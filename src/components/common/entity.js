@@ -1,0 +1,31 @@
+export const navigationName = {
+  "/board/dashboard": "홈/대시보드",
+  "/board/media": "홈/지면관리/지면 등록",
+  "/board/media2": "홈/지면관리/지면 리스트",
+  "/board/media2/detail": "홈/지면관리/지면 리스트 상세",
+  "/board/reports":"홈/보고서/기간별 보고서",
+  "/board/reports2":"홈/보고서/매체별 보고서",
+  "/board/reports3":"홈/보고서/지면별 보고서",
+  "/board/reports4":"홈/보고서/외부 연동 수신 보고서",
+  "/board/platform": "홈/플랫폼 관리/사용자 관리",
+  "/board/platform3": "홈/플랫폼 관리/지면 이력 관리",
+  "/board/platform4": "홈/플랫폼 관리/애드 익스체인지 이력 관리",
+  "/board/platform/detail": "홈/플랫폼 관리/사용자 관리 상세",
+  "/board/myPage/user": "홈/마이페이지",
+  "/board/myPage/admin": "홈/마이페이지",
+  "/board/platform3/detail": "홈/플랫폼 관리/지면 이력 관리 상세",
+  "/board/platform4/detail": "홈/플랫폼 관리/애드 익스체인지 이력 관리 상세",
+  "/board/adExchange": "홈/애드 익스체인지 관리/지면별 연동사 수신 연동",
+  "/board/adExchange/detail": "홈/애드 익스체인지 관리/지면별 연동사 수신 연동",
+  "/board/adExchange2/detail": "홈/애드 익스체인지 관리/지면별 연동사 송출 연동",
+  "/board/account": "홈/정산 관리/정산 정보",
+  "/board/accountHistory": "홈/정산 관리/정산 이력",
+  "/board/accountProfile": "홈/정산 관리/정산 프로필 관리",
+  "/board/accountConfirm": "홈/정산 관리/정산 심사",
+  "/board/accountData": "홈/정산 관리/데이터 관리",
+}
+export const dataTotalInfo = {
+  totalCount:1,
+  totalPages:1,
+  currentPage:1
+}
