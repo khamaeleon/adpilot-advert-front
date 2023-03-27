@@ -15,110 +15,30 @@ function AsideList (props) {
   useEffect(()=>{
     setUserName(adminInfoState.convertedUser)
   },[adminInfoState.convertedUser])
-  /**
-   * 대메뉴 권한 체크
-   * @param item
-   * @returns {boolean}
-   */
-  const checkPermissions = (item) => {
-    if(role === 'NORMAL' && ['reports','dashboard','account'].includes(item.name)) {
-      return true
-    }
-    if(['ADMIN','SUPER_ADMIN'].includes(role)) {
-      return true
-    }
-  }
-  /**
-   * 소메뉴 권한 체크
-   * @param child
-   * @returns {boolean}
-   */
-  const checkPermission = (child) => {
-
-    if(role === 'SUPER_ADMIN') {
-      if(userName !== '' || child.name !== 'accountProfile'){
-        return true
-      }
-    } else {
-      if(role === 'ADMIN' ) {
-        if(userName !== ''){
-         console.log(child)
-          if(child.name !== 'reports2' && child.name !== 'platform2') {
-            return true
-          }
-        } else {
-          if(child.name !== 'accountProfile') {
-            return true
-          }
-        }
-      } else {
-        if(role === 'NORMAL' && ['reports','reports3','reports4','account','accountHistory'].includes(child.name)) {
-          return true
-        } else {
-          return false
-        }
-      }
-    }
-  }
-  /**
-   * 메뉴 변경시 높이값 조정
-   * @param item
-   * @returns {*|string}
-   */
-  const calcHeight = (item) => {
-    if(role === 'SUPER_ADMIN'){
-       if(userName !== '' && item.name === 'account'){
-         return item.child.length
-       } else if(userName !== '' || item.name !== 'account') {
-         return item.child.length
-       } else {
-         return '4'
-       }
-    } else {
-      if(role === 'ADMIN' && item.name === 'reports' || item.name === 'platform'){
-        return '3'
-      } else if(role === 'ADMIN' && item.name === 'account'){
-        return '4'
-      } else {
-        if(role === 'NORMAL' && item.name === 'reports') {
-          return '3'
-        } else if (item.name === 'account' || item.name === 'accountHistory') {
-          return '2'
-        } else {
-          return item.child.length
-        }
-        return item.child.length
-      }
-    }
-  }
 
   return (
     <>
       {menuList.map((item,key) => {
         return(
           <div key={key}>
-            {checkPermissions(item)&&
-              <li className={id.indexOf(item.name) > -1 ? "active" : null} style={mode? narrowStyle.li : widenStyle.li}>
-                <Link to={`/board/${item.name}`} className={mode? "icon-mode" : "list-mode"}>
-                  <Icon style={id.indexOf(item.name) > -1? {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: 1}: {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: .5}}/>
-                  <span className={mode? "fadeOut" : "fadeIn"}>{item.header}</span>
-                  {item.child.length > 0 && <DropIcon className={mode? "fadeOut" : "fadeIn"} style={id.indexOf(item.name) > -1 ? narrowStyle.button : widenStyle.button}/>}
-                </Link>
-                <SubMenu className={id.indexOf(item.name) > -1  ? "list slide-down-"+(calcHeight(item)) : 'list'}>
-                  {item.child.map((child,key) => {
-                    return (
-                      <div key={key}>
-                        {checkPermission(child)&&
-                          <div>
-                            <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
-                          </div>
-                        }
+            <li className={id.indexOf(item.name) > -1 ? "active" : null} style={mode? narrowStyle.li : widenStyle.li}>
+              <Link to={`/board/${item.name}`} className={mode? "icon-mode" : "list-mode"}>
+                <Icon style={id.indexOf(item.name) > -1? {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: 1}: {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: .5}}/>
+                <span className={mode? "fadeOut" : "fadeIn"}>{item.header}</span>
+                {item.child.length > 0 && <DropIcon className={mode? "fadeOut" : "fadeIn"} style={id.indexOf(item.name) > -1 ? narrowStyle.button : widenStyle.button}/>}
+              </Link>
+              <SubMenu className={id.indexOf(item.name) > -1  ? "list slide-down-"+(item.child.length) : 'list'}>
+                {item.child.map((child,key) => {
+                  return (
+                    <div key={key}>
+                      <div>
+                        <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
                       </div>
-                    )
-                  })}
-                </SubMenu>
-              </li>
-            }
+                    </div>
+                  )
+                })}
+              </SubMenu>
+            </li>
           </div>
         )
       })

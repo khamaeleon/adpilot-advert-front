@@ -603,7 +603,7 @@ function AdProductInfo(props) {
         <ListBody>
           <ProductSet>
             {productTypeInfo.map((data,index) => {
-              return index != 0 &&
+              return index !== 0 &&
                   (<div key={index}>
                     <input type={'radio'} id={data.value} name={'product'}  onChange={handleProductType}/>
                     <label htmlFor={data.label}>{data.label}</label>

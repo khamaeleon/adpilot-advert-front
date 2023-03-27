@@ -813,7 +813,7 @@ export const Span3 = styled.span`
 `
 export const Span4 = styled.span`
   display: inline-block;
-  width: 120px;
+  width: 140px;
 `
 
 export const SubmitContainer = styled.div`

@@ -28,6 +28,7 @@ import {atom} from "jotai/index";
 import {adminInfo, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
 import PlatformAdminDetail from "../platform_manage/AdminDetail";
+import Campaign from "../campaign";
 
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
@@ -120,13 +121,6 @@ function Layout(){
       <Aside />
       <BoardBody>
         <BoardHeader>
-          {role !== 'NORMAL' && adminInfoState.convertedUser !== '' &&
-            <MyPage onClick={handleChangeConverted}>
-              <span>어드민 계정으로 전환</span>
-            </MyPage>
-            ||
-            null
-          }
           <UserName>
             <UserIcon/>
             <span>{role==='NORMAL'? userInfoState.name:adminInfoState.name}</span>
@@ -140,33 +134,7 @@ function Layout(){
         </BoardHeader>
         {/* 대시보드 */}
         {params.id === 'dashboard'  && <DashBoard />}
-        {/* 지면관리 */}
-        {params.id === 'media' && <MediaManage />}
-        {params.id === 'media2' && params.detail !== 'detail' && <MediaList />}
-        {params.id === 'media2' && params.detail === 'detail' && <MediaListDetail />}
-        {/* 외부연동 */}
-        {params.id === 'adExchange' && params.detail !== 'detail' && <AdExchange />}
-        {params.id === 'adExchange' && params.detail === 'detail'  && <AdExchangeDetail />}
-        {/* 보고서 */}
-        {['reports','reports2','reports3','reports4'].includes(params.id) && <Reports />}
-        {/* 정산관리 */}
-        {params.id === 'account' && <Account />}
-        {params.id === 'accountHistory' && <AccountHistory />}
-        {params.id === 'accountProfile' && <AccountProfile />}
-        {params.id === 'accountConfirm' && <AccountConfirm />}
-        {params.id === 'accountData' && <AccountData />}
-        {/* 플랫폼 관리 */}
-        {params.id === 'platform' && params.detail !== 'detail' && <PlatformManage />}
-        {params.id === 'platform3' && params.detail !== 'detail' && <PlatformHistory />}
-        {params.id === 'platform4' && params.detail !== 'detail' && <PlatformAdExchange />}
-
-        {params.id === 'platform' && params.detail ==='detail' && <PlatformUserDetail/>}
-
-        {params.id === 'platform3' && params.detail === 'detail' && <PlatformHistoryDetail/>}
-        {params.id === 'platform4' && params.detail === 'detail' && <PlatformAdExchangeDetail/>}
-        {params.id === 'myPage' && params.detail ==='user' && <PlatformUserDetail/>}
-        {params.id === 'myPage' && params.detail === 'admin' && <PlatformAdminDetail/>}
-
+        {params.id === 'campaign' && <Campaign/>}
       </BoardBody>
       <Modal></Modal>
     </div>

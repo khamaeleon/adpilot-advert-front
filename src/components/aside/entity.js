@@ -23,93 +23,21 @@ export const menuList = [
     child: []
   },
   {
-    name: "media",
-    header: "지면관리",
+    name: "campaign",
+    header: "광고관리",
     child:[
       {
-        name: "media",
-        header: "지면 관리",
+        name: "campaign",
+        header: "캠페인 생성",
       },
       {
-        name: "media2",
-        header: "지면 리스트",
-      },
-    ]
-  },
-  {
-    name: "adExchange",
-    header: "애드익스체인지 관리",
-    child:[
-      {
-        name: "adExchange",
-        header: "서비스 수신 연동",
-      }
-    ]
-  },
-  {
-    name: "reports",
-    header: "보고서",
-    child:[
-      {
-        name: "reports",
-        header: "기간별 보고서",
+        name: "createCreative",
+        header: "크리에이티브 생성",
       },
       {
-        name: "reports2",
-        header: "매체별 보고서",
+        name: "manageCreative",
+        header: "크리에이티브 관리",
       },
-      {
-        name: "reports3",
-        header: "지면별 보고서",
-      },
-      {
-        name: "reports4",
-        header: "외부 연동 수신 보고서",
-      },
-    ]
-  },
-  {
-    name: "account",
-    header: "정산관리",
-    child:[
-      {
-        name: "account",
-        header: "정산 관리",
-      },
-      {
-        name: "accountHistory",
-        header: "정산 이력",
-      },
-      {
-        name: "accountProfile",
-        header: "정산 프로필 관리",
-      },
-      {
-        name: "accountConfirm",
-        header: "정산 심사",
-      },
-      {
-        name: "accountData",
-        header: "데이터 관리",
-      },
-    ]
-  },
-  {
-    name: "platform",
-    header: "플랫폼 관리",
-    child:[
-      {
-        name: "platform",
-        header: "사용자 관리",
-      },
-      {
-        name: "platform3",
-        header: "지면 이력 관리",
-      },
-      {
-        name: "platform4",
-        header: "애드 익스체인지 이력 관리",
-      }
     ]
   },
 ]
