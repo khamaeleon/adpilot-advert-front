@@ -1,19 +1,17 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import Login from "./pages/login";
-import Main from "./pages/main";
 import SignUp from "./pages/signup";
 import {useAtom} from "jotai/index";
 import Layout from "./pages/layout";
 import Modal from "./components/modal/Modal";
 import {modalController} from "./store";
-import { ThemeProvider } from "styled-components";
+import {ThemeProvider} from "styled-components";
 import {useAtomsDevtools} from "jotai-devtools";
 import {light} from "./assets/theme";
 import {GlobalStyles} from "./assets/GlobalStyles";
 import AdminLogin from "./pages/login/AdminLogin";
 import {NotFound} from "./pages/404";
 import "../src/assets/DatePicker.css"
-import PlatformAdminDetail from "./pages/platform_manage/AdminDetail";
 
 const AtomsDevtools = ({ children }) => {
   useAtomsDevtools('demo')
