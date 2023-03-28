@@ -76,7 +76,7 @@ function AdminLogin() {
   const onSubmit = () => {
     loginAdmin(loginParamsValue).then((response) => {
       if (response) {
-        navigate('/board/dashboard')
+        navigate('/board/campaign')
       } else {
         toast.info('아이디와 비밀번호를 확인해 주세요.')
       }

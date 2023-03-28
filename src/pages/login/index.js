@@ -321,6 +321,9 @@ function LoginComponent () {
       <Title>
         <h1><BlockLogo/></h1>
       </Title>
+      <RowSpan style={{justifyContent: 'flex-end'}}>
+        <Link to={'/AdminLogin'}>관리자 로그인</Link>
+      </RowSpan>
       <form onSubmit={handleSubmit(onSubmit,onError)}>
       <InputGroup>
         <LabelInline>

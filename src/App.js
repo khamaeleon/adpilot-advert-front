@@ -29,6 +29,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path={'/'} element={<Login match={'login'}/>}/>
+            <Route path={'/adminLogin'} element={<AdminLogin match={'AdminLogin'}/>}/>
             <Route path={'/findId'} element={<Login match={'findId'}/>}/>
             <Route path={'/findPassword'} element={<Login match={'findPassword'}/>}/>
             <Route path={'/signup'} element={<SignUp/>}/>
