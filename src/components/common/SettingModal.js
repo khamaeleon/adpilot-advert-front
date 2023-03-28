@@ -48,7 +48,7 @@ function SettingChangeModal(props) {
         userOptimization: ''
       })
     }
-  }, [reset, dataState])
+  }, [reset])
   const onError = (error) => console.log(error)
   /**
    * 그룹명
