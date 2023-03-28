@@ -30,16 +30,16 @@ function PlatformUserDetail() {
 
   useEffect(() => {
     console.log(state)
-    selUserInfo(state.id).then(response => {
-      setAccountInfoState({
-        ...response,
-        activeYn: response.status ==='NORMAL'? 'Y' :'N'
-      })
-      reset({
-        ...response,
-        activeYn: response.status ==='NORMAL'? 'Y' :'N'
-      })
-    })
+    // selUserInfo(state.id).then(response => {
+    //   setAccountInfoState({
+    //     ...response,
+    //     activeYn: response.status ==='NORMAL'? 'Y' :'N'
+    //   })
+    //   reset({
+    //     ...response,
+    //     activeYn: response.status ==='NORMAL'? 'Y' :'N'
+    //   })
+    // })
   }, [])
 
   /**
