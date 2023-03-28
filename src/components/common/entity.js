@@ -2,7 +2,8 @@ export const navigationName = {
   "/board/dashboard": "홈/대시보드",
   "/board/campaign": "홈/광고 관리/캠페인생성",
   "/board/platform": "홈/플랫폼 관리/사용자 관리",
-  "/board/settings": "홈/설정/이벤트 단가 관리"
+  "/board/settings": "홈/설정/이벤트 단가 관리",
+  "/board/settings/detail": "홈/설정/이벤트 단가 관리"
 }
 export const dataTotalInfo = {
   totalCount:1,

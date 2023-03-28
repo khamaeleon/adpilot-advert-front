@@ -3,10 +3,10 @@ import {
   Board,
   BoardHeader,
   BoardSearchDetail,
-  BoardTableContainer, ColSpan0,
+  BoardTableContainer, CancelButton, ColSpan0,
   ColSpan1,
   ColTitle,
-  RowSpan
+  RowSpan, SubmitButton, SubmitContainer
 } from "../../assets/GlobalStyles";
 import React, {useEffect} from "react";
 import {useAtom} from "jotai";
@@ -14,10 +14,12 @@ import Table from "../../components/table";
 import {eventUnitPriceDetailColumns, eventUnitPriceDetailDataAtom, eventUnitPriceDetailSetting} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
+import {useNavigate} from "react-router-dom";
 
 
 function EventUnitPriceDetail() {
   const [eventUnitPriceDetailDataState, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
+  const navigate =useNavigate()
   useEffect(() => {
   }, [])
 
@@ -57,6 +59,9 @@ function EventUnitPriceDetail() {
                  activeCell={[0]}
                  emptyText={'이벤트 단가 관리 내역이 없습니다.'}/>
         </BoardTableContainer>
+        <SubmitContainer>
+          <CancelButton onClick={()=>navigate('/board/settings')}>목록</CancelButton>
+        </SubmitContainer>
       </Board>
       <ToastContainer position="top-center"
                       autoClose={1500}

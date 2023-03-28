@@ -71,9 +71,14 @@ export const eventUnitPriceColumns = [ //이벤트 단가 컬럼
     name: 'mediaName',
     header: '광고주명',
     defaultFlex: 1,
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
     render: (props) => {
       return (
-        <Link to={'/board/settings/EventUnitPriceDetail'} state={{id: props.data.id}}>{props.value}</Link>
+        <Link to={'/board/settings/detail'} state={{id: props.data.id}}>{props.value}</Link>
       )
     }
   },

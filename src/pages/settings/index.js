@@ -19,7 +19,7 @@ function Settings(){
           <h1>설정</h1>
         </TitleContainer>
         {/* 이벤트 단가 관리 */}
-        {params.id === 'settings' && <EventUnitPrice />}
+        {params.id === 'settings' && params.detail !=='detail' && <EventUnitPrice />}
         {params.id === 'settings' && params.detail ==='detail' && <EventUnitPriceDetail />}
       </BoardContainer>
     </main>
