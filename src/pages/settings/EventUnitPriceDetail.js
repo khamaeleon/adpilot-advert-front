@@ -8,7 +8,8 @@ import {
   ColSpan0,
   ColSpan1,
   ColTitle,
-  RowSpan, SubmitContainer
+  RowSpan,
+  SubmitContainer
 } from "../../assets/GlobalStyles";
 import React, {useEffect} from "react";
 import {useAtom} from "jotai";
@@ -16,7 +17,7 @@ import Table from "../../components/table";
 import {eventUnitPriceDetailColumns, eventUnitPriceDetailDataAtom} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {selPriceEventList} from "../../services/SettingsAxios";
 import SettingAdd from "../../components/common/SettingModal";
 
@@ -25,7 +26,7 @@ function EventUnitPriceDetail() {
   const [eventUnitPriceDetailDataState, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
   const navigate = useNavigate()
   useEffect(() => {
-    selPriceEventList(state).then(response => {
+    selPriceEventList().then(response => {
       console.log(response)
       setEventUnitPriceDetailDataState(response)
     })
