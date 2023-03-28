@@ -49,11 +49,11 @@ export const menuList = [
         header: "이벤트 단가 관리",
       },
       {
-        name: "eventBudget",
+        name: "budgetEvent",
         header: "이벤트 예산 관리",
       },
       {
-        name: "timeBudget",
+        name: "budgetTime",
         header: "시간별 예산 관리",
       },
     ]

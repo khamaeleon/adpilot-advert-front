@@ -5,13 +5,14 @@ import {
   BoardSearchDetail,
   BoardTableContainer,
   ColSpan1,
-  DefaultButton, Input,
+  DefaultButton,
+  Input,
   RowSpan
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {adverEventPriceColumns, eventUnitPriceColumns, eventUnitPriceDataAtom} from "./entity";
+import {adverEventPriceColumns, adverEventPriceSetting, eventUnitPriceDataAtom} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {selAdverPriceEventList} from "../../services/SettingsAxios";
 
@@ -55,8 +56,9 @@ function EventUnitPrice() {
           </RowSpan>
         </BoardSearchDetail>
         <BoardTableContainer>
-          { eventUnitPriceDataState !==null &&
+          { eventUnitPriceDataState !== null &&
             <Table columns={adverEventPriceColumns}
+                   settings={adverEventPriceSetting}
                    data={eventUnitPriceDataState.eventDtos}
                    showHoverRows={false}
                    activeCell={[0]}
