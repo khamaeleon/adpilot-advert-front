@@ -20,11 +20,13 @@ export const menuList = [
   {
     name: "dashboard",
     header: "대쉬보드",
+    include: ["dashboard"],
     child: []
   },
   {
     name: "campaign",
     header: "광고관리",
+    include: ["campaign","createCreative","manageCreative"],
     child:[
       {
         name: "campaign",
@@ -43,6 +45,7 @@ export const menuList = [
   {
     name: "settings",
     header: "설정",
+    include: ["settings","settingsDetail","budgetEvent","budgetEventDetail","budgetTime","budgetTimeDetail"],
     child:[
       {
         name: "settings",
@@ -61,6 +64,7 @@ export const menuList = [
   {
     name: "platform",
     header: "플랫폼 관리",
+    include: ["platform"],
     child:[
       {
         name: "platform",
@@ -69,7 +73,6 @@ export const menuList = [
     ]
   },
 ]
-
 
 export const narrowStyle = {
   li: {

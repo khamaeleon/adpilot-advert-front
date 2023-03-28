@@ -42,7 +42,6 @@ function BudgetEvent() {
   }
   return (
     <>
-      <Navigator/>
       <Board>
         <BoardHeader>이벤트 예산 현황</BoardHeader>
         <BoardSearchDetail>

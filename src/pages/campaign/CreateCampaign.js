@@ -1,18 +1,23 @@
 import {
-  AgentType,
   Board,
   BoardHeader,
   BoardSearchResult,
+  CampaignType,
+  ColSpan2,
   ColSpan4,
-  DefaultButton, Input,
+  DefaultButton,
+  Input,
   RowSpan,
-  Span4, SubmitButton, SubmitContainer
+  Span4,
+  SubmitButton,
+  SubmitContainer
 } from "../../assets/GlobalStyles";
 import React from "react";
 import styled from "styled-components";
 import Select from "react-select";
 import {useAtom} from "jotai/index";
 import {stepCampaignAtom} from "./entity";
+import {HorizontalRule} from "../../components/common/Common";
 
 function CampaignOne () {
   return (
@@ -43,14 +48,28 @@ function CampaignOne () {
             </ColSpan4>
           </RowSpan>
           <RowSpan>
-            <ColSpan4>
+            <ColSpan2>
               <Span4>캠페인 상품 선택</Span4>
-            </ColSpan4>
+            </ColSpan2>
+            <ColSpan2>
+              <Span4>캠페인 상품 선택</Span4>
+            </ColSpan2>
           </RowSpan>
           <RowSpan>
-            <ColSpan4>
-              <AgentType></AgentType>
-            </ColSpan4>
+            <ColSpan2>
+              <CampaignType>
+                <CampaignTypeItem>배너</CampaignTypeItem>
+                <CampaignTypeItem>팝언더</CampaignTypeItem>
+              </CampaignType>
+            </ColSpan2>
+            <HorizontalRule style={{margin: '0 10px 0 20px',height: 'auto'}}/>
+            <ColSpan2>
+              <CampaignType>
+                <CampaignTypeItem><div>전환</div><div>전환 가능성과 관심도가 높은 대상에게 구매 또는 참여, 설치 등의 행동을 유도 합니다.</div></CampaignTypeItem>
+                <CampaignTypeItem><div>전환</div><div>전환 가능성과 관심도가 높은 대상에게 구매 또는 참여, 설치 등의 행동을 유도 합니다.</div></CampaignTypeItem>
+                <CampaignTypeItem><div>전환</div><div>전환 가능성과 관심도가 높은 대상에게 구매 또는 참여, 설치 등의 행동을 유도 합니다.</div></CampaignTypeItem>
+              </CampaignType>
+            </ColSpan2>
           </RowSpan>
           <RowSpan>
             <ColSpan4>
@@ -96,7 +115,7 @@ export default function CreateCampaign() {
     <>
       <CampaignOne/>
       <SubmitContainer>
-        <SubmitButton type={'submit'}>다음</SubmitButton>
+        <SubmitButton type={'submit'}>다음 [{stepCampaign + 1}/4]</SubmitButton>
       </SubmitContainer>
     </>
   )
@@ -104,9 +123,23 @@ export default function CreateCampaign() {
 
 const BorderSpan = styled.div`
   display: flex;
-  width: auto;
+  width: auto !important;
   padding: 5px;
   background-color: #f9fafb;
   border: 1px solid #ddd;
   border-radius: 8px;
+`
+
+const CampaignTypeItem = styled.div`
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 3px 0 rgba(10, 10, 10, 0.2);
+  font-size: 12px;
+  white-space: break-spaces;
+  &:hover {
+    border: 2px solid #f5811f;
+    cursor: pointer;
+  }
 `

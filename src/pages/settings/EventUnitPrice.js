@@ -40,7 +40,6 @@ function EventUnitPrice() {
   }
   return (
     <>
-      <Navigator/>
       <Board>
         <BoardHeader>이벤트 단가 현황</BoardHeader>
         <BoardSearchDetail>

@@ -23,13 +23,13 @@ function AsideList (props) {
       {menuList.map((item,key) => {
         return(
           <div key={key}>
-            <li className={id.indexOf(item.name) > -1 ? "active" : null} style={mode? narrowStyle.li : widenStyle.li}>
+            <li className={item.include.includes(id) ? "active" : null} style={mode? narrowStyle.li : widenStyle.li}>
               <Link to={`/board/${item.name}`} className={mode? "icon-mode" : "list-mode"}>
                 <Icon style={id.indexOf(item.name) > -1? {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: 1}: {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: .5}}/>
                 <span className={mode? "fadeOut" : "fadeIn"}>{item.header}</span>
                 {item.child.length > 0 && <DropIcon className={mode? "fadeOut" : "fadeIn"} style={id.indexOf(item.name) > -1 ? narrowStyle.button : widenStyle.button}/>}
               </Link>
-              <SubMenu className={id.indexOf(item.name) > -1  ? "list slide-down-"+(calcHeight(item)) : 'list'}>
+              <SubMenu className={item.include.includes(id) ? "list slide-down-"+(calcHeight(item)) : 'list'}>
                 {item.child.map((child,key) => {
                   return (
                     <div key={key}>

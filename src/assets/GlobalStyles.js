@@ -692,6 +692,14 @@ export const AgentType = styled.div`
     white-space: nowrap;
   }
 `
+export const CampaignType = styled.div`
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+  background-color: #f9fafb;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+`
 export const DateContainer = styled.div`
   display: flex;
   border: 1px solid ${lightGray};

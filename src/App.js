@@ -34,9 +34,7 @@ function App() {
             <Route path={'/findPassword'} element={<Login match={'findPassword'}/>}/>
             <Route path={'/signup'} element={<SignUp/>}/>
             <Route path={'/board/'} element={<Layout />}>
-              <Route path={':id'} element={<Layout />}>
-                <Route path={':detail'} element={<Layout />}/>
-              </Route>
+              <Route path={':id'} element={<Layout />}/>
             </Route>
             <Route path={"*"} element={<NotFound/>}/>
           </Routes>

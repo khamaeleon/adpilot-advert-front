@@ -125,15 +125,11 @@ function Layout(){
         </BoardHeader>
         {/* 대시보드 */}
         {params.id === 'dashboard'  && <DashBoard />}
-        {params.id === 'campaign' && <Campaign/>}
+        {['campaign','createCreative'].includes(params.id) && <Campaign/>}
         {/*설정*/}
-        {params.id === 'settings' && params.detail !=='detail' && <EventUnitPrice />}
-        {params.id === 'settings' && params.detail ==='detail' && <EventUnitPriceDetail />}
-        {params.id === 'budgetEvent' && params.detail !=='detail' && <BudgetEvent />}
-        {params.id === 'budgetEvent' && params.detail ==='detail' && <BudgetEventDetail />}
+        {['settings','settingsDetail','budgetEvent','budgetEventDetail','budgetTime','budgetTimeDetail'].includes(params.id) && <Settings/>}
         {/* 플랫폼 관리 */}
-        {params.id === 'platform' && params.detail !== 'detail' && <PlatformManage />}
-        {params.id === 'platform' && params.detail ==='detail' && <PlatformUserDetail/>}
+        {['platform','platformDetail'].includes(params.id) && <PlatformManage />}
       </BoardBody>
       <Modal></Modal>
     </div>

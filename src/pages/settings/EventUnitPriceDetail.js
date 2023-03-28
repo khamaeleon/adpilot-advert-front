@@ -42,7 +42,6 @@ function EventUnitPriceDetail() {
   }
   return (
     <>
-      <Navigator/>
       <Board>
         <BoardHeader>이벤트 단가 기본 정보</BoardHeader>
         <BoardSearchDetail>

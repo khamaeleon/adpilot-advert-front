@@ -31,7 +31,7 @@ export const adverEventPriceColumns = [
     },
     render: (props) => {
       return (
-        <Link to={'/board/settings/detail'} state={{id: props.data.username}}>{props.value}</Link>
+        <Link to={'/board/settingsDetail'} state={{id: props.data.username}}>{props.value}</Link>
       )
     }
   },
@@ -137,7 +137,7 @@ export const adverEventBudgetColumns = [ //이벤트 단가 컬럼
     },
     render: (props) => {
       return (
-        <Link to={'/board/budgetEvent/detail'} state={{id: props.data.username}}>{props.value}</Link>
+        <Link to={'/board/budgetEventDetail'} state={{id: props.data.username}}>{props.value}</Link>
       )
     }
   },

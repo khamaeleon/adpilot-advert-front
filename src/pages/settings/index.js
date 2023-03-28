@@ -5,6 +5,7 @@ import EventUnitPrice from "./EventUnitPrice";
 import EventUnitPriceDetail from "./EventUnitPriceDetail";
 import BudgetEvent from "./BudgetEvent";
 import BudgetEventDetail from "./BudgetEventDetail";
+import Navigator from "../../components/common/Navigator";
 
 function Settings(){
   const params = useParams()
@@ -18,12 +19,13 @@ function Settings(){
       <BoardContainer>
         <TitleContainer>
           <h1>설정</h1>
+          <Navigator/>
         </TitleContainer>
         {/* 이벤트 단가 관리 */}
-        {params.id === 'settings' && params.detail !=='detail' && <EventUnitPrice />}
-        {params.id === 'settings' && params.detail ==='detail' && <EventUnitPriceDetail />}
-        {params.id === 'budgetEvent' && params.detail !=='detail' && <BudgetEvent />}
-        {params.id === 'budgetEvent' && params.detail ==='detail' && <BudgetEventDetail />}
+        {params.id === 'settings' && <EventUnitPrice />}
+        {params.id === 'settingsDetail' && <EventUnitPriceDetail />}
+        {params.id === 'budgetEvent' && <BudgetEvent />}
+        {params.id === 'budgetEventDetail' && <BudgetEventDetail />}
       </BoardContainer>
     </main>
   )
