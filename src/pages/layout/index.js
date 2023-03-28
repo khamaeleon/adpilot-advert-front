@@ -14,11 +14,12 @@ import {adminInfo, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
 import PlatformAdminDetail from "../platform_manage/AdminDetail";
 import Campaign from "../campaign";
-import Settings from "../settings";
 import BudgetEvent from "../settings/BudgetEvent";
 import BudgetEventDetail from "../settings/BudgetEventDetail";
-import EventUnitPrice from "../settings/EventUnitPrice";
+import EventUnitPrice from "../settings";
 import EventUnitPriceDetail from "../settings/EventUnitPriceDetail";
+import BudgetTime from "../settings/BudgetTime";
+import BudgetTimeDetail from "../settings/BudgetTimeDetail";
 
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
@@ -131,6 +132,8 @@ function Layout(){
         {params.id === 'settings' && params.detail ==='detail' && <EventUnitPriceDetail />}
         {params.id === 'budgetEvent' && params.detail !=='detail' && <BudgetEvent />}
         {params.id === 'budgetEvent' && params.detail ==='detail' && <BudgetEventDetail />}
+        {params.id === 'budgetTime' && params.detail !=='detail' && <BudgetTime />}
+        {params.id === 'budgetTime' && params.detail ==='detail' && <BudgetTimeDetail />}
         {/* 플랫폼 관리 */}
         {params.id === 'platform' && params.detail !== 'detail' && <PlatformManage />}
         {params.id === 'platform' && params.detail ==='detail' && <PlatformUserDetail/>}

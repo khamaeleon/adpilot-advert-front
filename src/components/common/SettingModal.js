@@ -165,7 +165,6 @@ function SettingChangeModal(props) {
                   })}
                   value={dataState?.shopperMatching !== 0 ? dataState?.shopperMatching : ''}
                 />
-                {console.log(dataState)}
                 {errors.shopperMatching && <ValidationScript>{errors.shopperMatching?.message}</ValidationScript>}
               </RelativeDiv>
               <span>원</span>

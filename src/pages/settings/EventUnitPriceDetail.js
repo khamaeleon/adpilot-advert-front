@@ -1,6 +1,6 @@
 import Navigator from "../../components/common/Navigator";
 import {
-  Board,
+  Board, BoardContainer,
   BoardHeader,
   BoardSearchDetail,
   BoardTableContainer,
@@ -9,7 +9,7 @@ import {
   ColSpan1,
   ColTitle,
   RowSpan,
-  SubmitContainer
+  SubmitContainer, TitleContainer
 } from "../../assets/GlobalStyles";
 import React, {useEffect} from "react";
 import {useAtom} from "jotai";
@@ -41,8 +41,12 @@ function EventUnitPriceDetail() {
     console.log(data)
   }
   return (
-    <>
-      <Navigator/>
+    <main>
+      <BoardContainer>
+        <TitleContainer>
+          <h1>설정</h1>
+        </TitleContainer>
+        <Navigator/>
       <Board>
         <BoardHeader>이벤트 단가 기본 정보</BoardHeader>
         <BoardSearchDetail>
@@ -96,7 +100,8 @@ function EventUnitPriceDetail() {
                       draggable
                       pauseOnHover
                       style={{zIndex: 9999999}}/>
-    </>
+      </BoardContainer>
+    </main>
   )
 }
 export default EventUnitPriceDetail

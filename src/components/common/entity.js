@@ -3,7 +3,11 @@ export const navigationName = {
   "/board/campaign": "홈/광고 관리/캠페인생성",
   "/board/platform": "홈/플랫폼 관리/사용자 관리",
   "/board/settings": "홈/설정/이벤트 단가 관리",
-  "/board/settings/detail": "홈/설정/이벤트 단가 관리"
+  "/board/settings/detail": "홈/설정/이벤트 단가 관리",
+  "/board/budgetEvent": "홈/설정/이벤트 예산 관리",
+  "/board/budgetEvent/detail": "홈/설정/이벤트 예산 관리",
+  "/board/budgetTime": "홈/설정/시간별 예산 관리",
+  "/board/budgetTime/detail": "홈/설정/시간별 예산 관리"
 }
 export const dataTotalInfo = {
   totalCount:1,

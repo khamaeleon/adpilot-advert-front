@@ -55,7 +55,7 @@ export const menuList = [
       {
         name: "budgetTime",
         header: "시간별 예산 관리",
-      },
+      }
     ]
   },
   {

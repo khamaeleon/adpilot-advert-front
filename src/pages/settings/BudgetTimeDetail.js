@@ -1,6 +1,7 @@
 import Navigator from "../../components/common/Navigator";
 import {
-  Board, BoardContainer,
+  Board,
+  BoardContainer,
   BoardHeader,
   BoardSearchDetail,
   BoardTableContainer,
@@ -9,15 +10,13 @@ import {
   ColSpan1,
   ColTitle,
   RowSpan,
-  SubmitContainer, TitleContainer
+  SubmitContainer,
+  TitleContainer
 } from "../../assets/GlobalStyles";
 import React, {useEffect} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {
-  budgetEventDetailColumns,
-  eventBudgetDetailDataAtom,
-} from "./entity";
+import {budgetTimeDetailColumns, timeBudgetDetailDataAtom,} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -25,14 +24,14 @@ import {selBudgetEventList} from "../../services/SettingsAxios";
 import SettingAdd from "../../components/common/SettingModal";
 
 
-function BudgetEventDetail() {
-  const [eventBudgetDetailDataState, setEventBudgetDetailDataState] = useAtom(eventBudgetDetailDataAtom)
+function BudgetTimeDetail() {
+  const [timeBudgetDetailDataState, setTimeBudgetDetailDataState] = useAtom(timeBudgetDetailDataAtom)
   const navigate = useNavigate()
   const {state} =useLocation()
   useEffect(() => {
     selBudgetEventList(state.id).then(response => {
       console.log(response)
-      setEventBudgetDetailDataState(response)
+      setTimeBudgetDetailDataState(response)
     })
   }, [])
 
@@ -50,26 +49,26 @@ function BudgetEventDetail() {
         </TitleContainer>
         <Navigator/>
       <Board>
-        <BoardHeader>이벤트 예산 기본 정보</BoardHeader>
+        <BoardHeader>시간별 예산 기본 정보</BoardHeader>
         <BoardSearchDetail>
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
             <ColSpan0>
               <ColTitle>최근 수정</ColTitle>
-              <div>{dateFormat(eventBudgetDetailDataState !==null && eventBudgetDetailDataState.lastModifiedAt, 'YYYY.MM.DD HH:mm')}</div>
+              <div>{dateFormat(timeBudgetDetailDataState !==null && timeBudgetDetailDataState.lastModifiedAt, 'YYYY.MM.DD HH:mm')}</div>
             </ColSpan0>
           </RowSpan>
           <RowSpan>
             <ColSpan1>
               <ColTitle>광고주명</ColTitle>
-              <div>{eventBudgetDetailDataState !==null && eventBudgetDetailDataState.brandName}</div>
+              <div>{timeBudgetDetailDataState !==null && timeBudgetDetailDataState.brandName}</div>
             </ColSpan1>
             <ColSpan1>
               <ColTitle>아이디</ColTitle>
-              <div>{eventBudgetDetailDataState !==null && eventBudgetDetailDataState.username}</div>
+              <div>{timeBudgetDetailDataState !==null && timeBudgetDetailDataState.username}</div>
             </ColSpan1>
             <ColSpan1>
               <ColTitle>담당자</ColTitle>
-              <div>{eventBudgetDetailDataState !==null && eventBudgetDetailDataState.managerName}</div>
+              <div>{timeBudgetDetailDataState !==null && timeBudgetDetailDataState.managerName}</div>
             </ColSpan1>
           </RowSpan>
         </BoardSearchDetail>
@@ -78,11 +77,11 @@ function BudgetEventDetail() {
             <SettingAdd title={'추가'} onSubmit={handleOnSubmit} type={'create'} data={null} btnStyle={'AccountButton'}/>
           </RowSpan>
           <div>
-            총 <span>{eventBudgetDetailDataState !==null && eventBudgetDetailDataState.totalCount}</span>건
+            총 <span>{timeBudgetDetailDataState !==null && timeBudgetDetailDataState.totalCount}</span>건
           </div>
-          {eventBudgetDetailDataState !==null &&
-            <Table columns={budgetEventDetailColumns}
-                   data={eventBudgetDetailDataState?.budgetEventDtos}
+          {timeBudgetDetailDataState !==null &&
+            <Table columns={budgetTimeDetailColumns}
+                   data={timeBudgetDetailDataState?.budgetEventDtos}
                    showHoverRows={false}
                    activeCell={[0]}
                    emptyText={'이벤트 단가 관리 내역이 없습니다.'}/>
@@ -106,4 +105,4 @@ function BudgetEventDetail() {
     </main>
   )
 }
-export default BudgetEventDetail
+export default BudgetTimeDetail
