@@ -3,7 +3,9 @@ import {
   Board,
   BoardHeader,
   BoardSearchDetail,
-  BoardTableContainer, CancelButton, ColSpan0,
+  BoardTableContainer,
+  CancelButton,
+  ColSpan0,
   ColSpan1,
   ColTitle,
   RowSpan, SubmitContainer
@@ -16,6 +18,7 @@ import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useNavigate} from "react-router-dom";
 import {selPriceEventList} from "../../services/SettingsAxios";
+import SettingAdd from "../../components/common/SettingModal";
 
 
 function EventUnitPriceDetail() {
@@ -28,6 +31,12 @@ function EventUnitPriceDetail() {
     })
   }, [])
 
+  /**
+   * 모달안에 매체 검색 선택시
+   */
+  const handleOnSubmit = (data) => {
+    console.log(data)
+  }
   return (
     <>
       <Navigator/>
@@ -56,9 +65,10 @@ function EventUnitPriceDetail() {
           </RowSpan>
         </BoardSearchDetail>
         <BoardTableContainer>
+          <SettingAdd title={'추가'} onSubmit={handleOnSubmit} data={eventUnitPriceDetailDataState} btnStyle={'AccountButton'}/>
           {eventUnitPriceDetailDataState !==null &&
             <Table columns={eventUnitPriceDetailColumns}
-                   data={eventUnitPriceDetailDataState.priceEventDtos}
+                   data={eventUnitPriceDetailDataState?.priceEventDtos}
                    showHoverRows={false}
                    activeCell={[0]}
                    emptyText={'이벤트 단가 관리 내역이 없습니다.'}/>
