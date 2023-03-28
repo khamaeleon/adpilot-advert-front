@@ -2,7 +2,7 @@ import Aside from "../../components/aside";
 import {useNavigate, useParams} from "react-router-dom";
 import DashBoard from "../dash_board";
 import PlatformManage from "../platform_manage";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
 import PlatformUserDetail from "../platform_manage/UserDetail";
@@ -15,6 +15,10 @@ import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
 import PlatformAdminDetail from "../platform_manage/AdminDetail";
 import Campaign from "../campaign";
 import Settings from "../settings";
+import BudgetEvent from "../settings/BudgetEvent";
+import BudgetEventDetail from "../settings/BudgetEventDetail";
+import EventUnitPrice from "../settings/EventUnitPrice";
+import EventUnitPriceDetail from "../settings/EventUnitPriceDetail";
 
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
@@ -26,6 +30,7 @@ function Layout(){
   const [role,setRole] = useState(localStorage.getItem("role"))
 
   useEffect(() => {
+    console.log(params)
     if(role==='NORMAL'){
       if(userInfoState.name ===''){
         selUserByUserId(localStorage.getItem("id")).then(response =>{
@@ -122,7 +127,10 @@ function Layout(){
         {params.id === 'dashboard'  && <DashBoard />}
         {params.id === 'campaign' && <Campaign/>}
         {/*설정*/}
-        {params.id === 'settings' && <Settings/>}
+        {params.id === 'settings' && params.detail !=='detail' && <EventUnitPrice />}
+        {params.id === 'settings' && params.detail ==='detail' && <EventUnitPriceDetail />}
+        {params.id === 'budgetEvent' && params.detail !=='detail' && <BudgetEvent />}
+        {params.id === 'budgetEvent' && params.detail ==='detail' && <BudgetEventDetail />}
         {/* 플랫폼 관리 */}
         {params.id === 'platform' && params.detail !== 'detail' && <PlatformManage />}
         {params.id === 'platform' && params.detail ==='detail' && <PlatformUserDetail/>}

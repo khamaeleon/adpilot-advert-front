@@ -1,5 +1,5 @@
 import {BoardContainer, TitleContainer} from "../../assets/GlobalStyles";
-import React from "react";
+import React, {useEffect} from "react";
 import {useParams} from "react-router-dom";
 import EventUnitPrice from "./EventUnitPrice";
 import EventUnitPriceDetail from "./EventUnitPriceDetail";
@@ -9,8 +9,9 @@ import BudgetEventDetail from "./BudgetEventDetail";
 function Settings(){
   const params = useParams()
 
-  // useEffect(() => {
-  // }, []);
+  useEffect(() => {
+    console.log(params)
+  }, []);
 
   return(
     <main>

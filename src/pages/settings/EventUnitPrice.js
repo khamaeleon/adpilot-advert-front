@@ -58,7 +58,6 @@ function EventUnitPrice() {
         <BoardTableContainer>
           { eventUnitPriceDataState !== null &&
             <Table columns={adverEventPriceColumns}
-                   settings={adverEventPriceSetting}
                    data={eventUnitPriceDataState.eventDtos}
                    showHoverRows={false}
                    activeCell={[0]}

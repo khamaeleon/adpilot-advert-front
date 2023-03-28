@@ -58,6 +58,43 @@ export const adverEventPriceColumns = [ //이벤트 단가 컬럼
 
 export const eventUnitPriceDetailDataAtom = atom(null)
 
+export const adverEventBudgetColumns = [ //이벤트 단가 컬럼
+  {
+    name: 'brandName',
+    header: '광고주명',
+    defaultFlex: 1,
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
+    render: (props) => {
+      return (
+        <Link to={'/board/budgetEvent/detail'} state={{id: props.data.username}}>{props.value}</Link>
+      )
+    }
+  },
+  {
+    name: 'username',
+    header: '아이디',
+    defaultFlex: 1,
+    resizable: false,
+  },
+  {
+    name: 'managerName',
+    header: '담당자',
+    defaultFlex: 1,
+    resizable: false,
+  },
+  {
+    name: 'count',
+    header: '등록된 이벤트 단가 그룹',
+    defaultFlex: 1,
+    resizable: false
+  }
+]
+
+
 export const eventUnitPriceDetailColumns = [ //이벤트 단가 상세 컬럼
   {
     name: 'priceEventName',

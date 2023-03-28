@@ -4,6 +4,7 @@ const ACTION_URL = '/system/setting'
 const PRICE_EVENT = '/price'
 const BUDGET_EVENT = '/budget'
 const PRICE_LIST= '/price/list'
+const BUDGET_LIST= '/budget/list'
 
 
 export async function selPriceEventList(username) {
@@ -47,5 +48,21 @@ export async function selAdverPriceEventList(keyword) {
     }).catch((e) => returnVal = false)
   return returnVal;
 };
+
+export async function selAdverBudgetEventList(keyword) {
+  let returnVal = null;
+  await AdminAxios('POST', ACTION_URL + BUDGET_LIST ,keyword)
+    .then((response) => {
+      const {data, responseCode} =response
+      if(responseCode.statusCode ===200){
+        returnVal = data
+      }else{
+        returnVal = null
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+};
+
+
 
 
