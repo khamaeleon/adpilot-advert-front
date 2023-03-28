@@ -6,21 +6,26 @@ import {
   BoardTableContainer, CancelButton, ColSpan0,
   ColSpan1,
   ColTitle,
-  RowSpan, SubmitButton, SubmitContainer
+  RowSpan, SubmitContainer
 } from "../../assets/GlobalStyles";
 import React, {useEffect} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {eventUnitPriceDetailColumns, eventUnitPriceDetailDataAtom, eventUnitPriceDetailSetting} from "./entity";
+import {eventUnitPriceDetailColumns, eventUnitPriceDetailDataAtom} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useNavigate} from "react-router-dom";
+import {selPriceEventList} from "../../services/SettingsAxios";
 
 
 function EventUnitPriceDetail() {
   const [eventUnitPriceDetailDataState, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
   const navigate =useNavigate()
   useEffect(() => {
+    selPriceEventList().then(response => {
+      console.log(response)
+      setEventUnitPriceDetailDataState(response)
+    })
   }, [])
 
   return (
@@ -38,26 +43,26 @@ function EventUnitPriceDetail() {
           <RowSpan>
             <ColSpan1>
               <ColTitle>광고주명</ColTitle>
-              <div>네이트</div>
+              <div>{eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.brandName}</div>
             </ColSpan1>
             <ColSpan1>
               <ColTitle>아이디</ColTitle>
-              <div>nate9988</div>
+              <div>{eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.username}</div>
             </ColSpan1>
             <ColSpan1>
               <ColTitle>담당자</ColTitle>
-              <div>홍길동</div>
+              <div>{eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.managerName}</div>
             </ColSpan1>
           </RowSpan>
-
         </BoardSearchDetail>
         <BoardTableContainer>
-          <Table columns={eventUnitPriceDetailColumns}
-                 data={eventUnitPriceDetailDataState}
-                 settings={eventUnitPriceDetailSetting}
-                 showHoverRows={false}
-                 activeCell={[0]}
-                 emptyText={'이벤트 단가 관리 내역이 없습니다.'}/>
+          {eventUnitPriceDetailDataState !==null &&
+            <Table columns={eventUnitPriceDetailColumns}
+                   data={eventUnitPriceDetailDataState.priceEventDtos}
+                   showHoverRows={false}
+                   activeCell={[0]}
+                   emptyText={'이벤트 단가 관리 내역이 없습니다.'}/>
+          }
         </BoardTableContainer>
         <SubmitContainer>
           <CancelButton onClick={()=>navigate('/board/settings')}>목록</CancelButton>

@@ -1,9 +1,9 @@
 import axios from "axios";
-import {ADMIN_SERVER} from "../constants/GlobalConst";
+import {ADMIN_SERVER, TEST_SERVER} from "../constants/GlobalConst";
 import {refreshAdmin} from "../services/AuthAxios";
 
 export const adminAxios = axios.create({
-  baseURL: ADMIN_SERVER,
+  baseURL: TEST_SERVER,
   headers: {
     'Content-Type': 'application/json',
     Accept: '*/*',

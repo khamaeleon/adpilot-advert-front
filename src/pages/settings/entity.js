@@ -5,58 +5,6 @@ import {Icon} from "../../components/table";
 import {Link} from "react-router-dom";
 import React from "react";
 
-export const accountProfile = atom({ // 매체 계정 프로필 조회
-  "username" : "",
-  "managerName" : "",
-  "managerEmail" : "",
-  "managerPhone" : "",
-  "bankAccountNumber" : "",
-  "bankType" : "",
-  "accountHolder" : "",
-  "passbookCopy" : "",
-  "grossCalculate" : 0,
-  "businessName" : "",
-  "businessNumber" : "",
-  "businessLicenseCopy" : "",
-  "business" : "",
-  "businessType" : "",
-  "ceoName" : "",
-  "address" : "",
-  "taxYn" : 'Y',
-  "mediaType" : ""
-})
-
-
-export const accountInfoSetting = {
-  default: {
-    textAlign: "center",
-    showColumnMenuTool: false,
-  },
-  setColumns: [
-    {
-      target: 0,
-      value: {
-      },
-    }
-  ]
-}
-
-export const accountInfoTable = atom([])
-
-export const searchAccountParams = {// 정산 이력 조회
-  startAt: dateFormat(getToDay(), 'YYYY-MM'),
-  endAt: dateFormat(getToDay(), 'YYYY-MM'),
-  statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE'],
-  searchType: 'DEFAULT',
-  search: ''
-}
-
-export const searchAccountType = [
-  {id: "1", value: "DEFAULT", label: "전체"},
-  {id: "2", value: "MEDIA_NAME", label: "매체명"},
-  {id: "3", value: "MEDIA_ID", label: "매체 아이디"},
-  {id: "4", value: "REQUESTER_ID", label: "신청 아이디"},
-]
 export const eventUnitPriceDataAtom = atom([//이벤트 단가 데이타
   {
     mediaName: '네이트',
@@ -116,41 +64,37 @@ export const eventUnitPriceSetting = {
   ]
 }
 
-export const eventUnitPriceDetailDataAtom = atom([//이벤트 단가 데이타
-  {
-    groupName: '고단가 그룹',
-  }
-])
+export const eventUnitPriceDetailDataAtom = atom(null)
 
 export const eventUnitPriceDetailColumns = [ //이벤트 단가 상세 컬럼
   {
-    name: 'groupName',
+    name: 'priceEventName',
     header: '이벤트 단가 그룹명',
     defaultFlex: 1,
   },
   {
-    name: 'shopper',
+    name: 'shopperMatching',
     header: '쇼퍼 맞춤',
     defaultFlex: 1,
     resizable: false,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
-    name: 'cart',
+    name: 'cartRecommendations',
     header: '카트 추천',
     defaultFlex: 1,
     resizable: false,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
-    name: 'product',
+    name: 'productRecommendations',
     header: '상품 추천',
     defaultFlex: 1,
     resizable: false,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
-    name: 'userMatch',
+    name: 'userMatching',
     header: '유저매치',
     defaultFlex: 1,
     resizable: false,
@@ -164,7 +108,7 @@ export const eventUnitPriceDetailColumns = [ //이벤트 단가 상세 컬럼
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
-    name: 'userOptimize',
+    name: 'userOptimization',
     header: '유저 최적화',
     defaultFlex: 1,
     resizable: false,

@@ -38,13 +38,13 @@ function Layout(){
       }
     }else{
       if(adminInfoState.name ===''){
-        selAdminInfo().then(response =>{
+        /*selAdminInfo().then(response =>{
           setAdminInfoState({
             ...adminInfoState,
             name:response.name,
           })
           setRole('ADMIN')
-        })
+        })*/
       }
     }
   }, []);
