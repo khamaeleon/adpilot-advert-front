@@ -41,6 +41,24 @@ export const menuList = [
     ]
   },
   {
+    name: "settings",
+    header: "설정",
+    child:[
+      {
+        name: "settings",
+        header: "이벤트 단가 관리",
+      },
+      {
+        name: "eventBudget",
+        header: "이벤트 예산 관리",
+      },
+      {
+        name: "timeBudget",
+        header: "시간별 예산 관리",
+      },
+    ]
+  },
+  {
     name: "platform",
     header: "플랫폼 관리",
     child:[

@@ -15,7 +15,9 @@ function AsideList (props) {
   useEffect(()=>{
     setUserName(adminInfoState.convertedUser)
   },[adminInfoState.convertedUser])
-
+  const calcHeight = (item) => {
+    return item.child.length
+  }
   return (
     <>
       {menuList.map((item,key) => {
@@ -27,7 +29,7 @@ function AsideList (props) {
                 <span className={mode? "fadeOut" : "fadeIn"}>{item.header}</span>
                 {item.child.length > 0 && <DropIcon className={mode? "fadeOut" : "fadeIn"} style={id.indexOf(item.name) > -1 ? narrowStyle.button : widenStyle.button}/>}
               </Link>
-              <SubMenu className={id.indexOf(item.name) > -1  ? "list slide-down-"+(item.child.length) : 'list'}>
+              <SubMenu className={id.indexOf(item.name) > -1  ? "list slide-down-"+(calcHeight(item)) : 'list'}>
                 {item.child.map((child,key) => {
                   return (
                     <div key={key}>

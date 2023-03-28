@@ -14,6 +14,7 @@ import {adminInfo, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
 import PlatformAdminDetail from "../platform_manage/AdminDetail";
 import Campaign from "../campaign";
+import Settings from "../settings";
 
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
@@ -120,6 +121,8 @@ function Layout(){
         {/* 대시보드 */}
         {params.id === 'dashboard'  && <DashBoard />}
         {params.id === 'campaign' && <Campaign/>}
+        {/*설정*/}
+        {params.id === 'settings' && <Settings/>}
         {/* 플랫폼 관리 */}
         {params.id === 'platform' && params.detail !== 'detail' && <PlatformManage />}
         {params.id === 'platform' && params.detail ==='detail' && <PlatformUserDetail/>}

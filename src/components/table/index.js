@@ -207,7 +207,7 @@ function Table (props) {
   const {columns, data, settings, groups, titleTotal, historyBtn, handleModalComponent} = props
   const [activeCell, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
-  const gridStyle = { minHeight: 350, border: '1px solid #dddddd' }
+  const gridStyle = { minHeight: 550, border: '1px solid #dddddd' }
   const [loading, setLoading] = useState(false)
   const columnData = () => {
     columns.map(item => {
@@ -259,7 +259,7 @@ function Table (props) {
         handle={setGridRef}
         columns={columns}
         dataSource={data}
-        rowHeight={80}
+        rowHeight={null}
         headerHeight={48}
         showZebraRows={true}
         showCellBorders={'horizontal'}

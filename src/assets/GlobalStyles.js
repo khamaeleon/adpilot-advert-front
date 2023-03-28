@@ -573,6 +573,19 @@ export const RowSpan = styled.div`
   justify-content: space-between;
   margin-top: 25px;
 `
+export const ColSpan0 = styled.div`
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  width: auto;
+  min-height: 45px;
+  gap: 10px;
+  & > div:first-child {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+`
+
 
 export const ColSpan1 = styled.div`
   padding-left: 10px;
