@@ -1,14 +1,15 @@
 import styled from "styled-components";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import {
+  CancelButton,
   ColSpan1,
   ColSpan3,
   ColSpan4,
   ColTitle,
   Input,
   RelativeDiv,
-  RowSpan,
+  RowSpan, Span2,
   Span4,
   SubmitButton,
   ValidationScript
@@ -18,109 +19,254 @@ import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
 
 function SettingChangeModal(props) {
-  const {data} = props
-  const [showPassword, setShowPassword] = useState(false)
+  const {data, onSubmit, type} = props
   const [, setModal] = useAtom(modalController)
-  const [accountInfoState, setAccountInfoState] = useState(data)
-  const {register, handleSubmit, watch, reset, formState: {errors}} = useForm({
+  const [dataState, setDataState] = useState(data !== null ? data :{
+    audience: '',
+    cartRecommendations: '',
+    priceEventId: '',
+    priceEventName: '',
+    productRecommendations: '',
+    shopperMatching: '',
+    userMatching :'',
+    userOptimization: ''
+  } )
+  const {register, handleSubmit, reset, formState: {errors}} = useForm({
     mode: "onSubmit",
-    defaultValues: accountInfoState
+    defaultValues: dataState
   })
+  useEffect(() => {
+    if (type === 'create') {
+      reset({
+        audience: '',
+        cartRecommendations: '',
+        priceEventId: '',
+        priceEventName: '',
+        productRecommendations: '',
+        shopperMatching: '',
+        userMatching :'',
+        userOptimization: ''
+      })
+    }
+  }, [reset, dataState])
   const onError = (error) => console.log(error)
   /**
-   * 패스워드 입력
+   * 그룹명
    * @param event
    */
-  const handlePassword = (event) => {
-    console.log(event.target.value)
-    setAccountInfoState({
-      ...accountInfoState,
-      password: event.target.value
+  const handlePriceEventName = (event) => {
+    setDataState({
+      ...dataState,
+      priceEventName: event.target.value
     })
-  }
-  /**
-   * 패스원드 컨펌
-   * @param event
-   */
-  const handleConfirmPassword = (event) => {
-    setAccountInfoState({
-      ...accountInfoState,
-      confirmPassword: event.target.value
-    })
-  }
-  const handleShowPassword = () => {
-    setShowPassword(!showPassword)
-    console.log(showPassword)
   }
 
-  const handleSave = (data) => {
-    props.onSave(data)
+  /**
+   * 쇼퍼 맞춤
+   * @param event
+   */
+  const handleShopperMatching = (event) => {
+    setDataState({
+      ...dataState,
+      shopperMatching: event.target.value
+    })
+  }
+
+  /**
+   * 카트 추천
+   * @param event
+   */
+  const handleCartRecommendations = (event) => {
+    setDataState({
+      ...dataState,
+      cartRecommendations: event.target.value
+    })
+  }
+
+  /**
+   * 상품 추천
+   * @param event
+   */
+  const handleProductRecommendations = (event) => {
+    setDataState({
+      ...dataState,
+      productRecommendations: event.target.value
+    })
+  }
+
+  /**
+   * 유저 매치
+   * @param event
+   */
+  const handleUserMatching = (event) => {
+    setDataState({
+      ...dataState,
+      userMatching: event.target.value
+    })
+  }
+
+  /**
+   * 오디언스
+   * @param event
+   */
+  const handleAudience = (event) => {
+    setDataState({
+      ...dataState,
+      audience: event.target.value
+    })
+  }
+
+  /**
+   * 유저 최적화
+   * @param event
+   */
+  const handleUserOptimization = (event) => {
+    setDataState({
+      ...dataState,
+      userOptimization: event.target.value
+    })
+  }
+
+  const handleSave = (dataState) => {
+    onSubmit(dataState)
   }
 
   return (
     <div>
       <form onSubmit={handleSubmit(handleSave, onError)}>
-        <ModalHeader title={'비밀번호 변경'}/>
         <ModalBody>
           <RowSpan>
             <ColSpan4>
-              <ColTitle><Span4>비밀번호</Span4></ColTitle>
+              <ColTitle><Span2>그룹명</Span2></ColTitle>
               <RelativeDiv>
                 <Input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
-                  {...register("password", {
-                    required: "비밀번호를 입력해주세요",
-                    pattern: {
-                      value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
-                      message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
-                    }
+                  type={'text'}
+                  placeholder={'그룹명을 입력해주세요'}
+                  {...register("priceEventName", {
+                    required: "그룹명을 입력해주세요",
+                    onChange:(e) => handlePriceEventName(e)
                   })}
-                  value={accountInfoState.password}
-                  onChange={(e) => handlePassword(e)}
+                  value={dataState?.priceEventName}
                 />
-                {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
+                {errors.priceEventName && <ValidationScript>{errors.priceEventName?.message}</ValidationScript>}
               </RelativeDiv>
             </ColSpan4>
-            <ColSpan1>
-              <div onClick={handleShowPassword}>
-                    <span style={{
-                      marginRight: 10,
-                      width: 30,
-                      height: 30,
-                      display: 'inline-block',
-                      verticalAlign: 'middle',
-                      backgroundImage: `url(/assets/images/common/checkbox_${showPassword ? 'on' : 'off'}_B.png)`
-                    }}/>
-                <span>{showPassword ? '가리기' : '보기'}</span>
-              </div>
-            </ColSpan1>
           </RowSpan>
           <RowSpan>
-            <ColSpan3 style={{width: '80%'}}>
-              <ColTitle><Span4>비밀번호 확인</Span4></ColTitle>
+            <ColSpan4>
+              <ColTitle><Span2>쇼퍼 맞춤</Span2></ColTitle>
               <RelativeDiv>
                 <Input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
-                  {...register("confirmPassword", {
-                    required: "비밀번호를 입력해주세요",
-                    validate: (value) => {
-                      if (watch('password') !== value) {
-                        return "입력하신 비밀번호가 맞는지 확인부탁드립니다."
-                      }
-                    }
+                  type={'text'}
+                  placeholder={'금액을 입력해주세요'}
+                  {...register("shopperMatching", {
+                    required: "금액을 입력해주세요",
+                    onChange:(e) => handleShopperMatching(e)
                   })}
-                  value={accountInfoState.confirmPassword}
-                  onChange={(e) => handleConfirmPassword(e)}
+                  value={dataState?.shopperMatching !== 0 ? dataState?.shopperMatching : ''}
                 />
-                {errors.confirmPassword && <ValidationScript style={{marginBottom: 5}}>{errors.confirmPassword?.message}</ValidationScript>}
+                {console.log(dataState)}
+                {errors.shopperMatching && <ValidationScript>{errors.shopperMatching?.message}</ValidationScript>}
               </RelativeDiv>
-            </ColSpan3>
+              <span>원</span>
+            </ColSpan4>
+          </RowSpan>
+          <RowSpan>
+            <ColSpan4>
+              <ColTitle><Span2>카트 추천</Span2></ColTitle>
+              <RelativeDiv>
+                <Input
+                  type={'text'}
+                  placeholder={'금액을 입력해주세요'}
+                  {...register("cartRecommendations", {
+                    required: "금액을 입력해주세요",
+                    onChange:(e) => handleCartRecommendations(e)
+                  })}
+                  value={dataState?.cartRecommendations !== 0 ? dataState?.cartRecommendations : ''}
+                />
+                {errors.cartRecommendations && <ValidationScript>{errors.cartRecommendations?.message}</ValidationScript>}
+              </RelativeDiv>
+              <span>원</span>
+            </ColSpan4>
+          </RowSpan>
+          <RowSpan>
+            <ColSpan4>
+              <ColTitle><Span2>상품 추천</Span2></ColTitle>
+              <RelativeDiv>
+                <Input
+                  type={'text'}
+                  placeholder={'금액을 입력해주세요'}
+                  {...register("productRecommendations", {
+                    required: "금액을 입력해주세요",
+                    onChange:(e) => handleProductRecommendations(e)
+                  })}
+                  value={dataState?.productRecommendations !== 0 ? dataState?.productRecommendations : ''}
+                />
+                {errors.productRecommendations && <ValidationScript>{errors.productRecommendations?.message}</ValidationScript>}
+              </RelativeDiv>
+              <span>원</span>
+            </ColSpan4>
+          </RowSpan>
+          <RowSpan>
+            <ColSpan4>
+              <ColTitle><Span2>유저 매치</Span2></ColTitle>
+              <RelativeDiv>
+                <Input
+                  type={'text'}
+                  placeholder={'금액을 입력해주세요'}
+                  {...register("userMatching", {
+                    required: "금액을 입력해주세요",
+                    onChange:(e) => handleUserMatching(e)
+                  })}
+                  value={dataState?.userMatching !== 0 ? dataState?.userMatching : ''}
+                />
+                {errors.userMatching && <ValidationScript>{errors.userMatching?.message}</ValidationScript>}
+              </RelativeDiv>
+              <span>원</span>
+            </ColSpan4>
+          </RowSpan>
+          <RowSpan>
+            <ColSpan4>
+              <ColTitle><Span2>오디언스</Span2></ColTitle>
+              <RelativeDiv>
+                <Input
+                  type={'text'}
+                  placeholder={'금액을 입력해주세요'}
+                  {...register("audience", {
+                    required: "금액을 입력해주세요",
+                    onChange:(e) => handleAudience(e)
+                  })}
+                  value={dataState?.audience !== 0 ? dataState?.audience : ''}
+                />
+                {errors.audience && <ValidationScript>{errors.audience?.message}</ValidationScript>}
+              </RelativeDiv>
+              <span>원</span>
+            </ColSpan4>
+          </RowSpan>
+          <RowSpan>
+            <ColSpan4>
+              <ColTitle><Span2>유저 최적화</Span2></ColTitle>
+              <RelativeDiv>
+                <Input
+                  type={'text'}
+                  placeholder={'금액을 입력해주세요'}
+                  {...register("userOptimization", {
+                    required: "금액을 입력해주세요",
+                    onChange:(e) => handleUserOptimization(e)
+                  })}
+                  value={dataState.userOptimization !== 0 ? dataState.userOptimization : ''}
+                />
+                {errors.userOptimization && <ValidationScript>{errors.userOptimization?.message}</ValidationScript>}
+              </RelativeDiv>
+              <span>원</span>
+            </ColSpan4>
           </RowSpan>
         </ModalBody>
         <ModalFooter>
-          <SubmitButton type={"submit"} >변경</SubmitButton>
+          <CancelButton onClick={()=>setModal({
+            isShow: false,
+          })}>취소</CancelButton>
+          <SubmitButton type={"submit"} >{data !== 'create' ? '변경' : '추가'}</SubmitButton>
         </ModalFooter>
       </form>
     </div>
@@ -128,16 +274,15 @@ function SettingChangeModal(props) {
 }
 
 export function SettingAdd(props) {
-  console.log(props)
-  const {onSubmit, data, onSave, title} = props;
+  const {onSubmit, data, title, type} = props;
   const [, setModal] = useAtom(modalController)
   const handleModalComponent = () => {
     setModal({
       isShow: true,
-      width: 700,
+      width: 500,
       modalComponent: () => {
         return (
-          <SettingChangeModal onSave={onSave} data={data} onSubmit={onSubmit}/>
+          <SettingChangeModal data={data} onSubmit={onSubmit} type={type}/>
         )
       }
     })

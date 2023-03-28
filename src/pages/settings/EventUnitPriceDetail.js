@@ -23,7 +23,7 @@ import SettingAdd from "../../components/common/SettingModal";
 
 function EventUnitPriceDetail() {
   const [eventUnitPriceDetailDataState, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
-  const navigate =useNavigate()
+  const navigate = useNavigate()
   useEffect(() => {
     selPriceEventList().then(response => {
       console.log(response)
@@ -32,7 +32,7 @@ function EventUnitPriceDetail() {
   }, [])
 
   /**
-   * 모달안에 매체 검색 선택시
+   * 모달에서 수정 추가
    */
   const handleOnSubmit = (data) => {
     console.log(data)
@@ -65,7 +65,9 @@ function EventUnitPriceDetail() {
           </RowSpan>
         </BoardSearchDetail>
         <BoardTableContainer>
-          <SettingAdd title={'추가'} onSubmit={handleOnSubmit} data={eventUnitPriceDetailDataState} btnStyle={'AccountButton'}/>
+          <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
+            <SettingAdd title={'추가'} onSubmit={handleOnSubmit} type={'create'} data={null} btnStyle={'AccountButton'}/>
+          </RowSpan>
           {eventUnitPriceDetailDataState !==null &&
             <Table columns={eventUnitPriceDetailColumns}
                    data={eventUnitPriceDetailDataState?.priceEventDtos}
