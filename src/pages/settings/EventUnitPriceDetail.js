@@ -16,7 +16,7 @@ import Table from "../../components/table";
 import {eventUnitPriceDetailColumns, eventUnitPriceDetailDataAtom} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {selPriceEventList} from "../../services/SettingsAxios";
 import SettingAdd from "../../components/common/SettingModal";
 
@@ -24,8 +24,9 @@ import SettingAdd from "../../components/common/SettingModal";
 function EventUnitPriceDetail() {
   const [eventUnitPriceDetailDataState, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
   const navigate =useNavigate()
+  const state =useLocation()
   useEffect(() => {
-    selPriceEventList().then(response => {
+    selPriceEventList(state).then(response => {
       console.log(response)
       setEventUnitPriceDetailDataState(response)
     })
