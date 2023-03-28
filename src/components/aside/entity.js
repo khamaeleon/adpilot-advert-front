@@ -40,6 +40,16 @@ export const menuList = [
       },
     ]
   },
+  {
+    name: "platform",
+    header: "플랫폼 관리",
+    child:[
+      {
+        name: "platform",
+        header: "사용자 관리",
+      }
+    ]
+  },
 ]
 
 

@@ -34,17 +34,17 @@ function PlatformUser(){
   const [totalInfo,setTotalInfo] = useState(dataTotalInfo)
 
   useEffect(()=>{
-    selUserList(searchAccountInfoState).then(response =>{
-      if(response){
-        console.log(response)
-        setUserInfoList(response.rows)
-        setTotalInfo({
-          totalCount: response.totalCount,
-          totalPages: response.totalPages,
-          currentPage:response.currentPage
-        })
-      }
-    })
+    // selUserList(searchAccountInfoState).then(response =>{
+    //   if(response){
+    //     console.log(response)
+    //     setUserInfoList(response.rows)
+    //     setTotalInfo({
+    //       totalCount: response.totalCount,
+    //       totalPages: response.totalPages,
+    //       currentPage:response.currentPage
+    //     })
+    //   }
+    // })
   },[])
 
   /**
@@ -156,7 +156,7 @@ function PlatformUser(){
             {/*line1*/}
             <RowSpan>
               <ColSpan1>
-                <ColTitle><span>매체 구분</span></ColTitle>
+                <ColTitle><span>광고주 구분</span></ColTitle>
                 <div>
                   <Select styles={inputStyle}
                           components={{IndicatorSeparator: () => null}}

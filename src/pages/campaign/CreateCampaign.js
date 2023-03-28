@@ -1,8 +1,8 @@
 import {
   AgentType,
-  Board, BoardContainer,
+  Board,
   BoardHeader,
-  BoardSearchResult, CancelButton,
+  BoardSearchResult,
   ColSpan4,
   DefaultButton, Input,
   RowSpan,

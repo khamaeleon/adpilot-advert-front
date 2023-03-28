@@ -1,26 +1,11 @@
 import Aside from "../../components/aside";
 import {useNavigate, useParams} from "react-router-dom";
 import DashBoard from "../dash_board";
-import MediaManage from "../media_manage";
 import PlatformManage from "../platform_manage";
-import Reports from "../reports";
-import AdExchange from "../ad_exchange";
-import Account from "../account_manage";
-import AccountHistory from "../account_manage/AccountHistory";
-import AccountProfile from "../account_manage/AccountProfile";
-import AccountConfirm from "../account_manage/AccountConfirm";
-import AccountData from "../account_manage/AccountData";
 import {useEffect, useState} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
-import MediaList from "../media_manage/List";
-import PlatformHistory from "../platform_manage/History";
-import PlatformAdExchange from "../platform_manage/AdExchange";
 import PlatformUserDetail from "../platform_manage/UserDetail";
-import PlatformHistoryDetail from "../platform_manage/HistoryDetail";
-import PlatformAdExchangeDetail from "../platform_manage/AdExchagneDetail";
-import AdExchangeDetail from "../ad_exchange/AdExchangeDetail";
-import MediaListDetail from "../media_manage/MediaListDetail";
 import {useAtom,} from "jotai";
 import {selUserByUserId} from "../../services/ManageUserAxios";
 import {selAdminInfo} from "../../services/ManageAdminAxios";
@@ -135,6 +120,9 @@ function Layout(){
         {/* 대시보드 */}
         {params.id === 'dashboard'  && <DashBoard />}
         {params.id === 'campaign' && <Campaign/>}
+        {/* 플랫폼 관리 */}
+        {params.id === 'platform' && params.detail !== 'detail' && <PlatformManage />}
+        {params.id === 'platform' && params.detail ==='detail' && <PlatformUserDetail/>}
       </BoardBody>
       <Modal></Modal>
     </div>
