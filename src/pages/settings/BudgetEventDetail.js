@@ -21,7 +21,7 @@ import {
 import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
-import {selBudgetEventList, selPriceEventList} from "../../services/SettingsAxios";
+import {selBudgetEventList} from "../../services/SettingsAxios";
 import SettingAdd from "../../components/common/SettingModal";
 
 

@@ -26,6 +26,7 @@ function EventUnitPriceDetail() {
   const [eventUnitPriceDetailDataState, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
   const navigate = useNavigate()
   const {state} =useLocation()
+
   useEffect(() => {
     selPriceEventList(state.id).then(response => {
       console.log(response)
