@@ -46,7 +46,7 @@ function EventUnitPriceDetail() {
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
             <ColSpan0>
               <ColTitle>최근 수정</ColTitle>
-              <div>{dateFormat(new Date(), 'YYYY.MM.DD HH:mm')}</div>
+              <div>{dateFormat(eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.lastModifiedAt, 'YYYY.MM.DD HH:mm')}</div>
             </ColSpan0>
           </RowSpan>
           <RowSpan>
@@ -65,6 +65,9 @@ function EventUnitPriceDetail() {
           </RowSpan>
         </BoardSearchDetail>
         <BoardTableContainer>
+          <div>
+            총 <span>{eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.totalCount}</span>건
+          </div>
           <SettingAdd title={'추가'} onSubmit={handleOnSubmit} data={eventUnitPriceDetailDataState} btnStyle={'AccountButton'}/>
           {eventUnitPriceDetailDataState !==null &&
             <Table columns={eventUnitPriceDetailColumns}
