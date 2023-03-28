@@ -1,5 +1,4 @@
-import {dateFormat, decimalFormat} from "../../common/StringUtils";
-import {getToDay} from "../../common/DateUtils";
+import {decimalFormat} from "../../common/StringUtils";
 import {atom} from "jotai/index";
 import {Icon} from "../../components/table";
 import {Link} from "react-router-dom";
@@ -7,7 +6,7 @@ import React from "react";
 
 export const eventUnitPriceDataAtom = atom(null)
 
-export const eventUnitPriceColumns = [ //이벤트 단가 컬럼
+export const adverEventPriceColumns = [ //이벤트 단가 컬럼
   {
     name: 'brandName',
     header: '광고주명',

@@ -3,15 +3,15 @@ import {
   Board,
   BoardHeader,
   BoardSearchDetail,
-  BoardTableContainer, ColSpan0,
+  BoardTableContainer,
   ColSpan1,
-  ColTitle, DefaultButton, Input,
+  DefaultButton, Input,
   RowSpan
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {eventUnitPriceColumns, eventUnitPriceDataAtom} from "./entity";
+import {adverEventPriceColumns, eventUnitPriceColumns, eventUnitPriceDataAtom} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {selAdverPriceEventList} from "../../services/SettingsAxios";
 
@@ -56,7 +56,7 @@ function EventUnitPrice() {
         </BoardSearchDetail>
         <BoardTableContainer>
           { eventUnitPriceDataState !==null &&
-            <Table columns={eventUnitPriceColumns}
+            <Table columns={adverEventPriceColumns}
                    data={eventUnitPriceDataState.eventDtos}
                    showHoverRows={false}
                    activeCell={[0]}
