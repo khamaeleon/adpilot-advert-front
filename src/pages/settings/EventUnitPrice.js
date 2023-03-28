@@ -11,18 +11,31 @@ import {
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {eventUnitPriceColumns, eventUnitPriceDataAtom, eventUnitPriceSetting} from "./entity";
+import {eventUnitPriceColumns, eventUnitPriceDataAtom} from "./entity";
 import {ToastContainer} from "react-toastify";
-import {dateFormat} from "../../common/StringUtils";
+import {selAdverPriceEventList} from "../../services/SettingsAxios";
 
 
 function EventUnitPrice() {
   const [eventUnitPriceDataState, setEventUnitPriceDataState] = useAtom(eventUnitPriceDataAtom)
-  const [searchParams, setSearchParams] = useState('')
+  const [searchParams, setSearchParams] = useState({ keyword:''})
   useEffect(() => {
+    selAdverPriceEventList(searchParams).then(response =>{
+      setEventUnitPriceDataState(response)
+    })
   }, [])
   const handleSearch = (event) => {
-    setSearchParams(event.target.value)
+    setSearchParams({
+      ...searchParams,
+      keyword:event.target.value
+    })
+  }
+
+  const onSearchAdverEventPrice =() =>{
+    console.log(searchParams)
+    selAdverPriceEventList(searchParams).then(response =>{
+      setEventUnitPriceDataState(response)
+    })
   }
   return (
     <>
@@ -34,20 +47,21 @@ function EventUnitPrice() {
             <ColSpan1>
               <Input style={{width: 300}}
                      placeholder={'광고주 명 및 아이디 검색'}
-                     value={searchParams}
+                     value={searchParams.keyword}
                      onChange={handleSearch}
               />
-              <DefaultButton>검색</DefaultButton>
+              <DefaultButton onClick={onSearchAdverEventPrice}>검색</DefaultButton>
             </ColSpan1>
           </RowSpan>
         </BoardSearchDetail>
         <BoardTableContainer>
-          <Table columns={eventUnitPriceColumns}
-                 data={eventUnitPriceDataState}
-                 settings={eventUnitPriceSetting}
-                 showHoverRows={false}
-                 activeCell={[0]}
-                 emptyText={'이벤트 단가 현황 내역이 없습니다.'}/>
+          { eventUnitPriceDataState !==null &&
+            <Table columns={eventUnitPriceColumns}
+                   data={eventUnitPriceDataState.eventDtos}
+                   showHoverRows={false}
+                   activeCell={[0]}
+                   emptyText={'이벤트 단가 현황 내역이 없습니다.'}/>
+          }
         </BoardTableContainer>
       </Board>
       <ToastContainer position="top-center"

@@ -5,18 +5,11 @@ import {Icon} from "../../components/table";
 import {Link} from "react-router-dom";
 import React from "react";
 
-export const eventUnitPriceDataAtom = atom([//이벤트 단가 데이타
-  {
-    mediaName: '네이트',
-    mediaId: 'nate9988',
-    managerName: '홍길동',
-    eventUnitGroup: 10
-  }
-])
+export const eventUnitPriceDataAtom = atom(null)
 
 export const eventUnitPriceColumns = [ //이벤트 단가 컬럼
   {
-    name: 'mediaName',
+    name: 'brandName',
     header: '광고주명',
     defaultFlex: 1,
     cellProps: {
@@ -26,12 +19,12 @@ export const eventUnitPriceColumns = [ //이벤트 단가 컬럼
     },
     render: (props) => {
       return (
-        <Link to={'/board/settings/detail'} state={{id: props.data.id}}>{props.value}</Link>
+        <Link to={'/board/settings/detail'} state={{id: props.data.username}}>{props.value}</Link>
       )
     }
   },
   {
-    name: 'mediaId',
+    name: 'username',
     header: '아이디',
     defaultFlex: 1,
     resizable: false,
@@ -43,26 +36,12 @@ export const eventUnitPriceColumns = [ //이벤트 단가 컬럼
     resizable: false,
   },
   {
-    name: 'eventUnitGroup',
+    name: 'count',
     header: '등록된 이벤트 단가 그룹',
     defaultFlex: 1,
-    resizable: false,
+    resizable: false
   }
 ]
-
-export const eventUnitPriceSetting = {
-  default: {
-    textAlign: "center",
-    showColumnMenuTool: false,
-  },
-  setColumns: [
-    {
-      target: 0,
-      value: {
-      },
-    }
-  ]
-}
 
 export const eventUnitPriceDetailDataAtom = atom(null)
 
