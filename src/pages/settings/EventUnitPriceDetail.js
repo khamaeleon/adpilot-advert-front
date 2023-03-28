@@ -16,7 +16,7 @@ import Table from "../../components/table";
 import {eventUnitPriceDetailColumns, eventUnitPriceDetailDataAtom} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {selPriceEventList} from "../../services/SettingsAxios";
 import SettingAdd from "../../components/common/SettingModal";
 
@@ -25,7 +25,7 @@ function EventUnitPriceDetail() {
   const [eventUnitPriceDetailDataState, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
   const navigate = useNavigate()
   useEffect(() => {
-    selPriceEventList().then(response => {
+    selPriceEventList(state).then(response => {
       console.log(response)
       setEventUnitPriceDetailDataState(response)
     })
@@ -46,7 +46,7 @@ function EventUnitPriceDetail() {
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
             <ColSpan0>
               <ColTitle>최근 수정</ColTitle>
-              <div>{dateFormat(new Date(), 'YYYY.MM.DD HH:mm')}</div>
+              <div>{dateFormat(eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.lastModifiedAt, 'YYYY.MM.DD HH:mm')}</div>
             </ColSpan0>
           </RowSpan>
           <RowSpan>
@@ -68,6 +68,9 @@ function EventUnitPriceDetail() {
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
             <SettingAdd title={'추가'} onSubmit={handleOnSubmit} type={'create'} data={null} btnStyle={'AccountButton'}/>
           </RowSpan>
+          <div>
+            총 <span>{eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.totalCount}</span>건
+          </div>
           {eventUnitPriceDetailDataState !==null &&
             <Table columns={eventUnitPriceDetailColumns}
                    data={eventUnitPriceDetailDataState?.priceEventDtos}
