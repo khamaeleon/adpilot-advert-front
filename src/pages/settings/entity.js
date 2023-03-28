@@ -1,24 +1,10 @@
 import {decimalFormat} from "../../common/StringUtils";
 import {atom} from "jotai/index";
-import {Icon} from "../../components/table";
 import {Link} from "react-router-dom";
 import React from "react";
 
 export const eventUnitPriceDataAtom = atom(null)
-
-export const adverEventPriceSetting = {
-  default: {
-    textAlign: "center",
-    showColumnMenuTool: false,
-  },
-  setColumns: [
-    {
-      target: 0,
-      value: {
-      },
-    }
-  ]
-}
+export const eventUnitPriceDetailDataAtom = atom(null)
 
 export const adverEventPriceColumns = [ //이벤트 단가 컬럼
   {
@@ -33,44 +19,6 @@ export const adverEventPriceColumns = [ //이벤트 단가 컬럼
     render: (props) => {
       return (
         <Link to={'/board/settings/detail'} state={{id: props.data.username}}>{props.value}</Link>
-      )
-    }
-  },
-  {
-    name: 'username',
-    header: '아이디',
-    defaultFlex: 1,
-    resizable: false,
-  },
-  {
-    name: 'managerName',
-    header: '담당자',
-    defaultFlex: 1,
-    resizable: false,
-  },
-  {
-    name: 'count',
-    header: '등록된 이벤트 단가 그룹',
-    defaultFlex: 1,
-    resizable: false
-  }
-]
-
-export const eventUnitPriceDetailDataAtom = atom(null)
-
-export const adverEventBudgetColumns = [ //이벤트 단가 컬럼
-  {
-    name: 'brandName',
-    header: '광고주명',
-    defaultFlex: 1,
-    cellProps: {
-      style: {
-        textDecoration: 'underline'
-      }
-    },
-    render: (props) => {
-      return (
-        <Link to={'/board/budgetEvent/detail'} state={{id: props.data.username}}>{props.value}</Link>
       )
     }
   },
@@ -144,11 +92,47 @@ export const eventUnitPriceDetailColumns = [ //이벤트 단가 상세 컬럼
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   }
 ]
-
 export const budgetEventDataAtom = atom(null)
+export const eventBudgetDetailDataAtom = atom(null)
+
+export const adverEventBudgetColumns = [ //이벤트 단가 컬럼
+  {
+    name: 'brandName',
+    header: '광고주명',
+    defaultFlex: 1,
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
+    render: (props) => {
+      return (
+        <Link to={'/board/budgetEvent/detail'} state={{id: props.data.username}}>{props.value}</Link>
+      )
+    }
+  },
+  {
+    name: 'username',
+    header: '아이디',
+    defaultFlex: 1,
+    resizable: false,
+  },
+  {
+    name: 'managerName',
+    header: '담당자',
+    defaultFlex: 1,
+    resizable: false,
+  },
+  {
+    name: 'count',
+    header: '등록된 이벤트 단가 그룹',
+    defaultFlex: 1,
+    resizable: false
+  }
+]
 export const budgetEventDetailColumns = [ //이벤트 예산 상세 컬럼
   {
-    name: 'priceEventName',
+    name: 'budgetEventName',
     header: '이벤트 단가 그룹명',
     defaultFlex: 1,
   },
