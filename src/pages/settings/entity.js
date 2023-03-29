@@ -61,7 +61,7 @@ export const adverEventPriceColumns = [
  */
 export const eventUnitPriceDetailColumns = [ //이벤트 단가 상세 컬럼
   {
-    name: 'priceEventName',
+    name: 'groupName',
     header: '이벤트 단가 그룹명',
     defaultFlex: 1,
   },
@@ -167,7 +167,7 @@ export const adverEventBudgetColumns = [ //이벤트 단가 컬럼
  */
 export const budgetEventDetailColumns = [ //이벤트 예산 상세 컬럼
   {
-    name: 'budgetEventName',
+    name: 'groupName',
     header: '이벤트 단가 그룹명',
     defaultFlex: 1,
   },

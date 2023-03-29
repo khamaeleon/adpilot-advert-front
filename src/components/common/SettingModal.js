@@ -25,7 +25,7 @@ function SettingChangeModal(props) {
     audience: '',
     cartRecommendations: '',
     priceEventId: '',
-    priceEventName: '',
+    groupName: '',
     productRecommendations: '',
     shopperMatching: '',
     userMatching :'',
@@ -41,7 +41,7 @@ function SettingChangeModal(props) {
         audience: '',
         cartRecommendations: '',
         priceEventId: '',
-        priceEventName: '',
+        groupName: '',
         productRecommendations: '',
         shopperMatching: '',
         userMatching :'',
@@ -57,7 +57,7 @@ function SettingChangeModal(props) {
   const handlePriceEventName = (event) => {
     setDataState({
       ...dataState,
-      priceEventName: event.target.value
+      groupName: event.target.value
     })
   }
 
@@ -142,13 +142,13 @@ function SettingChangeModal(props) {
                 <Input
                   type={'text'}
                   placeholder={'그룹명을 입력해주세요'}
-                  {...register("priceEventName", {
+                  {...register("groupName", {
                     required: "그룹명을 입력해주세요",
                     onChange:(e) => handlePriceEventName(e)
                   })}
-                  value={dataState?.priceEventName}
+                  value={dataState?.groupName}
                 />
-                {errors.priceEventName && <ValidationScript>{errors.priceEventName?.message}</ValidationScript>}
+                {errors.groupName && <ValidationScript>{errors.groupName?.message}</ValidationScript>}
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
