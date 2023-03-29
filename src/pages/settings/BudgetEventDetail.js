@@ -29,12 +29,12 @@ function BudgetEventDetail() {
   const [eventBudgetDetailDataState, setEventBudgetDetailDataState] = useAtom(eventBudgetDetailDataAtom)
   const navigate = useNavigate()
   const {state} =useLocation()
-  useEffect(() => {
-    selBudgetEventList(state.id).then(response => {
-      console.log(response)
-      setEventBudgetDetailDataState(response)
-    })
-  }, [])
+  // useEffect(() => {
+  //   selBudgetEventList(state.id).then(response => {
+  //     console.log(response)
+  //     setEventBudgetDetailDataState(response)
+  //   })
+  // }, [])
 
   /**
    * 모달에서 수정 추가

@@ -34,7 +34,7 @@ function AsideList (props) {
                   return (
                     <div key={key}>
                       <div>
-                        <Link to={`/board/${child.name}`} style={id === child.name ? {color:'#fff'}:null}>{child.header}</Link>
+                        <Link to={`/board/${child.name}`} style={id === child.name || id === child.detail ? {color:'#fff'}:null}>{child.header}</Link>
                       </div>
                     </div>
                   )

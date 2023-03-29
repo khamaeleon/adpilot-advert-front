@@ -50,25 +50,32 @@ export const menuList = [
       {
         name: "settings",
         header: "이벤트 단가 관리",
+        detail: "settingsDetail"
       },
       {
         name: "budgetEvent",
         header: "이벤트 예산 관리",
+        detail: "budgetEventDetail"
       },
       {
         name: "budgetTime",
         header: "시간별 예산 관리",
+        detail: "budgetTimeDetail"
       }
     ]
   },
   {
     name: "platform",
     header: "플랫폼 관리",
-    include: ["platform"],
+    include: ["platform","categoryManage"],
     child:[
       {
         name: "platform",
         header: "사용자 관리",
+      },
+      {
+        name: "categoryManage",
+        header: "광고주 카테고리 관리"
       }
     ]
   },
