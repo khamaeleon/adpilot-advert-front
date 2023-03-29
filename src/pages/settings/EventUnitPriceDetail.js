@@ -30,7 +30,6 @@ function EventUnitPriceDetail() {
 
   useEffect(() => {
     selPriceEventList(state.id).then(response => {
-      console.log(response)
       setEventUnitPriceDetailDataState(response)
     })
   }, [])

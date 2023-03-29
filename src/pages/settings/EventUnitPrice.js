@@ -29,7 +29,9 @@ function EventUnitPrice() {
       keyword:event.target.value
     })
   }
-
+  /**
+   * 광고주 명 및 아이디 검색
+   */
   const onSearchAdverEventPrice =() =>{
     selAdverPriceEventList(searchParams).then(response =>{
       setEventUnitPriceDataState(response)

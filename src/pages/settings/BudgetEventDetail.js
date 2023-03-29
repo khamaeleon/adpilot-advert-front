@@ -31,7 +31,6 @@ function BudgetEventDetail() {
 
   useEffect(() => {
     selBudgetEventList(state.id).then(response => {
-      console.log(response)
       setEventBudgetDetailDataState(response)
     })
   }, [])

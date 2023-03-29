@@ -23,7 +23,6 @@ function BudgetEvent() {
 
   useEffect(() => {
     selAdverBudgetEventList(searchParams).then(response => {
-      console.log(response)
       setBudgetEventDataState(response)
     })
   }, [])
@@ -33,9 +32,10 @@ function BudgetEvent() {
       keyword:event.target.value
     })
   }
-
+  /**
+   * 광고주 명 및 아이디 검색
+   */
   const onSearchAdverEventBudget =() =>{
-    console.log(searchParams)
     selAdverPriceEventList(searchParams).then(response =>{
       setBudgetEventDataState(response)
     })
