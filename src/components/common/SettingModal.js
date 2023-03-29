@@ -16,10 +16,12 @@ import {
 import {useAtom} from "jotai";
 import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
+import {saveTypeAtom} from "../../pages/settings/entity";
 
 function SettingChangeModal(props) {
   const {data, onSubmit, saveType, label} = props
   const [, setModal] = useAtom(modalController)
+  const [, setSaveTypeState] = useAtom(saveTypeAtom)
   const [dataState, setDataState] = useState(saveType !== 'create' ? data :{
     audience: '',
     cartRecommendations: '',
@@ -36,15 +38,11 @@ function SettingChangeModal(props) {
   })
   useEffect(() => {
     if (saveType === 'create') {
+      setSaveTypeState(saveType)
+    }else{
+      setSaveTypeState(saveType)
       reset({
-        audience: '',
-        cartRecommendations: '',
-        priceEventId: '',
-        groupName: '',
-        productRecommendations: '',
-        shopperMatching: '',
-        userMatching :'',
-        userOptimization: ''
+        dataState
       })
     }
   }, [reset])

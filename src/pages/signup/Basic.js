@@ -3,22 +3,13 @@ import {useAtom} from "jotai/index";
 import {useForm} from "react-hook-form";
 import {toast} from "react-toastify";
 import {selValidUserId, signUp} from "../../services/ManageUserAxios";
-import {
-  CancelButton,
-  ColSpan1,
-  DefaultButton,
-  DeleteButton,
-  Input,
-  inputStyle,
-  RelativeDiv
-} from "../../assets/GlobalStyles";
+import {CancelButton, DefaultButton, DeleteButton, Input, inputStyle, RelativeDiv} from "../../assets/GlobalStyles";
 import {accountInfoAtom, hostList, nextStepAtom} from "./entity";
 import {ButtonGroup, DuplicateButton, Form, SignUpVerify, ValidationScript, VerticalRule} from "./styles";
 import Select from "react-select";
 import {useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
-import {HorizontalRule} from "../../components/common/Common";
 import ImageUploading from "react-images-uploading";
 import {accountFileUpload} from "../../services/AccountAxios";
 

@@ -13,6 +13,7 @@ export default function Terms() {
 
   useEffect(() => {
     selPolicyLatestTerms().then(response => {
+      console.log(response)
       setTermsInfo(response)
       setAccountInfo({
         ...accountInfo,

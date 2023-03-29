@@ -23,6 +23,7 @@ import SelectBox from "../common/SelectBox";
 import {showListAtom} from "../../pages/ad_exchange/entity";
 import {TotalCount} from "./TableDetail";
 import SettingAdd from "../common/SettingModal";
+import {handleOnSubmit} from "../../pages/settings/EventUnitPriceDetail";
 
 
 function UseAtom (props){
@@ -177,7 +178,7 @@ export function Icon(props) {
   return(
     <>
       {props.saveType === 'edit' &&
-        <SettingAdd data={props.cellProps} saveType={props.saveType} label={props.label}/>
+        <SettingAdd data={props.cellProps} saveType={props.saveType} label={props.label} />
       }
       {props.icon === 'script' &&
         <ScriptComponent cellProps={props.cellProps} />

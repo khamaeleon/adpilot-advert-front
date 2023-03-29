@@ -3,7 +3,9 @@ import {atom} from "jotai/index";
 import {Link} from "react-router-dom";
 import React from "react";
 import {Icon} from "../../components/table";
+import {handleOnSubmit} from "./EventUnitPriceDetail";
 
+export const saveTypeAtom =atom('create')
 /**
  * 이벤트 단가 광고주 리스트 Atom
  * @type {Atom<unknown>}
