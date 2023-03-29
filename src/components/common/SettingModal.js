@@ -21,7 +21,7 @@ import {useForm} from "react-hook-form";
 function SettingChangeModal(props) {
   const {data, onSubmit, type} = props
   const [, setModal] = useAtom(modalController)
-  const [dataState, setDataState] = useState(data !== null ? data :{
+  const [dataState, setDataState] = useState(type !== 'create' ? data :{
     audience: '',
     cartRecommendations: '',
     priceEventId: '',
@@ -265,7 +265,7 @@ function SettingChangeModal(props) {
           <CancelButton onClick={()=>setModal({
             isShow: false,
           })}>취소</CancelButton>
-          <SubmitButton type={"submit"} >{data !== 'create' ? '변경' : '추가'}</SubmitButton>
+          <SubmitButton type={"submit"} >{type !== 'create' ? '변경' : '추가'}</SubmitButton>
         </ModalFooter>
       </form>
     </div>

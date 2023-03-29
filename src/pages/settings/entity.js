@@ -7,13 +7,13 @@ import React from "react";
  * 이벤트 단가 광고주 리스트 Atom
  * @type {Atom<unknown>}
  */
-export const eventUnitPriceDataAtom = atom('')
+export const eventUnitPriceDataAtom = atom(null)
 
 /**
  * 이벤트 단가 광고주별 상세 리스트 Atom
  * @type {Atom<unknown>}
  */
-export const eventUnitPriceDetailDataAtom = atom('')
+export const eventUnitPriceDetailDataAtom = atom(null)
 
 /**
  * 이벤트 단가 광고주 리스트 컬럼세팅
@@ -21,7 +21,7 @@ export const eventUnitPriceDetailDataAtom = atom('')
  */
 export const adverEventPriceColumns = [
   {
-    name: 'brandName',
+    name: 'adverName',
     header: '광고주명',
     defaultFlex: 1,
     cellProps: {
@@ -31,7 +31,7 @@ export const adverEventPriceColumns = [
     },
     render: (props) => {
       return (
-        <Link to={'/board/settingsDetail'} state={{id: props.data.username}}>{props.value}</Link>
+        <Link to={'/board/settingsDetail'} state={{id: props.data.userId}}>{props.value}</Link>
       )
     }
   },
@@ -127,7 +127,7 @@ export const eventBudgetDetailDataAtom = atom(null)
  */
 export const adverEventBudgetColumns = [ //이벤트 단가 컬럼
   {
-    name: 'brandName',
+    name: 'adverName',
     header: '광고주명',
     defaultFlex: 1,
     cellProps: {
@@ -233,7 +233,7 @@ export const timeBudgetDetailDataAtom = atom(null)
  */
 export const adverTimeBudgetColumns = [ //시간 단가 컬럼
   {
-    name: 'brandName',
+    name: 'adverName',
     header: '광고주명',
     defaultFlex: 1,
     cellProps: {

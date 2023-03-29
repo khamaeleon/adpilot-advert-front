@@ -14,7 +14,7 @@ function Navigator (props) {
     setDepth1(nav[0])
     setDepth2(nav[1])
     setDepth3(nav[2])
-  }, []);
+  }, [location.pathname]);
 
   return (
     <NavigatorContainer>

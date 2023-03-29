@@ -1,29 +1,20 @@
 import Navigator from "../../components/common/Navigator";
 import {
-  Board, BoardContainer,
-  BoardHeader,
-  BoardSearchDetail,
-  BoardTableContainer,
-  ColSpan1,
-  DefaultButton,
-  Input,
-  RowSpan, TitleContainer
+  BoardContainer,
+  TitleContainer
 } from "../../assets/GlobalStyles";
-import React, {useEffect, useState} from "react";
-import {useAtom} from "jotai";
-import Table from "../../components/table";
-import {adverEventPriceColumns, eventUnitPriceDataAtom} from "./entity";
-import {ToastContainer} from "react-toastify";
-import {selAdverPriceEventList} from "../../services/SettingsAxios";
+import React from "react";
 import {useParams} from "react-router-dom";
 import EventUnitPrice from "./EventUnitPrice";
 import EventUnitPriceDetail from "./EventUnitPriceDetail";
 import BudgetEvent from "./BudgetEvent";
 import BudgetEventDetail from "./BudgetEventDetail";
+import BudgetTime from "./BudgetTime";
+import BudgetTimeDetail from "./BudgetTimeDetail";
 
 export default function Settings() {
   const params = useParams()
-  return(
+  return (
     <main>
       <BoardContainer>
         <TitleContainer>
@@ -31,10 +22,12 @@ export default function Settings() {
           <Navigator/>
         </TitleContainer>
         {/* 이벤트 단가 관리 */}
-        {params.id === 'settings' && <EventUnitPrice />}
-        {params.id === 'settingsDetail' && <EventUnitPriceDetail />}
-        {params.id === 'budgetEvent' && <BudgetEvent />}
-        {params.id === 'budgetEventDetail' && <BudgetEventDetail />}
+        {params.id === 'settings' && <EventUnitPrice/>}
+        {params.id === 'settingsDetail' && <EventUnitPriceDetail/>}
+        {params.id === 'budgetEvent' && <BudgetEvent/>}
+        {params.id === 'budgetEventDetail' && <BudgetEventDetail/>}
+        {params.id === 'budgeTime' && <BudgetTime/>}
+        {params.id === 'budgetTimeDetail' && <BudgetTimeDetail/>}
       </BoardContainer>
     </main>
   )

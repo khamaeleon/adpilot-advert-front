@@ -11,20 +11,23 @@ import {
   RowSpan,
   SubmitContainer, TitleContainer
 } from "../../assets/GlobalStyles";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
 import {eventUnitPriceDetailColumns, eventUnitPriceDetailDataAtom} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
-import {selPriceEventList} from "../../services/SettingsAxios";
+import {resistPriceEvent, selPriceEventList} from "../../services/SettingsAxios";
 import SettingAdd from "../../components/common/SettingModal";
+import {modalController} from "../../store";
 
 
 function EventUnitPriceDetail() {
   const [eventUnitPriceDetailDataState, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
   const navigate = useNavigate()
+  const [, setModal] = useAtom(modalController)
+  const [saveType,setSaveType] =useState('create')
   const {state} =useLocation()
 
   useEffect(() => {
@@ -38,7 +41,21 @@ function EventUnitPriceDetail() {
    * 모달에서 수정 추가
    */
   const handleOnSubmit = (data) => {
-    console.log(data)
+    if(saveType ==='create'){
+      resistPriceEvent({...data,groupName:data.priceEventName,userId:state.id}).then(response => {
+        if(response){
+          setModal({
+            isShow: false,
+            modalComponent: null
+          })
+          selPriceEventList(state.id).then(response => {
+            setEventUnitPriceDetailDataState(response)
+          })
+        }
+      })
+    }else{
+
+    }
   }
   return (
     <>
@@ -54,7 +71,7 @@ function EventUnitPriceDetail() {
           <RowSpan>
             <ColSpan1>
               <ColTitle>광고주명</ColTitle>
-              <div>{eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.brandName}</div>
+              <div>{eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.adverName}</div>
             </ColSpan1>
             <ColSpan1>
               <ColTitle>아이디</ColTitle>
@@ -68,7 +85,7 @@ function EventUnitPriceDetail() {
         </BoardSearchDetail>
         <BoardTableContainer>
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
-            <SettingAdd title={'추가'} onSubmit={handleOnSubmit} type={'create'} data={null} btnStyle={'AccountButton'}/>
+            <SettingAdd title={'추가'} onSubmit={handleOnSubmit} type={saveType} data={null} btnStyle={'AccountButton'}/>
           </RowSpan>
           <div>
             총 <span>{eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.totalCount}</span>건
