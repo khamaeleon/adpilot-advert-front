@@ -22,6 +22,7 @@ import {VerticalRule} from "../common/Common";
 import SelectBox from "../common/SelectBox";
 import {showListAtom} from "../../pages/ad_exchange/entity";
 import {TotalCount} from "./TableDetail";
+import SettingAdd from "../common/SettingModal";
 
 
 function UseAtom (props){
@@ -175,6 +176,9 @@ export function Icon(props) {
   };
   return(
     <>
+      {props.saveType === 'edit' &&
+        <SettingAdd data={props.cellProps} saveType={props.saveType} label={props.label}/>
+      }
       {props.icon === 'script' &&
         <ScriptComponent cellProps={props.cellProps} />
       }

@@ -25,7 +25,7 @@ function EventUnitPriceDetail() {
   const [eventUnitPriceDetailDataState, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
   const navigate = useNavigate()
   const [, setModal] = useAtom(modalController)
-  const [saveType,setSaveType] =useState('create')
+  const [saveType, setSaveType] = useState('create')
   const {state} =useLocation()
 
   useEffect(() => {
@@ -53,7 +53,7 @@ function EventUnitPriceDetail() {
         }
       })
     }else{
-
+      console.log('수정')
     }
   }
   return (
@@ -84,7 +84,7 @@ function EventUnitPriceDetail() {
         </BoardSearchDetail>
         <BoardTableContainer>
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
-            <SettingAdd title={'추가'} onSubmit={handleOnSubmit} type={saveType} data={null} btnStyle={'AccountButton'}/>
+            <SettingAdd title={'추가'} onSubmit={handleOnSubmit} saveType={saveType} data={null} label={'won'} />
           </RowSpan>
           <div>
             총 <span>{eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.totalCount}</span>건

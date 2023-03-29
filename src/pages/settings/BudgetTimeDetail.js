@@ -42,12 +42,7 @@ function BudgetTimeDetail() {
     console.log(data)
   }
   return (
-    <main>
-      <BoardContainer>
-        <TitleContainer>
-          <h1>설정</h1>
-        </TitleContainer>
-        <Navigator/>
+    <>
       <Board>
         <BoardHeader>시간별 예산 기본 정보</BoardHeader>
         <BoardSearchDetail>
@@ -101,8 +96,7 @@ function BudgetTimeDetail() {
                       draggable
                       pauseOnHover
                       style={{zIndex: 9999999}}/>
-      </BoardContainer>
-    </main>
+    </>
   )
 }
 export default BudgetTimeDetail

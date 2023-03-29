@@ -1,16 +1,15 @@
 import styled from "styled-components";
 import React, {useEffect, useState} from "react";
-import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
+import {ModalBody, ModalFooter} from "../modal/Modal";
 import {
   CancelButton,
-  ColSpan1,
-  ColSpan3,
   ColSpan4,
   ColTitle,
+  Edit,
   Input,
   RelativeDiv,
-  RowSpan, Span2,
-  Span4,
+  RowSpan,
+  Span2,
   SubmitButton,
   ValidationScript
 } from "../../assets/GlobalStyles";
@@ -19,9 +18,9 @@ import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
 
 function SettingChangeModal(props) {
-  const {data, onSubmit, type} = props
+  const {data, onSubmit, saveType, label} = props
   const [, setModal] = useAtom(modalController)
-  const [dataState, setDataState] = useState(type !== 'create' ? data :{
+  const [dataState, setDataState] = useState(saveType !== 'create' ? data :{
     audience: '',
     cartRecommendations: '',
     priceEventId: '',
@@ -36,7 +35,7 @@ function SettingChangeModal(props) {
     defaultValues: dataState
   })
   useEffect(() => {
-    if (type === 'create') {
+    if (saveType === 'create') {
       reset({
         audience: '',
         cartRecommendations: '',
@@ -166,8 +165,8 @@ function SettingChangeModal(props) {
                   value={dataState?.shopperMatching !== 0 ? dataState?.shopperMatching : ''}
                 />
                 {errors.shopperMatching && <ValidationScript>{errors.shopperMatching?.message}</ValidationScript>}
+                <span className={label}></span>
               </RelativeDiv>
-              <span>원</span>
             </ColSpan4>
           </RowSpan>
           <RowSpan>
@@ -184,8 +183,8 @@ function SettingChangeModal(props) {
                   value={dataState?.cartRecommendations !== 0 ? dataState?.cartRecommendations : ''}
                 />
                 {errors.cartRecommendations && <ValidationScript>{errors.cartRecommendations?.message}</ValidationScript>}
+                <span className={label}></span>
               </RelativeDiv>
-              <span>원</span>
             </ColSpan4>
           </RowSpan>
           <RowSpan>
@@ -202,8 +201,8 @@ function SettingChangeModal(props) {
                   value={dataState?.productRecommendations !== 0 ? dataState?.productRecommendations : ''}
                 />
                 {errors.productRecommendations && <ValidationScript>{errors.productRecommendations?.message}</ValidationScript>}
+                <span className={label}></span>
               </RelativeDiv>
-              <span>원</span>
             </ColSpan4>
           </RowSpan>
           <RowSpan>
@@ -220,8 +219,8 @@ function SettingChangeModal(props) {
                   value={dataState?.userMatching !== 0 ? dataState?.userMatching : ''}
                 />
                 {errors.userMatching && <ValidationScript>{errors.userMatching?.message}</ValidationScript>}
+                <span className={label}></span>
               </RelativeDiv>
-              <span>원</span>
             </ColSpan4>
           </RowSpan>
           <RowSpan>
@@ -238,8 +237,8 @@ function SettingChangeModal(props) {
                   value={dataState?.audience !== 0 ? dataState?.audience : ''}
                 />
                 {errors.audience && <ValidationScript>{errors.audience?.message}</ValidationScript>}
+                <span className={label}></span>
               </RelativeDiv>
-              <span>원</span>
             </ColSpan4>
           </RowSpan>
           <RowSpan>
@@ -256,8 +255,8 @@ function SettingChangeModal(props) {
                   value={dataState.userOptimization !== 0 ? dataState.userOptimization : ''}
                 />
                 {errors.userOptimization && <ValidationScript>{errors.userOptimization?.message}</ValidationScript>}
+                <span className={label}></span>
               </RelativeDiv>
-              <span>원</span>
             </ColSpan4>
           </RowSpan>
         </ModalBody>
@@ -265,7 +264,7 @@ function SettingChangeModal(props) {
           <CancelButton onClick={()=>setModal({
             isShow: false,
           })}>취소</CancelButton>
-          <SubmitButton type={"submit"} >{type !== 'create' ? '변경' : '추가'}</SubmitButton>
+          <SubmitButton type={"submit"} >{saveType !== 'create' ? '수정' : '추가'}</SubmitButton>
         </ModalFooter>
       </form>
     </div>
@@ -273,7 +272,7 @@ function SettingChangeModal(props) {
 }
 
 export function SettingAdd(props) {
-  const {onSubmit, data, title, type} = props;
+  const {onSubmit, data, title, saveType, label} = props;
   const [, setModal] = useAtom(modalController)
   const handleModalComponent = () => {
     setModal({
@@ -281,12 +280,14 @@ export function SettingAdd(props) {
       width: 500,
       modalComponent: () => {
         return (
-          <SettingChangeModal data={data} onSubmit={onSubmit} type={type}/>
+          <SettingChangeModal data={data} onSubmit={onSubmit} saveType={saveType} label={label}/>
         )
       }
     })
   }
-  return <Button type={'button'} onClick={handleModalComponent}>{title}</Button>
+  return (
+    saveType !== 'edit' ? <Button type={'button'} onClick={handleModalComponent}>{title}</Button> : <Edit type={'button'} onClick={handleModalComponent} />
+  )
 }
 export default SettingAdd
 

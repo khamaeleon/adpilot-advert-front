@@ -86,7 +86,7 @@ function BudgetEventDetail() {
         </BoardSearchDetail>
         <BoardTableContainer>
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
-            <SettingAdd title={'추가'} onSubmit={handleOnSubmit} type={saveType} data={null} btnStyle={'AccountButton'}/>
+            <SettingAdd title={'추가'} onSubmit={handleOnSubmit} type={saveType} data={null} label={'pct'}/>
           </RowSpan>
           <div>
             총 <span>{eventBudgetDetailDataState !==null && eventBudgetDetailDataState.totalCount}</span>건

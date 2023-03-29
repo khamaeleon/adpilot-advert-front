@@ -2,6 +2,7 @@ import {decimalFormat} from "../../common/StringUtils";
 import {atom} from "jotai/index";
 import {Link} from "react-router-dom";
 import React from "react";
+import {Icon} from "../../components/table";
 
 /**
  * 이벤트 단가 광고주 리스트 Atom
@@ -64,6 +65,11 @@ export const eventUnitPriceDetailColumns = [ //이벤트 단가 상세 컬럼
     name: 'groupName',
     header: '이벤트 단가 그룹명',
     defaultFlex: 1,
+    render: ({value, cellProps}) => {
+      return (
+        <div style={{display: "flex", alignItems: 'center'}}><p>{value}</p><Icon saveType={'edit'} cellProps={cellProps.data} label={'won'} /></div>
+      )
+    }
   },
   {
     name: 'shopperMatching',
@@ -170,6 +176,11 @@ export const budgetEventDetailColumns = [ //이벤트 예산 상세 컬럼
     name: 'groupName',
     header: '이벤트 단가 그룹명',
     defaultFlex: 1,
+    render: ({value, cellProps}) => {
+      return (
+        <div style={{display: "flex", alignItems: 'center'}}><p>{value}</p><Icon saveType={'edit'} cellProps={cellProps.data} label={'pct'} /></div>
+      )
+    }
   },
   {
     name: 'shopperMatching',
@@ -276,6 +287,11 @@ export const budgetTimeDetailColumns = [ //시간 예산 상세 컬럼
     name: 'groupName',
     header: '시간별 예산 그룹명',
     defaultFlex: 1,
+    render: ({value, cellProps}) => {
+      return (
+        <div style={{display: "flex", alignItems: 'center'}}><p>{value}</p><Icon saveType={'edit'} cellProps={cellProps.data} label={'pct'} /></div>
+      )
+    }
   },
   {
     name: 'shopperMatching',

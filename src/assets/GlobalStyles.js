@@ -938,7 +938,20 @@ export const TableButton = styled.button`
   background-color: #f3f3f3;
   border-radius: 5px;
 `
-
+export const Edit = styled.div`
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  background-image: url("/assets/images/table/icon_pop_off@2x.png");
+  background-image: -webkit-image-set(url("/assets/images/table/icon_pop_off.png") 1x, url("/assets/images/table/icon_pop_off@2x.png") 2x, url("/assets/images/table/icon_pop_off@3x.png") 3x);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
+  &:hover {
+    background-color: #f9fafb;
+  }
+`
 export const Script = styled.div`
   display: inline-block;
   width: 35px;
