@@ -26,7 +26,7 @@ export default function Settings() {
         {params.id === 'settingsDetail' && <EventUnitPriceDetail/>}
         {params.id === 'budgetEvent' && <BudgetEvent/>}
         {params.id === 'budgetEventDetail' && <BudgetEventDetail/>}
-        {params.id === 'budgeTime' && <BudgetTime/>}
+        {params.id === 'budgetTime' && <BudgetTime/>}
         {params.id === 'budgetTimeDetail' && <BudgetTimeDetail/>}
       </BoardContainer>
     </main>

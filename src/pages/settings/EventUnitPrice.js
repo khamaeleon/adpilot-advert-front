@@ -31,7 +31,6 @@ function EventUnitPrice() {
   }
 
   const onSearchAdverEventPrice =() =>{
-    console.log(searchParams)
     selAdverPriceEventList(searchParams).then(response =>{
       setEventUnitPriceDataState(response)
     })

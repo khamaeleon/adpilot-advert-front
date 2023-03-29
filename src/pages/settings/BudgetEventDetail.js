@@ -11,7 +11,7 @@ import {
   RowSpan,
   SubmitContainer, TitleContainer
 } from "../../assets/GlobalStyles";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
 import {
@@ -21,26 +21,45 @@ import {
 import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
-import {selBudgetEventList} from "../../services/SettingsAxios";
+import {resistBudgetEvent, resistPriceEvent, selBudgetEventList, selPriceEventList} from "../../services/SettingsAxios";
 import SettingAdd from "../../components/common/SettingModal";
+import {modalController} from "../../store";
 
 
 function BudgetEventDetail() {
   const [eventBudgetDetailDataState, setEventBudgetDetailDataState] = useAtom(eventBudgetDetailDataAtom)
   const navigate = useNavigate()
+  const [, setModal] = useAtom(modalController)
+  const [saveType,setSaveType] =useState('create')
   const {state} =useLocation()
-  // useEffect(() => {
-  //   selBudgetEventList(state.id).then(response => {
-  //     console.log(response)
-  //     setEventBudgetDetailDataState(response)
-  //   })
-  // }, [])
+
+  useEffect(() => {
+    selBudgetEventList(state.id).then(response => {
+      console.log(response)
+      setEventBudgetDetailDataState(response)
+    })
+  }, [])
 
   /**
    * 모달에서 수정 추가
    */
   const handleOnSubmit = (data) => {
     console.log(data)
+    if(saveType ==='create'){
+      resistBudgetEvent({...data,userId:state.id}).then(response => {
+        if(response){
+          setModal({
+            isShow: false,
+            modalComponent: null
+          })
+          selBudgetEventList(state.id).then(response => {
+            setEventBudgetDetailDataState(response)
+          })
+        }
+      })
+    }else{
+
+    }
   }
   return (
     <>
@@ -56,7 +75,7 @@ function BudgetEventDetail() {
           <RowSpan>
             <ColSpan1>
               <ColTitle>광고주명</ColTitle>
-              <div>{eventBudgetDetailDataState !==null && eventBudgetDetailDataState.brandName}</div>
+              <div>{eventBudgetDetailDataState !==null && eventBudgetDetailDataState.adverName}</div>
             </ColSpan1>
             <ColSpan1>
               <ColTitle>아이디</ColTitle>
@@ -70,7 +89,7 @@ function BudgetEventDetail() {
         </BoardSearchDetail>
         <BoardTableContainer>
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
-            <SettingAdd title={'추가'} onSubmit={handleOnSubmit} type={'create'} data={null} btnStyle={'AccountButton'}/>
+            <SettingAdd title={'추가'} onSubmit={handleOnSubmit} type={saveType} data={null} btnStyle={'AccountButton'}/>
           </RowSpan>
           <div>
             총 <span>{eventBudgetDetailDataState !==null && eventBudgetDetailDataState.totalCount}</span>건
