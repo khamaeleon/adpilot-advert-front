@@ -2,16 +2,19 @@ import {
   Board,
   BoardHeader,
   BoardSearchDetail,
-  BoardSearchResult, ColSpan1, ColSpan2, ColSpan3,
-  ColSpan4, DefaultButton, Input,
-  RowSpan, SearchButton,
-  SearchInput
+  ColSpan1,
+  ColSpan3,
+  DefaultButton,
+  Input,
+  RowSpan,
+  SearchButton
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {CategoryContainer} from "./styles";
 import styled from "styled-components";
 import {atom, useAtom} from "jotai/index";
 import {atomWithReset, useResetAtom} from "jotai/utils";
+
 const categoryList = [
   {
     code: 'IAB1',
@@ -81,6 +84,14 @@ async function createApi(data) {
     console.log(e)
   }
 }
+async function searchApi(keyword) {
+  try{
+
+    return 200
+  }catch (e) {
+    console.log(e)
+  }
+}
 
 export function CategoryManage() {
   const [selectCategory, setSelectCategory] = useAtom(selectCategoryAtom)
@@ -89,39 +100,70 @@ export function CategoryManage() {
   const [category, setCategory] = useState(false)
   const [searchKeyword, setSearchKeyword] = useState('')
 
+  /**
+   * 카테고리 등록 취소시 입력값 삭제
+   */
   useEffect(() => {
     resetCategory()
   }, [category]);
 
+  /**
+   * 카테고리 선택
+   * @param code
+   */
   const handleSelectCategory = (code) => {
     setSelectCategory(code)
   }
-
+  /**
+   * 상위 카테고리 등록 값 추가
+   * @param inputEvent
+   */
   const handleChangeCategory = (inputEvent) => {
     setCreateCategory({
       ...createCategory,
       category: inputEvent.target.value
     })
   }
-
+  /**
+   * 서브 카테고리 등록 값 추가
+   * @param inputEvent
+   */
   const handleChangeSubCategory = (inputEvent) => {
     setCreateCategory({
       ...createCategory,
       subCategory: inputEvent.target.value
     })
   }
-
-  const handleSearchCategory = (e) => {
+  /**
+   * 검색 키워드 값 저장
+   * @param e
+   */
+  const handleChangeSearchCategory = (e) => {
     console.log(e.target.value)
     setSearchKeyword(e.target.value)
   }
-
+  /**
+   * 카테고리 등록 상위카테고리
+   * @returns {Promise<void>}
+   */
   const handleCreateCategory = async () => {
     const fetchData = await createApi(createCategory.category)
     console.log(fetchData)
   }
+  /**
+   * 카테고리 등록 (서브카테고리)
+   * @returns {Promise<void>}
+   */
   const handleCreateSubCategory = async () => {
     const fetchData = await createApi(createCategory.subCategory)
+    console.log(fetchData)
+  }
+  /**
+   * 카테고리 검색
+   * @returns {Promise<void>}
+   */
+  const handleSearchCategory = async () => {
+    const fetchData = await searchApi(searchKeyword)
     console.log(fetchData)
   }
 
@@ -133,8 +175,8 @@ export function CategoryManage() {
           <RowSpan>
             <ColSpan3/>
             <ColSpan1>
-              <Input value={searchKeyword} onChange={handleSearchCategory}/>
-              <SearchButton>검색</SearchButton>
+              <Input value={searchKeyword} onChange={handleChangeSearchCategory}/>
+              <SearchButton onClick={handleSearchCategory}>검색</SearchButton>
             </ColSpan1>
           </RowSpan>
         </BoardSearchDetail>
