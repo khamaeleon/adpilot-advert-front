@@ -42,7 +42,7 @@ function EventUnitPriceDetail() {
    */
   const handleOnSubmit = (data) => {
     if(saveType ==='create'){
-      resistPriceEvent({...data,groupName:data.priceEventName,userId:state.id}).then(response => {
+      resistPriceEvent({...data,userId:state.id}).then(response => {
         if(response){
           setModal({
             isShow: false,
