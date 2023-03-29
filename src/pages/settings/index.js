@@ -15,23 +15,14 @@ import Table from "../../components/table";
 import {adverEventPriceColumns, eventUnitPriceDataAtom} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {selAdverPriceEventList} from "../../services/SettingsAxios";
+import {useParams} from "react-router-dom";
+import EventUnitPrice from "./EventUnitPrice";
+import EventUnitPriceDetail from "./EventUnitPriceDetail";
+import BudgetEvent from "./BudgetEvent";
+import BudgetEventDetail from "./BudgetEventDetail";
 
-
-function EventUnitPrice() {
-  const [eventUnitPriceDataState, setEventUnitPriceDataState] = useAtom(eventUnitPriceDataAtom)
-  const [searchParams, setSearchParams] = useState({ keyword:''})
-  useEffect(() => {
-    selAdverPriceEventList(searchParams).then(response =>{
-      setEventUnitPriceDataState(response)
-    })
-  }, [])
-  const handleSearch = (event) => {
-    setSearchParams({
-      ...searchParams,
-      keyword:event.target.value
-    })
-  }
-
+export default function Settings() {
+  const params = useParams()
   return(
     <main>
       <BoardContainer>
@@ -44,44 +35,7 @@ function EventUnitPrice() {
         {params.id === 'settingsDetail' && <EventUnitPriceDetail />}
         {params.id === 'budgetEvent' && <BudgetEvent />}
         {params.id === 'budgetEventDetail' && <BudgetEventDetail />}
-        <Navigator/>
-        {/*<Board>*/}
-        {/*  <BoardHeader>이벤트 단가 현황</BoardHeader>*/}
-        {/*  <BoardSearchDetail>*/}
-        {/*    <RowSpan>*/}
-        {/*      <ColSpan1>*/}
-        {/*        <Input style={{width: 300}}*/}
-        {/*               placeholder={'광고주 명 및 아이디 검색'}*/}
-        {/*               value={searchParams.keyword}*/}
-        {/*               onChange={handleSearch}*/}
-        {/*        />*/}
-        {/*        <DefaultButton onClick={onSearchAdverEventPrice}>검색</DefaultButton>*/}
-        {/*      </ColSpan1>*/}
-        {/*    </RowSpan>*/}
-        {/*  </BoardSearchDetail>*/}
-        {/*  <BoardTableContainer>*/}
-        {/*    { eventUnitPriceDataState !== null &&*/}
-        {/*      <Table columns={adverEventPriceColumns}*/}
-        {/*             data={eventUnitPriceDataState.eventDtos}*/}
-        {/*             showHoverRows={false}*/}
-        {/*             activeCell={[0]}*/}
-        {/*             emptyText={'이벤트 단가 현황 내역이 없습니다.'}/>*/}
-        {/*    }*/}
-        {/*  </BoardTableContainer>*/}
-        {/*</Board>*/}
-        {/*<ToastContainer position="top-center"*/}
-        {/*                autoClose={1500}*/}
-        {/*                hideProgressBar*/}
-        {/*                newestOnTop={false}*/}
-        {/*                closeOnClick*/}
-        {/*                rtl={false}*/}
-        {/*                pauseOnFocusLoss*/}
-        {/*                draggable*/}
-        {/*                pauseOnHover*/}
-        {/*                style={{zIndex: 9999999}}/>*/}
       </BoardContainer>
     </main>
   )
 }
-
-export default Settings

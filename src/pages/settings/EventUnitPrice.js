@@ -1,3 +1,39 @@
+import React from "react";
+import {Board, BoardHeader, BoardSearchDetail, BoardTableContainer, ColSpan1, RowSpan} from "../../assets/GlobalStyles";
+import {ToastContainer} from "react-toastify";
+
+function EventUnitPrice() {
+
+  return(
+    <>
+        <Board>
+          <BoardHeader>이벤트 단가 현황</BoardHeader>
+          <BoardSearchDetail>
+            <RowSpan>
+              <ColSpan1>
+
+              </ColSpan1>
+            </RowSpan>
+          </BoardSearchDetail>
+          <BoardTableContainer>
+
+          </BoardTableContainer>
+        </Board>
+        <ToastContainer position="top-center"
+                        autoClose={1500}
+                        hideProgressBar
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        style={{zIndex: 9999999}}/>
+    </>
+  )
+}
+export default EventUnitPrice
+
 // import Navigator from "../../components/common/Navigator";
 // import {
 //   Board, BoardContainer,

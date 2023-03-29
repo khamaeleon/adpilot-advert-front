@@ -7,13 +7,13 @@ import React from "react";
  * 이벤트 단가 광고주 리스트 Atom
  * @type {Atom<unknown>}
  */
-export const eventUnitPriceDataAtom = atom(null)
+export const eventUnitPriceDataAtom = atom('')
 
 /**
  * 이벤트 단가 광고주별 상세 리스트 Atom
  * @type {Atom<unknown>}
  */
-export const eventUnitPriceDetailDataAtom = atom(null)
+export const eventUnitPriceDetailDataAtom = atom('')
 
 /**
  * 이벤트 단가 광고주 리스트 컬럼세팅

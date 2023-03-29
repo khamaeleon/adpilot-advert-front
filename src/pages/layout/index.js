@@ -5,21 +5,13 @@ import PlatformManage from "../platform_manage";
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
-import PlatformUserDetail from "../platform_manage/UserDetail";
 import {useAtom,} from "jotai";
 import {selUserByUserId} from "../../services/ManageUserAxios";
-import {selAdminInfo} from "../../services/ManageAdminAxios";
 import {atom} from "jotai/index";
 import {adminInfo, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
-import PlatformAdminDetail from "../platform_manage/AdminDetail";
 import Campaign from "../campaign";
-import BudgetEvent from "../settings/BudgetEvent";
-import BudgetEventDetail from "../settings/BudgetEventDetail";
-import EventUnitPrice from "../settings";
-import EventUnitPriceDetail from "../settings/EventUnitPriceDetail";
-import BudgetTime from "../settings/BudgetTime";
-import BudgetTimeDetail from "../settings/BudgetTimeDetail";
+import Settings from "../settings";
 
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
