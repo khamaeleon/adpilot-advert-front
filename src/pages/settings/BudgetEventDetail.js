@@ -1,6 +1,5 @@
-import Navigator from "../../components/common/Navigator";
 import {
-  Board, BoardContainer,
+  Board,
   BoardHeader,
   BoardSearchDetail,
   BoardTableContainer,
@@ -9,19 +8,16 @@ import {
   ColSpan1,
   ColTitle,
   RowSpan,
-  SubmitContainer, TitleContainer
+  SubmitContainer
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {
-  budgetEventDetailColumns,
-  eventBudgetDetailDataAtom,
-} from "./entity";
-import {ToastContainer} from "react-toastify";
+import {budgetEventDetailColumns, eventBudgetDetailDataAtom,} from "./entity";
+import {toast, ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
-import {resistBudgetEvent, resistPriceEvent, selBudgetEventList, selPriceEventList} from "../../services/SettingsAxios";
+import {resistBudgetEvent, selBudgetEventList} from "../../services/SettingsAxios";
 import SettingAdd from "../../components/common/SettingModal";
 import {modalController} from "../../store";
 
@@ -58,7 +54,7 @@ function BudgetEventDetail() {
         }
       })
     }else{
-
+      toast.warning("이벤트 예산 그룹명이 중복 되었습니다.")
     }
   }
   return (

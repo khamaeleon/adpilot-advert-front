@@ -1,6 +1,5 @@
-import Navigator from "../../components/common/Navigator";
 import {
-  Board, BoardContainer,
+  Board,
   BoardHeader,
   BoardSearchDetail,
   BoardTableContainer,
@@ -9,19 +8,18 @@ import {
   ColSpan1,
   ColTitle,
   RowSpan,
-  SubmitContainer, TitleContainer
+  SubmitContainer
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
 import {eventUnitPriceDetailColumns, eventUnitPriceDetailDataAtom} from "./entity";
-import {ToastContainer} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
 import {resistPriceEvent, selPriceEventList} from "../../services/SettingsAxios";
 import SettingAdd from "../../components/common/SettingModal";
 import {modalController} from "../../store";
-
 
 function EventUnitPriceDetail() {
   const [eventUnitPriceDetailDataState, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
@@ -54,7 +52,7 @@ function EventUnitPriceDetail() {
         }
       })
     }else{
-
+      toast.warning("이벤트 단가 그룹명이 중복 되었습니다.")
     }
   }
   return (

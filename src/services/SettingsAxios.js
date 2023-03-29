@@ -95,10 +95,10 @@ export async function resistBudgetEvent(budgetEventInfo) {
   await AdminAxios('POST', ACTION_URL + BUDGET_EVENT ,budgetEventInfo)
     .then((response) => {
       const {data, responseCode} =response
-      if(responseCode.statusCode ===200){
-        returnVal = data
+      if(responseCode.statusCode ===201){
+        returnVal = true
       }else{
-        returnVal = null
+        returnVal = false
       }
     }).catch((e) => returnVal = false)
   return returnVal;
