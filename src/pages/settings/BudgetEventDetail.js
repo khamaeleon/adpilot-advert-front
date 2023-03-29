@@ -51,10 +51,12 @@ function BudgetEventDetail() {
           selBudgetEventList(state.id).then(response => {
             setEventBudgetDetailDataState(response)
           })
+        }else{
+          toast.warning("이벤트 단가 그룹명이 중복 되었습니다.")
         }
       })
     }else{
-      toast.warning("이벤트 예산 그룹명이 중복 되었습니다.")
+      //업데이트
     }
   }
   return (
