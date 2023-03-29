@@ -1,114 +1,16 @@
-import React, { useEffect,  useState} from "react";
-import {
-  AbsoluteDiv,
-  CancelButton, ColSpan2,
-  CopyCode, RowSpan,
-  SaveExcelButton,
-  Script, Site,
-} from "../../assets/GlobalStyles";
+import React, {useEffect, useState} from "react";
+import {ColSpan2, CopyCode, RowSpan, SaveExcelButton, Script, Site,} from "../../assets/GlobalStyles";
 import {Link} from "react-router-dom";
 import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
-import {
-  confirmAllType,
-  mediaSearchResult
-} from "../../pages/media_manage/entity";
 import {useAtom} from "jotai";
 import styled from "styled-components";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import {VerticalRule} from "../common/Common";
-import SelectBox from "../common/SelectBox";
-import {showListAtom} from "../../pages/ad_exchange/entity";
 import {TotalCount} from "./TableDetail";
 import SettingAdd from "../common/SettingModal";
-import {handleOnSubmit} from "../../pages/settings/EventUnitPriceDetail";
-
-
-function UseAtom (props){
-  const [searchResult,setSearchResult] = useAtom(mediaSearchResult)
-  useEffect(() => {
-    console.log(props.objects)
-    setSearchResult([...searchResult,props.objects])
-  }, [props.objects]);
-
-  return null
-}
-
-export function SwitchComponent(props){
-  const {value, cellProps, eventClick} = props
-  const [select, setSelect] = useState(value)
-  const [, setModal] = useAtom(modalController)
-  const background = !select ? {background: '#ddd'} : {background: '#f5811f'};
-  const position = select ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null
-
-  const handleClick = (confirm) => {
-
-    if(confirm){
-      cellProps.data.publish = !cellProps.data.publish;
-      eventClick();
-    }
-    setSelect(cellProps.data.publish)
-    setModal({isShow:false});
-    return (
-      <UseAtom objects={cellProps.data}/>
-    )
-  }
-  const showModal = () => {
-    setSelect(!cellProps.data.publish)
-    setModal({
-      isShow: true,
-      width: 660,
-      modalComponent: () => {
-        return (
-            <div>
-              <ModalHeader title={'지면 게재 상태 변경'}/>
-              <ModalBody>
-                <ScriptSubject>
-                  {!cellProps.data.publish ?
-                  <div>지면을 게재하시겠습니까?<br/>
-                    지면이 게재되면 광고가 노출됩니다.
-                  </div>
-                  :
-                      <div>지면을 게재를 중지하시겠습니까?<br/>
-                        게재가 중지되면 광고가 나오지 않아요.
-                      </div>
-                  }
-                   </ScriptSubject>
-              </ModalBody>
-              <ModalFooter>
-                <CancelButton onClick={()=>handleClick(false)}>취소</CancelButton>
-                <PreviewSubmit onClick={()=>handleClick(true)}>확인</PreviewSubmit>
-              </ModalFooter>
-            </div>
-        )
-      }
-    })
-  }
-
-  return(
-    <SwitchBox
-      style={background}
-      onClick={() => showModal()}
-    >
-      <label style={position}/>
-      {select ? <On>ON</On>:  <Off>OFF</Off>}
-    </SwitchBox>
-  )
-}
-
-export const renderSwitch = {
-  render: ({value, cellProps}) => {
-    return (
-      <SwitchComponent value={value} cellProps={cellProps}/>
-    );
-  }
-}
-
-export function SelectConfirm(props) {
-    return <SelectBox options={confirmAllType} value={props.value} onSelect={props.onSelect} cellProps={props.cellProps}/>
-}
 
 
 export const LinkRef = (link) => {

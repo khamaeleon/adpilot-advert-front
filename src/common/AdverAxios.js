@@ -1,9 +1,9 @@
 import axios from "axios";
-import {MEDIA_SERVER} from "../constants/GlobalConst";
+import {ADVER_SERVER} from "../constants/GlobalConst";
 import {refresh} from "../services/AuthAxios";
 
-export const mediaAxios = axios.create({
-  baseURL: MEDIA_SERVER,
+export const adverAxios = axios.create({
+  baseURL: ADVER_SERVER,
   headers: {
     'Content-Type': 'application/json',
     Accept: '*/*',
@@ -13,7 +13,7 @@ export const mediaAxios = axios.create({
   },
 });
 
-mediaAxios.interceptors.request.use(
+adverAxios.interceptors.request.use(
   async (config) => {
     let token=''
     const accessToken = localStorage.getItem("accessToken");
@@ -40,7 +40,7 @@ const addRefreshSubscriber = (callback) => {
   refreshSubscribers.push(callback);
 };
 
-mediaAxios.interceptors.response.use(
+adverAxios.interceptors.response.use(
   (response) => {
     return response.data
   },
@@ -54,7 +54,7 @@ mediaAxios.interceptors.response.use(
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
           refreshSubscribers = [];
           isTokenRefreshing = false;
-          resolve(mediaAxios(originalRequest));
+          resolve(adverAxios(originalRequest));
         });
       });
       if (!isTokenRefreshing ) {

@@ -1,8 +1,6 @@
 import {Icon, LinkRef} from "../../components/table";
 import {Link} from "react-router-dom";
-import {ReportsMediaModal} from "../reports/Media";
 import React from "react";
-import {productTypeInfo} from "../media_manage/entity";
 import moment from "moment";
 
 /**

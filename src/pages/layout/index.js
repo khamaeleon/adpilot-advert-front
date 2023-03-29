@@ -1,6 +1,5 @@
 import Aside from "../../components/aside";
 import {useNavigate, useParams} from "react-router-dom";
-import DashBoard from "../dash_board";
 import PlatformManage from "../platform_manage";
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
@@ -116,8 +115,6 @@ function Layout(){
             <button type={'button'} onClick={() => logOut()}>로그아웃</button>
           </Logout>
         </BoardHeader>
-        {/* 대시보드 */}
-        {params.id === 'dashboard'  && <DashBoard />}
         {['campaign','createCreative'].includes(params.id) && <Campaign/>}
         {/*설정*/}
         {['settings','settingsDetail','budgetEvent','budgetEventDetail','budgetTime','budgetTimeDetail'].includes(params.id) && <Settings/>}

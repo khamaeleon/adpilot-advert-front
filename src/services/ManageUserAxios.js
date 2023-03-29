@@ -1,4 +1,4 @@
-import {AdminAxios, MediaAxios} from "../common/Axios";
+import {AdminAxios, AdverAxios, AxiosImage} from "../common/Axios";
 import {responseFormatMessage} from "../common/StringUtils";
 
 const ACTION_URL = '/user';
@@ -15,7 +15,7 @@ const SIGNUP_URL = ACTION_URL + '/sign-up'
 const VALID_USERID = ACTION_URL + '/verify/username'
 const FIND_USERID = ACTION_URL + '/find/my-id'
 const CHANGE_PASSWORD = ACTION_URL + '/find/my-password'
-
+const UPLOAD_URL = ACTION_URL + '/upload' + SLASH;
 /**
  * 사용자 리스트 가져오기 api
  * @param userParams
@@ -76,7 +76,7 @@ export async function updateUser(userInfo) {
  */
 export async function selPolicyLatestTerms() {
   let returnVal = null;
-  await MediaAxios('GET', TERMS_INFO, null)
+  await AdverAxios('GET', TERMS_INFO, null)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
@@ -93,7 +93,7 @@ export async function selPolicyLatestTerms() {
  * @returns {Promise<*>}
  */
 export async function signUp(userInfo) {
-  return responseFormatMessage(await MediaAxios('POST', SIGNUP_URL, userInfo))
+  return responseFormatMessage(await AdverAxios('POST', SIGNUP_URL, userInfo))
 }
 
 /**
@@ -103,7 +103,7 @@ export async function signUp(userInfo) {
  */
 export async function selValidUserId(username) {
   let returnVal = null;
-  await MediaAxios('GET', VALID_USERID+SLASH+username, null)
+  await AdverAxios('GET', VALID_USERID+SLASH+username, null)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
@@ -121,7 +121,7 @@ export async function selValidUserId(username) {
  */
 export async function selFindUserId(userInfo) {
   let returnVal = null;
-  await MediaAxios('POST', FIND_USERID, userInfo)
+  await AdverAxios('POST', FIND_USERID, userInfo)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
@@ -139,7 +139,7 @@ export async function selFindUserId(userInfo) {
  */
 export async function selChangePassword(userInfo) {
   let returnVal = null;
-  await MediaAxios('POST', CHANGE_PASSWORD, userInfo)
+  await AdverAxios('POST', CHANGE_PASSWORD, userInfo)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = true
@@ -157,7 +157,7 @@ export async function selChangePassword(userInfo) {
  */
 export async function selKeywordUser(keyword) {
   let returnVal = null;
-  await MediaAxios('GET', USER_KEYWORD_SEARCH + '?keyword=' + keyword, null)
+  await AdverAxios('GET', USER_KEYWORD_SEARCH + '?keyword=' + keyword, null)
   .then((response) => {
     if(response.responseCode.statusCode ===200){
       returnVal = response.data
@@ -175,7 +175,7 @@ export async function selKeywordUser(keyword) {
  */
 export async function selUserByUserId(username) {
   let returnVal = null;
-  await MediaAxios('GET', BY_USER_INFO + SLASH + username, null)
+  await AdverAxios('GET', BY_USER_INFO + SLASH + username, null)
     .then((response) => {
       console.log(response)
       if(response.responseCode.statusCode ===200){
@@ -184,6 +184,27 @@ export async function selUserByUserId(username) {
         returnVal = null
       }
     }).catch((e) => returnVal = false)
+  return returnVal;
+}
+
+/**
+ * 통장 사본 및 사업자 등록증 등록
+ * @param resourceType
+ * @returns {Promise<false>}
+ */
+export async function accountFileUpload(username,data,resourceType) {
+  let returnVal = null;
+
+  await AxiosImage('POST', UPLOAD_URL + username + SLASH + resourceType, data)
+    .then(response =>response.json())
+    .then(data => {
+      if(data.responseCode.statusCode === 200){
+        returnVal = data.data.path
+      } else {
+        returnVal = false
+      }
+    })
+    .catch((e) => returnVal = false)
   return returnVal;
 }
 

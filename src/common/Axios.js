@@ -1,7 +1,7 @@
-import {ADMIN_SERVER, MEDIA_SERVER} from "../constants/GlobalConst.js";
+import {ADMIN_SERVER, ADVER_SERVER} from "../constants/GlobalConst.js";
 import {adminAxios} from "./AdminAxios";
 import {nonUserAxios} from "./NonUserAxios";
-import {mediaAxios} from "./MediaAxios";
+import {adverAxios} from "./AdverAxios";
 
 export async function AdminAxios(type, uri, param) {
   switch(type){
@@ -17,7 +17,7 @@ export async function AxiosImage(type, uri, formData) {
   // const accessToken = store.getState().auth.accessToken
   const accessToken = localStorage.getItem("accessToken");
 
-  return fetch(MEDIA_SERVER + uri, {
+  return fetch(ADVER_SERVER + uri, {
     method: type,
     headers: {
       Authorization: `Bearer  ${accessToken}`,
@@ -54,12 +54,12 @@ export async function NonUserAxios(type, uri, param) {
   }
 }
 
-export async function MediaAxios(type, uri, param) {
+export async function AdverAxios(type, uri, param) {
   switch(type){
-    case 'GET' : return mediaAxios.get(uri);
-    case 'POST' : return mediaAxios.post(uri, param);
-    case 'PUT' : return mediaAxios.put(uri, param);
-    case 'DELETE' : return mediaAxios.delete(uri, {data:param});
+    case 'GET' : return adverAxios.get(uri);
+    case 'POST' : return adverAxios.post(uri, param);
+    case 'PUT' : return adverAxios.put(uri, param);
+    case 'DELETE' : return adverAxios.delete(uri, {data:param});
     default : return null;
   }
 }

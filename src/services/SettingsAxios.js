@@ -1,6 +1,6 @@
 import {AdminAxios} from "../common/Axios";
 
-const ACTION_URL = '/system/setting'
+const ACTION_URL = '/adver/setting'
 const PRICE_EVENT = '/price'
 const PRICE_LIST= '/price/list'
 const BUDGET_EVENT = '/budget'

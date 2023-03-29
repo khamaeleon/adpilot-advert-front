@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useAtom} from "jotai/index";
 import {useForm} from "react-hook-form";
 import {toast} from "react-toastify";
-import {selValidUserId, signUp} from "../../services/ManageUserAxios";
+import {accountFileUpload, selValidUserId, signUp} from "../../services/ManageUserAxios";
 import {CancelButton, DefaultButton, DeleteButton, Input, inputStyle, RelativeDiv} from "../../assets/GlobalStyles";
 import {accountInfoAtom, hostList, nextStepAtom} from "./entity";
 import {ButtonGroup, DuplicateButton, Form, SignUpVerify, ValidationScript, VerticalRule} from "./styles";
@@ -11,7 +11,6 @@ import {useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import ImageUploading from "react-images-uploading";
-import {accountFileUpload} from "../../services/AccountAxios";
 
 function ModalCheckBusinessNumber() {
   return (
