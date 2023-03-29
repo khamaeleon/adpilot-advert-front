@@ -1,6 +1,7 @@
 import Navigator from "../../components/common/Navigator";
 import {
-  Board, BoardContainer,
+  Board,
+  BoardContainer,
   BoardHeader,
   BoardSearchDetail,
   BoardTableContainer,
@@ -9,28 +10,28 @@ import {
   ColSpan1,
   ColTitle,
   RowSpan,
-  SubmitContainer, TitleContainer
+  SubmitContainer,
+  TitleContainer
 } from "../../assets/GlobalStyles";
 import React, {useEffect} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {eventUnitPriceDetailColumns, eventUnitPriceDetailDataAtom} from "./entity";
+import {budgetTimeDetailColumns, timeBudgetDetailDataAtom,} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
-import {selPriceEventList} from "../../services/SettingsAxios";
+import {selBudgetEventList} from "../../services/SettingsAxios";
 import SettingAdd from "../../components/common/SettingModal";
 
 
-function EventUnitPriceDetail() {
-  const [eventUnitPriceDetailDataState, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
+function BudgetTimeDetail() {
+  const [timeBudgetDetailDataState, setTimeBudgetDetailDataState] = useAtom(timeBudgetDetailDataAtom)
   const navigate = useNavigate()
   const {state} =useLocation()
-
   useEffect(() => {
-    selPriceEventList(state.id).then(response => {
+    selBudgetEventList(state.id).then(response => {
       console.log(response)
-      setEventUnitPriceDetailDataState(response)
+      setTimeBudgetDetailDataState(response)
     })
   }, [])
 
@@ -41,28 +42,33 @@ function EventUnitPriceDetail() {
     console.log(data)
   }
   return (
-    <>
+    <main>
+      <BoardContainer>
+        <TitleContainer>
+          <h1>설정</h1>
+        </TitleContainer>
+        <Navigator/>
       <Board>
-        <BoardHeader>이벤트 단가 기본 정보</BoardHeader>
+        <BoardHeader>시간별 예산 기본 정보</BoardHeader>
         <BoardSearchDetail>
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
             <ColSpan0>
               <ColTitle>최근 수정</ColTitle>
-              <div>{dateFormat(eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.lastModifiedAt, 'YYYY.MM.DD HH:mm')}</div>
+              <div>{dateFormat(timeBudgetDetailDataState !==null && timeBudgetDetailDataState.lastModifiedAt, 'YYYY.MM.DD HH:mm')}</div>
             </ColSpan0>
           </RowSpan>
           <RowSpan>
             <ColSpan1>
               <ColTitle>광고주명</ColTitle>
-              <div>{eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.brandName}</div>
+              <div>{timeBudgetDetailDataState !==null && timeBudgetDetailDataState.brandName}</div>
             </ColSpan1>
             <ColSpan1>
               <ColTitle>아이디</ColTitle>
-              <div>{eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.username}</div>
+              <div>{timeBudgetDetailDataState !==null && timeBudgetDetailDataState.username}</div>
             </ColSpan1>
             <ColSpan1>
               <ColTitle>담당자</ColTitle>
-              <div>{eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.managerName}</div>
+              <div>{timeBudgetDetailDataState !==null && timeBudgetDetailDataState.managerName}</div>
             </ColSpan1>
           </RowSpan>
         </BoardSearchDetail>
@@ -71,11 +77,11 @@ function EventUnitPriceDetail() {
             <SettingAdd title={'추가'} onSubmit={handleOnSubmit} type={'create'} data={null} btnStyle={'AccountButton'}/>
           </RowSpan>
           <div>
-            총 <span>{eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.totalCount}</span>건
+            총 <span>{timeBudgetDetailDataState !==null && timeBudgetDetailDataState.totalCount}</span>건
           </div>
-          {eventUnitPriceDetailDataState !==null &&
-            <Table columns={eventUnitPriceDetailColumns}
-                   data={eventUnitPriceDetailDataState?.priceEventDtos}
+          {timeBudgetDetailDataState !==null &&
+            <Table columns={budgetTimeDetailColumns}
+                   data={timeBudgetDetailDataState?.budgetEventDtos}
                    showHoverRows={false}
                    activeCell={[0]}
                    emptyText={'이벤트 단가 관리 내역이 없습니다.'}/>
@@ -95,7 +101,8 @@ function EventUnitPriceDetail() {
                       draggable
                       pauseOnHover
                       style={{zIndex: 9999999}}/>
-    </>
+      </BoardContainer>
+    </main>
   )
 }
-export default EventUnitPriceDetail
+export default BudgetTimeDetail

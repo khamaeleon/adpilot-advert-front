@@ -1,6 +1,6 @@
 import Navigator from "../../components/common/Navigator";
 import {
-  Board,
+  Board, BoardContainer,
   BoardHeader,
   BoardSearchDetail,
   BoardTableContainer,
@@ -9,7 +9,7 @@ import {
   ColSpan1,
   ColTitle,
   RowSpan,
-  SubmitContainer
+  SubmitContainer, TitleContainer
 } from "../../assets/GlobalStyles";
 import React, {useEffect} from "react";
 import {useAtom} from "jotai";
@@ -45,7 +45,7 @@ function BudgetEventDetail() {
   return (
     <>
       <Board>
-        <BoardHeader>이벤트 단가 기본 정보</BoardHeader>
+        <BoardHeader>이벤트 예산 기본 정보</BoardHeader>
         <BoardSearchDetail>
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
             <ColSpan0>

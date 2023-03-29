@@ -14,11 +14,12 @@ import {adminInfo, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
 import PlatformAdminDetail from "../platform_manage/AdminDetail";
 import Campaign from "../campaign";
-import Settings from "../settings";
 import BudgetEvent from "../settings/BudgetEvent";
 import BudgetEventDetail from "../settings/BudgetEventDetail";
-import EventUnitPrice from "../settings/EventUnitPrice";
+import EventUnitPrice from "../settings";
 import EventUnitPriceDetail from "../settings/EventUnitPriceDetail";
+import BudgetTime from "../settings/BudgetTime";
+import BudgetTimeDetail from "../settings/BudgetTimeDetail";
 
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)

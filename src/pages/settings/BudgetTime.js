@@ -1,30 +1,32 @@
 import Navigator from "../../components/common/Navigator";
 import {
-  Board, BoardContainer,
+  Board,
+  BoardContainer,
   BoardHeader,
   BoardSearchDetail,
   BoardTableContainer,
   ColSpan1,
   DefaultButton,
   Input,
-  RowSpan, TitleContainer
+  RowSpan,
+  TitleContainer
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {adverEventBudgetColumns,  budgetEventDataAtom} from "./entity";
+import {adverTimeBudgetColumns, budgetTimeDataAtom} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {selAdverBudgetEventList, selAdverPriceEventList} from "../../services/SettingsAxios";
 
 
-function BudgetEvent() {
-  const [budgetEventDataState, setBudgetEventDataState] = useAtom(budgetEventDataAtom)
+function BudgetTime() {
+  const [budgetTimeDataState, setBudgetTimeDataState] = useAtom(budgetTimeDataAtom)
   const [searchParams, setSearchParams] = useState({ keyword:''})
 
   useEffect(() => {
     selAdverBudgetEventList(searchParams).then(response => {
       console.log(response)
-      setBudgetEventDataState(response)
+      setBudgetTimeDataState(response)
     })
   }, [])
   const handleSearch = (event) => {
@@ -37,13 +39,18 @@ function BudgetEvent() {
   const onSearchAdverEventBudget =() =>{
     console.log(searchParams)
     selAdverPriceEventList(searchParams).then(response =>{
-      setBudgetEventDataState(response)
+      setBudgetTimeDataState(response)
     })
   }
   return (
-    <>
+    <main>
+      <BoardContainer>
+        <TitleContainer>
+          <h1>설정</h1>
+        </TitleContainer>
+        <Navigator/>
       <Board>
-        <BoardHeader>이벤트 예산 현황</BoardHeader>
+        <BoardHeader>시간별 예산 현황</BoardHeader>
         <BoardSearchDetail>
           <RowSpan>
             <ColSpan1>
@@ -57,12 +64,12 @@ function BudgetEvent() {
           </RowSpan>
         </BoardSearchDetail>
         <BoardTableContainer>
-          { budgetEventDataState !== null &&
-          <Table columns={adverEventBudgetColumns}
-                 data={budgetEventDataState.eventDtos}
+          { budgetTimeDataState !== null &&
+          <Table columns={adverTimeBudgetColumns}
+                 data={budgetTimeDataState.eventDtos}
                  showHoverRows={false}
                  activeCell={[0]}
-                 emptyText={'이벤트 예산 현황 내역이 없습니다.'}/>
+                 emptyText={'시간 예산 현황 내역이 없습니다.'}/>
           }
         </BoardTableContainer>
       </Board>
@@ -76,7 +83,8 @@ function BudgetEvent() {
                       draggable
                       pauseOnHover
                       style={{zIndex: 9999999}}/>
-    </>
+      </BoardContainer>
+    </main>
   )
 }
-export default BudgetEvent
+export default BudgetTime
