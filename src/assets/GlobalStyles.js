@@ -31,7 +31,24 @@ export const GlobalStyles = createGlobalStyle`
     margin: 0;
     padding: 0;
   }
-
+  //scrollbar 스타일 추가
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+      background-color: #f5f5f5;
+      &-track {
+        box-shadow: inset 0 0 6px rgba(95, 78, 78, 0.1);
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        background-color: #f5f5f5;
+      }
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background-color: rgba(85, 85, 85, 0.15);
+    }
+  pre {white-space: pre-wrap;}
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

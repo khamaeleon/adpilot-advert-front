@@ -11,6 +11,7 @@ import {adminInfo, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
 import Campaign from "../campaign";
 import Settings from "../settings";
+import Pixel from "../pixel";
 
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
@@ -53,6 +54,9 @@ function Layout(){
       navigate('/board/myPage/admin',{state:{id:localStorage.getItem("id")}})
     }
 
+  }
+  const pixel = () =>{
+    navigate('/board/pixel')
   }
   const logOut = () => {
     const userInfo ={
@@ -104,6 +108,7 @@ function Layout(){
       <Aside />
       <BoardBody>
         <BoardHeader>
+          <MyPage onClick={pixel}>픽셀 관리</MyPage>
           <UserName>
             <UserIcon/>
             <span>{role==='NORMAL'? userInfoState.name:adminInfoState.name}</span>
@@ -115,6 +120,8 @@ function Layout(){
             <button type={'button'} onClick={() => logOut()}>로그아웃</button>
           </Logout>
         </BoardHeader>
+        {/*픽셀 관리*/}
+        {['pixel','pixelDetail'].includes(params.id) && <Pixel/>}
         {['campaign','createCreative'].includes(params.id) && <Campaign/>}
         {/*설정*/}
         {['settings','settingsDetail','budgetEvent','budgetEventDetail','budgetTime','budgetTimeDetail'].includes(params.id) && <Settings/>}
@@ -160,6 +167,7 @@ const UserIcon = styled.div`
 `
 
 const MyPage = styled.div`
+  cursor: pointer; 
   display: flex;
   justify-content: flex-start;
   align-items: center;
