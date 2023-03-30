@@ -13,6 +13,7 @@ import Campaign from "../campaign";
 import Settings from "../settings";
 import Pixel from "../pixel";
 import {selAdminInfo} from "../../services/ManageAdminAxios";
+import Reports from "../reports";
 
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
@@ -122,10 +123,14 @@ function Layout(){
             <button type={'button'} onClick={() => logOut()}>로그아웃</button>
           </Logout>
         </BoardHeader>
-        {/*픽셀 관리*/}
+        {/* 대시보드 */}
+        {/* 픽셀 관리*/}
         {['pixel','pixelDetail'].includes(params.id) && <Pixel/>}
+        {/* 광고 관리 */}
         {['campaign','createCreative'].includes(params.id) && <Campaign/>}
-        {/*설정*/}
+        {/* 보고서 */}
+        {['reports','reportsDaily','reportsCPC'].includes(params.id) && <Reports/>}
+        {/* 설정 */}
         {['settings','settingsDetail','budgetEvent','budgetEventDetail','budgetTime','budgetTimeDetail'].includes(params.id) && <Settings/>}
         {/* 플랫폼 관리 */}
         {['platform','platformDetail','categoryManage','productManage'].includes(params.id) && <PlatformManage />}

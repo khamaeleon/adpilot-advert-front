@@ -1,6 +1,9 @@
 export const navigationName = {
   "/board/dashboard": "홈/대시보드",
   "/board/campaign": "홈/광고 관리/캠페인생성",
+  "/board/reports": "홈/보고서/보고서 생성",
+  "/board/reportsDaily": "홈/보고서/일별 보고서",
+  "/board/reportsCPC": "홈/보고서/CPC 보고서",
   "/board/platform": "홈/플랫폼 관리/사용자 관리",
   "/board/categoryManage": "홈/플랫폼 관리/광고주 카테고리 관리",
   "/board/productManage": "홈/플랫폼 관리/상품 수집 관리",

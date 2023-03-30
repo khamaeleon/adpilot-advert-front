@@ -14,6 +14,7 @@ export const selectedIcon = {
   platform:'/assets/images/aside/gmd_menu_06_on@3x.png'
 }
 
+const advertiser = '나이키'
 export const menuList = [
   {
     name: "dashboard",
@@ -43,8 +44,21 @@ export const menuList = [
   {
     name: "reports",
     header: "보고서",
-    include: ["reports"],
-    child: []
+    include: ['reports','reportsDaily','reportsCPC'],
+    child: [
+      {
+        name: "reports",
+        header: "보고서 생성"
+      },
+      {
+        name: "reportsDaily",
+        header: `${advertiser} 일별 보고서`
+      },
+      {
+        name: "reportsDaily",
+        header: `${advertiser} CPC 보고서`
+      }
+    ]
   },
   {
     name: "settings",
