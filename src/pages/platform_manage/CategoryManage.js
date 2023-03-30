@@ -248,8 +248,8 @@ const SubCategoryBody = styled.div`
   align-items: flex-start;
   flex-wrap: wrap;
   width: 100%;
-  height: 500px;
-  overflow-y: scroll;
+  max-height: 500px;
+  overflow-y: auto;
   & div:nth-child(4n) {
     border-right: 0;
   }
