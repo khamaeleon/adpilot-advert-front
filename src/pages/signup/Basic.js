@@ -1,9 +1,17 @@
 import React, {useState} from "react";
 import {useAtom} from "jotai/index";
-import {useForm} from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import {toast} from "react-toastify";
 import {accountFileUpload, selValidUserId, signUp} from "../../services/ManageUserAxios";
-import {CancelButton, DefaultButton, DeleteButton, Input, inputStyle, RelativeDiv} from "../../assets/GlobalStyles";
+import {
+  CancelButton, ColSpan2,
+  DefaultButton,
+  DeleteButton,
+  Input,
+  inputStyle,
+  RelativeDiv,
+  RowSpan
+} from "../../assets/GlobalStyles";
 import {accountInfoAtom, hostList, nextStepAtom} from "./entity";
 import {ButtonGroup, DuplicateButton, Form, SignUpVerify, ValidationScript, VerticalRule} from "./styles";
 import Select from "react-select";
@@ -11,8 +19,10 @@ import {useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import ImageUploading from "react-images-uploading";
+import styled from "styled-components";
 
-function ModalCheckBusinessNumber() {
+function ModalCheckBusinessNumber(props) {
+  const {onSubmit} =props
   return (
     <div>
       <ModalHeader title={"사업자 조회 결과"}/>
@@ -26,7 +36,7 @@ function ModalCheckBusinessNumber() {
       </ModalBody>
       <ModalFooter>
         <CancelButton>취소</CancelButton>
-        <DefaultButton>등록</DefaultButton>
+        <DefaultButton onClick={onSubmit}>등록</DefaultButton>
       </ModalFooter>
     </div>
   )
@@ -38,7 +48,7 @@ export default function Basic(props) {
   const [agreeValidation, setAgreeValidation] = useAtom(nextStepAtom)
   const setModal = useSetAtom(modalController)
 
-  const {register, handleSubmit, watch,  formState: {errors}} = useForm({
+  const {register, handleSubmit,reset, control, watch, formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: accountInfo
   })
@@ -59,25 +69,25 @@ export default function Basic(props) {
    * 대행사 여부
    * @param event
    */
-  const handleChangeMediaType = (mediaType) => {
+  const handleChangeMediaType = (adverType) => {
     setAccountInfo({
       ...accountInfo,
-      mediaType: mediaType
+      adverType: adverType
     })
   }
   /**
    * 아이디 중복 체크
    */
-  const checkUserId = () =>{
-    if(accountInfo.username === ''){
+  const checkUserId = () => {
+    if (accountInfo.username === '') {
       toast.warning('아이디를 입력해주세요')
-    }else{
+    } else {
       selValidUserId(accountInfo.username).then(response => {
         console.log(response)
-        if(response.validUsername){
+        if (response.validUsername) {
           //사용가능한 아이디 입니다.
           toast.warning('사용가능한 아이디입니다')
-        }else{
+        } else {
           toast.warning('중복된 아이디입니다')
         }
       })
@@ -128,14 +138,13 @@ export default function Basic(props) {
   }
 
   /**
-  /**
    * 상호명 입력
    * @param event
    */
   const handleCompanyName = (event) => {
     setAccountInfo({
       ...accountInfo,
-      handleCompanyName: event.target.value
+      companyName: event.target.value
     })
   }
   /**
@@ -145,7 +154,7 @@ export default function Basic(props) {
   const handleManagerName = (event) => {
     setAccountInfo({
       ...accountInfo,
-      managerName: event.target.value
+      managerName1: event.target.value
     })
   }
   /**
@@ -156,7 +165,7 @@ export default function Basic(props) {
     let num = event.target.value.replace(/[a-z]|[ㄱ-ㅎ]|[.-]/i, '')
     setAccountInfo({
       ...accountInfo,
-      managerPhone: num
+      managerPhone1: num
     })
   }
 
@@ -175,31 +184,13 @@ export default function Basic(props) {
    * 호스트 입력
    * @param event
    */
-  const handleSelectHosting = (event) => {
+  const handleSelectHosting = (selectHostType) => {
     setAccountInfo({
       ...accountInfo,
-      selectHost: event.target.value
+      hostType: selectHostType
     })
   }
-  /**
-   * 상호명
-   * @param event
-   */
-  const handleCorporationName = (event) => {
-    setAccountInfo({
-      ...accountInfo,
-      corporationName: event.target.value
-    })
-  }
-  /**
-   *
-   */
-  const handleBusinessNumber = (event) => {
-    setAccountInfo({
-      ...accountInfo,
-      businessNumber: event.target.value
-    })
-  }
+
   /**
    * 대표자 명
    * @param event
@@ -207,53 +198,124 @@ export default function Basic(props) {
   const handleCeoName = (event) => {
     setAccountInfo({
       ...accountInfo,
+      ceoName: event.target.value
+    })
+  }
+  /**
+   * 주소
+   * @param event
+   */
+  const handleLocation = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      location: event.target.value
+    })
+  }
+  /**
+   * 주소 상세
+   * @param event
+   */
+  const handleLocationDetail = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      locationDetail: event.target.value
+    })
+  }
+
+  /**
+   * 세금계산서 발행 이메일
+   * @param event
+   */
+  const handleTaxEmail = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      businessLicense: event.target.value
+    })
+  }
+  /**
+   * 업테 입력
+   * @param event
+   */
+  const handleTypeOfBusiness = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      typeOfBusiness: event.target.value
+    })
+  }
+
+  /**
+   * 종목 입력
+   * @param event
+   */
+  const handleItemsOfBusiness = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      itemsOfBusiness: event.target.value
+    })
+  }
+
+  /**
+   * 사업자 등록번호
+   */
+  const handleBusinessNumber = (event) => {
+    setAccountInfo({
+      ...accountInfo,
       businessNumber: event.target.value
     })
   }
 
-  const handleBusinessType =  (event) => {
+  const onResistBusinessNumber = (data) => {
     setAccountInfo({
       ...accountInfo,
-      businessType: event.target.value
+      companyName:'파인딩랩',
+      businessNumber: '111-1111-1111',
+      location: '서울특별시 금천구 가산디지털 1로 149',
+      locationDetail: '505호 (신한이노플렉스)',
+      typeOfBusiness:'통신/전자',
+      itemsOfBusiness:'판매업',
+      taxInvoiceEmail:'findinglab@findinglab.co.kr',
+      ceoName:'임제민'
+    })
+    reset({
+      ...accountInfo,
+      companyName:'파인딩랩',
+      businessNumber: '111-1111-1111',
+      location: '서울특별시 금천구 가산디지털 1로 149',
+      locationDetail: '505호 (신한이노플렉스)',
+      typeOfBusiness:'통신/전자',
+      itemsOfBusiness:'판매업',
+      taxInvoiceEmail:'findinglab@findinglab.co.kr',
+      ceoName:'임제민'
+    })
+    setModal({
+      isShow: false,
+      modalComponent: null
     })
   }
 
-  const handleCorporationAddress = (event) => {
-    setAccountInfo({
-      ...accountInfo,
-      corporationAddress: event.target.value
-    })
-  }
-  const handleBusinessLicense = (event) => {
-    setAccountInfo({
-      ...accountInfo,
-      businessLicense: event.target.value
-    })
-  }
 
-  const handleTaxEmail = (event)  => {
-    setAccountInfo({
-      ...accountInfo,
-      businessLicense: event.target.value
-    })
-  }
-
+  /**
+   * 사업자 등록증 조회
+   */
   const handleCheckBusinessNumber = () => {
     setModal({
       isShow: true,
       width: 700,
-      modalComponent: () => <ModalCheckBusinessNumber/>
+      modalComponent: () => <ModalCheckBusinessNumber onSubmit={onResistBusinessNumber}/>
     })
   }
 
+  /**
+   * 사업자등록증 파일 첨부
+   * @param pictureFiles
+   */
   const onDrop = (pictureFiles) => {
-    if(pictureFiles.length !== 0){
+    if (pictureFiles.length !== 0) {
       const data = new FormData()
-      const imagesLastIndex = pictureFiles.length-1;
+      const imagesLastIndex = pictureFiles.length - 1;
       data.append('file', pictureFiles[imagesLastIndex].file, pictureFiles[imagesLastIndex].file.name)
-      accountFileUpload(data,'LICENCE').then(response => {
-        if(response){
-          console.log(response)
+      accountFileUpload(data, 'LICENCE').then(response => {
+        if (response) {
           setAccountInfo({
             ...accountInfo,
             businessLicenseWebPath: response,
@@ -266,14 +328,15 @@ export default function Basic(props) {
    * 회원가입
    */
   const onSubmit = (data) => {
-    signUp(accountInfo).then(response => {
-      if(response.responseCode.statusCode === 200){
+    console.log(accountInfo)
+    signUp({...accountInfo,hostType:accountInfo.hostType.value}).then(response => {
+      if (response.responseCode.statusCode === 200) {
         setAgreeValidation({
           terms: true,
           validation: true
         })
         handleNextStep()
-      }else{
+      } else {
         toast.warning('회원가입에 실패하였습니다. 관리자에게 문의하세요')
       }
     })
@@ -318,7 +381,7 @@ export default function Basic(props) {
                 value={accountInfo.username}
               />
               {errors.username && <ValidationScript>{errors.username?.message}</ValidationScript>}
-              <DefaultButton type={'button'} onClick={()=>checkUserId()}>중복검사</DefaultButton>
+              <DefaultButton type={'button'} onClick={() => checkUserId()}>중복검사</DefaultButton>
             </div>
           </RelativeDiv>
           <RelativeDiv>
@@ -444,15 +507,32 @@ export default function Basic(props) {
           <RelativeDiv>
             <div>호스팅</div>
             <div>
-              <Select options={hostList}
-                      styles={inputStyle}
-                      components={{IndicatorSeparator: () => null}}
-                      value={accountInfo.hostType ===''? {value:'select',label:'선택하세요'}:accountInfo.hostType}
-                      {...register("selectHost", {
-                        required: "호스팅을 선택해주세요",
-                        onChange: (e) => handleSelectHosting(e)
-                      })}
+              <Controller
+                name="hostType"
+                control={control}
+                rules={{
+                  required: {
+                    value: accountInfo.hostType === "",
+                    message: "호스팅을 선택해주세요"
+                  }
+                }}
+                render={({field}) => (
+                  <Select options={hostList}
+                          placeholder={'호스팅 선택'}
+                          {...field}
+                          value={accountInfo.hostType !== '' ? accountInfo.hostType : ''}
+                          onChange={handleSelectHosting}
+                          styles={{
+                            input: (baseStyles, state) => (
+                              {
+                                ...baseStyles,
+                                minWidth: "300px",
+                              })
+                          }}
+                  />
+                )}
               />
+              {errors.hostType && <ValidationScript>{errors.hostType?.message}</ValidationScript>}
             </div>
           </RelativeDiv>
           <h2>사업자 정보</h2>
@@ -479,7 +559,7 @@ export default function Basic(props) {
                 placeholder={'사업자 등록 번호'}
                 {...register("businessNumber", {
                   required: "사업자 조회를 해주세요",
-                  onChange:(e) => handleBusinessNumber(e)
+                  onChange: (e) => handleBusinessNumber(e)
                 })}
                 value={accountInfo.businessNumber}
                 readOnly={true}
@@ -501,8 +581,8 @@ export default function Basic(props) {
                 value={accountInfo.businessLicenseWebPath}
                 readOnly={true}
               />
-              {errors.businessLicenseWebPath && <ValidationScript>{errors.businessLicenseWebPath?.message}</ValidationScript>}
-              <DeleteButton type={'button'} onClick={()=> handleBusinessLicense('del')} />
+              {errors.businessLicenseWebPath &&
+                <ValidationScript>{errors.businessLicenseWebPath?.message}</ValidationScript>}
               <DuplicateButton type={'button'}>
                 <ImageUploading
                   acceptType={["jpg", "gif", "png"]}
@@ -513,7 +593,7 @@ export default function Basic(props) {
                   {({onImageUpload}) => (
                     <button
                       onClick={onImageUpload}
-                      style={{width:'100%',height:'100%'}}
+                      style={{width: '100%', height: '100%'}}
                     >파일 첨부</button>
                   )}
                 </ImageUploading>
@@ -525,7 +605,7 @@ export default function Basic(props) {
             <div>
               <Input
                 type={'text'}
-                placeholder={'이메일을 입력해주세요.'}
+                placeholder={'대표자 명을 입력해주세요.'}
                 value={accountInfo.ceoName}
                 {...register("ceoName", {
                   required: "대표자 명을 입력해주세요",
@@ -540,30 +620,47 @@ export default function Basic(props) {
             <div>
               <input
                 type={'text'}
-                placeholder={'업태'}
-                {...register("business", {
-                  required: "업태를 입력해주세요",
-                  onChange:(e) => handleBusinessType(e)
-                })}
-                value={accountInfo.businessType}
+                placeholder={'업태를 입력해주세요'}
+                onChange={(e) => handleTypeOfBusiness(e)}
+                value={accountInfo.typeOfBusiness}
               />
-              {errors.businessType && <ValidationScript>{errors.businessType?.message}</ValidationScript>}
+            </div>
+          </RelativeDiv>
+          <RelativeDiv>
+            <div>종목</div>
+            <div>
+              <input
+                type={'text'}
+                placeholder={'종목을 입력해주세요'}
+                onChange={(e) => handleItemsOfBusiness(e)}
+                value={accountInfo.itemsOfBusiness}
+              />
             </div>
           </RelativeDiv>
           <RelativeDiv>
             <div>사업자 주소</div>
-            <div>
-              <input
-                type={'text'}
-                placeholder={'주소를 입력해주세요.'}
-                value={accountInfo.corporationAddress}
-                {...register("corporationAddress", {
-                  required: "주소를 입력해주세요",
-                  onChange: (e) => handleCorporationAddress(e)
-                })}
-              />
-              {errors.corporationAddress && <ValidationScript>{errors.corporationAddress?.message}</ValidationScript>}
-            </div>
+            <Division>
+              <div>
+                <input
+                  type={'text'}
+                  placeholder={'주소를 입력해주세요.'}
+                  value={accountInfo.location}
+                  {...register("location", {
+                    required: "주소를 입력해주세요",
+                    onChange: (e) => handleLocation(e)
+                  })}
+                />
+                {errors.location && <ValidationScript>{errors.location?.message}</ValidationScript>}
+              </div>
+              <div>
+                <input
+                  type={'text'}
+                  placeholder={'상세 주소를 입력해주세요.'}
+                  value={accountInfo.locationDetail}
+                  onChange={(e) => handleLocationDetail(e)}
+                />
+              </div>
+            </Division>
           </RelativeDiv>
           <RelativeDiv>
             <div>세금계산서 발행 이메일</div>
@@ -571,13 +668,13 @@ export default function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'이메일을 입력해주세요.'}
-                value={accountInfo.taxEmail}
-                {...register("taxEmail", {
+                value={accountInfo.taxInvoiceEmail}
+                {...register("taxInvoiceEmail", {
                   required: "이메일을 입력해주세요",
                   onChange: (e) => handleTaxEmail(e)
                 })}
               />
-              {errors.taxEmail && <ValidationScript>{errors.taxEmail?.message}</ValidationScript>}
+              {errors.taxInvoiceEmail && <ValidationScript>{errors.taxInvoiceEmail?.message}</ValidationScript>}
             </div>
           </RelativeDiv>
         </Form>
@@ -588,3 +685,14 @@ export default function Basic(props) {
     </form>
   )
 }
+
+const Division = styled.div`
+  display: flex;
+  width: 80%;
+
+  & div:last-child {
+    & input {
+      min-width: 290px !important;
+    }
+  }
+`
