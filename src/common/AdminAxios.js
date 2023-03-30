@@ -11,7 +11,7 @@ export const adminAxios = axios.create({
     Accept: '*/*',
   },
   validateStatus: function (status) {
-    return status !== 401 && status <= 500;
+    return status !== 403 && status <= 500;
   },
 });
 adminAxios.interceptors.request.use(
@@ -46,7 +46,7 @@ adminAxios.interceptors.response.use(
     const {config, response: {status}} = error;
     const originalRequest = config;
 
-    if (status === 401) {
+    if (status === 403) {
       const retryOriginalRequest = new Promise((resolve) => {
         addRefreshSubscriber((accessToken) => {
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;

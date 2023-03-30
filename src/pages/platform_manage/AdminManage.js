@@ -26,17 +26,17 @@ export default function AdminManage(){
   const [totalInfo,setTotalInfo] = useState(dataTotalInfo)
 
   useEffect(()=>{
-    // selUserList(searchAccountInfoState).then(response =>{
-    //   if(response){
-    //     console.log(response)
-    //     setUserInfoList(response.rows)
-    //     setTotalInfo({
-    //       totalCount: response.totalCount,
-    //       totalPages: response.totalPages,
-    //       currentPage:response.currentPage
-    //     })
-    //   }
-    // })
+    selUserList(searchAccountInfoState).then(response =>{
+      if(response){
+        console.log(response)
+        setUserInfoList(response.rows)
+        setTotalInfo({
+          totalCount: response.totalCount,
+          totalPages: response.totalPages,
+          currentPage:response.currentPage
+        })
+      }
+    })
   },[])
 
   /**
