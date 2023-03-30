@@ -586,7 +586,6 @@ export const ColSpan0 = styled.div`
   }
 `
 
-
 export const ColSpan1 = styled.div`
   padding-left: 10px;
   display: flex;
@@ -943,13 +942,14 @@ export const Edit = styled.div`
   width: 35px;
   height: 35px;
   cursor: pointer;
-  background-image: url("/assets/images/table/icon_pop_off@2x.png");
-  background-image: -webkit-image-set(url("/assets/images/table/icon_pop_off.png") 1x, url("/assets/images/table/icon_pop_off@2x.png") 2x, url("/assets/images/table/icon_pop_off@3x.png") 3x);
+  background-image: url("/assets/images/table/icon_correction_off@2x.png");
+  background-image: -webkit-image-set(url("/assets/images/table/icon_correction_off.png") 1x, url("/assets/images/table/icon_correction_off@2x.png") 2x, url("/assets/images/table/icon_correction_off@3x.png") 3x);
   background-repeat: no-repeat;
   background-position: center;
   background-size: 20px;
   &:hover {
-    background-color: #f9fafb;
+    background-image: url("/assets/images/table/icon_correction_on@2x.png");
+    background-image: -webkit-image-set(url("/assets/images/table/icon_correction_on.png") 1x, url("/assets/images/table/icon_correction_on@2x.png") 2x, url("/assets/images/table/icon_correction_on@3x.png") 3x);
   }
 `
 export const Script = styled.div`
