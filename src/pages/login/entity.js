@@ -1,3 +1,5 @@
+import {atom} from "jotai";
+
 export  const userInfo ={
   email: '',
   name:'',
@@ -20,8 +22,19 @@ export const loginAdminParams= {
 export  const adminInfo ={
   email: '',
   name:'',
-  convertedUser: localStorage.getItem('username') ? localStorage.getItem('username') : "",
+  convertedUser: localStorage.getItem('mediaUsername') ? localStorage.getItem('mediaUsername') : "",
+  id:'',
+  accountProfile: ''
 }
+
+export const tokenResultAtom = atom({
+  accessToken:'',
+  refreshToken:'',
+  id:'',
+  role:'',
+  name:'',
+  serverName:''
+})
 
 export const findIdParams ={
   email: '',

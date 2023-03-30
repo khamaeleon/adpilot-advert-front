@@ -1,9 +1,11 @@
 import axios from "axios";
-import {ADMIN_SERVER, TEST_SERVER} from "../constants/GlobalConst";
+import {ADMIN_SERVER} from "../constants/GlobalConst";
 import {refreshAdmin} from "../services/AuthAxios";
+import {tokenResultAtom} from "../pages/login/entity";
+import store from "../store";
 
 export const adminAxios = axios.create({
-  baseURL: TEST_SERVER,
+  baseURL: ADMIN_SERVER,
   headers: {
     'Content-Type': 'application/json',
     Accept: '*/*',
@@ -12,17 +14,12 @@ export const adminAxios = axios.create({
     return status !== 401 && status <= 500;
   },
 });
-
 adminAxios.interceptors.request.use(
   async (config) => {
-    let token ='';
-    const accessToken = localStorage.getItem("accessToken");
-
-    if(accessToken !==''){
-      token = accessToken
-    }
-    console.log(token)
-    config.headers.Authorization = `Bearer ${token}`;
+    let token = ''
+    const tokenAtom = store.get(tokenResultAtom)
+    console.log(tokenAtom.accessToken)
+    config.headers.Authorization = `Bearer ${tokenAtom.accessToken}`;
     return config;
   },
   async (error) => {
@@ -46,12 +43,10 @@ adminAxios.interceptors.response.use(
     return response.data
   },
   async (error) => {
-    const { config, response: {status}} = error;
+    const {config, response: {status}} = error;
     const originalRequest = config;
 
-
-    if(status === 401) {
-      console.log("expire")
+    if (status === 401) {
       const retryOriginalRequest = new Promise((resolve) => {
         addRefreshSubscriber((accessToken) => {
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
@@ -60,20 +55,28 @@ adminAxios.interceptors.response.use(
           resolve(adminAxios(originalRequest));
         });
       });
-      if (!isTokenRefreshing ) {
+      if (!isTokenRefreshing) {
         isTokenRefreshing = true;
-        refreshAdmin().then(response =>{
-          if(response){
-            onTokenRefreshed(localStorage.getItem("accessToken"));
-          }else{
+        await refreshAdmin().then(response => {
+          console.log(response)
+          if (response) {
+            store.set(tokenResultAtom, {
+              id: response.id,
+              role: response.role,
+              name: response.name,
+              accessToken: response.token.accessToken,
+              refreshToken: response.token.refreshToken,
+              serverName: ADMIN_SERVER
+            })
+            onTokenRefreshed(response.token.accessToken);
+          } else {
             refreshSubscribers = [];
             isTokenRefreshing = false;
             // eslint-disable-next-line no-restricted-globals
-            location.replace('/login')
+            location.replace('/')
           }
-        });
+        })
       }
-
       return retryOriginalRequest;
     }
     return Promise.reject(error)

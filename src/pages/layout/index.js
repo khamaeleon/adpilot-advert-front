@@ -7,11 +7,12 @@ import Modal from "../../components/modal/Modal";
 import {useAtom,} from "jotai";
 import {selUserByUserId} from "../../services/ManageUserAxios";
 import {atom} from "jotai/index";
-import {adminInfo, userInfo} from "../login/entity";
+import {adminInfo, tokenResultAtom, userInfo} from "../login/entity";
 import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
 import Campaign from "../campaign";
 import Settings from "../settings";
 import Pixel from "../pixel";
+import {selAdminInfo} from "../../services/ManageAdminAxios";
 
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
@@ -20,98 +21,99 @@ function Layout(){
   const navigate = useNavigate()
   const [adminInfoState,setAdminInfoState] = useAtom(AdminInfo)
   const [userInfoState,setUserInfoState] = useAtom(UserInfo)
-  const [role,setRole] = useState(localStorage.getItem("role"))
+  const [tokenUserInfo] = useAtom(tokenResultAtom)
 
   useEffect(() => {
-    console.log(params)
-    if(role==='NORMAL'){
+    console.log(tokenUserInfo)
+    if(tokenUserInfo.role==='NORMAL'){
       if(userInfoState.name ===''){
-        selUserByUserId(localStorage.getItem("id")).then(response =>{
+        selUserByUserId(tokenUserInfo.id).then(response =>{
           setUserInfoState({
             name:response.managerName1,
             id:response.id
           })
-          setRole('NORMAL')
+
         })
       }
     }else{
       if(adminInfoState.name ===''){
-        /*selAdminInfo().then(response =>{
+        selAdminInfo().then(response =>{
           setAdminInfoState({
             ...adminInfoState,
             name:response.name,
           })
-          setRole('ADMIN')
-        })*/
+        })
       }
     }
   }, []);
   const myPage = () =>{
-    if(role==='NORMAL'){
+    if(tokenUserInfo.role==='NORMAL'){
       navigate('/board/myPage/user',{state:{id:userInfoState.id}})
-
     }else{
-      navigate('/board/myPage/admin',{state:{id:localStorage.getItem("id")}})
+      navigate('/board/myPage/admin',{state:{id:tokenUserInfo.id}})
     }
+  }
 
-  }
-  const pixel = () =>{
-    navigate('/board/pixel')
-  }
   const logOut = () => {
     const userInfo ={
-      accessToken:localStorage.getItem("accessToken"),
+      accessToken:tokenUserInfo.accessToken,
       refreshToken:localStorage.getItem("refreshToken")
     }
-    if(role==='NORMAL'){
+    if(tokenUserInfo.role==='NORMAL'){
       logOutUser(userInfo).then(response =>{
         if(response){
           localStorage.removeItem("refreshToken")
-          localStorage.removeItem("accessToken")
-          localStorage.removeItem("role")
-          localStorage.removeItem("id")
-          localStorage.removeItem("username")
+          localStorage.removeItem("mediaUsername")
         }
       }).then(() =>
         {
           // eslint-disable-next-line no-restricted-globals
-          location.replace('/login')
+          location.replace('/')
         }
       )
     } else {
       logOutAdmin(userInfo).then(response =>{
         if(response){
           localStorage.removeItem("refreshToken")
-          localStorage.removeItem("accessToken")
-          localStorage.removeItem("role")
-          localStorage.removeItem("id")
-          localStorage.removeItem("username")
+          localStorage.removeItem("mediaUsername")
         }
       }).then(() =>
         {
           // eslint-disable-next-line no-restricted-globals
-          location.replace('/login')
+          location.replace('/')
         }
       )
     }
   }
 
-  const handleChangeConverted =() => {
-    localStorage.removeItem('username')
+  const handleChangeConverted = () => {
+    localStorage.removeItem('mediaUsername')
     setAdminInfoState({
       ...adminInfoState,
       convertedUser: ''
     })
+    navigate('/board/dashboard')
   }
+  const pixel = () =>{
+    navigate('/board/pixel')
+  }
+
   return(
     <div id={'container'}>
       <Aside />
       <BoardBody>
         <BoardHeader>
+          {tokenUserInfo.role !== 'NORMAL' && adminInfoState.convertedUser !== '' &&
+            <MyPage onClick={handleChangeConverted}>
+              <span>어드민 계정으로 전환</span>
+            </MyPage>
+            ||
+            null
+          }
           <MyPage onClick={pixel}>픽셀 관리</MyPage>
           <UserName>
             <UserIcon/>
-            <span>{role==='NORMAL'? userInfoState.name:adminInfoState.name}</span>
+            <span>{tokenUserInfo.name}</span>
           </UserName>
           <MyPage onClick={myPage}>
             <span>마이페이지</span>

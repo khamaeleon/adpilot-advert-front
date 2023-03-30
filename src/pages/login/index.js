@@ -3,7 +3,7 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
-import {findIdParams, findIdResult, findPasswordParams, loginParams} from "./entity";
+import {findIdParams, findIdResult, findPasswordParams, loginParams, tokenResultAtom} from "./entity";
 import {login} from "../../services/AuthAxios";
 import {useAtom, useSetAtom} from "jotai";
 import {atom} from "jotai/index";
@@ -14,8 +14,10 @@ import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {selChangePassword, selFindUserId} from "../../services/ManageUserAxios";
 import {ComponentModalFindId, ComponentModalFindPassword} from "../../components/modal";
+import {ADMIN_SERVER, MEDIA_SERVER} from "../../constants/GlobalConst";
 
 export const FindIdResultAtom = atom(findIdResult)
+
 function FindPassword(props) {
   const [findPasswordInfo, setFindPasswordInfo] = useState(findPasswordParams)
   const {register, handleSubmit, formState:{errors}} = useForm()
@@ -23,12 +25,12 @@ function FindPassword(props) {
   const handleFindPassword = () => {
     //axios 로 호출하여 서버쪽에서 이메일쪽으로 전송
     selChangePassword(findPasswordInfo).then(response => {
-        if(response){
-          //성공
-          props.openModal(findPasswordInfo)
-        }else{
-          toast.warning('입력하신정보가 회원정보와 일치 하지 않습니다')
-        }
+      if(response){
+        //성공
+        props.openModal(findPasswordInfo)
+      }else{
+        toast.warning('입력하신정보가 회원정보와 일치 하지 않습니다')
+      }
     })
   }
   /**
@@ -74,65 +76,65 @@ function FindPassword(props) {
         <h1>비밀번호 찾기</h1>
       </Title>
       <form onSubmit={handleSubmit(onSubmit,onError)}>
-      <InputGroup>
-        <LabelInline>
-          <span>아이디</span>
-        </LabelInline>
-        <div>
-          <input type={'text'}
-                 placeholder={'아이디를 입력 해주세요'}
-                 value={findPasswordInfo.username}
-                 {...register('username',{
-                   required: "아이디를 입력 해주세요",
-                   onChange:(e) => handleMemberId(e)
-                 })}
-          />
-        </div>
-        {errors.username && <ValidationScript>{errors.username.message}</ValidationScript>}
-      </InputGroup>
-      <InputGroup>
-        <LabelInline>
-          <span>담당자 연락처</span>
-        </LabelInline>
-        <FindCorporationNo>
-          <input type={'text'}
-                 placeholder={'연락처를 입력해주세요'}
-                 value={findPasswordInfo.phone}
-                 {...register('phone',{
-                   required: "연락처를 입력해주세요,",
-                   onChange:(e) => handleManagerPhone(e)
-                 })}
-          />
-        </FindCorporationNo>
-        {errors.phone && <ValidationScript>{errors.phone.message}</ValidationScript>}
-      </InputGroup>
-      <InputGroup>
-        <LabelInline>
-          <span>담당자 이메일</span>
-        </LabelInline>
-        <div>
-          <input type={'text'}
-                 placeholder={'담당자 이메일을 입력해주세요.'}
-                 value={findPasswordInfo.email}
-                 onChange={(e) => handleManagerEmail(e)}
-                 {...register('email',{
-                   required: "이메일을 입력해주세요,",
-                   pattern: {
-                     value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
-                     message: "이메일 형식을 확인해주세요"
-                   },
-                   onChange:(e) => handleManagerEmail(e)
-                 })}
-          />
-        </div>
-        {errors.email && <ValidationScript>{errors.email.message}</ValidationScript>}
-      </InputGroup>
-      <FindGroup/>
-      <InputGroup>
-        <Button type={'submit'}>
-          비밀번호 찾기
-        </Button>
-      </InputGroup>
+        <InputGroup>
+          <LabelInline>
+            <span>아이디</span>
+          </LabelInline>
+          <div>
+            <input type={'text'}
+                   placeholder={'아이디를 입력 해주세요'}
+                   value={findPasswordInfo.username}
+                   {...register('username',{
+                     required: "아이디를 입력 해주세요",
+                     onChange:(e) => handleMemberId(e)
+                   })}
+            />
+          </div>
+          {errors.username && <ValidationScript>{errors.username.message}</ValidationScript>}
+        </InputGroup>
+        <InputGroup>
+          <LabelInline>
+            <span>담당자 연락처</span>
+          </LabelInline>
+          <FindCorporationNo>
+            <input type={'text'}
+                   placeholder={'연락처를 입력해주세요'}
+                   value={findPasswordInfo.phone}
+                   {...register('phone',{
+                     required: "연락처를 입력해주세요,",
+                     onChange:(e) => handleManagerPhone(e)
+                   })}
+            />
+          </FindCorporationNo>
+          {errors.phone && <ValidationScript>{errors.phone.message}</ValidationScript>}
+        </InputGroup>
+        <InputGroup>
+          <LabelInline>
+            <span>담당자 이메일</span>
+          </LabelInline>
+          <div>
+            <input type={'text'}
+                   placeholder={'담당자 이메일을 입력해주세요.'}
+                   value={findPasswordInfo.email}
+                   onChange={(e) => handleManagerEmail(e)}
+                   {...register('email',{
+                     required: "이메일을 입력해주세요,",
+                     pattern: {
+                       value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
+                       message: "이메일 형식을 확인해주세요"
+                     },
+                     onChange:(e) => handleManagerEmail(e)
+                   })}
+            />
+          </div>
+          {errors.email && <ValidationScript>{errors.email.message}</ValidationScript>}
+        </InputGroup>
+        <FindGroup/>
+        <InputGroup>
+          <Button type={'submit'}>
+            비밀번호 찾기
+          </Button>
+        </InputGroup>
       </form>
     </LoginInputComponent>
   )
@@ -187,48 +189,48 @@ function FindId(props) {
         <h1>아이디 찾기</h1>
       </Title>
       <form onSubmit={handleSubmit(onSubmit,onError)}>
-      <InputGroup>
-        <LabelInline>
-          <span>담당자 연락처</span>
-        </LabelInline>
-        <FindCorporationNo>
-          <input type={'text'}
-                 placeholder={'연락처를 입력해주세요'}
-                 value={findIdInfo.phone}
-                 {...register('phone',{
-                   required: "연락처를 입력해주세요",
-                   onChange:(e) => handleManagerPhone(e)
-                 })}
-          />
-        </FindCorporationNo>
-        {errors.phone && <ValidationScript>{errors.phone.message}</ValidationScript>}
-      </InputGroup>
-      <InputGroup>
-        <LabelInline>
-          <span>담당자 이메일</span>
-        </LabelInline>
-        <div>
-          <input type={'text'}
-                 placeholder={'담당자 이메일을 입력해주세요.'}
-                 value={findIdInfo.email}
-                 {...register('email',{
-                   required: "담당자 이메일을 입력해주세요",
-                   pattern: {
-                     value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
-                     message: "이메일 형식을 확인해주세요"
-                   },
-                   onChange:(e) => handleManagerEmail(e)
-                 })}
-          />
-        </div>
-        {errors.email && <ValidationScript>{errors.email.message}</ValidationScript>}
-      </InputGroup>
-      <FindGroup/>
-      <InputGroup>
-        <Button type={'submit'}>
-          아이디찾기
-        </Button>
-      </InputGroup>
+        <InputGroup>
+          <LabelInline>
+            <span>담당자 연락처</span>
+          </LabelInline>
+          <FindCorporationNo>
+            <input type={'text'}
+                   placeholder={'연락처를 입력해주세요'}
+                   value={findIdInfo.phone}
+                   {...register('phone',{
+                     required: "연락처를 입력해주세요",
+                     onChange:(e) => handleManagerPhone(e)
+                   })}
+            />
+          </FindCorporationNo>
+          {errors.phone && <ValidationScript>{errors.phone.message}</ValidationScript>}
+        </InputGroup>
+        <InputGroup>
+          <LabelInline>
+            <span>담당자 이메일</span>
+          </LabelInline>
+          <div>
+            <input type={'text'}
+                   placeholder={'담당자 이메일을 입력해주세요.'}
+                   value={findIdInfo.email}
+                   {...register('email',{
+                     required: "담당자 이메일을 입력해주세요",
+                     pattern: {
+                       value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
+                       message: "이메일 형식을 확인해주세요"
+                     },
+                     onChange:(e) => handleManagerEmail(e)
+                   })}
+            />
+          </div>
+          {errors.email && <ValidationScript>{errors.email.message}</ValidationScript>}
+        </InputGroup>
+        <FindGroup/>
+        <InputGroup>
+          <Button type={'submit'}>
+            아이디찾기
+          </Button>
+        </InputGroup>
       </form>
     </LoginInputComponent>
   )
@@ -239,6 +241,7 @@ function LoginComponent () {
   const [cookies, setCookie, removeCookie] = useCookies(['rememberId'])
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate();
+  const [tokenResult,setTokenResult] = useAtom(tokenResultAtom)
   const {register,setValue, handleSubmit, formState:{errors}} = useForm()
 
   /**
@@ -299,9 +302,16 @@ function LoginComponent () {
    * 로그인
    */
   const onSubmit = () => {
-    login(loginParamsValue).then((response) => {
+    login(loginParamsValue).then(response => {
       console.log(response)
       if(response){
+        setTokenResult({
+          id:response.id,
+          role:response.role,
+          name:response.name,
+          accessToken: response.token.accessToken,
+          refreshToken: response.token.refreshToken
+        })
         navigate('/board/dashboard')
         // if (response.data.isTermsAgree) {
         //   // go to main
@@ -322,67 +332,67 @@ function LoginComponent () {
         <h1><BlockLogo/></h1>
       </Title>
       <RowSpan style={{justifyContent: 'flex-end'}}>
-        <Link to={'/AdminLogin'}>관리자 로그인</Link>
+        <Link to={'/adminLogin'}>관리자로그인</Link>
       </RowSpan>
       <form onSubmit={handleSubmit(onSubmit,onError)}>
-      <InputGroup>
-        <LabelInline>
-          <span>아이디</span>
-          <Checkbox
-            onChange={handleChangeRemember}
-            isChecked={isRemember}
-            label={'아이디 저장'}
-            type={'a'}/>
-        </LabelInline>
-        <div>
-          <input
-            type={'text'}
-            placeholder={'아이디'}
-            value={loginParamsValue.username || ''}
-            {...register('username',{
-              required: "아이디를 입력해주세요",
-              onChange: (e) => {
-                handleChangeId(e)
-              }
-            })}/>
-        </div>
-        {errors.username && <ValidationScript>{errors.username.message}</ValidationScript>}
-      </InputGroup>
-      <InputGroup>
-        <LabelInline>
-          <span>비밀번호</span>
-        </LabelInline>
-        <div style={{position: 'relative'}}>
-          <input
-            type={!showPassword ? 'password' : 'text'}
-            placeholder={'비밀번호(8~12자)'}
-            value={loginParamsValue.password || ''}
-            {...register("password", {
-              required: "비밀번호를 입력해주세요",
-              pattern: {
-                value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
-                message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
-              },
-              onChange:handleChangePassword
-            })}/>
-          <ShowPassword
-            style={showPassword ? {backgroundImage: "url('/assets/images/login/hide.png')"} : {backgroundImage: "url('/assets/images/login/show.png')"}}
-            onClick={() => setShowPassword(!showPassword)}/>
-        </div>
-        {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
-      </InputGroup>
-      <FindGroup>
-        <Link to={'/findId'}>아이디찾기</Link>
-        <HorizontalRule/>
-        <Link to={'/findPassword'}>비밀번호 찾기</Link>
-        <HorizontalRule/>
-        <Link to={'/signUp'}>회원가입</Link>
-      </FindGroup>
-      <InputGroup>
-        <Button type={'submit'}>
-          Login
-        </Button>
-      </InputGroup>
+        <InputGroup>
+          <LabelInline>
+            <span>아이디</span>
+            <Checkbox
+              onChange={handleChangeRemember}
+              isChecked={isRemember}
+              label={'아이디 저장'}
+              type={'a'}/>
+          </LabelInline>
+          <div>
+            <input
+              type={'text'}
+              placeholder={'아이디'}
+              value={loginParamsValue.username || ''}
+              {...register('username',{
+                required: "아이디를 입력해주세요",
+                onChange: (e) => {
+                  handleChangeId(e)
+                }
+              })}/>
+          </div>
+          {errors.username && <ValidationScript>{errors.username.message}</ValidationScript>}
+        </InputGroup>
+        <InputGroup>
+          <LabelInline>
+            <span>비밀번호</span>
+          </LabelInline>
+          <div style={{position: 'relative'}}>
+            <input
+              type={!showPassword ? 'password' : 'text'}
+              placeholder={'비밀번호(8~12자)'}
+              value={loginParamsValue.password || ''}
+              {...register("password", {
+                required: "비밀번호를 입력해주세요",
+                pattern: {
+                  value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
+                  message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
+                },
+                onChange:handleChangePassword
+              })}/>
+            <ShowPassword
+              style={showPassword ? {backgroundImage: "url('/assets/images/login/hide.png')"} : {backgroundImage: "url('/assets/images/login/show.png')"}}
+              onClick={() => setShowPassword(!showPassword)}/>
+          </div>
+          {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
+        </InputGroup>
+        <FindGroup>
+          <Link to={'/findId'}>아이디찾기</Link>
+          <HorizontalRule/>
+          <Link to={'/findPassword'}>비밀번호 찾기</Link>
+          <HorizontalRule/>
+          <Link to={'/signUp'}>회원가입</Link>
+        </FindGroup>
+        <InputGroup>
+          <Button type={'submit'}>
+            Login
+          </Button>
+        </InputGroup>
       </form>
     </LoginInputComponent>
   )
@@ -478,7 +488,7 @@ const LoginContainer = styled.div`
         font-size: 1rem;
       }
     }
-    
+
   }
   & > div:last-child {
     display: flex;

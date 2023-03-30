@@ -1,6 +1,8 @@
 import axios from "axios";
-import {ADVER_SERVER} from "../constants/GlobalConst";
+import { ADVER_SERVER} from "../constants/GlobalConst";
 import {refresh} from "../services/AuthAxios";
+import {tokenResultAtom} from "../pages/login/entity";
+import store from "../store";
 
 export const adverAxios = axios.create({
   baseURL: ADVER_SERVER,
@@ -12,16 +14,12 @@ export const adverAxios = axios.create({
     return status !== 401 && status <= 500;
   },
 });
-
 adverAxios.interceptors.request.use(
   async (config) => {
     let token=''
-    const accessToken = localStorage.getItem("accessToken");
-    if(accessToken !==''){
-      token = accessToken
-    }
-    console.log(token)
-    config.headers.Authorization = `Bearer ${token}`;
+    const tokenAtom =store.get(tokenResultAtom)
+    console.log(tokenAtom.accessToken)
+    config.headers.Authorization = `Bearer ${tokenAtom.accessToken}`;
     return config;
   },
   async (error) => {
@@ -59,16 +57,26 @@ adverAxios.interceptors.response.use(
       });
       if (!isTokenRefreshing ) {
         isTokenRefreshing = true;
-        refresh().then(response =>{
+        await refresh().then(response =>{
+          console.log(response)
           if(response){
-            console.log(response)
-            onTokenRefreshed(localStorage.getItem("accessToken"));
-          }else{
-            refreshSubscribers = [];
-            isTokenRefreshing = false;
-            localStorage.removeItem("userId")
-            // eslint-disable-next-line no-restricted-globals
-            location.replace('/login')
+            refresh().then(response => {
+              if (response) {
+                store.set(tokenResultAtom, {
+                  id: response.id,
+                  role: response.role,
+                  name: response.name,
+                  accessToken: response.token.accessToken,
+                  refreshToken: response.token.refreshToken
+                })
+                onTokenRefreshed(response.token.accessToken);
+              } else {
+                refreshSubscribers = [];
+                isTokenRefreshing = false;
+                // eslint-disable-next-line no-restricted-globals
+                location.replace('/')
+              }
+            })
           }
         })
       }

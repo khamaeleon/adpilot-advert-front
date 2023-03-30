@@ -2,9 +2,8 @@ import {AdminAxios} from "../common/Axios";
 
 const ACTION_URL = '/admin';
 
-const RESIST_ADMIN = ACTION_URL
 const UPDATE_ADMIN = ACTION_URL
-const LIST_ADMIN = ACTION_URL + '/list';
+
 const INFO_ADMIN = 'admin-user/me'
 
 /**

@@ -1,4 +1,4 @@
-import {atom} from "jotai/index";
+import {atom, createStore} from "jotai/index";
 
 /**
  *
@@ -11,3 +11,7 @@ export const modalController = atom({
 })
 
 export const roleAtom = atom('')
+
+const store = createStore()
+
+export default store;

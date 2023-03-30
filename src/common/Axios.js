@@ -2,6 +2,8 @@ import {ADMIN_SERVER, ADVER_SERVER} from "../constants/GlobalConst.js";
 import {adminAxios} from "./AdminAxios";
 import {nonUserAxios} from "./NonUserAxios";
 import {adverAxios} from "./AdverAxios";
+import store from "../store";
+import {tokenResultAtom} from "../pages/login/entity";
 
 export async function AdminAxios(type, uri, param) {
   switch(type){
@@ -15,12 +17,11 @@ export async function AdminAxios(type, uri, param) {
 
 export async function AxiosImage(type, uri, formData) {
   // const accessToken = store.getState().auth.accessToken
-  const accessToken = localStorage.getItem("accessToken");
-
+  const tokenAtom =store.get(tokenResultAtom)
   return fetch(ADVER_SERVER + uri, {
     method: type,
     headers: {
-      Authorization: `Bearer  ${accessToken}`,
+      Authorization: `Bearer  ${tokenAtom.accessToken}`,
     },
     validateStatus: function (status) {
       return status <= 500;

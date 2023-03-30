@@ -2,12 +2,13 @@ import {NonUserAxios} from "../common/Axios";
 
 const ACTION_URL = '/sign';
 
-const LOGIN_USER = ACTION_URL + '/in/media';
+const LOGIN_USER = ACTION_URL + '/in/adver';
 const LOGIN_ADMIN = ACTION_URL + '/in/admin';
-const LOGOUT_USER = ACTION_URL + '/out/media';
+const LOGOUT_USER = ACTION_URL + '/out/adver';
 const LOGOUT_ADMIN = ACTION_URL + '/out/admin';
-const ADMIN_REFRESH_URL = '/refresh-token/admin';
-const USER_REFRESH_URL = '/refresh-token/media';
+const ADMIN_REFRESH_URL = '/admin/refresh-token/1';
+const USER_REFRESH_URL = '/adver/refresh-token/1';
+
 
 /**
  * 유저 로그인 API
@@ -18,17 +19,11 @@ export async function login(loginInfo) {
   let returnVal = null;
   await NonUserAxios('POST', LOGIN_USER, loginInfo)
     .then((response) => {
-      returnVal = response.data
-      if (returnVal.responseCode.statusCode === 200) {
+      const {data,responseCode} =response.data
+      returnVal = data
+      if (responseCode.statusCode === 200) {
         localStorage.removeItem("refreshToken")
-        localStorage.removeItem("accessToken")
-        localStorage.removeItem("role")
-        localStorage.removeItem("id")
-        localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
-        localStorage.setItem("accessToken", returnVal.data.token.accessToken);
-        localStorage.setItem("role", returnVal.data.role);
-        localStorage.setItem("id", returnVal.data.id);
-        returnVal = true
+        localStorage.setItem("refreshToken", data.token.refreshToken);
       } else {
         returnVal = false
       }
@@ -64,17 +59,12 @@ export async function loginAdmin(loginInfo) {
   let returnVal = null;
   await NonUserAxios('POST', LOGIN_ADMIN, loginInfo)
     .then((response) => {
-      returnVal = response.data
-      if (returnVal.responseCode.statusCode === 200) {
+      const {data,responseCode} =response.data
+      returnVal = data
+      console.log(responseCode)
+      if (responseCode.statusCode === 200) {
         localStorage.removeItem("refreshToken")
-        localStorage.removeItem("accessToken")
-        localStorage.removeItem("role")
-        localStorage.removeItem("id")
-        localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
-        localStorage.setItem("accessToken", returnVal.data.token.accessToken);
-        localStorage.setItem("role", returnVal.data.role);
-        localStorage.setItem("id", returnVal.data.email);
-        returnVal = true
+        localStorage.setItem("refreshToken", data.token.refreshToken);
       } else {
         returnVal = false
       }
@@ -108,22 +98,17 @@ export async function logOutAdmin(userInfo) {
  */
 export async function refreshAdmin() {
   const param = {
-    accessToken: localStorage.getItem("accessToken"),
+    accessToken: '',
     refreshToken: localStorage.getItem("refreshToken"),
   }
   let returnVal = null;
   await NonUserAxios('POST', ADMIN_REFRESH_URL, param).then((response) => {
-    returnVal = response.data
-    if (returnVal.responseCode.statusCode === 200) {
+    returnVal = response.data.data
+    const {data,responseCode} =response.data
+    returnVal = data
+    if (responseCode.statusCode === 200) {
       localStorage.removeItem("refreshToken")
-      localStorage.removeItem("accessToken")
-      localStorage.removeItem("id")
-      localStorage.removeItem("role")
-      localStorage.setItem("refreshToken", returnVal.data.token.refreshToken);
-      localStorage.setItem("accessToken", returnVal.data.token.accessToken);
-      localStorage.setItem("role", returnVal.data.role);
-      localStorage.setItem("id", returnVal.data.email);
-      returnVal = true
+      localStorage.setItem("refreshToken", data.token.refreshToken);
     } else {
       returnVal = false
     }
@@ -144,13 +129,7 @@ export async function refresh() {
     const {responseCode,data,message} = responseUser
     if (responseCode.statusCode === 200) {
       localStorage.removeItem("refreshToken")
-      localStorage.removeItem("accessToken")
-      localStorage.removeItem("role")
-      localStorage.removeItem("id")
       localStorage.setItem("refreshToken", data.token.refreshToken);
-      localStorage.setItem("accessToken", data.token.accessToken);
-      localStorage.setItem("role", data.role);
-      localStorage.setItem("id", data.id);
       return true
     } else {
       console.log(message)
