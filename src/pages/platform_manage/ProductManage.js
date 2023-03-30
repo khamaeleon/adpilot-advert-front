@@ -84,9 +84,6 @@ function ProductManage() {
               </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
-          <BoardSearchResultTitle>
-
-          </BoardSearchResultTitle>
           <BoardSearchResult>
             <Table columns={productListColumn}
                    totalCount={[count,'매체']}
