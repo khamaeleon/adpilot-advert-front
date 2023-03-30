@@ -14,103 +14,57 @@ import {CategoryContainer} from "./styles";
 import styled from "styled-components";
 import {atom, useAtom} from "jotai/index";
 import {atomWithReset, useResetAtom} from "jotai/utils";
+import {createNewCategory, retrieveCategoryByParentCode, retrieveTopLevelCategory} from "../../services/PlatformAxios";
 
-const categoryList = [
-  {
-    code: 'IAB1',
-    label: '예술 및 엔터테인먼트'
-  },
-  {
-    code: 'IAB2',
-    label: '자동차'
-  },
-  {
-    code: 'IAB3',
-    label: '사업'
-  },
-  {
-    code: 'IAB4',
-    label: '채용'
-  },
-  {
-    code: 'IAB5',
-    label: '교육'
-  },
-  {
-    code: 'IAB6',
-    label: '가족 및 육아'
-  },
-]
-
-const subCategoryList = [
-  {
-    code: 'IAB1',
-    category:['도서 및 문학','연예인 팬/가십','미술','유머','영화','음악','텔레비전']
-  },
-  {
-    code: 'IAB2',
-    category: ['자동차 부품','자동차 수리','자동차 매매','자동차 문화','인증 중고','컨버터블','쿠페','크로스 오버','디젤','전기자동차']
-  },
-  {
-    code: 'IAB3',
-    category: ['광고','농업','생명공학/생물의학','비지니스 소프트웨어','건설','영억','정부','친환경 솔루션']
-  },
-  {
-    code: 'IAB4',
-    category: ['경력 걔획','칼리지','재정 지원','취업 박람회','구직','이력서 적성/조언','간호','장학금']
-  },
-  {
-    code: 'IAB5',
-    category: ['미술사','대학 행정','대학 생활','원격 학습','제 2언어로서의 영어', '언어 학습' ,'대학원','홈스쿨링']
-  },
-  {
-    code: 'IAB6',
-    category: ['재택','영유아','데이케어/프리스쿨','제품군 인터넷','육아','키즈','청소년 양육']
-  },
-]
-
+const topLevelCategoryListAtom = atom([])
+const categoryListAtom = atom([])
 const selectCategoryAtom = atom('')
-
 const createCategoryAtom = atomWithReset({
-  category: '',
-  subCategory: ''
+  category: {
+    name: '',
+    level: 1,
+  },
+  subCategory: {
+    name: '',
+    level: 2,
+    parentCode: null
+  }
 })
 
-async function createApi(data) {
-  try{
-    return 200
-  }catch (e) {
-    console.log(e)
-  }
-}
-async function searchApi(keyword) {
-  try{
-    return 200
-  }catch (e) {
-    console.log(e)
-  }
-}
-
 export function CategoryManage() {
+  const [topLevelCategoryList, setTopLevelCategoryList] = useAtom(topLevelCategoryListAtom)
+  const [categoryList, setCategoryList] = useAtom(categoryListAtom)
   const [selectCategory, setSelectCategory] = useAtom(selectCategoryAtom)
   const [createCategory, setCreateCategory] = useAtom(createCategoryAtom)
   const resetCategory = useResetAtom(createCategoryAtom)
-  const [category, setCategory] = useState(false)
   const [searchKeyword, setSearchKeyword] = useState('')
-
+  const [category, setCategory] = useState(false)
+  const [refresh, setRefresh] = useState(false)
   /**
    * 카테고리 등록 취소시 입력값 삭제
    */
   useEffect(() => {
     resetCategory()
   }, [category]);
-
+  /**
+   * 카테고리 조회
+   */
+  useEffect(() => {
+    const fetchData = retrieveTopLevelCategory().then(response => {
+      console.log(response)
+      setTopLevelCategoryList(response)
+    })
+  }, [refresh]);
   /**
    * 카테고리 선택
    * @param code
    */
-  const handleSelectCategory = (code) => {
+  const handleSelectCategory = async (code) => {
     setSelectCategory(code)
+    const fetData = await retrieveCategoryByParentCode(code).then(response => {
+      console.log(response)
+      setCategoryList(response)
+    })
   }
   /**
    * 상위 카테고리 등록 값 추가
@@ -119,7 +73,10 @@ export function CategoryManage() {
   const handleChangeCategory = (inputEvent) => {
     setCreateCategory({
       ...createCategory,
-      category: inputEvent.target.value
+      category: {
+        ...createCategory.category,
+        name: inputEvent.target.value
+      }
     })
   }
   /**
@@ -127,9 +84,14 @@ export function CategoryManage() {
    * @param inputEvent
    */
   const handleChangeSubCategory = (inputEvent) => {
+    console.log(createCategory)
     setCreateCategory({
       ...createCategory,
-      subCategory: inputEvent.target.value
+      subCategory: {
+        ...createCategory.subCategory,
+        name: inputEvent.target.value,
+        parentCode: selectCategory
+      }
     })
   }
   /**
@@ -145,26 +107,32 @@ export function CategoryManage() {
    * @returns {Promise<void>}
    */
   const handleCreateCategory = async () => {
-    const fetchData = await createApi(createCategory.category).then(response => {
+    const fetchData = await createNewCategory(createCategory.category).then(response => {
       console.log(response)
-    })
-    console.log(fetchData)
+      setRefresh(!refresh)
+    }).then(() => resetCategory())
   }
   /**
    * 카테고리 등록 (서브카테고리)
    * @returns {Promise<void>}
    */
   const handleCreateSubCategory = async () => {
-    const fetchData = await createApi(createCategory.subCategory)
-    console.log(fetchData)
+    const fetchData = await createNewCategory(createCategory.subCategory).then(response => {
+      console.log(response)
+      setRefresh(!refresh)
+    }).then(() => resetCategory())
+    const fetData = await retrieveCategoryByParentCode(selectCategory).then(response => {
+      console.log(response)
+      setCategoryList(response)
+    })
   }
+
   /**
-   * 카테고리 검색
+   * 검색
    * @returns {Promise<void>}
    */
   const handleSearchCategory = async () => {
-    const fetchData = await searchApi(searchKeyword)
-    console.log(fetchData)
+
   }
 
   return(
@@ -175,7 +143,7 @@ export function CategoryManage() {
           <RowSpan>
             <ColSpan3/>
             <ColSpan1>
-              <Input value={searchKeyword} onChange={handleChangeSearchCategory}/>
+              <Input value={searchKeyword} onChange={handleChangeSearchCategory} placeholder={'검색'}/>
               <SearchButton onClick={handleSearchCategory}>검색</SearchButton>
             </ColSpan1>
           </RowSpan>
@@ -188,17 +156,17 @@ export function CategoryManage() {
             </CategoryHeader>
             <CategoryEnroll style={category ? {height: 60} : {height:0}}>
               <ColSpan3>
-                <Input value={createCategory.category || ""} onChange={handleChangeCategory}/>
+                <Input placeholder={'상위 카테고리 명을 입력하세요.'} value={createCategory.category.name || ""} onChange={handleChangeCategory} />
               </ColSpan3>
               <ColSpan1><DefaultButton onClick={handleCreateCategory}>등록</DefaultButton></ColSpan1>
             </CategoryEnroll>
             <CategoryBody>
-              {categoryList && categoryList.map((item, key) => {
+              {topLevelCategoryList.length !== 0 && topLevelCategoryList.map((item, key) => {
                 return (
                   <CategoryItem
                     key={key}
                     onClick={() => handleSelectCategory(item.code)}
-                    style={item.code === selectCategory? {color:"#ffbb00"} : null}>{item.label}</CategoryItem>
+                    style={item.code === selectCategory? {color:"#ffbb00"} : null}>{item.name}</CategoryItem>
                 )
               })}
             </CategoryBody>
@@ -211,22 +179,18 @@ export function CategoryManage() {
             <CategoryEnroll style={{justifyContent:'flex-end',height: category ? 60 : 0 }}>
               <div style={{display:'flex',width: 400}}>
                 <ColSpan3>
-                  <Input value={createCategory.subCategory || ""} onChange={handleChangeSubCategory}/>
+                  <Input placeholder={selectCategory !== '' ? '카테고리 명을 입력해주세요' : '상위 카테고리를 선택해주세요'} value={createCategory.subCategory.name || ""} onChange={handleChangeSubCategory} readOnly={selectCategory !== '' ? false : true}/>
                 </ColSpan3>
-                <ColSpan1><DefaultButton onClick={handleCreateSubCategory}>등록</DefaultButton></ColSpan1>
+                <ColSpan1><DefaultButton onClick={handleCreateSubCategory} disabled={selectCategory !== '' ? false : true}>등록</DefaultButton></ColSpan1>
               </div>
             </CategoryEnroll>
-              {selectCategory !== '' && subCategoryList.filter(item => item.code === selectCategory).map((item, key) => {
+            <SubCategoryBody>
+              {categoryList.length !== 0 && categoryList.map((item, key) => {
                 return(
-                  <SubCategoryBody key={key}>
-                    {item.category.map((sub, key) => {
-                      return (
-                        <SubCategoryItem key={key}>{sub}</SubCategoryItem>
-                      )
-                    })}
-                  </SubCategoryBody>
+                  <SubCategoryItem key={key}>{item.name}</SubCategoryItem>
                 )
               })}
+            </SubCategoryBody>
           </SubCategory>
         </CategoryContainer>
       </Board>

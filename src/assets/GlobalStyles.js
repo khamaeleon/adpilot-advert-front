@@ -885,7 +885,9 @@ export const DefaultButton = styled.button`
   border: 1px solid ${lightGray};
   background-color: #535353;
   color: #fff;
+  cursor: ${(props)=>props.disabled? "not-allowed":'pointer'};
 `
+
 export const DeleteButton = styled.button`
   width: 24px;
   height: 24px;
@@ -914,6 +916,7 @@ export const Input = styled('input')`
   border: 1px solid #e5e5e5;
   height: 45px;
   border-radius: 5px;
+  background-color: ${(props)=>props.readOnly? '#eee': '#fff'};
   .btn-delete {
     width: 35px;
     height: 35px;
