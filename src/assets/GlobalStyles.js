@@ -957,6 +957,18 @@ export const TableButton = styled.button`
   background-color: #f3f3f3;
   border-radius: 5px;
 `
+
+export const Check = styled.div`
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-image: url("/assets/images/table/icon_check@2x.png");
+  background-image: -webkit-image-set(url("/assets/images/table/icon_check.png") 1x, url("/assets/images/table/icon_check@2x.png") 2x, url("/assets/images/table/icon_check@3x.png") 3x);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
+`
+
 export const Edit = styled.div`
   display: inline-block;
   width: 35px;

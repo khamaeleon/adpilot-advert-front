@@ -3,6 +3,7 @@ export const navigationName = {
   "/board/campaign": "홈/광고 관리/캠페인생성",
   "/board/platform": "홈/플랫폼 관리/사용자 관리",
   "/board/categoryManage": "홈/플랫폼 관리/광고주 카테고리 관리",
+  "/board/productManage": "홈/플랫폼 관리/상품 수집 관리",
   "/board/settings": "홈/설정/이벤트 단가 관리",
   "/board/settingsDetail": "홈/설정/이벤트 단가 상세 관리",
   "/board/budgetEvent": "홈/설정/이벤트 예산 관리",

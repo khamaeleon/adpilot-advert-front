@@ -2,6 +2,9 @@ import {Icon, LinkRef} from "../../components/table";
 import {Link} from "react-router-dom";
 import React from "react";
 import moment from "moment";
+import {atom} from "jotai";
+import {dateFormat, decimalFormat} from "../../common/StringUtils";
+import {Check} from "../../assets/GlobalStyles";
 
 /**
  * 매체 타입
@@ -462,4 +465,151 @@ export const adExChangeDetailInfo = {
     }
   ]
 }
+
+/**
+ * 상품 수집 관리 리스트 Atom
+ * @type {Atom<unknown>}
+ */
+//export const productListDataAtom = atom(null)
+export const productListDataAtom = atom([{
+  name: 'id',
+}])
+
+/**
+ * 상품 수집 관리 리스트 컬럽 설정
+ */
+export const productListColumn = [
+
+  {
+    name: 'id',
+    defaultVisible: false
+  },
+  {
+    name: 'username',
+    header: '광고주 아이디',
+    textAlign: 'center',
+    showColumnMenuTool: false,
+  },
+  {
+    name: 'inventoryId',
+    header: '상품 코드',
+    textAlign: 'center',
+    width: 80,
+    sortable: false, //정렬
+    resizeable: false,
+    showColumnMenuTool: false,
+    render: ({value, cellProps}) => {
+      return <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>
+    }
+  },
+  {
+    name: 'username',
+    header: '등록 일시',
+    textAlign: 'center',
+    width: 150,
+    resizeable: false,
+    showColumnMenuTool: false,
+    render: ({value}) => {
+      return <p>{dateFormat(value,'YYYY.MM.DD HH:mm')}</p>
+    }
+  },
+  {
+    name: 'productType',
+    header: () => {
+      return(
+        <div><p>중지/품절</p><p>여부</p></div>
+      )
+    },
+    textAlign: 'center',
+    width: 100,
+    resizeable: false,
+    showColumnMenuTool: false,
+    render: ({value}) => {
+      return <Check/>
+    }
+  },
+  {
+    name: 'deviceType',
+    header: '상품 이미지1',
+    textAlign: 'center',
+    minWidth: 100,
+    maxWidth: 100,
+    showColumnMenuTool: false,
+    sortable: false
+  },
+  {
+    name: 'deviceType',
+    header: '상품 이미지2',
+    textAlign: 'center',
+    minWidth: 100,
+    maxWidth: 100,
+    showColumnMenuTool: false,
+    sortable: false
+  },
+  {
+    name: 'deviceType',
+    header: '상품 이미지3',
+    textAlign: 'center',
+    minWidth: 100,
+    maxWidth: 100,
+    showColumnMenuTool: false,
+    sortable: false
+  },
+  {
+    name: 'bannerSize',
+    header: () => {
+      return(
+        <div><p>표준 카테고리</p><p>(seq)</p></div>
+      )
+    },
+    textAlign: 'center',
+    showColumnMenuTool: false
+  },
+  {
+    name: 'bannerSize',
+    header: () => {
+      return(
+        <div><p>상품</p><p>카테고리1</p></div>
+      )
+    },
+    textAlign: 'center',
+    showColumnMenuTool: false
+  },
+  {
+    name: 'bannerSize',
+    header: () => {
+      return(
+        <div><p>상품</p><p>카테고리2</p></div>
+      )
+    },
+    textAlign: 'center',
+    showColumnMenuTool: false
+  },
+  {
+    name: 'script',
+    header: '원가',
+    textAlign: 'center',
+    showColumnMenuTool: false,
+    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
+  },
+  {
+    name: 'siteUrl',
+    header: '사이트',
+    textAlign: 'center',
+    width: 100,
+    sortable: false,
+    showColumnMenuTool: false,
+    render: ({value, cellProps}) => {
+      return <div style={{display: 'flex', alignItems: 'center'}}><p>이동</p> <Icon icon={'url'} value={value} cellProps={cellProps}/></div>
+    }
+  },
+  {
+    name: 'examinationStatus',
+    header: '평점',
+    textAlign: 'center',
+    showColumnMenuTool: false
+  }
+]
+
+
 

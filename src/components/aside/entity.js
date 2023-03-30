@@ -71,7 +71,7 @@ export const menuList = [
   {
     name: "platform",
     header: "플랫폼 관리",
-    include: ["platform","categoryManage"],
+    include: ["platform","categoryManage","productManage"],
     child:[
       {
         name: "platform",
@@ -80,6 +80,11 @@ export const menuList = [
       {
         name: "categoryManage",
         header: "광고주 카테고리 관리"
+      }
+      ,
+      {
+        name: "productManage",
+        header: "상품 수집 관리"
       }
     ]
   },

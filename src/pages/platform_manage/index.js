@@ -5,6 +5,7 @@ import {atom} from "jotai/index";
 import {useParams} from "react-router-dom";
 import AdminManage from "./AdminManage";
 import {CategoryManage} from "./CategoryManage";
+import ProductManage from "./ProductManage";
 
 function PlatformUser(){
   const params = useParams()
@@ -17,6 +18,7 @@ function PlatformUser(){
         </TitleContainer>
         {params.id === 'platform' && <AdminManage/>}
         {params.id === 'categoryManage' && <CategoryManage/>}
+        {params.id === 'productManage' && <ProductManage/>}
       </BoardContainer>
     </main>
   )
