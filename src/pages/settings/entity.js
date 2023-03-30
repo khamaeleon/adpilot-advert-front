@@ -3,8 +3,6 @@ import {atom} from "jotai/index";
 import {Link} from "react-router-dom";
 import React from "react";
 import {Icon} from "../../components/table";
-import {handleOnSubmit} from "./EventUnitPriceDetail";
-
 export const saveTypeAtom =atom('create')
 /**
  * 이벤트 단가 광고주 리스트 Atom
@@ -67,9 +65,12 @@ export const eventUnitPriceDetailColumns = [ //이벤트 단가 상세 컬럼
     name: 'groupName',
     header: '이벤트 단가 그룹명',
     defaultFlex: 1,
-    render: ({value, cellProps}) => {
+    render: (props) => {
       return (
-        <div style={{display: "flex", alignItems: 'center'}}><p>{value}</p><Icon saveType={'edit'} cellProps={cellProps.data} label={'won'} /></div>
+        <div style={{display: "flex", alignItems: 'center'}}>
+          <p>{props.value}</p>
+          <Icon saveType={'edit'} cellProps={props.cellProps.data} label={'won'}/>
+        </div>
       )
     }
   },

@@ -78,7 +78,6 @@ const createCategoryAtom = atomWithReset({
 
 async function createApi(data) {
   try{
-
     return 200
   }catch (e) {
     console.log(e)
@@ -86,7 +85,6 @@ async function createApi(data) {
 }
 async function searchApi(keyword) {
   try{
-
     return 200
   }catch (e) {
     console.log(e)
@@ -147,7 +145,9 @@ export function CategoryManage() {
    * @returns {Promise<void>}
    */
   const handleCreateCategory = async () => {
-    const fetchData = await createApi(createCategory.category)
+    const fetchData = await createApi(createCategory.category).then(response => {
+      console.log(response)
+    })
     console.log(fetchData)
   }
   /**

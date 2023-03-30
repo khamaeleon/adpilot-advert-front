@@ -3,6 +3,7 @@ import CreateCampaign from "./CreateCampaign";
 import ScrollToTop from "../../components/common/ScrollToTop";
 import {BoardContainer, TitleContainer} from "../../assets/GlobalStyles";
 import Navigator from "../../components/common/Navigator";
+import CreateCreative from "./CreateCreative";
 
 export default function Campaign(){
   const params = useParams()
@@ -15,6 +16,7 @@ export default function Campaign(){
           <Navigator/>
         </TitleContainer>
         {params.id === 'campaign' && <CreateCampaign />}
+        {params.id === 'createCreative' && <CreateCreative />}
       </BoardContainer>
     </main>
   )

@@ -16,12 +16,17 @@ import {
 import {useAtom} from "jotai";
 import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
-import {saveTypeAtom} from "../../pages/settings/entity";
+import {eventUnitPriceDetailDataAtom, saveTypeAtom} from "../../pages/settings/entity";
+import {resistPriceEvent, selPriceEventList, updatePriceEvent} from "../../services/SettingsAxios";
+import {toast} from "react-toastify";
+import {useLocation} from "react-router-dom";
 
 function SettingChangeModal(props) {
   const {data, onSubmit, saveType, label} = props
   const [, setModal] = useAtom(modalController)
   const [, setSaveTypeState] = useAtom(saveTypeAtom)
+  const [eventUnitPriceDetailDataState, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
+  const {state} = useLocation()
   const [dataState, setDataState] = useState(saveType !== 'create' ? data :{
     audience: '',
     cartRecommendations: '',
@@ -123,10 +128,42 @@ function SettingChangeModal(props) {
       userOptimization: event.target.value
     })
   }
-
-  const handleSave = (dataState) => {
-    onSubmit(dataState)
+  /**
+   * 모달에서 수정 추가
+   */
+  const handleSave = (data) => {
+    if(saveType ==='create'){
+      resistPriceEvent({...data,userId:state.id}).then(response => {
+        if(response){
+          setModal({
+            isShow: false,
+            modalComponent: null
+          })
+          selPriceEventList(state.id).then(response => {
+            setEventUnitPriceDetailDataState(response)
+          })
+        }else{
+          toast.warning("이벤트 단가 그룹명이 중복 되었습니다.")
+        }
+      })
+    }else{
+      console.log('수정')
+      updatePriceEvent({...data,userId:state.id}).then(response => {
+        if (response) {
+          setModal({
+            isShow: false,
+            modalComponent: null
+          })
+          selPriceEventList(state.id).then(response => {
+            setEventUnitPriceDetailDataState(response)
+          })
+        } else {
+          toast.warning("이벤트 단가 그룹명이 중복 되었습니다.")
+        }
+      })
+    }
   }
+
 
   return (
     <div>

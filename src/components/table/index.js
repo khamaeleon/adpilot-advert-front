@@ -77,10 +77,11 @@ export function Icon(props) {
       alert('클립보드 복사에 실패하였습니다.');
     }
   };
+
   return(
     <>
       {props.saveType === 'edit' &&
-        <SettingAdd data={props.cellProps} saveType={props.saveType} label={props.label} />
+        <SettingAdd data={props.cellProps} saveType={props.saveType} label={props.label} onSubmit={props.onSubmit}/>
       }
       {props.icon === 'script' &&
         <ScriptComponent cellProps={props.cellProps} />
