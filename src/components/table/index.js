@@ -1,5 +1,14 @@
 import React, {useEffect, useState} from "react";
-import {ColSpan2, CopyCode, RowSpan, SaveExcelButton, Script, Site,} from "../../assets/GlobalStyles";
+import {
+  ColSpan2,
+  ColTitle,
+  CopyCode,
+  RowSpan,
+  SaveExcelButton,
+  Script,
+  Site,
+  SubmitButton,
+} from "../../assets/GlobalStyles";
 import {Link} from "react-router-dom";
 import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
@@ -8,10 +17,37 @@ import {useAtom} from "jotai";
 import styled from "styled-components";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
-import {VerticalRule} from "../common/Common";
 import {TotalCount} from "./TableDetail";
 import SettingAdd from "../common/SettingModal";
 
+export function SwitchComponent(props){
+  const {value, cellProps, eventClick} = props
+  const [select, setSelect] = useState(value)
+  const [, setModal] = useAtom(modalController)
+  const background = !select ? {background: '#ddd'} : {background: '#f5811f'};
+  const position = select ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null
+
+  const handleClick = (confirm) => {
+    if(confirm){
+      cellProps.data.publish = !cellProps.data.publish;
+      eventClick();
+    }
+    setSelect(cellProps.data.publish)
+    setModal({isShow:false});
+    // return (
+    //   <UseAtom objects={cellProps.data}/>
+    // )
+  }
+  return(
+    <SwitchBox
+      style={background}
+      onClick={() => handleClick(true)}
+    >
+      <label style={position}/>
+      {select ? <On>ON</On>:  <Off>OFF</Off>}
+    </SwitchBox>
+  )
+}
 
 export const LinkRef = (link) => {
   const renderer = {
@@ -27,29 +63,37 @@ export const LinkRef = (link) => {
 function ScriptComponent(props){
   const {cellProps} = props
   const[modal, setModal] = useAtom(modalController)
+  const handleCopyClipBoard = async (text) => {
+    console.log(text)
+    try {
+      await navigator.clipboard.writeText(text);
+      alert('클립보드에 복사되었습니다.');
+    } catch (error) {
+      alert('클립보드 복사에 실패하였습니다.');
+    }
+  };
   const handleClick = () => {
-    console.log('click')
     setModal({
       isShow: true,
-      width: 1320,
+      width: 800,
       modalComponent: () => {
         return (
           <div>
-            <ModalHeader title={'지면 스크립트 발급 안내'}/>
+            <ModalHeader title={'스크립트 보기'}/>
             <ModalBody>
-              <ScriptSubject>
-                <div>지면 등록이 완료되었습니다.<br/>
-                  하단 발급된 광고 스크립트를 스크립트 삽인 가이드를 참고하여 표출할 광고 콘텐츠 HTML 영역에 삽입해주세요.
-                </div>
-                <div>※ 발급된 스크립트 정보는 지면 관리에서 확인 가능합니다.</div>
-              </ScriptSubject>
-              <GuideContainer>
-                <GuideHeader>스크립트 표출</GuideHeader>
-                <GuideBody>
-                  <pre>{cellProps.data.script}</pre>
-                </GuideBody>
-              </GuideContainer>
-              <VerticalRule style={{margin: "20px 0"}}/>
+              <RowSpan>
+                <ColTitle style={{paddingTop: 10}}>이벤트명</ColTitle>
+                <BorderBox>이벤트 명</BorderBox>
+              </RowSpan>
+              <RowSpan>
+                  <ColTitle style={{paddingTop: 10}}>
+                    <p>스크립트</p>
+                    <SubmitButton onClick={() => handleCopyClipBoard(cellProps.data.script)} style={{width: '100%', marginTop: 8, padding: '5px 0'}}>
+                      복사
+                    </SubmitButton>
+                  </ColTitle>
+                  <BorderBox><pre>{cellProps.data.script}스크립트 내용</pre></BorderBox>
+              </RowSpan>
             </ModalBody>
             <ModalFooter>
               <PreviewSubmit onClick={() => setModal({isShow: false})}>확인</PreviewSubmit>
@@ -243,6 +287,7 @@ export const On = styled.span`
   font-weight: 500;
   color: #fff
 `
+
 export const Off = styled.span`
   display: inline-block;
   width: 100%;
@@ -253,19 +298,14 @@ export const Off = styled.span`
   color: #999
 `
 
-const GuideContainer = styled.div`
+const BorderBox = styled.div`
   border: 1px solid #e5e5e5;
-`
-const GuideHeader = styled.div`
-  padding: 18px 20px;
-  background-color: #f9f9f9;
-  border-bottom: 1px solid #e5e5e5;
-  color: #f5811f;
-  font-size: 16px;
-`
-const GuideBody = styled.div`
-  display: flex;
-  padding: 20px;
+  margin-left: 15px;
+  width: 100%;
+  min-height: 45px;
+  max-height: 120px; 
+  padding: 10px 5px 10px 10px;
+  overflow-y: auto;
 `
 
 const PreviewSubmit = styled.button`
@@ -273,18 +313,6 @@ const PreviewSubmit = styled.button`
   width: 200px;
   background-color: #525252;
   color: #fff;
-`
-
-const ScriptSubject = styled.div`
-  margin-bottom: 20px;
-  padding: 20px;
-  background-color: #f9f9f9;
-
-  & div:last-child {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #777;
-  }
 `
 
 const Small = styled.small`
