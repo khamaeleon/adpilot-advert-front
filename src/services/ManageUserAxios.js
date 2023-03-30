@@ -15,7 +15,7 @@ const SIGNUP_URL = ACTION_URL + '/sign-up'
 const VALID_USERID = ACTION_URL + '/verify/username'
 const FIND_USERID = ACTION_URL + '/find/my-id'
 const CHANGE_PASSWORD = ACTION_URL + '/find/my-password'
-const UPLOAD_URL = ACTION_URL + '/upload' + SLASH;
+const UPLOAD_URL = ACTION_URL + '/image' + SLASH;
 /**
  * 사용자 리스트 가져오기 api
  * @param userParams
@@ -192,12 +192,13 @@ export async function selUserByUserId(username) {
  * @param resourceType
  * @returns {Promise<false>}
  */
-export async function accountFileUpload(username,data,resourceType) {
+export async function accountFileUpload(data,resourceType) {
   let returnVal = null;
 
-  await AxiosImage('POST', UPLOAD_URL + username + SLASH + resourceType, data)
+  await AxiosImage('POST', UPLOAD_URL + resourceType, data)
     .then(response =>response.json())
     .then(data => {
+      console.log(data)
       if(data.responseCode.statusCode === 200){
         returnVal = data.data.path
       } else {

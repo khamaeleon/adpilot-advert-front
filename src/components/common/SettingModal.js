@@ -16,21 +16,29 @@ import {
 import {useAtom} from "jotai";
 import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
-import {eventUnitPriceDetailDataAtom, saveTypeAtom} from "../../pages/settings/entity";
-import {resistPriceEvent, selPriceEventList, updatePriceEvent} from "../../services/SettingsAxios";
+import {eventBudgetDetailDataAtom, eventUnitPriceDetailDataAtom, saveTypeAtom} from "../../pages/settings/entity";
+import {
+  resistBudgetEvent,
+  resistPriceEvent,
+  selBudgetEventList,
+  selPriceEventList,
+  updateBudgetEvent,
+  updatePriceEvent
+} from "../../services/SettingsAxios";
 import {toast} from "react-toastify";
 import {useLocation} from "react-router-dom";
 
 function SettingChangeModal(props) {
-  const {data, onSubmit, saveType, label} = props
+  const {data, saveType, label} = props
   const [, setModal] = useAtom(modalController)
   const [, setSaveTypeState] = useAtom(saveTypeAtom)
-  const [eventUnitPriceDetailDataState, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
+  const [, setEventBudgetDetailDataState] = useAtom(eventBudgetDetailDataAtom)
+  const [, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
   const {state} = useLocation()
   const [dataState, setDataState] = useState(saveType !== 'create' ? data :{
     audience: '',
     cartRecommendations: '',
-    priceEventId: '',
+    eventId: '',
     groupName: '',
     productRecommendations: '',
     shopperMatching: '',
@@ -42,10 +50,12 @@ function SettingChangeModal(props) {
     defaultValues: dataState
   })
   useEffect(() => {
+    console.log(data)
     if (saveType === 'create') {
       setSaveTypeState(saveType)
     }else{
       setSaveTypeState(saveType)
+      setDataState(data)
       reset({
         dataState
       })
@@ -129,11 +139,11 @@ function SettingChangeModal(props) {
     })
   }
   /**
-   * 모달에서 수정 추가
+   * 이벤트 단가 수정 추가
    */
-  const handleSave = (data) => {
+  const handlePriceEventSave = () => {
     if(saveType ==='create'){
-      resistPriceEvent({...data,userId:state.id}).then(response => {
+      resistPriceEvent({...dataState,userId:state.id}).then(response => {
         if(response){
           setModal({
             isShow: false,
@@ -148,7 +158,7 @@ function SettingChangeModal(props) {
       })
     }else{
       console.log('수정')
-      updatePriceEvent({...data,userId:state.id}).then(response => {
+      updatePriceEvent({...dataState,userId:state.id}).then(response => {
         if (response) {
           setModal({
             isShow: false,
@@ -164,10 +174,42 @@ function SettingChangeModal(props) {
     }
   }
 
+  const handleBudgetEventSave = () => {
+    if(saveType ==='create'){
+      resistBudgetEvent({...dataState,userId:state.id}).then(response => {
+        if(response){
+          setModal({
+            isShow: false,
+            modalComponent: null
+          })
+          selBudgetEventList(state.id).then(response => {
+            setEventBudgetDetailDataState(response)
+          })
+        }else{
+          toast.warning("이벤트 단가 그룹명이 중복 되었습니다.")
+        }
+      })
+    }else{
+      console.log('수정')
+      updateBudgetEvent({...dataState,userId:state.id}).then(response => {
+        if (response) {
+          setModal({
+            isShow: false,
+            modalComponent: null
+          })
+          selBudgetEventList(state.id).then(response => {
+            setEventBudgetDetailDataState(response)
+          })
+        } else {
+          toast.warning("이벤트 단가 그룹명이 중복 되었습니다.")
+        }
+      })
+    }
+  }
 
   return (
     <div>
-      <form onSubmit={handleSubmit(handleSave, onError)}>
+      <form onSubmit={handleSubmit(label ==='won' ? handlePriceEventSave: handleBudgetEventSave, onError)}>
         <ModalBody>
           <RowSpan>
             <ColSpan4>
@@ -310,6 +352,7 @@ export function SettingAdd(props) {
   const {onSubmit, data, title, saveType, label} = props;
   const [, setModal] = useAtom(modalController)
   const handleModalComponent = () => {
+    console.log(data)
     setModal({
       isShow: true,
       width: 500,

@@ -179,9 +179,12 @@ export const budgetEventDetailColumns = [ //이벤트 예산 상세 컬럼
     name: 'groupName',
     header: '이벤트 단가 그룹명',
     defaultFlex: 1,
-    render: ({value, cellProps}) => {
+    render: (props) => {
       return (
-        <div style={{display: "flex", alignItems: 'center'}}><p>{value}</p><Icon saveType={'edit'} cellProps={cellProps.data} label={'pct'} /></div>
+        <div style={{display: "flex", alignItems: 'center'}}>
+          <p>{props.value}</p>
+          <Icon saveType={'edit'} cellProps={props.cellProps.data} label={'pct'}/>
+        </div>
       )
     }
   },

@@ -26,7 +26,7 @@ function BudgetEventDetail() {
   const [eventBudgetDetailDataState, setEventBudgetDetailDataState] = useAtom(eventBudgetDetailDataAtom)
   const navigate = useNavigate()
   const [, setModal] = useAtom(modalController)
-  const [saveType,setSaveType] =useState('create')
+  const [saveTypeState] =useState('create')
   const {state} =useLocation()
 
   useEffect(() => {
@@ -35,29 +35,6 @@ function BudgetEventDetail() {
     })
   }, [])
 
-  /**
-   * 모달에서 수정 추가
-   */
-  const handleOnSubmit = (data) => {
-    console.log(data)
-    if(saveType ==='create'){
-      resistBudgetEvent({...data,userId:state.id}).then(response => {
-        if(response){
-          setModal({
-            isShow: false,
-            modalComponent: null
-          })
-          selBudgetEventList(state.id).then(response => {
-            setEventBudgetDetailDataState(response)
-          })
-        }else{
-          toast.warning("이벤트 단가 그룹명이 중복 되었습니다.")
-        }
-      })
-    }else{
-      //업데이트
-    }
-  }
   return (
     <>
       <Board>
@@ -86,7 +63,7 @@ function BudgetEventDetail() {
         </BoardSearchDetail>
         <BoardTableContainer>
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
-            <SettingAdd title={'추가'} onSubmit={handleOnSubmit} type={saveType} data={null} label={'pct'}/>
+            <SettingAdd title={'추가'} saveType={saveTypeState} data={null} label={'pct'}/>
           </RowSpan>
           <div>
             총 <span>{eventBudgetDetailDataState !==null && eventBudgetDetailDataState.totalCount}</span>건

@@ -117,13 +117,25 @@ export default function Basic(props) {
   }
 
   /**
-   * 매체명 입력
+   * 광고주 명
    * @param event
    */
-  const handleMediaName = (event) => {
+  const handleAdverName = (event) => {
     setAccountInfo({
       ...accountInfo,
-      siteName: event.target.value
+      adverName: event.target.value
+    })
+  }
+
+  /**
+  /**
+   * 상호명 입력
+   * @param event
+   */
+  const handleCompanyName = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      handleCompanyName: event.target.value
     })
   }
   /**
@@ -147,6 +159,18 @@ export default function Basic(props) {
       managerPhone: num
     })
   }
+
+  /**
+   * 담당자 이메일 입력
+   * @param event
+   */
+  const handleManagerEmail = (event) => {
+    setAccountInfo({
+      ...accountInfo,
+      managerEmail1: event.target.value
+    })
+  }
+
   /**
    * 호스트 입력
    * @param event
@@ -227,11 +251,14 @@ export default function Basic(props) {
       const data = new FormData()
       const imagesLastIndex = pictureFiles.length-1;
       data.append('file', pictureFiles[imagesLastIndex].file, pictureFiles[imagesLastIndex].file.name)
-      accountFileUpload(accountInfo.username, data,'LICENCE').then(response => {
-        response !== false && setAccountInfo({
-          ...accountInfo,
-          businessLicenseCopy: pictureFiles[imagesLastIndex].file.name,
-        })
+      accountFileUpload(data,'LICENCE').then(response => {
+        if(response){
+          console.log(response)
+          setAccountInfo({
+            ...accountInfo,
+            businessLicenseWebPath: response,
+          })
+        }
       })
     }
   }
@@ -266,14 +293,14 @@ export default function Basic(props) {
               <input type={'radio'}
                      id={'direct'}
                      name={'direct'}
-                     checked={accountInfo.mediaType === 'DIRECT' ? true : false}
-                     onChange={() => handleChangeMediaType('DIRECT')}/>
+                     checked={accountInfo.adverType === 'ADVER' ? true : false}
+                     onChange={() => handleChangeMediaType('ADVER')}/>
               <label htmlFor={'direct'}>광고주</label>
               <input type={'radio'}
                      id={'agent'}
                      name={'agent'}
-                     checked={accountInfo.mediaType === 'AGENT' ? true : false}
-                     onChange={() => handleChangeMediaType('AGENT')}/>
+                     checked={accountInfo.adverType === 'AGENCY' ? true : false}
+                     onChange={() => handleChangeMediaType('AGENCY')}/>
               <label htmlFor={'agent'}>대행사</label>
             </div>
           </div>
@@ -291,7 +318,7 @@ export default function Basic(props) {
                 value={accountInfo.username}
               />
               {errors.username && <ValidationScript>{errors.username?.message}</ValidationScript>}
-              <DefaultButton onClick={()=>checkUserId()}>중복검사</DefaultButton>
+              <DefaultButton type={'button'} onClick={()=>checkUserId()}>중복검사</DefaultButton>
             </div>
           </RelativeDiv>
           <RelativeDiv>
@@ -351,14 +378,14 @@ export default function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'광고주명을 입력해주세요'}
-                {...register("siteName", {
+                {...register("adverName", {
                   required: "광고주명을 입력해주세요",
-                  onChange: (e) => handleMediaName(e)
+                  onChange: (e) => handleAdverName(e)
                 })}
-                value={accountInfo.siteName}
+                value={accountInfo.adverName}
 
               />
-              {errors.siteName && <ValidationScript>{errors.siteName?.message}</ValidationScript>}
+              {errors.adverName && <ValidationScript>{errors.adverName?.message}</ValidationScript>}
             </div>
           </RelativeDiv>
           <RelativeDiv>
@@ -367,13 +394,13 @@ export default function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'담당자 명을 입력해주세요'}
-                {...register("managerName", {
+                {...register("managerName1", {
                   required: "담당자 명을 입력해주세요",
                   onChange: (e) => handleManagerName(e)
                 })}
-                value={accountInfo.managerName}
+                value={accountInfo.managerName1}
               />
-              {errors.managerName && <ValidationScript>{errors.managerName?.message}</ValidationScript>}
+              {errors.managerName1 && <ValidationScript>{errors.managerName1?.message}</ValidationScript>}
             </div>
           </RelativeDiv>
           <RelativeDiv>
@@ -390,9 +417,28 @@ export default function Basic(props) {
                   },
                   onChange: (e) => handleManagerPhone(e)
                 })}
-                value={accountInfo.managerPhone}
+                value={accountInfo.managerPhone1}
               />
-              {errors.managerPhone && <ValidationScript>{errors.managerPhone?.message}</ValidationScript>}
+              {errors.managerPhone1 && <ValidationScript>{errors.managerPhone1?.message}</ValidationScript>}
+            </div>
+          </RelativeDiv>
+          <RelativeDiv>
+            <div>담당자 이메일</div>
+            <div>
+              <input
+                type={'text'}
+                placeholder={'이메일을 입력해주세요.'}
+                {...register("managerEmail1", {
+                  required: "담당자 이메일을 입력해주세요.",
+                  pattern: {
+                    value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
+                    message: "이메일 형식을 확인해주세요"
+                  },
+                  onChange: (e) => handleManagerEmail(e)
+                })}
+                value={accountInfo.managerEmail1}
+              />
+              {errors.managerEmail1 && <ValidationScript>{errors.managerEmail1?.message}</ValidationScript>}
             </div>
           </RelativeDiv>
           <RelativeDiv>
@@ -401,7 +447,7 @@ export default function Basic(props) {
               <Select options={hostList}
                       styles={inputStyle}
                       components={{IndicatorSeparator: () => null}}
-                      value={''}
+                      value={accountInfo.hostType ===''? {value:'select',label:'선택하세요'}:accountInfo.hostType}
                       {...register("selectHost", {
                         required: "호스팅을 선택해주세요",
                         onChange: (e) => handleSelectHosting(e)
@@ -416,13 +462,13 @@ export default function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'상호명 명을 입력해주세요'}
-                {...register("corporationName", {
+                {...register("companyName", {
                   required: "담당자 명을 입력해주세요",
-                  onChange: (e) => handleCorporationName(e)
+                  onChange: (e) => handleCompanyName(e)
                 })}
-                value={accountInfo.corporationName}
+                value={accountInfo.companyName}
               />
-              {errors.corporationName && <ValidationScript>{errors.corporationName?.message}</ValidationScript>}
+              {errors.companyName && <ValidationScript>{errors.companyName?.message}</ValidationScript>}
             </div>
           </RelativeDiv>
           <RelativeDiv>
@@ -439,7 +485,7 @@ export default function Basic(props) {
                 readOnly={true}
               />
               {errors.businessNumber && <ValidationScript>{errors.businessNumber?.message}</ValidationScript>}
-              <DuplicateButton type={'button'}>사업자 조회</DuplicateButton>
+              <DuplicateButton type={'button'} onClick={() => handleCheckBusinessNumber()}>사업자 조회</DuplicateButton>
             </div>
           </RelativeDiv>
           <RelativeDiv>
@@ -449,13 +495,13 @@ export default function Basic(props) {
                 style={{paddingRight: 35}}
                 type={'text'}
                 placeholder={'사업자 등록증'}
-                {...register("businessLicenseCopy", {
+                {...register("businessLicenseWebPath", {
                   required: "사업자 등록증을 등록해주세요",
                 })}
-                value={accountInfo.businessLicenseCopy}
+                value={accountInfo.businessLicenseWebPath}
                 readOnly={true}
               />
-              {errors.businessLicenseCopy && <ValidationScript>{errors.businessLicenseCopy?.message}</ValidationScript>}
+              {errors.businessLicenseWebPath && <ValidationScript>{errors.businessLicenseWebPath?.message}</ValidationScript>}
               <DeleteButton type={'button'} onClick={()=> handleBusinessLicense('del')} />
               <DuplicateButton type={'button'}>
                 <ImageUploading
