@@ -229,13 +229,15 @@ const CategoryBody = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 500px;
+  overflow-y: scroll;
   & div:last-child {
     border-bottom: 0;
   }
 `
 
 const CategoryItem = styled.div`
-  padding: 20px;
+  padding: 10px 20px;
   width: 100%;
   border-bottom: 1px solid #ddd;
   cursor: pointer;
@@ -243,15 +245,18 @@ const CategoryItem = styled.div`
 
 const SubCategoryBody = styled.div`
   display: flex;
+  align-items: flex-start;
   flex-wrap: wrap;
   width: 100%;
+  height: 500px;
+  overflow-y: scroll;
   & div:nth-child(4n) {
     border-right: 0;
   }
 `
 
 const SubCategoryItem = styled.div`
-  padding: 20px;
+  padding: 10px 20px;
   width: 25%;
   border-bottom: 1px solid #ddd;
   border-right: 1px solid #ddd;

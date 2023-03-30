@@ -4,136 +4,134 @@ import {ModalBody, ModalHeader} from "../modal/Modal";
 import styled from "styled-components";
 import {selKeywordUser} from "../../services/ManageUserAxios";
 import {modalController} from "../../store";
-import Switch from "./Switch";
 import {ColSpan4, RelativeDiv, RowSpan, SaveExcelButton} from "../../assets/GlobalStyles";
-import {accountCreateInvoice} from "../../pages/account_manage/entity";
-import {accountRevenueStatus} from "../../services/AccountAxios";
+
 import {decimalFormat, removeStr} from "../../common/StringUtils";
 import {useForm} from "react-hook-form";
 
-function ModalHistoryAdd(props) {
-  const id = localStorage.getItem("id")
-  const [, setModal] = useAtom(modalController)
-  const {selectedItem} = props;
-  const [createInvoice, setCreateInvoice] = useState(accountCreateInvoice)
-  const [revenueBalance, setRevenueBalance] = useState(0)
-  const {register, setValue, setError, formState:{errors} } = useForm()
-  useEffect(() => {
-    selectedItem.username !== undefined && accountRevenueStatus(selectedItem.username).then(response => { // 정산 수익 현황
-      response !== null && setRevenueBalance(response.revenueBalance)
-      setError('requestAmountValue', '')
-      setCreateInvoice({
-        ...createInvoice,
-        username : selectedItem.username,
-        requesterId : id
-      })
-    })
-  }, [selectedItem])
-
-  const invoiceParams = () => {
-    if(createInvoice.requestAmount > 0) {
-      props.onSubmit(createInvoice)
-      setModal({
-        isShow: false,
-        modalComponent: null
-      })
-    } else {
-      setError('requestAmountValue', {type: 'required', message:'정산 신청금을 입력해주세요.'})
-    }
-  }
-
-  const revenueType = (value) => {
-    setCreateInvoice({
-      ...createInvoice,
-      invoiceStatus : value,
-    })
-  }
-
-  const etcText = (value)=> {
-    setCreateInvoice({
-      ...createInvoice,
-      etc : value
-    })
-  }
-
-  const handleChange = (value) => {
-    let num = removeStr(value)
-    let numberNum = Number(num)
-    if(selectedItem.username !== undefined){
-      if(revenueBalance < numberNum){
-        setError('requestAmountValue', {type: 'required', message:'정산 신청금이 잔여 정산금을 초과하였습니다.'})
-      } else {
-        setCreateInvoice({
-          ...createInvoice,
-          requestAmount : numberNum,
-        })
-        setValue('requestAmountValue', numberNum)
-        setError('requestAmountValue', '')
-      }
-    } else {
-      setError('requestAmountValue', {type: 'required', message:'매체를 먼저 선택해주세요.'})
-    }
-  }
-  return (
-      <HistoryAdd>
-        <p>이력 추가</p>
-        <div className={'border-box'}>
-          <RowSpan style={{marginTop: 0}}>
-            <ColSpan4 style={{paddingLeft: 0}}>
-              <span>신청 금액 설정</span>
-              <RelativeDiv>
-                <input type={'radio'} id={'increment'} name={'proposeState'} defaultChecked={true} onChange={() => revenueType('REVENUE_INCREASE')}/>
-                <label htmlFor={'increment'}>증가</label>
-                <input type={'radio'} id={'decrement'} name={'proposeState'} onChange={() => revenueType('REVENUE_DECREASE')}/>
-                <label htmlFor={'decrement'}>감소</label>
-              </RelativeDiv>
-            </ColSpan4>
-          </RowSpan>
-          <RowSpan style={{marginTop: 0}}>
-            <div className={'inputCon'}>
-              <span>금액 입력</span>
-              <div className={'won gary-bg'}>
-                <input type={'text'} value={decimalFormat(createInvoice.requestAmount)}
-                       {...register("requestAmountValue", {
-                         required: "정산 금액을 입력해주세요,",
-                         pattern:{
-                           value: /^[0-9,]+$/,
-                           message: "숫자만 입력 가능합니다."
-                         },
-                         onChange:(e) => handleChange(e.target.value)
-                       })}
-                />
-              </div>
-            </div>
-            <div className={'inputCon'}>
-              <span>수익 잔액</span>
-              <div className={'won'}>
-                <input
-                  type={'text'}
-                  value={revenueBalance}
-                  placeholder={'수익 잔액'}
-                  readOnly={true}
-                />
-              </div>
-            </div>
-          </RowSpan>
-          {errors.requestAmountValue && <p style={{color: '#f55a5a', fontSize: 12, paddingLeft: 88}}>{errors.requestAmountValue.message}</p>}
-          <RowSpan style={{marginTop: 15}}>
-            <ColSpan4 style={{paddingLeft: 0}}>
-              <span>비고</span>
-              <div className={'gary-bg'}>
-                <textarea placeholder={'내용을 입력해주세요.'}
-                          value={createInvoice.etc}
-                          onChange={ e => etcText(e.target.value)}
-                />
-              </div>
-            </ColSpan4>
-          </RowSpan>
-        </div>
-        <MediaSelectedButton onClick={invoiceParams}>이력 추가</MediaSelectedButton>
-      </HistoryAdd>
-  )
-}
+// function ModalHistoryAdd(props) {
+//   const id = localStorage.getItem("id")
+//   const [, setModal] = useAtom(modalController)
+//   const {selectedItem} = props;
+//   const [createInvoice, setCreateInvoice] = useState(accountCreateInvoice)
+//   const [revenueBalance, setRevenueBalance] = useState(0)
+//   const {register, setValue, setError, formState:{errors} } = useForm()
+//   useEffect(() => {
+//     selectedItem.username !== undefined && accountRevenueStatus(selectedItem.username).then(response => { // 정산 수익 현황
+//       response !== null && setRevenueBalance(response.revenueBalance)
+//       setError('requestAmountValue', '')
+//       setCreateInvoice({
+//         ...createInvoice,
+//         username : selectedItem.username,
+//         requesterId : id
+//       })
+//     })
+//   }, [selectedItem])
+//
+//   const invoiceParams = () => {
+//     if(createInvoice.requestAmount > 0) {
+//       props.onSubmit(createInvoice)
+//       setModal({
+//         isShow: false,
+//         modalComponent: null
+//       })
+//     } else {
+//       setError('requestAmountValue', {type: 'required', message:'정산 신청금을 입력해주세요.'})
+//     }
+//   }
+//
+//   const revenueType = (value) => {
+//     setCreateInvoice({
+//       ...createInvoice,
+//       invoiceStatus : value,
+//     })
+//   }
+//
+//   const etcText = (value)=> {
+//     setCreateInvoice({
+//       ...createInvoice,
+//       etc : value
+//     })
+//   }
+//
+//   const handleChange = (value) => {
+//     let num = removeStr(value)
+//     let numberNum = Number(num)
+//     if(selectedItem.username !== undefined){
+//       if(revenueBalance < numberNum){
+//         setError('requestAmountValue', {type: 'required', message:'정산 신청금이 잔여 정산금을 초과하였습니다.'})
+//       } else {
+//         setCreateInvoice({
+//           ...createInvoice,
+//           requestAmount : numberNum,
+//         })
+//         setValue('requestAmountValue', numberNum)
+//         setError('requestAmountValue', '')
+//       }
+//     } else {
+//       setError('requestAmountValue', {type: 'required', message:'매체를 먼저 선택해주세요.'})
+//     }
+//   }
+//   return (
+//       <HistoryAdd>
+//         <p>이력 추가</p>
+//         <div className={'border-box'}>
+//           <RowSpan style={{marginTop: 0}}>
+//             <ColSpan4 style={{paddingLeft: 0}}>
+//               <span>신청 금액 설정</span>
+//               <RelativeDiv>
+//                 <input type={'radio'} id={'increment'} name={'proposeState'} defaultChecked={true} onChange={() => revenueType('REVENUE_INCREASE')}/>
+//                 <label htmlFor={'increment'}>증가</label>
+//                 <input type={'radio'} id={'decrement'} name={'proposeState'} onChange={() => revenueType('REVENUE_DECREASE')}/>
+//                 <label htmlFor={'decrement'}>감소</label>
+//               </RelativeDiv>
+//             </ColSpan4>
+//           </RowSpan>
+//           <RowSpan style={{marginTop: 0}}>
+//             <div className={'inputCon'}>
+//               <span>금액 입력</span>
+//               <div className={'won gary-bg'}>
+//                 <input type={'text'} value={decimalFormat(createInvoice.requestAmount)}
+//                        {...register("requestAmountValue", {
+//                          required: "정산 금액을 입력해주세요,",
+//                          pattern:{
+//                            value: /^[0-9,]+$/,
+//                            message: "숫자만 입력 가능합니다."
+//                          },
+//                          onChange:(e) => handleChange(e.target.value)
+//                        })}
+//                 />
+//               </div>
+//             </div>
+//             <div className={'inputCon'}>
+//               <span>수익 잔액</span>
+//               <div className={'won'}>
+//                 <input
+//                   type={'text'}
+//                   value={revenueBalance}
+//                   placeholder={'수익 잔액'}
+//                   readOnly={true}
+//                 />
+//               </div>
+//             </div>
+//           </RowSpan>
+//           {errors.requestAmountValue && <p style={{color: '#f55a5a', fontSize: 12, paddingLeft: 88}}>{errors.requestAmountValue.message}</p>}
+//           <RowSpan style={{marginTop: 15}}>
+//             <ColSpan4 style={{paddingLeft: 0}}>
+//               <span>비고</span>
+//               <div className={'gary-bg'}>
+//                 <textarea placeholder={'내용을 입력해주세요.'}
+//                           value={createInvoice.etc}
+//                           onChange={ e => etcText(e.target.value)}
+//                 />
+//               </div>
+//             </ColSpan4>
+//           </RowSpan>
+//         </div>
+//         <MediaSelectedButton onClick={invoiceParams}>이력 추가</MediaSelectedButton>
+//       </HistoryAdd>
+//   )
+// }
 
 export function SearchUser(props) {
   const {title, onSubmit, btnStyle, historyAdd} = props;
@@ -236,7 +234,7 @@ function SearchModal (props) {
                   </table>
                 </>
             }
-            {props.historyAdd !== undefined && <ModalHistoryAdd selectedItem={selectedItem} onSubmit={props.onSubmit}/>}
+            {/*{props.historyAdd !== undefined && <ModalHistoryAdd selectedItem={selectedItem} onSubmit={props.onSubmit}/>}*/}
             {props.historyAdd === undefined && <MediaSelectedButton onClick={handleSubmit}>선택 완료</MediaSelectedButton>}
           </MediaSearchResult>
         </ModalBody>

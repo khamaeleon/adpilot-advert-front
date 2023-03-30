@@ -5,7 +5,16 @@ import moment from "moment";
 import {atom} from "jotai";
 import {dateFormat, decimalFormat} from "../../common/StringUtils";
 import {Check} from "../../assets/GlobalStyles";
+import {ImageView} from "./ProductManage";
 
+/**
+ * 상품 수집 기간 검색 아톰
+ * @type {PrimitiveAtom<{endDate: string, stateDate: string}> & WithInitialValue<{endDate: string, stateDate: string}>}
+ */
+export const searchConditionAtom = atom({
+  stateDate:'',
+  endDate:''
+})
 /**
  * 매체 타입
  * @type {[{id: string, label: string, value: string},{id: string, label: string, value: string},{id: string, label: string, value: string}]}
@@ -211,7 +220,6 @@ export const columnHistoryData = [
     name: 'publish',
     header: '게재상태',
     render: ({value, cellProps}) => {
-      console.log(cellProps.data.publishChanged)
       return (
         <span>{cellProps.data.publishChanged ? (value === true) ? 'ON' : 'OFF' : '-'}</span>
       )
@@ -246,7 +254,6 @@ export const columnHistoryData = [
     name: 'noExposedConfigType',
     header: '대체광고',
     render: ({value, cellProps}) => {
-      console.log(cellProps.data)
       return (
         <span>
           <p>{cellProps.data.noExposedConfigTypeChanged ? value : '-'}</p>
@@ -471,27 +478,25 @@ export const adExChangeDetailInfo = {
  * @type {Atom<unknown>}
  */
 //export const productListDataAtom = atom(null)
-export const productListDataAtom = atom([{
-  name: 'id',
-}])
+export const productListDataAtom = atom([])
 
 /**
  * 상품 수집 관리 리스트 컬럽 설정
  */
 export const productListColumn = [
-
   {
     name: 'id',
-    defaultVisible: false
-  },
-  {
-    name: 'username',
-    header: '광고주 아이디',
+    header: () => {
+      return(
+        <div><p>광고주</p><p>아이디</p></div>
+      )
+    },
     textAlign: 'center',
+    minWidth: 80,
     showColumnMenuTool: false,
   },
   {
-    name: 'inventoryId',
+    name: 'productCode',
     header: '상품 코드',
     textAlign: 'center',
     width: 80,
@@ -503,10 +508,10 @@ export const productListColumn = [
     }
   },
   {
-    name: 'username',
+    name: '',
     header: '등록 일시',
     textAlign: 'center',
-    width: 150,
+    width: 90,
     resizeable: false,
     showColumnMenuTool: false,
     render: ({value}) => {
@@ -514,7 +519,7 @@ export const productListColumn = [
     }
   },
   {
-    name: 'productType',
+    name: 'productStatusType',
     header: () => {
       return(
         <div><p>중지/품절</p><p>여부</p></div>
@@ -529,74 +534,141 @@ export const productListColumn = [
     }
   },
   {
-    name: 'deviceType',
+    name: 'productImages',
     header: '상품 이미지1',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
     showColumnMenuTool: false,
-    sortable: false
+    sortable: false,
+    render: (props) => {
+      return (
+        <>
+          {props.cellProps.data.productImages.length !== 0 &&
+            <ImageView url={props.cellProps.data.productImages[0]}/>
+          }
+        </>
+      )
+    }
   },
   {
-    name: 'deviceType',
+    name: 'productImages2',
     header: '상품 이미지2',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
     showColumnMenuTool: false,
-    sortable: false
+    sortable: false,
+    render: (props) => {
+      return (
+        <>
+          {props.cellProps.data.productImages.length > 1 &&
+            <ImageView url={props.cellProps.data.productImages[1]}/>
+          }
+        </>
+      )
+    }
   },
   {
-    name: 'deviceType',
+    name: 'productImages3',
     header: '상품 이미지3',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
     showColumnMenuTool: false,
-    sortable: false
+    sortable: false,
+    render: (props) => {
+      return (
+        <>
+          {props.cellProps.data.productImages.length > 2 &&
+            <ImageView url={props.cellProps.data.productImages[2]}/>
+          }
+        </>
+      )
+    }
   },
   {
-    name: 'bannerSize',
+    name: 'productCategorys',
     header: () => {
       return(
         <div><p>표준 카테고리</p><p>(seq)</p></div>
       )
     },
     textAlign: 'center',
-    showColumnMenuTool: false
+    showColumnMenuTool: false,
+    render: (props) => {
+      return (
+        <>
+          {props.cellProps.data.productCategorys.length !== 0 &&
+            <span>{props.cellProps.data.productCategorys[0].name}</span>
+          }
+        </>
+      )
+    }
   },
   {
-    name: 'bannerSize',
+    name: 'productCategorys1',
     header: () => {
       return(
         <div><p>상품</p><p>카테고리1</p></div>
       )
     },
     textAlign: 'center',
-    showColumnMenuTool: false
+    showColumnMenuTool: false,
+    render: (props) => {
+      return (
+        <>
+          {props.cellProps.data.productCategorys.length > 1 &&
+            <span>{props.cellProps.data.productCategorys[1].name}</span>
+          }
+        </>
+      )
+    }
   },
   {
-    name: 'bannerSize',
+    name: 'productCategorys2',
     header: () => {
       return(
         <div><p>상품</p><p>카테고리2</p></div>
       )
     },
     textAlign: 'center',
-    showColumnMenuTool: false
+    showColumnMenuTool: false,
+    render: (props) => {
+      return (
+        <>
+          {props.cellProps.data.productCategorys.length > 2 &&
+            <span>{props.cellProps.data.productCategorys[2].name}</span>
+          }
+        </>
+      )
+    }
   },
   {
-    name: 'script',
+    name: 'price',
     header: '원가',
     textAlign: 'center',
     showColumnMenuTool: false,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
-    name: 'siteUrl',
+    name:'discountRate',
+    header: '할인가',
+    textAlign: 'center',
+    showColumnMenuTool: false,
+    render: (props) => {
+      const price = parseFloat(props.cellProps.data.price)
+      const discount = parseFloat(props.cellProps.data.discountRate)
+      const value = price - (price / discount)
+      return (
+        <p className={'won'}>{decimalFormat(value)}</p>
+      )
+    }
+  },
+  {
+    name: 'productUrl',
     header: '사이트',
     textAlign: 'center',
-    width: 100,
     sortable: false,
     showColumnMenuTool: false,
     render: ({value, cellProps}) => {
@@ -604,12 +676,22 @@ export const productListColumn = [
     }
   },
   {
-    name: 'examinationStatus',
+    name: 'ratingPoint',
     header: '평점',
+    textAlign: 'center',
+    showColumnMenuTool: false
+  },
+  {name:'reviewCnt',
+    header: '리뷰수',
+    textAlign: 'center',
+    showColumnMenuTool: false
+  },
+  {
+    name: 'keyword',
+    header: '키워드',
     textAlign: 'center',
     showColumnMenuTool: false
   }
 ]
-
 
 
