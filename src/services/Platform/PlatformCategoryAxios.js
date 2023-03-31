@@ -1,4 +1,4 @@
-import {AdminAxios, AdverAxios} from "../common/Axios";
+import {AdminAxios, AdverAxios} from "../../common/Axios";
 
 const ACTION_URL = '/category';
 const SLASH = '/';

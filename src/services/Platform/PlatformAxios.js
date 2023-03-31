@@ -1,4 +1,4 @@
-import {AdminAxios} from "../common/Axios";
+import {AdminAxios} from "../../common/Axios";
 
 const PRODUCT = '/product'
 

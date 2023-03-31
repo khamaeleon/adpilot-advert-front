@@ -17,7 +17,7 @@ import {modalController} from "../../store";
 import {useSetAtom} from "jotai";
 import {ModalBody, ModalHeader} from "../../components/modal/Modal";
 import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
-import {retrieveProduct} from "../../services/PlatformAxios";
+import {retrieveProduct} from "../../services/Platform/PlatformAxios";
 import {FooterButton} from "@inovua/reactdatagrid-community/packages/Calendar/src/Footer";
 import styled from "styled-components";
 

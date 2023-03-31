@@ -14,7 +14,7 @@ import {CategoryContainer} from "./styles";
 import styled from "styled-components";
 import {atom, useAtom} from "jotai/index";
 import {atomWithReset, useResetAtom} from "jotai/utils";
-import {createNewCategory, retrieveCategoryByParentCode, retrieveTopLevelCategory} from "../../services/PlatformCategoryAxios";
+import {createNewCategory, retrieveCategoryByParentCode, retrieveTopLevelCategory} from "../../services/Platform/PlatformCategoryAxios";
 
 const topLevelCategoryListAtom = atom([])
 const categoryListAtom = atom([])
