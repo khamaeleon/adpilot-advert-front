@@ -119,6 +119,69 @@ export const GlobalStyles = createGlobalStyle`
   input::placeholder{
     color: #a2aab2;
   }
+  input[type='range'] {
+    width: 100%;
+    -webkit-appearance: none;
+    background: transparent;
+    cursor: pointer;
+    background: #e5e4e3;
+  }
+  input[type=range]:focus {
+    outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+  }
+  input[type=range]::-ms-track {
+    width: 100%;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+  }
+  input[type=range]::-moz-range-thumb {
+    background: #ffffff;
+    cursor: pointer;
+    border: 2px solid #f5811f;
+    width: 17px;
+    height: 17px;
+    margin-top: -8px;
+    border-radius: 19px;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: #ffffff;
+    cursor: pointer;
+    border: 2px solid #f5811f;
+    width: 18px;
+    height: 18px; 
+    margin-top: -5px;
+    border-radius: 19px;
+    box-shadow: 0 3px 6px 0 hsla(0, 0%, 0%, 0.16);
+  }
+  input[type=range]::-webkit-slider-runnable-track {
+    width: 100%; 
+    height: 8px;
+    cursor: pointer;
+    background: #dddddd;
+    border-radius: 8px;
+  }
+  input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 8px;
+    cursor: pointer;
+    background: #dddddd;
+    border-radius: 8px;
+  }
+  input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #dddddd;
+  }
+  input[type=range]::-ms-fill-upper {
+    background: #3071a9;
+    border: 0.2px solid #010101;
+    border-radius: 2.6px;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  }
   input[type='text']:read-only {
     background-color: #f9fafb;
     cursor: not-allowed;
@@ -587,8 +650,14 @@ export const BoardTableContainer = styled.div`
 `
 export const RowSpan = styled.div`
   display: flex;
+  flex-direction: ${(props) => props.box ? "column" : "row"};
+  gap: ${(props) => props.box ? "15px" : null};
   justify-content: space-between;
   margin-top: 25px;
+  padding: ${(props) => props.box ? "15px" : null};
+  background-color: ${(props)=>props.box ? "#f9fafb":null};
+  border: ${(props) => props.box ? '1px solid #e5e5e5' : null};
+  border-radius: 5px;
 `
 export const ColSpan0 = styled.div`
   padding-left: 10px;
@@ -604,6 +673,7 @@ export const ColSpan0 = styled.div`
 `
 
 export const ColSpan1 = styled.div`
+  position: relative;
   padding-left: 10px;
   display: flex;
   align-items: center;
@@ -709,9 +779,10 @@ export const AgentType = styled.div`
   }
 `
 export const CampaignType = styled.div`
-  padding: 10px;
+  padding: 40px;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 30px;
   background-color: #f9fafb;
   border: 1px solid #e5e5e5;
   border-radius: 5px;
