@@ -11,6 +11,7 @@ import {light} from "./assets/theme";
 import {GlobalStyles} from "./assets/GlobalStyles";
 import AdminLogin from "./pages/login/AdminLogin";
 import {NotFound} from "./pages/404";
+import "react-datepicker/dist/react-datepicker.css";
 import "../src/assets/DatePicker.css"
 
 const AtomsDevtools = ({ children }) => {
