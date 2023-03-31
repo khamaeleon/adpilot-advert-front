@@ -58,3 +58,24 @@ export async function createNewCategory (params) {
     }).catch((e) => returnVal = false)
   return returnVal;
 }
+
+/**
+ * 키밸류 변환
+ */
+export async function retrieveTopLevelCategoryKeyValue() {
+  let returnVal = null;
+  await AdverAxios('GET', CATEGORY_ALL, null)
+    .then((response) => {
+      if (response.responseCode.statusCode === 200) {
+        returnVal = response.data
+
+        const fetch = returnVal.map((item,idx) => {
+          Object.assign(item, {key: idx, value:item.code, label: item.name})
+        })
+        console.log(fetch)
+      } else {
+        returnVal = null
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+}
