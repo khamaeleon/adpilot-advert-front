@@ -5,6 +5,7 @@ import moment from "moment";
 import {atom} from "jotai";
 import {dateFormat, decimalFormat} from "../../common/StringUtils";
 import {Check} from "../../assets/GlobalStyles";
+import {getToDay} from "../../common/DateUtils";
 import {ImageView} from "./ProductManage";
 
 /**
@@ -481,7 +482,7 @@ export const adExChangeDetailInfo = {
 export const productListDataAtom = atom([])
 
 /**
- * 상품 수집 관리 리스트 컬럽 설정
+ * 상품 수집 관리 리스트 컬럼 설정
  */
 export const productListColumn = [
   {
@@ -694,4 +695,204 @@ export const productListColumn = [
   }
 ]
 
+/**
+ * 전환 관리 리스트 Atom
+ * @type {Atom<unknown>}
+ */
+//export const exchangeDataAtom = atom(null)
+export const exchangeDataAtom = atom([{
+  name: 'id',
+}])
+
+/**
+ * 전환 관리 리스트 컬럼 설정
+ */
+export const exchangeColumns = [
+  {
+    name: 'id',
+    defaultVisible: false
+  },
+  {
+    name: 'username',
+    header: '광고주 아이디',
+    textAlign: 'center',
+    defaultFlex: 1,
+    showColumnMenuTool: false,
+  },
+  {
+    name: 'username',
+    header: '광고주명',
+    textAlign: 'center',
+    defaultFlex: 1,
+    showColumnMenuTool: false,
+  },
+  {
+    name: 'inventoryId',
+    header: '전환 코드',
+    textAlign: 'center',
+    showColumnMenuTool: false,
+    textEllipsis: false,
+    defaultFlex: 1,
+    render: ({value, cellProps}) => {
+      return <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>
+    }
+  },
+  {
+    name: 'examinationStatus',
+    header: '주문 번호',
+    textAlign: 'center',
+    defaultFlex: 1,
+    showColumnMenuTool: false
+  },
+  {
+    name: 'script',
+    header: '총결재 금액',
+    textAlign: 'center',
+    showColumnMenuTool: false,
+    defaultFlex: 1,
+    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
+  },
+  {
+    name: 'examinationStatus',
+    header: '상품수',
+    textAlign: 'center',
+    defaultFlex: 1,
+    showColumnMenuTool: false
+  },
+  {
+    name: 'username',
+    header: '전환 일시',
+    textAlign: 'center',
+    width: 150,
+    resizeable: false,
+    showColumnMenuTool: false,
+    render: ({value}) => {
+      return <p>{dateFormat(value,'YYYY.MM.DD HH:mm')}</p>
+    }
+  },
+  {
+    name: 'deviceType',
+    header: '전환 구분',
+    textAlign: 'center',
+    minWidth: 100,
+    maxWidth: 100,
+    showColumnMenuTool: false,
+    sortable: false
+  }
+]
+
+/**
+ * 결재 관리 리스트 Atom
+ * @type {Atom<unknown>}
+ */
+//export const paymentDataAtom = atom(null)
+export const paymentDataAtom = atom([{
+  name: 'id',
+}])
+
+/**
+ * 결재 관리 리스트 컬럼 설정
+ */
+
+export const paymentColumns = [
+  {
+    name: 'id',
+    header: 'id',
+    defaultVisible: false,
+  },
+  {
+    name: 'recordMonth',
+    header: '신청 일시',
+    width: 150,
+    showColumnMenuTool: false,
+    render: ({value}) => {
+      return <p>{dateFormat(value,'YYYY.MM.DD HH:mm')}</p>
+    }
+  },
+  {
+    name: 'status',
+    header: '신청 상태',
+    width: 120,
+    showColumnMenuTool: false,
+    render: ({ value })=> <>{value.label}</>
+  },
+  {
+    name: 'username',
+    header: '결재/환불 정보',
+    defaultFlex: 1,
+    showColumnMenuTool: false,
+  },
+  {
+    name: 'username',
+    header: '광고주명',
+    showColumnMenuTool: false,
+  },
+  {
+    name: 'requesterId',
+    header: '광고주 아이디',
+    showColumnMenuTool: false,
+  },
+  {
+    name: 'requesterId',
+    header: '신청 아이디',
+    showColumnMenuTool: false,
+  },
+  {
+    name: 'revenueAmount',
+    header: '광고비',
+    showColumnMenuTool: false,
+    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
+  },
+  {
+    name: 'requestAmountVAT',
+    header: '결재 금액(VAT포함)',
+    width: 160,
+    showColumnMenuTool: false,
+    render: ({data}) => {
+      let vat = data.requestAmount+(data.requestAmount/10)
+      return (
+        <span className={'won'}>{decimalFormat(vat)}</span>
+      )
+    }
+  },
+  {
+    name: 'updateAt',
+    header: '상태 변경일',
+    width: 120,
+    showColumnMenuTool: false,
+  },
+  {
+    name: 'etc',
+    header: '비고',
+    width: 180,
+    sortable: false,
+    showColumnMenuTool: false,
+  }
+]
+
+/**
+ * 결재 관리 상태 수정
+ */
+export const updatePaymentStatus = {
+  paymentIdList : [],
+  paymentStatus : "",
+}
+
+/**
+ * 결재 관리 현황 조회
+ */
+export const searchPaymentParams = atom({
+  startAt: dateFormat(getToDay(), 'YYYY-MM'),
+  endAt: dateFormat(getToDay(), 'YYYY-MM'),
+  statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE'],
+  searchType: 'DEFAULT',
+  search: ''
+})
+
+export const searchPaymentType = [
+  {id: "1", value: "DEFAULT", label: "전체"},
+  {id: "2", value: "MEDIA_NAME", label: "매체명"},
+  {id: "3", value: "MEDIA_ID", label: "매체 아이디"},
+  {id: "4", value: "REQUESTER_ID", label: "신청 아이디"},
+]
 

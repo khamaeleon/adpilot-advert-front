@@ -6,6 +6,8 @@ import {useParams} from "react-router-dom";
 import AdminManage from "./AdminManage";
 import {CategoryManage} from "./CategoryManage";
 import ProductManage from "./ProductManage";
+import ChangeManage from "./ChangeManage";
+import PaymentManage from "./PaymentManage";
 
 function PlatformUser(){
   const params = useParams()
@@ -19,6 +21,8 @@ function PlatformUser(){
         {params.id === 'platform' && <AdminManage/>}
         {params.id === 'categoryManage' && <CategoryManage/>}
         {params.id === 'productManage' && <ProductManage/>}
+        {params.id === 'exchangeManage' && <ChangeManage/>}
+        {params.id === 'paymentManage' && <PaymentManage/>}
       </BoardContainer>
     </main>
   )
