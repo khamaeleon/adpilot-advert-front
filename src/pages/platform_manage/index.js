@@ -21,7 +21,7 @@ function PlatformUser(){
         {params.id === 'platform' && <AdminManage/>}
         {params.id === 'categoryManage' && <CategoryManage/>}
         {params.id === 'productManage' && <ProductManage/>}
-        {params.id === 'exchangeManage' && <ChangeManage/>}
+        {params.id === 'changeManage' && <ChangeManage/>}
         {params.id === 'paymentManage' && <PaymentManage/>}
       </BoardContainer>
     </main>

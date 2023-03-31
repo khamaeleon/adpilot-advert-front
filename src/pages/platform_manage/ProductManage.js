@@ -5,7 +5,6 @@ import {
   BoardHeader,
   BoardSearchDetail,
   BoardSearchResult,
-  BoardSearchResultTitle,
   ColSpan2,
   RowSpan,
   Span4
@@ -53,7 +52,7 @@ export function ImageView (props) {
 }
 
 function ProductManage() {
-  const [searchCondition, setSearchCondition] = useAtom(searchConditionAtom)
+  const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
   const [count, setCount] = useState(0)
 
   const handleSearchResult = () => {
@@ -76,7 +75,7 @@ function ProductManage() {
         <Board>
           <BoardHeader>상품 수집 현황</BoardHeader>
           <BoardSearchDetail>
-            <PlatformCondition searchCodition={searchCondition} setSearchCondition={setSearchCondition}/>
+            <PlatformCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleTableData={retrieveProductList}/>
             <RowSpan>
               <ColSpan2>
                 <Span4>광고주 설정</Span4>

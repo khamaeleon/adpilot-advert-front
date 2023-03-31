@@ -25,14 +25,16 @@ import {
   getToDay
 } from "../../common/DateUtils";
 import {dateFormat} from "../../common/StringUtils";
-import {searchPaymentType} from "../../pages/platform_manage/entity";
+import {mediaType} from "../../pages/platform_manage/entity";
 import Checkbox from "../common/Checkbox";
 import Select from "react-select";
 
 export function PlatformCondition(props) {
-  const {searchCondition, setSearchCondition} = props
+  const {searchCondition, setSearchCondition, handleTableData} = props;
   const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
-  const [startDate, endDate] = dateRange
+  const [startDate, endDate] = dateRange;
+  const [searchTypeSelect] = useState(mediaType)
+  const [searchSelected, setSearchSelected] = useState(searchTypeSelect[0])
   /**
    * 날짜 레인지 선택
    * @param event
@@ -90,7 +92,20 @@ export function PlatformCondition(props) {
     }
     //call 때려
   }
+  const handleSearchType = (selectSearchType) => {
+    setSearchCondition({
+      ...searchCondition,
+      searchType: selectSearchType.value
+    })
+    setSearchSelected(selectSearchType)
+  }
 
+  const handleSearchValue = (event) => {
+    setSearchCondition({
+      ...searchCondition,
+      search: event.target.value
+    })
+  }
 
   return (
     <BoardSearchDetail>
@@ -135,6 +150,26 @@ export function PlatformCondition(props) {
         </ColSpan4>
         <ColSpan1/>
       </RowSpan>
+      <RowSpan>
+        <ColSpan2>
+          <Select styles={inputStyle}
+                  components={{IndicatorSeparator: () => null}}
+                  options={searchTypeSelect}
+                  value={searchSelected}
+                  onChange={handleSearchType}
+          />
+          <SearchInput>
+            <input type={'text'}
+                   placeholder={'검색어를 입력해주세요.'}
+                   value={searchCondition.search}
+                   onChange={handleSearchValue}
+            />
+          </SearchInput>
+        </ColSpan2>
+        <ColSpan2>
+          <SearchButton onClick={handleTableData}>검색</SearchButton>
+        </ColSpan2>
+      </RowSpan>
     </BoardSearchDetail>
   )
 }
@@ -144,7 +179,7 @@ export function PaymentCondition(props) {
   const [dateRange, setDateRange] = useState([new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [isCheckedAll, setIsCheckedAll] = useState(true)
-  const [paymentTypeSelect] = useState(searchPaymentType)
+  const [paymentTypeSelect] = useState(mediaType)
   const [searchSelected, setSearchSelected] = useState(paymentTypeSelect[0])
 
   useEffect(() => {
@@ -286,26 +321,26 @@ export function PaymentCondition(props) {
           </div>
         </ColSpan3>
       </RowSpan>
-        <RowSpan>
-          <ColSpan2>
-            <Select styles={inputStyle}
-                    components={{IndicatorSeparator: () => null}}
-                    options={paymentTypeSelect}
-                    value={searchSelected}
-                    onChange={handlePaymentSearchType}
+      <RowSpan>
+        <ColSpan2>
+          <Select styles={inputStyle}
+                  components={{IndicatorSeparator: () => null}}
+                  options={paymentTypeSelect}
+                  value={searchSelected}
+                  onChange={handlePaymentSearchType}
+          />
+          <SearchInput>
+            <input type={'text'}
+                   placeholder={'검색어를 입력해주세요.'}
+                   value={searchPayment.search}
+                   onChange={handlePaymentSearchValue}
             />
-            <SearchInput>
-              <input type={'text'}
-                     placeholder={'검색어를 입력해주세요.'}
-                     value={searchPayment.search}
-                     onChange={handlePaymentSearchValue}
-              />
-            </SearchInput>
-          </ColSpan2>
-          <ColSpan2>
-            <SearchButton onClick={handlePaymentTableData}>검색</SearchButton>
-          </ColSpan2>
-        </RowSpan>
+          </SearchInput>
+        </ColSpan2>
+        <ColSpan2>
+          <SearchButton onClick={handlePaymentTableData}>검색</SearchButton>
+        </ColSpan2>
+      </RowSpan>
     </BoardSearchDetail>
   )
 }

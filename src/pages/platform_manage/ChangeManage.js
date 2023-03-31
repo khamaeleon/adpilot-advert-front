@@ -1,5 +1,5 @@
 import {Board, BoardHeader, BoardSearchDetail, BoardTableContainer,} from "../../assets/GlobalStyles";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
 import {ToastContainer} from "react-toastify";
@@ -8,7 +8,7 @@ import {PlatformCondition} from "../../components/Platform/Condition";
 
 function ChangeManage() {
   const [exchangeDataState, setExchangeDataState] = useAtom(exchangeDataAtom)
-  const [searchCondition, setSearchCondition] = useAtom(searchConditionAtom)
+  const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
   const [searchParams, setSearchParams] = useState({ keyword:''})
   useEffect(() => {
 
@@ -23,12 +23,12 @@ function ChangeManage() {
     {name: 'defaultData', header: '연동 데이터', headerStyle: groupStyle},
     {name: 'platformData', header: '플랫폼 데이터', headerStyle: groupStyle},
   ]
-  const handleSearch = (event) => {
-    setSearchParams({
-      ...searchParams,
-      keyword:event.target.value
-    })
-  }
+  // const handleSearch = (event) => {
+  //   setSearchParams({
+  //     ...searchParams,
+  //     keyword:event.target.value
+  //   })
+  // }
 
   return (
     <main>
@@ -36,7 +36,7 @@ function ChangeManage() {
         <Board>
           <BoardHeader>전환 현황</BoardHeader>
           <BoardSearchDetail>
-            <PlatformCondition searchCodition={searchCondition} setSearchCondition={setSearchCondition}/>
+            <PlatformCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleTableData={exchangeDataState}/>
           </BoardSearchDetail>
           <BoardTableContainer>
             { exchangeDataState !== null &&

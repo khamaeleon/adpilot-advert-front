@@ -12,10 +12,12 @@ import {ImageView} from "./ProductManage";
  * 상품 수집 기간 검색 아톰
  * @type {PrimitiveAtom<{endDate: string, stateDate: string}> & WithInitialValue<{endDate: string, stateDate: string}>}
  */
-export const searchConditionAtom = atom({
+export const searchConditionAtom = {
   stateDate:'',
-  endDate:''
-})
+  endDate:'',
+  searchType: 'ALL',
+  search: ''
+}
 /**
  * 매체 타입
  * @type {[{id: string, label: string, value: string},{id: string, label: string, value: string},{id: string, label: string, value: string}]}
@@ -888,11 +890,3 @@ export const searchPaymentParams = atom({
   searchType: 'DEFAULT',
   search: ''
 })
-
-export const searchPaymentType = [
-  {id: "1", value: "DEFAULT", label: "전체"},
-  {id: "2", value: "MEDIA_NAME", label: "매체명"},
-  {id: "3", value: "MEDIA_ID", label: "매체 아이디"},
-  {id: "4", value: "REQUESTER_ID", label: "신청 아이디"},
-]
-
