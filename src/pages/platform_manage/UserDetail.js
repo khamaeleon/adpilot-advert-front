@@ -1,62 +1,75 @@
-import Navigator from "../../components/common/Navigator";
 import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, CancelButton, ColSpan1, ColSpan2, ColSpan3, ColTitle, DeleteButton, Input, inputStyle, RelativeDiv,
-  RowSpan, Span4, SubmitButton, SubmitContainer,
-  TitleContainer, ValidationScript
+  BoardSearchDetail,
+  CancelButton,
+  ColSpan1,
+  ColSpan2,
+  ColSpan3,
+  ColSpan4,
+  ColTitle,
+  DeleteButton,
+  Input,
+  inputStyle,
+  RelativeDiv,
+  RowSpan,
+  Span4,
+  SubmitButton,
+  SubmitContainer,
+  TitleContainer,
+  ValidationScript
 } from "../../assets/GlobalStyles";
 import {VerticalRule} from "../../components/common/Common";
 import {atom, useAtom} from "jotai";
 import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useLocation, useNavigate} from "react-router-dom";
-import {selUserInfo, updateUser} from "../../services/ManageUserAxios";
+import {selUserInfo, updateUser, accountFileUpload} from "../../services/ManageUserAxios";
 import {toast} from "react-toastify";
 import Select from "react-select";
 import ImageUploading from "react-images-uploading";
-import {accountFileUpload} from "../../services/AccountAxios";
 import styled from "styled-components";
+import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
+import {modalController} from "../../store";
+import {accountInfoAtom, adminInfoAtom} from "./entity";
 
-const AccountInfo = atom([])
+export function PwChange(props) {
+  const {onSubmit, modalInfo,onSave,title} = props;
+  const [, setModal] = useAtom(modalController)
+  const handleModalComponent = () => {
+    setModal({
+      isShow: true,
+      width: 700,
+      modalComponent: () => {
+        return (
+          <PwChangeModal onSave={onSave} modalInfo={modalInfo} onSubmit={onSubmit}/>
+        )
+      }
+    })
+  }
+  return <DuplicateButton type={'button'} onClick={handleModalComponent}>{title}</DuplicateButton>
+}
 
-function PlatformUserDetail() {
-  const [accountInfoState, setAccountInfoState] = useAtom(AccountInfo)
+function PwChangeModal(props) {
   const [showPassword, setShowPassword] = useState(false)
-  const {register, handleSubmit, watch, setValue, setError, reset ,formState: {errors}} = useForm({
+  const [accountInfoState, setAccountInfoState] = useAtom(props.modalInfo==='USER'? accountInfoAtom: adminInfoAtom)
+  const {register, handleSubmit, watch, formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: accountInfoState
   })
   const onError = (error) => console.log(error)
-  const navigate =useNavigate()
-  const {state} = useLocation();
-
-  useEffect(() => {
-    console.log(state)
-    // selUserInfo(state.id).then(response => {
-    //   setAccountInfoState({
-    //     ...response,
-    //     activeYn: response.status ==='NORMAL'? 'Y' :'N'
-    //   })
-    //   reset({
-    //     ...response,
-    //     activeYn: response.status ==='NORMAL'? 'Y' :'N'
-    //   })
-    // })
-  }, [])
-
   /**
    * 패스워드 입력
    * @param event
    */
   const handlePassword = (event) => {
+    console.log(event.target.value)
     setAccountInfoState({
       ...accountInfoState,
       password: event.target.value
     })
   }
-
   /**
    * 패스원드 컨펌
    * @param event
@@ -67,6 +80,108 @@ function PlatformUserDetail() {
       confirmPassword: event.target.value
     })
   }
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword)
+    console.log(showPassword)
+  }
+
+  const handleSave = (data) => {
+    props.onSave(data)
+  }
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit(handleSave, onError)}>
+        <ModalHeader title={'비밀번호 변경'}/>
+        <ModalBody>
+          <RowSpan>
+            <ColSpan4>
+              <ColTitle><Span4>비밀번호</Span4></ColTitle>
+              <RelativeDiv>
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
+                  {...register("password", {
+                    required: "비밀번호를 입력해주세요",
+                    pattern: {
+                      value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
+                      message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
+                    }
+                  })}
+                  value={accountInfoState.password}
+                  onChange={(e) => handlePassword(e)}
+                />
+                {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
+              </RelativeDiv>
+            </ColSpan4>
+            <ColSpan1>
+              <div onClick={handleShowPassword}>
+                    <span style={{
+                      marginRight: 10,
+                      width: 30,
+                      height: 30,
+                      display: 'inline-block',
+                      verticalAlign: 'middle',
+                      backgroundImage: `url(/assets/images/common/checkbox_${showPassword ? 'on' : 'off'}_B.png)`
+                    }}/>
+                <span>{showPassword ? '가리기' : '보기'}</span>
+              </div>
+            </ColSpan1>
+          </RowSpan>
+          <RowSpan>
+            <ColSpan3 style={{width: '80%'}}>
+              <ColTitle><Span4>비밀번호 확인</Span4></ColTitle>
+              <RelativeDiv>
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
+                  {...register("confirmPassword", {
+                    required: "비밀번호를 입력해주세요",
+                    validate: (value) => {
+                      if (watch('password') !== value) {
+                        return "입력하신 비밀번호가 맞는지 확인부탁드립니다."
+                      }
+                    }
+                  })}
+                  value={accountInfoState.confirmPassword}
+                  onChange={(e) => handleConfirmPassword(e)}
+                />
+                {errors.confirmPassword && <ValidationScript style={{marginBottom: 5}}>{errors.confirmPassword?.message}</ValidationScript>}
+              </RelativeDiv>
+            </ColSpan3>
+          </RowSpan>
+        </ModalBody>
+        <ModalFooter>
+          <SubmitButton type={"submit"} >변경</SubmitButton>
+        </ModalFooter>
+      </form>
+    </div>
+  )
+}
+
+function PlatformUserDetail() {
+  const [, setModal] = useAtom(modalController)
+  const [accountInfoState, setAccountInfoState] = useAtom(accountInfoAtom)
+  const {register, handleSubmit, setValue, setError, reset ,formState: {errors}} = useForm({
+    mode: "onSubmit",
+    defaultValues: accountInfoState
+  })
+  const onError = (error) => console.log(error)
+  const navigate =useNavigate()
+  const {state} = useLocation();
+
+  useEffect(() => {
+    selUserInfo(state.id).then(response => {
+      setAccountInfoState({
+        ...response,
+        activeYn: response.status ==='NORMAL'? 'Y' :'N'
+      })
+      reset({
+        ...response,
+        activeYn: response.status ==='NORMAL'? 'Y' :'N'
+      })
+    })
+  }, [])
 
   /**
    * 담당자명 입력
@@ -177,24 +292,37 @@ function PlatformUserDetail() {
       }
     })
   }
+  const handleSavePassword = (data) =>{
+    updateUser(data).then(response => {
+      if (response) {
+        setModal({
+          isShow: false,
+          modalComponent: null
+        })
+      } else {
+        toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
+      }
+    })
+  }
+
+  const onModalPw = () => {
+    setModal({
+      isShow: false,
+      modalComponent: null
+    })
+  }
   return (
-    <main>
-      <form onSubmit={handleSubmit(onSubmit, onError)}>
-      <BoardContainer>
-        <TitleContainer>
-          <h1>나의 정보</h1>
-          <Navigator/>
-        </TitleContainer>
+    <form onSubmit={handleSubmit(onSubmit, onError)}>
         <Board>
           <BoardHeader>기본 정보</BoardHeader>
           <BoardSearchDetail>
             <RowSpan>
               <ColSpan2>
-                <ColTitle><Span4>매체구분</Span4></ColTitle>
+                <ColTitle><Span4>광고주 구분</Span4></ColTitle>
                 <div>{(accountInfoState.mediaType ==='DIRECT') ? '매체사' :'대행사'}</div>
               </ColSpan2>
             </RowSpan>
-            <RowSpan>
+            <RowSpan style={{justifyContent: 'flex-start'}}>
               <ColSpan2>
                 <ColTitle><Span4>아이디</Span4></ColTitle>
                 <RelativeDiv>
@@ -206,49 +334,9 @@ function PlatformUserDetail() {
                   />
                 </RelativeDiv>
               </ColSpan2>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <ColTitle><Span4>비밀번호</Span4></ColTitle>
-                <RelativeDiv>
-                  <Input
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
-                    {...register("password", {
-                      required: "비밀번호를 입력해주세요",
-                      pattern: {
-                        value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
-                        message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
-                      }
-                    })}
-                    value={accountInfoState.password}
-                    onChange={(e) => handlePassword(e)}
-                  />
-                  {errors.password && <ValidationScript>{errors.password?.message}</ValidationScript>}
-                </RelativeDiv>
-              </ColSpan2>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <ColTitle><Span4>비밀번호 확인</Span4></ColTitle>
-                <RelativeDiv>
-                  <Input
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
-                    {...register("confirmPassword", {
-                      required: "비밀번호를 입력해주세요",
-                      validate: (value) => {
-                        if (watch('password') !== value) {
-                          return "입력하신 비밀번호가 맞는지 확인부탁드립니다."
-                        }
-                      }
-                    })}
-                    value={accountInfoState.confirmPassword}
-                    onChange={(e) => handleConfirmPassword(e)}
-                  />
-                  {errors.confirmPassword && <ValidationScript>{errors.confirmPassword?.message}</ValidationScript>}
-                </RelativeDiv>
-              </ColSpan2>
+              <ColSpan1>
+                <PwChange title={'비밀번호 변경'} modalInfo={'USER'} onSave={handleSavePassword} onSubmit={onModalPw}/>
+              </ColSpan1>
             </RowSpan>
             <RowSpan>
               <ColSpan2>
@@ -498,6 +586,27 @@ function PlatformUserDetail() {
                 </RelativeDiv>
               </ColSpan2>
             </RowSpan>
+            {state.id !== 'NEW' &&
+              <RowSpan>
+                <ColSpan1>
+                  <ColTitle><Span4>사용 여부</Span4></ColTitle>
+                  <RelativeDiv>
+                    <input type={'radio'}
+                           id={'use'}
+                           name={'useManager'}
+                           checked={accountInfoState.activeYn === 'Y' ? true : false}
+                           onChange={() => handleActiveYn('Y')}/>
+                    <label htmlFor={'use'}>사용</label>
+                    <input type={'radio'}
+                           id={'unuse'}
+                           name={'useManager'}
+                           checked={accountInfoState.activeYn === 'Y' ? false : true}
+                           onChange={() => handleActiveYn('N')}/>
+                    <label htmlFor={'unuse'}>미사용</label>
+                  </RelativeDiv>
+                </ColSpan1>
+              </RowSpan>
+            }
           </BoardSearchDetail>
           <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
         </Board>
@@ -505,9 +614,7 @@ function PlatformUserDetail() {
           <CancelButton onClick={()=>navigate('/board/platform')}>목록</CancelButton>
           <SubmitButton type={"submit"}>저장</SubmitButton>
         </SubmitContainer>
-      </BoardContainer>
       </form>
-    </main>
   )
 }
 
@@ -520,5 +627,8 @@ const DuplicateButton = styled.button`
   border-radius: 5px;
   color: #fff;
   font-size: 15px;
+  &:hover {
+    background-color: #535353;
+  }
 `
 

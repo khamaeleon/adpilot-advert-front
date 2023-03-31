@@ -14,6 +14,8 @@ import Settings from "../settings";
 import Pixel from "../pixel";
 import {selAdminInfo} from "../../services/ManageAdminAxios";
 import Reports from "../reports";
+import PlatformUserDetail from "../platform_manage/UserDetail";
+import PlatformAdminDetail from "../platform_manage/AdminDetail";
 
 export const AdminInfo = atom(adminInfo)
 export const UserInfo = atom(userInfo)
@@ -48,10 +50,11 @@ function Layout(){
     }
   }, []);
   const myPage = () =>{
+    console.log()
     if(tokenUserInfo.role==='NORMAL'){
-      navigate('/board/myPage/user',{state:{id:userInfoState.id}})
+      navigate('/board/myPageUser',{state:{id:userInfoState.id}})
     }else{
-      navigate('/board/myPage/admin',{state:{id:tokenUserInfo.id}})
+      navigate('/board/myPageAdmin',{state:{id:tokenUserInfo.id}})
     }
   }
 
@@ -134,6 +137,8 @@ function Layout(){
         {['settings','settingsDetail','budgetEvent','budgetEventDetail','budgetTime','budgetTimeDetail'].includes(params.id) && <Settings/>}
         {/* 플랫폼 관리 */}
         {['platform','platformDetail','categoryManage','productManage','changeManage', 'paymentManage'].includes(params.id) && <PlatformManage />}
+        {params.id === 'myPageUser' && <PlatformUserDetail/>}
+        {params.id === 'myPageAdmin' && <PlatformAdminDetail/>}
       </BoardBody>
       <Modal></Modal>
     </div>

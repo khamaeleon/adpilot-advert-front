@@ -8,6 +8,7 @@ import {CategoryManage} from "./CategoryManage";
 import ProductManage from "./ProductManage";
 import ChangeManage from "./ChangeManage";
 import PaymentManage from "./PaymentManage";
+import PlatformUserDetail from "./UserDetail";
 
 function PlatformUser(){
   const params = useParams()
@@ -19,6 +20,7 @@ function PlatformUser(){
           <Navigator/>
         </TitleContainer>
         {params.id === 'platform' && <AdminManage/>}
+        {params.id === 'platformDetail' && <PlatformUserDetail/>}
         {params.id === 'categoryManage' && <CategoryManage/>}
         {params.id === 'productManage' && <ProductManage/>}
         {params.id === 'changeManage' && <ChangeManage/>}

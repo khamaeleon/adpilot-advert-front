@@ -8,6 +8,9 @@ import {Check} from "../../assets/GlobalStyles";
 import {getToDay} from "../../common/DateUtils";
 import {ImageView} from "./ProductManage";
 
+export const accountInfoAtom = atom([])
+export const adminInfoAtom = atom({})
+
 /**
  * 상품 수집 기간 검색 아톰
  * @type {PrimitiveAtom<{endDate: string, stateDate: string}> & WithInitialValue<{endDate: string, stateDate: string}>}
@@ -84,7 +87,7 @@ export const columnUserData = [
     header: '아이디',
     render: (props) => {
       return (
-        <Link to={'/board/platform/detail'} state={{id: props.data.id}}>{props.value}</Link>
+        <Link to={'/board/platformDetail'} state={{id: props.data.id}}>{props.value}</Link>
       )
     }
   },

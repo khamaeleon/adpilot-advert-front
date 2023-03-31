@@ -85,11 +85,12 @@ export const menuList = [
   {
     name: "platform",
     header: "플랫폼 관리",
-    include: ["platform","categoryManage","productManage",'changeManage','paymentManage'],
+    include: ["platform",'platformDetail',"categoryManage","productManage",'changeManage','paymentManage'],
     child:[
       {
         name: "platform",
         header: "사용자 관리",
+        detail: "platformDetail"
       },
       {
         name: "categoryManage",
