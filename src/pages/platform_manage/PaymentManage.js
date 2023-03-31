@@ -1,4 +1,4 @@
-import {Board, BoardHeader, BoardTableContainer, ColSpan2} from "../../assets/GlobalStyles";
+import {Board, BoardHeader, BoardTableContainer, ColSpan2, RowSpan} from "../../assets/GlobalStyles";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import React, {useCallback, useEffect, useState} from "react";
@@ -12,6 +12,7 @@ import {
 import {toast, ToastContainer} from "react-toastify";
 import styled from "styled-components";
 import {PaymentCondition} from "../../components/Platform/Condition";
+import {SearchUser} from "../../components/common/SearchUser";
 
 function PaymentManage() {
   const [paymentDataState, setPaymentDataState] = useAtom(paymentDataAtom)
@@ -19,21 +20,42 @@ function PaymentManage() {
   const [updatePaymentStatusParams, setUpdatePaymentStatusParams] = useState(updatePaymentStatus)
 
   useEffect(() => {
+    handlePaymentTableData()
   }, [])
 
-  useEffect(() => {
-    updatePaymentStatusParams.paymentStatus !== '' && updatePayment(updatePaymentStatusParams)
-  }, [updatePaymentStatusParams.paymentIdList])
+  // useEffect(() => {
+  //   updatePaymentStatusParams.paymentStatus !== '' && updatePayment(updatePaymentStatusParams)
+  // }, [updatePaymentStatusParams.paymentIdList])
 
   const handlePaymentTableData = async() => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
     // const userName = adminInfoState.convertedUser !== '' ? adminInfoState.convertedUser : ''
-    // await accountHistoryTableData(userName, searchPaymentParamsState)
-    //   .then(response => {
-    //   response !== null && setPaymentDataState(response)
+    // const fetchData = await accountHistoryTableData(userName,searchAccountHistoryParamsState).then(response => {
+    //   const data = response
+    //   response !== null && setAccountHistoryDataState(response)
+    //   return data
     // })
+    // return fetchData
     handlePaymentStatus('')
     setPaymentStatusSelected([])
     setCheckboxAllSelect(false)
+  }
+
+  /**
+   * 모달안에 매체 검색 선택시
+   */
+  const handleHistoryAdd = (params) => {
+    console.log(params)
+    // accountCreateInvoiceRecord(params).then(response => {
+    //   response ? handlePaymentTableData() : confirmAlert({
+    //     title: '이력 추가',
+    //     message: '정산 프로필이 없습니다.',
+    //     buttons: [
+    //       {
+    //         label: '확인',
+    //       }
+    //     ]
+    //   });
+    // })
   }
 
   const dataCallback = useCallback( handlePaymentTableData , [paymentDataState])
@@ -113,15 +135,18 @@ function PaymentManage() {
         <BoardHeader>결재 현황</BoardHeader>
         <PaymentCondition searchPayment={searchPaymentParamsState} setSearchPayment={setSearchPaymentParamsState} handlePaymentTableData={handlePaymentTableData} />
         <BoardTableContainer>
-          <ColSpan2 style={{marginTop: 20, paddingLeft: 0}}>
-            <Checkbox label={'전체'}
-                      type={'c'}
-                      id={'AllSelect'}
-                      isChecked={checkboxAllSelect}
-                      onChange={(e)=> handlePaymentCheckAll(e)}
-            />
-            <StatusBtn type={'button'} id={'EXAMINED_COMPLETED'} onClick={(event)=> handlePaymentStatus(event.currentTarget.id)}>환불완료</StatusBtn>
-          </ColSpan2>
+          <RowSpan>
+            <ColSpan2 style={{marginTop: 20, paddingLeft: 0}}>
+              <Checkbox label={'전체'}
+                        type={'c'}
+                        id={'AllSelect'}
+                        isChecked={checkboxAllSelect}
+                        onChange={(e)=> handlePaymentCheckAll(e)}
+              />
+              <StatusBtn type={'button'} id={'EXAMINED_COMPLETED'} onClick={(event)=> handlePaymentStatus(event.currentTarget.id)}>환불완료</StatusBtn>
+            </ColSpan2>
+            <div style={{display: 'flex', justifyContent: 'flex-end'}}><SearchUser title={'이력 추가'} className={'listUp'} onSubmit={handleHistoryAdd} btnStyle={'historyAddButton'} historyAdd={true}/></div>
+          </RowSpan>
           <Table columns={paymentColumns}
                  data={paymentDataAtom}
                  idProperty="id"
@@ -158,4 +183,7 @@ const StatusBtn = styled.button`
   height: 35px;
   border: 1px solid #e5e5e5;
   border-radius: 5px;
+  &:hover {
+    border-color: #f5811f;
+  }
 `

@@ -17,7 +17,7 @@ import {useForm} from "react-hook-form";
 //   const [revenueBalance, setRevenueBalance] = useState(0)
 //   const {register, setValue, setError, formState:{errors} } = useForm()
 //   useEffect(() => {
-//     selectedItem.username !== undefined && accountRevenueStatus(selectedItem.username).then(response => { // 정산 수익 현황
+//     selectedItem.username !== undefined && accountRevenueStatus(selectedItem.username).then(response => {
 //       response !== null && setRevenueBalance(response.revenueBalance)
 //       setError('requestAmountValue', '')
 //       setCreateInvoice({
@@ -36,7 +36,7 @@ import {useForm} from "react-hook-form";
 //         modalComponent: null
 //       })
 //     } else {
-//       setError('requestAmountValue', {type: 'required', message:'정산 신청금을 입력해주세요.'})
+//       setError('requestAmountValue', {type: 'required', message:'신청금을 입력해주세요.'})
 //     }
 //   }
 //
@@ -59,7 +59,7 @@ import {useForm} from "react-hook-form";
 //     let numberNum = Number(num)
 //     if(selectedItem.username !== undefined){
 //       if(revenueBalance < numberNum){
-//         setError('requestAmountValue', {type: 'required', message:'정산 신청금이 잔여 정산금을 초과하였습니다.'})
+//         setError('requestAmountValue', {type: 'required', message:'신청금이 충전금을 초과하였습니다.'})
 //       } else {
 //         setCreateInvoice({
 //           ...createInvoice,
@@ -69,7 +69,7 @@ import {useForm} from "react-hook-form";
 //         setError('requestAmountValue', '')
 //       }
 //     } else {
-//       setError('requestAmountValue', {type: 'required', message:'매체를 먼저 선택해주세요.'})
+//       setError('requestAmountValue', {type: 'required', message:'광고주를 먼저 선택해주세요.'})
 //     }
 //   }
 //   return (
@@ -81,9 +81,9 @@ import {useForm} from "react-hook-form";
 //               <span>신청 금액 설정</span>
 //               <RelativeDiv>
 //                 <input type={'radio'} id={'increment'} name={'proposeState'} defaultChecked={true} onChange={() => revenueType('REVENUE_INCREASE')}/>
-//                 <label htmlFor={'increment'}>증가</label>
+//                 <label htmlFor={'increment'}>광고비 증가</label>
 //                 <input type={'radio'} id={'decrement'} name={'proposeState'} onChange={() => revenueType('REVENUE_DECREASE')}/>
-//                 <label htmlFor={'decrement'}>감소</label>
+//                 <label htmlFor={'decrement'}>광고비 감소</label>
 //               </RelativeDiv>
 //             </ColSpan4>
 //           </RowSpan>
@@ -104,12 +104,12 @@ import {useForm} from "react-hook-form";
 //               </div>
 //             </div>
 //             <div className={'inputCon'}>
-//               <span>수익 잔액</span>
+//               <span>충전 잔액</span>
 //               <div className={'won'}>
 //                 <input
 //                   type={'text'}
 //                   value={revenueBalance}
-//                   placeholder={'수익 잔액'}
+//                   placeholder={'충전 잔액'}
 //                   readOnly={true}
 //                 />
 //               </div>
