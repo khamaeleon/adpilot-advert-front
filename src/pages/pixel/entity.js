@@ -73,7 +73,7 @@ export const pixelColumns = [
     sortable: false,
     render: ({value, cellProps}) => {
       return (
-        <PixelAdd title={'추가'} data={cellProps}/>
+        <PixelAdd title={'추가'} data={cellProps.data}/>
       )
     }
   }
