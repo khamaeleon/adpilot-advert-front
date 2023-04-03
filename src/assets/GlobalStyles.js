@@ -1169,6 +1169,7 @@ export const Edit = styled.div`
   }
 `
 export const Script = styled.div`
+  cursor: pointer;
   display: inline-block;
   width: 35px;
   height: 35px;
@@ -1179,7 +1180,8 @@ export const Script = styled.div`
   background-position: center;
   background-size: 20px;
   &:hover {
-    background-color: #f9fafb;
+    background-image: url("/assets/images/table/icon_pop_on@2x.png");
+    background-image: -webkit-image-set(url("/assets/images/table/icon_pop_on.png") 1x, url("/assets/images/table/icon_pop_on@2x.png") 2x, url("/assets/images/table/icon_pop_on@3x.png") 3x);
   }
 `
 

@@ -21,19 +21,21 @@ import {TotalCount} from "./TableDetail";
 import SettingAdd from "../common/SettingModal";
 
 export function SwitchComponent(props){
-  const {value, cellProps, eventClick} = props
+  const {value, cellProps, eventClick, styles} = props
   const [select, setSelect] = useState(value)
   const [, setModal] = useAtom(modalController)
-  const background = !select ? {background: '#ddd'} : {background: '#f5811f'};
+  const background = !select ? {background: '#ddd', ...styles} : {background: '#f5811f', ...styles};
   const position = select ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null
 
   const handleClick = (confirm) => {
-    if(confirm){
-      cellProps.data.publish = !cellProps.data.publish;
-      eventClick();
+    if(!eventClick) {
+      if(confirm){
+        cellProps.data.publish = !cellProps.data.publish;
+        eventClick();
+      }
+      setSelect(cellProps.data.publish)
+      setModal({isShow:false});
     }
-    setSelect(cellProps.data.publish)
-    setModal({isShow:false});
     // return (
     //   <UseAtom objects={cellProps.data}/>
     // )
@@ -61,7 +63,7 @@ export const LinkRef = (link) => {
 }
 
 function ScriptComponent(props){
-  const {cellProps} = props
+  const {title, cellProps} = props
   const[modal, setModal] = useAtom(modalController)
   const handleCopyClipBoard = async (text) => {
     console.log(text)
@@ -103,11 +105,36 @@ function ScriptComponent(props){
       }
     })
   }
+  const TitColor = styled.div`{
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    &:hover {
+      color: #f5811f;
+      > div {
+        background-image: url("/assets/images/table/icon_pop_on@2x.png");
+        background-image: -webkit-image-set(url("/assets/images/table/icon_pop_on.png") 1x, url("/assets/images/table/icon_pop_on@2x.png") 2x, url("/assets/images/table/icon_pop_on@3x.png") 3x);
+      }
+    }
+    
+}`
   return(
-    <Script onClick={e => {
-      e.stopPropagation()
-      handleClick()
-    }}/>
+    <>
+      {title !== undefined ?
+        <TitColor onClick={e => {
+          e.stopPropagation()
+          handleClick()
+        }}>{title}
+            <Script />
+        </TitColor>
+        :
+        <Script onClick={e => {
+          e.stopPropagation()
+          handleClick()
+        }}/>
+      }
+    </>
   )
 }
 
@@ -127,7 +154,7 @@ export function Icon(props) {
         <SettingAdd data={props.cellProps} saveType={props.saveType} label={props.label} onSubmit={props.onSubmit}/>
       }
       {props.icon === 'script' &&
-        <ScriptComponent cellProps={props.cellProps} />
+        <ScriptComponent cellProps={props.cellProps} title={props.title}/>
       }
       {props.icon === 'url' &&
         <a href={props.value} target={'_blank'}>

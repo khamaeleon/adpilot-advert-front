@@ -3,6 +3,7 @@ import React from "react";
 import {Icon, SwitchComponent} from "../../components/table";
 import {PixelAdd, PixelModal} from "./PixelList";
 import {Link} from "react-router-dom";
+import {HorizontalRule} from "../../components/common/Common";
 
 /**
  * 픽셀 관리 리스트 Atom
@@ -20,10 +21,10 @@ export const pixelDetailDataAtom = atom([
 ])
 
 export const statusTypeAll = [
-  {key:0, value:'NORMAL', label:'수집중'},
-  {key:1, value:'STOPPED', label:'수집 중지'},
-  {key:2, value:'WAITING', label:'수집 전'},
-  {key:3, value:'PENDING', label:'확인 필요'}
+  {key:0, value:'NORMAL', label:'수집중', color: '#6fa1db'},
+  {key:1, value:'STOPPED', label:'수집 중지', color: '#777'},
+  {key:2, value:'WAITING', label:'수집 전', color: '#db6f6f'},
+  {key:3, value:'PENDING', label:'확인 필요', color: '#db6f6f'}
 ]
 
 /**
@@ -93,7 +94,7 @@ export const pixelDetailColumns = [
     sortable: false,
     render: ({value, cellProps}) => {
       return (
-        <SwitchComponent value={value} cellProps={cellProps} eventClick={()=> console.log('연동상태')}/>
+        <SwitchComponent value={value} cellProps={cellProps} eventClick={false}/>
       );
     }
   },
@@ -137,13 +138,15 @@ export const pixelDetailInfoColumns = [
   {
     name: 'interlock',
     header: '연동 상태',
-    minWidth:90,
-    maxWidth:90,
+    minWidth:120,
+    maxWidth:120,
     showColumnMenuTool: false,
     sortable: false,
     render: ({value, cellProps}) => {
       return (
-        <SwitchComponent value={value} cellProps={cellProps} eventClick={()=> console.log('연동상태')}/>
+        <div style={{display: "flex", alignItems: 'center', justifyContent: 'center'}}>
+          <SwitchComponent value={value} cellProps={cellProps} eventClick={()=> console.log('연동상태')}/>
+        </div>
       );
     }
   },
@@ -162,26 +165,32 @@ export const pixelDetailInfoColumns = [
       )
     }
   },
-  {
-    name: 'status',
-    header: '이벤트 수집 상태',
-    defaultFlex: 1,
-    resizable: false,
-    showColumnMenuTool: false,
-    render: ({value}) => {
-      console.log(value)
-      return (
-        <span>{value !==undefined && statusTypeAll.find(type => type.value === value).label}</span>
-      )
-    }
-  },
+  // {
+  //   name: 'status',
+  //   header: '이벤트 수집 상태',
+  //   defaultFlex: 1,
+  //   resizable: false,
+  //   showColumnMenuTool: false,
+  //   render: ({value}) => {
+  //     return (
+  //
+  //     )
+  //   }
+  // },
   {
     name: 'script',
-    header: '스크립트',
-    textAlign: 'center',
-    defaultWidth: 100,
-    render: ({value, cellProps}) => {
-      return <Icon icon={'script'} value={value} cellProps={cellProps}/>
+    header: '이벤트 수집 상태',
+    defaultWidth: 300,
+    showColumnMenuTool: false,
+    render: ({data, cellProps}) => {
+      let textColor = {color: statusTypeAll.find(type => type.value === data.status).color};
+      return (
+        <div style={{display: "flex", alignItems: 'center', justifyContent: 'center'}}>
+          <span style={textColor}>{data.status !== undefined && statusTypeAll.find(type => type.value === data.status).label}</span>
+          <HorizontalRule style={{margin: '0 10px'}} />
+          <Icon icon={'script'} cellProps={cellProps} title={'스크립트 보기'}/>
+        </div>
+      )
     }
   }
 ]
