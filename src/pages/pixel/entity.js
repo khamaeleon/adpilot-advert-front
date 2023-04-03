@@ -1,7 +1,7 @@
 import {atom} from "jotai/index";
 import React from "react";
 import {Icon, SwitchComponent} from "../../components/table";
-import {PixelAdd} from "./PixelList";
+import {PixelAdd, PixelModal} from "./PixelList";
 import {Link} from "react-router-dom";
 
 /**
@@ -73,7 +73,7 @@ export const pixelColumns = [
     sortable: false,
     render: ({value, cellProps}) => {
       return (
-        <PixelAdd title={'추가'} data={cellProps.data}/>
+        <PixelModal title={'추가'} data={cellProps.data}/>
       )
     }
   }
