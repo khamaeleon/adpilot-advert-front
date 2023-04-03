@@ -174,5 +174,14 @@ export const pixelDetailInfoColumns = [
         <span>{value !==undefined && statusTypeAll.find(type => type.value === value).label}</span>
       )
     }
+  },
+  {
+    name: 'script',
+    header: '스크립트',
+    textAlign: 'center',
+    defaultWidth: 100,
+    render: ({value, cellProps}) => {
+      return <Icon icon={'script'} value={value} cellProps={cellProps}/>
+    }
   }
 ]

@@ -83,7 +83,7 @@ function ScriptComponent(props){
             <ModalBody>
               <RowSpan>
                 <ColTitle style={{paddingTop: 10}}>이벤트명</ColTitle>
-                <BorderBox>이벤트 명</BorderBox>
+                <BorderBox>{cellProps.data.eventName}</BorderBox>
               </RowSpan>
               <RowSpan>
                   <ColTitle style={{paddingTop: 10}}>
@@ -92,7 +92,7 @@ function ScriptComponent(props){
                       복사
                     </SubmitButton>
                   </ColTitle>
-                  <BorderBox><pre>{cellProps.data.script}스크립트 내용</pre></BorderBox>
+                  <BorderBox><pre>{cellProps.data.script}</pre></BorderBox>
               </RowSpan>
             </ModalBody>
             <ModalFooter>

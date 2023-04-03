@@ -243,7 +243,7 @@ function PixelDetail() {
             </div>
             {pixelInfoListState !== null &&
               <Table columns={pixelDetailInfoColumns}
-                     data={pixelInfoListState}
+                     data={pixelInfoListState.events}
                      showHoverRows={false}
                      activeCell={[0]}
                      emptyText={'이벤트 단가 관리 내역이 없습니다.'}/>
