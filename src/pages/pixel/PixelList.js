@@ -3,21 +3,28 @@ import {
   BoardHeader,
   BoardSearchDetail,
   BoardTableContainer,
-  ColSpan1, ColSpan4, ColTitle,
+  ColSpan1,
+  ColSpan4,
   DefaultButton,
-  Input, RelativeDiv,
-  RowSpan, Span1, Span2, SubmitButton,
-  TableButton, ValidationScript,
+  Input,
+  RelativeDiv,
+  RowSpan,
+  Span1,
+  Span2,
+  SubmitButton,
+  TableButton,
+  ValidationScript,
 } from "../../assets/GlobalStyles";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {useAtom} from "jotai";
-import Table from "../../components/table";
-import {pixelColumns, pixelDataAtom} from "./entity";
+import {pixelColumns, pixelDataAtom, pixelDetailColumns} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {selAdverPriceEventList} from "../../services/SettingsAxios";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {useForm} from "react-hook-form";
+import {selAdverPixelDetailList, selAdverPixelList} from "../../services/header/ManagePixelAxios";
+import TableDetail from "../../components/table/TableDetail";
 
 export function PixelAdd(props) {
   const {data, title} = props
@@ -154,10 +161,13 @@ function PixelList() {
   const [pixelDataState, setPixelDataState] = useAtom(pixelDataAtom)
   const [searchParams, setSearchParams] = useState({ keyword:''})
   useEffect(() => {
-    selAdverPriceEventList(searchParams).then(response =>{
+    selAdverPixelList(searchParams).then(response =>{
       setPixelDataState(response)
     })
   }, [])
+  const handleFetchDetailData = useCallback(async ({userId}) => {
+    return await selAdverPixelDetailList(userId)
+  },[])
 
   const groupStyle = {
     textAlign: 'center',
@@ -201,13 +211,14 @@ function PixelList() {
         </BoardSearchDetail>
         <BoardTableContainer>
           { pixelDataState !== null &&
-            <Table columns={pixelColumns}
-                   data={pixelDataState.eventDtos}
-                   //detailData={handleFetchDetailData}
-                   //detailColumn={reportsStaticsAdExchangeByInventoryColumn}
-                   //detailGroups={groups}
-                   //groups={groups}
-                   emptyText={'픽셀 관리 현황 내역이 없습니다.'}/>
+            <TableDetail columns={pixelColumns}
+                         data={pixelDataState}
+                         detailData={handleFetchDetailData}
+                         detailColumn={pixelDetailColumns}
+                         detailGroups={groups}
+                         idProperty={'userId'}
+                         groups={groups}
+                         style={{minHeight: 500}}/>
           }
         </BoardTableContainer>
       </Board>
