@@ -624,22 +624,25 @@ export const DashBoardHeader = styled.div`
 export const BoardTableContainer = styled.div`
   & table {
     width: 100%;
-    border-top: 1px solid ${lightGray};
-    border-bottom: 1px solid ${lightGray};
+    border: 1px solid ${lightGray};
     & tr {
       & th {
         padding: 14px 0;
         background-color: #fafafa;
         font-size: 15px;
         color: #b2b2b2;
+        border-right: 1px solid ${lightGray};
         font-weight: normal;
         white-space: nowrap;
+        &:last-child {border-right: 0}
       }
       & td {
         padding: 14px 0;
         word-break: break-word;
         border-top: 1px solid ${lightGray};
+        border-right: 1px solid ${lightGray};
         text-align: center;
+        &:last-child {border-right: 0}
         & a {
           border-bottom: 1px solid #777;
         }
