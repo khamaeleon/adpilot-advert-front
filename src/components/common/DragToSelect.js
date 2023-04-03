@@ -1,62 +1,241 @@
-import styled from "styled-components";
+import {useAtom} from "jotai/index";
+import {atomWithReset} from "jotai/utils";
+import TableDragSelect from "react-table-drag-select";
+import "../../assets/dragSelect.css"
 
-function Cells(props) {
-  const handleTouchStart = (e) => {
-    console.log(e)
-    props.onTouchStart(e)
-  }
-  const handleTouchMove = (e) => {
-    console.log(e)
-    props.onTouchMove(e)
-  }
-  return (
-    <Cell
-      onMouseDown={handleTouchStart}
-      onMouseMove={handleTouchMove}>
-    </Cell>
+const cellsAtom = atomWithReset([
+  [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+])
+export default function DragToSelect() {
+  const [cells, setCells] = useAtom(cellsAtom)
+  return(
+    <TableDragSelect
+      value={cells}
+      onChange={cells => setCells(cells)}
+    >
+      <tr>
+        <td disabled />
+        <td disabled>0시</td>
+        <td disabled>1시</td>
+        <td disabled>2시</td>
+        <td disabled>3시</td>
+        <td disabled>4시</td>
+        <td disabled>5시</td>
+        <td disabled>6시</td>
+        <td disabled>7시</td>
+        <td disabled>8시</td>
+        <td disabled>9시</td>
+        <td disabled>10시</td>
+        <td disabled>11시</td>
+        <td disabled>12시</td>
+        <td disabled>13시</td>
+        <td disabled>14시</td>
+        <td disabled>15시</td>
+        <td disabled>16시</td>
+        <td disabled>17시</td>
+        <td disabled>18시</td>
+        <td disabled>19시</td>
+        <td disabled>20시</td>
+        <td disabled>21시</td>
+        <td disabled>22시</td>
+        <td disabled>23시</td>
+      </tr>
+      <tr>
+        <td disabled>월</td>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+      </tr>
+      <tr>
+        <td disabled>화</td>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+      </tr>
+      <tr>
+        <td disabled>수</td>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+      </tr>
+      <tr>
+        <td disabled>목</td>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+      </tr>
+      <tr>
+        <td disabled>금</td>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+      </tr>
+      <tr>
+        <td disabled>토</td>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+      </tr>
+      <tr>
+        <td disabled>일</td>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+      </tr>
+    </TableDragSelect>
   )
 }
-export default function DragToSelect(props) {
-  const { value } = props
-  const onTouchStartCell = (e) => {
-
-  }
-
-  const onTouchStartMove = (e) => {
-
-  }
-
-  return (
-    <DragSelect>
-      {value.map((item, i) => {
-        return(
-          <div key={i}>
-            {item.map((cell, j) => {
-              return (
-                <Cells
-                  key={j}
-                  onTouchStart={onTouchStartCell}
-                  onTouchMove={onTouchStartMove}
-                />
-              )
-            })}
-          </div>
-        )
-      })}
-    </DragSelect>
-  )
-}
-
-const DragSelect = styled.div`
-  display: flex;
-  flex-direction: column;
-  & div {
-    display: flex;
-  }
-`
-
-const Cell = styled.div`
-  width: 100%;
-  height: 30px;
-  border: 1px solid #ddd;
-`

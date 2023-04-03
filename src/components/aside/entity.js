@@ -55,7 +55,7 @@ export const menuList = [
         header: `${advertiser} 일별 보고서`
       },
       {
-        name: "reportsDaily",
+        name: "reportsCPC",
         header: `${advertiser} CPC 보고서`
       }
     ]

@@ -1,28 +1,37 @@
-import {CampaignFour} from "./steps/CampaignFour";
 import {
   Board,
-  BoardHeader, BoardSearchResult,
-  CancelButton, ColSpan1,
-  ColSpan100, ColSpan2, ColSpan3,
-  ColSpan4, Input, RelativeDiv,
-  RowSpan, selectStyle, Span3,
-  Span4,
-  SubmitButton,
-  SubmitContainer
-} from "../../assets/GlobalStyles";
-import React, {useState} from "react";
+  BoardHeader,
+  BoardSearchResult,
+  ColSpan1,
+  ColSpan100,
+  ColSpan2,
+  ColSpan3,
+  ColSpan4,
+  Input,
+  RelativeDiv,
+  RowSpan,
+  selectStyle,
+  Span3,
+  Span4
+} from "../../../assets/GlobalStyles";
 import {
   CampaignButton,
   CategoryItem,
   CreateImage,
-  DeleteIcon, ImageTitle,
+  DeleteIcon,
+  ImageTitle,
   ImageUploadCard,
-  LoadButton, PrevImage, ResistBanner, Row, RowBody, RowHeader,
+  LoadButton,
+  PrevImage,
+  ResistBanner,
+  Row,
+  RowBody,
+  RowHeader,
   SelectCategory
-} from "./styles";
-import {HorizontalRule} from "../../components/common/Common";
+} from "../styles";
+import {HorizontalRule} from "../../../components/common/Common";
 import Select from "react-select";
-import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
+import React, {useState} from "react";
 
 const RegistryBannerItem = (props) => {
   return (
@@ -62,6 +71,7 @@ const RegistryBannerItem = (props) => {
     </RowSpan>
   )
 }
+
 function CampaignFourBanner () {
   const bannerSize = [{name: '250*250'},{name: '250*250'},{name: '250*250'},{name: '250*250'},{name: '250*250'},{name: '250*250'},{name: '250*250'},{name: '250*250'},{name: '250*250'}]
 
@@ -332,50 +342,40 @@ function CampaignFourNative () {
     </>
   )
 }
-export default function CreateCreative() {
+
+export function CampaignFour() {
   const [creativeGroup, setCreativeGroup] = useState('banner')
-  return (
-    <>
-      <Board>
-        <BoardHeader>크리에이티브 생성</BoardHeader>
-        <BoardSearchResult>
-          <RowSpan>
-            <ColSpan4>
-              <Span4>광고주 설정</Span4>
-              <Input style={{width: 300}} readOnly/>
-              <SearchAdvertiser title={'광고주 검색'}/>
-            </ColSpan4>
-          </RowSpan>
-          <Span4>크리에이티브 그룹 선택</Span4>
-          <RowSpan box={true} column={false}>
-            <ColSpan1 padding={'0'}>
-              <CampaignButton
-                onClick={() => setCreativeGroup('banner')}
-                className={creativeGroup === 'banner' ? 'on': null}
-              >고정 배너</CampaignButton>
-              <CampaignButton
-                onClick={() => setCreativeGroup('native')}
-                className={creativeGroup === 'native' ? 'on': null}
-              >네이티브</CampaignButton>
-            </ColSpan1>
-            <HorizontalRule style={{margin: '0',height: 50}}/>
-            <ColSpan1 padding={'0'}>
-              <LoadButton>크리에이티브 불러오기</LoadButton>
-            </ColSpan1>
-            <ColSpan2>
-              <span>나이키_특별 기획_노출 집중그룹_YYYY.MM.DD HH:MM</span>
-            </ColSpan2>
-          </RowSpan>
-          {creativeGroup === 'banner' &&
-            <CampaignFourBanner/>
-            ||
-            <CampaignFourNative/>
-          }
-        </BoardSearchResult>
-      </Board>
-      <SubmitContainer>
-        <SubmitButton type={'submit'}>크리에이티브 생성</SubmitButton>
-      </SubmitContainer>
-    </>
+
+  return(
+    <Board>
+      <BoardHeader>광고 그룹 설정</BoardHeader>
+      <BoardSearchResult>
+        <Span4>크리에이티브 그룹 선택</Span4>
+        <RowSpan box={true} column={false}>
+          <ColSpan1 padding={'0'}>
+            <CampaignButton
+              onClick={() => setCreativeGroup('banner')}
+              className={creativeGroup === 'banner' ? 'on': null}
+            >고정 배너</CampaignButton>
+            <CampaignButton
+              onClick={() => setCreativeGroup('native')}
+              className={creativeGroup === 'native' ? 'on': null}
+            >네이티브</CampaignButton>
+          </ColSpan1>
+          <HorizontalRule style={{margin: '0',height: 50}}/>
+          <ColSpan1 padding={'0'}>
+            <LoadButton>크리에이티브 불러오기</LoadButton>
+          </ColSpan1>
+          <ColSpan2>
+            <span>나이키_특별 기획_노출 집중그룹_YYYY.MM.DD HH:MM</span>
+          </ColSpan2>
+        </RowSpan>
+        {creativeGroup === 'banner' &&
+          <CampaignFourBanner/>
+          ||
+          <CampaignFourNative/>
+        }
+      </BoardSearchResult>
+    </Board>
   )
 }

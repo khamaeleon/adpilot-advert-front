@@ -3,6 +3,8 @@ export const navigationName = {
   "/board/myPageUser": "홈/마이페이지",
   "/board/myPageAdmin": "홈/마이페이지",
   "/board/campaign": "홈/광고 관리/캠페인생성",
+  "/board/createCreative": "홈/광고 관리/크리에이티브 생성",
+  "/board/manageCreative": "홈/광고 관리/크리에이티브 관리",
   "/board/reports": "홈/보고서/보고서 생성",
   "/board/reportsDaily": "홈/보고서/일별 보고서",
   "/board/reportsCPC": "홈/보고서/CPC 보고서",

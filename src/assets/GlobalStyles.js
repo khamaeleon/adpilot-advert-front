@@ -5,6 +5,7 @@ const mainColor = css`${props => props.theme.color.mainColor}`
 const textColor = css`${props => props.theme.color.textColor}`
 const borderColor = css`${props => props.theme.color.borderColor}`
 const lightGray = css`${props => props.theme.color.lightGray}`
+const buttonHeightSize = 45
 
 export const GlobalStyles = createGlobalStyle`
   html {
@@ -119,68 +120,39 @@ export const GlobalStyles = createGlobalStyle`
   input::placeholder{
     color: #a2aab2;
   }
-  input[type='range'] {
-    width: 100%;
+
+  input[type=range] {
     -webkit-appearance: none;
-    background: transparent;
+    width: 100%;
+    height: 8px;
+    background: #ddd;
     cursor: pointer;
-    background: #e5e4e3;
+    border-radius: 8px; 
+    transition: background 450ms ease-in;
   }
+
   input[type=range]:focus {
     outline: none;
   }
+
   input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
-  }
-  input[type=range]::-ms-track {
-    width: 100%;
-    cursor: pointer;
-    background: transparent;
-    border-color: transparent;
-    color: transparent;
-  }
-  input[type=range]::-moz-range-thumb {
-    background: #ffffff;
-    cursor: pointer;
-    border: 2px solid #f5811f;
-    width: 17px;
-    height: 17px;
-    margin-top: -8px;
-    border-radius: 19px;
-  }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    background: #ffffff;
-    cursor: pointer;
-    border: 2px solid #f5811f;
     width: 18px;
-    height: 18px; 
-    margin-top: -5px;
-    border-radius: 19px;
-    box-shadow: 0 3px 6px 0 hsla(0, 0%, 0%, 0.16);
-  }
-  input[type=range]::-webkit-slider-runnable-track {
-    width: 100%; 
-    height: 8px;
+    height: 18px;
+    background: #fff;
+    border: 2px solid #f5811f;
+    border-radius: 50%;
     cursor: pointer;
-    background: #dddddd;
-    border-radius: 8px;
   }
-  input[type=range]::-moz-range-track {
-    width: 100%;
-    height: 8px;
+
+  input[type=range]::-moz-range-thumb {
+    -webkit-appearance: none;
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border: 1px solid dodgerblue;
+    border-radius: 50%;
     cursor: pointer;
-    background: #dddddd;
-    border-radius: 8px;
-  }
-  input[type=range]:focus::-webkit-slider-runnable-track {
-    background: #dddddd;
-  }
-  input[type=range]::-ms-fill-upper {
-    background: #3071a9;
-    border: 0.2px solid #010101;
-    border-radius: 2.6px;
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
   }
   input[type='text']:read-only {
     background-color: #f9fafb;
@@ -205,7 +177,7 @@ export const GlobalStyles = createGlobalStyle`
 
   .react-datepicker__input-container input[type='text']{
     border: 0;
-    height: calc(45px - 2px);
+    height: calc(${buttonHeightSize}px - 2px);
   }
   .sign-up article {
     width: 1320px;
@@ -537,6 +509,123 @@ export const inputStyle = {
       borderRadius: 5,
     })
 }
+
+export const selectStyle = {
+  indicatorSeparator: () => null,
+  indicatorsContainer: (baseStyles,state) => (
+    {
+      ...baseStyles,
+      height: buttonHeightSize,
+    }
+  ),
+  container:(baseStyles,state) => (
+    {
+      ...baseStyles,
+      height: buttonHeightSize,
+    }
+  ),
+  valueContainer: (baseStyles,state) => (
+    {
+      ...baseStyles,
+      height: buttonHeightSize,
+    }
+  ),
+  control: (baseStyles,state) => (
+    {
+      ...baseStyles,
+      minHeight: buttonHeightSize,
+      marginRight: '0 !important',
+      border: '1px solid #e5e5e5'
+    }
+  ),
+  input: (baseStyles,state) => (
+    {
+      ...baseStyles,
+      minWidth: 250,
+      height: buttonHeightSize - 10,
+      borderRadius: 5,
+    }
+  )
+}
+
+export const smallStyle = {
+  indicatorSeparator: () => null,
+  indicatorsContainer: (baseStyles,state) => (
+    {
+      ...baseStyles,
+      height: 24,
+    }
+  ),
+  container:(baseStyles,state) => (
+    {
+      ...baseStyles,
+      height: 24,
+    }
+  ),
+  valueContainer: (baseStyles,state) => (
+    {
+      ...baseStyles,
+      height: 24,
+    }
+  ),
+  control: (baseStyles,state) => (
+    {
+      ...baseStyles,
+      width: '100%',
+      minHeight: 24,
+      marginRight: '0 !important',
+      border: '1px solid #e5e5e5'
+    }
+  ),
+  input: (baseStyles,state) => (
+    {
+      ...baseStyles,
+      width: '100%',
+      height: 16,
+      borderRadius: 5,
+    }
+  )
+}
+
+export const defaultStyle = {
+  indicatorSeparator: () => null,
+  indicatorsContainer: (baseStyles,state) => (
+    {
+      ...baseStyles,
+      height: 36,
+    }
+  ),
+  container:(baseStyles,state) => (
+    {
+      ...baseStyles,
+      width: '100%',
+      height: 36,
+    }
+  ),
+  valueContainer: (baseStyles,state) => (
+    {
+      ...baseStyles,
+      height: 36,
+    }
+  ),
+  control: (baseStyles,state) => (
+    {
+      ...baseStyles,
+      width: '100%',
+      minHeight: 36,
+      marginRight: '0 !important',
+      border: '1px solid #e5e5e5'
+    }
+  ),
+  input: (baseStyles,state) => (
+    {
+      ...baseStyles,
+      width: '100%',
+      height: 24,
+      borderRadius: 5,
+    }
+  )
+}
 export const TextMainColor = styled.span`
   color: ${mainColor};
 `
@@ -653,17 +742,17 @@ export const BoardTableContainer = styled.div`
 `
 export const RowSpan = styled.div`
   display: flex;
-  flex-direction: ${(props) => props.box ? "column" : "row"};
-  gap: ${(props) => props.box ? "15px" : null};
+  flex-direction: ${(props) => props.column ? "column" : "row"};
+  gap: ${(props) => props.box ? "10px" : null};
   justify-content: space-between;
-  margin-top: 25px;
+  margin-top: 15px;
   padding: ${(props) => props.box ? "15px" : null};
   background-color: ${(props)=>props.box ? "#f9fafb":null};
   border: ${(props) => props.box ? '1px solid #e5e5e5' : null};
   border-radius: 5px;
 `
 export const ColSpan0 = styled.div`
-  padding-left: 10px;
+  padding-left: ${(props) => props.padding ? props.padding : '10'}px;
   display: flex;
   align-items: center;
   width: auto;
@@ -675,9 +764,10 @@ export const ColSpan0 = styled.div`
   }
 `
 
+
 export const ColSpan1 = styled.div`
   position: relative;
-  padding-left: 10px;
+  padding-left: ${(props) => props.padding ? props.padding : '10'}px;
   display: flex;
   align-items: center;
   width: 25%;
@@ -698,9 +788,10 @@ export const ColSpan1 = styled.div`
 `
 
 export const ColSpan2 = styled.div`
-  padding-left: 10px;
+  padding-left: ${(props) => props.padding ? props.padding : '10'}px;
   display: flex;
-  align-items: center;
+  flex-direction: ${(props)=>props.column ? 'column' : 'row'};
+  align-items: ${(props)=>props.column ? 'flex-start' : 'center'};
   width: 50%;
   gap: 10px;
   & > div:first-child {
@@ -711,16 +802,12 @@ export const ColSpan2 = styled.div`
     display: flex;
     width: 100%;
     min-height: 45px;
-    padding-right: 5px;
     align-items: center;
-  }
-  & > div:last-child > * {
-    margin-right: 10px;
   }
 `
 
 export const ColSpan3 = styled.div`
-  padding-left: 10px;
+  padding-left: ${(props) => props.padding ? props.padding : '10'}px;
   display: flex;
   align-items: center;
   width: 75%;
@@ -742,7 +829,8 @@ export const ColSpan3 = styled.div`
 `
 
 export const ColSpan4 = styled.div`
-  padding-left: 10px;
+  position: relative;
+  padding-left: ${(props) => props.padding ? props.padding : '10'}px;
   display: flex;
   align-items: center;
   width: 100%;
@@ -753,7 +841,6 @@ export const ColSpan4 = styled.div`
   }
   & > div:last-child {
     display: flex;
-    white-space: nowrap;
     width: 100%;
     min-height: 45px;
     padding-right: 5px;
@@ -762,6 +849,15 @@ export const ColSpan4 = styled.div`
   & > div:last-child > * {
     margin-right: 10px;
   }
+`
+
+export const ColSpan100 = styled.div`
+  position: relative;
+  padding-left: ${(props) => props.padding ? props.padding : '10'}px;
+  display: flex;
+  align-items: center;
+  max-width: 100px;
+  width: 100%;
 `
 export const ColTitle = styled.div`
   padding: 0 0 0 10px;
@@ -785,6 +881,7 @@ export const CampaignType = styled.div`
   padding: 40px;
   display: flex;
   justify-content: center;
+  width: 100%;
   gap: 30px;
   background-color: #f9fafb;
   border: 1px solid #e5e5e5;
@@ -826,7 +923,7 @@ export const RangePicker = styled.div`
   display: flex;
   align-items: center;
   background-color: #f9fafb;
-  height: 45px;
+  height: ${buttonHeightSize}px;
   border: 1px solid #e5e5e5;
   border-radius: 5px;
   color: #777;
@@ -841,7 +938,7 @@ export const SearchInput = styled.div`
   & input[type='text'] {
     padding: 0 20px;
     width: 100%;
-    height: 45px;
+    height: ${buttonHeightSize}px;
     border: 1px solid #e5e5e5;
     border-radius: 5px;
   }
@@ -849,7 +946,7 @@ export const SearchInput = styled.div`
 
 export const SearchButton = styled.button`
   width: 140px;
-  height: 45px;
+  height: ${buttonHeightSize}px;
   border: 1px solid ${lightGray};
   background-color: #fff;
   border-radius: 5px;
@@ -874,7 +971,7 @@ export const SaveExcelButton = styled.button`
   justify-content: center;
   align-items: center;
   width: 140px;
-  height: 45px;
+  height: ${buttonHeightSize}px;
   border: 1px solid ${lightGray};
   background-color: #fff;
   &.listUp {
@@ -955,7 +1052,7 @@ export const DefaultButton = styled.button`
   justify-content: center;
   align-items: center;
   width: 140px;
-  height: 45px;
+  height: ${buttonHeightSize}px;
   border: 1px solid ${lightGray};
   background-color: #535353;
   color: #fff;
@@ -988,7 +1085,7 @@ export const Input = styled('input')`
   padding:0 20px;
   width: 100%;
   border: 1px solid #e5e5e5;
-  height: 45px;
+  height: ${buttonHeightSize}px;
   border-radius: 5px;
   background-color: ${(props)=>props.readOnly? '#eee': '#fff'};
   .btn-delete {
@@ -1006,9 +1103,22 @@ export const Input = styled('input')`
 `
 
 export const RelativeDiv = styled.div`
+  display: flex;
+  flex-direction: ${(props) => props.column ? "column" : "row"};
+  align-items: ${(props) => props.column ? "flex-start !important" : "center"};
   position: relative;
   width: 100%;
+  padding: ${(props) => props.box ? "15px": null};
+  background-color: ${(props) => props.box ? "#f9fafb": null};
+  border-radius: ${(props) => props.box ? "5px": null};
+  border: ${(props) => props.box ? "1px solid #e5e5e5": null};
   & > * {
+    margin-right: 10px;
+  }
+  & label {
+    margin-right: 10px;
+  }
+  & label > input {
     margin-right: 10px;
   }
 `

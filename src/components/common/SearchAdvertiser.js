@@ -164,7 +164,7 @@ const InputGroup = styled.div`
     padding: 0 20px;
     width: 80%;
     border: 1px solid #e5e5e5;
-    height: 45px;
+    height: 36px;
     border-radius: 10px 0 0 10px;
   }
 

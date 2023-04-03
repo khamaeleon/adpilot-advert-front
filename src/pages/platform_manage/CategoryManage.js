@@ -7,7 +7,6 @@ import {
   DefaultButton,
   Input,
   RowSpan,
-  SearchButton
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {CategoryContainer} from "./styles";
@@ -162,7 +161,7 @@ export function CategoryManage() {
               <ColSpan3>
                 <Input placeholder={'상위 카테고리 명을 입력하세요.'} value={createCategory.category.name || ""} onChange={handleChangeCategory} />
               </ColSpan3>
-              <ColSpan1><DefaultButton onClick={handleCreateCategory}>등록</DefaultButton></ColSpan1>
+              <ColSpan1><SearchButton onClick={handleCreateCategory}>등록</SearchButton></ColSpan1>
             </CategoryEnroll>
             <CategoryBody>
               {topLevelCategoryList.length !== 0 && topLevelCategoryList.map((item, key) => {
@@ -170,7 +169,8 @@ export function CategoryManage() {
                   <CategoryItem
                     key={key}
                     onClick={() => handleSelectCategory(item.code)}
-                    style={item.code === selectCategory? {color:"#ffbb00"} : null}>{item.name}</CategoryItem>
+                    active={item.code === selectCategory? true: false}
+                  >{item.name}</CategoryItem>
                 )
               })}
             </CategoryBody>
@@ -185,7 +185,7 @@ export function CategoryManage() {
                 <ColSpan3>
                   <Input placeholder={selectCategory !== '' ? '카테고리 명을 입력해주세요' : '상위 카테고리를 선택해주세요'} value={createCategory.subCategory.name || ""} onChange={handleChangeSubCategory} readOnly={selectCategory !== '' ? false : true}/>
                 </ColSpan3>
-                <ColSpan1><DefaultButton onClick={handleCreateSubCategory} disabled={selectCategory !== '' ? false : true}>등록</DefaultButton></ColSpan1>
+                <ColSpan1><SearchButton onClick={handleCreateSubCategory} disabled={selectCategory !== '' ? false : true}>등록</SearchButton></ColSpan1>
               </div>
             </CategoryEnroll>
             <SubCategoryBody>
@@ -203,12 +203,14 @@ export function CategoryManage() {
 }
 
 const MainCategory = styled.div`
+  margin-right: 15px;
   width: 400px;
-  border-right: 1px solid #ddd;
+  border: 1px solid #ddd;
 `
 
 const SubCategory = styled.div`
   width: 100%;
+  border: 1px solid #ddd;
 `
 
 const CategoryEnroll = styled.div`
@@ -218,14 +220,15 @@ const CategoryEnroll = styled.div`
   padding: 0 10px 0 0;
   height: 0;
   transition-duration: 0.5s;
+  background-color: #f3f3f3;
 `
 
 const CategoryHeader = styled.div`
   position: relative;
   width: 100%;
-  padding: 20px;
+  padding: 15px;
   text-align: center;
-  background-color: #f8f8f8;
+  background-color: #fafafa;
   border-bottom: 1px solid #ddd;
 `
 
@@ -241,10 +244,13 @@ const CategoryBody = styled.div`
 `
 
 const CategoryItem = styled.div`
-  padding: 10px 20px;
+  padding: 15px 20px;
   width: 100%;
-  border-bottom: 1px solid #ddd;
+  border-bottom: ${(props) => props.active ? "1px solid #ffe3cb" : "1px solid #ddd"};
+  border-left: ${(props) => props.active ? "2px solid #f5811f" : null};
   cursor: pointer;
+  background-color: ${(props) => props.active ? "#fffaf1" : null};
+  color: ${(props) => props.active ? "#f5811f" : null};
 `
 
 const SubCategoryBody = styled.div`
@@ -254,13 +260,14 @@ const SubCategoryBody = styled.div`
   width: 100%;
   max-height: 500px;
   overflow-y: auto;
+  
   & div:nth-child(4n) {
     border-right: 0;
   }
 `
 
 const SubCategoryItem = styled.div`
-  padding: 10px 20px;
+  padding: 15px 20px;
   width: 25%;
   border-bottom: 1px solid #ddd;
   border-right: 1px solid #ddd;
@@ -271,9 +278,24 @@ const EnrollButton = styled.button`
   top: 50%;
   right: 10px;
   padding: 0 20px;
-  height: 40px;
-  margin-top: -20px;
-  background-color: #535353;
-  color: #fff;
+  height: 30px;
+  margin-top: -15px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  color: #777777;
   font-weight: bold;
+  &:hover {
+    color: #f5811f;
+  }
+`
+
+const SearchButton = styled.button`
+  width: 140px;
+  height: 45px;
+  border: 1px solid #dddddd;
+  background-color: #fff;
+  border-radius: 5px;
+  &:hover {
+    color: #f5811f;
+  }
 `
