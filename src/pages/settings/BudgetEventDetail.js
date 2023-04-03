@@ -46,20 +46,27 @@ function BudgetEventDetail() {
               <div>{dateFormat(eventBudgetDetailDataState !==null && eventBudgetDetailDataState.lastModifiedAt, 'YYYY.MM.DD HH:mm')}</div>
             </ColSpan0>
           </RowSpan>
-          <RowSpan>
-            <ColSpan1>
-              <ColTitle>광고주명</ColTitle>
-              <div>{eventBudgetDetailDataState !==null && eventBudgetDetailDataState.adverName}</div>
-            </ColSpan1>
-            <ColSpan1>
-              <ColTitle>아이디</ColTitle>
-              <div>{eventBudgetDetailDataState !==null && eventBudgetDetailDataState.username}</div>
-            </ColSpan1>
-            <ColSpan1>
-              <ColTitle>담당자</ColTitle>
-              <div>{eventBudgetDetailDataState !==null && eventBudgetDetailDataState.managerName}</div>
-            </ColSpan1>
-          </RowSpan>
+          <BoardTableContainer>
+            <table>
+              <thead>
+              <tr>
+                <th>광고주명</th>
+                <th>아이디</th>
+                <th>담당자</th>
+              </tr>
+              </thead>
+              {
+                eventBudgetDetailDataState !==null &&
+                <tbody>
+                  <tr>
+                    <td>{eventBudgetDetailDataState.adverName}</td>
+                    <td>{eventBudgetDetailDataState.username}</td>
+                    <td>{eventBudgetDetailDataState.managerName}</td>
+                  </tr>
+                </tbody>
+              }
+            </table>
+          </BoardTableContainer>
         </BoardSearchDetail>
         <BoardTableContainer>
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
