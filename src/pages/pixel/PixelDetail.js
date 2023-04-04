@@ -288,6 +288,7 @@ function PixelDetail() {
         </form>
       </Board>
       <Board>
+          <BoardHeader>이벤트 현황</BoardHeader>
           <BoardTableContainer>
             {pixelInfoListState !== null &&
               <Table columns={pixelDetailInfoColumns}
