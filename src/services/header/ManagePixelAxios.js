@@ -2,6 +2,7 @@ import {AdminAxios} from "../../common/Axios";
 
 const ACTION_URL = '/adver/pixel'
 const ADVER_LIST ='/manage'
+const EVENT ='/event'
 
 /**
  * 광고주 리스트 픽셀 관리
@@ -27,6 +28,21 @@ export async function resistAdverPixelInfo(pixelInfo) {
     .then((response) => {
       const {responseCode} =response
       if(responseCode.statusCode ===201){
+        returnVal = true
+      }else{
+        returnVal = false
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+}
+
+export async function updateEventInterlock(eventId,interlock) {
+  let returnVal = null;
+  console.log(eventId)
+  await AdminAxios('PUT', ACTION_URL+EVENT+'/'+eventId+'/interlock',interlock)
+    .then((response) => {
+      const {responseCode} =response
+      if(responseCode.statusCode ===200){
         returnVal = true
       }else{
         returnVal = false

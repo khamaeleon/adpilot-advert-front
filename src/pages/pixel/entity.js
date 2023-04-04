@@ -3,6 +3,7 @@ import React from "react";
 import {Icon, SwitchComponent} from "../../components/table";
 import {PixelAdd, PixelModal} from "./PixelList";
 import {Link} from "react-router-dom";
+import {updateEventInterlock} from "../../services/header/ManagePixelAxios";
 import {HorizontalRule} from "../../components/common/Common";
 
 /**
@@ -146,14 +147,15 @@ export const pixelDetailInfoColumns = [
   {
     name: 'interlock',
     header: '연동 상태',
-    minWidth:200,
-    maxWidth:200,
+    minWidth:90,
+    maxWidth:90,
     showColumnMenuTool: false,
     sortable: false,
     render: ({value, cellProps}) => {
+      console.log(value)
       return (
         <div style={{display: "flex", alignItems: 'center', justifyContent: 'center'}}>
-          <SwitchComponent value={value} cellProps={cellProps} eventClick={()=> console.log('연동상태')}/>
+          <SwitchComponent value={cellProps.data.interlock} cellProps={cellProps} eventClick={()=> updateEventInterlock(cellProps.data.eventId,{interlock:!value})}/>
         </div>
       );
     }
