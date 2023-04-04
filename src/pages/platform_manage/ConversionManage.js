@@ -59,9 +59,9 @@ function ConversionManage() {
                            data={conversionListDataState}
                            detailData={handleFetchDetailData}
                            detailColumn={columnConversionDetailData}
-                           detailGroups={groups}
+                           detailGroups={false}
                            idProperty={'conversionId'}
-                           groups={groups}
+                           groups={false}
                            style={{minHeight: 500}}/>
             }
           </BoardTableContainer>

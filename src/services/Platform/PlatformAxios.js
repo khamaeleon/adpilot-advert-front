@@ -6,9 +6,9 @@ const PRODUCT = '/product'
  * 상품 관리
  * @returns {Promise<null>}
  */
-export async function retrieveProduct() {
+export async function retrieveProduct(searchCondition) {
   let returnVal = null;
-  await AdminAxios('GET', PRODUCT, null)
+  await AdminAxios('POST', PRODUCT, searchCondition)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data

@@ -31,9 +31,8 @@ import {
   retrieveSubLevelCategoryKeyValue,
   retrieveTopLevelCategoryKeyValue
 } from "../../services/Platform/CategoryAxios";
-import {atom, useAtomValue} from "jotai/index";
+import {atom} from "jotai/index";
 import {useNavigate} from "react-router-dom";
-import {selAdverPriceEventList} from "../../services/SettingsAxios";
 
 const pixelAtom = atom({
   pixelName: '',
@@ -74,6 +73,7 @@ function PixelAdd(props){
   const [topLevelCategoryList,setTopLevelCategoryList] = useState([])
   const [rowLevelCategoryList,setRowLevelCategoryList] = useState([])
   const setPixel = useSetAtom(pixelAtom)
+  const navigate =useNavigate()
   const {register, handleSubmit, reset, control,formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: pixelInfoListState
@@ -147,10 +147,7 @@ function PixelAdd(props){
           isShow: false,
           modalComponent: null
         })
-        setPixel({
-          pixelName: pixelInfoListState.pixelName,
-          userId: data.userId
-        })
+        navigate(0)
       }else{
         console.log('실패')
         toast.warning("등록이 실패 하였습니다. 관리자한테 문의하세요")
@@ -339,36 +336,18 @@ function PixelAdd(props){
 function PixelList() {
   const [searchParams, setSearchParams] = useState({ keyword:''})
   const [pixelDataState,setPixelDataState] = useState([])
-  const [pixelDataDetailState,setPixelDetailDataState] = useState([])
-  const pixel = useAtomValue(pixelAtom)
 
-  useEffect(() => {
-    handleFetchData()
-    if(pixel.pixelName !== ''){
-      window.location.href = '/board/pixel'
-    }
-  },[pixel])
-
-  const handleFetchData = useCallback(async () => {
-    const newDataSource = () => {
-      return selAdverPixelList(searchParams)
-    }
-    setPixelDataState(newDataSource)
+  useEffect(()=>{
+    selAdverPixelList(searchParams).then(response =>{
+      setPixelDataState(response)
+    })
   },[])
 
   const handleFetchDetailData = useCallback(async ({userId}) => {
     return selAdverPixelDetailList(userId)
   },[])
 
-  const groupStyle = {
-    textAlign: 'center',
-    backgroundColor: '#fafafa',
-    color: '#b2b2b2'
-  }
-  const groups = [
-    {name: 'defaultData', header: '연동 데이터', headerStyle: groupStyle},
-    {name: 'platformData', header: '플랫폼 데이터', headerStyle: groupStyle},
-  ]
+
   const handleSearch = (event) => {
     setSearchParams({
       ...searchParams,
@@ -381,11 +360,6 @@ function PixelList() {
   const onSearchAdverEventPrice = async() => {
     if(searchParams.keyword !== ''){
       await selAdverPixelList(searchParams).then(response =>{
-        setPixelDataState(response)
-      })
-    } else {
-      await selAdverPixelList(searchParams).then(response => {
-        console.log(response)
         setPixelDataState(response)
       })
     }
@@ -413,9 +387,9 @@ function PixelList() {
                        data={pixelDataState}
                        detailData={handleFetchDetailData}
                        detailColumn={pixelDetailColumns}
-                       detailGroups={groups}
+                       detailGroups={false}
                        idProperty={'userId'}
-                       groups={groups}
+                       groups={false}
                        style={{minHeight: 500}}/>
         </BoardTableContainer>
       </Board>

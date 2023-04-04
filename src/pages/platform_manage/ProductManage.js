@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from "react";
-import {productListColumn, searchConditionAtom} from "./entity";
+import {productListColumn, searchConditionAtom, searchProductType} from "./entity";
 import {
   Board,
   BoardHeader,
@@ -60,22 +60,23 @@ function ProductManage() {
   }
 
   const retrieveProductList = async () => {
-    const fetchData = await retrieveProduct().then(response => {
-      const data = response
-      setCount(data.length)
+    const fetchData = await retrieveProduct(searchCondition).then(response => {
+      console.log(response)
+      const data = response.rows
+      setCount(response.totalCount)
       return data
     })
     return fetchData
   }
 
-  const dataSource = useCallback(retrieveProductList,[],);
+  const dataSource = useCallback(retrieveProductList,[]);
 
   return (
     <>
         <Board>
           <BoardHeader>상품 수집 현황</BoardHeader>
           <BoardSearchDetail>
-            <PlatformCondition searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleTableData={retrieveProductList}/>
+            <PlatformCondition searchType={searchProductType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleTableData={retrieveProductList}/>
             <RowSpan>
               <ColSpan2>
                 <Span4>광고주 설정</Span4>

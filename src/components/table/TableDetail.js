@@ -72,6 +72,7 @@ function TableDetail (props) {
   const renderContactsGrid = useCallback(({data}) => {
     return (
       <ReactDataGrid
+        handle={setGridRef}
         dataSource={props.detailData(data)}
         columns={props.detailColumn}
         rowHeight={detailRowHeight}

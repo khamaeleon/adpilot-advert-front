@@ -19,7 +19,10 @@ export const searchConditionAtom = {
   searchStartDate: getThisMonth().startDay,
   searchEndDate: getThisMonth().endDay,
   searchType: 'DEFAULT',
-  keyword: ''
+  keyword: '',
+  pageSize: 1000,
+  currentPage:1,
+  username:''
 }
 
 export const searchConversionType = [
@@ -82,6 +85,12 @@ export const columnConversionData = [
 
 export const columnConversionDetailData = [
   {
+    name: 'conversionId',
+    header:'',
+    defaultVisible: false
+
+  },
+  {
     name: 'conversionDateTime',
     header: '액션 일시',
     render: ({value}) => {
@@ -103,6 +112,7 @@ export const columnConversionDetailData = [
     name: 'campaignId',
     header: '캠페인 코드',
     render: ({value, cellProps}) => {
+      console.log(cellProps)
       return <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>
     }
   },
@@ -134,7 +144,7 @@ export const columnConversionDetailData = [
   {
     name: 'productName',
     header: '상품 명',
-  },
+  }
 ]
 
 /**
@@ -253,6 +263,12 @@ export const searchAdminParams = {
  */
 //export const productListDataAtom = atom(null)
 export const productListDataAtom = atom([])
+
+export const searchProductType = [
+  {id: "1", value: "DEFAULT", label: "기본"},
+  {id: "2", value: "PRODUCT_CODE", label: "상품코드"},
+  {id: "3", value: "PRODUCT_NAME", label: "상품명"}
+]
 
 /**
  * 상품 수집 관리 리스트 컬럼 설정
