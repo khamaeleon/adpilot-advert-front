@@ -28,7 +28,7 @@ export function SwitchComponent(props){
   const position = select ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null
 
   const handleClick = (confirm) => {
-    if(!eventClick) {
+    if(eventClick !== false) {
       if(confirm){
         cellProps.data.publish = !cellProps.data.publish;
         eventClick();

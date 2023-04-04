@@ -37,10 +37,8 @@ function PixelDetail() {
   const [topLevelCategoryList,setTopLevelCategoryList] = useState([])
   const [rowLevelCategoryList,setRowLevelCategoryList] = useState([])
   const navigate = useNavigate()
-  const [, setModal] = useAtom(modalController)
-  const [saveType, setSaveType] = useState('create')
   const {state} = useLocation()
-  const {register, handleSubmit, reset, control, watch, formState: {errors}} = useForm({
+  const {register, handleSubmit, reset, control, formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: pixelInfoListState
   })
@@ -84,6 +82,18 @@ function PixelDetail() {
       subCategoryCode: selectRowCategory
     })
   }
+  const handlePixelName = (e) => {
+    setPixelInfoListState({
+      ...pixelInfoListState,
+      pixelName: e.target.value
+    })
+  }
+  const handleLinkUrl = (e) => {
+    setPixelInfoListState({
+      ...pixelInfoListState,
+      linkUrl: e.target.value
+    })
+  }
 
   const onSubmit = (data) => {
     console.log(data)
@@ -101,170 +111,76 @@ function PixelDetail() {
             </ColSpan0>
           </RowSpan>
           <PixelDetailInfoBox>
-            <div>
-              <div className={'col'}>
-                <div className={'row'}>
+            <div className={'col'}>
+              <div className={'row'}>
+                <div className={'w-50'}>
                   <p className={'tit'}>광고주명</p>
                   <div className={'txt'}>{pixelInfoListState !== null && pixelInfoListState.adverName}</div>
                 </div>
-                <div className={'row'}>
-                  <p className={'tit'}>픽셀 정보</p>
-                  <div className={'txt'}>
-                    <RelativeDiv>
-                      {pixelInfoListState !== null &&
-                        <Input
-                          type={'text'}
-                          placeholder={'픽셀명을 입력해주세요'}
-                          {...register("pixelName", {
-                            required: "픽셀명을 입력해주세요",
-                            //onChange:(e) => handlePixelName(e)
-                          })}
-                          value={pixelInfoListState?.pixelName}
-                        />}
-                      {errors.pixelName && <ValidationScript>{errors.pixelName?.message}</ValidationScript>}
-                    </RelativeDiv>
-                  </div>
-                </div>
-              </div>
-              <div className={'col'}>
-                <div className={'row'}>
+                <div className={'w-50'}>
                   <p className={'tit'}>아이디</p>
                   <div className={'txt'}>{pixelInfoListState !== null && pixelInfoListState.username}</div>
                 </div>
-                <div className={'row'}>
-                  <p className={'tit'}>연동 상태</p>
-                  <div className={'txt'}>
-                    <SwitchComponent background={pixelInfoListState?.interlock} styles={{cursor: 'default'}} eventClick={()=> console.log('연동상태')}/>
-                  </div>
+              </div>
+              <div className={'row'}>
+                <p className={'tit'}>픽셀 정보</p>
+                <div className={'txt'}>
+                  <RelativeDiv>
+                    {pixelInfoListState !== null &&
+                      <Input
+                        style={{height:38}}
+                        type={'text'}
+                        placeholder={'픽셀명을 입력해주세요'}
+                        {...register("pixelName", {
+                          required: "픽셀명을 입력해주세요",
+                          onChange:(e) => handlePixelName(e)
+                        })}
+                        value={pixelInfoListState?.pixelName}
+                      />}
+                    {errors.pixelName && <ValidationScript>{errors.pixelName?.message}</ValidationScript>}
+                  </RelativeDiv>
                 </div>
               </div>
-              <div className={'col'}>
-                <div className={'row'}>
-                  <p className={'tit'}>담당자</p>
-                  <div className={'txt'}>{pixelInfoListState !== null && pixelInfoListState.managerName}</div>
-                </div>
-                <div className={'row'}>
-                  <p className={'tit'}>데이터 수집 상태</p>
-                  <div className={'txt'}>
-                    <p style={textColor}>
-                      {pixelInfoListState !== null && statusTypeAll.find(type => type.value === pixelInfoListState.status).label}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div className={'col2'}>
-                <div className={'row'}>
-                  <p className={'tit'}>연동 URL</p>
-                  <div className={'txt'}>
-                    <RelativeDiv>
-                      {pixelInfoListState !== null &&
-                        <Input
-                          type={'text'}
-                          placeholder={'그룹명을 입력해주세요'}
-                          {...register("linkUrl", {
-                            required: "그룹명을 입력해주세요",
-                            //onChange:(e) => handleLinkUrl(e)
-                          })}
-                          value={pixelInfoListState.linkUrl}
-                        />}
-                      {errors.linkUrl && <ValidationScript>{errors.linkUrl?.message}</ValidationScript>}
-                    </RelativeDiv>
-                  </div>
+              <div className={'row'}>
+                <p className={'tit'}>연동 URL</p>
+                <div className={'txt'}>
+                  <RelativeDiv>
+                    {pixelInfoListState !== null &&
+                      <Input
+                        style={{height:38}}
+                        type={'text'}
+                        placeholder={'연동URL을 입력해주세요'}
+                        {...register("linkUrl", {
+                          required: "연동URL을 입력해주세요",
+                          onChange:(e) => handleLinkUrl(e)
+                        })}
+                        value={pixelInfoListState.linkUrl}
+                      />}
+                    {errors.linkUrl && <ValidationScript>{errors.linkUrl?.message}</ValidationScript>}
+                  </RelativeDiv>
                 </div>
               </div>
-            </div>
-            <div>
-              <div className={'col2'}>
-                <div className={'row'}>
-                  <p className={'tit'}>카테고리 설정</p>
-                  <div className={'txt'} style={{display: 'flex', justifyContent: 'space-between'}}>
-                    <div style={{width: '48%'}}>
-                      {pixelInfoListState !== null &&
-                        <Controller
-                          style={{width: '50%'}}
-                          name="mainCategoryCode"
-                          control={control}
-                          rules={{
-                            required: {
-                              value: pixelInfoListState.mainCategoryCode === "",
-                              message: "카테고리를 선택해주세요"
-                            }
-                          }}
-                          render={({field}) => (
-                            <Select options={topLevelCategoryList}
-                                    placeholder={'카테고리선택 선택'}
-                                    {...field}
-                                    value={pixelInfoListState.mainCategoryCode !== '' ? topLevelCategoryList.find(value => value.value === pixelInfoListState.mainCategoryCode) : ''}
-                                    onChange={handleSelectTopCategory}
-                                    styles={{
-                                      input: (baseStyles, state) => (
-                                        {
-                                          ...baseStyles,
-                                          minWidth: "300px",
-                                        })
-                                    }}
-                            />
-                          )}
-                        />
-                      }
-                      {errors.mainCategoryCode &&
-                        <ValidationScript>{errors.mainCategoryCode?.message}</ValidationScript>}
-                    </div>
-                    <div style={{width: '50%'}}>
-                      {pixelInfoListState !== null &&
-                        <Controller
-                          name="subCategoryCode"
-                          control={control}
-                          rules={{
-                            required: {
-                              value: pixelInfoListState.subCategoryCode === "",
-                              message: "카테고리를 선택해주세요"
-                            }
-                          }}
-                          render={({field}) => (
-                            <Select options={rowLevelCategoryList}
-                                    placeholder={'서브 카테고리 선택'}
-                                    {...field}
-                                    value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
-                                    onChange={handleSelectRowCategory}
-                                    styles={{
-                                      input: (baseStyles, state) => (
-                                        {
-                                          ...baseStyles,
-                                          minWidth: "300px",
-                                        })
-                                    }}
-                            />
-                          )}
-                        />
-                      }
-                      {errors.subCategoryCode && <ValidationScript>{errors.subCategoryCode?.message}</ValidationScript>}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className={'col'}>
-                <div className={'row'} style={{marginTop: 15}}>
-                  <p className={'tit'}>호스팅 설정</p>
-                  <div className={'txt'}>
+              <div className={'row'}>
+                <p className={'tit'}>카테고리 설정</p>
+                <div className={'txt'} style={{display: 'flex', justifyContent: 'space-between'}}>
+                  <div style={{width: '48%'}}>
                     {pixelInfoListState !== null &&
                       <Controller
-                        name="hostType"
+                        style={{width: '50%'}}
+                        name="mainCategoryCode"
                         control={control}
                         rules={{
                           required: {
-                            value: pixelInfoListState.hostType === "",
-                            message: "호스팅을 선택해주세요"
+                            value: pixelInfoListState.mainCategoryCode === "",
+                            message: "카테고리를 선택해주세요"
                           }
                         }}
                         render={({field}) => (
-                          <Select options={hostList}
-                                  placeholder={'호스팅 선택'}
+                          <Select options={topLevelCategoryList}
+                                  placeholder={'카테고리선택 선택'}
                                   {...field}
-                                  value={pixelInfoListState.hostType !== '' ? hostList.find(value => value.value === pixelInfoListState.hostType) : ''}
-                                  onChange={handleSelectHosting}
+                                  value={pixelInfoListState.mainCategoryCode !== '' ? topLevelCategoryList.find(value => value.value === pixelInfoListState.mainCategoryCode) : ''}
+                                  onChange={handleSelectTopCategory}
                                   styles={{
                                     input: (baseStyles, state) => (
                                       {
@@ -276,8 +192,92 @@ function PixelDetail() {
                         )}
                       />
                     }
-                    {errors.hostType && <ValidationScript>{errors.hostType?.message}</ValidationScript>}</div>
+                    {errors.mainCategoryCode &&
+                      <ValidationScript>{errors.mainCategoryCode?.message}</ValidationScript>}
+                  </div>
+                  <div style={{width: '50%'}}>
+                    {pixelInfoListState !== null &&
+                      <Controller
+                        name="subCategoryCode"
+                        control={control}
+                        rules={{
+                          required: {
+                            value: pixelInfoListState.subCategoryCode === "",
+                            message: "카테고리를 선택해주세요"
+                          }
+                        }}
+                        render={({field}) => (
+                          <Select options={rowLevelCategoryList}
+                                  placeholder={'서브 카테고리 선택'}
+                                  {...field}
+                                  value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
+                                  onChange={handleSelectRowCategory}
+                                  styles={{
+                                    input: (baseStyles, state) => (
+                                      {
+                                        ...baseStyles,
+                                        minWidth: "300px",
+                                      })
+                                  }}
+                          />
+                        )}
+                      />
+                    }
+                    {errors.subCategoryCode && <ValidationScript>{errors.subCategoryCode?.message}</ValidationScript>}
+                  </div>
                 </div>
+              </div>
+            </div>
+            <div className={'col2'}>
+              <div className={'row'}>
+                <p className={'tit'}>담당자</p>
+                <div className={'txt'}>{pixelInfoListState !== null && pixelInfoListState.managerName}</div>
+              </div>
+              <div className={'row'}>
+                <p className={'tit'}>연동 상태</p>
+                <div className={'txt'}>
+                  <SwitchComponent background={pixelInfoListState?.interlock} styles={{cursor: 'default'}} eventClick={false}/>
+                </div>
+              </div>
+              <div className={'row'}>
+                <p className={'tit'}>데이터 수집 상태</p>
+                <div className={'txt'}>
+                  <p style={textColor}>
+                    {pixelInfoListState !== null && statusTypeAll.find(type => type.value === pixelInfoListState.status).label}
+                  </p>
+                </div>
+              </div>
+              <div className={'row'}>
+                <p className={'tit'}>호스팅 설정</p>
+                <div className={'txt'}>
+                  {pixelInfoListState !== null &&
+                    <Controller
+                      name="hostType"
+                      control={control}
+                      rules={{
+                        required: {
+                          value: pixelInfoListState.hostType === "",
+                          message: "호스팅을 선택해주세요"
+                        }
+                      }}
+                      render={({field}) => (
+                        <Select options={hostList}
+                                placeholder={'호스팅 선택'}
+                                {...field}
+                                value={pixelInfoListState.hostType !== '' ? hostList.find(value => value.value === pixelInfoListState.hostType) : ''}
+                                onChange={handleSelectHosting}
+                                styles={{
+                                  input: (baseStyles, state) => (
+                                    {
+                                      ...baseStyles,
+                                      minWidth: "300px",
+                                    })
+                                }}
+                        />
+                      )}
+                    />
+                  }
+                  {errors.hostType && <ValidationScript>{errors.hostType?.message}</ValidationScript>}</div>
               </div>
             </div>
           </PixelDetailInfoBox>
@@ -289,9 +289,6 @@ function PixelDetail() {
       </Board>
       <Board>
           <BoardTableContainer>
-            <div>
-              총 <span>{pixelInfoListState !== null && pixelInfoListState.totalCount}</span>건
-            </div>
             {pixelInfoListState !== null &&
               <Table columns={pixelDetailInfoColumns}
                      data={pixelInfoListState.events}
@@ -328,39 +325,43 @@ const PixelDetailInfoBox = styled.div`
   border: solid 1px #e5e5e5;
   background-color: #f9fafb;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   > div {
     display: flex;
-  }
-  .col {
-    width: calc(100% / 3);
-    border-right: solid 1px #ddd;
-    &:last-child {border-right:0}
-    &:first-child .row {justify-content:normal}
+    flex-direction: column;
+    &.col {
+      width: calc((100% / 3) * 2 - 30px);
+      border-right: solid 1px #ddd;
+      padding-right: 30px;
+    }
+    &.col2 {
+      width: calc(100% / 3);
+    }
     .row {
-      margin-top: 18px;
-      justify-content: center;
-      &:first-child {margin-top: 0;}
+      width: 100%;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      margin-top: 15px;
+      &:first-child {margin-top:0}
+      .w-50 {
+        width: 50%;
+        display: flex;
+        &:last-child {
+          width: calc(50% + 30px);
+          border-left: solid 1px #ddd;
+          padding-left: 30px;
+        }
+      }
+      .tit {
+        width: 140px;
+      }
+      .txt {
+        width: calc(100% - 140px);
+        input[type='text'] { margin-right: 0}
+      }
     }
   }
-  .col2 {
-    width: calc((100% / 3) * 2);
-    border-right: solid 1px #ddd;
-    padding-top: 18px;
-    .row {
-      margin-top: 0;
-    }
-  }
-  .row {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    .tit {
-      width: 140px;
-    }
-    .txt {
-      width: calc(100% - 190px);
-      input { height: 38px; }
-    }
-  }
+  
+  
 `

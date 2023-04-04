@@ -21,7 +21,7 @@ export const pixelDetailDataAtom = atom([
 ])
 
 export const statusTypeAll = [
-  {key:0, value:'NORMAL', label:'수집중', color: '#6fa1db'},
+  {key:0, value:'NORMAL', label:'정상 수집', color: '#6fa1db'},
   {key:1, value:'STOPPED', label:'수집 중지', color: '#777'},
   {key:2, value:'WAITING', label:'수집 전', color: '#db6f6f'},
   {key:3, value:'PENDING', label:'확인 필요', color: '#db6f6f'}
@@ -88,13 +88,16 @@ export const pixelDetailColumns = [
   {
     name: 'interlock',
     header: '연동 상태',
-    minWidth:90,
-    maxWidth:90,
+    minWidth:200,
+    maxWidth:200,
+    textAlign: 'center',
     showColumnMenuTool: false,
     sortable: false,
     render: ({value, cellProps}) => {
       return (
-        <SwitchComponent value={value} cellProps={cellProps} eventClick={false}/>
+        <div style={{display: "flex", alignItems: 'center', justifyContent: 'center'}}>
+          <SwitchComponent value={value} cellProps={cellProps} eventClick={()=> console.log('연동상태')}/>
+        </div>
       );
     }
   },
@@ -102,6 +105,8 @@ export const pixelDetailColumns = [
     name: 'pixelName',
     header: '이벤트명',
     defaultFlex: 1,
+    textAlign: 'center',
+    showColumnMenuTool: false,
     cellProps: {
       style: {
         textDecoration: 'underline'
@@ -117,6 +122,7 @@ export const pixelDetailColumns = [
     name: 'linkUrl',
     header: '연동 URL',
     defaultFlex: 2,
+    textAlign: 'center',
     showColumnMenuTool: false,
     resizable: false,
   },
@@ -124,11 +130,13 @@ export const pixelDetailColumns = [
     name: 'status',
     header: '이벤트 수집 상태',
     defaultFlex: 1,
+    textAlign: 'center',
     resizable: false,
     showColumnMenuTool: false,
     render: ({value}) => {
+      let textColor = {color: statusTypeAll.find(type => type.value === value).color};
       return (
-        <span>{statusTypeAll.find(type => type.value === value).label}</span>
+        <span style={textColor}>{statusTypeAll.find(type => type.value === value).label}</span>
       )
     }
   }
@@ -138,8 +146,8 @@ export const pixelDetailInfoColumns = [
   {
     name: 'interlock',
     header: '연동 상태',
-    minWidth:120,
-    maxWidth:120,
+    minWidth:200,
+    maxWidth:200,
     showColumnMenuTool: false,
     sortable: false,
     render: ({value, cellProps}) => {
@@ -154,16 +162,7 @@ export const pixelDetailInfoColumns = [
     name: 'eventName',
     header: '이벤트명',
     defaultFlex: 1,
-    cellProps: {
-      style: {
-        textDecoration: 'underline'
-      }
-    },
-    render: (props) => {
-      return (
-        <Link to={'/board/pixelDetail'} state={{id: props.data.pixelId}}>{props.value}</Link>
-      )
-    }
+    showColumnMenuTool: false,
   },
   // {
   //   name: 'status',
@@ -180,7 +179,8 @@ export const pixelDetailInfoColumns = [
   {
     name: 'script',
     header: '이벤트 수집 상태',
-    defaultWidth: 300,
+    minWidth:300,
+    maxWidth:300,
     showColumnMenuTool: false,
     render: ({data, cellProps}) => {
       let textColor = {color: statusTypeAll.find(type => type.value === data.status).color};
