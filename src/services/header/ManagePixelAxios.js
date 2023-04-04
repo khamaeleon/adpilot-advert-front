@@ -51,6 +51,20 @@ export async function updateEventInterlock(eventId,interlock) {
   return returnVal;
 }
 
+export async function updatePixelInfo(pixelId,pixelInfo) {
+  let returnVal = null;
+  await AdminAxios('PUT', ACTION_URL+'/'+pixelId,pixelInfo)
+    .then((response) => {
+      const {responseCode} =response
+      if(responseCode.statusCode ===200){
+        returnVal = true
+      }else{
+        returnVal = false
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+}
+
 export async function selAdverPixelDetailList(userId) {
   let returnVal = null;
   await AdminAxios('GET', ACTION_URL + ADVER_LIST +'/'+userId ,null)

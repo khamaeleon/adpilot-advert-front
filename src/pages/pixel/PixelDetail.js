@@ -15,10 +15,10 @@ import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table, {Off, On, SwitchBox} from "../../components/table";
 import {pixelDetailInfoColumns, pixelInfoListAtom, statusTypeAll} from "./entity";
-import {ToastContainer} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
-import {selPixelInfoList} from "../../services/header/ManagePixelAxios";
+import {selPixelInfoList, updatePixelInfo} from "../../services/header/ManagePixelAxios";
 import {Controller, useForm} from "react-hook-form";
 import Select from "react-select";
 import {hostList} from "../signup/entity";
@@ -76,7 +76,7 @@ function PixelDetail() {
   const handleSelectRowCategory = (selectRowCategory) => {
     setPixelInfoListState({
       ...pixelInfoListState,
-      subCategoryCode: selectRowCategory
+      subCategoryCode: selectRowCategory.value
     })
   }
   const handlePixelName = (e) => {
@@ -93,7 +93,14 @@ function PixelDetail() {
   }
 
   const onSubmit = (data) => {
-    console.log(data)
+    console.log(pixelInfoListState)
+    updatePixelInfo(state.id,pixelInfoListState).then(response =>{
+      if(response){
+        navigate('/board/pixel')
+      }else{
+        toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
+      }
+    })
   }
   let textColor = {color: pixelInfoListState !== null ? statusTypeAll.find(type => type.value === pixelInfoListState.status).color : ''};
   const background = !pixelInfoListState?.interlock ? {background: '#ddd', cursor: 'default'} : {background: '#f5811f', cursor: 'default'};
@@ -293,7 +300,7 @@ function PixelDetail() {
           </PixelDetailInfoBox>
           <SubmitContainer>
             <CancelButton onClick={() => navigate('/board/pixel')}>목록</CancelButton>
-            <DefaultButton>저장</DefaultButton>
+            <DefaultButton type={'submit'}>저장</DefaultButton>
           </SubmitContainer>
         </form>
       </Board>

@@ -336,9 +336,9 @@ function PixelList() {
   const [dataLength, setDataLength] = useState(0)
 
   const dataSource = useCallback(async () => {
-    const fetData = selAdverPixelList(searchParams)
-    setDataLength(fetData?.length)
-    return fetData
+    const fetchData = selAdverPixelList(searchParams)
+    setDataLength(fetchData?.length)
+    return fetchData
 
   },[searchParams])
 
