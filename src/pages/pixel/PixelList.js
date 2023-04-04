@@ -17,7 +17,7 @@ import {
   ValidationScript,
 } from "../../assets/GlobalStyles";
 import React, {useCallback, useEffect, useState} from "react";
-import {useAtom} from "jotai";
+import {useAtom, useSetAtom} from "jotai";
 import {pixelColumns, pixelDetailColumns} from "./entity";
 import {toast, ToastContainer} from "react-toastify";
 import {modalController} from "../../store";
@@ -31,7 +31,14 @@ import {
   retrieveSubLevelCategoryKeyValue,
   retrieveTopLevelCategoryKeyValue
 } from "../../services/Platform/CategoryAxios";
+import {atom, useAtomValue} from "jotai/index";
+import {useNavigate} from "react-router-dom";
+import {selAdverPriceEventList} from "../../services/SettingsAxios";
 
+const pixelAtom = atom({
+  pixelName: '',
+  userId: ''
+})
 export function PixelModal(props) {
   const {data, title} = props
   const [, setModal] = useAtom(modalController)
@@ -52,11 +59,12 @@ export function PixelModal(props) {
   )
 }
 
+
 function PixelAdd(props){
   const {data, title} = props
   const [, setModal] = useAtom(modalController)
   const [pixelInfoListState, setPixelInfoListState] = useState({
-    userId:data.userId,
+    userId: data.userId,
     pixelName:'',
     linkUrl:'',
     mainCategoryCode:'',
@@ -65,6 +73,7 @@ function PixelAdd(props){
   })
   const [topLevelCategoryList,setTopLevelCategoryList] = useState([])
   const [rowLevelCategoryList,setRowLevelCategoryList] = useState([])
+  const setPixel = useSetAtom(pixelAtom)
   const {register, handleSubmit, reset, control,formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: pixelInfoListState
@@ -96,7 +105,7 @@ function PixelAdd(props){
   }
   /**
    * 상위 카테고리
-   * @param event
+   * @param selectTopCategory
    */
   const handleSelectTopCategory = (selectTopCategory) => {
     setPixelInfoListState({
@@ -110,7 +119,7 @@ function PixelAdd(props){
   }
   /**
    * 하위 카테고리
-   * @param event
+   * @param selectRowCategory
    */
   const handleSelectRowCategory = (selectRowCategory) => {
     setPixelInfoListState({
@@ -120,7 +129,7 @@ function PixelAdd(props){
   }
   /**
    * 호스팅 설정
-   * @param event
+   * @param selectHostType
    */
   const handleSelectHosting = (selectHostType) => {
     setPixelInfoListState({
@@ -137,6 +146,10 @@ function PixelAdd(props){
         setModal({
           isShow: false,
           modalComponent: null
+        })
+        setPixel({
+          pixelName: pixelInfoListState.pixelName,
+          userId: data.userId
         })
       }else{
         console.log('실패')
@@ -227,87 +240,48 @@ function PixelAdd(props){
           <ColSpan4>
             <Span3>카테고리설정</Span3>
             <div>
-                {pixelInfoListState !== null &&
-                  <Controller
-                    name="mainCategoryCode"
-                    control={control}
-                    rules={{
-                      required: {
-                        value: pixelInfoListState.mainCategoryCode === "",
-                        message: "카테고리를 선택해주세요"
-                      }
-                    }}
-                    render={({field}) => (
-                      <Select options={topLevelCategoryList}
-                              placeholder={'카테고리선택 선택'}
-                              {...field}
-                              value={pixelInfoListState.mainCategoryCode !== '' ? topLevelCategoryList.find(value => value.value === pixelInfoListState.mainCategoryCode) : ''}
-                              onChange={handleSelectTopCategory}
-                              styles={{
-                                input: (baseStyles, state) => (
-                                  {
-                                    ...baseStyles,
-                                    minWidth: "250px",
-                                  })
-                              }}
-                      />
-                    )}
+              <Controller
+                name="mainCategoryCode"
+                control={control}
+                rules={{
+                  required: {
+                    value: pixelInfoListState.mainCategoryCode === "",
+                    message: "카테고리를 선택해주세요"
+                  }
+                }}
+                render={({field}) => (
+                  <Select options={topLevelCategoryList}
+                          placeholder={'카테고리선택 선택'}
+                          {...field}
+                          value={pixelInfoListState.mainCategoryCode !== '' ? topLevelCategoryList.find(value => value.value === pixelInfoListState.mainCategoryCode) : ''}
+                          onChange={handleSelectTopCategory}
+                          styles={{
+                            input: (baseStyles, state) => (
+                              {
+                                ...baseStyles,
+                                minWidth: "250px",
+                              })
+                          }}
                   />
-                }
+                )}
+              />
                 {errors.mainCategoryCode && <ValidationScript>{errors.mainCategoryCode?.message}</ValidationScript>}
-                {pixelInfoListState !== null &&
-                  <div style={{marginRight: 0}}>
-                    <Controller
-                      name="subCategoryCode"
-                      control={control}
-                      rules={{
-                        required: {
-                          value: pixelInfoListState.subCategoryCode === "",
-                          message: "카테고리를 선택해주세요"
-                        }
-                      }}
-                      render={({field}) => (
-                        <Select options={rowLevelCategoryList}
-                                placeholder={'서브 카테고리 선택'}
-                                {...field}
-                                value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
-                                onChange={handleSelectRowCategory}
-                                styles={{
-                                  input: (baseStyles, state) => (
-                                    {
-                                      ...baseStyles,
-                                      minWidth: "250px",
-                                    })
-                                }}
-                        />
-                      )}
-                    />
-                  </div>
-                }
-                {errors.subCategoryCode && <ValidationScript>{errors.subCategoryCode?.message}</ValidationScript>}
-              </div>
-          </ColSpan4>
-        </RowSpan>
-        <RowSpan>
-          <ColSpan4>
-            <Span3>호스팅 설정</Span3>
-            <div>
-              {pixelInfoListState !== null &&
+              <div style={{marginRight: 0}}>
                 <Controller
-                  name="hostType"
+                  name="subCategoryCode"
                   control={control}
                   rules={{
                     required: {
-                      value: pixelInfoListState.hostType === "",
-                      message: "호스팅을 선택해주세요"
+                      value: pixelInfoListState.subCategoryCode === "",
+                      message: "카테고리를 선택해주세요"
                     }
                   }}
                   render={({field}) => (
-                    <Select options={hostList}
-                            placeholder={'호스팅 선택'}
+                    <Select options={rowLevelCategoryList}
+                            placeholder={'서브 카테고리 선택'}
                             {...field}
-                            value={pixelInfoListState.hostType !== '' ? hostList.find(value => value.value === pixelInfoListState.hostType) : ''}
-                            onChange={handleSelectHosting}
+                            value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
+                            onChange={handleSelectRowCategory}
                             styles={{
                               input: (baseStyles, state) => (
                                 {
@@ -318,7 +292,40 @@ function PixelAdd(props){
                     />
                   )}
                 />
-              }
+              </div>
+                {errors.subCategoryCode && <ValidationScript>{errors.subCategoryCode?.message}</ValidationScript>}
+              </div>
+          </ColSpan4>
+        </RowSpan>
+        <RowSpan>
+          <ColSpan4>
+            <Span3>호스팅 설정</Span3>
+            <div>
+              <Controller
+                name="hostType"
+                control={control}
+                rules={{
+                  required: {
+                    value: pixelInfoListState.hostType === "",
+                    message: "호스팅을 선택해주세요"
+                  }
+                }}
+                render={({field}) => (
+                  <Select options={hostList}
+                          placeholder={'호스팅 선택'}
+                          {...field}
+                          value={pixelInfoListState.hostType !== '' ? hostList.find(value => value.value === pixelInfoListState.hostType) : ''}
+                          onChange={handleSelectHosting}
+                          styles={{
+                            input: (baseStyles, state) => (
+                              {
+                                ...baseStyles,
+                                minWidth: "250px",
+                              })
+                          }}
+                  />
+                )}
+              />
               {errors.hostType && <ValidationScript>{errors.hostType?.message}</ValidationScript>}</div>
           </ColSpan4>
         </RowSpan>
@@ -331,18 +338,27 @@ function PixelAdd(props){
 }
 function PixelList() {
   const [searchParams, setSearchParams] = useState({ keyword:''})
-  const [dataLength, setDataLength] = useState(0)
+  const [pixelDataState,setPixelDataState] = useState([])
+  const [pixelDataDetailState,setPixelDetailDataState] = useState([])
+  const pixel = useAtomValue(pixelAtom)
 
-  const dataSource = useCallback(async () => {
-    const fetchData = selAdverPixelList(searchParams)
-    setDataLength(fetchData?.length)
-    return fetchData
+  useEffect(() => {
+    handleFetchData()
+    if(pixel.pixelName !== ''){
+      window.location.href = '/board/pixel'
+    }
+  },[pixel])
 
-  },[searchParams])
+  const handleFetchData = useCallback(async () => {
+    const newDataSource = () => {
+      return selAdverPixelList(searchParams)
+    }
+    setPixelDataState(newDataSource)
+  },[])
 
   const handleFetchDetailData = useCallback(async ({userId}) => {
-    return await selAdverPixelDetailList(userId)
-  },[dataLength])
+    return selAdverPixelDetailList(userId)
+  },[])
 
   const groupStyle = {
     textAlign: 'center',
@@ -362,10 +378,17 @@ function PixelList() {
   /**
    * 광고주 명 및 아이디 검색
    */
-  const onSearchAdverEventPrice =() =>{
-    // selAdverPriceEventList(searchParams).then(response =>{
-    //   setPixelDataState(response)
-    // })
+  const onSearchAdverEventPrice = async() => {
+    if(searchParams.keyword !== ''){
+      await selAdverPixelList(searchParams).then(response =>{
+        setPixelDataState(response)
+      })
+    } else {
+      await selAdverPixelList(searchParams).then(response => {
+        console.log(response)
+        setPixelDataState(response)
+      })
+    }
   }
 
   return (
@@ -387,7 +410,7 @@ function PixelList() {
         </BoardSearchDetail>
         <BoardTableContainer>
           <TableDetail columns={pixelColumns}
-                       data={dataSource}
+                       data={pixelDataState}
                        detailData={handleFetchDetailData}
                        detailColumn={pixelDetailColumns}
                        detailGroups={groups}

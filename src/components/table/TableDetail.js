@@ -7,14 +7,14 @@ import {ColSpan2, RowSpan} from "../../assets/GlobalStyles";
 
 const rowHeight = 60
 const detailRowHeight = rowHeight
-const accountExpandHeight = 300
+const accountExpandHeight = 400
 
 
 function TableDetail (props) {
   const {columns, data, settings, groups } = props
   const [activeCell, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
-  const gridStyle = { minHeight: 350 }
+  const gridStyle = { minHeight: 550 }
   const [accountRowHeights, setAccountRowHeights] = useState({})
 
   /**
@@ -69,10 +69,9 @@ function TableDetail (props) {
    * @param data
    * @returns {JSX.Element}
    */
-  const renderContactsGrid = ({data}) => {
+  const renderContactsGrid = useCallback(({data}) => {
     return (
       <ReactDataGrid
-        handle={setGridRef}
         dataSource={props.detailData(data)}
         columns={props.detailColumn}
         rowHeight={detailRowHeight}
@@ -81,7 +80,7 @@ function TableDetail (props) {
         emptyText={emptyText}
       />
     );
-  }
+  },[])
 
   return(
     <>

@@ -1,21 +1,22 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchResult, CampaignType, ColSpan0, ColSpan1,
+  BoardSearchResult, CampaignType, CancelButton, ColSpan0, ColSpan1, ColSpan2, ColSpan3,
   ColSpan4,
   DefaultButton, defaultStyle,
   Input, inputStyle,
   RowSpan, selectStyle, Span1, Span2,
-  Span4
+  Span4, SubmitButton, SubmitContainer, ValidationScript
 } from "../../../assets/GlobalStyles";
 import {BorderSpan, CampaignTypeItem, CampaignTypeItem2} from "../styles";
 import Select from "react-select";
-import React from "react";
+import React, {useState} from "react";
 import {SearchAdvertiser} from "../../../components/common/SearchAdvertiser";
-import {useSetAtom} from "jotai";
+import {useAtom, useSetAtom} from "jotai";
 import {modalController} from "../../../store";
 import {ModalBody, ModalContainer, ModalFooter, ModalHeader} from "../../../components/modal/Modal";
-import {ButtonGroup} from "../../signup/styles";
+import {stepCampaignAtom} from "../entity";
+import {Controller, useFormContext} from "react-hook-form";
 function PixelComponent (props) {
   return(
     <ModalContainer>
@@ -55,7 +56,16 @@ function PixelComponent (props) {
   )
 }
 export function CampaignOne () {
+  const [stepCampaign, setStepCampaign] = useAtom(stepCampaignAtom)
   const setModal = useSetAtom(modalController)
+  const {register,handleSubmit ,control, formState:{errors}} = useFormContext()
+  const [stepOne, setStepOne] = useState({
+    advertiser: '',
+    pixel:'',
+    productType: 'banner',
+    productTarget: 'transform',
+    targetDetail:''
+  })
   const handleSearchAdvertiser = () => {
 
   }
@@ -66,16 +76,60 @@ export function CampaignOne () {
       modalComponent: () => <PixelComponent/>
     })
   }
+
+  const handleChangePixel = (pixelValue) => {
+    setStepOne({
+      ...stepOne,
+      pixel: pixelValue.value
+    })
+  }
+
+  const handleChangeTargetDetail = (target) => {
+    setStepOne({
+      ...stepOne,
+      targetDetail: target.value
+    })
+  }
+
+  const handleChangeProductType = (type) => {
+    setStepOne({
+      ...stepOne,
+      productType: type
+    })
+  }
+
+  const handleChangeProductTarget = (type) => {
+    setStepOne({
+      ...stepOne,
+      productTarget: type
+    })
+  }
+  const onSubmit = (data) => {
+    console.log(data)
+  }
+
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Board>
         <BoardHeader>캠페인 생성</BoardHeader>
         <BoardSearchResult>
           <RowSpan>
             <ColSpan4>
               <Span4>광고주 설정</Span4>
-              <Input style={{width: 300}} readOnly/>
-              <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
+              <ColSpan2>
+                <Input
+                  style={{width: 300}}
+                  readOnly
+                  {...register("advertiser",{
+                    required: {
+                      value: stepOne.advertiser === "",
+                      message: "광고주를 검색해주세요"
+                    },
+                  })}
+                />
+                <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
+              </ColSpan2>
+              {errors.advertiser && <ColSpan1><ValidationScript>{errors.advertiser.message}</ValidationScript></ColSpan1>}
             </ColSpan4>
           </RowSpan>
         </BoardSearchResult>
@@ -88,29 +142,50 @@ export function CampaignOne () {
               <Span4>픽셀 설정</Span4>
               <BorderSpan>
                 <Span4>최적화 픽셀 선택</Span4>
-                <Select
-                  styles={selectStyle}
-                  components={{IndicatorSeparator: () => null}}
-                  options={[{key:1,value:'',label:'픽셀 선택'}]}
+                <Controller
+                  name="pixel"
+                  control={control}
+                  rules={{
+                    required: {
+                      value: stepOne.pixel === "",
+                      message: "최적화 픽셀을 선택해주세요"
+                    }
+                  }}
+                  render={({field}) => (
+                    <Select options={[{key:1,value:'pixel1',label:'픽셀'}]}
+                            placeholder={'최적화 픽셀 선택'}
+                            {...field}
+                            value={stepOne.pixel !== '' ? stepOne.pixel : ''}
+                            onChange={handleChangePixel}
+                            styles={{
+                              input: (baseStyles, state) => (
+                                {
+                                  ...baseStyles,
+                                  minWidth: "300px",
+                                })
+                            }}
+                    />
+                  )}
                 />
                 <DefaultButton onClick={handleAddPixel}>픽셀추가</DefaultButton>
               </BorderSpan>
+              {errors.pixel && <ColSpan1><ValidationScript>{errors.pixel?.message}</ValidationScript></ColSpan1>}
             </ColSpan4>
           </RowSpan>
           <RowSpan>
             <ColSpan1>
-              <Span4>캠페인 상품 선택</Span4>
+              <Span4>캠페인 목표 선택</Span4>
             </ColSpan1>
           </RowSpan>
           <RowSpan>
             <ColSpan4>
               <CampaignType>
-                <CampaignTypeItem>
-                  <img src={'../assets/images/campaign/img_banner_off.png'}/>
+                <CampaignTypeItem active={stepOne.productType === 'banner'} onClick={()=>handleChangeProductType('banner')}>
+                  <img src={`../assets/images/campaign/img_banner_${stepOne.productType === 'banner' ? "on" : "off"}.png`}/>
                   <p>배너</p>
                 </CampaignTypeItem>
-                <CampaignTypeItem>
-                  <img src={'../assets/images/campaign/img_popunder_off.png'}/>
+                <CampaignTypeItem active={stepOne.productType === 'popunder'} onClick={()=>handleChangeProductType('popunder')}>
+                  <img src={`../assets/images/campaign/img_popunder_${stepOne.productType === 'popunder' ? "on" : "off"}.png`}/>
                   <p>팝언더</p>
                 </CampaignTypeItem>
               </CampaignType>
@@ -124,25 +199,47 @@ export function CampaignOne () {
           <RowSpan>
             <ColSpan4>
               <CampaignType>
-                <CampaignTypeItem2><div>전환</div><div>전환 가능성과 관심도가 높은 대상에게 구매 또는 참여, 설치 등의 행동을 유도 합니다.</div></CampaignTypeItem2>
-                <CampaignTypeItem2><div>방문</div><div>원하는 랜딩으로 사용자들의 방문을 극대화해서 마케팅 목표를 달성합니다.</div></CampaignTypeItem2>
-                <CampaignTypeItem2><div>노출</div><div>광고주의 크리에이티브 노출을 극대화해서 홍보 및 브랜딩을 강화합니다.</div></CampaignTypeItem2>
+                <CampaignTypeItem2 active={stepOne.productTarget === 'transform'} onClick={()=>handleChangeProductTarget('transform')}><div>전환</div><div>전환 가능성과 관심도가 높은 대상에게 구매 또는 참여, 설치 등의 행동을 유도 합니다.</div></CampaignTypeItem2>
+                <CampaignTypeItem2 active={stepOne.productTarget === 'visit'} onClick={()=>handleChangeProductTarget('visit')}><div>방문</div><div>원하는 랜딩으로 사용자들의 방문을 극대화해서 마케팅 목표를 달성합니다.</div></CampaignTypeItem2>
+                <CampaignTypeItem2 active={stepOne.productTarget === 'exposure'} onClick={()=>handleChangeProductTarget('exposure')}><div>노출</div><div>광고주의 크리에이티브 노출을 극대화해서 홍보 및 브랜딩을 강화합니다.</div></CampaignTypeItem2>
               </CampaignType>
             </ColSpan4>
           </RowSpan>
           <RowSpan>
             <ColSpan4>
               <Span4>캠페인 상세 목표 선택</Span4>
-              <Select
-                styles={selectStyle}
-                components={{IndicatorSeparator: () => null}}
-                options={[{key:1,value:'',label:'노출'}]}
-              />
+              <ColSpan3>
+                <Controller
+                  name="targetDetail"
+                  control={control}
+                  rules={{
+                    required: {
+                      value: stepOne.targetDetail === "",
+                      message: "캠페인 상세 목표를 설정해주세요"
+                    }
+                  }}
+                  render={({field}) => (
+                    <Select
+                      options={[{key:1,value:'',label:'노출'}]}
+                      styles={selectStyle}
+                      placeholder={'목표 선택'}
+                      {...field}
+                      value={stepOne.targetDetail !== '' ? stepOne.targetDetail : ''}
+                      onChange={handleChangeTargetDetail}
+                    />
+                  )}
+                />
               <Input style={{width: 300,  textAlign:'right'}} disabled value={'1,000,000회'}/>
+              </ColSpan3>
+              {errors.targetDetail && <ColSpan1><ValidationScript>{errors.targetDetail?.message}</ValidationScript></ColSpan1>}
             </ColSpan4>
           </RowSpan>
         </BoardSearchResult>
       </Board>
-    </>
+      <SubmitContainer>
+        <CancelButton type={'button'}>취소</CancelButton>
+        <SubmitButton type={'submit'}>다음</SubmitButton>
+      </SubmitContainer>
+    </form>
   )
 }

@@ -20,7 +20,7 @@ export const CampaignTypeItem = styled.div`
   padding: 30px 80px;
   background-color: #fff;
   border-radius: 8px;
-  border: 2px solid #fff;
+  border: 2px solid ${(props) => props.active ? "#f5811f" : "#fff"};
   box-shadow: 0 2px 3px 0 rgba(10, 10, 10, 0.2);
   font-size: 12px;
   white-space: break-spaces;
@@ -34,7 +34,7 @@ export const CampaignTypeItem2 = styled.div`
   padding: 15px 20px;
   background-color: #fff;
   border-radius: 8px;
-  border: 2px solid #fff;
+  border: 2px solid ${(props) => props.active ? "#f5811f" : "#fff"};
   box-shadow: 0 2px 3px 0 rgba(10, 10, 10, 0.2);
   font-size: 12px;
   white-space: break-spaces;
