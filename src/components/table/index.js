@@ -45,14 +45,14 @@ export function SwitchComponent(props){
       modalComponent: () => {
         return (
           <div>
-            <ModalHeader title={'지면 게재 상태 변경'}/>
+            <ModalHeader title={'연동 상태 변경'}/>
             <ModalBody>
               <ScriptSubject>
                 {!cellProps.data.interlock ?
-                  <div>해당 이벤트 수집을 사용하시겠습니까?<br/>
+                  <div>연동을 사용 하시겠습니까?<br/>
                   </div>
                   :
-                  <div>해당 이벤트 수집을 중지하시겠습니까?<br/>
+                  <div>연동을 중지 하시겠습니까?<br/>
                   </div>
                 }
               </ScriptSubject>
