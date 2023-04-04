@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {productListColumn, searchConditionAtom, searchProductType} from "./entity";
 import {
   Board,
@@ -19,6 +19,7 @@ import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
 import {retrieveProduct} from "../../services/Platform/PlatformAxios";
 import {FooterButton} from "@inovua/reactdatagrid-community/packages/Calendar/src/Footer";
 import styled from "styled-components";
+import {selConversionDetailList, selConversionList} from "../../services/conversion/ConversionAxios";
 
 function ImageViewComponent (props) {
   return(
@@ -53,43 +54,52 @@ export function ImageView (props) {
 
 function ProductManage() {
   const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
+  const [productData, setProductData] = useState(null)
   const [count, setCount] = useState(0)
 
-  const handleSearchResult = () => {
-
-  }
-
-  const retrieveProductList = async () => {
-    const fetchData = await retrieveProduct(searchCondition).then(response => {
-      console.log(response)
-      const data = response.rows
-      setCount(response.totalCount)
-      return data
+  useEffect(() => {
+    retrieveProduct(searchCondition).then(response =>{
+      setProductData(response)
     })
-    return fetchData
+  }, [])
+
+  const handleSearchResult = () => {
+    retrieveProduct(searchCondition).then(response =>{
+      setProductData(response)
+    })
   }
 
-  const dataSource = useCallback(retrieveProductList,[]);
+  const handleSearchAdverResult = (username) => {
+   setSearchCondition({
+     ...searchCondition,
+     username:username
+   })
+    retrieveProduct({...searchCondition,username:username}).then(response =>{
+      setProductData(response)
+    })
+  }
 
   return (
     <>
         <Board>
           <BoardHeader>상품 수집 현황</BoardHeader>
           <BoardSearchDetail>
-            <PlatformCondition searchType={searchProductType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleTableData={retrieveProductList}/>
+            <PlatformCondition searchType={searchProductType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleTableData={handleSearchResult}/>
             <RowSpan>
               <ColSpan2>
                 <Span4>광고주 설정</Span4>
-                <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchResult}/>
+                <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdverResult}/>
               </ColSpan2>
             </RowSpan>
           </BoardSearchDetail>
           <BoardSearchResult>
-            <Table columns={productListColumn}
-                   totalCount={[count,'매체']}
-                   data={dataSource}
-                   idProperty={'id'}
-            />
+            {productData !==null &&
+              <Table columns={productListColumn}
+                     totalCount={[productData.totalCount,'상품수']}
+                     data={productData.rows}
+                     idProperty={'id'}
+              />
+            }
           </BoardSearchResult>
         </Board>
     </>

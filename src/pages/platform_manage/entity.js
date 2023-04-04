@@ -275,12 +275,8 @@ export const searchProductType = [
  */
 export const productListColumn = [
   {
-    name: 'id',
-    header: () => {
-      return (
-        <div><p>광고주</p><p>아이디</p></div>
-      )
-    },
+    name: 'username',
+    header: '광고주 아이디',
     textAlign: 'center',
     minWidth: 80,
     showColumnMenuTool: false,

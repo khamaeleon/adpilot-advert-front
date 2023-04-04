@@ -10,8 +10,9 @@ export async function retrieveProduct(searchCondition) {
   let returnVal = null;
   await AdminAxios('POST', PRODUCT, searchCondition)
     .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = response.data
+      const {responseCode, data} = response
+      if (responseCode.statusCode === 200) {
+        returnVal = data
       } else {
         returnVal = null
       }
