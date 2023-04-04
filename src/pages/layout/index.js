@@ -136,7 +136,7 @@ function Layout(){
         {/* 설정 */}
         {['settings','settingsDetail','budgetEvent','budgetEventDetail','budgetTime','budgetTimeDetail'].includes(params.id) && <Settings/>}
         {/* 플랫폼 관리 */}
-        {['platform','platformDetail','categoryManage','productManage','changeManage', 'paymentManage'].includes(params.id) && <PlatformManage />}
+        {['platform','platformDetail','categoryManage','productManage','conversionManage', 'paymentManage'].includes(params.id) && <PlatformManage />}
         {params.id === 'myPageUser' && <PlatformUserDetail/>}
         {params.id === 'myPageAdmin' && <PlatformAdminDetail/>}
       </BoardBody>

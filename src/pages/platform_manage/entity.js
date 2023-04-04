@@ -5,7 +5,7 @@ import moment from "moment";
 import {atom} from "jotai";
 import {dateFormat, decimalFormat} from "../../common/StringUtils";
 import {Check} from "../../assets/GlobalStyles";
-import {getToDay} from "../../common/DateUtils";
+import {getThisMonth, getToDay} from "../../common/DateUtils";
 import {ImageView} from "./ProductManage";
 
 export const accountInfoAtom = atom([])
@@ -16,11 +16,127 @@ export const adminInfoAtom = atom({})
  * @type {PrimitiveAtom<{endDate: string, stateDate: string}> & WithInitialValue<{endDate: string, stateDate: string}>}
  */
 export const searchConditionAtom = {
-  stateDate:'',
-  endDate:'',
-  searchType: 'ALL',
-  search: ''
+  searchStartDate: getThisMonth().startDay,
+  searchEndDate: getThisMonth().endDay,
+  searchType: 'DEFAULT',
+  keyword: ''
 }
+
+export const searchConversionType = [
+  {id: "1", value: "DEFAULT", label: "기본"},
+  {id: "2", value: "ADVER_NAME", label: "광고주명"},
+  {id: "3", value: "ADVER_ID", label: "광고주아이디"}
+]
+export const conversionListDataAtom = atom(null)
+
+export const columnConversionData = [
+  {
+    name: 'conversionId',
+    header:'',
+    defaultVisible: false
+
+  },
+  {
+    name: 'username',
+    header: '광고주 아이디'
+  },
+  {
+    name: 'adverName',
+    header: '광고주 명',
+  },
+  {
+    name: 'conversionCode',
+    header: '전환 코드',
+    render: ({value, cellProps}) => {
+      return <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>
+    }
+  },
+  {
+    name: 'orderCode',
+    header: '주문 번호'
+  },
+  {
+    name: 'totalPurchasePrice',
+    header: '총 결제 금액',
+    render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>
+  },
+  {
+    name: 'totalProductCount',
+    header: '총 상품수',
+    render: ({value}) => <p>{decimalFormat(value)}</p>
+  },
+  {
+    name: 'conversionDateTime',
+    header: '전환 일시',
+    render: ({value}) => {
+      return (
+        <span>{moment(value).format('YYYY년 MM월 DD일')}</span>
+      )
+    }
+  },
+  {
+    name: 'purchaseType',
+    header: '전환 타입',
+  },
+]
+
+export const columnConversionDetailData = [
+  {
+    name: 'conversionDateTime',
+    header: '액션 일시',
+    render: ({value}) => {
+      return (
+        <span>{moment(value).format('YYYY년 MM월 DD일')}</span>
+      )
+    }
+  },
+  {
+    name: 'clickDateTime',
+    header: '광고 클릭 일시',
+    render: ({value}) => {
+      return (
+        <span>{moment(value).format('YYYY년 MM월 DD일')}</span>
+      )
+    }
+  },
+  {
+    name: 'campaignId',
+    header: '캠페인 코드',
+    render: ({value, cellProps}) => {
+      return <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>
+    }
+  },
+  {
+    name: 'inventoryId',
+    header: '지면 코드',
+    render: ({value, cellProps}) => {
+      return <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>
+    }
+  },
+  {
+    name: 'eventInfo',
+    header: '이벤트 정보',
+  },
+  {
+    name: 'productCode',
+    header: '상품 코드',
+  },
+  {
+    name: 'purchasePrice',
+    header: '결제 금액',
+    render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>
+  },
+  {
+    name: 'purchaseCount',
+    header: '구매 수',
+    render: ({value}) => <p>{decimalFormat(value)}</p>
+  },
+  {
+    name: 'productName',
+    header: '상품 명',
+  },
+]
+
 /**
  * 매체 타입
  * @type {[{id: string, label: string, value: string},{id: string, label: string, value: string},{id: string, label: string, value: string}]}
@@ -130,354 +246,6 @@ export const searchAdminParams = {
   searchText: ''
 }
 
-/**
- * 어드민 등록 form
- * @type {{activeYn: string, password: string, phoneNumber: string, name: string, confirmPassword: string, email: string}}
- */
-export const adminInfo = {
-  email: '',
-  password: '',
-  confirmPassword: '',
-  name: '',
-  phoneNumber: '',
-  activeYn: 'Y'
-}
-
-/**
- * 관리자 리스트 컬럼 세팅
- * @type {[{name: string, header: string, render: (function(*): *)},{name: string, header: string},{name: string, header: string},{name: string, header: string},{name: string, header: string, render: (function({value: *}): *)}]}
- */
-export const columnAdminData = [
-  {
-    name: 'email',
-    header: '아이디',
-    render: (props) => {
-      return (
-        <Link to={'/board/platform2/detail'} state={{id: props.data.email}}>{props.value}</Link>
-      )
-    }
-  },
-  {
-    name: 'name',
-    header: '담당자명',
-  },
-  {
-    name: 'phoneNumber',
-    header: '연락처',
-  },
-  {
-    name: 'createdAt',
-    header: '생성 일시',
-    render: ({value}) => {
-      return (
-        <span>{moment(value).format('YYYY년 MM월 DD일')}</span>
-      )
-    }
-  },
-  {
-    name: 'status',
-    header: '사용 여부',
-    render: ({value}) => {
-      return (
-        <>{value === 'NORMAL' ? "사용중" : "중지"}</>
-      )
-    }
-  },
-]
-export const eventTypeAll = [
-  {key: "1", value: 'SAW_THE_PRODUCT', label: '본상품'},
-  {key: "2", value: "CART_THE_PRODUCT", label: "장바구니"},
-  {key: "3", value: 'DOMAIN_MATCHING', label: '리턴매칭'}
-]
-
-
-export const columnHistoryData = [
-  {
-    name: 'inventoryName',
-    header: '지면명',
-    textAlign: 'center',
-    defaultWidth: 220, //가변 사이즈
-    resizeable: true, //리사이징
-    textEllipsis: false, // ... 표시
-    cellProps: {
-      style: {
-        textDecoration: 'underline'
-      }
-    },
-    render: ({value, cellProps}) => {
-      return (
-        <Link to={"/board/platform3/detail"} state={cellProps.data.revisionId}>{value}</Link>
-      )
-    }
-  },
-  {
-    name: 'inventoryId',
-    header: '지면 코드',
-    textAlign: 'center',
-    width: 80,
-    sortable: false, //정렬
-    resizeable: false,
-    showColumnMenuTool: false,
-    render: ({value, cellProps}) => {
-      return <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>
-    }
-  },
-  {
-    name: 'publish',
-    header: '게재상태',
-    render: ({value, cellProps}) => {
-      return (
-        <span>{cellProps.data.publishChanged ? (value === true) ? 'ON' : 'OFF' : '-'}</span>
-      )
-    }
-  },
-  {
-    name: 'allowEvents',
-    header: '이벤트 설정',
-    render: ({value, cellProps}) => {
-      return (
-        <span>{
-          cellProps.data.allowEventsChanged ?
-            value.map((data, index) => {
-              return (
-                <p key={index}>{eventTypeAll.find(type => type.value === data.eventType).label + ':' + data.exposureWeight}</p>
-              )
-            }) : '-'
-        }</span>
-      )
-    }
-  },
-  {
-    name: 'feeCalculation',
-    header: '정산 설정',
-    render: ({value, cellProps}) => {
-      return (
-        <span>{cellProps.data.feeCalculation.calculationValueChanged ? value.calculationType + '-' + value.calculationValue : '-'}</span>
-      )
-    }
-  },
-  {
-    name: 'noExposedConfigType',
-    header: '대체광고',
-    render: ({value, cellProps}) => {
-      return (
-        <span>
-          <p>{cellProps.data.noExposedConfigTypeChanged ? value : '-'}</p>
-          <p>{cellProps.data.noExposedConfigValueChanged ? cellProps.data.noExposedConfigValue : '-'}</p>
-        </span>
-      )
-    }
-  },
-  {
-    name: 'modifiedAt',
-    header: '변경일시',
-    defaultWidth: 220, //가변 사이즈
-    render: ({value}) => {
-      return (
-        <span>{moment(value).format('YYYY년 MM월 DD일  HH시mm분ss초')}</span>
-      )
-    }
-  },
-  {
-    name: 'modifiedBy',
-    header: '변경자',
-  }
-]
-
-export const mediaSearchTypeByHistory = [
-  {id: "1", value: "INVENTORY_NAME", label: "지면명"},
-  {id: "2", value: "USER_ID", label: "아이디"},
-  {id: "3", value: "INVENTORY_ID", label: "지면코드"},
-  {id: "4", value: "MODIFIED_BY", label: "변경자"}
-]
-
-export const searchRevisionTypes = [
-  {id: "1", value: "MODIFIED_PUBLISH", label: "게재 상태"},
-  {id: "2", value: "MODIFIED_PRODUCT", label: "광고 상품 설정"},
-  {id: "3", value: "MODIFIED_FEE_CALCULATION", label: "정산 정보 설정"},
-  {id: "4", value: "MODIFIED_DETAIL_SETTINGS", label: "지면 상세 설정"}
-]
-
-
-export const searchHistoryParams = {
-  pageSize: 10,
-  currentPage: 1,
-  searchRevisionTypes: [],
-  searchStartDay: new Date(),
-  searchEndDay: new Date(),
-  searchKeywordType: null,
-  searchKeyword: '',
-  sortType: null
-}
-export const searchAdExChangeParams = {
-  pageSize: 10,
-  currentPage: 1,
-  searchRevisionTypes: [],
-  searchStartDay: new Date(),
-  searchEndDay: new Date(),
-  searchKeywordType: null,
-  searchKeyword: '',
-  sortType: null
-}
-
-export const searchAdExChangeRevisionTypes = [
-  {id: "1", value: "EXCHANGE_CONFIG", label: "연동 설정"},
-  {id: "2", value: "KEY_VALUE", label: "KEY/VALUE 설정"},
-  {id: "3", value: "SORT_NUMBER", label: "송출 순서"}
-]
-
-export const columnAdExChangeData = [
-  {
-    name: 'inventoryName',
-    header: '지면명',
-  },
-  {
-    name: 'inventoryCode',
-    header: '지면코드',
-  },
-  {
-    name: 'adExchangeConfig',
-    header: '연동 설정',
-  },
-  {
-    name: 'paramsConfig',
-    header: 'KEY/VALUE 설정',
-  },
-  {
-    name: 'rankingConfig',
-    header: '송출 순서 설정',
-  },
-  {
-    name: 'updateDate',
-    header: '변경일시',
-  },
-  {
-    name: 'userName',
-    header: '변경자',
-  }
-]
-
-export const adExChangeListInfo = [
-  {
-    inventoryName: '네이트 날개배너',
-    inventoryCode: 'c123123ho',
-    adExchangeConfig: 'ON',
-    paramsConfig: 'key=zoneId \n value=23123',
-    rankingConfig: 'YES',
-    updateDate: '20220101',
-    userName: '조규홍'
-  },
-  {
-    inventoryName: '네이트 날개배너',
-    inventoryCode: 'c12321823ho',
-    adExchangeConfig: 'ON',
-    paramsConfig: 'ke=:mediaKeyId \n value=23123',
-    rankingConfig: 'YES',
-    updateDate: '20220101',
-    userName: '한란민'
-  }
-]
-
-export const columnAdExChangeSetting = {
-  default: {
-    textAlign: "center"
-  },
-  setColumns: [
-    {
-      target: 0,
-      function: LinkRef("/board/platform4/detail"),
-      value: {
-        width: 300,
-      },
-    },
-    {
-      target: 1,
-      value: {
-        width: 100,
-      },
-    },
-    {
-      target: 2,
-      value: {
-        width: 100,
-      },
-    },
-    {
-      target: 3,
-      value: {
-        width: 500,
-      },
-    },
-    {
-      target: 4,
-      value: {
-        width: 100,
-      },
-    },
-    {
-      target: 5,
-      value: {
-        width: 100,
-      },
-    }
-  ]
-}
-
-
-export const adExChangeDetailInfo = {
-  inventoryName: '네이트 중아',
-  accountId: 'nate',
-  inventoryCode: '213123',
-  beforeUpdateDate: '2023-01-01',
-  beforeUpdateName: '한란민',
-  lastUpdateDate: '2023-01-01',
-  lastUpdateName: '조규홍',
-  adExChangeConfig: [
-    {
-      adExChangeName: '크리테오',
-      beforePublication: false,
-      lastPublication: true
-    },
-    {
-      adExChangeName: '와이더플래닛',
-      beforePublication: false,
-      lastPublication: false
-    },
-  ],
-  ParamsConfig: [
-    {
-      adExChangeName: '크리테오',
-      beforeKey: '123123',
-      beforeValue: '213213',
-      lastKey: '123123',
-      lastValue: '213213'
-    },
-    {
-      adExChangeName: '와이더플래닛',
-      beforeKey: 'mediaKey',
-      beforeValue: '213213',
-      lastKey: 'sdfsdf',
-      lastValue: '2132sdfadf13'
-    },
-  ],
-  rankingConfig: [
-    {
-      adExChangeName: '크리테오',
-      beforeRankingValue: 1,
-      lastRankingValue: 2,
-    },
-    {
-      adExChangeName: '와이더플래닛',
-      beforeRankingValue: 2,
-      lastRankingValue: 3,
-    },
-    {
-      adExChangeName: '아이엠',
-      beforeRankingValue: 3,
-      lastRankingValue: 1,
-    }
-  ]
-}
 
 /**
  * 상품 수집 관리 리스트 Atom
@@ -493,7 +261,7 @@ export const productListColumn = [
   {
     name: 'id',
     header: () => {
-      return(
+      return (
         <div><p>광고주</p><p>아이디</p></div>
       )
     },
@@ -521,13 +289,13 @@ export const productListColumn = [
     resizeable: false,
     showColumnMenuTool: false,
     render: ({value}) => {
-      return <p>{dateFormat(value,'YYYY.MM.DD HH:mm')}</p>
+      return <p>{dateFormat(value, 'YYYY.MM.DD HH:mm')}</p>
     }
   },
   {
     name: 'productStatusType',
     header: () => {
-      return(
+      return (
         <div><p>중지/품절</p><p>여부</p></div>
       )
     },
@@ -596,7 +364,7 @@ export const productListColumn = [
   {
     name: 'productCategorys',
     header: () => {
-      return(
+      return (
         <div><p>표준 카테고리</p><p>(seq)</p></div>
       )
     },
@@ -615,7 +383,7 @@ export const productListColumn = [
   {
     name: 'productCategorys1',
     header: () => {
-      return(
+      return (
         <div><p>상품</p><p>카테고리1</p></div>
       )
     },
@@ -634,7 +402,7 @@ export const productListColumn = [
   {
     name: 'productCategorys2',
     header: () => {
-      return(
+      return (
         <div><p>상품</p><p>카테고리2</p></div>
       )
     },
@@ -655,10 +423,10 @@ export const productListColumn = [
     header: '원가',
     textAlign: 'center',
     showColumnMenuTool: false,
-    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
+    render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
-    name:'discountRate',
+    name: 'discountRate',
     header: '할인가',
     textAlign: 'center',
     showColumnMenuTool: false,
@@ -678,7 +446,8 @@ export const productListColumn = [
     sortable: false,
     showColumnMenuTool: false,
     render: ({value, cellProps}) => {
-      return <div style={{display: 'flex', alignItems: 'center'}}><p>이동</p> <Icon icon={'url'} value={value} cellProps={cellProps}/></div>
+      return <div style={{display: 'flex', alignItems: 'center'}}><p>이동</p> <Icon icon={'url'} value={value}
+                                                                                  cellProps={cellProps}/></div>
     }
   },
   {
@@ -687,7 +456,8 @@ export const productListColumn = [
     textAlign: 'center',
     showColumnMenuTool: false
   },
-  {name:'reviewCnt',
+  {
+    name: 'reviewCnt',
     header: '리뷰수',
     textAlign: 'center',
     showColumnMenuTool: false
@@ -755,7 +525,7 @@ export const exchangeColumns = [
     textAlign: 'center',
     showColumnMenuTool: false,
     defaultFlex: 1,
-    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
+    render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
     name: 'examinationStatus',
@@ -772,7 +542,7 @@ export const exchangeColumns = [
     resizeable: false,
     showColumnMenuTool: false,
     render: ({value}) => {
-      return <p>{dateFormat(value,'YYYY.MM.DD HH:mm')}</p>
+      return <p>{dateFormat(value, 'YYYY.MM.DD HH:mm')}</p>
     }
   },
   {
@@ -811,7 +581,7 @@ export const paymentColumns = [
     width: 150,
     showColumnMenuTool: false,
     render: ({value}) => {
-      return <p>{dateFormat(value,'YYYY.MM.DD HH:mm')}</p>
+      return <p>{dateFormat(value, 'YYYY.MM.DD HH:mm')}</p>
     }
   },
   {
@@ -819,7 +589,7 @@ export const paymentColumns = [
     header: '신청 상태',
     width: 120,
     showColumnMenuTool: false,
-    render: ({ value })=> <>{value.label}</>
+    render: ({value}) => <>{value.label}</>
   },
   {
     name: 'username',
@@ -846,7 +616,7 @@ export const paymentColumns = [
     name: 'revenueAmount',
     header: '광고비',
     showColumnMenuTool: false,
-    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
+    render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
     name: 'requestAmountVAT',
@@ -854,7 +624,7 @@ export const paymentColumns = [
     width: 160,
     showColumnMenuTool: false,
     render: ({data}) => {
-      let vat = data.requestAmount+(data.requestAmount/10)
+      let vat = data.requestAmount + (data.requestAmount / 10)
       return (
         <span className={'won'}>{decimalFormat(vat)}</span>
       )
@@ -879,8 +649,8 @@ export const paymentColumns = [
  * 결재 관리 상태 수정
  */
 export const updatePaymentStatus = {
-  paymentIdList : [],
-  paymentStatus : "",
+  paymentIdList: [],
+  paymentStatus: "",
 }
 
 /**

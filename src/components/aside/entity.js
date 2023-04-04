@@ -101,7 +101,7 @@ export const menuList = [
         header: "상품 수집 관리"
       },
       {
-        name: "changeManage",
+        name: "conversionManage",
         header: "전환 관리"
       },
       {

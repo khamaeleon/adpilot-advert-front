@@ -6,7 +6,7 @@ import {useParams} from "react-router-dom";
 import AdminManage from "./AdminManage";
 import {CategoryManage} from "./CategoryManage";
 import ProductManage from "./ProductManage";
-import ChangeManage from "./ChangeManage";
+import ConversionManage from "./ConversionManage";
 import PaymentManage from "./PaymentManage";
 import PlatformUserDetail from "./UserDetail";
 
@@ -23,7 +23,7 @@ function PlatformUser(){
         {params.id === 'platformDetail' && <PlatformUserDetail/>}
         {params.id === 'categoryManage' && <CategoryManage/>}
         {params.id === 'productManage' && <ProductManage/>}
-        {params.id === 'changeManage' && <ChangeManage/>}
+        {params.id === 'conversionManage' && <ConversionManage/>}
         {params.id === 'paymentManage' && <PaymentManage/>}
       </BoardContainer>
     </main>

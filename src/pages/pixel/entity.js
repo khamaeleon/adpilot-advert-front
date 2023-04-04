@@ -3,7 +3,7 @@ import React from "react";
 import {Icon, SwitchComponent} from "../../components/table";
 import {PixelAdd, PixelModal} from "./PixelList";
 import {Link} from "react-router-dom";
-import {updateEventInterlock} from "../../services/header/ManagePixelAxios";
+import {updateEventInterlock, updatePixelInterlock} from "../../services/header/ManagePixelAxios";
 import {HorizontalRule} from "../../components/common/Common";
 
 /**
@@ -97,7 +97,7 @@ export const pixelDetailColumns = [
     render: ({value, cellProps}) => {
       return (
         <div style={{display: "flex", alignItems: 'center', justifyContent: 'center'}}>
-          <SwitchComponent value={value} cellProps={cellProps} eventClick={()=> console.log('연동상태')}/>
+          <SwitchComponent value={value} cellProps={cellProps} eventClick={()=> updatePixelInterlock(cellProps.data.pixelId,{interlock:cellProps.data.interlock})}/>
         </div>
       );
     }
@@ -155,7 +155,7 @@ export const pixelDetailInfoColumns = [
       console.log(value)
       return (
         <div style={{display: "flex", alignItems: 'center', justifyContent: 'center'}}>
-          <SwitchComponent value={value} cellProps={cellProps} eventClick={()=> updateEventInterlock(cellProps.data.eventId,{interlock:cellProps.data.interlock})}/>        </div>
+          <SwitchComponent value={value} cellProps={cellProps} eventClick={()=> updateEventInterlock(cellProps.data.eventId,{interlock:cellProps.data.interlock})}/></div>
       );
     }
   },

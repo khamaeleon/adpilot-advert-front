@@ -18,9 +18,8 @@ import {
 } from "../../assets/GlobalStyles";
 import React, {useCallback, useEffect, useState} from "react";
 import {useAtom} from "jotai";
-import {pixelColumns, pixelDataAtom, pixelDetailColumns, pixelDetailDataAtom} from "./entity";
+import {pixelColumns, pixelDetailColumns} from "./entity";
 import {toast, ToastContainer} from "react-toastify";
-import {selAdverPriceEventList} from "../../services/SettingsAxios";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {Controller, useForm} from "react-hook-form";
@@ -36,7 +35,6 @@ import {
 export function PixelModal(props) {
   const {data, title} = props
   const [, setModal] = useAtom(modalController)
-
 
   const handleModalComponent = () => {
     setModal({

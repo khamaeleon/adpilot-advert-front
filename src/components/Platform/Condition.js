@@ -30,10 +30,10 @@ import Checkbox from "../common/Checkbox";
 import Select from "react-select";
 
 export function PlatformCondition(props) {
-  const {searchCondition, setSearchCondition, handleTableData} = props;
+  const {searchCondition, setSearchCondition, handleTableData, searchType} = props;
   const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
-  const [searchTypeSelect] = useState(mediaType)
+  const [searchTypeSelect] = useState(searchType)
   const [searchSelected, setSearchSelected] = useState(searchTypeSelect[0])
   /**
    * 날짜 레인지 선택
@@ -103,7 +103,7 @@ export function PlatformCondition(props) {
   const handleSearchValue = (event) => {
     setSearchCondition({
       ...searchCondition,
-      search: event.target.value
+      keyword: event.target.value
     })
   }
 
@@ -161,7 +161,7 @@ export function PlatformCondition(props) {
           <SearchInput>
             <input type={'text'}
                    placeholder={'검색어를 입력해주세요.'}
-                   value={searchCondition.search}
+                   value={searchCondition.keyword}
                    onChange={handleSearchValue}
             />
           </SearchInput>
