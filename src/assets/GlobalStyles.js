@@ -1031,8 +1031,8 @@ export const SubmitContainer = styled.div`
   width: 100%;
   & button {
     margin: 8px;
-    width: 200px;
-    height: 60px;
+    width: 140px;
+    height: 50px;
     font-size: 16px;
     cursor: pointer;
   }

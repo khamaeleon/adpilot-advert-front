@@ -4,22 +4,21 @@ import {
   BoardSearchDetail,
   BoardTableContainer,
   ColSpan1,
-  ColSpan2,
   ColSpan4,
-  ColTitle,
   DefaultButton,
   Input,
   RelativeDiv,
   RowSpan,
   Span1,
-  Span2, Span3, Span4,
+  Span2,
+  Span3,
   SubmitButton,
   TableButton,
   ValidationScript,
 } from "../../assets/GlobalStyles";
 import React, {useCallback, useEffect, useState} from "react";
 import {useAtom} from "jotai";
-import {pixelColumns, pixelDataAtom, pixelDetailColumns, pixelInfoListAtom} from "./entity";
+import {pixelColumns, pixelDataAtom, pixelDetailColumns} from "./entity";
 import {toast, ToastContainer} from "react-toastify";
 import {selAdverPriceEventList} from "../../services/SettingsAxios";
 import {modalController} from "../../store";
@@ -190,7 +189,7 @@ function PixelAdd(props){
         </RowSpan>
         <RowSpan>
           <ColSpan4>
-            <Span2>픽셀명</Span2>
+            <Span3>픽셀명</Span3>
             <RelativeDiv>
               <Input
                 style={{marginRight: 0}}
@@ -208,7 +207,7 @@ function PixelAdd(props){
         </RowSpan>
         <RowSpan>
           <ColSpan4>
-            <Span2>연동 URL</Span2>
+            <Span3>연동 URL</Span3>
             <RelativeDiv>
               <Input
                 style={{marginRight: 0}}
@@ -220,7 +219,6 @@ function PixelAdd(props){
                   pattern:{
                     value:  /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi,
                     message: "http(s)://가 포함된 url 주소를 확인해주세요."
-
                   }
                 })}
                 value={pixelInfoListState.linkUrl}
@@ -231,9 +229,8 @@ function PixelAdd(props){
         </RowSpan>
         <RowSpan>
           <ColSpan4>
-            <Span4>카테고리설정</Span4>
-            <ColSpan2>
-              <div>
+            <Span3>카테고리설정</Span3>
+            <div>
                 {pixelInfoListState !== null &&
                   <Controller
                     name="mainCategoryCode"
@@ -254,53 +251,50 @@ function PixelAdd(props){
                                 input: (baseStyles, state) => (
                                   {
                                     ...baseStyles,
-                                    minWidth: "300px",
+                                    minWidth: "250px",
                                   })
                               }}
                       />
                     )}
                   />
                 }
-                {errors.mainCategoryCode &&
-                  <ValidationScript>{errors.mainCategoryCode?.message}</ValidationScript>}</div>
-            </ColSpan2>
-            <ColSpan2>
-              <div>
+                {errors.mainCategoryCode && <ValidationScript>{errors.mainCategoryCode?.message}</ValidationScript>}
                 {pixelInfoListState !== null &&
-                  <Controller
-                    name="subCategoryCode"
-                    control={control}
-                    rules={{
-                      required: {
-                        value: pixelInfoListState.subCategoryCode === "",
-                        message: "카테고리를 선택해주세요"
-                      }
-                    }}
-                    render={({field}) => (
-                      <Select options={rowLevelCategoryList}
-                              placeholder={'서브 카테고리 선택'}
-                              {...field}
-                              value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
-                              onChange={handleSelectRowCategory}
-                              styles={{
-                                input: (baseStyles, state) => (
-                                  {
-                                    ...baseStyles,
-                                    minWidth: "300px",
-                                  })
-                              }}
-                      />
-                    )}
-                  />
+                  <div style={{marginRight: 0}}>
+                    <Controller
+                      name="subCategoryCode"
+                      control={control}
+                      rules={{
+                        required: {
+                          value: pixelInfoListState.subCategoryCode === "",
+                          message: "카테고리를 선택해주세요"
+                        }
+                      }}
+                      render={({field}) => (
+                        <Select options={rowLevelCategoryList}
+                                placeholder={'서브 카테고리 선택'}
+                                {...field}
+                                value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
+                                onChange={handleSelectRowCategory}
+                                styles={{
+                                  input: (baseStyles, state) => (
+                                    {
+                                      ...baseStyles,
+                                      minWidth: "250px",
+                                    })
+                                }}
+                        />
+                      )}
+                    />
+                  </div>
                 }
                 {errors.subCategoryCode && <ValidationScript>{errors.subCategoryCode?.message}</ValidationScript>}
               </div>
-            </ColSpan2>
           </ColSpan4>
         </RowSpan>
         <RowSpan>
-          <ColSpan2>
-            <Span4>호스팅 설정</Span4>
+          <ColSpan4>
+            <Span3>호스팅 설정</Span3>
             <div>
               {pixelInfoListState !== null &&
                 <Controller
@@ -322,7 +316,7 @@ function PixelAdd(props){
                               input: (baseStyles, state) => (
                                 {
                                   ...baseStyles,
-                                  minWidth: "300px",
+                                  minWidth: "250px",
                                 })
                             }}
                     />
@@ -330,7 +324,7 @@ function PixelAdd(props){
                 />
               }
               {errors.hostType && <ValidationScript>{errors.hostType?.message}</ValidationScript>}</div>
-          </ColSpan2>
+          </ColSpan4>
         </RowSpan>
       </ModalBody>
       <ModalFooter>

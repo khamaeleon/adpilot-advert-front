@@ -1,26 +1,23 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchDetail,
   BoardTableContainer,
   CancelButton,
   ColSpan0,
-  ColSpan1,
-  ColSpan2,
-  ColSpan3,
   ColTitle,
-  DefaultButton, Input, RelativeDiv,
-  RowSpan, Span4,
+  DefaultButton,
+  Input,
+  RelativeDiv,
+  RowSpan,
   SubmitContainer
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
-import Table, {SwitchComponent} from "../../components/table";
+import Table, {Off, On, SwitchBox} from "../../components/table";
 import {pixelDetailInfoColumns, pixelInfoListAtom, statusTypeAll} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
-import {modalController} from "../../store";
 import {selPixelInfoList} from "../../services/header/ManagePixelAxios";
 import {Controller, useForm} from "react-hook-form";
 import Select from "react-select";
@@ -99,6 +96,9 @@ function PixelDetail() {
     console.log(data)
   }
   let textColor = {color: pixelInfoListState !== null ? statusTypeAll.find(type => type.value === pixelInfoListState.status).color : ''};
+  const background = !pixelInfoListState?.interlock ? {background: '#ddd', cursor: 'default'} : {background: '#f5811f', cursor: 'default'};
+  const position = pixelInfoListState?.interlock ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null;
+
   return (
     <>
       <Board>
@@ -152,7 +152,11 @@ function PixelDetail() {
                         placeholder={'연동URL을 입력해주세요'}
                         {...register("linkUrl", {
                           required: "연동URL을 입력해주세요",
-                          onChange:(e) => handleLinkUrl(e)
+                          onChange:(e) => handleLinkUrl(e),
+                          pattern:{
+                            value:  /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi,
+                            message: "http(s)://가 포함된 url 주소를 확인해주세요."
+                          }
                         })}
                         value={pixelInfoListState.linkUrl}
                       />}
@@ -236,7 +240,13 @@ function PixelDetail() {
               <div className={'row'}>
                 <p className={'tit'}>연동 상태</p>
                 <div className={'txt'}>
-                  <SwitchComponent background={pixelInfoListState?.interlock} styles={{cursor: 'default'}} eventClick={false}/>
+                  <SwitchBox
+                    style={background}
+                  >
+                    <label style={position}/>
+                    {pixelInfoListState?.interlock ? <On>ON</On>:  <Off>OFF</Off>}
+                  </SwitchBox>
+                  {/*<SwitchComponent background={pixelInfoListState?.interlock} styles={{cursor: 'default'}}/>*/}
                 </div>
               </div>
               <div className={'row'}>
