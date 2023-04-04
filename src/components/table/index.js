@@ -26,22 +26,16 @@ export function SwitchComponent(props){
   const {value, cellProps, eventClick} = props
   const [select, setSelect] = useState(value)
   const [, setModal] = useAtom(modalController)
-  const [pixelInfoListState, setPixelInfoListState] = useAtom(pixelInfoListAtom)
   const background = !select ? {background: '#ddd'} : {background: '#f5811f'};
   const position = select ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null
 
   const handleClick = (confirm) => {
     if(confirm){
-      cellProps.data.interlock = !value;
+      cellProps.data.interlock = !cellProps.data.interlock;
       eventClick();
     }
     setSelect(cellProps.data.interlock)
     setModal({isShow:false});
-    console.log(pixelInfoListState)
-    setPixelInfoListState({
-      ...pixelInfoListState,
-      events:pixelInfoListState.events.map(eventData=>eventData.eventId ===cellProps.data.eventId ? {...eventData, interlock: value} :eventData)
-    })
   }
   const showModal = () => {
     setSelect(!cellProps.data.interlock)

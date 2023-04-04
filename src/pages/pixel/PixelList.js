@@ -18,7 +18,7 @@ import {
 } from "../../assets/GlobalStyles";
 import React, {useCallback, useEffect, useState} from "react";
 import {useAtom} from "jotai";
-import {pixelColumns, pixelDataAtom, pixelDetailColumns} from "./entity";
+import {pixelColumns, pixelDataAtom, pixelDetailColumns, pixelDetailDataAtom} from "./entity";
 import {toast, ToastContainer} from "react-toastify";
 import {selAdverPriceEventList} from "../../services/SettingsAxios";
 import {modalController} from "../../store";
@@ -37,13 +37,14 @@ export function PixelModal(props) {
   const {data, title} = props
   const [, setModal] = useAtom(modalController)
 
+
   const handleModalComponent = () => {
     setModal({
       isShow: true,
       width: 800,
       modalComponent: () => {
         return (
-          <PixelAdd data={data} title={title}/>
+          <PixelAdd data={data} title={title} />
         )
       }
     })
@@ -80,7 +81,6 @@ function PixelAdd(props){
    * @param event
    */
   const handlePixelName = (event) => {
-    console.log(event.target.value)
     setPixelInfoListState({
       ...pixelInfoListState,
       pixelName:event.target.value
@@ -91,7 +91,6 @@ function PixelAdd(props){
    * @param event
    */
   const handleUrl = (event) => {
-    console.log(event.target.value)
     setPixelInfoListState({
       ...pixelInfoListState,
       linkUrl:event.target.value
@@ -135,7 +134,6 @@ function PixelAdd(props){
   const onError = (error) => console.log(error)
 
   const handleSave = () => {
-    console.log(pixelInfoListState)
     resistAdverPixelInfo(pixelInfoListState).then(response => {
       if(response){
         setModal({
@@ -334,16 +332,19 @@ function PixelAdd(props){
   )
 }
 function PixelList() {
-  const [pixelDataState, setPixelDataState] = useAtom(pixelDataAtom)
   const [searchParams, setSearchParams] = useState({ keyword:''})
-  useEffect(() => {
-    selAdverPixelList(searchParams).then(response =>{
-      setPixelDataState(response)
-    })
-  }, [])
+  const [dataLength, setDataLength] = useState(0)
+
+  const dataSource = useCallback(async () => {
+    const fetData = selAdverPixelList(searchParams)
+    setDataLength(fetData?.length)
+    return fetData
+
+  },[searchParams])
+
   const handleFetchDetailData = useCallback(async ({userId}) => {
     return await selAdverPixelDetailList(userId)
-  },[])
+  },[dataLength])
 
   const groupStyle = {
     textAlign: 'center',
@@ -364,10 +365,11 @@ function PixelList() {
    * 광고주 명 및 아이디 검색
    */
   const onSearchAdverEventPrice =() =>{
-    selAdverPriceEventList(searchParams).then(response =>{
-      setPixelDataState(response)
-    })
+    // selAdverPriceEventList(searchParams).then(response =>{
+    //   setPixelDataState(response)
+    // })
   }
+
   return (
     <main>
       <>
@@ -386,16 +388,14 @@ function PixelList() {
           </RowSpan>
         </BoardSearchDetail>
         <BoardTableContainer>
-          { pixelDataState !== null &&
-            <TableDetail columns={pixelColumns}
-                         data={pixelDataState}
-                         detailData={handleFetchDetailData}
-                         detailColumn={pixelDetailColumns}
-                         detailGroups={groups}
-                         idProperty={'userId'}
-                         groups={groups}
-                         style={{minHeight: 500}}/>
-          }
+          <TableDetail columns={pixelColumns}
+                       data={dataSource}
+                       detailData={handleFetchDetailData}
+                       detailColumn={pixelDetailColumns}
+                       detailGroups={groups}
+                       idProperty={'userId'}
+                       groups={groups}
+                       style={{minHeight: 500}}/>
         </BoardTableContainer>
       </Board>
       <ToastContainer position="top-center"

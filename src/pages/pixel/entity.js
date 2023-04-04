@@ -75,7 +75,7 @@ export const pixelColumns = [
     sortable: false,
     render: ({value, cellProps}) => {
       return (
-        <PixelModal title={'추가'} data={cellProps.data}/>
+        <PixelModal title={'추가'} data={cellProps.data} />
       )
     }
   }
@@ -155,8 +155,7 @@ export const pixelDetailInfoColumns = [
       console.log(value)
       return (
         <div style={{display: "flex", alignItems: 'center', justifyContent: 'center'}}>
-          <SwitchComponent value={cellProps.data.interlock} cellProps={cellProps} eventClick={()=> updateEventInterlock(cellProps.data.eventId,{interlock:!value})}/>
-        </div>
+          <SwitchComponent value={value} cellProps={cellProps} eventClick={()=> updateEventInterlock(cellProps.data.eventId,{interlock:cellProps.data.interlock})}/>        </div>
       );
     }
   },

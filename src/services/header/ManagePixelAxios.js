@@ -38,7 +38,7 @@ export async function resistAdverPixelInfo(pixelInfo) {
 
 export async function updateEventInterlock(eventId,interlock) {
   let returnVal = null;
-  console.log(eventId)
+  console.log(interlock)
   await AdminAxios('PUT', ACTION_URL+EVENT+'/'+eventId+'/interlock',interlock)
     .then((response) => {
       const {responseCode} =response
