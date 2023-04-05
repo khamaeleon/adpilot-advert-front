@@ -1,57 +1,27 @@
 import Aside from "../../components/aside";
 import {useNavigate, useParams} from "react-router-dom";
 import PlatformManage from "../platform_manage";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
 import {useAtom,} from "jotai";
-import {selUserByUserId} from "../../services/ManageUserAxios";
-import {atom} from "jotai/index";
-import {adminInfo, tokenResultAtom, userInfo} from "../login/entity";
+import {tokenResultAtom} from "../login/entity";
 import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
 import Campaign from "../campaign";
 import Settings from "../settings";
 import Pixel from "../pixel";
-import {selAdminInfo} from "../../services/ManageAdminAxios";
 import Reports from "../reports";
 import PlatformUserDetail from "../platform_manage/UserDetail";
 import PlatformAdminDetail from "../platform_manage/AdminDetail";
 
-export const AdminInfo = atom(adminInfo)
-export const UserInfo = atom(userInfo)
 function Layout(){
   const params = useParams()
   const navigate = useNavigate()
-  const [adminInfoState,setAdminInfoState] = useAtom(AdminInfo)
-  const [userInfoState,setUserInfoState] = useAtom(UserInfo)
   const [tokenUserInfo] = useAtom(tokenResultAtom)
 
-  useEffect(() => {
-    if(tokenUserInfo.role==='NORMAL'){
-      if(userInfoState.name ===''){
-        selUserByUserId(tokenUserInfo.id).then(response =>{
-          setUserInfoState({
-            name:response.managerName1,
-            id:response.id
-          })
-
-        })
-      }
-    }else{
-      if(adminInfoState.name ===''){
-        selAdminInfo().then(response =>{
-          setAdminInfoState({
-            ...adminInfoState,
-            name:response.name,
-          })
-        })
-      }
-    }
-  }, []);
   const myPage = () =>{
-    console.log()
     if(tokenUserInfo.role==='NORMAL'){
-      navigate('/board/myPageUser',{state:{id:userInfoState.id}})
+      navigate('/board/myPageUser',{state:{id:tokenUserInfo.id}})
     }else{
       navigate('/board/myPageAdmin',{state:{id:tokenUserInfo.id}})
     }
@@ -66,7 +36,6 @@ function Layout(){
       logOutUser(userInfo).then(response =>{
         if(response){
           localStorage.removeItem("refreshToken")
-          localStorage.removeItem("mediaUsername")
         }
       }).then(() =>
         {
@@ -78,7 +47,6 @@ function Layout(){
       logOutAdmin(userInfo).then(response =>{
         if(response){
           localStorage.removeItem("refreshToken")
-          localStorage.removeItem("mediaUsername")
         }
       }).then(() =>
         {
@@ -89,14 +57,7 @@ function Layout(){
     }
   }
 
-  const handleChangeConverted = () => {
-    localStorage.removeItem('mediaUsername')
-    setAdminInfoState({
-      ...adminInfoState,
-      convertedUser: ''
-    })
-    navigate('/board/dashboard')
-  }
+
   const pixel = () =>{
     navigate('/board/pixel')
   }
@@ -106,13 +67,6 @@ function Layout(){
       <Aside />
       <BoardBody>
         <BoardHeader>
-          {tokenUserInfo.role !== 'NORMAL' && adminInfoState.convertedUser !== '' &&
-            <MyPage onClick={handleChangeConverted}>
-              <span>어드민 계정으로 전환</span>
-            </MyPage>
-            ||
-            null
-          }
           <MyPage onClick={pixel}>픽셀 관리</MyPage>
           <UserName>
             <UserIcon/>

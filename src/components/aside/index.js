@@ -8,13 +8,8 @@ import {useAtomValue} from "jotai/index";
 function AsideList (props) {
   const {id, mode, role} = props
   const [userName, setUserName] = useState('')
-  const adminInfoState = useAtomValue(AdminInfo)
-  /**
-   * 매체 전환시 리렌더링 일으키게 didupdate
-   */
-  useEffect(()=>{
-    setUserName(adminInfoState.convertedUser)
-  },[adminInfoState.convertedUser])
+
+
   const calcHeight = (item) => {
     return item.child.length
   }

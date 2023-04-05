@@ -61,6 +61,7 @@ adverAxios.interceptors.response.use(
               if (response) {
                 store.set(tokenResultAtom, {
                   id: response.id,
+                  username: response.username,
                   role: response.role,
                   name: response.name,
                   accessToken: response.token.accessToken,
