@@ -2,12 +2,12 @@ import {AdminAxios, AdverAxios, AxiosImage} from "../common/Axios";
 import {responseFormatMessage} from "../common/StringUtils";
 
 const ACTION_URL = '/user';
-const USER_MANAGE_URL ='/media/user'
+const USER_MANAGE_URL ='/adver/user'
 const SLASH = '/';
 
 const USER_LIST = USER_MANAGE_URL+'/list'
-const USER_KEYWORD_SEARCH = ACTION_URL + '/find/by-media'
 const USER_INFO = USER_MANAGE_URL+'/uuid'
+const USER_KEYWORD_SEARCH = ACTION_URL + '/find/by-media'
 const BY_USER_INFO = ACTION_URL+'/username'
 
 const TERMS_INFO = '/policy/latest-terms'
@@ -39,9 +39,9 @@ export async function selUserList(userParams) {
  * @param userId
  * @returns {Promise<null>}
  */
-export async function selUserInfo(username) {
+export async function selUserInfo(id) {
   let returnVal = null;
-  await AdminAxios('GET', USER_INFO +SLASH + username)
+  await AdminAxios('GET', USER_INFO +SLASH + id)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data

@@ -173,28 +173,28 @@ export function PlatformCondition(props) {
 }
 
 export function PaymentCondition(props) {
-  const {searchPayment, setSearchPayment, handlePaymentTableData} = props
+  const {searchCondition, setSearchCondition, handleTableData, searchType} = props
   const [dateRange, setDateRange] = useState([new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
   const [isCheckedAll, setIsCheckedAll] = useState(true)
-  const [paymentTypeSelect] = useState(mediaType)
-  const [searchSelected, setSearchSelected] = useState(paymentTypeSelect[0])
+  const [searchTypeSelect] = useState(searchType)
+  const [searchSelected, setSearchSelected] = useState(searchTypeSelect[0])
 
   useEffect(() => {
-    setSearchPayment({
-      ...searchPayment,
+    setSearchCondition({
+      ...searchCondition,
       startAt: dateFormat(startDate, 'YYYY-MM-dd'),
       endAt: dateFormat(endDate, 'YYYY-MM-dd'),
     })
   },[dateRange])
 
   useEffect(() => {
-    if(searchPayment.statusList.length == 7) {
+    if(searchCondition.statusList.length == 7) {
       setIsCheckedAll(true)
     } else {
       setIsCheckedAll(false)
     }
-  },[searchPayment.statusList.length])
+  },[searchCondition.statusList.length])
   /**
    * 이벤트 유형 선택
    * @param event
@@ -204,13 +204,13 @@ export function PaymentCondition(props) {
   }
   const handleChangeCheckAll = (event) => {
     if(event.target.checked){
-      setSearchPayment({
-        ...searchPayment,
+      setSearchCondition({
+        ...searchCondition,
         statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE']
       })
     } else{
-      setSearchPayment({
-        ...searchPayment,
+      setSearchCondition({
+        ...searchCondition,
         statusList: []
       })
     }
@@ -220,29 +220,28 @@ export function PaymentCondition(props) {
   const handleChangeChecked = (event) => {
     //체크박스 핸들링
     if(event.currentTarget.checked){
-      setSearchPayment({
-        ...searchPayment,
-        statusList: searchPayment.statusList.concat(event.currentTarget.id)
+      setSearchCondition({
+        ...searchCondition,
+        statusList: searchCondition.statusList.concat(event.currentTarget.id)
       })
     }else{
-      setSearchPayment({
-        ...searchPayment,
-        statusList: searchPayment.statusList.filter(id => id !== event.currentTarget.id)
+      setSearchCondition({
+        ...searchCondition,
+        statusList: searchCondition.statusList.filter(id => id !== event.currentTarget.id)
       })
     }
   }
-
-  const handlePaymentSearchType = (selectSearchType) => {
-    setSearchPayment({
-      ...searchPayment,
+  const handleSearchType = (selectSearchType) => {
+    setSearchCondition({
+      ...searchCondition,
       searchType: selectSearchType.value
     })
     setSearchSelected(selectSearchType)
   }
 
   const handlePaymentSearchValue = (event) => {
-    setSearchPayment({
-      ...searchPayment,
+    setSearchCondition({
+      ...searchCondition,
       search: event.target.value
     })
   }
@@ -283,37 +282,37 @@ export function PaymentCondition(props) {
               <Checkbox label={'정산 신청'}
                         type={'c'}
                         id={'INVOICE_REQUEST'}
-                        isChecked={searchPayment.statusList.includes('INVOICE_REQUEST') ? true : false}
+                        isChecked={searchCondition.statusList.includes('INVOICE_REQUEST') ? true : false}
                         onChange={handleChangeChecked}/>
               <Checkbox label={'심사 완료'}
                         type={'c'}
                         id={'EXAMINED_COMPLETED'}
-                        isChecked={searchPayment.statusList.includes('EXAMINED_COMPLETED') ? true : false}
+                        isChecked={searchCondition.statusList.includes('EXAMINED_COMPLETED') ? true : false}
                         onChange={handleChangeChecked}/>
               <Checkbox label={'반려'}
                         type={'c'}
                         id={'REJECT'}
-                        isChecked={searchPayment.statusList.includes('REJECT') ? true : false}
+                        isChecked={searchCondition.statusList.includes('REJECT') ? true : false}
                         onChange={handleChangeChecked}/>
               <Checkbox label={'지급 완료'}
                         type={'c'}
                         id={'PAYMENT_COMPLETED'}
-                        isChecked={searchPayment.statusList.includes('PAYMENT_COMPLETED') ? true : false}
+                        isChecked={searchCondition.statusList.includes('PAYMENT_COMPLETED') ? true : false}
                         onChange={handleChangeChecked}/>
               <Checkbox label={'지급 보류'}
                         type={'c'}
                         id={'WITHHELD_PAYMENT'}
-                        isChecked={searchPayment.statusList.includes('WITHHELD_PAYMENT') ? true : false}
+                        isChecked={searchCondition.statusList.includes('WITHHELD_PAYMENT') ? true : false}
                         onChange={handleChangeChecked}/>
               <Checkbox label={'수익 증가'}
                         type={'c'}
                         id={'REVENUE_INCREASE'}
-                        isChecked={searchPayment.statusList.includes('REVENUE_INCREASE') ? true : false}
+                        isChecked={searchCondition.statusList.includes('REVENUE_INCREASE') ? true : false}
                         onChange={handleChangeChecked}/>
               <Checkbox label={'수익 감소'}
                         type={'c'}
                         id={'REVENUE_DECREASE'}
-                        isChecked={searchPayment.statusList.includes('REVENUE_DECREASE') ? true : false}
+                        isChecked={searchCondition.statusList.includes('REVENUE_DECREASE') ? true : false}
                         onChange={handleChangeChecked}/>
             </AgentType>
           </div>
@@ -323,20 +322,20 @@ export function PaymentCondition(props) {
         <ColSpan2>
           <Select styles={inputStyle}
                   components={{IndicatorSeparator: () => null}}
-                  options={paymentTypeSelect}
-                  value={searchSelected}
-                  onChange={handlePaymentSearchType}
+                  options={searchType}
+                  value={searchCondition.searchType.value !== '' ? searchType.find(value => value.value === searchCondition.searchType) : ''}
+                  onChange={handleSearchType}
           />
           <SearchInput>
             <input type={'text'}
                    placeholder={'검색어를 입력해주세요.'}
-                   value={searchPayment.search}
+                   value={searchCondition.search}
                    onChange={handlePaymentSearchValue}
             />
           </SearchInput>
         </ColSpan2>
         <ColSpan2>
-          <SearchButton onClick={handlePaymentTableData}>검색</SearchButton>
+          <SearchButton onClick={handleTableData}>검색</SearchButton>
         </ColSpan2>
       </RowSpan>
     </BoardSearchDetail>
