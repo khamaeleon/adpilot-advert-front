@@ -2,7 +2,7 @@ import {
   Board,
   BoardHeader,
   BoardSearchDetail,
-  BoardTableContainer,
+  BoardTableContainer, BoardTableCustomContainer,
   CancelButton,
   ColSpan0,
   ColTitle,
@@ -45,7 +45,7 @@ function BudgetEventDetail() {
               <div>{dateFormat(eventBudgetDetailDataState !==null && eventBudgetDetailDataState.lastModifiedAt, 'YYYY.MM.DD HH:mm')}</div>
             </ColSpan0>
           </RowSpan>
-          <BoardTableContainer>
+          <BoardTableCustomContainer>
             <table>
               <thead>
               <tr>
@@ -65,7 +65,7 @@ function BudgetEventDetail() {
                 </tbody>
               }
             </table>
-          </BoardTableContainer>
+          </BoardTableCustomContainer>
         </BoardSearchDetail>
         <BoardTableContainer>
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>

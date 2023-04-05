@@ -2,19 +2,19 @@ import {
   AgentType,
   BoardSearchDetail,
   CalendarBox,
-  CalendarIcon,
+  CalendarIcon, ColSpan0,
   ColSpan1,
   ColSpan2,
   ColSpan3,
   ColSpan4,
   ColTitle,
   CustomDatePicker,
-  DateContainer,
+  DateContainer, Input,
   inputStyle,
   RangePicker,
   RowSpan,
   SearchButton,
-  SearchInput
+  SearchInput, Span1, Span4
 } from "../../assets/GlobalStyles";
 import ko from "date-fns/locale/ko";
 import {HorizontalRule} from "../common/Common";
@@ -31,10 +31,16 @@ import {
 import {dateFormat} from "../../common/StringUtils";
 import Checkbox from "../common/Checkbox";
 import Select from "react-select";
+import {SearchAdvertiser} from "../common/SearchAdvertiser";
+import {retrieveProduct} from "../../services/Platform/PlatformAxios";
+import {useAtom} from "jotai";
+import {productListDataAtom} from "../../pages/platform_manage/entity/product";
 
 export function PlatformCondition(props) {
+  const [dateActive,setDateActive] = useState('')
   const {searchCondition, setSearchCondition, handleTableData, searchType} = props;
   const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
+  const [productData, setProductData] = useAtom(productListDataAtom)
   const [startDate, endDate] = dateRange;
   const [searchTypeSelect] = useState(searchType)
   /**
@@ -42,6 +48,7 @@ export function PlatformCondition(props) {
    * @param rangeType
    */
   const handleRangeDate = (rangeType) => {
+    setDateActive(rangeType)
     if (rangeType === 'thisMonth') {
       setSearchCondition({
         ...searchCondition,
@@ -108,10 +115,20 @@ export function PlatformCondition(props) {
     })
   }
 
+  const handleSearchAdverResult = (username) => {
+    setSearchCondition({
+      ...searchCondition,
+      username:username
+    })
+    retrieveProduct({...searchCondition,username:username}).then(response =>{
+      setProductData(response)
+    })
+  }
+
   return (
     <BoardSearchDetail>
       <RowSpan>
-        <ColSpan2>
+        <ColSpan1>
           <ColTitle><span>기간</span></ColTitle>
           <div style={{width:'100%'}}>
             <DateContainer>
@@ -129,27 +146,31 @@ export function PlatformCondition(props) {
               />
             </DateContainer>
           </div>
-        </ColSpan2>
-        <ColSpan4>
+        </ColSpan1>
+        <ColSpan2>
           <div>
             <RangePicker>
-              <div onClick={() => handleRangeDate('thisMonth')}>이번달</div>
+              <div onClick={() => handleRangeDate('thisMonth')} style={dateActive==='thisMonth'?{color:'#f5811f'}:null}>이번달</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastMonth')}>지난달</div>
+              <div onClick={() => handleRangeDate('lastMonth')} style={dateActive==='lastMonth'?{color:'#f5811f'}:null}>지난달</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('today')}>오늘</div>
+              <div onClick={() => handleRangeDate('today')} style={dateActive==='today'?{color:'#f5811f'}:null}>오늘</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastDay')}>어제</div>
+              <div onClick={() => handleRangeDate('lastDay')} style={dateActive==='lastDay'?{color:'#f5811f'}:null}>어제</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastWeekDay')}>지난7일</div>
+              <div onClick={() => handleRangeDate('lastWeekDay')} style={dateActive==='lastWeekDay'?{color:'#f5811f'}:null}>지난7일</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastThirtyDay')}>지난30일</div>
+              <div onClick={() => handleRangeDate('lastThirtyDay')} style={dateActive==='lastThirtyDay'?{color:'#f5811f'}:null}>지난30일</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastNinetyDay')}>지난90일</div>
+              <div onClick={() => handleRangeDate('lastNinetyDay')} style={dateActive==='lastNinetyDay'?{color:'#f5811f'}:null}>지난90일</div>
             </RangePicker>
           </div>
-        </ColSpan4>
-        <ColSpan1/>
+        </ColSpan2>
+        <ColSpan0>
+          <Span4>광고주 설정</Span4>
+          <Input type={'text'}/>
+          <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdverResult}/>
+        </ColSpan0>
       </RowSpan>
       <RowSpan>
         <ColSpan2>

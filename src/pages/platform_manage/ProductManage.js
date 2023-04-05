@@ -16,10 +16,10 @@ import {useSetAtom} from "jotai";
 import {ModalBody, ModalHeader} from "../../components/modal/Modal";
 import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
 import {retrieveProduct} from "../../services/Platform/PlatformAxios";
-import {FooterButton} from "@inovua/reactdatagrid-community/packages/Calendar/src/Footer";
 import {searchConditionAtom} from "./entity/common";
 import {productListColumn, productListDataAtom, searchProductType} from "./entity/product";
 import {Image} from "./styles/common";
+import styled from "styled-components";
 
 function ImageViewComponent (props) {
   return(
@@ -48,9 +48,23 @@ export function ImageView (props) {
     })
   }
   return (
-    <FooterButton onClick={handleShowModal}>보기</FooterButton>
+    <ImageViewButton onClick={handleShowModal}/>
   )
 }
+
+const ImageViewButton = styled.div`
+  margin: 0 auto;
+  width: 24px;
+  height: 24px;
+  background-image: url('/assets/images/common/btn_img_show@2x.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  &:hover {
+    background-image: url('/assets/images/common/btn_img_show_on.png'); 
+    cursor: pointer;
+  }
+`
 
 function ProductManage() {
   const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
@@ -59,6 +73,7 @@ function ProductManage() {
 
   useEffect(() => {
     retrieveProduct(searchCondition).then(response =>{
+      console.log(response)
       setProductData(response)
     })
   }, [])
@@ -69,28 +84,12 @@ function ProductManage() {
     })
   }
 
-  const handleSearchAdverResult = (username) => {
-   setSearchCondition({
-     ...searchCondition,
-     username:username
-   })
-    retrieveProduct({...searchCondition,username:username}).then(response =>{
-      setProductData(response)
-    })
-  }
-
   return (
     <>
         <Board>
           <BoardHeader>상품 수집 현황</BoardHeader>
           <BoardSearchDetail>
             <PlatformCondition searchType={searchProductType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleTableData={handleSearchResult}/>
-            <RowSpan>
-              <ColSpan2>
-                <Span4>광고주 설정</Span4>
-                <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdverResult}/>
-              </ColSpan2>
-            </RowSpan>
           </BoardSearchDetail>
           <BoardSearchResult>
             {productData !==null &&

@@ -2,3 +2,10 @@ $DATAGRID_THEME_NAME: 'default-light';
 $INOVUA_DATAGRID_ACCENT_COLOR: #f5811f;
 
 @import '@inovua/reactdatagrid-community/style/theme/default-light/index.scss';
+
+.InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__group-toolbar-item .InovuaReactDataGrid__sort-icon-wrapper, .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__column-header__content .InovuaReactDataGrid__sort-icon-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}

@@ -239,15 +239,6 @@ export function Icon(props) {
       setActiveCell([data.length])
     }, []);
 
-    const renderRowContextMenu = (menuProps, {rowProps, cellProps}) => {
-      menuProps.autoDismiss = true
-      menuProps.items = [
-        {
-          label: '원하는 메뉴'
-        }
-      ]
-    }
-
     const emptyText = <p style={{
       fontSize: 16,
 
@@ -272,7 +263,6 @@ export function Icon(props) {
         showCellBorders={'horizontal'}
         groups={groups !== null ? groups : false}
         enableColumnAutosize={true}
-        renderRowContextMenu={renderRowContextMenu}
         showColumnMenuLockOptions={false}
         showColumnMenuGroupOptions={false}
         emptyText={emptyText}

@@ -23,7 +23,11 @@ export const searchProductType = [
 export const productListColumn = [
   {
     name: 'username',
-    header: '광고주 아이디',
+    header: () => {
+      return (
+        <div><p>광고주</p><p>아이디</p></div>
+      )
+    },
     textAlign: 'center',
     minWidth: 80,
     showColumnMenuTool: false,
@@ -41,14 +45,14 @@ export const productListColumn = [
     }
   },
   {
-    name: '',
+    name: 'createdAt',
     header: '등록 일시',
     textAlign: 'center',
     width: 90,
     resizeable: false,
     showColumnMenuTool: false,
     render: ({value}) => {
-      return <p>{dateFormat(value, 'YYYY.MM.DD HH:mm')}</p>
+      return <p>{dateFormat(value, 'YYYY.MM.DD HH:mm:ss')}</p>
     }
   },
   {
@@ -75,10 +79,11 @@ export const productListColumn = [
     showColumnMenuTool: false,
     sortable: false,
     render: (props) => {
+      console.log(props.cellProps.data.productImages[0])
       return (
         <>
           {props.cellProps.data.productImages.length !== 0 &&
-            <ImageView url={props.cellProps.data.productImages[0]}/>
+            <img src={props.cellProps.data.productImages[0].imageUrl} style={{height: 50}}/>
           }
         </>
       )
@@ -205,8 +210,11 @@ export const productListColumn = [
     sortable: false,
     showColumnMenuTool: false,
     render: ({value, cellProps}) => {
-      return <div style={{display: 'flex', alignItems: 'center'}}><p>이동</p> <Icon icon={'url'} value={value}
-                                                                                  cellProps={cellProps}/></div>
+      return (
+        <div style={{display: 'flex', justifyContent:'center',alignItems: 'center'}}>
+          <p>이동</p> <Icon icon={'url'} value={value} cellProps={cellProps}/>
+        </div>
+      )
     }
   },
   {

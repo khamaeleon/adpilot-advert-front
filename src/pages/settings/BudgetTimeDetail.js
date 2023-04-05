@@ -2,7 +2,7 @@ import {
   Board,
   BoardHeader,
   BoardSearchDetail,
-  BoardTableContainer,
+  BoardTableContainer, BoardTableCustomContainer,
   CancelButton,
   ColSpan0,
   ColTitle,
@@ -48,7 +48,7 @@ function BudgetTimeDetail() {
               <div>{dateFormat(timeBudgetDetailDataState !==null && timeBudgetDetailDataState.lastModifiedAt, 'YYYY.MM.DD HH:mm')}</div>
             </ColSpan0>
           </RowSpan>
-          <BoardTableContainer>
+          <BoardTableCustomContainer>
             <table>
               <thead>
               <tr>
@@ -68,7 +68,7 @@ function BudgetTimeDetail() {
               }
 
             </table>
-          </BoardTableContainer>
+          </BoardTableCustomContainer>
         </BoardSearchDetail>
         <BoardTableContainer>
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>

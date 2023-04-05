@@ -173,13 +173,15 @@ export const ResistBanner = styled.div`
 export const ImageUploadCard = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 5px;
   width: 100%;
   aspect-ratio: 1/1;
   background-color: #ebebec;
   border-radius: 5px;
   & img {
-    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
   }
 `
 

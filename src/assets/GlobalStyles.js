@@ -710,7 +710,8 @@ export const DashBoardHeader = styled.div`
   font-weight: bold;
 `
 
-export const BoardTableContainer = styled.div`
+export const BoardTableContainer = styled.div``
+export const BoardTableCustomContainer = styled.div`
   & table {
     width: 100%;
     border: 1px solid ${lightGray};
