@@ -261,8 +261,7 @@ export const searchAdminParams = {
  * 상품 수집 관리 리스트 Atom
  * @type {Atom<unknown>}
  */
-//export const productListDataAtom = atom(null)
-export const productListDataAtom = atom([])
+export const productListDataAtom = atom(null)
 
 export const searchProductType = [
   {id: "1", value: "DEFAULT", label: "기본"},

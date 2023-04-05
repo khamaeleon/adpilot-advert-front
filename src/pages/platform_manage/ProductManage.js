@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {productListColumn, searchConditionAtom, searchProductType} from "./entity";
+import {productListColumn, productListDataAtom, searchConditionAtom, searchProductType} from "./entity";
 import {
   Board,
   BoardHeader,
@@ -54,7 +54,7 @@ export function ImageView (props) {
 
 function ProductManage() {
   const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
-  const [productData, setProductData] = useState(null)
+  const [productData, setProductData] = useAtom(productListDataAtom)
   const [count, setCount] = useState(0)
 
   useEffect(() => {
