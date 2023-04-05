@@ -27,7 +27,6 @@ function Layout(){
   const [tokenUserInfo] = useAtom(tokenResultAtom)
 
   useEffect(() => {
-    console.log(tokenUserInfo)
     if(tokenUserInfo.role==='NORMAL'){
       if(userInfoState.name ===''){
         selUserByUserId(tokenUserInfo.id).then(response =>{

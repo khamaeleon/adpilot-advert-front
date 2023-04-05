@@ -24,9 +24,9 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {selAdminInfo, updateAdmin} from "../../services/ManageAdminAxios";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import {adminInfoAtom} from "./entity";
 import {PwChange} from "./UserDetail";
 import {modalController} from "../../store";
+import {adminInfoAtom} from "./entity/admin";
 
 function PlatformAdminDetail() {
   const [, setModal] = useAtom(modalController)

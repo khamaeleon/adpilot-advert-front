@@ -1,6 +1,5 @@
 import {
   Board,
-  BoardContainer,
   BoardHeader,
   BoardSearchDetail,
   CancelButton,
@@ -17,24 +16,23 @@ import {
   Span4,
   SubmitButton,
   SubmitContainer,
-  TitleContainer,
   ValidationScript
 } from "../../assets/GlobalStyles";
-import {VerticalRule} from "../../components/common/Common";
 import {useAtom} from "jotai";
 import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useLocation, useNavigate} from "react-router-dom";
-import {selUserInfo, updateUser, accountFileUpload} from "../../services/ManageUserAxios";
+import {accountFileUpload, selUserInfo, updateUser} from "../../services/ManageUserAxios";
 import {toast} from "react-toastify";
 import Select from "react-select";
 import ImageUploading from "react-images-uploading";
 import styled from "styled-components";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {modalController} from "../../store";
-import {accountInfoAtom, adminInfoAtom} from "./entity";
 import {phoneNumFormat} from "../../common/StringUtils";
 import {hostList} from "../signup/entity";
+import {accountInfoAtom} from "./entity/user";
+import {adminInfoAtom} from "./entity/admin";
 
 export function PwChange(props) {
   const {onSubmit, modalInfo, onSave, title} = props;

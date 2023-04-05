@@ -16,9 +16,7 @@ export const adverAxios = axios.create({
 });
 adverAxios.interceptors.request.use(
   async (config) => {
-    let token=''
     const tokenAtom =store.get(tokenResultAtom)
-    console.log(tokenAtom.accessToken)
     config.headers.Authorization = `Bearer ${tokenAtom.accessToken}`;
     return config;
   },
@@ -58,7 +56,6 @@ adverAxios.interceptors.response.use(
       if (!isTokenRefreshing ) {
         isTokenRefreshing = true;
         await refresh().then(response =>{
-          console.log(response)
           if(response){
             refresh().then(response => {
               if (response) {

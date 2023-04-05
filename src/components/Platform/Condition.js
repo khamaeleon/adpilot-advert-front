@@ -4,13 +4,17 @@ import {
   CalendarBox,
   CalendarIcon,
   ColSpan1,
-  ColSpan2, ColSpan3,
+  ColSpan2,
+  ColSpan3,
   ColSpan4,
   ColTitle,
   CustomDatePicker,
-  DateContainer, inputStyle,
+  DateContainer,
+  inputStyle,
   RangePicker,
-  RowSpan, SearchButton, SearchInput
+  RowSpan,
+  SearchButton,
+  SearchInput
 } from "../../assets/GlobalStyles";
 import ko from "date-fns/locale/ko";
 import {HorizontalRule} from "../common/Common";
@@ -25,7 +29,6 @@ import {
   getToDay
 } from "../../common/DateUtils";
 import {dateFormat} from "../../common/StringUtils";
-import {mediaType} from "../../pages/platform_manage/entity";
 import Checkbox from "../common/Checkbox";
 import Select from "react-select";
 

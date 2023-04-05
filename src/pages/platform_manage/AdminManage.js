@@ -1,27 +1,34 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchDetail, BoardSearchResultTitle, BoardTableContainer,
+  BoardSearchDetail,
+  BoardSearchResultTitle,
+  BoardTableContainer,
   ColSpan1,
   ColSpan2,
   ColTitle,
   inputStyle,
-  RowSpan, SaveExcelButton, SearchButton, SearchInput
+  RowSpan,
+  SaveExcelButton,
+  SearchButton,
+  SearchInput
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
 import Table from "../../components/table";
-import {
-  adverType,
-  columnUserData, hostType,
-  searchAccountInfo,
-  selectAccountUseInfo,
-  selectKeywordType, userInfoAtom,
-} from "./entity";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai/index";
 import {dataTotalInfo} from "../../components/common/entity";
 import {selUserList} from "../../services/ManageUserAxios";
 import {hostList} from "../signup/entity";
+import {
+  adverType,
+  columnUserData,
+  searchAccountInfo,
+  selectAccountUseInfo,
+  selectKeywordType,
+  userInfoAtom
+} from "./entity/admin";
+import {hostType} from "./entity/common";
 
 export default function AdminManage(){
   const [searchAccountInfoState ,setSearchAccountInfoState] = useState(searchAccountInfo)
@@ -173,8 +180,7 @@ export default function AdminManage(){
                 <Select styles={inputStyle}
                         components={{IndicatorSeparator: () => null}}
                         options={hostTypeState}
-                        value={searchAccountInfoState?.hostType !== null ? hostList.find(value => value.value === searchAccountInfoState?.hostType) : hostTypeState[0]
-                        }
+                        value={searchAccountInfoState?.hostType !== null ? hostList.find(value => value.value === searchAccountInfoState?.hostType) : hostTypeState[0]  }
                         onChange={handleSelectHosting}
                 />
               </div>

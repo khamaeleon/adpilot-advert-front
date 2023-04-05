@@ -2,19 +2,16 @@ import {Board, BoardHeader, BoardSearchDetail, BoardTableContainer,} from "../..
 import React, {useCallback, useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import {ToastContainer} from "react-toastify";
+import {PlatformCondition} from "../../components/Platform/Condition";
+import {selConversionDetailList, selConversionList} from "../../services/conversion/ConversionAxios";
+import TableDetail from "../../components/table/TableDetail";
+import {searchConditionAtom} from "./entity/common";
 import {
   columnConversionData,
   columnConversionDetailData,
   conversionListDataAtom,
-  searchConditionAtom,
   searchConversionType
-} from "./entity";
-import {PlatformCondition} from "../../components/Platform/Condition";
-import {selConversionDetailList, selConversionList} from "../../services/conversion/ConversionAxios";
-import Table from "../../components/table";
-import TableDetail from "../../components/table/TableDetail";
-import {pixelColumns, pixelDetailColumns} from "../pixel/entity";
-import {selAdverPixelDetailList} from "../../services/header/ManagePixelAxios";
+} from "./entity/conversion";
 
 function ConversionManage() {
   const [conversionListDataState, setConversionListDataState] = useAtom(conversionListDataAtom)

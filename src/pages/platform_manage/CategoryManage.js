@@ -1,38 +1,16 @@
-import {
-  Board,
-  BoardHeader,
-  BoardSearchDetail,
-  ColSpan1,
-  ColSpan3,
-  DefaultButton,
-  Input,
-  RowSpan,
-} from "../../assets/GlobalStyles";
+import {Board, BoardHeader, BoardSearchDetail, ColSpan1, ColSpan3, Input, RowSpan,} from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {CategoryContainer} from "./styles";
 import styled from "styled-components";
-import {atom, useAtom} from "jotai/index";
-import {atomWithReset, useResetAtom} from "jotai/utils";
+import {useAtom} from "jotai/index";
+import {useResetAtom} from "jotai/utils";
 import {
   createNewCategory,
   retrieveCategoryByParentCode,
   retrieveTopLevelCategory
 } from "../../services/Platform/CategoryAxios";
+import {categoryListAtom, createCategoryAtom, selectCategoryAtom, topLevelCategoryListAtom} from "./entity/category";
 
-export const topLevelCategoryListAtom = atom([])
-export const categoryListAtom = atom([])
-const selectCategoryAtom = atom('')
-const createCategoryAtom = atomWithReset({
-  category: {
-    name: '',
-    level: 1,
-  },
-  subCategory: {
-    name: '',
-    level: 2,
-    parentCode: null
-  }
-})
 
 export function CategoryManage() {
   const [topLevelCategoryList, setTopLevelCategoryList] = useAtom(topLevelCategoryListAtom)
@@ -54,7 +32,6 @@ export function CategoryManage() {
    */
   useEffect(() => {
     const fetchData = retrieveTopLevelCategory().then(response => {
-      console.log(response)
       setTopLevelCategoryList(response)
     })
   }, [refresh]);
@@ -65,7 +42,6 @@ export function CategoryManage() {
   const handleSelectCategory = async (code) => {
     setSelectCategory(code)
     const fetData = await retrieveCategoryByParentCode(code).then(response => {
-      console.log(response)
       setCategoryList(response)
     })
   }
@@ -87,7 +63,6 @@ export function CategoryManage() {
    * @param inputEvent
    */
   const handleChangeSubCategory = (inputEvent) => {
-    console.log(createCategory)
     setCreateCategory({
       ...createCategory,
       subCategory: {
@@ -102,7 +77,6 @@ export function CategoryManage() {
    * @param e
    */
   const handleChangeSearchCategory = (e) => {
-    console.log(e.target.value)
     setSearchKeyword(e.target.value)
   }
   /**
@@ -111,7 +85,6 @@ export function CategoryManage() {
    */
   const handleCreateCategory = async () => {
     const fetchData = await createNewCategory(createCategory.category).then(response => {
-      console.log(response)
       setRefresh(!refresh)
     }).then(() => resetCategory())
   }
@@ -121,11 +94,9 @@ export function CategoryManage() {
    */
   const handleCreateSubCategory = async () => {
     const fetchData = await createNewCategory(createCategory.subCategory).then(response => {
-      console.log(response)
       setRefresh(!refresh)
     }).then(() => resetCategory())
     const fetData = await retrieveCategoryByParentCode(selectCategory).then(response => {
-      console.log(response)
       setCategoryList(response)
     })
   }

@@ -1,5 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
-import {productListColumn, productListDataAtom, searchConditionAtom, searchProductType} from "./entity";
+import React, {useEffect, useState} from "react";
 import {
   Board,
   BoardHeader,
@@ -19,7 +18,8 @@ import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
 import {retrieveProduct} from "../../services/Platform/PlatformAxios";
 import {FooterButton} from "@inovua/reactdatagrid-community/packages/Calendar/src/Footer";
 import styled from "styled-components";
-import {selConversionDetailList, selConversionList} from "../../services/conversion/ConversionAxios";
+import {searchConditionAtom} from "./entity/common";
+import {productListColumn, productListDataAtom, searchProductType} from "./entity/product";
 
 function ImageViewComponent (props) {
   return(

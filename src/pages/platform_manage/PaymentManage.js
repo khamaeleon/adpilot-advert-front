@@ -5,14 +5,17 @@ import React, {useCallback, useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
-import {
-  paymentColumns, paymentDataAtom,
-  searchPaymentParams, searchPaymentType, searchProductType, updatePaymentStatus
-} from "./entity";
 import {toast, ToastContainer} from "react-toastify";
 import styled from "styled-components";
 import {PaymentCondition} from "../../components/Platform/Condition";
 import {SearchUser} from "../../components/common/SearchUser";
+import {
+  paymentColumns,
+  paymentDataAtom,
+  searchPaymentParams,
+  searchPaymentType,
+  updatePaymentStatus
+} from "./entity/payment";
 
 function PaymentManage() {
   const [paymentDataState, setPaymentDataState] = useAtom(paymentDataAtom)

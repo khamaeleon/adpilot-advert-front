@@ -72,7 +72,6 @@ export async function retrieveTopLevelCategoryKeyValue() {
         const fetch = returnVal.map((item,idx) => {
           Object.assign(item, {key: idx, value:item.code, label: item.name})
         })
-        console.log(fetch)
       } else {
         returnVal = null
       }
@@ -82,17 +81,14 @@ export async function retrieveTopLevelCategoryKeyValue() {
 
 export async function retrieveSubLevelCategoryKeyValue(params) {
   let returnVal = null;
-  console.log(params)
   await AdverAxios('GET', CATEGORY_BY_PARENT+SLASH+params, null)
     .then((response) => {
       const {responseCode ,data} =response
       if (responseCode.statusCode === 200) {
         returnVal = data
-
         const fetch = returnVal.map((item,idx) => {
           Object.assign(item, {key: idx, value:item.code, label: item.name})
         })
-        console.log(fetch)
       } else {
         returnVal = null
       }
