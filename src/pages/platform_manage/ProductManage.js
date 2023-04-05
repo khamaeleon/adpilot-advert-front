@@ -17,9 +17,9 @@ import {ModalBody, ModalHeader} from "../../components/modal/Modal";
 import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
 import {retrieveProduct} from "../../services/Platform/PlatformAxios";
 import {FooterButton} from "@inovua/reactdatagrid-community/packages/Calendar/src/Footer";
-import styled from "styled-components";
 import {searchConditionAtom} from "./entity/common";
 import {productListColumn, productListDataAtom, searchProductType} from "./entity/product";
+import {Image} from "./styles/common";
 
 function ImageViewComponent (props) {
   return(
@@ -108,6 +108,3 @@ function ProductManage() {
 
 export default ProductManage;
 
-const Image = styled.img`
-  width: 100%;
-`

@@ -6,7 +6,6 @@ import {useAtom} from "jotai";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
 import {toast, ToastContainer} from "react-toastify";
-import styled from "styled-components";
 import {PaymentCondition} from "../../components/Platform/Condition";
 import {SearchUser} from "../../components/common/SearchUser";
 import {
@@ -16,6 +15,7 @@ import {
   searchPaymentType,
   updatePaymentStatus
 } from "./entity/payment";
+import {StatusBtn} from "./styles/common";
 
 function PaymentManage() {
   const [paymentDataState, setPaymentDataState] = useAtom(paymentDataAtom)
@@ -178,15 +178,3 @@ function PaymentManage() {
 
 export default PaymentManage
 
-const StatusBtn = styled.button`
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-  background-color: #f9fafb;
-  height: 35px;
-  border: 1px solid #e5e5e5;
-  border-radius: 5px;
-  &:hover {
-    border-color: #f5811f;
-  }
-`

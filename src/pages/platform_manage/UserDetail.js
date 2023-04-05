@@ -26,13 +26,13 @@ import {accountFileUpload, selUserInfo, updateUser} from "../../services/ManageU
 import {toast} from "react-toastify";
 import Select from "react-select";
 import ImageUploading from "react-images-uploading";
-import styled from "styled-components";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {modalController} from "../../store";
 import {phoneNumFormat} from "../../common/StringUtils";
 import {hostList} from "../signup/entity";
 import {accountInfoAtom} from "./entity/user";
 import {adminInfoAtom} from "./entity/admin";
+import {DuplicateButton, InputValidationCon} from "./styles/common";
 
 export function PwChange(props) {
   const {onSubmit, modalInfo, onSave, title} = props;
@@ -725,20 +725,4 @@ function PlatformUserDetail() {
 }
 
 export default PlatformUserDetail
-
-const DuplicateButton = styled.button`
-  width: 150px;
-  height: 45px;
-  background-color: #777;
-  border-radius: 5px;
-  color: #fff;
-  font-size: 15px;
-  &:hover {
-    background-color: #535353;
-  }
-`
-const InputValidationCon = styled.div`
-  width: 100%;
-  > div { position: unset; }
-`
 

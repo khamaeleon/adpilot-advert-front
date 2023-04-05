@@ -1,7 +1,13 @@
-import {Board, BoardHeader, BoardSearchDetail, ColSpan1, ColSpan3, Input, RowSpan,} from "../../assets/GlobalStyles";
+import {
+  Board,
+  BoardHeader,
+  BoardSearchDetail,
+  ColSpan1,
+  ColSpan3,
+  Input,
+  RowSpan,
+} from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
-import {CategoryContainer} from "./styles";
-import styled from "styled-components";
 import {useAtom} from "jotai/index";
 import {useResetAtom} from "jotai/utils";
 import {
@@ -10,6 +16,17 @@ import {
   retrieveTopLevelCategory
 } from "../../services/Platform/CategoryAxios";
 import {categoryListAtom, createCategoryAtom, selectCategoryAtom, topLevelCategoryListAtom} from "./entity/category";
+import {
+  CategoryBody, CategoryContainer,
+  CategoryEnroll,
+  CategoryHeader,
+  CategoryItem,
+  EnrollButton,
+  MainCategory, SearchButton,
+  SubCategory,
+  SubCategoryBody,
+  SubCategoryItem
+} from "./styles/common";
 
 
 export function CategoryManage() {
@@ -173,100 +190,3 @@ export function CategoryManage() {
   )
 }
 
-const MainCategory = styled.div`
-  margin-right: 15px;
-  width: 400px;
-  border: 1px solid #ddd;
-`
-
-const SubCategory = styled.div`
-  width: 100%;
-  border: 1px solid #ddd;
-`
-
-const CategoryEnroll = styled.div`
-  display: flex;
-  border-bottom: 1px solid #ddd;
-  overflow: hidden;
-  padding: 0 10px 0 0;
-  height: 0;
-  transition-duration: 0.5s;
-  background-color: #f3f3f3;
-`
-
-const CategoryHeader = styled.div`
-  position: relative;
-  width: 100%;
-  padding: 15px;
-  text-align: center;
-  background-color: #fafafa;
-  border-bottom: 1px solid #ddd;
-`
-
-const CategoryBody = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 500px;
-  overflow-y: scroll;
-  & div:last-child {
-    border-bottom: 0;
-  }
-`
-
-const CategoryItem = styled.div`
-  padding: 15px 20px;
-  width: 100%;
-  border-bottom: ${(props) => props.active ? "1px solid #ffe3cb" : "1px solid #ddd"};
-  border-left: ${(props) => props.active ? "2px solid #f5811f" : null};
-  cursor: pointer;
-  background-color: ${(props) => props.active ? "#fffaf1" : null};
-  color: ${(props) => props.active ? "#f5811f" : null};
-`
-
-const SubCategoryBody = styled.div`
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  width: 100%;
-  max-height: 500px;
-  overflow-y: auto;
-  
-  & div:nth-child(4n) {
-    border-right: 0;
-  }
-`
-
-const SubCategoryItem = styled.div`
-  padding: 15px 20px;
-  width: 25%;
-  border-bottom: 1px solid #ddd;
-  border-right: 1px solid #ddd;
-`
-
-const EnrollButton = styled.button`
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  padding: 0 20px;
-  height: 30px;
-  margin-top: -15px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  color: #777777;
-  font-weight: bold;
-  &:hover {
-    color: #f5811f;
-  }
-`
-
-const SearchButton = styled.button`
-  width: 140px;
-  height: 45px;
-  border: 1px solid #dddddd;
-  background-color: #fff;
-  border-radius: 5px;
-  &:hover {
-    color: #f5811f;
-  }
-`
