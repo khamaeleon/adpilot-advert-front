@@ -1,23 +1,19 @@
-import Navigator from "../../components/common/Navigator";
 import {
   Board,
-  BoardContainer,
   BoardHeader,
   BoardSearchDetail,
   BoardTableContainer,
   ColSpan1,
   DefaultButton,
   Input,
-  RowSpan,
-  TitleContainer
+  RowSpan
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {adverTimeBudgetColumns, budgetTimeDataAtom} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {selAdverBudgetEventList, selAdverPriceEventList} from "../../services/SettingsAxios";
-
+import {adverTimeBudgetColumns, budgetTimeDataAtom} from "./entity/budgetTime";
 
 function BudgetTime() {
   const [budgetTimeDataState, setBudgetTimeDataState] = useAtom(budgetTimeDataAtom)
@@ -25,7 +21,6 @@ function BudgetTime() {
 
   useEffect(() => {
     selAdverBudgetEventList(searchParams).then(response => {
-      console.log(response)
       setBudgetTimeDataState(response)
     })
   }, [])

@@ -5,7 +5,6 @@ import {
   BoardTableContainer,
   CancelButton,
   ColSpan0,
-  ColSpan1,
   ColTitle,
   RowSpan,
   SubmitContainer
@@ -13,19 +12,18 @@ import {
 import React, {useEffect} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {eventUnitPriceDetailColumns, eventUnitPriceDetailDataAtom, saveTypeAtom} from "./entity";
-import {toast, ToastContainer} from "react-toastify";
+import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
-import {resistPriceEvent, selPriceEventList, updatePriceEvent} from "../../services/SettingsAxios";
+import {selPriceEventList} from "../../services/SettingsAxios";
 import SettingAdd from "../../components/common/SettingModal";
 import {modalController} from "../../store";
+import {eventUnitPriceDetailColumns, eventUnitPriceDetailDataAtom} from "./entity/eventPrice";
 
 function EventUnitPriceDetail() {
   const [eventUnitPriceDetailDataState, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
   const navigate = useNavigate()
   const [, setModal] = useAtom(modalController)
-  const [saveTypeState] = useAtom(saveTypeAtom)
   const {state} = useLocation()
 
   useEffect(() => {
@@ -70,7 +68,7 @@ function EventUnitPriceDetail() {
         </BoardSearchDetail>
         <BoardTableContainer>
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
-            <SettingAdd title={'추가'} saveType={saveTypeState} data={null} label={'won'} />
+            <SettingAdd title={'추가'} saveType={'create'} data={null} label={'won'} />
           </RowSpan>
           <div>
             총 <span>{eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.totalCount}</span>건

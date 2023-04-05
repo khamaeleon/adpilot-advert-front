@@ -1,27 +1,23 @@
-import Navigator from "../../components/common/Navigator";
 import {
   Board,
-  BoardContainer,
   BoardHeader,
   BoardSearchDetail,
   BoardTableContainer,
   CancelButton,
   ColSpan0,
-  ColSpan1,
   ColTitle,
   RowSpan,
-  SubmitContainer,
-  TitleContainer
+  SubmitContainer
 } from "../../assets/GlobalStyles";
 import React, {useEffect} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {budgetTimeDetailColumns, timeBudgetDetailDataAtom,} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
 import {selBudgetEventList} from "../../services/SettingsAxios";
 import SettingAdd from "../../components/common/SettingModal";
+import {budgetTimeDetailColumns, timeBudgetDetailDataAtom} from "./entity/budgetTime";
 
 
 function BudgetTimeDetail() {

@@ -1,21 +1,19 @@
-import Navigator from "../../components/common/Navigator";
 import {
-  Board, BoardContainer,
+  Board,
   BoardHeader,
   BoardSearchDetail,
   BoardTableContainer,
   ColSpan1,
   DefaultButton,
   Input,
-  RowSpan, TitleContainer
+  RowSpan
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {adverEventBudgetColumns,  budgetEventDataAtom} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {selAdverBudgetEventList, selAdverPriceEventList} from "../../services/SettingsAxios";
-
+import {adverEventBudgetColumns, budgetEventDataAtom} from "./entity/budgetEvent";
 
 function BudgetEvent() {
   const [budgetEventDataState, setBudgetEventDataState] = useAtom(budgetEventDataAtom)

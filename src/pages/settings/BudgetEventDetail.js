@@ -5,7 +5,6 @@ import {
   BoardTableContainer,
   CancelButton,
   ColSpan0,
-  ColSpan1,
   ColTitle,
   RowSpan,
   SubmitContainer
@@ -13,13 +12,13 @@ import {
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {budgetEventDetailColumns, eventBudgetDetailDataAtom,} from "./entity";
-import {toast, ToastContainer} from "react-toastify";
+import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
-import {resistBudgetEvent, selBudgetEventList} from "../../services/SettingsAxios";
+import {selBudgetEventList} from "../../services/SettingsAxios";
 import SettingAdd from "../../components/common/SettingModal";
 import {modalController} from "../../store";
+import {budgetEventDetailColumns, eventBudgetDetailDataAtom} from "./entity/budgetEvent";
 
 
 function BudgetEventDetail() {

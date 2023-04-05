@@ -16,7 +16,6 @@ import {
 import {useAtom} from "jotai";
 import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
-import {eventBudgetDetailDataAtom, eventUnitPriceDetailDataAtom, saveTypeAtom} from "../../pages/settings/entity";
 import {
   resistBudgetEvent,
   resistPriceEvent,
@@ -27,39 +26,34 @@ import {
 } from "../../services/SettingsAxios";
 import {toast} from "react-toastify";
 import {useLocation} from "react-router-dom";
+import {eventUnitPriceDetailDataAtom} from "../../pages/settings/entity/eventPrice";
+import {eventBudgetDetailDataAtom} from "../../pages/settings/entity/budgetEvent";
 
 function SettingChangeModal(props) {
   const {data, saveType, label} = props
   const [, setModal] = useAtom(modalController)
-  const [, setSaveTypeState] = useAtom(saveTypeAtom)
   const [, setEventBudgetDetailDataState] = useAtom(eventBudgetDetailDataAtom)
   const [, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
   const {state} = useLocation()
-  const [dataState, setDataState] = useState(saveType !== 'create' ? data :{
+  const [dataState, setDataState] = useState(saveType !== 'create' ? data : {
     audience: '',
     cartRecommendations: '',
     eventId: '',
     groupName: '',
     productRecommendations: '',
     shopperMatching: '',
-    userMatching :'',
+    userMatching: '',
     userOptimization: ''
-  } )
+  })
   const {register, handleSubmit, reset, formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: dataState
   })
   useEffect(() => {
-    console.log(data)
-    if (saveType === 'create') {
-      setSaveTypeState(saveType)
-    }else{
-      setSaveTypeState(saveType)
-      setDataState(data)
-      reset({
-        dataState
-      })
-    }
+    setDataState(data)
+    reset({
+      dataState
+    })
   }, [reset])
   const onError = (error) => console.log(error)
   /**
@@ -142,9 +136,9 @@ function SettingChangeModal(props) {
    * 이벤트 단가 수정 추가
    */
   const handlePriceEventSave = () => {
-    if(saveType ==='create'){
-      resistPriceEvent({...dataState,userId:state.id}).then(response => {
-        if(response){
+    if (saveType === 'create') {
+      resistPriceEvent({...dataState, userId: state.id}).then(response => {
+        if (response) {
           setModal({
             isShow: false,
             modalComponent: null
@@ -152,13 +146,12 @@ function SettingChangeModal(props) {
           selPriceEventList(state.id).then(response => {
             setEventUnitPriceDetailDataState(response)
           })
-        }else{
+        } else {
           toast.warning("이벤트 단가 그룹명이 중복 되었습니다.")
         }
       })
-    }else{
-      console.log('수정')
-      updatePriceEvent({...dataState,userId:state.id}).then(response => {
+    } else {
+      updatePriceEvent({...dataState, userId: state.id}).then(response => {
         if (response) {
           setModal({
             isShow: false,
@@ -175,9 +168,9 @@ function SettingChangeModal(props) {
   }
 
   const handleBudgetEventSave = () => {
-    if(saveType ==='create'){
-      resistBudgetEvent({...dataState,userId:state.id}).then(response => {
-        if(response){
+    if (saveType === 'create') {
+      resistBudgetEvent({...dataState, userId: state.id}).then(response => {
+        if (response) {
           setModal({
             isShow: false,
             modalComponent: null
@@ -185,13 +178,13 @@ function SettingChangeModal(props) {
           selBudgetEventList(state.id).then(response => {
             setEventBudgetDetailDataState(response)
           })
-        }else{
+        } else {
           toast.warning("이벤트 단가 그룹명이 중복 되었습니다.")
         }
       })
-    }else{
+    } else {
       console.log('수정')
-      updateBudgetEvent({...dataState,userId:state.id}).then(response => {
+      updateBudgetEvent({...dataState, userId: state.id}).then(response => {
         if (response) {
           setModal({
             isShow: false,
@@ -209,7 +202,7 @@ function SettingChangeModal(props) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit(label ==='won' ? handlePriceEventSave: handleBudgetEventSave, onError)}>
+      <form onSubmit={handleSubmit(label === 'won' ? handlePriceEventSave : handleBudgetEventSave, onError)}>
         <ModalBody>
           <RowSpan>
             <ColSpan4>
@@ -220,7 +213,7 @@ function SettingChangeModal(props) {
                   placeholder={'그룹명을 입력해주세요'}
                   {...register("groupName", {
                     required: "그룹명을 입력해주세요",
-                    onChange:(e) => handlePriceEventName(e)
+                    onChange: (e) => handlePriceEventName(e)
                   })}
                   value={dataState?.groupName}
                 />
@@ -237,7 +230,7 @@ function SettingChangeModal(props) {
                   placeholder={'금액을 입력해주세요'}
                   {...register("shopperMatching", {
                     required: "금액을 입력해주세요",
-                    onChange:(e) => handleShopperMatching(e)
+                    onChange: (e) => handleShopperMatching(e)
                   })}
                   value={dataState?.shopperMatching !== 0 ? dataState?.shopperMatching : ''}
                 />
@@ -255,11 +248,12 @@ function SettingChangeModal(props) {
                   placeholder={'금액을 입력해주세요'}
                   {...register("cartRecommendations", {
                     required: "금액을 입력해주세요",
-                    onChange:(e) => handleCartRecommendations(e)
+                    onChange: (e) => handleCartRecommendations(e)
                   })}
                   value={dataState?.cartRecommendations !== 0 ? dataState?.cartRecommendations : ''}
                 />
-                {errors.cartRecommendations && <ValidationScript>{errors.cartRecommendations?.message}</ValidationScript>}
+                {errors.cartRecommendations &&
+                  <ValidationScript>{errors.cartRecommendations?.message}</ValidationScript>}
                 <span className={label}></span>
               </RelativeDiv>
             </ColSpan4>
@@ -273,11 +267,12 @@ function SettingChangeModal(props) {
                   placeholder={'금액을 입력해주세요'}
                   {...register("productRecommendations", {
                     required: "금액을 입력해주세요",
-                    onChange:(e) => handleProductRecommendations(e)
+                    onChange: (e) => handleProductRecommendations(e)
                   })}
                   value={dataState?.productRecommendations !== 0 ? dataState?.productRecommendations : ''}
                 />
-                {errors.productRecommendations && <ValidationScript>{errors.productRecommendations?.message}</ValidationScript>}
+                {errors.productRecommendations &&
+                  <ValidationScript>{errors.productRecommendations?.message}</ValidationScript>}
                 <span className={label}></span>
               </RelativeDiv>
             </ColSpan4>
@@ -291,7 +286,7 @@ function SettingChangeModal(props) {
                   placeholder={'금액을 입력해주세요'}
                   {...register("userMatching", {
                     required: "금액을 입력해주세요",
-                    onChange:(e) => handleUserMatching(e)
+                    onChange: (e) => handleUserMatching(e)
                   })}
                   value={dataState?.userMatching !== 0 ? dataState?.userMatching : ''}
                 />
@@ -309,7 +304,7 @@ function SettingChangeModal(props) {
                   placeholder={'금액을 입력해주세요'}
                   {...register("audience", {
                     required: "금액을 입력해주세요",
-                    onChange:(e) => handleAudience(e)
+                    onChange: (e) => handleAudience(e)
                   })}
                   value={dataState?.audience !== 0 ? dataState?.audience : ''}
                 />
@@ -327,7 +322,7 @@ function SettingChangeModal(props) {
                   placeholder={'금액을 입력해주세요'}
                   {...register("userOptimization", {
                     required: "금액을 입력해주세요",
-                    onChange:(e) => handleUserOptimization(e)
+                    onChange: (e) => handleUserOptimization(e)
                   })}
                   value={dataState.userOptimization !== 0 ? dataState.userOptimization : ''}
                 />
@@ -338,10 +333,10 @@ function SettingChangeModal(props) {
           </RowSpan>
         </ModalBody>
         <ModalFooter>
-          <CancelButton onClick={()=>setModal({
+          <CancelButton onClick={() => setModal({
             isShow: false,
           })}>취소</CancelButton>
-          <SubmitButton type={"submit"} >{saveType !== 'create' ? '수정' : '추가'}</SubmitButton>
+          <SubmitButton type={"submit"}>{saveType !== 'create' ? '수정' : '추가'}</SubmitButton>
         </ModalFooter>
       </form>
     </div>
@@ -364,9 +359,11 @@ export function SettingAdd(props) {
     })
   }
   return (
-    saveType !== 'edit' ? <Button type={'button'} onClick={handleModalComponent}>{title}</Button> : <Edit type={'button'} onClick={handleModalComponent} />
+    saveType !== 'edit' ? <Button type={'button'} onClick={handleModalComponent}>{title}</Button> :
+      <Edit type={'button'} onClick={handleModalComponent}/>
   )
 }
+
 export default SettingAdd
 
 const Button = styled.button`

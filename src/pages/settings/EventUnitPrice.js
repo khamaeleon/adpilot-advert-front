@@ -11,9 +11,9 @@ import {
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {adverEventPriceColumns, eventUnitPriceDataAtom} from "./entity";
 import {ToastContainer} from "react-toastify";
 import {selAdverPriceEventList} from "../../services/SettingsAxios";
+import {adverEventPriceColumns, eventUnitPriceDataAtom} from "./entity/eventPrice";
 
 function EventUnitPrice() {
   const [eventUnitPriceDataState, setEventUnitPriceDataState] = useAtom(eventUnitPriceDataAtom)
