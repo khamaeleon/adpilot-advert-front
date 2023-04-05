@@ -5,6 +5,7 @@ import {
   BoardHeader,
   BoardSearchDetail,
   ColSpan1,
+  ColSpan2,
   ColSpan3,
   ColTitle,
   Input,
@@ -24,58 +25,35 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {selAdminInfo, updateAdmin} from "../../services/ManageAdminAxios";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+
 import {PwChange} from "./UserDetail";
 import {modalController} from "../../store";
+import {tokenResultAtom} from "../login/entity";
 import {adminInfoAtom} from "./entity/admin";
+
 
 function PlatformAdminDetail() {
   const [, setModal] = useAtom(modalController)
+  const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [adminInfoState, setAdminInfoState] = useAtom(adminInfoAtom)
-  const {register, handleSubmit, reset, formState: {errors}} = useForm({
+  const {register, handleSubmit, watch, reset, formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: adminInfoState
   })
-  const {state} = useLocation();
   const onError = (error) => console.log(error)
+  const state =useLocation()
 
   const navigate = useNavigate()
 
   useEffect(() => {
     selAdminInfo().then(response => {
       if (response) {
-        setAdminInfoState({
-          ...response,
-          activeYn: response.status === 'NORMAL' ? 'Y' : 'N'
-        })
-        reset({
-          ...response,
-          activeYn: response.status === 'NORMAL' ? 'Y' : 'N'
-        })
+        setAdminInfoState(response)
+        reset(response)
       }
     })
-  }, [reset, setAdminInfoState, state.id])
+  }, [])
 
-  /**
-   * 아이디 입력
-   * @param event
-   */
-  const handleAdminId = (event) => {
-    setAdminInfoState({
-      ...adminInfoState,
-      email: event.target.value
-    })
-  }
-
-  /**
-   * 담당자명 입력
-   * @param event
-   */
-  const handleManagerName = (event) => {
-    setAdminInfoState({
-      ...adminInfoState,
-      name: event.target.value
-    })
-  }
   /**
    * 담당자 연락처 입력
    * @param event
@@ -90,13 +68,12 @@ function PlatformAdminDetail() {
   const onSubmit = () => {
     updateAdmin(adminInfoState).then((response) => {
       if (response) {
-        navigate('/board/platform2')
+        navigate('/board/campaign')
       } else {
         toast.warning("어드민 계정이 수정이 실패 하였습니다.")
       }
     })
   }
-
   const onModalPw = () => {
     setModal({
       isShow: false,
@@ -116,7 +93,6 @@ function PlatformAdminDetail() {
       }
     })
   }
-
   return (
     <main>
       <form onSubmit={handleSubmit(onSubmit, onError)}>
@@ -128,33 +104,19 @@ function PlatformAdminDetail() {
           <Board>
             <BoardHeader>기본 정보</BoardHeader>
             <BoardSearchDetail>
-              <RowSpan style={{justifyContent: 'flex-start'}}>
+              <RowSpan>
                 <ColSpan3>
                   <ColTitle><Span4>아이디</Span4></ColTitle>
                   <RelativeDiv>
-                    {state.id !== 'NEW' ?
-                      <Input
-                        type={'text'}
-                        placeholder={'이메일 형태 아이디를 입력해주세요'}
-                        value={adminInfoState.email}
-                        readOnly={true}
-                      /> :
-                      <Input
-                        type={'text'}
-                        placeholder={'이메일 형태 아이디를 입력해주세요'}
-                        value={adminInfoState.email}
-                        {...register("email", {
-                          required: "관리자 아이디를 입력해주세요",
-                        })}
-                        onChange={(e) => handleAdminId(e)}
-                      />
-                    }
-                    {errors.email && <ValidationScript>{errors.email?.message}</ValidationScript>}
+                    <Input
+                      type={'text'}
+                      placeholder={'이메일 형태 아이디를 입력해주세요'}
+                      value={adminInfoState !== null && adminInfoState.email}
+                      readOnly={true}
+                    />
                   </RelativeDiv>
-                </ColSpan3>
-                <ColSpan1>
                   <PwChange title={'비밀번호 변경'} modalInfo={'ADMIN'} onSave={handleSavePassword} onSubmit={onModalPw}/>
-                </ColSpan1>
+                </ColSpan3>
               </RowSpan>
             </BoardSearchDetail>
             <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
@@ -166,25 +128,12 @@ function PlatformAdminDetail() {
                 <ColSpan3>
                   <ColTitle><Span4>담당자명</Span4></ColTitle>
                   <RelativeDiv>
-                    {state.id === 'NEW' ?
-                      <Input
-                        type={'text'}
-                        placeholder={'담당자 명을 입력해주세요'}
-                        {...register("name", {
-                          required: "담당자 명을 입력해주세요",
-                        })}
-                        value={adminInfoState.name}
-                        onChange={(e) => handleManagerName(e)}
-                      />
-                      :
-                      <Input
-                        type={'text'}
-                        placeholder={'담당자 명을 입력해주세요'}
-                        value={adminInfoState.name}
-                        readOnly={true}
-                      />
-                    }
-                    {errors.name && <ValidationScript>{errors.name?.message}</ValidationScript>}
+                    <Input
+                      type={'text'}
+                      placeholder={'담당자 명을 입력해주세요'}
+                      value={adminInfoState !== null && adminInfoState.name}
+                      readOnly={true}
+                    />
                   </RelativeDiv>
                 </ColSpan3>
               </RowSpan>
@@ -198,7 +147,7 @@ function PlatformAdminDetail() {
                       {...register("phoneNumber", {
                         required: "담당자 연락처를 입력해주세요.",
                       })}
-                      value={adminInfoState.phoneNumber}
+                      value={adminInfoState !== null && adminInfoState.phoneNumber}
                       onChange={(e) => handleManagerPhone(e)}
                     />
                     {errors.phoneNumber && <ValidationScript>{errors.phoneNumber?.message}</ValidationScript>}

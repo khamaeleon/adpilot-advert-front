@@ -22,7 +22,13 @@ import {useAtom} from "jotai";
 import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useLocation, useNavigate} from "react-router-dom";
-import {accountFileUpload, selUserInfo, updateUser} from "../../services/ManageUserAxios";
+import {
+  accountFileUpload,
+  selUserInfo,
+  selUserMyPageInfo,
+  updateMyPageUser,
+  updateUser
+} from "../../services/ManageUserAxios";
 import {toast} from "react-toastify";
 import Select from "react-select";
 import ImageUploading from "react-images-uploading";
@@ -33,6 +39,7 @@ import {hostList} from "../signup/entity";
 import {accountInfoAtom} from "./entity/user";
 import {adminInfoAtom} from "./entity/admin";
 import {DuplicateButton, InputValidationCon} from "./styles/common";
+import {tokenResultAtom} from "../login/entity";
 
 export function PwChange(props) {
   const {onSubmit, modalInfo, onSave, title} = props;
@@ -160,6 +167,7 @@ function PwChangeModal(props) {
 function PlatformUserDetail() {
   const [, setModal] = useAtom(modalController)
   const [accountInfoState, setAccountInfoState] = useAtom(accountInfoAtom)
+  const [tokenUserInfo] = useAtom(tokenResultAtom)
   const {register, handleSubmit, setValue, setError, reset ,formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: accountInfoState
@@ -169,16 +177,30 @@ function PlatformUserDetail() {
   const {state} = useLocation();
 
   useEffect(() => {
-    selUserInfo(state.id).then(response => {
-      setAccountInfoState({
-        ...response,
-        status: response.status ==='NORMAL'? 'NORMAL' :'SUSPEND'
+    console.log(state.id)
+    if(tokenUserInfo.role ==='NORMAL'){
+      selUserMyPageInfo(state.id).then(response => {
+        setAccountInfoState({
+          ...response,
+          status: response.status ==='NORMAL'? 'NORMAL' :'SUSPEND'
+        })
+        reset({
+          ...response,
+          status: response.status ==='NORMAL'? 'NORMAL' :'SUSPEND'
+        })
       })
-      reset({
-        ...response,
-        status: response.status ==='NORMAL'? 'NORMAL' :'SUSPEND'
+    }else{
+      selUserInfo(state.id).then(response => {
+        setAccountInfoState({
+          ...response,
+          status: response.status ==='NORMAL'? 'NORMAL' :'SUSPEND'
+        })
+        reset({
+          ...response,
+          status: response.status ==='NORMAL'? 'NORMAL' :'SUSPEND'
+        })
       })
-    })
+    }
   }, [])
 
   /**
@@ -353,25 +375,51 @@ function PlatformUserDetail() {
 
   const onSubmit = () => {
     // 최종데이터
-    updateUser(accountInfoState).then(response => {
-      if(response){
-        navigate('/board/platform')
-      }else{
-        toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
-      }
-    })
+    if(tokenUserInfo.role==='NORMAL'){
+      updateMyPageUser(accountInfoState).then(response => {
+        if (response) {
+          setModal({
+            isShow: false,
+            modalComponent: null
+          })
+        } else {
+          toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
+        }
+      })
+    }else{
+      updateUser(accountInfoState).then(response => {
+        if(response){
+          navigate('/board/platform')
+        }else{
+          toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
+        }
+      })
+    }
   }
   const handleSavePassword = (data) =>{
-    updateUser(data).then(response => {
-      if (response) {
-        setModal({
-          isShow: false,
-          modalComponent: null
-        })
-      } else {
-        toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
-      }
-    })
+    if(tokenUserInfo.role==='NORMAL'){
+      updateMyPageUser(data).then(response => {
+        if (response) {
+          setModal({
+            isShow: false,
+            modalComponent: null
+          })
+        } else {
+          toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
+        }
+      })
+    }else{
+      updateUser(data).then(response => {
+        if (response) {
+          setModal({
+            isShow: false,
+            modalComponent: null
+          })
+        } else {
+          toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
+        }
+      })
+    }
   }
 
   const onModalPw = () => {

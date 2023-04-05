@@ -307,6 +307,7 @@ function LoginComponent () {
       if(response){
         setTokenResult({
           id:response.id,
+          username:response.username,
           role:response.role,
           name:response.name,
           accessToken: response.token.accessToken,
