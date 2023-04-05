@@ -27,7 +27,7 @@ export default function AdminManage(){
   const [searchAccountInfoState ,setSearchAccountInfoState] = useState(searchAccountInfo)
   const [adverTypeState]=useState(adverType)
   const [hostTypeState]=useState(hostType)
-  const [keywordSearchType,]=useState(selectKeywordType)
+  const [searchType,]=useState(selectKeywordType)
   const [accountUseYnState]=useState(selectAccountUseInfo)
   const [userInfoList, setUserInfoList] = useAtom(userInfoAtom)
   const [totalInfo,setTotalInfo] = useState(dataTotalInfo)
@@ -113,12 +113,12 @@ export default function AdminManage(){
 
   /**
    * 검색 타입 선택
-   * @param keywordSearchType
+   * @param searchType
    */
-  const handleKeywordSearchType = (keywordSearchType) =>{
+  const handleSearchType = (searchType) =>{
     setSearchAccountInfoState({
       ...searchAccountInfoState,
-      searchKeywordType:keywordSearchType
+      searchType:searchType
     })
   }
 
@@ -126,7 +126,7 @@ export default function AdminManage(){
    * 검색어 입력
    * @param event
    */
-  const handleSearchName = (event) =>{
+  const handleSearchKeyword = (event) =>{
     setSearchAccountInfoState({
       ...searchAccountInfoState,
       keyword: event.target.value,
@@ -196,16 +196,16 @@ export default function AdminManage(){
               <ColTitle><span>검색어</span></ColTitle>
               <Select styles={inputStyle}
                       components={{IndicatorSeparator: () => null}}
-                      options={keywordSearchType}
-                      value={(searchAccountInfoState.searchKeywordType !== null && searchAccountInfoState.searchKeywordType.value !== '') ? searchAccountInfoState.searchKeywordType : {key: "0", value: "select", label: "선택"}}
-                      onChange={handleKeywordSearchType}
+                      options={searchType}
+                      value={(searchAccountInfoState.searchType !== null && searchAccountInfoState.searchType.value !== '') ? searchAccountInfoState.searchType : {key: "0", value: "select", label: "선택"}}
+                      onChange={handleSearchType}
               />
               <SearchInput>
                 <input type={'text'}
                        placeholder={'아이디 및 담당자명 검색'}
                        value={searchAccountInfoState?.keyword !== null ? searchAccountInfoState?.keyword : ''}
-                       onChange={handleSearchName}
-                       readOnly={(searchAccountInfoState.searchKeywordType === null || searchAccountInfoState.searchKeywordType.value === 'select') ? true : false}
+                       onChange={handleSearchKeyword}
+                       readOnly={(searchAccountInfoState.searchType === null || searchAccountInfoState.searchType.value === 'select') ? true : false}
                 />
               </SearchInput>
               <SearchButton onClick={()=>searchUserList()}>검색</SearchButton>

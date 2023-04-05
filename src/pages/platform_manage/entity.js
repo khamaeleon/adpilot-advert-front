@@ -195,7 +195,7 @@ export const searchAccountInfo = {
   adverType: null,
   hostType: null,
   accountStateType: null,
-  searchKeywordType: null,
+  searchType: null,
   keyword: null
 }
 export const userInfoAtom = atom([])
