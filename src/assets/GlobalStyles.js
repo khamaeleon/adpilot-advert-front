@@ -710,7 +710,11 @@ export const DashBoardHeader = styled.div`
   font-weight: bold;
 `
 
+export const DashBoardBody = styled.div`
+  display: block;
+`
 export const BoardTableContainer = styled.div``
+
 export const BoardTableCustomContainer = styled.div`
   & table {
     width: 100%;
@@ -739,8 +743,21 @@ export const BoardTableCustomContainer = styled.div`
       }
     }
   }
-  
 `
+
+export const ChartLabel = styled.div`
+  display: flex;
+  gap: 30px;
+  padding: 0 40px;
+  & div {
+    display: flex;
+    align-items: center;
+    height: 45px;
+    cursor: pointer;
+    border-bottom: 4px solid #fff
+  }
+`
+
 export const RowSpan = styled.div`
   display: flex;
   flex-direction: ${(props) => props.column ? "column" : "row"};
