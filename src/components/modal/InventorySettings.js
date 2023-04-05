@@ -4,7 +4,7 @@ import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import styled from "styled-components";
 import {modalController} from "../../store";
 import {ColSpan2, DefaultButton, defaultStyle, RowSpan, Span4} from "../../assets/GlobalStyles";
-import {SmallButton} from "../../pages/campaign/styles";
+import {SmallButton} from "../../pages/campaign/styles/common";
 import Select from "react-select";
 import {Icon} from "../table";
 
@@ -63,7 +63,7 @@ function SearchModal (props) {
       <ModalBody>
         <RowSpan>
           <ColSpan2>
-            <div style={{width: '100%'}}>
+            <div style={{display:'flex',flexDirection:'column',width: '100%'}}>
               <SearchInventoryMain>
                 <Span4>지면검색</Span4>
                 <SearchInventoryInputGroup>
@@ -103,7 +103,7 @@ function SearchModal (props) {
             </div>
           </ColSpan2>
           <ColSpan2 style={{alignItems: 'flex-start'}}>
-            <div style={{width: '100%'}}>
+            <div style={{display:'flex',flexDirection:'column',width: '100%'}}>
               <SelectedInventoryMain>
                 <div>선택된 지면</div>
                 <div>총 <span>3</span>건의 광고 그룹</div>
@@ -146,6 +146,7 @@ function SearchModal (props) {
 const SearchInventoryMain = styled.div`
   border: 1px solid #e5e5e5;
   padding: 20px 15px;
+  width: 100%;
 `
 
 const SearchInventoryInputGroup = styled.div`
@@ -173,6 +174,7 @@ const SearchInventoryItemResult = styled.div`
   border: 1px solid #e5e5e5;
   height: 350px;
   overflow: auto;
+  width: 100%;
 `
 
 const InventoryItem = styled.div`
@@ -192,6 +194,7 @@ const InventoryItem = styled.div`
 
 const SearchInventoryHeader = styled.div`
   display: flex;
+  width: 100%;
   margin-top: 15px;
   border: 1px solid #e5e5e5;
   background-color: #f3f3f3;
@@ -200,6 +203,7 @@ const SearchInventoryHeader = styled.div`
 
 const SelectedInventoryMain = styled.div`
   padding: 15px 20px;
+  width: 100%;
   line-height: 30px;
   background-color: #f9fafb;
   border: 1px solid #e5e5e5;
@@ -220,11 +224,13 @@ const SelectedInventoryMain = styled.div`
 
 const SelectedInventoryHeader = styled.div`
   display: flex;
+  width: 100%;
   background-color: #f3f3f3;
   border-top: 1px solid #e5e5e5;
   text-align: center;
 `
 const SelectedInventoryResult = styled.div`
+  width: 100%;
   height: 350px;
   overflow: auto;
 `

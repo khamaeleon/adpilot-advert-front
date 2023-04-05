@@ -1,20 +1,25 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchResult,
+  BoardSearchResult, CancelButton,
   ColSpan2,
   ColSpan4,
   Input,
   RowSpan,
-  Span3,
-  Span4
+  Span4,
+  SubmitButton,
+  SubmitContainer
 } from "../../../assets/GlobalStyles";
 import React from "react";
 import {HorizontalRule} from "../../../components/common/Common";
-import {Row, ValueText} from "../styles";
+import {Row, ValueText} from "../styles/common";
+import {useAtom} from "jotai";
+import {stepCampaignAtom} from "../entity";
 
 export function CampaignLookOver() {
+  const [stepCampaign, setStepCampaign] = useAtom(stepCampaignAtom)
   return (
+    <>
     <Board>
       <BoardHeader>캠페인 검토</BoardHeader>
       <BoardSearchResult>
@@ -180,5 +185,10 @@ export function CampaignLookOver() {
         </RowSpan>
       </BoardSearchResult>
     </Board>
+    <SubmitContainer>
+      <CancelButton type={'button'} onClick={()=> setStepCampaign({steps:3})}>취소</CancelButton>
+      <SubmitButton type={'submit'}>캠페인 생성</SubmitButton>
+    </SubmitContainer>
+  </>
   )
 }

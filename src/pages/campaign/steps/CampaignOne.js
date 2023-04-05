@@ -8,7 +8,7 @@ import {
   RowSpan, selectStyle, Span1, Span2,
   Span4, SubmitButton, SubmitContainer, ValidationScript
 } from "../../../assets/GlobalStyles";
-import {BorderSpan, CampaignTypeItem, CampaignTypeItem2} from "../styles";
+import {BorderSpan, CampaignTypeItem, CampaignTypeItem2, Validation, ValidationGroup} from "../styles/common";
 import Select from "react-select";
 import React, {useState} from "react";
 import {SearchAdvertiser} from "../../../components/common/SearchAdvertiser";
@@ -66,6 +66,7 @@ export function CampaignOne () {
     productTarget: 'transform',
     targetDetail:''
   })
+
   const handleSearchAdvertiser = () => {
 
   }
@@ -106,6 +107,7 @@ export function CampaignOne () {
   }
   const onSubmit = (data) => {
     console.log(data)
+    setStepCampaign({steps:1})
   }
 
   return (
@@ -129,10 +131,13 @@ export function CampaignOne () {
                 />
                 <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
               </ColSpan2>
-              {errors.advertiser && <ColSpan1><ValidationScript>{errors.advertiser.message}</ValidationScript></ColSpan1>}
             </ColSpan4>
           </RowSpan>
         </BoardSearchResult>
+        <ValidationGroup>
+          {errors.advertiser && <Validation>{errors.advertiser.message}</Validation>}
+          <div/>
+        </ValidationGroup>
       </Board>
       <Board>
         <BoardHeader>캠페인 목표 설정</BoardHeader>
@@ -169,9 +174,12 @@ export function CampaignOne () {
                 />
                 <DefaultButton onClick={handleAddPixel}>픽셀추가</DefaultButton>
               </BorderSpan>
-              {errors.pixel && <ColSpan1><ValidationScript>{errors.pixel?.message}</ValidationScript></ColSpan1>}
             </ColSpan4>
           </RowSpan>
+          <ValidationGroup>
+            {errors.pixel &&<Validation>{errors.pixel?.message}</Validation>}
+            <div/>
+          </ValidationGroup>
           <RowSpan>
             <ColSpan1>
               <Span4>캠페인 목표 선택</Span4>
@@ -231,14 +239,16 @@ export function CampaignOne () {
                 />
               <Input style={{width: 300,  textAlign:'right'}} disabled value={'1,000,000회'}/>
               </ColSpan3>
-              {errors.targetDetail && <ColSpan1><ValidationScript>{errors.targetDetail?.message}</ValidationScript></ColSpan1>}
             </ColSpan4>
           </RowSpan>
+          <ValidationGroup>
+            {errors.targetDetail &&<Validation>{errors.targetDetail?.message}</Validation>}
+            <div/>
+          </ValidationGroup>
         </BoardSearchResult>
       </Board>
       <SubmitContainer>
-        <CancelButton type={'button'}>취소</CancelButton>
-        <SubmitButton type={'submit'}>다음</SubmitButton>
+        <SubmitButton type={'submit'}>다음[1/4]</SubmitButton>
       </SubmitContainer>
     </form>
   )

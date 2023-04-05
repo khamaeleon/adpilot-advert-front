@@ -226,7 +226,7 @@ export function ReportsCondition(props) {
           <ColTitle><span>에이전트 유형</span></ColTitle>
           <div>
             <AgentType>
-              <Checkbox label={'전체'}
+              웹<Checkbox label={'전체'}
                         type={'c'}
                         id={'all'}
                         isChecked={isCheckedAll}

@@ -4,8 +4,9 @@ import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import styled from "styled-components";
 import {modalController} from "../../store";
 import {ColSpan2, DefaultButton, RowSpan, Span3} from "../../assets/GlobalStyles";
+import {LoadButton} from "../../pages/campaign/styles/common";
 
-export function AdGroupButton(props) {
+export function CreativeButton(props) {
   const {title, onSubmit, btnStyle, historyAdd} = props;
   const [, setModal] = useAtom(modalController)
   const handleModalComponent = () => {
@@ -20,7 +21,7 @@ export function AdGroupButton(props) {
     })
   }
 
-  return <Button type={'button'} onClick={handleModalComponent}>{title}</Button>
+  return <LoadButton type={'button'} onClick={handleModalComponent}>{title}</LoadButton>
 }
 
 function SearchModal (props) {
@@ -99,8 +100,8 @@ function SearchModal (props) {
           <ColSpan2 style={{alignItems: 'flex-start'}}>
             <div style={{display:'flex',flexDirection:'column',width: '100%'}}>
               <AdGroupMain>
-                <div>등록된 광고 그룹</div>
-                <div>총 <span>3</span>건의 광고 그룹</div>
+                <div>등록된 소재</div>
+                <div>총 <span>{adGroupList.length}</span>건의 소재</div>
               </AdGroupMain>
               <AdGroupHeader>
                 <GroupName>광고 그룹명</GroupName>
@@ -119,7 +120,6 @@ function SearchModal (props) {
             </div>
           </ColSpan2>
         </RowSpan>
-
       </ModalBody>
       <ModalFooter>
         <DefaultButton>불러오기</DefaultButton>

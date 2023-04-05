@@ -19,7 +19,7 @@ import {
   ImageUploadCard,
   LoadButton, PrevImage, ResistBanner, Row, RowBody, RowHeader,
   SelectCategory
-} from "./styles";
+} from "./styles/common";
 import {HorizontalRule} from "../../components/common/Common";
 import Select from "react-select";
 import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";

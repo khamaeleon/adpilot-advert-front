@@ -216,14 +216,20 @@ export const CreateImage = styled.div`
 `
 
 export const RowHeader = styled.div`
-  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
   border-bottom: 1px solid #e5e5e5;
 `
 
 export const RowBody = styled.div`
   display: flex;
   align-content: stretch;
-  padding: 10px 30px 20px ;
+  padding: 10px 30px 20px;
+  height: ${(props) => props.fold ? 0:null};
+  transform: scaleY(${(props) => props.fold ? 0:null});
+  overflow: hidden;
 `
 export const Row = styled.div`
   display: flex;
@@ -252,6 +258,9 @@ export const PrevImage = styled.div`
   aspect-ratio: 1/1;
   background-color: #fff;
   border: 1px solid #ddd;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 `
 
 export const ImageTitle = styled.div`
@@ -266,4 +275,23 @@ export const ImageTitle = styled.div`
 
 export const ValueText = styled.span`
   font-size: 12px;
+`
+
+export const FolderButton = styled.div`
+  width: 50px;
+  height: 50px;
+  background-image: url('/assets/images/common/btn_setup_close.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: rotate(${(props) => props.fold ? '180deg' : '0deg'});
+`
+export const ValidationGroup = styled.div`
+  display: flex;
+  justify-content: space-around;
+`
+export const Validation = styled.div`
+  width: 50%;
+  font-size: 12px;
+  color: #f55a5a;
+  
 `

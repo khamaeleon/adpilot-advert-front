@@ -8,7 +8,7 @@ import {
   RowSpan, selectStyle, Span1, Span2,
   Span4, SubmitButton, SubmitContainer, ValidationScript
 } from "../../../assets/GlobalStyles";
-import {Won} from "../styles";
+import {Won} from "../styles/common";
 import Select from "react-select";
 import {useAtom, useSetAtom} from "jotai";
 import {stepCampaignAtom} from "../entity";
@@ -60,6 +60,7 @@ export function CampaignTwo() {
   }
   const onSubmit = (data) => {
     console.log(data)
+    setStepCampaign({steps:2})
   }
   return(
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -147,7 +148,7 @@ export function CampaignTwo() {
                     )}
                     />
                 </ColSpan1>
-                <ColSpan1>{errors.timeGroup && <ValidationScript>{errors.timeGroup.message}</ValidationScript>}</ColSpan1>
+                {errors.timeGroup && <ColSpan1><ValidationScript>{errors.timeGroup.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>
             <ColSpan4>
@@ -171,7 +172,7 @@ export function CampaignTwo() {
                     )}
                   />
                 </ColSpan1>
-                <ColSpan1>{errors.eventGroup && <ValidationScript>{errors.eventGroup.message}</ValidationScript>}</ColSpan1>
+                {errors.eventGroup && <ColSpan1><ValidationScript>{errors.eventGroup.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
@@ -200,7 +201,7 @@ export function CampaignTwo() {
                     )}
                   />
                 </ColSpan1>
-                <ColSpan1>{errors.bidingType && <ValidationScript>{errors.bidingType.message}</ValidationScript>}</ColSpan1>
+                {errors.bidingType && <ColSpan1><ValidationScript>{errors.bidingType.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>
             <ColSpan4>
@@ -218,7 +219,7 @@ export function CampaignTwo() {
                   />
                   <Won/>
                 </ColSpan1>
-                <ColSpan1>{errors.maxBid && <ValidationScript>{errors.maxBid.message}</ValidationScript>}</ColSpan1>
+                {errors.maxBid && <ColSpan1><ValidationScript>{errors.maxBid.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>
             <ColSpan4>
@@ -242,7 +243,7 @@ export function CampaignTwo() {
                     )}
                   />
                 </ColSpan1>
-                <ColSpan1> {errors.eventUnitPrice && <ValidationScript>{errors.eventUnitPrice.message}</ValidationScript>}</ColSpan1>
+                {errors.eventUnitPrice && <ColSpan1><ValidationScript>{errors.eventUnitPrice.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>
             <ColSpan4>
@@ -266,15 +267,15 @@ export function CampaignTwo() {
                     )}
                   />
                 </ColSpan1>
-                <ColSpan1> {errors.weightGroup && <ValidationScript>{errors.weightGroup.message}</ValidationScript>}</ColSpan1>
+                {errors.weightGroup && <ColSpan1><ValidationScript>{errors.weightGroup.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
         </BoardSearchResult>
       </Board>
       <SubmitContainer>
-        <CancelButton type={'button'}>취소</CancelButton>
-        <SubmitButton type={'submit'}>다음</SubmitButton>
+        <CancelButton type={'button'} onClick={()=>setStepCampaign({steps:0})}>취소</CancelButton>
+        <SubmitButton type={'submit'}>다음[2/4]</SubmitButton>
       </SubmitContainer>
     </form>
   )

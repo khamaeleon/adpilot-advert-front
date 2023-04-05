@@ -39,7 +39,7 @@ export function PlatformCondition(props) {
   const [searchTypeSelect] = useState(searchType)
   /**
    * 날짜 레인지 선택
-   * @param event
+   * @param rangeType
    */
   const handleRangeDate = (rangeType) => {
     if (rangeType === 'thisMonth') {

@@ -751,6 +751,20 @@ export const RowSpan = styled.div`
   border: ${(props) => props.box ? '1px solid #e5e5e5' : null};
   border-radius: 5px;
 `
+
+export const FoldSpan = styled.div`
+  display: flex;
+  flex-direction: ${(props) => props.column ? "column" : "row"};
+  gap: ${(props) => props.box ? "10px" : null};
+  justify-content: space-between;
+  margin-top: 15px;
+  padding: ${(props) => props.box ? "15px" : null};
+  background-color: ${(props)=>props.box ? "#f9fafb":null};
+  border: ${(props) => props.box ? '1px solid #e5e5e5' : null};
+  border-radius: 5px;
+  height: 0;
+  overflow: hidden;
+`
 export const ColSpan0 = styled.div`
   padding-left: ${(props) => props.padding ? props.padding : '10'}px;
   display: flex;
@@ -788,6 +802,7 @@ export const ColSpan1 = styled.div`
 `
 
 export const ColSpan2 = styled.div`
+  position: relative;
   padding-left: ${(props) => props.padding ? props.padding : '10'}px;
   display: flex;
   flex-direction: ${(props)=>props.column ? 'column' : 'row'};
