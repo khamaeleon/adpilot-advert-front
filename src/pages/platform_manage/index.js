@@ -2,7 +2,7 @@ import Navigator from "../../components/common/Navigator";
 import {BoardContainer, TitleContainer} from "../../assets/GlobalStyles";
 import React from "react";
 import {useParams} from "react-router-dom";
-import AdminManage from "./AdminManage";
+import UserManage from "./UserManage";
 import {CategoryManage} from "./CategoryManage";
 import ProductManage from "./ProductManage";
 import ConversionManage from "./ConversionManage";
@@ -18,7 +18,7 @@ function PlatformUser(){
           <h1>플랫폼 관리</h1>
           <Navigator/>
         </TitleContainer>
-        {params.id === 'platform' && <AdminManage/>}
+        {params.id === 'platform' && <UserManage/>}
         {params.id === 'platformDetail' && <PlatformUserDetail/>}
         {params.id === 'categoryManage' && <CategoryManage/>}
         {params.id === 'productManage' && <ProductManage/>}

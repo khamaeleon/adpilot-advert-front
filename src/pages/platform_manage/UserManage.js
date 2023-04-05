@@ -27,10 +27,10 @@ import {
   selectAccountUseInfo,
   selectKeywordType,
   userInfoAtom
-} from "./entity/admin";
+} from "./entity/user";
 import {hostType} from "./entity/common";
 
-export default function AdminManage(){
+export default function UserManage(){
   const [searchAccountInfoState ,setSearchAccountInfoState] = useState(searchAccountInfo)
   const [adverTypeState]=useState(adverType)
   const [hostTypeState]=useState(hostType)
