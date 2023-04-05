@@ -34,7 +34,6 @@ export function PlatformCondition(props) {
   const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
   const [searchTypeSelect] = useState(searchType)
-  const [searchSelected, setSearchSelected] = useState(searchTypeSelect[0])
   /**
    * 날짜 레인지 선택
    * @param event
@@ -97,7 +96,6 @@ export function PlatformCondition(props) {
       ...searchCondition,
       searchType: selectSearchType.value
     })
-    setSearchSelected(selectSearchType)
   }
 
   const handleSearchValue = (event) => {
@@ -154,8 +152,8 @@ export function PlatformCondition(props) {
         <ColSpan2>
           <Select styles={inputStyle}
                   components={{IndicatorSeparator: () => null}}
-                  options={searchTypeSelect}
-                  value={searchSelected}
+                  options={searchType}
+                  value={searchCondition.searchType.value !== '' ? searchType.find(value => value.value === searchCondition.searchType) : ''}
                   onChange={handleSearchType}
           />
           <SearchInput>

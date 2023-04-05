@@ -154,7 +154,7 @@ export default function Basic(props) {
   const handleManagerName = (event) => {
     setAccountInfo({
       ...accountInfo,
-      managerName1: event.target.value
+      managerName: event.target.value
     })
   }
   /**
@@ -165,7 +165,7 @@ export default function Basic(props) {
     let num = event.target.value.replace(/[a-z]|[ㄱ-ㅎ]|[.-]/i, '')
     setAccountInfo({
       ...accountInfo,
-      managerPhone1: num
+      managerPhone: num
     })
   }
 
@@ -176,7 +176,7 @@ export default function Basic(props) {
   const handleManagerEmail = (event) => {
     setAccountInfo({
       ...accountInfo,
-      managerEmail1: event.target.value
+      managerEmail: event.target.value
     })
   }
 
@@ -457,13 +457,13 @@ export default function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'담당자 명을 입력해주세요'}
-                {...register("managerName1", {
+                {...register("managerName", {
                   required: "담당자 명을 입력해주세요",
                   onChange: (e) => handleManagerName(e)
                 })}
-                value={accountInfo.managerName1}
+                value={accountInfo.managerName}
               />
-              {errors.managerName1 && <ValidationScript>{errors.managerName1?.message}</ValidationScript>}
+              {errors.managerName && <ValidationScript>{errors.managerName.message}</ValidationScript>}
             </div>
           </RelativeDiv>
           <RelativeDiv>
@@ -472,7 +472,7 @@ export default function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'연락처를 입력해주세요.'}
-                {...register("managerPhone1", {
+                {...register("managerPhone", {
                   required: "담당자 연락처를 입력해주세요.",
                   pattern: {
                     value: /0([1-9][0-9]?){1,2}[.-]?([0-9]{3,4})[.-]?([0-9]{4})/g,
@@ -480,9 +480,9 @@ export default function Basic(props) {
                   },
                   onChange: (e) => handleManagerPhone(e)
                 })}
-                value={accountInfo.managerPhone1}
+                value={accountInfo.managerPhone}
               />
-              {errors.managerPhone1 && <ValidationScript>{errors.managerPhone1?.message}</ValidationScript>}
+              {errors.managerPhone && <ValidationScript>{errors.managerPhone?.message}</ValidationScript>}
             </div>
           </RelativeDiv>
           <RelativeDiv>
@@ -491,7 +491,7 @@ export default function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'이메일을 입력해주세요.'}
-                {...register("managerEmail1", {
+                {...register("managerEmail", {
                   required: "담당자 이메일을 입력해주세요.",
                   pattern: {
                     value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
@@ -499,9 +499,9 @@ export default function Basic(props) {
                   },
                   onChange: (e) => handleManagerEmail(e)
                 })}
-                value={accountInfo.managerEmail1}
+                value={accountInfo.managerEmail}
               />
-              {errors.managerEmail1 && <ValidationScript>{errors.managerEmail1?.message}</ValidationScript>}
+              {errors.managerEmail && <ValidationScript>{errors.managerEmail?.message}</ValidationScript>}
             </div>
           </RelativeDiv>
           <RelativeDiv>
