@@ -7,7 +7,7 @@ import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
 import {
   paymentColumns, paymentDataAtom,
-  searchPaymentParams, updatePaymentStatus
+  searchPaymentParams, searchPaymentType, searchProductType, updatePaymentStatus
 } from "./entity";
 import {toast, ToastContainer} from "react-toastify";
 import styled from "styled-components";
@@ -133,7 +133,7 @@ function PaymentManage() {
     <>
       <Board>
         <BoardHeader>결재 현황</BoardHeader>
-        <PaymentCondition searchPayment={searchPaymentParamsState} setSearchPayment={setSearchPaymentParamsState} handlePaymentTableData={handlePaymentTableData} />
+        <PaymentCondition searchType={searchPaymentType} searchCondition={searchPaymentParamsState} setSearchCondition={setSearchPaymentParamsState} handleTableData={handlePaymentTableData} />
         <BoardTableContainer>
           <RowSpan>
             <ColSpan2 style={{marginTop: 20, paddingLeft: 0}}>
