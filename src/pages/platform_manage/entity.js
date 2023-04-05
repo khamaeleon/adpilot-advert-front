@@ -3,12 +3,13 @@ import {Link} from "react-router-dom";
 import React from "react";
 import moment from "moment";
 import {atom} from "jotai";
-import {dateFormat, decimalFormat} from "../../common/StringUtils";
+import {dateFormat, decimalFormat, phoneNumFormat} from "../../common/StringUtils";
 import {Check} from "../../assets/GlobalStyles";
 import {getThisMonth, getToDay} from "../../common/DateUtils";
 import {ImageView} from "./ProductManage";
+import {hostList} from "../signup/entity";
 
-export const accountInfoAtom = atom([])
+export const accountInfoAtom = atom(null)
 export const adminInfoAtom = atom({})
 
 /**
@@ -148,86 +149,117 @@ export const columnConversionDetailData = [
 ]
 
 /**
+ * 호스트 타입
+ * @type
+ */
+export const hostType = [
+  {key: 100, value: "ALL", label: "전체"},
+  ...hostList
+]
+/**
  * 매체 타입
  * @type {[{id: string, label: string, value: string},{id: string, label: string, value: string},{id: string, label: string, value: string}]}
  */
-export const mediaType = [
-  {id: "1", value: "ALL", label: "전체"},
-  {id: "2", value: "DIRECT", label: "직매체"},
-  {id: "3", value: "AGENCY", label: "대행사"},
+export const adverType = [
+  {key: "1", value: "ALL", label: "전체"},
+  {key: "2", value: "ADVER", label: "광고주"},
+  {key: "3", value: "AGENCY", label: "대행사"},
 ]
 /**
  * 매체 계정 사용여부
  * @type {[{id: string, label: string, value: string},{id: string, label: string, value: string},{id: string, label: string, value: string}]}
  */
 export const selectAccountUseInfo = [
-  {id: "1", value: "ALL", label: "전체"},
-  {id: "2", value: "Y", label: "사용중"},
-  {id: "3", value: "N", label: "미사용"},
+  {key: "1", value: "ALL", label: "전체"},
+  {key: "2", value: "NORMAL", label: "사용중"},
+  {key: "3", value: "SUSPEND", label: "미사용"},
 ]
 /**
  * 매체 계정 검색 타입
- * @type {[{id: string, label: string, value: string},{id: string, label: string, value: string},{id: string, label: string, value: string}]}
+ * @type {[{label: string, value: string, key: string},{label: string, value: string, key: string},{label: string, value: string, key: string},{label: string, value: string, key: string},{label: string, value: string, key: string}]}
  */
-export const selectMediaSearchType = [
-  {id: "1", value: "MEDIA_NAME", label: "매체명"},
-  {id: "2", value: "MEDIA_ID", label: "아이디"},
-  {id: "3", value: "PHONE", label: "연락처"}
+export const selectKeywordType = [
+  {key:"1",value:"ADVER_NAME",label:"광고주명"},
+  {key:"2",value:"USERNAME",label:"아이디"},
+  {key:"3",value:"COMPANY_NAME",label:"상호명"},
+  {key:"4",value:"MANAGER_NAME",label:"담당자명"},
+  {key:"5",value:"MANAGER_EMAIL",label:"담당자 이메일"}
 ]
 /**
  * 검색 조건
  * @type {{activeYn: {id: string, label: string, value: string}, phoneNumber: string, siteName: string, mediaType: {id: string, label: string, value: string}, selectAdminType: {id: string, label: string, value: string}, userId: string, mediaSearchType: {id: string, label: string, value: string}}}
  */
 export const searchAccountInfo = {
-  mediaType: '',
-  selectAdminType: '',
-  mediaSearchType: '',
-  username: '',
-  siteName: '',
-  phoneNumber: '',
-  activeYn: '',
-  pageSize: 1000,
+  pageSize: 50,
   currentPage: 1,
-  searchText: ''
+  adverType: null,
+  hostType: null,
+  accountStateType: null,
+  searchKeywordType: null,
+  keyword: null
 }
+export const userInfoAtom = atom([])
 /**
  * 사용자 리스트 컬럼 설정
  * @type {[{name: string, header: string},{name: string, header: string, render: (function({value: *}): *)},{name: string, header: string, render: (function(*): *)},{name: string, header: string},{name: string, header: string},null,null]}
  */
 export const columnUserData = [
   {
-    name: 'siteName',
-    header: '매체명'
+    name: 'adverName',
+    header: '광고주명'
   },
   {
-    name: 'mediaType',
-    header: '매체타입',
+    name: 'adverType',
+    header: '광고주 구분',
     render: ({value}) => {
       return (
-        <>{value === 'DIRECT' ? "직매체" : "대행사"}</>
+        <>{value === 'ADVER' ? "광고주" : "대행사"}</>
+      )
+    }
+  },
+  {
+    name: 'hostType',
+    header: '솔루션 타입',
+    render: ({value}) => {
+      return (
+        <>{hostList.find(obj => obj.value === value).label}</>
       )
     }
   },
   {
     name: 'username',
     header: '아이디',
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
     render: (props) => {
       return (
-        <Link to={'/board/platformDetail'} state={{id: props.data.id}}>{props.value}</Link>
+        <Link to={'/board/platformDetail'} state={{id: props.data.id}}>{props.data?.username}</Link>
       )
     }
   },
   {
-    name: 'managerName1',
+    name: 'userCompanyProfile',
+    header: '상호명',
+    render: ({value})=> {
+      return (
+        <span>{value.companyName}</span>
+      )
+    }
+  },
+  {
+    name: 'managerName',
     header: '담당자명'
   },
   {
-    name: 'managerPhone1',
-    header: '연락처'
+    name: 'managerEmail',
+    header: '이메일',
   },
   {
     name: 'createdAt',
-    header: '생성 일시',
+    header: '가입 일시',
     render: ({value}) => {
       return (
         <span>{moment(value).format('YYYY년 MM월 DD일')}</span>
@@ -239,7 +271,7 @@ export const columnUserData = [
     header: '사용 여부',
     render: ({value}) => {
       return (
-        <>{value === 'NORMAL' ? "사용중" : "중지"}</>
+        <>{value !== 'NORMAL' ? "미사용" : "사용"}</>
       )
     }
   },
@@ -565,6 +597,13 @@ export const exchangeColumns = [
     showColumnMenuTool: false,
     sortable: false
   }
+]
+
+export const searchPaymentType = [
+  {id: "0", value: "All", label: "전체"},
+  {id: "1", value: "ADVER_NAME", label: "광고주명"},
+  {id: "2", value: "USERNAME", label: "광고주 아이디"},
+  {id: "3", value: "PRODUCT_NAME", label: "신청 아이디"}
 ]
 
 /**

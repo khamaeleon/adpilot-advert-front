@@ -10,25 +10,31 @@ import {
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
 import Table from "../../components/table";
-import {columnUserData, mediaType, searchAccountInfo, selectAccountUseInfo, selectMediaSearchType} from "./entity";
+import {
+  adverType,
+  columnUserData, hostType,
+  searchAccountInfo,
+  selectAccountUseInfo,
+  selectKeywordType, userInfoAtom,
+} from "./entity";
 import React, {useEffect, useState} from "react";
-import {atom, useAtom} from "jotai/index";
+import {useAtom} from "jotai/index";
 import {dataTotalInfo} from "../../components/common/entity";
 import {selUserList} from "../../services/ManageUserAxios";
+import {hostList} from "../signup/entity";
 
-const UserInfoList = atom([])
 export default function AdminManage(){
   const [searchAccountInfoState ,setSearchAccountInfoState] = useState(searchAccountInfo)
-  const [mediaTypeState]=useState(mediaType)
-  const [mediaSearchType]=useState(selectMediaSearchType)
+  const [adverTypeState]=useState(adverType)
+  const [hostTypeState]=useState(hostType)
+  const [keywordSearchType,]=useState(selectKeywordType)
   const [accountUseYnState]=useState(selectAccountUseInfo)
-  const [userInfoList, setUserInfoList] = useAtom(UserInfoList)
+  const [userInfoList, setUserInfoList] = useAtom(userInfoAtom)
   const [totalInfo,setTotalInfo] = useState(dataTotalInfo)
 
   useEffect(()=>{
     selUserList(searchAccountInfoState).then(response =>{
       if(response){
-        console.log(response)
         setUserInfoList(response.rows)
         setTotalInfo({
           totalCount: response.totalCount,
@@ -40,17 +46,16 @@ export default function AdminManage(){
   },[])
 
   /**
-   * 매체 타입 변경
-   * @param mediaType
+   * 광고주 타입 변경
+   * @param adverType
    */
-  const handleMediaType =(mediaType) =>{
+  const handleAdverType =(adverType) =>{
     setSearchAccountInfoState({
       ...searchAccountInfoState,
-      mediaType:mediaType
+      adverType: adverType
     })
     //검색
-    selUserList({...searchAccountInfoState,mediaType:mediaType.value}).then(response =>{
-
+    selUserList({...searchAccountInfoState,adverType:adverType.value}).then(response =>{
       if(response){
         setUserInfoList(response.rows)
         setTotalInfo({
@@ -61,27 +66,40 @@ export default function AdminManage(){
       }
     })
   }
+
   /**
-   * 검색 타입 선택
-   * @param mediaSearchType
+   * 호스트 타입
+   * @param hostType
    */
-  const handleMediaSearchType =(mediaSearchType) =>{
+  const handleSelectHosting = (selectHostType) => {
     setSearchAccountInfoState({
       ...searchAccountInfoState,
-      mediaSearchType:mediaSearchType
+      hostType: selectHostType
+    })
+    //검색
+    selUserList({...searchAccountInfoState,hostType:selectHostType.value}).then(response =>{
+      if(response){
+        setUserInfoList(response.rows)
+        setTotalInfo({
+          totalCount: response.totalCount,
+          totalPages: response.totalPages,
+          currentPage:response.currentPage
+        })
+      }
     })
   }
+
   /**
    * 계정 사용여부
-   * @param accountUseYn
+   * @param accountStateType
    */
-  const handleSelectAccountUseYn =(activeYn) =>{
+  const handleSelectAccountStateType =(accountState) =>{
     setSearchAccountInfoState({
       ...searchAccountInfoState,
-      activeYn: activeYn
+      accountStateType: accountState
     })
     //검색
-    selUserList({...searchAccountInfoState,activeYn:activeYn.value}).then(response =>{
+    selUserList({...searchAccountInfoState,accountStateType:accountState.value}).then(response =>{
       if(response){
         setUserInfoList(response.rows)
         setTotalInfo({
@@ -92,11 +110,33 @@ export default function AdminManage(){
       }
     })
   }
+
+  /**
+   * 검색 타입 선택
+   * @param keywordSearchType
+   */
+  const handleKeywordSearchType = (keywordSearchType) =>{
+    setSearchAccountInfoState({
+      ...searchAccountInfoState,
+      searchKeywordType:keywordSearchType
+    })
+  }
+
+  /**
+   * 검색어 입력
+   * @param event
+   */
+  const handleSearchName = (event) =>{
+    setSearchAccountInfoState({
+      ...searchAccountInfoState,
+      keyword: event.target.value,
+    })
+  }
+
   /**
    * 검색버튼
    */
   const searchUserList =() =>{
-    console.log(searchAccountInfoState)
     selUserList(searchAccountInfoState).then(response =>{
       if(response){
         setUserInfoList(response.rows)
@@ -109,46 +149,33 @@ export default function AdminManage(){
     })
   }
 
-  /**
-   * 검색어 입력
-   * @param event
-   */
-  const handleSearchName =(event) =>{
-    if(searchAccountInfoState.mediaSearchType.value ==='MEDIA_NAME'){
-      setSearchAccountInfoState({
-        ...searchAccountInfoState,
-        siteName: event.target.value,
-        searchText:event.target.value
-      })
-    }else if(searchAccountInfoState.mediaSearchType.value ==='MEDIA_ID'){
-      setSearchAccountInfoState({
-        ...searchAccountInfoState,
-        username: event.target.value,
-        searchText:event.target.value
-      })
-    }else if(searchAccountInfoState.mediaSearchType.value ==='PHONE'){
-      setSearchAccountInfoState({
-        ...searchAccountInfoState,
-        phoneNumber: event.target.value,
-        searchText:event.target.value
-      })
-    }
-  }
   return(
     <>
       <Board>
         <BoardHeader>사용자 관리</BoardHeader>
         <BoardSearchDetail>
           {/*line1*/}
-          <RowSpan>
+          <RowSpan style={{justifyContent: 'flex-start', marginBottom: 20}}>
             <ColSpan1>
               <ColTitle><span>광고주 구분</span></ColTitle>
               <div>
                 <Select styles={inputStyle}
                         components={{IndicatorSeparator: () => null}}
-                        options={mediaTypeState}
-                        value={(searchAccountInfoState.mediaType !== '' && searchAccountInfoState.mediaType.value !== '') ? searchAccountInfoState.mediaType : {id: "0", value: "ALL", label: "전체"}}
-                        onChange={handleMediaType}
+                        options={adverTypeState}
+                        value={(searchAccountInfoState.adverType !== null && searchAccountInfoState.adverType.value !== '') ? searchAccountInfoState.adverType : adverTypeState[0]}
+                        onChange={handleAdverType}
+                />
+              </div>
+            </ColSpan1>
+            <ColSpan1>
+              <ColTitle><span>호스팅 타입</span></ColTitle>
+              <div>
+                <Select styles={inputStyle}
+                        components={{IndicatorSeparator: () => null}}
+                        options={hostTypeState}
+                        value={searchAccountInfoState?.hostType !== null ? hostList.find(value => value.value === searchAccountInfoState?.hostType) : hostTypeState[0]
+                        }
+                        onChange={handleSelectHosting}
                 />
               </div>
             </ColSpan1>
@@ -158,25 +185,27 @@ export default function AdminManage(){
                 <Select styles={inputStyle}
                         components={{IndicatorSeparator: () => null}}
                         options={accountUseYnState}
-                        value={(searchAccountInfoState.activeYn !== '' && searchAccountInfoState.activeYn.value !== '') ? searchAccountInfoState.activeYn : {id: "1", value: "ALL", label: "전체"}}
-                        onChange={handleSelectAccountUseYn}
+                        value={(searchAccountInfoState.accountStateType !== null && searchAccountInfoState.accountStateType.value !== '') ? searchAccountInfoState.accountStateType : accountUseYnState[0]}
+                        onChange={handleSelectAccountStateType}
                 />
               </div>
             </ColSpan1>
+          </RowSpan>
+          <RowSpan>
             <ColSpan2>
               <ColTitle><span>검색어</span></ColTitle>
               <Select styles={inputStyle}
                       components={{IndicatorSeparator: () => null}}
-                      options={mediaSearchType}
-                      value={(searchAccountInfoState.mediaSearchType !== '' && searchAccountInfoState.mediaSearchType.value !== '') ? searchAccountInfoState.mediaSearchType : {id: "1", value: "select", label: "선택"}}
-                      onChange={handleMediaSearchType}
+                      options={keywordSearchType}
+                      value={(searchAccountInfoState.searchKeywordType !== null && searchAccountInfoState.searchKeywordType.value !== '') ? searchAccountInfoState.searchKeywordType : {key: "0", value: "select", label: "선택"}}
+                      onChange={handleKeywordSearchType}
               />
               <SearchInput>
                 <input type={'text'}
                        placeholder={'아이디 및 담당자명 검색'}
-                       value={searchAccountInfoState.searchText}
+                       value={searchAccountInfoState?.keyword !== null ? searchAccountInfoState?.keyword : ''}
                        onChange={handleSearchName}
-                       readOnly={(searchAccountInfoState.mediaSearchType === '' || searchAccountInfoState.mediaSearchType.value === 'select') ? true:false}
+                       readOnly={(searchAccountInfoState.searchKeywordType === null || searchAccountInfoState.searchKeywordType.value === 'select') ? true : false}
                 />
               </SearchInput>
               <SearchButton onClick={()=>searchUserList()}>검색</SearchButton>
@@ -184,15 +213,14 @@ export default function AdminManage(){
           </RowSpan>
         </BoardSearchDetail>
         <BoardSearchResultTitle>
-          <div>
-            총 <span>{totalInfo.totalCount}</span>건의 매체
-          </div>
+          <div></div>
           <div>
             <SaveExcelButton>엑셀 저장</SaveExcelButton>
           </div>
         </BoardSearchResultTitle>
         <BoardTableContainer>
           <Table columns={columnUserData}
+                 totalCount={[totalInfo.totalCount, '사용자']}
                  data={userInfoList}/>
         </BoardTableContainer>
       </Board>

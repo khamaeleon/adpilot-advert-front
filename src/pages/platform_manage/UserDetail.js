@@ -21,7 +21,7 @@ import {
   ValidationScript
 } from "../../assets/GlobalStyles";
 import {VerticalRule} from "../../components/common/Common";
-import {atom, useAtom} from "jotai";
+import {useAtom} from "jotai";
 import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -33,9 +33,11 @@ import styled from "styled-components";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {modalController} from "../../store";
 import {accountInfoAtom, adminInfoAtom} from "./entity";
+import {phoneNumFormat} from "../../common/StringUtils";
+import {hostList} from "../signup/entity";
 
 export function PwChange(props) {
-  const {onSubmit, modalInfo,onSave,title} = props;
+  const {onSubmit, modalInfo, onSave, title} = props;
   const [, setModal] = useAtom(modalController)
   const handleModalComponent = () => {
     setModal({
@@ -53,7 +55,7 @@ export function PwChange(props) {
 
 function PwChangeModal(props) {
   const [showPassword, setShowPassword] = useState(false)
-  const [accountInfoState, setAccountInfoState] = useAtom(props.modalInfo==='USER'? accountInfoAtom: adminInfoAtom)
+  const [accountInfoState, setAccountInfoState] = useAtom(props.modalInfo === 'USER' ? accountInfoAtom : adminInfoAtom)
   const {register, handleSubmit, watch, formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: accountInfoState
@@ -64,7 +66,6 @@ function PwChangeModal(props) {
    * @param event
    */
   const handlePassword = (event) => {
-    console.log(event.target.value)
     setAccountInfoState({
       ...accountInfoState,
       password: event.target.value
@@ -82,7 +83,6 @@ function PwChangeModal(props) {
   }
   const handleShowPassword = () => {
     setShowPassword(!showPassword)
-    console.log(showPassword)
   }
 
   const handleSave = (data) => {
@@ -174,11 +174,11 @@ function PlatformUserDetail() {
     selUserInfo(state.id).then(response => {
       setAccountInfoState({
         ...response,
-        activeYn: response.status ==='NORMAL'? 'Y' :'N'
+        status: response.status ==='NORMAL'? 'NORMAL' :'SUSPEND'
       })
       reset({
         ...response,
-        activeYn: response.status ==='NORMAL'? 'Y' :'N'
+        status: response.status ==='NORMAL'? 'NORMAL' :'SUSPEND'
       })
     })
   }, [])
@@ -190,7 +190,7 @@ function PlatformUserDetail() {
   const handleManagerName = (event) => {
     setAccountInfoState({
       ...accountInfoState,
-      managerName1: event.target.value
+      managerName: event.target.value
     })
   }
   /**
@@ -200,7 +200,7 @@ function PlatformUserDetail() {
   const handleManagerPhone = (event) => {
     setAccountInfoState({
       ...accountInfoState,
-      managerPhone1: event.target.value
+      managerPhone: event.target.value
     })
   }
   /**
@@ -210,46 +210,108 @@ function PlatformUserDetail() {
   const handleManagerEmail = (event) => {
     setAccountInfoState({
       ...accountInfoState,
-      managerEmail1: event.target.value
-    })
-  }
-  const handleBusinessNumber = (event) => {
-    setAccountInfoState({
-      ...accountInfoState,
-      businessNumber: event.target.value,
-      businessName: '',
-      ceoName:'',
+      managerEmail: event.target.value
     })
   }
 
+  /**
+   * 사업장 업태
+   * @param event
+   */
   const handleBusiness = (event) => {
     setAccountInfoState({
       ...accountInfoState,
-      business: event.target.value
+      userCompanyProfile: {
+        ...accountInfoState.userCompanyProfile,
+        typeOfBusiness: event.target.value
+      }
     })
   }
 
+  /**
+   * 사업장 종목
+   * @param event
+   */
   const handleBusinessType = (event) => {
     setAccountInfoState({
       ...accountInfoState,
-      businessType: event.target.value
+      userCompanyProfile: {
+        ...accountInfoState.userCompanyProfile,
+        itemsOfBusiness: event.target.value
+      }
     })
   }
 
-  const handleAddress = (event) => {
+  /**
+   * 사업장 주소
+   * @param event
+   */
+  const handleAddressLocation = (event) => {
     setAccountInfoState({
       ...accountInfoState,
-      address: event.target.value
+      userCompanyProfile: {
+        ...accountInfoState.userCompanyProfile,
+        address: {
+          ...accountInfoState.userCompanyProfile.address,
+          location: event.target.value
+        }
+      }
+    })
+  }
+
+  /**
+   * 사업장 주소 상세
+   * @param event
+   */
+  const handleAddressLocationDetail = (event) => {
+    setAccountInfoState({
+      ...accountInfoState,
+      userCompanyProfile: {
+        ...accountInfoState.userCompanyProfile,
+        address: {
+          ...accountInfoState.userCompanyProfile.address,
+          locationDetail: event.target.value
+        }
+      }
+    })
+  }
+
+  /**
+   * 대표명
+   * @param event
+   */
+  const handleCeoName = (event) => {
+    setAccountInfoState({
+      ...accountInfoState,
+      userCompanyProfile: {
+        ...accountInfoState.userCompanyProfile,
+        ceoName: event.target.value
+      }
+    })
+  }
+  /**
+   * 세금 계산서 발행 이메일
+   * @param event
+   */
+  const handleTaxInvoiceEmail = (event) => {
+    setAccountInfoState({
+      ...accountInfoState,
+      userCompanyProfile: {
+        ...accountInfoState.userCompanyProfile,
+        taxInvoiceEmail: event.target.value
+      }
     })
   }
 
   const imageDel = () => {
       setAccountInfoState({
         ...accountInfoState,
-        businessLicenseCopy: '',
-        businessLicenseCopyName: '',
+        userCompanyProfile: {
+          ...accountInfoState.userCompanyProfile,
+          businessLicenseWebPath: ''
+        }
       })
-      setValue('businessLicenseCopyName', '')
+      setValue('businessLicenseWebPath', '')
   }
 
   const handleBusinessLicense = (pictureFiles) => {
@@ -257,34 +319,43 @@ function PlatformUserDetail() {
       const data = new FormData()
       const imagesLastIndex = pictureFiles.length-1;
       data.append('file', pictureFiles[imagesLastIndex].file, pictureFiles[imagesLastIndex].file.name)
-      accountFileUpload('', data,'LICENCE').then(response => {
-        if(response !== false) {
+      accountFileUpload( data,'LICENCE').then(response => {
+        if(response) {
           setAccountInfoState({
             ...accountInfoState,
-            businessLicenseCopy: response,
-            businessLicenseCopyName: pictureFiles[imagesLastIndex].file.name
+            userCompanyProfile: {
+              ...accountInfoState.userCompanyProfile,
+              businessLicenseWebPath: response
+            }
           })
-          setValue('businessLicenseCopyName', pictureFiles[imagesLastIndex].file.name)
-          setError('businessLicenseCopyName', '')
+          setValue('businessLicenseWebPath', pictureFiles[imagesLastIndex].file.name)
+          setError('businessLicenseWebPath', '')
         }
       })
     }
   }
 
   /**
-   * 사용여부
-   * @param activeYn
+   * 사용 여부
+   * @param status
    */
-  const handleActiveYn =(activeYn) =>{
+  const handleStatus = (status) => {
     setAccountInfoState({
       ...accountInfoState,
-      activeYn: activeYn
+      status: status
+    })
+  }
+
+  const handleSelectHosting = (selectHostType) => {
+    setAccountInfoState({
+      ...accountInfoState,
+      hostType: selectHostType.value
     })
   }
 
   const onSubmit = () => {
     // 최종데이터
-    updateUser(accountInfoState).then(response =>{
+    updateUser(accountInfoState).then(response => {
       if(response){
         navigate('/board/platform')
       }else{
@@ -310,243 +381,280 @@ function PlatformUserDetail() {
       isShow: false,
       modalComponent: null
     })
+
+
   }
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)}>
-        <Board>
-          <BoardHeader>기본 정보</BoardHeader>
-          <BoardSearchDetail>
-            <RowSpan>
-              <ColSpan2>
-                <ColTitle><Span4>광고주 구분</Span4></ColTitle>
-                <div>{(accountInfoState.mediaType ==='DIRECT') ? '매체사' :'대행사'}</div>
-              </ColSpan2>
-            </RowSpan>
-            <RowSpan style={{justifyContent: 'flex-start'}}>
-              <ColSpan2>
-                <ColTitle><Span4>아이디</Span4></ColTitle>
-                <RelativeDiv>
-                  <Input
-                    type={'text'}
-                    placeholder={'아이디를 입력해주세요'}
-                    value={accountInfoState.username}
-                    readOnly={true}
-                  />
-                </RelativeDiv>
-              </ColSpan2>
-              <ColSpan1>
-                <PwChange title={'비밀번호 변경'} modalInfo={'USER'} onSave={handleSavePassword} onSubmit={onModalPw}/>
-              </ColSpan1>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <ColTitle><Span4>광고주명</Span4></ColTitle>
-                <RelativeDiv>
-                  <Input
-                    type={'text'}
-                    placeholder={'광고주명을 입력해주세요'}
-                    value={accountInfoState.siteName}
-                    readOnly={true}
-                  />
-                </RelativeDiv>
-              </ColSpan2>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <ColTitle><Span4>담당자명</Span4></ColTitle>
-                <RelativeDiv>
-                  <Input
-                    type={'text'}
-                    placeholder={'담당자 명을 입력해주세요'}
-                    {...register("managerName", {
-                      required: "담당자 명을 입력해주세요",
-                      onChange:(e) => handleManagerName(e)
-                    })}
-                    value={accountInfoState.managerName1}
-                  />
-                  {errors.managerName && <ValidationScript>{errors.managerName?.message}</ValidationScript>}
-                </RelativeDiv>
-              </ColSpan2>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <ColTitle><Span4>담당자 연락처</Span4></ColTitle>
-                <RelativeDiv>
-                  <Input
-                    type={'text'}
-                    placeholder={'담당자 연락처를 입력해주세요'}
-                    {...register("managerPhone", {
-                      required: "담당자 연락처를 입력해주세요.",
-                      pattern: {
-                        value: /0([1-9][0-9]?){1,2}[.-]?([0-9]{3,4})[.-]?([0-9]{4})/g,
-                        message: "연락처 정보를 확인해주세요"
-                      },
-                      onChange : (e) => handleManagerPhone(e)
-                    })}
-                    value={accountInfoState.managerPhone}
-                  />
-                </RelativeDiv>
-              </ColSpan2>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <ColTitle><Span4>담당자 이메일</Span4></ColTitle>
-                <RelativeDiv>
-                  <Input
-                    type={'text'}
-                    placeholder={'담당자 이메일을 입력해주세요.'}
-                    {...register("managerEmail", {
-                      required: "담당자 이메일을 입력해주세요.",
-                      pattern: {
-                        value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
-                        message: "이메일 형식을 확인해주세요"
-                      },
-                      onChange: (e) => handleManagerEmail(e)
-                    })}
-                    value={accountInfoState.managerEmail}
-
-                  />
-                  {errors.managerEmail && <ValidationScript>{errors.managerEmail?.message}</ValidationScript>}
-                </RelativeDiv>
-              </ColSpan2>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <ColTitle><Span4>호스팅</Span4></ColTitle>
-                <RelativeDiv>
-                  <Select styles={inputStyle}
-                          components={{IndicatorSeparator: () => null}}
-                          options={[]}
-                          value={''}
-                          //onChange={}
-                  />
-                </RelativeDiv>
-              </ColSpan2>
-            </RowSpan>
-          </BoardSearchDetail>
-          <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
-        </Board>
-        <Board>
-          <BoardHeader>사업자 정보</BoardHeader>
-          <BoardSearchDetail>
-            <RowSpan>
-              <ColSpan2>
-                <ColTitle><Span4>상호명</Span4></ColTitle>
-                <RelativeDiv>
-                  <Input
-                    type={'text'}
-                    placeholder={'상호명'}
-                    value={accountInfoState.businessName}
-                    readOnly={true}
-                  />
-                </RelativeDiv>
-              </ColSpan2>
-            </RowSpan>
-            <RowSpan style={{justifyContent: 'flex-start'}}>
-              <ColSpan2>
-                <ColTitle><Span4>사업자 등록 번호</Span4></ColTitle>
-                <RelativeDiv>
-                  <Input
-                    type={'text'}
-                    placeholder={'사업자 등록 번호'}
-                    {...register("businessNumber", {
-                      required: "사업자 조회를 해주세요",
-                      onChange:(e) => handleBusinessNumber(e)
-                    })}
-                    value={accountInfoState.businessNumber}
-                    readOnly={true}
-                  />
-                  {errors.businessNumber && <ValidationScript>{errors.businessNumber?.message}</ValidationScript>}
-                </RelativeDiv>
-              </ColSpan2>
-              <ColSpan1>
-                <DuplicateButton type={'button'}>사업자 조회</DuplicateButton>
-              </ColSpan1>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <ColTitle><Span4>대표자 성명</Span4></ColTitle>
-                <RelativeDiv>
-                  <Input
-                    type={'text'}
-                    placeholder={'대표자 성명'}
-                    value={accountInfoState.ceoName}
-                    readOnly={true}
-                  />
-                </RelativeDiv>
-              </ColSpan2>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <ColTitle><Span4>업태</Span4></ColTitle>
-                <RelativeDiv>
-                  <Input
-                    type={'text'}
-                    placeholder={'업태'}
-                    {...register("business", {
-                      required: "업태를 입력해주세요",
-                      onChange:(e) => handleBusiness(e)
-                    })}
-                    value={accountInfoState.business}
-                  />
-                  {errors.business && <ValidationScript>{errors.business?.message}</ValidationScript>}
-                </RelativeDiv>
-              </ColSpan2>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <ColTitle><Span4>종목</Span4></ColTitle>
-                <RelativeDiv>
-                  <Input
-                    type={'text'}
-                    placeholder={'종목'}
-                    {...register("businessType", {
-                      required: "종목을 입력해주세요",
-                      onChange:(e) => handleBusinessType(e)
-                    })}
-                    value={accountInfoState.businessType}
-                  />
-                  {errors.businessType && <ValidationScript>{errors.businessType?.message}</ValidationScript>}
-                </RelativeDiv>
-              </ColSpan2>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <ColTitle><Span4>사업장 주소</Span4></ColTitle>
-                <RelativeDiv>
-                  <Input
-                    type={'text'}
-                    placeholder={'사업장 주소'}
-                    {...register("address", {
-                      required: "주소를 입력해주세요",
-                      onChange:(e) => handleAddress(e)
-                    })}
-                    value={accountInfoState.address}
-                  />
-                  {errors.address && <ValidationScript>{errors.address?.message}</ValidationScript>}
-                </RelativeDiv>
-              </ColSpan2>
-            </RowSpan>
-            <RowSpan style={{justifyContent: 'flex-start'}}>
-              <ColSpan2>
-                <ColTitle><Span4>사업자 등록증</Span4></ColTitle>
-                <RelativeDiv>
-                  <Input
-                    style={{paddingRight: 35}}
-                    type={'text'}
-                    placeholder={'사업자 등록증'}
-                    {...register("businessLicenseCopy", {
-                      required: "사업자 등록증을 등록해주세요",
-                    })}
-                    value={accountInfoState.businessLicenseCopy}
-                    readOnly={true}
-                  />
-                  {errors.businessLicenseCopy && <ValidationScript>{errors.businessLicenseCopy?.message}</ValidationScript>}
-                  <DeleteButton type={'button'} onClick={()=> imageDel()} />
-                </RelativeDiv>
-              </ColSpan2>
-              <ColSpan1>
-                <DuplicateButton type={'button'}>
+      { accountInfoState !== null &&
+        <>
+          <Board>
+            <BoardHeader>기본 정보</BoardHeader>
+            <BoardSearchDetail>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>광고주 구분</Span4></ColTitle>
+                  <div>{(accountInfoState.adverType !=='ADVER') ? '대행사' : '광고주'}</div>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan style={{justifyContent: 'flex-start'}}>
+                <ColSpan2>
+                  <ColTitle><Span4>아이디</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      type={'text'}
+                      placeholder={'아이디를 입력해주세요'}
+                      value={accountInfoState.username}
+                      readOnly={true}
+                    />
+                  </RelativeDiv>
+                </ColSpan2>
+                <ColSpan1>
+                  <PwChange title={'비밀번호 변경'} modalInfo={'USER'} onSave={handleSavePassword} onSubmit={onModalPw}/>
+                </ColSpan1>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>광고주명</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      type={'text'}
+                      placeholder={'광고주명을 입력해주세요'}
+                      value={accountInfoState.adverName}
+                      readOnly={true}
+                    />
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>담당자명</Span4></ColTitle>
+                  <RelativeDiv>
+                    <InputValidationCon>
+                      <Input
+                        type={'text'}
+                        placeholder={'담당자 명을 입력해주세요'}
+                        {...register("managerName", {
+                          required: "담당자 명을 입력해주세요",
+                          onChange:(e) => handleManagerName(e)
+                        })}
+                        value={accountInfoState.managerName}
+                      />
+                      {errors.managerName && <ValidationScript>{errors.managerName?.message}</ValidationScript>}
+                    </InputValidationCon>
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>담당자 연락처</Span4></ColTitle>
+                  <RelativeDiv>
+                    <InputValidationCon>
+                      <Input
+                        type={'text'}
+                        placeholder={'담당자 연락처를 입력해주세요'}
+                        {...register("managerPhone", {
+                          required: "담당자 연락처를 입력해주세요.",
+                          pattern: {
+                            value: /0([1-9][0-9]?){1,2}[.-]?([0-9]{3,4})[.-]?([0-9]{4})/g,
+                            message: "연락처 정보를 확인해주세요"
+                          },
+                          onChange : (e) => handleManagerPhone(e)
+                        })}
+                        value={phoneNumFormat(accountInfoState.managerPhone)}
+                      />
+                      {errors.managerPhone && <ValidationScript>{errors.managerPhone?.message}</ValidationScript>}
+                    </InputValidationCon>
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>담당자 이메일</Span4></ColTitle>
+                  <RelativeDiv>
+                    <InputValidationCon>
+                      <Input
+                        type={'text'}
+                        placeholder={'담당자 이메일을 입력해주세요.'}
+                        {...register("managerEmail", {
+                          required: "담당자 이메일을 입력해주세요.",
+                          pattern: {
+                            value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
+                            message: "이메일 형식을 확인해주세요"
+                          },
+                          onChange: (e) => handleManagerEmail(e)
+                        })}
+                        value={accountInfoState.managerEmail}
+                      />
+                      {errors.managerEmail && <ValidationScript>{errors.managerEmail?.message}</ValidationScript>}
+                    </InputValidationCon>
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>호스팅</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Select styles={inputStyle}
+                            components={{IndicatorSeparator: () => null}}
+                            options={hostList}
+                            value={accountInfoState.hostType !== '' ? hostList.find(value => value.value === accountInfoState.hostType) : ''}
+                            onChange={handleSelectHosting}
+                    />
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+            </BoardSearchDetail>
+          </Board>
+          <Board>
+            <BoardHeader>사업자 정보</BoardHeader>
+            <BoardSearchDetail>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>상호명</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      type={'text'}
+                      placeholder={'상호명'}
+                      value={accountInfoState?.userCompanyProfile.companyName}
+                      readOnly={true}
+                    />
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan style={{justifyContent: 'flex-start'}}>
+                <ColSpan2>
+                  <ColTitle><Span4>사업자 등록 번호</Span4></ColTitle>
+                  <RelativeDiv>
+                    <Input
+                      type={'text'}
+                      placeholder={'사업자 등록 번호'}
+                      {...register("businessNumber", {
+                        required: "사업자 조회를 해주세요",
+                      })}
+                      value={accountInfoState?.userCompanyProfile.businessNumber}
+                      readOnly={true}
+                    />
+                    {errors.businessNumber && <ValidationScript>{errors.businessNumber?.message}</ValidationScript>}
+                  </RelativeDiv>
+                </ColSpan2>
+                <ColSpan1>
+                  <DuplicateButton type={'button'}>사업자 조회</DuplicateButton>
+                </ColSpan1>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>대표자 성명</Span4></ColTitle>
+                  <RelativeDiv>
+                    <InputValidationCon>
+                      <Input
+                        type={'text'}
+                        placeholder={'대표자 성명'}
+                        {...register("ceoName", {
+                          required: "대표자 성명을 입력해주세요",
+                          onChange:(e) => handleCeoName(e)
+                        })}
+                        value={accountInfoState?.userCompanyProfile.ceoName}
+                      />
+                      {errors.ceoName && <ValidationScript>{errors.ceoName?.message}</ValidationScript>}
+                    </InputValidationCon>
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>업태</Span4></ColTitle>
+                  <RelativeDiv>
+                    <InputValidationCon>
+                      <Input
+                        type={'text'}
+                        placeholder={'업태'}
+                        {...register("typeOfBusiness", {
+                          required: "업태를 입력해주세요",
+                          onChange:(e) => handleBusiness(e)
+                        })}
+                        value={accountInfoState?.userCompanyProfile.typeOfBusiness}
+                      />
+                      {errors.typeOfBusiness && <ValidationScript>{errors.typeOfBusiness?.message}</ValidationScript>}
+                    </InputValidationCon>
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>종목</Span4></ColTitle>
+                  <RelativeDiv>
+                    <InputValidationCon>
+                      <Input
+                        type={'text'}
+                        placeholder={'종목'}
+                        {...register("itemsOfBusiness", {
+                          required: "종목을 입력해주세요",
+                          onChange:(e) => handleBusinessType(e)
+                        })}
+                        value={accountInfoState?.userCompanyProfile.itemsOfBusiness}
+                      />
+                      {errors.itemsOfBusiness && <ValidationScript>{errors.itemsOfBusiness?.message}</ValidationScript>}
+                    </InputValidationCon>
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              <RowSpan style={{justifyContent: 'flex-start'}}>
+                <ColSpan2>
+                  <ColTitle><Span4>사업장 주소</Span4></ColTitle>
+                  <RelativeDiv>
+                    <InputValidationCon>
+                      <Input
+                        type={'text'}
+                        placeholder={'사업장 주소'}
+                        {...register("location", {
+                          required: "주소를 입력해주세요",
+                          onChange:(e) => handleAddressLocation(e)
+                        })}
+                        value={accountInfoState?.userCompanyProfile.address.location}
+                      />
+                      {errors.location && <ValidationScript>{errors.location?.message}</ValidationScript>}
+                    </InputValidationCon>
+                  </RelativeDiv>
+                </ColSpan2>
+                <ColSpan1>
+                  <InputValidationCon style={{flexDirection: 'column', alignItems: 'flex-start'}}>
+                    <Input
+                      type={'text'}
+                      placeholder={'상세 주소를 입력해주세요.'}
+                      value={accountInfoState?.userCompanyProfile.address.locationDetail}
+                      {...register("locationDetail", {
+                        required: "상세 주소를 입력해주세요",
+                        onChange:(e) => handleAddressLocationDetail(e)
+                      })}
+                    />
+                    {errors.locationDetail && <ValidationScript>{errors.locationDetail?.message}</ValidationScript>}
+                  </InputValidationCon>
+                </ColSpan1>
+              </RowSpan>
+              <RowSpan style={{justifyContent: 'flex-start'}}>
+                <ColSpan2>
+                  <ColTitle><Span4>사업자 등록증</Span4></ColTitle>
+                  <RelativeDiv>
+                    <InputValidationCon>
+                      <div style={{width: '100%', display: 'flex', alignItems: 'center'}}>
+                        <Input
+                          style={{paddingRight: 35}}
+                          type={'text'}
+                          placeholder={'사업자 등록증'}
+                          {...register("businessLicenseWebPath", {
+                            required: "사업자 등록증을 등록해주세요",
+                          })}
+                          value={accountInfoState?.userCompanyProfile.businessLicenseWebPath}
+                          readOnly={true}
+                        />
+                        <DeleteButton type={'button'} onClick={()=> imageDel()} />
+                      </div>
+                      {errors.businessLicenseWebPath && <ValidationScript>{errors.businessLicenseWebPath?.message}</ValidationScript>}
+                    </InputValidationCon>
+                  </RelativeDiv>
+                </ColSpan2>
+                <ColSpan1 style={errors.businessLicenseWebPath ? {paddingBottom: 17} : {paddingBottom: 0}}>
                   <ImageUploading
                     acceptType={["jpg", "gif", "png"]}
                     onChange={handleBusinessLicense}
@@ -560,61 +668,61 @@ function PlatformUserDetail() {
                       >파일 첨부</DuplicateButton>
                     )}
                   </ImageUploading>
-                  파일 첨부
-                </DuplicateButton>
-              </ColSpan1>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan2>
-                <ColTitle><Span4>세금계산서 발행 이메일</Span4></ColTitle>
-                <RelativeDiv>
-                  <Input
-                    type={'text'}
-                    placeholder={'세금계산서 발행 이메일을 입력해주세요.'}
-                    {...register("managerEmail", {
-                      required: "세금계산서 발행 이메일을 입력해주세요.",
-                      pattern: {
-                        value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
-                        message: "이메일 형식을 확인해주세요"
-                      },
-                      onChange: (e) => handleManagerEmail(e)
-                    })}
-                    value={accountInfoState.managerEmail}
-
-                  />
-                  {errors.managerEmail && <ValidationScript>{errors.managerEmail?.message}</ValidationScript>}
-                </RelativeDiv>
-              </ColSpan2>
-            </RowSpan>
-            {state.id !== 'NEW' &&
-              <RowSpan>
-                <ColSpan1>
-                  <ColTitle><Span4>사용 여부</Span4></ColTitle>
-                  <RelativeDiv>
-                    <input type={'radio'}
-                           id={'use'}
-                           name={'useManager'}
-                           checked={accountInfoState.activeYn === 'Y' ? true : false}
-                           onChange={() => handleActiveYn('Y')}/>
-                    <label htmlFor={'use'}>사용</label>
-                    <input type={'radio'}
-                           id={'unuse'}
-                           name={'useManager'}
-                           checked={accountInfoState.activeYn === 'Y' ? false : true}
-                           onChange={() => handleActiveYn('N')}/>
-                    <label htmlFor={'unuse'}>미사용</label>
-                  </RelativeDiv>
                 </ColSpan1>
               </RowSpan>
-            }
-          </BoardSearchDetail>
-          <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
-        </Board>
-        <SubmitContainer>
-          <CancelButton onClick={()=>navigate('/board/platform')}>목록</CancelButton>
-          <SubmitButton type={"submit"}>저장</SubmitButton>
-        </SubmitContainer>
-      </form>
+              <RowSpan>
+                <ColSpan2>
+                  <ColTitle><Span4>세금계산서 발행 이메일</Span4></ColTitle>
+                  <RelativeDiv>
+                    <InputValidationCon>
+                      <Input
+                        type={'text'}
+                        placeholder={'세금계산서 발행 이메일을 입력해주세요.'}
+                        {...register("taxInvoiceEmail", {
+                          required: "세금계산서 발행 이메일을 입력해주세요.",
+                          pattern: {
+                            value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
+                            message: "이메일 형식을 확인해주세요"
+                          },
+                          onChange: (e) => handleTaxInvoiceEmail(e)
+                        })}
+                        value={accountInfoState?.userCompanyProfile.taxInvoiceEmail}
+                      />
+                      {errors.taxInvoiceEmail && <ValidationScript>{errors.taxInvoiceEmail?.message}</ValidationScript>}
+                    </InputValidationCon>
+                  </RelativeDiv>
+                </ColSpan2>
+              </RowSpan>
+              {state.id !== 'NEW' &&
+                <RowSpan>
+                  <ColSpan1>
+                    <ColTitle><Span4>사용 여부</Span4></ColTitle>
+                    <RelativeDiv>
+                      <input type={'radio'}
+                             id={'normal'}
+                             name={'status'}
+                             checked={accountInfoState.status !== 'NORMAL' ? false : true}
+                             onChange={() => handleStatus('NORMAL')}/>
+                      <label htmlFor={'normal'}>사용</label>
+                      <input type={'radio'}
+                             id={'suspend'}
+                             name={'status'}
+                             checked={accountInfoState.status !== 'NORMAL' ? true : false}
+                             onChange={() => handleStatus('SUSPEND')}/>
+                      <label htmlFor={'suspend'}>미사용</label>
+                    </RelativeDiv>
+                  </ColSpan1>
+                </RowSpan>
+              }
+            </BoardSearchDetail>
+          </Board>
+        </>
+      }
+      <SubmitContainer>
+        <CancelButton type={'button'} onClick={()=>navigate('/board/platform')}>목록</CancelButton>
+        <SubmitButton type={"submit"}>저장</SubmitButton>
+      </SubmitContainer>
+    </form>
   )
 }
 
@@ -630,5 +738,9 @@ const DuplicateButton = styled.button`
   &:hover {
     background-color: #535353;
   }
+`
+const InputValidationCon = styled.div`
+  width: 100%;
+  > div { position: unset; }
 `
 

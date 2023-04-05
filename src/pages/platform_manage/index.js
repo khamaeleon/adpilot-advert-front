@@ -1,7 +1,6 @@
 import Navigator from "../../components/common/Navigator";
 import {BoardContainer, TitleContainer} from "../../assets/GlobalStyles";
 import React from "react";
-import {atom} from "jotai/index";
 import {useParams} from "react-router-dom";
 import AdminManage from "./AdminManage";
 import {CategoryManage} from "./CategoryManage";
