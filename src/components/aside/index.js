@@ -4,20 +4,66 @@ import {menuList, narrowStyle, selectedIcon, widenStyle} from "./entity";
 import {useEffect, useRef, useState} from "react";
 import {AdminInfo} from "../../pages/layout";
 import {useAtomValue} from "jotai/index";
+import {useAtom} from "jotai";
+import {tokenResultAtom} from "../../pages/login/entity";
 
 function AsideList (props) {
   const {id, mode, role} = props
   const [userName, setUserName] = useState('')
-
-
-  const calcHeight = (item) => {
-    return item.child.length
+  const params = useParams()
+  const [tokenUserInfo] = useAtom(tokenResultAtom)
+  /**
+   * 대메뉴 권한 체크
+   * @param item
+   * @returns {boolean}
+   */
+  const checkPermissions = (item) => {
+    if(tokenUserInfo.role === 'NORMAL' && ['reports','dashboard'].includes(item.name)) {
+      return true
+    }
+    if(['ADMIN','SUPER_ADMIN'].includes(tokenUserInfo.role)) {
+      return true
+    }
   }
+
+  /**
+   * 메뉴 변경시 높이값 조정
+   * @param item
+   * @returns {*|string}
+   */
+  const calcHeight = (item) => {
+    if(tokenUserInfo.role === 'SUPER_ADMIN'){
+      if(userName !== '' && item.name === 'account'){
+        return item.child.length
+      } else if(userName !== '' || item.name !== 'account') {
+        return item.child.length
+      } else {
+        return '4'
+      }
+    } else {
+      if(tokenUserInfo.role === 'ADMIN' && item.name === 'reports' || item.name === 'platform'){
+        return '3'
+      } else if(tokenUserInfo.role === 'ADMIN' && item.name === 'account'){
+        return '4'
+      } else {
+        if(tokenUserInfo.role === 'NORMAL' && item.name === 'reports') {
+          return '3'
+        } else if (item.name === 'account' || item.name === 'accountHistory') {
+          return '2'
+        } else {
+          return item.child.length
+        }
+        return item.child.length
+      }
+    }
+  }
+
   return (
     <>
       {menuList.map((item,key) => {
         return(
           <div key={key}>
+            {params.id !== undefined && checkPermissions(item)&&
             <li className={item.include.includes(id) ? "active" : null} style={mode? narrowStyle.li : widenStyle.li}>
               <Link to={`/board/${item.name}`} className={mode? "icon-mode" : "list-mode"}>
                 <Icon style={id.indexOf(item.name) > -1? {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: 1}: {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: .5}}/>
@@ -36,6 +82,7 @@ function AsideList (props) {
                 })}
               </SubMenu>
             </li>
+            }
           </div>
         )
       })
