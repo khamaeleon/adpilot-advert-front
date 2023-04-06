@@ -28,7 +28,7 @@ import {
   selUserMyPageInfo,
   updateMyPageUser,
   updateUser
-} from "../../services/ManageUserAxios";
+} from "../../services/Platform/ManageUserAxios";
 import {toast} from "react-toastify";
 import Select from "react-select";
 import ImageUploading from "react-images-uploading";

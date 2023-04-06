@@ -1,4 +1,5 @@
-import {AdminAxios} from "../common/Axios";
+import {AdminAxios} from "../../common/Axios";
+
 
 const ACTION_URL = '/admin';
 

@@ -12,7 +12,6 @@ import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
 import {ToastContainer} from "react-toastify";
-import {selAdverBudgetEventList, selAdverPriceEventList} from "../../services/SettingsAxios";
 import {adverTimeBudgetColumns, budgetTimeDataAtom} from "./entity/budgetTime";
 
 function BudgetTime() {
@@ -20,9 +19,7 @@ function BudgetTime() {
   const [searchParams, setSearchParams] = useState({ keyword:''})
 
   useEffect(() => {
-    selAdverBudgetEventList(searchParams).then(response => {
-      setBudgetTimeDataState(response)
-    })
+
   }, [])
   const handleSearch = (event) => {
     setSearchParams({
@@ -32,10 +29,6 @@ function BudgetTime() {
   }
 
   const onSearchAdverEventBudget =() =>{
-    console.log(searchParams)
-    selAdverPriceEventList(searchParams).then(response =>{
-      setBudgetTimeDataState(response)
-    })
   }
   return (
     <>

@@ -16,18 +16,12 @@ import {
 import {useAtom} from "jotai";
 import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
-import {
-  resistBudgetEvent,
-  resistPriceEvent,
-  selBudgetEventList,
-  selPriceEventList,
-  updateBudgetEvent,
-  updatePriceEvent
-} from "../../services/SettingsAxios";
 import {toast} from "react-toastify";
 import {useLocation} from "react-router-dom";
 import {eventUnitPriceDetailDataAtom} from "../../pages/settings/entity/eventPrice";
 import {eventBudgetDetailDataAtom} from "../../pages/settings/entity/budgetEvent";
+import {resistPriceEvent, selPriceEventList, updatePriceEvent} from "../../services/settings/EventPriceAxios";
+import {resistBudgetEvent, selBudgetEventList, updateBudgetEvent} from "../../services/settings/BudgetEventAxios";
 
 function SettingChangeModal(props) {
   const {data, saveType, label} = props
@@ -50,10 +44,12 @@ function SettingChangeModal(props) {
     defaultValues: dataState
   })
   useEffect(() => {
-    setDataState(data)
-    reset({
-      dataState
-    })
+    if(saveType ==='edit'){
+      setDataState(data)
+      reset({
+        dataState
+      })
+    }
   }, [reset])
   const onError = (error) => console.log(error)
   /**
@@ -183,7 +179,6 @@ function SettingChangeModal(props) {
         }
       })
     } else {
-      console.log('수정')
       updateBudgetEvent({...dataState, userId: state.id}).then(response => {
         if (response) {
           setModal({

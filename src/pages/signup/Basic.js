@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useAtom} from "jotai/index";
 import {Controller, useForm} from "react-hook-form";
 import {toast} from "react-toastify";
-import {accountFileUpload, selValidUserId, signUp} from "../../services/ManageUserAxios";
+import {accountFileUpload, selValidUserId, signUp} from "../../services/Platform/ManageUserAxios";
 import {
   CancelButton, ColSpan2,
   DefaultButton,

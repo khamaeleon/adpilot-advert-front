@@ -15,16 +15,15 @@ import Table from "../../components/table";
 import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
-import {selBudgetEventList} from "../../services/SettingsAxios";
 import SettingAdd from "../../components/common/SettingModal";
 import {modalController} from "../../store";
 import {budgetEventDetailColumns, eventBudgetDetailDataAtom} from "./entity/budgetEvent";
+import {selBudgetEventList} from "../../services/settings/BudgetEventAxios";
 
 
 function BudgetEventDetail() {
   const [eventBudgetDetailDataState, setEventBudgetDetailDataState] = useAtom(eventBudgetDetailDataAtom)
   const navigate = useNavigate()
-  const [, setModal] = useAtom(modalController)
   const [saveTypeState] =useState('create')
   const {state} =useLocation()
 

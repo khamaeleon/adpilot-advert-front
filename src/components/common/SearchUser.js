@@ -2,7 +2,7 @@ import {useAtom} from "jotai";
 import React, {useEffect, useState} from "react";
 import {ModalBody, ModalHeader} from "../modal/Modal";
 import styled from "styled-components";
-import {selKeywordUser} from "../../services/ManageUserAxios";
+import {selKeywordUser} from "../../services/Platform/ManageUserAxios";
 import {modalController} from "../../store";
 import {ColSpan4, RelativeDiv, RowSpan, SaveExcelButton} from "../../assets/GlobalStyles";
 

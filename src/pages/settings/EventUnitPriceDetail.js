@@ -15,10 +15,10 @@ import Table from "../../components/table";
 import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
-import {selPriceEventList} from "../../services/SettingsAxios";
 import SettingAdd from "../../components/common/SettingModal";
 import {modalController} from "../../store";
 import {eventUnitPriceDetailColumns, eventUnitPriceDetailDataAtom} from "./entity/eventPrice";
+import {selPriceEventList} from "../../services/settings/EventPriceAxios";
 
 function EventUnitPriceDetail() {
   const [eventUnitPriceDetailDataState, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
@@ -28,7 +28,6 @@ function EventUnitPriceDetail() {
 
   useEffect(() => {
     selPriceEventList(state.id).then(response => {
-      console.log(response)
       setEventUnitPriceDetailDataState(response)
     })
   }, [])

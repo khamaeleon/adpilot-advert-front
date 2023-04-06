@@ -1,6 +1,6 @@
 import axios from "axios";
 import {ADMIN_SERVER} from "../constants/GlobalConst";
-import {refreshAdmin} from "../services/AuthAxios";
+import {refreshAdmin} from "../services/auth/AuthAxios";
 import {tokenResultAtom} from "../pages/login/entity";
 import store from "../store";
 

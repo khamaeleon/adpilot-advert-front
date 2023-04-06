@@ -6,7 +6,7 @@ import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
 import {useAtom,} from "jotai";
 import {tokenResultAtom} from "../login/entity";
-import {logOutAdmin, logOutUser} from "../../services/AuthAxios";
+import {logOutAdmin, logOutUser} from "../../services/auth/AuthAxios";
 import Campaign from "../campaign";
 import Settings from "../settings";
 import Pixel from "../pixel";

@@ -5,7 +5,7 @@ const SLASH = '/';
 const LEVEL = ACTION_URL+'/level'
 const CATEGORY_ALL = LEVEL+'/1/all'
 const CATEGORY_BY_PARENT = ACTION_URL + '/by-parent'
-const PRODUCT = '/product'
+
 /**
  * 상위카테고리 조회
  * @returns {Promise<null>}

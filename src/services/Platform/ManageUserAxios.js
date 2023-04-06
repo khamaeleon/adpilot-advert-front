@@ -1,5 +1,6 @@
-import {AdminAxios, AdverAxios, AxiosImage} from "../common/Axios";
-import {responseFormatMessage} from "../common/StringUtils";
+import {AdminAxios, AdverAxios, AxiosImage} from "../../common/Axios";
+import {responseFormatMessage} from "../../common/StringUtils";
+
 
 const ACTION_URL = '/user';
 const USER_MANAGE_URL ='/adver/user'

@@ -15,7 +15,6 @@ import Table from "../../components/table";
 import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
-import {selBudgetEventList} from "../../services/SettingsAxios";
 import SettingAdd from "../../components/common/SettingModal";
 import {budgetTimeDetailColumns, timeBudgetDetailDataAtom} from "./entity/budgetTime";
 
@@ -25,10 +24,6 @@ function BudgetTimeDetail() {
   const navigate = useNavigate()
   const {state} =useLocation()
   useEffect(() => {
-    selBudgetEventList(state.id).then(response => {
-      console.log(response)
-      setTimeBudgetDetailDataState(response)
-    })
   }, [])
 
   /**
