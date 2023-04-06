@@ -2,19 +2,21 @@ import {
   AgentType,
   BoardSearchDetail,
   CalendarBox,
-  CalendarIcon, ColSpan0,
+  CalendarIcon,
+  ColSpan0,
   ColSpan1,
   ColSpan2,
   ColSpan3,
-  ColSpan4,
   ColTitle,
   CustomDatePicker,
-  DateContainer, Input,
+  DateContainer,
+  Input,
   inputStyle,
   RangePicker,
   RowSpan,
   SearchButton,
-  SearchInput, Span1, Span4
+  SearchInput,
+  Span4
 } from "../../assets/GlobalStyles";
 import ko from "date-fns/locale/ko";
 import {HorizontalRule} from "../common/Common";
