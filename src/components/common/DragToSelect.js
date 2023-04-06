@@ -23,9 +23,15 @@ const weeksInfo = {
   6:'토',
   7:'일'
 }
-export default function DragToSelect({userId, reset}) {
+export default function DragToSelect({userId, reset, readOnly}) {
   const resetCells = useResetAtom(cellsAtom)
   const [cells, setCells] = useAtom(cellsAtom)//[0] 은 요일, 시간
+  const [cellEnabled, setCellEnabled] = useState(false)
+  useEffect(() => {
+    if(readOnly) {
+      setCellEnabled(true)
+    }
+  },[])
   useEffect(() => {
     cells.map((weeks, key) => {
       weeks.map((day, idx) => {
@@ -74,192 +80,192 @@ export default function DragToSelect({userId, reset}) {
       </tr>
       <tr>
         <td disabled>월</td>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
       </tr>
       <tr>
         <td disabled>화</td>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
       </tr>
       <tr>
         <td disabled>수</td>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
       </tr>
       <tr>
         <td disabled>목</td>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
       </tr>
       <tr>
         <td disabled>금</td>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
       </tr>
       <tr>
         <td disabled>토</td>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
       </tr>
       <tr>
         <td disabled>일</td>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
-        <td/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
+        <td disabled={cellEnabled}/>
       </tr>
     </TableDragSelect>
   )

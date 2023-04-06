@@ -14,6 +14,7 @@ import {useAtom, useSetAtom} from "jotai";
 import {stepCampaignAtom} from "../entity";
 import {modalController} from "../../../store";
 import {Controller, useFormContext} from "react-hook-form";
+import TimeTable from "../../../components/modal/TimeTable";
 
 export function CampaignTwo() {
   const [stepCampaign, setStepCampaign] = useAtom(stepCampaignAtom)
@@ -148,6 +149,11 @@ export function CampaignTwo() {
                     )}
                     />
                 </ColSpan1>
+                {stepTwo.timeGroup.value !== "" &&
+                  <ColSpan1>
+                    <TimeTable title={'설정된 시간별 예산'} readOnly={true}/>
+                  </ColSpan1>
+                }
                 {errors.timeGroup && <ColSpan1><ValidationScript>{errors.timeGroup.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>

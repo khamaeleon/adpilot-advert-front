@@ -66,6 +66,7 @@ function BudgetTimeDetail() {
                   type={'radio'}
                   name={'exhaust'}
                   value={'equal'}
+                  checked={timeSetting === 'equal'}
                   onChange={handleRadioSelect}
                 />
                 <span>균등 소진</span>
@@ -75,6 +76,7 @@ function BudgetTimeDetail() {
                   type={'radio'}
                   name={'exhaust'}
                   value={'fast'}
+                  checked={timeSetting === 'fast'}
                   onChange={handleRadioSelect}
                 />
                 <span>빠른 소진</span>
@@ -84,6 +86,7 @@ function BudgetTimeDetail() {
                   type={'radio'}
                   name={'exhaust'}
                   value={'direct'}
+                  checked={timeSetting === 'direct'}
                   onChange={handleRadioSelect}
                 />
                 <span>직접 설정</span>
@@ -100,9 +103,9 @@ function BudgetTimeDetail() {
             <RelativeDiv box={true} column={true}>
               <ColSpan4 style={{color: '#ccc',marginBottom: 10, justifyContent:'space-between'}}>
                 <div>Drag & Drop으로 원하는 요일 및 시간을 설정하세요.</div>
-                <div style={{width: 'auto'}}>
+                <div style={{width: 'auto',minHeight: 24}}>
                   <SelectShape active={true}><span>노출</span></SelectShape>
-                    <SelectShape><span>미노출</span></SelectShape>
+                  <SelectShape><span>미노출</span></SelectShape>
                 </div>
               </ColSpan4>
               <DragToSelect userId={'id'} reset={reset}/>
@@ -118,7 +121,7 @@ function BudgetTimeDetail() {
           <RowSpan>
             <RelativeDiv box={true} column={true}>
               <ColSpan4 style={{color: '#ccc',marginBottom: 10, justifyContent:'space-between'}}>
-                <div>요일 및 시간별 예산을 % 단위로 설정해주세요</div>
+                <div style={{minHeight: 24}}>요일 및 시간별 예산을 % 단위로 설정해주세요</div>
               </ColSpan4>
               <InsertToSelect userId={'id'}/>
             </RelativeDiv>
