@@ -16,7 +16,6 @@ export const adminAxios = axios.create({
 });
 adminAxios.interceptors.request.use(
   async (config) => {
-    let token = ''
     const tokenAtom = store.get(tokenResultAtom)
     config.headers.Authorization = `Bearer ${tokenAtom.accessToken}`;
     return config;
@@ -63,8 +62,7 @@ adminAxios.interceptors.response.use(
               id: response.email,
               role: response.role,
               name: response.name,
-              accessToken: response.token.accessToken,
-              refreshToken: response.token.refreshToken
+              accessToken: response.token.accessToken
             })
             onTokenRefreshed(response.token.accessToken);
           } else {

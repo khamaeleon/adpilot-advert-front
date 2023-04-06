@@ -17,7 +17,6 @@ export const adverAxios = axios.create({
 adverAxios.interceptors.request.use(
   async (config) => {
     const tokenAtom =store.get(tokenResultAtom)
-    console.log(tokenAtom)
     config.headers.Authorization = `Bearer ${tokenAtom.accessToken}`;
     return config;
   },
@@ -64,8 +63,7 @@ adverAxios.interceptors.response.use(
                 username: response.username,
                 role: response.role,
                 name: response.name,
-                accessToken: response.token.accessToken,
-                refreshToken: response.token.refreshToken
+                accessToken: response.token.accessToken
               })
               onTokenRefreshed(response.token.accessToken);
             } else {

@@ -6,8 +6,8 @@ import {useAtom} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity/Common";
 
 function AsideList (props) {
-  const {id, mode, role} = props
-  const [userName, setUserName] = useState('')
+  const {id, mode} = props
+  const [userName] = useState('')
   const params = useParams()
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   /**
@@ -16,7 +16,6 @@ function AsideList (props) {
    * @returns {boolean}
    */
   const checkPermissions = (item) => {
-    console.log(tokenUserInfo)
     if(tokenUserInfo.role === 'NORMAL' && ['reports','dashboard'].includes(item.name)) {
       return true
     }

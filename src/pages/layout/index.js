@@ -19,6 +19,7 @@ function Layout() {
   const params = useParams()
   const navigate = useNavigate()
   const [tokenUserInfo, setTokenUserInfo] = useAtom(tokenResultAtom)
+
   useEffect(() => {
       if (tokenUserInfo.role === '') {
         refreshAdmin().then(response => {
@@ -27,8 +28,7 @@ function Layout() {
               id: response.email,
               role: response.role,
               name: response.name,
-              accessToken: response.token.accessToken,
-              refreshToken: response.token.refreshToken
+              accessToken: response.token.accessToken
             })
           } else {
             refresh().then(response => {
@@ -38,8 +38,7 @@ function Layout() {
                   username:response.username,
                   role: response.role,
                   name: response.name,
-                  accessToken: response.token.accessToken,
-                  refreshToken: response.token.refreshToken
+                  accessToken: response.token.accessToken
                 })
               }else{
                 // eslint-disable-next-line no-restricted-globals
@@ -50,6 +49,7 @@ function Layout() {
         })
       }
     },[])
+
   const myPage = () => {
     if (tokenUserInfo.role === 'NORMAL') {
       navigate('/board/myPageUser', {state: {id: tokenUserInfo.id}})
