@@ -1,13 +1,28 @@
 import {atom} from "jotai";
 import {decimalFormat} from "../../../common/StringUtils";
 import React from "react";
+import {SwitchComponent} from "../../../components/table";
+import {updatePixelInterlock} from "../../../services/header/ManagePixelAxios";
+import {Link} from "react-router-dom";
+import {statusTypeAll} from "../../pixel/entity/Pixel";
 
 /*광고주 현황 리스트 데이터*/
-export const adverStatusAtom = atom([])
+//export const adverStatusAtom = atom([])
+export const adverStatusAtom = atom([
+  {
+    name: 'adverName',
+  }
+])
 /**
  * 광고주 현황 리스트 컬럼 설정
  */
 export const adverListColumn = [
+  {
+    name: 'userId',
+    header:'',
+    defaultVisible: false
+
+  },
   {
     name: 'adverName',
     header: '광고주명',
@@ -156,3 +171,61 @@ export const adverListColumn = [
     showColumnMenuTool: false
   },
 ]
+export const adverStatusDetailColumn = [
+  {
+    name: 'interlock',
+    header: '연동 상태',
+    minWidth:200,
+    maxWidth:200,
+    textAlign: 'center',
+    showColumnMenuTool: false,
+    sortable: false,
+    render: ({value, cellProps}) => {
+      return (
+        <div style={{display: "flex", alignItems: 'center', justifyContent: 'center'}}>
+          <SwitchComponent value={value} cellProps={cellProps} eventClick={()=> updatePixelInterlock(cellProps.data.pixelId,{interlock:cellProps.data.interlock})}/>
+        </div>
+      );
+    }
+  },
+  {
+    name: 'pixelName',
+    header: '이벤트명',
+    defaultFlex: 1,
+    textAlign: 'center',
+    showColumnMenuTool: false,
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
+    render: (props) => {
+      return (
+        <Link to={'/board/pixelDetail'} state={{id: props.data.pixelId}}>{props.value}</Link>
+      )
+    }
+  },
+  {
+    name: 'linkUrl',
+    header: '연동 URL',
+    defaultFlex: 2,
+    textAlign: 'center',
+    showColumnMenuTool: false,
+    resizable: false,
+  },
+  {
+    name: 'status',
+    header: '이벤트 수집 상태',
+    defaultFlex: 1,
+    textAlign: 'center',
+    resizable: false,
+    showColumnMenuTool: false,
+    render: ({value}) => {
+      let textColor = {color: statusTypeAll.find(type => type.value === value).color};
+      return (
+        <span style={textColor}>{statusTypeAll.find(type => type.value === value).label}</span>
+      )
+    }
+  }
+]
+
