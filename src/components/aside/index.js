@@ -1,9 +1,7 @@
 import styled from "styled-components";
 import {Link, useParams} from "react-router-dom";
 import {menuList, narrowStyle, selectedIcon, widenStyle} from "./entity";
-import {useEffect, useRef, useState} from "react";
-import {AdminInfo} from "../../pages/layout";
-import {useAtomValue} from "jotai/index";
+import {useState} from "react";
 import {useAtom} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity/Common";
 
@@ -18,6 +16,7 @@ function AsideList (props) {
    * @returns {boolean}
    */
   const checkPermissions = (item) => {
+    console.log(tokenUserInfo)
     if(tokenUserInfo.role === 'NORMAL' && ['reports','dashboard'].includes(item.name)) {
       return true
     }
@@ -94,7 +93,6 @@ function AsideList (props) {
 function Aside() {
   const params = useParams()
   const [asideWidth, setAsideWidth] = useState(false)
-  const role = localStorage.getItem("role")
   /**
    * 가로 길이 변경
    */
@@ -107,7 +105,7 @@ function Aside() {
       <AsideContainer style={asideWidth ? {width: 84} : {width: 220}}>
         <Logo style={asideWidth ? narrowStyle.icon : widenStyle.icon}/>
         <Menu>
-          <AsideList id={params.id} mode={asideWidth} role={role}/>
+          <AsideList id={params.id} mode={asideWidth} />
         </Menu>
         <Narrow>
           <button type={'button'} onClick={handleChangeWidth}>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ADVER_SERVER} from "../constants/GlobalConst";
+import {ADVER_SERVER} from "../constants/GlobalConst";
 import {refresh} from "../services/auth/AuthAxios";
 import {tokenResultAtom} from "../pages/login/entity/Common";
 import store from "../store";
@@ -17,6 +17,7 @@ export const adverAxios = axios.create({
 adverAxios.interceptors.request.use(
   async (config) => {
     const tokenAtom =store.get(tokenResultAtom)
+    console.log(tokenAtom)
     config.headers.Authorization = `Bearer ${tokenAtom.accessToken}`;
     return config;
   },
@@ -57,24 +58,22 @@ adverAxios.interceptors.response.use(
         isTokenRefreshing = true;
         await refresh().then(response =>{
           if(response){
-            refresh().then(response => {
-              if (response) {
-                store.set(tokenResultAtom, {
-                  id: response.id,
-                  username: response.username,
-                  role: response.role,
-                  name: response.name,
-                  accessToken: response.token.accessToken,
-                  refreshToken: response.token.refreshToken
-                })
-                onTokenRefreshed(response.token.accessToken);
-              } else {
-                refreshSubscribers = [];
-                isTokenRefreshing = false;
-                // eslint-disable-next-line no-restricted-globals
-                location.replace('/')
-              }
-            })
+            if (response) {
+              store.set(tokenResultAtom, {
+                id: response.id,
+                username: response.username,
+                role: response.role,
+                name: response.name,
+                accessToken: response.token.accessToken,
+                refreshToken: response.token.refreshToken
+              })
+              onTokenRefreshed(response.token.accessToken);
+            } else {
+              refreshSubscribers = [];
+              isTokenRefreshing = false;
+              // eslint-disable-next-line no-restricted-globals
+              location.replace('/')
+            }
           }
         })
       }

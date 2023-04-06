@@ -1,12 +1,12 @@
 import Aside from "../../components/aside";
 import {useNavigate, useParams} from "react-router-dom";
 import PlatformManage from "../platform_manage";
-import React from "react";
+import React, {useEffect} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
 import {useAtom,} from "jotai";
 import {tokenResultAtom} from "../login/entity/Common";
-import {logOutAdmin, logOutUser} from "../../services/auth/AuthAxios";
+import {logOutAdmin, logOutUser, refresh, refreshAdmin} from "../../services/auth/AuthAxios";
 import Campaign from "../campaign";
 import Settings from "../settings";
 import Pixel from "../pixel";
@@ -15,42 +15,70 @@ import PlatformUserDetail from "../platform_manage/UserDetail";
 import PlatformAdminDetail from "../platform_manage/AdminDetail";
 import DashBoard from "../dash_board";
 
-function Layout(){
+function Layout() {
   const params = useParams()
   const navigate = useNavigate()
-  const [tokenUserInfo] = useAtom(tokenResultAtom)
-
-  const myPage = () =>{
-    if(tokenUserInfo.role==='NORMAL'){
-      navigate('/board/myPageUser',{state:{id:tokenUserInfo.id}})
-    }else{
-      navigate('/board/myPageAdmin',{state:{id:tokenUserInfo.id}})
+  const [tokenUserInfo, setTokenUserInfo] = useAtom(tokenResultAtom)
+  useEffect(() => {
+      if (tokenUserInfo.role === '') {
+        refreshAdmin().then(response => {
+          if (response) {
+            setTokenUserInfo({
+              id: response.email,
+              role: response.role,
+              name: response.name,
+              accessToken: response.token.accessToken,
+              refreshToken: response.token.refreshToken
+            })
+          } else {
+            refresh().then(response => {
+              if (response) {
+                setTokenUserInfo({
+                  id: response.id,
+                  username:response.username,
+                  role: response.role,
+                  name: response.name,
+                  accessToken: response.token.accessToken,
+                  refreshToken: response.token.refreshToken
+                })
+              }else{
+                // eslint-disable-next-line no-restricted-globals
+                location.replace('/')
+              }
+            })
+          }
+        })
+      }
+    },[])
+  const myPage = () => {
+    if (tokenUserInfo.role === 'NORMAL') {
+      navigate('/board/myPageUser', {state: {id: tokenUserInfo.id}})
+    } else {
+      navigate('/board/myPageAdmin', {state: {id: tokenUserInfo.id}})
     }
   }
 
   const logOut = () => {
-    const userInfo ={
-      accessToken:tokenUserInfo.accessToken,
-      refreshToken:localStorage.getItem("refreshToken")
+    const userInfo = {
+      accessToken: tokenUserInfo.accessToken,
+      refreshToken: localStorage.getItem("refreshToken")
     }
-    if(tokenUserInfo.role==='NORMAL'){
-      logOutUser(userInfo).then(response =>{
-        if(response){
+    if (tokenUserInfo.role === 'NORMAL') {
+      logOutUser(userInfo).then(response => {
+        if (response) {
           localStorage.removeItem("refreshToken")
         }
-      }).then(() =>
-        {
+      }).then(() => {
           // eslint-disable-next-line no-restricted-globals
           location.replace('/')
         }
       )
     } else {
-      logOutAdmin(userInfo).then(response =>{
-        if(response){
+      logOutAdmin(userInfo).then(response => {
+        if (response) {
           localStorage.removeItem("refreshToken")
         }
-      }).then(() =>
-        {
+      }).then(() => {
           // eslint-disable-next-line no-restricted-globals
           location.replace('/')
         }
@@ -59,13 +87,13 @@ function Layout(){
   }
 
 
-  const pixel = () =>{
+  const pixel = () => {
     navigate('/board/pixel')
   }
 
-  return(
+  return (
     <div id={'container'}>
-      <Aside />
+      <Aside/>
       <BoardBody>
         <BoardHeader>
           <MyPage onClick={pixel}>픽셀 관리</MyPage>
@@ -81,17 +109,19 @@ function Layout(){
           </Logout>
         </BoardHeader>
         {/* 대시보드 */}
-        {params.id === 'dashboard'  && <DashBoard />}
+        {params.id === 'dashboard' && <DashBoard/>}
         {/* 픽셀 관리*/}
-        {['pixel','pixelDetail'].includes(params.id) && <Pixel/>}
+        {['pixel', 'pixelDetail'].includes(params.id) && <Pixel/>}
         {/* 광고 관리 */}
-        {['campaign','createCreative','manageCreative'].includes(params.id) && <Campaign/>}
+        {['campaign', 'createCreative', 'manageCreative'].includes(params.id) && <Campaign/>}
         {/* 보고서 */}
-        {['reports','reportsDaily','reportsCPC'].includes(params.id) && <Reports/>}
+        {['reports', 'reportsDaily', 'reportsCPC'].includes(params.id) && <Reports/>}
         {/* 설정 */}
-        {['settings','settingsDetail','budgetEvent','budgetEventDetail','budgetTime','budgetTimeDetail'].includes(params.id) && <Settings/>}
+        {['settings', 'settingsDetail', 'budgetEvent', 'budgetEventDetail', 'budgetTime', 'budgetTimeDetail'].includes(params.id) &&
+          <Settings/>}
         {/* 플랫폼 관리 */}
-        {['platform','platformDetail','categoryManage','productManage','conversionManage', 'paymentManage'].includes(params.id) && <PlatformManage />}
+        {['platform', 'platformDetail', 'categoryManage', 'productManage', 'conversionManage', 'paymentManage'].includes(params.id) &&
+          <PlatformManage/>}
         {params.id === 'myPageUser' && <PlatformUserDetail/>}
         {params.id === 'myPageAdmin' && <PlatformAdminDetail/>}
       </BoardBody>
@@ -134,7 +164,7 @@ const UserIcon = styled.div`
 `
 
 const MyPage = styled.div`
-  cursor: pointer; 
+  cursor: pointer;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -150,6 +180,7 @@ const Logout = styled.div`
   border-left: 1px solid #eee;
   padding-left: 28px;
   margin-right: 28px;
+
   & button {
     font-size: 13px;
     padding: 4px 28px;

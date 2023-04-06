@@ -64,8 +64,7 @@ adminAxios.interceptors.response.use(
               role: response.role,
               name: response.name,
               accessToken: response.token.accessToken,
-              refreshToken: response.token.refreshToken,
-              serverName: ADMIN_SERVER
+              refreshToken: response.token.refreshToken
             })
             onTokenRefreshed(response.token.accessToken);
           } else {

@@ -122,7 +122,7 @@ export async function refreshAdmin() {
  */
 export async function refresh() {
   const param = {
-    accessToken: localStorage.getItem("accessToken"),
+    accessToken: '',
     refreshToken: localStorage.getItem("refreshToken"),
   }
   return await NonUserAxios('POST', USER_REFRESH_URL, param).then((responseUser) => {
