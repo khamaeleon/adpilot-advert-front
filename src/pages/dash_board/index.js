@@ -7,6 +7,7 @@ import {
   CalendarIcon,
   ChartContainer,
   ChartLabel,
+  ColSpan0,
   ColSpan1,
   ColSpan2,
   ColSpan3,
@@ -16,19 +17,18 @@ import {
   DashBoardCard,
   DashBoardHeader,
   DateContainer,
+  defaultStyle,
   Input,
-  inputStyle,
   RangePicker,
   RelativeDiv,
   RowSpan,
   SearchButton,
   TitleContainer
 } from "../../assets/GlobalStyles";
-import {ResponsiveBar} from "@nivo/bar";
+import {ResponsiveLine} from '@nivo/line'
 import React, {useEffect, useState} from "react";
-import {HorizontalRule, VerticalRule} from "../../components/common/Common";
+import {HorizontalRule} from "../../components/common/Common";
 import {useAtom} from "jotai/index";
-import {adverListColumn, adverStatusAtom, platformStatusAtom, productType, searchConditionAtom} from "./entity";
 import Table from "../../components/table";
 import {dataTotalInfo} from "../../components/common/entity";
 import {
@@ -43,6 +43,9 @@ import {
 import ko from "date-fns/locale/ko";
 import Select from "react-select";
 import Checkbox from "../../components/common/Checkbox";
+import {platformStatusAtom, platformStatusType} from "./entity/Chart";
+import {adverListColumn, adverStatusAtom} from "./entity/Campaign";
+import {productType, searchConditionAtom} from "./entity/Common";
 
 const activeBottomStyle = {borderBottom:'4px solid #f5811f'}
 const activeRightStyle = {borderRight: activeBottomStyle.borderBottom, color: '#f5811f'}
@@ -67,30 +70,30 @@ function PlatformResponsiveBar(props) {
       PROCEEDS: '#f5811f',
       REQUEST_COUNT: '#f25108',
       EXPOSURE_COUNT: '#ffd1af',
-      CLICK_COUNT: '#fecfcf'
+      CLICK_COUNT: '#fecfcf',
+      CLICK: '#fecfcf'
     }
     return color[dataType]
   }
 
   return (
-    <ResponsiveBar
+    <ResponsiveLine
       data={platformStatusData}
       keys={["count"]}
       indexBy={"date"}
       margin={{top: 40, right: 40, bottom: 130, left: 40}}
       padding={0.75}
-      valueScale={{type: 'linear'}}
-      indexScale={{type: 'band', round: true}}
+      yScale={{type: 'linear'}}
       colors={[getColor()]}
       axisLeft={false}
       axisBottom={{
         tickSize: 0,
         tickPadding: 15,
-        tickRotation: -45,
+        tickRotation: 0,
         legendOffset: 32,
       }}
-      enableLabel={false}
       enableGridY={false}
+      isInteractive={true}
     />
   )
 }
@@ -103,6 +106,7 @@ export default function DashBoard(){
   const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
   const [productTypeSelect] = useState(productType)
+  const [platformStatusTypeSelect] = useState(platformStatusType)
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [dataType, setDataType] = useState('PROCEEDS')
 
@@ -242,7 +246,7 @@ export default function DashBoard(){
    * @param
    */
   const handleChangeChartKey = (type) => {
-    setDataType(type)
+    //setDataType(type)
   }
 
   return(
@@ -254,16 +258,22 @@ export default function DashBoard(){
         </TitleContainer>
         <DashBoardCard>
           <BoardSearchDetail>
-            <RowSpan style={{marginTop: 0}}>
-              <ColSpan1>
+            <RowSpan style={{marginTop: 0, justifyContent: 'flex-start'}}>
+              <ColSpan0 style={{marginRight: 20}}>
                 <ColTitle style={{paddingLeft: 0}}>광고 상품</ColTitle>
-                <Select styles={inputStyle}
-                        components={{IndicatorSeparator: () => null}}
+                <Select components={{IndicatorSeparator: () => null}}
                         options={productTypeSelect}
                         value={searchCondition.productType.value !== '' ? productTypeSelect.find(value => value.value === searchCondition.productType) : ''}
                         onChange={handleProductType}
+                        styles={{
+                          input: (baseStyles, state) => (
+                            {
+                              ...baseStyles,
+                              width: "100px",
+                            })
+                        }}
                 />
-              </ColSpan1>
+              </ColSpan0>
               <ColSpan3>
                 <ColTitle style={{paddingLeft: 0}}>에이전트</ColTitle>
                 <RelativeDiv>
@@ -356,12 +366,37 @@ export default function DashBoard(){
           <DashBoardBody>
             <ChartContainer style={{height:250}}>
               <ChartLabel>
-                <div onClick={() => handleChangeChartKey('PROCEEDS')} style={dataType==='PROCEEDS' ? activeBottomStyle : null}>수익금</div>
-                <div onClick={() => handleChangeChartKey('REQUEST_COUNT')} style={dataType==='REQUEST_COUNT' ? activeBottomStyle : null}>요청수</div>
-                <div onClick={() => handleChangeChartKey('EXPOSURE_COUNT')} style={dataType==='EXPOSURE_COUNT' ? activeBottomStyle : null}>노출수</div>
-                <div onClick={() => handleChangeChartKey('CLICK_COUNT')} style={dataType==='CLICK_COUNT' ? activeBottomStyle : null}>클릭수</div>
+                <div>
+                  <p>클릭수</p>
+                  <span>123456789</span>
+                </div>
+                <div>
+                  <p>노출수</p>
+                  <span>123456789</span>
+                </div>
+                <div>
+                  <p>전환수</p>
+                  <span>123456789</span>
+                </div>
+                <div>
+                  <Select styles={defaultStyle}
+                          components={{IndicatorSeparator: () => null}}
+                          options={platformStatusTypeSelect}
+                          value={platformStatusTypeSelect[0]}
+                          onChange={handleChangeChartKey}
+                  />
+                  <span>123456789</span>
+                </div>
+                <div>
+                  <Select styles={defaultStyle}
+                          components={{IndicatorSeparator: () => null}}
+                          options={platformStatusTypeSelect}
+                          value={platformStatusTypeSelect[0]}
+                          onChange={handleChangeChartKey}
+                  />
+                  <span>123456789</span>
+                </div>
               </ChartLabel>
-              <VerticalRule style={{backgroundColor:'#e5e5e5'}}/>
               <PlatformResponsiveBar dataType={dataType} />
             </ChartContainer>
           </DashBoardBody>

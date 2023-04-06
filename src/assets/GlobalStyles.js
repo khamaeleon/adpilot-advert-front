@@ -745,19 +745,6 @@ export const BoardTableCustomContainer = styled.div`
   }
 `
 
-export const ChartLabel = styled.div`
-  display: flex;
-  gap: 30px;
-  padding: 0 40px;
-  & div {
-    display: flex;
-    align-items: center;
-    height: 45px;
-    cursor: pointer;
-    border-bottom: 4px solid #fff
-  }
-`
-
 export const RowSpan = styled.div`
   display: flex;
   flex-direction: ${(props) => props.column ? "column" : "row"};
@@ -1036,8 +1023,33 @@ export const SaveExcelButton = styled.button`
 `
 export const ChartContainer = styled.div`
   margin: 20px 0 0 0;
+  padding: 10px 30px 20px;
   border: 1px solid #e5e5e5;
   border-radius: 5px;
+`
+export const ChartLabel = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    > p {
+      display: flex;
+      align-items: center;
+      height: 36px;
+    }
+    > div {
+      width: 110px;
+      > div { 
+        cursor: pointer;
+        border-width: 0;
+      }
+    }
+    > span {
+    }
+  }
 `
 
 export const Span1 = styled.span`
