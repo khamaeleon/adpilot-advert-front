@@ -14,7 +14,6 @@ import {
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table, {Off, On, SwitchBox} from "../../components/table";
-import {pixelDetailInfoColumns, pixelInfoListAtom, statusTypeAll} from "./entity";
 import {toast, ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -28,6 +27,7 @@ import {
   retrieveTopLevelCategoryKeyValue
 } from "../../services/Platform/CategoryAxios";
 import styled from "styled-components";
+import {pixelDetailInfoColumns, pixelInfoListAtom, statusTypeAll} from "./entity/Pixel";
 
 function PixelDetail() {
   const [pixelInfoListState, setPixelInfoListState] = useAtom(pixelInfoListAtom)

@@ -20,7 +20,6 @@ import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import {TotalCount} from "./TableDetail";
 import SettingAdd from "../common/SettingModal";
-import {pixelInfoListAtom} from "../../pages/pixel/entity";
 
 export function SwitchComponent(props){
   const {value, cellProps, eventClick} = props

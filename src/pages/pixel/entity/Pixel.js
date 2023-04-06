@@ -1,10 +1,10 @@
 import {atom} from "jotai/index";
 import React from "react";
-import {Icon, SwitchComponent} from "../../components/table";
-import {PixelAdd, PixelModal} from "./PixelList";
 import {Link} from "react-router-dom";
-import {updateEventInterlock, updatePixelInterlock} from "../../services/header/ManagePixelAxios";
-import {HorizontalRule} from "../../components/common/Common";
+import {PixelModal} from "../PixelList";
+import {Icon, SwitchComponent} from "../../../components/table";
+import {updateEventInterlock, updatePixelInterlock} from "../../../services/header/ManagePixelAxios";
+import {HorizontalRule} from "../../../components/common/Common";
 
 /**
  * 픽셀 관리 리스트 Atom

@@ -18,7 +18,6 @@ import {
 } from "../../assets/GlobalStyles";
 import React, {useCallback, useEffect, useState} from "react";
 import {useAtom, useSetAtom} from "jotai";
-import {pixelColumns, pixelDetailColumns} from "./entity";
 import {toast, ToastContainer} from "react-toastify";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
@@ -33,6 +32,7 @@ import {
 } from "../../services/Platform/CategoryAxios";
 import {atom} from "jotai/index";
 import {useNavigate} from "react-router-dom";
+import {pixelColumns, pixelDetailColumns} from "./entity/Pixel";
 
 const pixelAtom = atom({
   pixelName: '',
