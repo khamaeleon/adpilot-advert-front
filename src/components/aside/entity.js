@@ -85,7 +85,7 @@ export const menuList = [
   {
     name: "platform",
     header: "플랫폼 관리",
-    include: ["platform",'platformDetail',"categoryManage","productManage",'changeManage','paymentManage'],
+    include: ["platform",'platformDetail',"categoryManage","productManage",'conversionManage','paymentManage'],
     child:[
       {
         name: "platform",
