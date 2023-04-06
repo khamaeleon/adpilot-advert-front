@@ -1,4 +1,9 @@
 import {atom} from "jotai";
+import {SwitchComponent} from "../../../components/table";
+import {updatePixelInterlock} from "../../../services/header/ManagePixelAxios";
+import {Link} from "react-router-dom";
+import React from "react";
+import {statusTypeAll} from "../../pixel/entity/Pixel";
 
 /* 플랫폼 현황 차트 셀렉트 */
 export const platformStatusType = [
@@ -19,8 +24,7 @@ export const platformStatusType = [
 //export const platformStatusAtom = atom([])
 export const platformStatusAtom = atom([
   {
-    "id": "japan",
-    "color": "hsl(161, 70%, 50%)",
+    "id": "클릭수",
     "data": [
       {
         "x": "2023.03.01",
@@ -53,8 +57,7 @@ export const platformStatusAtom = atom([
     ]
   },
   {
-    "id": "france",
-    "color": "hsl(25, 70%, 50%)",
+    "id": "노출수",
     "data": [
       {
         "x": "2023.03.01",
@@ -87,8 +90,7 @@ export const platformStatusAtom = atom([
     ]
   },
   {
-    "id": "us",
-    "color": "hsl(245, 70%, 50%)",
+    "id": "전환수",
     "data": [
       {
         "x": "2023.03.01",

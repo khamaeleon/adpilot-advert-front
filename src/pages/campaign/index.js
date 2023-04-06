@@ -13,7 +13,7 @@ export default function Campaign(){
       <ScrollToTop/>
       <BoardContainer>
         <TitleContainer>
-          <h1>캠페인 생성</h1>
+          <h1>광고 관리</h1>
           <Navigator/>
         </TitleContainer>
         {params.id === 'campaign' && <CreateCampaign />}

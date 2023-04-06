@@ -9,7 +9,6 @@ import {
   ChartLabel,
   ColSpan0,
   ColSpan1,
-  ColSpan2,
   ColSpan3,
   ColTitle,
   CustomDatePicker,
@@ -26,10 +25,9 @@ import {
   TitleContainer
 } from "../../assets/GlobalStyles";
 import {ResponsiveLine} from '@nivo/line'
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {HorizontalRule} from "../../components/common/Common";
 import {useAtom} from "jotai/index";
-import Table from "../../components/table";
 import {dataTotalInfo} from "../../components/common/entity";
 import {
   getLastDay,
@@ -44,8 +42,10 @@ import ko from "date-fns/locale/ko";
 import Select from "react-select";
 import Checkbox from "../../components/common/Checkbox";
 import {platformStatusAtom, platformStatusType} from "./entity/Chart";
-import {adverListColumn, adverStatusAtom} from "./entity/Campaign";
+import {adverListColumn, adverStatusAtom, adverStatusDetailColumn,} from "./entity/Campaign";
 import {productType, searchConditionAtom} from "./entity/Common";
+import TableDetail from "../../components/table/TableDetail";
+import {selAdverPixelDetailList} from "../../services/header/ManagePixelAxios";
 
 const activeBottomStyle = {borderBottom:'4px solid #f5811f'}
 const activeRightStyle = {borderRight: activeBottomStyle.borderBottom, color: '#f5811f'}
@@ -77,24 +77,44 @@ function PlatformResponsiveBar(props) {
   }
 
   return (
-    <ResponsiveLine
-      data={platformStatusData}
-      keys={["count"]}
-      indexBy={"date"}
-      margin={{top: 40, right: 40, bottom: 130, left: 40}}
-      padding={0.75}
-      yScale={{type: 'linear'}}
-      colors={[getColor()]}
-      axisLeft={false}
-      axisBottom={{
-        tickSize: 0,
-        tickPadding: 15,
-        tickRotation: 0,
-        legendOffset: 32,
-      }}
-      enableGridY={false}
-      isInteractive={true}
-    />
+    <div style={{height: 300}}>
+      <ResponsiveLine
+        data={platformStatusData}
+        keys={["count"]}
+        indexBy={"date"}
+        margin={{top: 30, right: 30, bottom: 30, left: 30}}
+        padding={0.75}
+        yScale={{type: 'linear'}}
+        //colors={[getColor()]}
+        axisLeft={false}
+        axisBottom={{
+          tickSize: 0,
+          tickPadding: 15,
+          tickRotation: 0,
+          legendOffset: 32,
+        }}
+        enableGridY={false}
+        useMesh={true}
+        enableCrosshair={false}
+        tooltip={({ point }) => {
+          return (
+            <div style={{
+              background: '#fff',
+              padding: '3px 10px',
+              border: '1px solid #ccc',
+              borderRadius: '3px',
+              textAlign: "center"
+          }}>
+              <p style={{
+                color: point.serieColor
+              }}>{point.serieId}</p>
+              <p>{point.y}</p>
+            </div>
+          )
+        }}
+      />
+    </div>
+
   )
 }
 
@@ -109,6 +129,7 @@ export default function DashBoard(){
   const [platformStatusTypeSelect] = useState(platformStatusType)
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [dataType, setDataType] = useState('PROCEEDS')
+  const [userId, setUserId] = useState('ccde14c6-ba7c-4729-bed7-9f02986ba7f2')
 
   useEffect(()=>{
     setTotalInfo({
@@ -249,6 +270,10 @@ export default function DashBoard(){
     //setDataType(type)
   }
 
+  const handleFetchDetailData = useCallback(async ({}) => {
+    return selAdverPixelDetailList(userId)
+  },[])
+
   return(
     <main>
       <BoardContainer>
@@ -313,7 +338,7 @@ export default function DashBoard(){
               </ColSpan3>
             </RowSpan>
             <RowSpan style={{justifyContent: 'flex-start', marginTop: 20}}>
-              <ColSpan2>
+              <ColSpan0>
                 <ColTitle style={{paddingLeft: 0}}>기간</ColTitle>
                 <div>
                   <DateContainer>
@@ -348,8 +373,8 @@ export default function DashBoard(){
                     <div onClick={() => handleRangeDate('lastNinetyDay')}>지난90일</div>
                   </RangePicker>
                 </div>
-              </ColSpan2>
-              <ColSpan1>
+              </ColSpan0>
+              <ColSpan1 style={{marginLeft: 20}}>
                 <ColTitle style={{paddingLeft: 0}}>검색어</ColTitle>
                 <Input type={'text'}
                        placeholder={'광고주명 및 아이디 검색'}
@@ -364,7 +389,7 @@ export default function DashBoard(){
         <DashBoardCard>
           <DashBoardHeader>플랫폼 현황</DashBoardHeader>
           <DashBoardBody>
-            <ChartContainer style={{height:250}}>
+            <ChartContainer>
               <ChartLabel>
                 <div>
                   <p>클릭수</p>
@@ -402,9 +427,16 @@ export default function DashBoard(){
           </DashBoardBody>
           <DashBoardHeader style={{marginTop: 30}}>광고주 현황</DashBoardHeader>
           <DashBoardBody>
-            <Table columns={adverListColumn}
-                   totalCount={[totalInfo.totalCount, '광고주']}
-                   data={adverStatusData}/>
+            <TableDetail columns={adverListColumn}
+                         totalCount={[totalInfo.totalCount, '광고주']}
+                         showHoverRows={false}
+                         activeCell={[0]}
+                         data={adverStatusData}
+                         detailData={handleFetchDetailData}
+                         detailColumn={adverStatusDetailColumn}
+                         detailGroups={false}
+                         idProperty={'userId'}
+                         groups={false}/>
           </DashBoardBody>
         </DashBoardCard>
       </BoardContainer>
