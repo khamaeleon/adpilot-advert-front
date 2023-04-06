@@ -19,7 +19,7 @@ import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai/index";
 import {dataTotalInfo} from "../../components/common/entity";
 import {selUserList} from "../../services/Platform/ManageUserAxios";
-import {hostList} from "../signup/entity";
+import {hostList} from "../signup/entity/Common";
 import {
   adverType,
   columnUserData,

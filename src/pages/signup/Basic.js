@@ -3,16 +3,8 @@ import {useAtom} from "jotai/index";
 import {Controller, useForm} from "react-hook-form";
 import {toast} from "react-toastify";
 import {accountFileUpload, selValidUserId, signUp} from "../../services/Platform/ManageUserAxios";
-import {
-  CancelButton, ColSpan2,
-  DefaultButton,
-  DeleteButton,
-  Input,
-  inputStyle,
-  RelativeDiv,
-  RowSpan
-} from "../../assets/GlobalStyles";
-import {accountInfoAtom, hostList, nextStepAtom} from "./entity";
+import {CancelButton, DefaultButton, Input, RelativeDiv} from "../../assets/GlobalStyles";
+import {accountInfoAtom, hostList, nextStepAtom} from "./entity/Common";
 import {ButtonGroup, DuplicateButton, Form, SignUpVerify, ValidationScript, VerticalRule} from "./styles";
 import Select from "react-select";
 import {useSetAtom} from "jotai";

@@ -3,7 +3,7 @@ import {adminAxios} from "./AdminAxios";
 import {nonUserAxios} from "./NonUserAxios";
 import {adverAxios} from "./AdverAxios";
 import store from "../store";
-import {tokenResultAtom} from "../pages/login/entity";
+import {tokenResultAtom} from "../pages/login/entity/Common";
 
 export async function AdminAxios(type, uri, param) {
   switch(type){

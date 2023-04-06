@@ -1,6 +1,6 @@
 import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {loginAdminParams, tokenResultAtom} from "./entity";
+import {loginAdminParams, tokenResultAtom} from "./entity/Common";
 import {loginAdmin} from "../../services/auth/AuthAxios";
 import {useForm} from "react-hook-form";
 import {RowSpan, ValidationScript} from "../../assets/GlobalStyles";

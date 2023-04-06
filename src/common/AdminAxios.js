@@ -1,7 +1,7 @@
 import axios from "axios";
 import {ADMIN_SERVER} from "../constants/GlobalConst";
 import {refreshAdmin} from "../services/auth/AuthAxios";
-import {tokenResultAtom} from "../pages/login/entity";
+import {tokenResultAtom} from "../pages/login/entity/Common";
 import store from "../store";
 
 export const adminAxios = axios.create({

@@ -1,5 +1,5 @@
 import {atom} from "jotai";
-import {hostList} from "../../signup/entity";
+import {hostList} from "../../signup/entity/Common";
 import {Link} from "react-router-dom";
 import moment from "moment";
 import React from "react";

@@ -1,5 +1,5 @@
 import {getThisMonth} from "../../../common/DateUtils";
-import {hostList} from "../../signup/entity";
+import {hostList} from "../../signup/entity/Common";
 
 /**
  * 상품 수집 기간 검색 아톰

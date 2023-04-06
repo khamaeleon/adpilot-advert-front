@@ -6,7 +6,7 @@ import Terms from "./Terms";
 import Basic from "./Basic";
 import Done from "./Done";
 import {useAtomValue} from "jotai/index";
-import {nextStepAtom} from "./entity";
+import {nextStepAtom} from "./entity/Common";
 import {Arrow, ButtonGroup, Logo, SignUpContents, SignUpHeader, Step, StepContainer, Steps} from "./styles";
 
 

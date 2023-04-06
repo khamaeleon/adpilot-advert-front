@@ -2,7 +2,7 @@ import {useAtom, useSetAtom} from "jotai/index";
 import React, {useEffect, useState} from "react";
 import {selPolicyLatestTerms} from "../../services/Platform/ManageUserAxios";
 import Checkbox from "../../components/common/Checkbox";
-import {accountInfoAtom, nextStepAtom, termsInfoAtom} from "./entity";
+import {accountInfoAtom, nextStepAtom, termsInfoAtom} from "./entity/Common";
 import {AlignRight, TermsBox, VerticalRule} from "./styles";
 
 export default function Terms() {

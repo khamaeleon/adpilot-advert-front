@@ -3,7 +3,7 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
-import {findIdParams, findIdResult, findPasswordParams, loginParams, tokenResultAtom} from "./entity";
+import {findIdParams, findIdResult, findPasswordParams, loginParams, tokenResultAtom} from "./entity/Common";
 import {login} from "../../services/auth/AuthAxios";
 import {useAtom, useSetAtom} from "jotai";
 import {atom} from "jotai/index";

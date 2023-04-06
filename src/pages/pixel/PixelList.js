@@ -25,7 +25,7 @@ import {Controller, useForm} from "react-hook-form";
 import {resistAdverPixelInfo, selAdverPixelDetailList, selAdverPixelList} from "../../services/header/ManagePixelAxios";
 import TableDetail from "../../components/table/TableDetail";
 import Select from "react-select";
-import {hostList} from "../signup/entity";
+import {hostList} from "../signup/entity/Common";
 import {
   retrieveSubLevelCategoryKeyValue,
   retrieveTopLevelCategoryKeyValue

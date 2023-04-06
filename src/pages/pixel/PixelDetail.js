@@ -20,7 +20,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {selPixelInfoList, updatePixelInfo} from "../../services/header/ManagePixelAxios";
 import {Controller, useForm} from "react-hook-form";
 import Select from "react-select";
-import {hostList} from "../signup/entity";
+import {hostList} from "../signup/entity/Common";
 import {ValidationScript} from "../signup/styles";
 import {
   retrieveSubLevelCategoryKeyValue,

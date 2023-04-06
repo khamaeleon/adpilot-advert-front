@@ -35,11 +35,11 @@ import ImageUploading from "react-images-uploading";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {modalController} from "../../store";
 import {phoneNumFormat} from "../../common/StringUtils";
-import {hostList} from "../signup/entity";
+import {hostList} from "../signup/entity/Common";
 import {accountInfoAtom} from "./entity/user";
 import {adminInfoAtom} from "./entity/admin";
 import {DuplicateButton, InputValidationCon} from "./styles/common";
-import {tokenResultAtom} from "../login/entity";
+import {tokenResultAtom} from "../login/entity/Common";
 
 export function PwChange(props) {
   const {onSubmit, modalInfo, onSave, title} = props;

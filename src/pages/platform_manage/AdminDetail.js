@@ -28,7 +28,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import {PwChange} from "./UserDetail";
 import {modalController} from "../../store";
-import {tokenResultAtom} from "../login/entity";
+import {tokenResultAtom} from "../login/entity/Common";
 import {adminInfoAtom} from "./entity/admin";
 
 

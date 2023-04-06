@@ -5,7 +5,7 @@ import {useEffect, useRef, useState} from "react";
 import {AdminInfo} from "../../pages/layout";
 import {useAtomValue} from "jotai/index";
 import {useAtom} from "jotai";
-import {tokenResultAtom} from "../../pages/login/entity";
+import {tokenResultAtom} from "../../pages/login/entity/Common";
 
 function AsideList (props) {
   const {id, mode, role} = props

@@ -5,7 +5,7 @@ import React from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
 import {useAtom,} from "jotai";
-import {tokenResultAtom} from "../login/entity";
+import {tokenResultAtom} from "../login/entity/Common";
 import {logOutAdmin, logOutUser} from "../../services/auth/AuthAxios";
 import Campaign from "../campaign";
 import Settings from "../settings";
