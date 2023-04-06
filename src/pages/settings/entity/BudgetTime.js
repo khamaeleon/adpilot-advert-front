@@ -32,7 +32,7 @@ export const adverTimeBudgetColumns = [ //시간 단가 컬럼
     },
     render: (props) => {
       return (
-        <Link to={'/board/budgetTime/detail'} state={{id: props.data.userId}}>{props.value}</Link>
+        <Link to={'/board/budgetTimeDetail'} state={{id: props.data.userId}}>{props.value}</Link>
       )
     }
   },

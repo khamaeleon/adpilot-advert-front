@@ -1,7 +1,8 @@
-import {useAtom} from "jotai/index";
-import {atomWithReset} from "jotai/utils";
+import {useAtom} from "jotai";
+import {atomWithReset, useResetAtom} from "jotai/utils";
 import TableDragSelect from "react-table-drag-select";
 import "../../assets/dragSelect.css"
+import {useEffect, useState} from "react";
 
 const cellsAtom = atomWithReset([
   [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
@@ -13,8 +14,32 @@ const cellsAtom = atomWithReset([
   [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
   [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
 ])
-export default function DragToSelect() {
-  const [cells, setCells] = useAtom(cellsAtom)
+const weeksInfo = {
+  1:'월',
+  2:'화',
+  3:'수',
+  4:'목',
+  5:'금',
+  6:'토',
+  7:'일'
+}
+export default function DragToSelect({userId, reset}) {
+  const resetCells = useResetAtom(cellsAtom)
+  const [cells, setCells] = useAtom(cellsAtom)//[0] 은 요일, 시간
+  useEffect(() => {
+    cells.map((weeks, key) => {
+      weeks.map((day, idx) => {
+        if(day){
+          console.log(`요일:${weeksInfo[key]}, 시간:${idx}시`)
+        }
+      })
+    })
+  }, [cells]);
+
+  useEffect(() => {
+    resetCells()
+  },[reset])
+
   return(
     <TableDragSelect
       value={cells}
@@ -22,7 +47,6 @@ export default function DragToSelect() {
     >
       <tr>
         <td disabled />
-        <td disabled>0시</td>
         <td disabled>1시</td>
         <td disabled>2시</td>
         <td disabled>3시</td>
@@ -46,6 +70,7 @@ export default function DragToSelect() {
         <td disabled>21시</td>
         <td disabled>22시</td>
         <td disabled>23시</td>
+        <td disabled>24시</td>
       </tr>
       <tr>
         <td disabled>월</td>

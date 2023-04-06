@@ -1,0 +1,171 @@
+import {
+  Board,
+  BoardHeader,
+  BoardSearchResult,
+  CancelButton, ColSpan2, ColSpan4, Input, RelativeDiv, RowSpan, Span4,
+  SubmitButton,
+  SubmitContainer
+} from "../../assets/GlobalStyles";
+import React, {useState} from "react";
+import styled from "styled-components";
+import {VerticalRule} from "../../components/common/Common";
+import {Row} from "../campaign/styles/common";
+import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
+import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
+import {OpenReports} from "../../components/modal/OpenReports";
+
+const columnList= {
+  date: "날짜",
+  daily:"일별",
+  weeks:"주별",
+  month:"월별",
+  advertiserCnt:"광고주수",
+  advertiserName:"광고주명",
+  advertiserId:"광고주 아이디",
+  campaignName:"캠페인명",
+  creative:"광고 상품",
+  exposureAll:"총노출수",
+  exposureCount:"노출수",
+  clickCountAll:"총클릭수",
+  clickCount:"클릭수",
+  clickRate:"클릭율",
+  cost:"비용",
+  cpc:"CPC",
+  conversionCount:"전환수",
+  conversionRate:"전환율",
+  averageCost:"평균구매액",
+  roas:"ROAS",
+  ecpm:"eCPM",
+}
+export default function CreateReports() {
+  const [columns, setColumns] = useState(['date'])
+  const handleSearchAdvertiser = () => {
+
+  }
+
+  const handleAddReportsItem = (item) => {
+    setColumns((prev) => [...prev,{nane:[item], header:columnList[item], textAlign:'center'}])
+    console.log(columns)
+  }
+
+  return(
+    <>
+      <Board>
+        <BoardHeader>보고서 생성</BoardHeader>
+        <BoardSearchResult>
+          <RowSpan>
+            <RelativeDiv>
+              <Span4>광고주 설정</Span4>
+              <Input
+                style={{width: 300}}
+                readOnly
+              />
+              <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
+            </RelativeDiv>
+          </RowSpan>
+          <RowSpan>
+            <Span4>보고서 항목 선택</Span4>
+            <OpenReports title={'보고서 불러오기'}/>
+          </RowSpan>
+          <ReportsItemContainer>
+            <RowSpan box={true} column={true}>
+              <Row>
+                <Span4>기준 항목</Span4>
+              </Row>
+              <Row>
+                <DefaultItemContainer>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('daily')}>일별</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('weeks')}>주별</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('month')}>월별</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('advertiserCnt')}>광고주수</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('advertiserName')}>광고주명</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('advertiserId')}>광고주 아이디</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('campaignName')}>캠페인명</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('creative')}>광고 상품</DefaultItemButton>
+                </DefaultItemContainer>
+              </Row>
+              <VerticalRule/>
+              <Row>
+                <Span4>데이터 항목</Span4>
+              </Row>
+              <Row>
+                <DefaultItemContainer>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('exposureAll')}>총 노출수</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('exposureCount')}>노출수</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('clickCountAll')}>총클릭수</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('clickCount')}>클릭수</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('clickRate')}>클릭률</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('cost')}>비용</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('cpc')}>CPC</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('conversionCount')}>전환수</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('conversionRate')}>전환율</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('averageCost')}>평균구매액</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('roas')}>ROAS</DefaultItemButton>
+                  <DefaultItemButton
+                    onClick={()=>handleAddReportsItem('ecpm')}>eCPM</DefaultItemButton>
+                </DefaultItemContainer>
+              </Row>
+            </RowSpan>
+          </ReportsItemContainer>
+        </BoardSearchResult>
+        <BoardSearchResult>
+          <Span4>보고서 생성 결과</Span4>
+          <RowSpan>
+            <ReactDataGrid
+              licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
+              columns={columns}
+              dataSource={[{date:""}]}
+              />
+          </RowSpan>
+        </BoardSearchResult>
+      </Board>
+      <SubmitContainer>
+        <SubmitButton type={'button'}>보고서 생성</SubmitButton>
+      </SubmitContainer>
+    </>
+  )
+}
+
+const ReportsItemContainer = styled.div`
+  margin-top: 10px;
+  padding: 0 15px 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+`
+
+const DefaultItemContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 12px;
+`
+const DefaultItemButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 137px;
+  height: 36px;
+  background-color: #ffffff;
+  border: 1px solid ${(props) => props.active ? '#f5811f' : '#e5e5e5'};
+  color: ${(props) => props.active ? '#f5811f' : null};
+  cursor: pointer;
+`
