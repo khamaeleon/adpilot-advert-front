@@ -2,7 +2,10 @@ import {
   Board,
   BoardHeader,
   BoardSearchResult,
-  CancelButton, ColSpan2, ColSpan4, Input, RelativeDiv, RowSpan, Span4,
+  Input,
+  RelativeDiv,
+  RowSpan,
+  Span4,
   SubmitButton,
   SubmitContainer
 } from "../../assets/GlobalStyles";
@@ -38,14 +41,30 @@ const columnList= {
   ecpm:"eCPM",
 }
 export default function CreateReports() {
-  const [columns, setColumns] = useState(['date'])
+  const [columns, setColumns] = useState([
+    {name: 'date',header:'날짜별',textAlign: 'center'}
+  ])
   const handleSearchAdvertiser = () => {
 
   }
 
   const handleAddReportsItem = (item) => {
-    setColumns((prev) => [...prev,{nane:[item], header:columnList[item], textAlign:'center'}])
-    console.log(columns)
+    const data = {
+      name: item,
+      header: columnList[item],
+      textAlign: 'center'
+    }
+    if(columns.filter(datum => datum.name === item).length === 0){
+      setColumns(prev => [...prev, data])
+    } else {
+      const newColumnData = columns.filter(datum => datum.name !== item)
+      setColumns(newColumnData)
+    }
+  }
+
+  const includeItem = (name) => {
+    const i = columns.filter((item) => { return item.name === name });
+    return i[0]?.name === name
   }
 
   return(
@@ -75,20 +94,28 @@ export default function CreateReports() {
               <Row>
                 <DefaultItemContainer>
                   <DefaultItemButton
+                    active={includeItem('daily')}
                     onClick={()=>handleAddReportsItem('daily')}>일별</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('weeks')}
                     onClick={()=>handleAddReportsItem('weeks')}>주별</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('month')}
                     onClick={()=>handleAddReportsItem('month')}>월별</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('advertiserCnt')}
                     onClick={()=>handleAddReportsItem('advertiserCnt')}>광고주수</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('advertiserName')}
                     onClick={()=>handleAddReportsItem('advertiserName')}>광고주명</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('advertiserId')}
                     onClick={()=>handleAddReportsItem('advertiserId')}>광고주 아이디</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('campaignName')}
                     onClick={()=>handleAddReportsItem('campaignName')}>캠페인명</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('creative')}
                     onClick={()=>handleAddReportsItem('creative')}>광고 상품</DefaultItemButton>
                 </DefaultItemContainer>
               </Row>
@@ -99,28 +126,40 @@ export default function CreateReports() {
               <Row>
                 <DefaultItemContainer>
                   <DefaultItemButton
+                    active={includeItem('exposureAll')}
                     onClick={()=>handleAddReportsItem('exposureAll')}>총 노출수</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('exposureCount')}
                     onClick={()=>handleAddReportsItem('exposureCount')}>노출수</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('clickCountAll')}
                     onClick={()=>handleAddReportsItem('clickCountAll')}>총클릭수</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('clickCount')}
                     onClick={()=>handleAddReportsItem('clickCount')}>클릭수</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('clickRate')}
                     onClick={()=>handleAddReportsItem('clickRate')}>클릭률</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('cost')}
                     onClick={()=>handleAddReportsItem('cost')}>비용</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('cpc')}
                     onClick={()=>handleAddReportsItem('cpc')}>CPC</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('conversionCount')}
                     onClick={()=>handleAddReportsItem('conversionCount')}>전환수</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('conversionRate')}
                     onClick={()=>handleAddReportsItem('conversionRate')}>전환율</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('averageCost')}
                     onClick={()=>handleAddReportsItem('averageCost')}>평균구매액</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('roas')}
                     onClick={()=>handleAddReportsItem('roas')}>ROAS</DefaultItemButton>
                   <DefaultItemButton
+                    active={includeItem('ecpm')}
                     onClick={()=>handleAddReportsItem('ecpm')}>eCPM</DefaultItemButton>
                 </DefaultItemContainer>
               </Row>
@@ -128,13 +167,16 @@ export default function CreateReports() {
           </ReportsItemContainer>
         </BoardSearchResult>
         <BoardSearchResult>
-          <Span4>보고서 생성 결과</Span4>
+          <div style={{display:'flex',justifyContent:"space-between"}}>
+            <Span4>보고서 생성 결과 (예시)</Span4>
+            <small>* shift를 누른 상태에서 스크롤시 좌우 스크롤이 가능합니다.</small>
+          </div>
           <RowSpan>
             <ReactDataGrid
               licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
               columns={columns}
-              dataSource={[{date:""}]}
-              />
+              dataSource={[columnList,columnList,columnList,columnList,columnList]}
+               activateRowOnFocus/>
           </RowSpan>
         </BoardSearchResult>
       </Board>
