@@ -16,8 +16,8 @@ import {useSetAtom} from "jotai";
 import {ModalBody, ModalHeader} from "../../components/modal/Modal";
 import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
 import {retrieveProduct} from "../../services/Platform/PlatformAxios";
-import {searchConditionAtom} from "./entity/common";
-import {productListColumn, productListDataAtom, searchProductType} from "./entity/product";
+import {searchConditionAtom} from "./entity/Common";
+import {productListColumn, productListDataAtom, searchProductType} from "./entity/Product";
 import {Image} from "./styles/common";
 import styled from "styled-components";
 

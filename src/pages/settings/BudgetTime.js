@@ -12,7 +12,7 @@ import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
 import {ToastContainer} from "react-toastify";
-import {adverTimeBudgetColumns, budgetTimeDataAtom} from "./entity/budgetTime";
+import {adverTimeBudgetColumns, budgetTimeDataAtom} from "./entity/BudgetTime";
 
 function BudgetTime() {
   const [budgetTimeDataState, setBudgetTimeDataState] = useAtom(budgetTimeDataAtom)

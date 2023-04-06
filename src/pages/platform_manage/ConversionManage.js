@@ -5,13 +5,13 @@ import {ToastContainer} from "react-toastify";
 import {PlatformCondition} from "../../components/Platform/Condition";
 import {selConversionDetailList, selConversionList} from "../../services/conversion/ConversionAxios";
 import TableDetail from "../../components/table/TableDetail";
-import {searchConditionAtom} from "./entity/common";
+import {searchConditionAtom} from "./entity/Common";
 import {
   columnConversionData,
   columnConversionDetailData,
   conversionListDataAtom,
   searchConversionType
-} from "./entity/conversion";
+} from "./entity/Conversion";
 
 function ConversionManage() {
   const [conversionListDataState, setConversionListDataState] = useAtom(conversionListDataAtom)

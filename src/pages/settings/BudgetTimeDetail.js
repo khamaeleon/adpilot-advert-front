@@ -16,7 +16,7 @@ import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
 import SettingAdd from "../../components/common/SettingModal";
-import {budgetTimeDetailColumns, timeBudgetDetailDataAtom} from "./entity/budgetTime";
+import {budgetTimeDetailColumns, timeBudgetDetailDataAtom} from "./entity/BudgetTime";
 
 
 function BudgetTimeDetail() {

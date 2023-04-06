@@ -15,7 +15,7 @@ import {
   retrieveCategoryByParentCode,
   retrieveTopLevelCategory
 } from "../../services/Platform/CategoryAxios";
-import {categoryListAtom, createCategoryAtom, selectCategoryAtom, topLevelCategoryListAtom} from "./entity/category";
+import {categoryListAtom, createCategoryAtom, selectCategoryAtom, topLevelCategoryListAtom} from "./entity/Category";
 import {
   CategoryBody, CategoryContainer,
   CategoryEnroll,

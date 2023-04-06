@@ -12,7 +12,7 @@ import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
 import {ToastContainer} from "react-toastify";
-import {adverEventPriceColumns, eventUnitPriceDataAtom} from "./entity/eventPrice";
+import {adverEventPriceColumns, eventUnitPriceDataAtom} from "./entity/EventPrice";
 import {selAdverPriceEventList} from "../../services/settings/EventPriceAxios";
 
 function EventUnitPrice() {

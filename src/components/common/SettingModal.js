@@ -18,8 +18,8 @@ import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
 import {toast} from "react-toastify";
 import {useLocation} from "react-router-dom";
-import {eventUnitPriceDetailDataAtom} from "../../pages/settings/entity/eventPrice";
-import {eventBudgetDetailDataAtom} from "../../pages/settings/entity/budgetEvent";
+import {eventUnitPriceDetailDataAtom} from "../../pages/settings/entity/EventPrice";
+import {eventBudgetDetailDataAtom} from "../../pages/settings/entity/BudgetEvent";
 import {resistPriceEvent, selPriceEventList, updatePriceEvent} from "../../services/settings/EventPriceAxios";
 import {resistBudgetEvent, selBudgetEventList, updateBudgetEvent} from "../../services/settings/BudgetEventAxios";
 

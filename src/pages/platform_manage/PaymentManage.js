@@ -14,7 +14,7 @@ import {
   searchPaymentParams,
   searchPaymentType,
   updatePaymentStatus
-} from "./entity/payment";
+} from "./entity/Payment";
 import {StatusBtn} from "./styles/common";
 
 function PaymentManage() {

@@ -17,7 +17,7 @@ import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
 import SettingAdd from "../../components/common/SettingModal";
 import {modalController} from "../../store";
-import {budgetEventDetailColumns, eventBudgetDetailDataAtom} from "./entity/budgetEvent";
+import {budgetEventDetailColumns, eventBudgetDetailDataAtom} from "./entity/BudgetEvent";
 import {selBudgetEventList} from "../../services/settings/BudgetEventAxios";
 
 

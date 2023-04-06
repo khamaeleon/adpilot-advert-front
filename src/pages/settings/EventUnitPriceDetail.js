@@ -17,7 +17,7 @@ import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
 import SettingAdd from "../../components/common/SettingModal";
 import {modalController} from "../../store";
-import {eventUnitPriceDetailColumns, eventUnitPriceDetailDataAtom} from "./entity/eventPrice";
+import {eventUnitPriceDetailColumns, eventUnitPriceDetailDataAtom} from "./entity/EventPrice";
 import {selPriceEventList} from "../../services/settings/EventPriceAxios";
 
 function EventUnitPriceDetail() {

@@ -36,8 +36,8 @@ import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal"
 import {modalController} from "../../store";
 import {phoneNumFormat} from "../../common/StringUtils";
 import {hostList} from "../signup/entity/Common";
-import {accountInfoAtom} from "./entity/user";
-import {adminInfoAtom} from "./entity/admin";
+import {accountInfoAtom} from "./entity/User";
+import {adminInfoAtom} from "./entity/Admin";
 import {DuplicateButton, InputValidationCon} from "./styles/common";
 import {tokenResultAtom} from "../login/entity/Common";
 

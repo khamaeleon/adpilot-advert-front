@@ -34,7 +34,7 @@ import Select from "react-select";
 import {SearchAdvertiser} from "../common/SearchAdvertiser";
 import {retrieveProduct} from "../../services/Platform/PlatformAxios";
 import {useAtom} from "jotai";
-import {productListDataAtom} from "../../pages/platform_manage/entity/product";
+import {productListDataAtom} from "../../pages/platform_manage/entity/Product";
 
 export function PlatformCondition(props) {
   const [dateActive,setDateActive] = useState('')
