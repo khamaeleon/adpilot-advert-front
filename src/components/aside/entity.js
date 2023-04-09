@@ -51,12 +51,8 @@ export const menuList = [
         header: "보고서 생성"
       },
       {
-        name: "reportsDaily",
+        name: "customReports",
         header: `${advertiser} 일별 보고서`
-      },
-      {
-        name: "reportsCPC",
-        header: `${advertiser} CPC 보고서`
       }
     ]
   },

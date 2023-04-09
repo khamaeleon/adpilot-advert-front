@@ -115,7 +115,7 @@ function Layout() {
         {/* 광고 관리 */}
         {['campaign', 'createCreative', 'manageCreative'].includes(params.id) && <Campaign/>}
         {/* 보고서 */}
-        {['reports', 'reportsDaily', 'reportsCPC'].includes(params.id) && <Reports/>}
+        {['reports', 'customReports'].includes(params.id) && <Reports/>}
         {/* 설정 */}
         {['settings', 'settingsDetail', 'budgetEvent', 'budgetEventDetail', 'budgetTime', 'budgetTimeDetail'].includes(params.id) &&
           <Settings/>}
