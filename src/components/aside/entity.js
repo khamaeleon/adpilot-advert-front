@@ -44,7 +44,7 @@ export const menuList = [
   {
     name: "reports",
     header: "보고서",
-    include: ['reports','reportsDaily','reportsCPC'],
+    include: ['reports','customReports'],
     child: [
       {
         name: "reports",

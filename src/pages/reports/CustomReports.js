@@ -157,7 +157,7 @@ export default function CustomReports() {
             </ColSpan2>
             <ColSpan1/>
           </RowSpan>
-          <VerticalRule/>
+          <VerticalRule style={{height:0.5}}/>
           <ValidationGroup>
             <DefaultButton>검색</DefaultButton>
           </ValidationGroup>

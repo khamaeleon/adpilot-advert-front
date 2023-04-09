@@ -1,7 +1,7 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchResult,
+  BoardSearchResult, ColSpan1, ColSpan2,
   Input,
   RelativeDiv,
   RowSpan,
@@ -42,7 +42,15 @@ const columnList= {
 }
 export default function CreateReports() {
   const [columns, setColumns] = useState([
-    {name: 'date',header:'날짜별',textAlign: 'center'}
+    {
+      name: 'date',
+      header:'날짜별',
+      textAlign: 'center',
+      resizable: false,
+      sortable: false,
+      showColumnMenuTool: false,
+      headerProps: {style: {backgroundColor: '#fafafa',color: '#222'}}
+    }
   ])
   const handleSearchAdvertiser = () => {
 
@@ -52,7 +60,11 @@ export default function CreateReports() {
     const data = {
       name: item,
       header: columnList[item],
-      textAlign: 'center'
+      textAlign: 'center',
+      sortable: false,
+      resizable: false,
+      showColumnMenuTool: false,
+      headerProps: {style: {backgroundColor: '#fafafa',color: '#222'}}
     }
     if(columns.filter(datum => datum.name === item).length === 0){
       setColumns(prev => [...prev, data])
@@ -167,16 +179,28 @@ export default function CreateReports() {
           </ReportsItemContainer>
         </BoardSearchResult>
         <BoardSearchResult>
-          <div style={{display:'flex',justifyContent:"space-between"}}>
-            <Span4>보고서 생성 결과 (예시)</Span4>
-            <small>* shift를 누른 상태에서 스크롤시 좌우 스크롤이 가능합니다.</small>
+          <div style={{display:'flex'}}>
+            <Span4>보고서 생성 결과</Span4>
+            <small>* 현재 보고서에 생성된 데이터는 예시입니다.</small>
           </div>
-          <RowSpan>
-            <ReactDataGrid
-              licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
-              columns={columns}
-              dataSource={[columnList,columnList,columnList,columnList,columnList]}
-               activateRowOnFocus/>
+          <RowSpan column={true}>
+            <RowSpan>
+              <ColSpan1>
+                <Span4>보고서 명</Span4>
+                <Input placeholder={'보고서 명을 작성해주세요'}/>
+              </ColSpan1>
+            </RowSpan>
+            <RowSpan>
+              <ReactDataGrid
+                licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
+                columns={columns}
+                dataSource={[]}
+                showCellBorders={'horizontal'}
+                showZebraRows={false}
+                activateRowOnFocus
+                emptyText={'데이터가 없습니다.'}
+              />
+            </RowSpan>
           </RowSpan>
         </BoardSearchResult>
       </Board>
