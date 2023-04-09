@@ -3,6 +3,7 @@ import {BoardContainer, TitleContainer,} from "../../assets/GlobalStyles";
 import {useParams} from "react-router-dom";
 import ScrollToTop from "../../components/common/ScrollToTop";
 import CreateReports from "./CreateReports";
+import CustomReports from "./CustomReports";
 
 function Reports(){
   const params = useParams()
@@ -14,7 +15,12 @@ function Reports(){
           <h1>보고서</h1>
           <Navigator/>
         </TitleContainer>
-        <CreateReports/>
+        {params.id === 'reports' &&
+          <CreateReports/>
+        }
+        {params.id === 'customReports' &&
+          <CustomReports/>
+        }
       </BoardContainer>
     </main>
   )

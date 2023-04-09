@@ -909,6 +909,7 @@ export const CampaignType = styled.div`
 `
 export const DateContainer = styled.div`
   display: flex;
+  width: 100%;
   border: 1px solid ${lightGray};
   border-radius: 5px;
   overflow: hidden;
