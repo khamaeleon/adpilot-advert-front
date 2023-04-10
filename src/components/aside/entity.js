@@ -18,9 +18,10 @@ const advertiser = '나이키'
 export const menuList = [
   {
     name: "dashboard",
-    header: "대쉬보드",
-    include: ["dashboard"],
-    child: []
+    header: "대시보드",
+    include: ["dashboard",'campaignInfoDetail','campaignBudgetDetail','campaignGroupDetail','campaignCreativeDetail'],
+    child: [
+    ]
   },
   {
     name: "campaign",

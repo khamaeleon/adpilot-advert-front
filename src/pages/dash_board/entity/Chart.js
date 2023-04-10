@@ -7,119 +7,34 @@ import {statusTypeAll} from "../../pixel/entity/Pixel";
 
 /* 플랫폼 현황 차트 셀렉트 */
 export const platformStatusType = [
-  {id: 1, value: "DEFAULT", label: "광고주수"},
-  {id: 2, value: "PRODUCT_CODE", label: "총노출수"},
-  {id: 3, value: "PRODUCT_NAME", label: "총클릭수"},
-  {id: 4, value: "PRODUCT_NAME", label: "클릭률"},
-  {id: 5, value: "PRODUCT_NAME", label: "비용"},
-  {id: 6, value: "PRODUCT_NAME", label: "CPC"},
-  {id: 7, value: "PRODUCT_NAME", label: "전환율"},
-  {id: 8, value: "PRODUCT_NAME", label: "전환단가"},
-  {id: 9, value: "PRODUCT_NAME", label: "평균"},
-  {id: 10, value: "PRODUCT_NAME", label: "구매액"},
-  {id: 11, value: "PRODUCT_NAME", label: "ROAS"},
-  {id: 12, value: "PRODUCT_NAME", label: "Ecpm"},
+  {id: 1, value: "userCount", label: "광고주수"},
+  {id: 2, value: "totalExposureCount", label: "총노출수"},
+  {id: 3, value: "totalClickCount", label: "총클릭수"},
+  {id: 4, value: "clickRate", label: "클릭률"},
+  {id: 5, value: "costAmount", label: "비용"},
+  {id: 6, value: "avgCpc", label: "CPC"},
+  {id: 7, value: "conversionRate", label: "전환율"},
+  {id: 8, value: "conversionPerSales", label: "전환단가"},
+  {id: 9, value: "avgConversionAmount", label: "평균 구매액"},
+  {id: 11, value: "roas", label: "ROAS"},
+  {id: 12, value: "ecpm", label: "ECPM"},
 ]
 /*플랫폼 현황 차트 데이터*/
-//export const platformStatusAtom = atom([])
-export const platformStatusAtom = atom([
-  {
-    "id": "클릭수",
-    "data": [
-      {
-        "x": "2023.03.01",
-        "y": 158
-      },
-      {
-        "x": "2023.03.02",
-        "y": 39
-      },
-      {
-        "x": "2023.03.03",
-        "y": 185
-      },
-      {
-        "x": "2023.03.04",
-        "y": 221
-      },
-      {
-        "x": "2023.03.05",
-        "y": 69
-      },
-      {
-        "x": "2023.03.06",
-        "y": 215
-      },
-      {
-        "x": "2023.03.07",
-        "y": 222
-      }
-    ]
-  },
-  {
-    "id": "노출수",
-    "data": [
-      {
-        "x": "2023.03.01",
-        "y": 257
-      },
-      {
-        "x": "2023.03.02",
-        "y": 193
-      },
-      {
-        "x": "2023.03.03",
-        "y": 223
-      },
-      {
-        "x": "2023.03.04",
-        "y": 217
-      },
-      {
-        "x": "2023.03.05",
-        "y": 34
-      },
-      {
-        "x": "2023.03.06",
-        "y": 296
-      },
-      {
-        "x": "2023.03.07",
-        "y": 179
-      }
-    ]
-  },
-  {
-    "id": "전환수",
-    "data": [
-      {
-        "x": "2023.03.01",
-        "y": 43
-      },
-      {
-        "x": "2023.03.02",
-        "y": 122
-      },
-      {
-        "x": "2023.03.03",
-        "y": 216
-      },
-      {
-        "x": "2023.03.04",
-        "y": 197
-      },
-      {
-        "x": "2023.03.05",
-        "y": 191
-      },
-      {
-        "x": "2023.03.06",
-        "y": 11
-      },
-      {
-        "x": "2023.03.07",
-        "y": 46
-      }
-    ]
-  },
-])
+export const platformStatusAtom = atom([])
+
+/*플랫폼 현황 차트 항목별 합산*/
+export const platformTotalCont = {
+  clickCountTotal:0, //clickCount 합산
+  exposureCountTotal:0,//exposureCount 합산
+  conversionCountTotal:0,//conversionCount 합산
+  userCountTotal:0,//userCount 합산
+  totalExposureCount:0,//totalExposureCount 합산
+  totalClickCount:0,//totalClickCount 합산
+  costAmount:0,//costAmount 합산
+  avgCpc:0,//avgCpc 평균 계산
+  conversionRate:0,//conversionRate 평균 계산
+  conversionPerSales:0,//conversionPerSales 평균 계산
+  avgConversionAmount:0,//avgConversionAmount 평균 계산
+  roas:0,//roas 평균 계산
+  ecpm:0,//ecpm 평균 계산
+}

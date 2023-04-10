@@ -1,10 +1,9 @@
 import {atom} from "jotai";
 import {decimalFormat} from "../../../common/StringUtils";
 import React from "react";
-import {SwitchComponent} from "../../../components/table";
+import {Icon, SwitchComponent} from "../../../components/table";
 import {updatePixelInterlock} from "../../../services/header/ManagePixelAxios";
 import {Link} from "react-router-dom";
-import {statusTypeAll} from "../../pixel/entity/Pixel";
 
 /*광고주 현황 리스트 데이터*/
 //export const adverStatusAtom = atom([])
@@ -171,6 +170,10 @@ export const adverListColumn = [
     showColumnMenuTool: false
   },
 ]
+
+/**
+ * 광고주 현황 리스트 디테일 컬럼 설정
+ */
 export const adverStatusDetailColumn = [
   {
     name: 'interlock',
@@ -189,8 +192,42 @@ export const adverStatusDetailColumn = [
     }
   },
   {
+    name: 'linkUrl',
+    header: '캠페인명',
+    defaultFlex: 1,
+    textAlign: 'center',
+    showColumnMenuTool: false,
+    resizable: false,
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
+    render: ({value, cellProps}) => {
+      return (
+        <Link to={'/board/campaignInfoDetail'} state={{id: cellProps.userId}}>{'캠페인 설정 상세'}</Link>
+      )
+    }
+  },
+  {
+    name: 'linkUrl',
+    header: '캠페인 코드',
+    defaultFlex: 1,
+    textAlign: 'center',
+    showColumnMenuTool: false,
+    resizable: false,
+    render: ({value, cellProps}) => {
+      return (
+        <div style={{display: "flex", alignItems: 'center', justifyContent: 'center'}}>
+          <span>{'캠페인 코드'}</span>
+          <Icon icon={'script'} data={cellProps.data} />
+        </div>
+      )
+    }
+  },
+  {
     name: 'pixelName',
-    header: '이벤트명',
+    header: '예산설정',
     defaultFlex: 1,
     textAlign: 'center',
     showColumnMenuTool: false,
@@ -199,31 +236,43 @@ export const adverStatusDetailColumn = [
         textDecoration: 'underline'
       }
     },
-    render: (props) => {
+    render: ({value, cellProps}) => {
       return (
-        <Link to={'/board/pixelDetail'} state={{id: props.data.pixelId}}>{props.value}</Link>
+        <Link to={'/board/campaignBudgetDetail'} state={{id: cellProps.userId}}>{'예산 설정 상세'}</Link>
       )
     }
   },
   {
-    name: 'linkUrl',
-    header: '연동 URL',
-    defaultFlex: 2,
-    textAlign: 'center',
-    showColumnMenuTool: false,
-    resizable: false,
-  },
-  {
-    name: 'status',
-    header: '이벤트 수집 상태',
+    name: 'pixelName',
+    header: '광고 그룹',
     defaultFlex: 1,
     textAlign: 'center',
-    resizable: false,
     showColumnMenuTool: false,
-    render: ({value}) => {
-      let textColor = {color: statusTypeAll.find(type => type.value === value).color};
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
+    render: ({value, cellProps}) => {
       return (
-        <span style={textColor}>{statusTypeAll.find(type => type.value === value).label}</span>
+        <Link to={'/board/campaignGroupDetail'} state={{id: cellProps.userId}}>{'광고 설정 상세'}</Link>
+      )
+    }
+  },
+  {
+    name: 'pixelName',
+    header: '크리에이티브 설정 상세',
+    defaultFlex: 1,
+    textAlign: 'center',
+    showColumnMenuTool: false,
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
+    render: ({value, cellProps}) => {
+      return (
+        <Link to={'/board/campaignCreativeDetail'} state={{id: cellProps.userId}}>{'크리에이티브 설정 상세'}</Link>
       )
     }
   }

@@ -14,6 +14,7 @@ import Reports from "../reports";
 import PlatformUserDetail from "../platform_manage/UserDetail";
 import PlatformAdminDetail from "../platform_manage/AdminDetail";
 import DashBoard from "../dash_board";
+import DashBoardIndex from "../dash_board/DashBoardIndex";
 
 function Layout() {
   const params = useParams()
@@ -109,7 +110,7 @@ function Layout() {
           </Logout>
         </BoardHeader>
         {/* 대시보드 */}
-        {params.id === 'dashboard' && <DashBoard/>}
+        {['dashboard','campaignInfoDetail','campaignBudgetDetail','campaignGroupDetail','campaignCreativeDetail'].includes(params.id) && <DashBoard/>}
         {/* 픽셀 관리*/}
         {['pixel', 'pixelDetail'].includes(params.id) && <Pixel/>}
         {/* 광고 관리 */}
