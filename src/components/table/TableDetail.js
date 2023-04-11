@@ -4,9 +4,6 @@ import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
 import styled from "styled-components";
 import {ColSpan2, RowSpan} from "../../assets/GlobalStyles";
-
-const rowHeight = 60
-const detailRowHeight = rowHeight
 const accountExpandHeight = 400
 
 
@@ -30,7 +27,6 @@ function TableDetail (props) {
    */
   const columnData = () => {
     columns.map(item => {
-      Object.assign(item, {headerProps: {style: {backgroundColor: '#fafafa', color:'#b2b2b2', textAlign: 'center'}}})
       Object.assign(item, settings.default)
     })
     settings.setColumns.map(item => {
@@ -47,7 +43,6 @@ function TableDetail (props) {
       columnData()
     } else {
       columns.map(item => {
-        Object.assign(item, {headerProps: {style: {backgroundColor: '#fafafa', color:'#b2b2b2'}}})
         Object.assign(item, {textAlign: 'center'})
       })
     }
@@ -75,7 +70,6 @@ function TableDetail (props) {
         handle={setGridRef}
         dataSource={props.detailData(data)}
         columns={props.detailColumn}
-        rowHeight={detailRowHeight}
         enableColumnAutosize={true}
         groups={props.detailGroups}
         emptyText={emptyText}
@@ -95,7 +89,6 @@ function TableDetail (props) {
         licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
         handle={setGridRef}
         style={gridStyle}
-        rowHeight={rowHeight}
         rowExpandHeight={accountExpandHeight}
         rowHeights={accountRowHeights}
         renderDetailsGrid={renderContactsGrid}

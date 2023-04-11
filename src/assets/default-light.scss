@@ -3,9 +3,50 @@ $INOVUA_DATAGRID_ACCENT_COLOR: #f5811f;
 
 @import '@inovua/reactdatagrid-community/style/theme/default-light/index.scss';
 
+
+.InovuaReactDataGrid--theme-default-light {
+  border: 0;
+  border-top: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+}
+.InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__header {
+  background-color: #fafafa;
+}
+.InovuaReactDataGrid__column-header--show-border-left {
+  border: none !important;
+}
+.InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__column-header__content {
+  font-weight: 400
+}
+.InovuaReactDataGrid__column-header__content .checkbox-type-a + i{
+  display: none;
+}
+.InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__cell.InovuaReactDataGrid__cell a {
+  text-decoration: underline;
+  white-space: normal;
+}
+.InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__row--no-zebra, .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__row {
+  background: transparent;
+}
+.InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__header-group__title {
+  font-weight: normal;
+}
+.InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__locked-row-cell--show-border-left, .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__footer-row-cell--show-border-left, .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__cell--show-border-left {
+  border-left: 0;
+}
 .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__group-toolbar-item .InovuaReactDataGrid__sort-icon-wrapper, .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__column-header__content .InovuaReactDataGrid__sort-icon-wrapper {
   position: absolute;
   top: 50%;
   left: 0;
   transform: translateY(-50%);
+}
+.InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__row .InovuaReactDataGrid__row-details > .InovuaReactDataGrid .InovuaReactDataGrid__header {
+  background-color: #fffaf1;
+}
+.InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__row .InovuaReactDataGrid__row-details > .InovuaReactDataGrid {
+  margin: 0;
+  border: 1px solid #f5811f
+}
+.InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__row .InovuaReactDataGrid__row-details.InovuaReactDataGrid__row-details--details-grid {
+  padding: 0 0 1px 0;
 }

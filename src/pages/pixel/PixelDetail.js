@@ -13,7 +13,8 @@ import {
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
-import Table, {Off, On, SwitchBox} from "../../components/table";
+import {Off, On, SwitchBox} from "../../components/table/styles";
+import Table from "../../components/table";
 import {toast, ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";

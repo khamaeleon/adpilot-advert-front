@@ -1,31 +1,35 @@
 import {
   Board,
-  BoardHeader, BoardSearchDetail,
-  BoardSearchResult, CalendarBox, CalendarIcon, ColSpan0,
-  ColSpan1, ColSpan2, ColSpan3, ColTitle, CustomDatePicker, DateContainer, DefaultButton,
-  defaultStyle, DeleteButton, Input, RangePicker,
-  RelativeDiv,
-  RowSpan, selectStyle,
+  BoardHeader,
+  BoardSearchDetail,
+  BoardSearchResult,
+  CalendarBox,
+  CalendarIcon,
+  ColSpan1,
+  ColSpan2,
+  CustomDatePicker,
+  DateContainer,
+  DefaultButton,
+  DeleteButton,
+  RangePicker,
+  RowSpan,
+  selectStyle,
   Span4
 } from "../../assets/GlobalStyles";
-import {Row, ValidationGroup} from "../campaign/styles/common";
+import {ValidationGroup} from "../campaign/styles/common";
 import Select from "react-select";
 import ko from "date-fns/locale/ko";
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
-import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
 import React, {useState} from "react";
 import {
   getLastDay,
-  getLastMonth, getLastNinetyDay,
+  getLastMonth,
+  getLastNinetyDay,
   getLastThirtyDay,
   getLastWeekDay,
   getThisMonth,
   getToDay
 } from "../../common/DateUtils";
-import {useAtom} from "jotai/index";
-import {productListDataAtom} from "../platform_manage/entity/Product";
-import {retrieveProduct} from "../../services/Platform/PlatformAxios";
-import {ButtonGroup} from "../signup/styles";
 import Table from "../../components/table";
 import {customReportsColumns} from "./entity/Common";
 
