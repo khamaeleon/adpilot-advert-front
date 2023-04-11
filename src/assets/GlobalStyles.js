@@ -1042,7 +1042,7 @@ export const ChartLabel = styled.div`
       height: 36px;
     }
     > div {
-      width: 110px;
+      width: 120px;
       > div { 
         cursor: pointer;
         border-width: 0;

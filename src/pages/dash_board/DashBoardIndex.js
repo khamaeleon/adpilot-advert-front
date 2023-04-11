@@ -41,7 +41,8 @@ import {platformStatusAtom, platformStatusType, platformTotalCont} from "./entit
 import {adverListColumn, adverStatusAtom, adverStatusDetailColumn,} from "./entity/Campaign";
 import {productType, searchConditionAtom} from "./entity/Common";
 import TableDetail from "../../components/table/TableDetail";
-import {retrievePlatformStatus} from "../../services/dash_board/ChartAxios";
+import {retrievePlatformStatus, retrieveUserPlatformStatus} from "../../services/dash_board/ChartAxios";
+import {tokenResultAtom} from "../login/entity/Common";
 
 const activeBottomStyle = {borderBottom:'4px solid #f5811f'}
 const activeRightStyle = {borderRight: activeBottomStyle.borderBottom, color: '#f5811f'}
@@ -97,9 +98,6 @@ function PlatformResponsiveBar(props) {
     }
   }, [platformData]);
 
-  console.log(lineData)
-  console.log(platformData)
-
   const getColor = () => {
     const color = {
       PROCEEDS: '#f5811f',
@@ -136,7 +134,6 @@ function PlatformResponsiveBar(props) {
         useMesh={true}
         enableCrosshair={false}
         tooltip={({ point }) => {
-          console.log(point)
           return (
             <div style={{
               background: '#fff',
@@ -160,6 +157,7 @@ function PlatformResponsiveBar(props) {
 
 /** 대시보드 **/
 function DashBoardIndex(){
+  const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [totalInfo,setTotalInfo] = useState(dataTotalInfo)
   const [adverStatusData,setAdverStatusData] = useAtom(adverStatusAtom)
   const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
@@ -170,14 +168,14 @@ function DashBoardIndex(){
   const [platformStatusData, setPlatformStatusData] = useAtom(platformStatusAtom)
   const [platformChartTotal, setPlatformChartTotal] = useState(platformTotalCont)
   const [isCheckedAll, setIsCheckedAll] = useState(true)
-  const [dataType, setDataType] = useState(['',''])
-  const [userId, setUserId] = useState('ccde14c6-ba7c-4729-bed7-9f02986ba7f2')
+  const [dataType, setDataType] = useState('avgCpc')
+  const [dataType2, setDataType2] = useState('costAmount')
 
   useEffect(()=>{
-    retrievePlatformStatus(searchCondition).then( response => {
-      if (response) {
-        setPlatformStatusData(response)
-      }
+    tokenUserInfo.role !== 'NORMAL' ? retrievePlatformStatus(searchCondition).then( response => {
+      handlePlatformData(response)
+    }) : retrieveUserPlatformStatus(tokenUserInfo.id, searchCondition).then( response => {
+      handlePlatformData(response)
     })
     setTotalInfo({
       totalCount: 1
@@ -191,7 +189,41 @@ function DashBoardIndex(){
       setIsCheckedAll(false)
     }
   }, [searchCondition.agentTypes]);
-
+ const handlePlatformData = (response) => {
+    let clickCount=0 ,exposureCount=0, conversionCount = 0, userCount=0, totalExposureCount=0, totalClickCount=0, costAmount=0, avgCpc=0, conversionRate=0, avgConversionAmount=0, roas=0, ecpm=0;
+    if (response) {
+      setPlatformStatusData(response)
+      response?.map(data => {
+        clickCount += data.clickCount
+        exposureCount += data.exposureCount
+        conversionCount += data.conversionCount
+        userCount += data?.userCount
+        totalExposureCount += data.totalExposureCount
+        totalClickCount += data.totalClickCount
+        costAmount += data.costAmount
+        avgCpc += data.avgCpc
+        conversionRate += data.conversionRate
+        avgConversionAmount += data.avgConversionAmount
+        roas += data.roas
+        ecpm += data.ecpm
+      })
+      setPlatformChartTotal({
+        ...platformChartTotal,
+        clickCountTotal: clickCount,
+        exposureCountTotal: exposureCount,
+        conversionCountTotal: conversionCount,
+        userCount: userCount,
+        totalExposureCount: totalExposureCount,
+        totalClickCount: totalClickCount,
+        costAmount: costAmount,
+        avgCpc: avgCpc/response?.length,
+        conversionRate: conversionRate/response?.length,
+        avgConversionAmount: avgConversionAmount/response?.length,
+        roas: roas/response?.length,
+        ecpm: ecpm/response?.length,
+      })
+    }
+  }
   /**
    * 날짜 레인지 선택
    * @param rangeType
@@ -307,7 +339,10 @@ function DashBoardIndex(){
    * @param
    */
   const handleChangeChartKey = (type) => {
-    setDataType(type)
+    setDataType(type.value)
+  }
+  const handleChangeChartKey2 = (type) => {
+    setDataType2(type.value)
   }
 
   // const handleFetchDetailData = useCallback(async ({}) => {
@@ -451,7 +486,8 @@ function DashBoardIndex(){
                 <Select styles={defaultStyle}
                         components={{IndicatorSeparator: () => null}}
                         options={platformStatusTypeSelect}
-                        value={platformStatusTypeSelect[0]}
+                        value={platformStatusTypeSelect.filter(options => options.value === dataType)}
+                        isOptionDisabled={option=> option.value === dataType2}
                         onChange={handleChangeChartKey}
                 />
                 <span>123456789</span>
@@ -460,10 +496,11 @@ function DashBoardIndex(){
                 <Select styles={defaultStyle}
                         components={{IndicatorSeparator: () => null}}
                         options={platformStatusTypeSelect}
-                        value={platformStatusTypeSelect[0]}
-                        onChange={handleChangeChartKey}
+                        value={platformStatusTypeSelect.filter(options => options.value === dataType2)}
+                        isOptionDisabled={option=> option.value === dataType}
+                        onChange={handleChangeChartKey2}
                 />
-                <span>123456789</span>
+                <span>{platformChartTotal?.dataType2}</span>
               </div>
             </ChartLabel>
             <PlatformResponsiveBar dataType={dataType} platformData={platformStatusData}/>

@@ -12,12 +12,12 @@ export const platformStatusType = [
   {id: 3, value: "totalClickCount", label: "총클릭수"},
   {id: 4, value: "clickRate", label: "클릭률"},
   {id: 5, value: "costAmount", label: "비용"},
-  {id: 6, value: "avgCpc", label: "CPC"},
-  {id: 7, value: "conversionRate", label: "전환율"},
-  {id: 8, value: "conversionPerSales", label: "전환단가"},
+  {id: 6, value: "avgCpc", label: "평균 CPC"},
+  {id: 7, value: "conversionRate", label: "평균 전환율"},
+  {id: 8, value: "conversionPerSales", label: "평균 전환단가"},
   {id: 9, value: "avgConversionAmount", label: "평균 구매액"},
-  {id: 11, value: "roas", label: "ROAS"},
-  {id: 12, value: "ecpm", label: "ECPM"},
+  {id: 11, value: "roas", label: "평균 ROAS"},
+  {id: 12, value: "ecpm", label: "평균 ECPM"},
 ]
 /*플랫폼 현황 차트 데이터*/
 export const platformStatusAtom = atom([])
@@ -27,7 +27,7 @@ export const platformTotalCont = {
   clickCountTotal:0, //clickCount 합산
   exposureCountTotal:0,//exposureCount 합산
   conversionCountTotal:0,//conversionCount 합산
-  userCountTotal:0,//userCount 합산
+  userCount:0,//userCount 합산
   totalExposureCount:0,//totalExposureCount 합산
   totalClickCount:0,//totalClickCount 합산
   costAmount:0,//costAmount 합산
