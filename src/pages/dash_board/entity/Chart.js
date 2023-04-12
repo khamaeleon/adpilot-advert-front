@@ -39,3 +39,5 @@ export const platformTotalCont = {
   roas:0,//roas 평균 계산
   ecpm:0,//ecpm 평균 계산
 }
+export const lineDataAtom = atom(null)
+export const cloneLineDataAtom = atom(null)
