@@ -1,9 +1,5 @@
 import {atom} from "jotai";
-import {SwitchComponent} from "../../../components/table";
-import {updatePixelInterlock} from "../../../services/header/ManagePixelAxios";
-import {Link} from "react-router-dom";
 import React from "react";
-import {statusTypeAll} from "../../pixel/entity/Pixel";
 
 /* 플랫폼 현황 차트 셀렉트 */
 export const platformStatusType = [
@@ -14,10 +10,13 @@ export const platformStatusType = [
   {id: 5, value: "costAmount", label: "비용"},
   {id: 6, value: "cpc", label: "CPC"},
   {id: 7, value: "conversionRate", label: "전환율"},
-  {id: 8, value: "conversionPerSales", label: "전환단가"},
+  {id: 8, value: "costPerConversion", label: "전환단가"},
   {id: 9, value: "avgConversionAmount", label: "구매액"},
-  {id: 11, value: "roas", label: "ROAS"},
-  {id: 12, value: "ecpm", label: "ECPM"},
+  {id: 11, value: "sessionRoas", label: "세션매출"},
+  {id: 12, value: "directRoas", label: "직접매출"},
+  {id: 13, value: "exposureRoas", label: "노출매출"},
+  {id: 14, value: "totalRoas", label: "총매출"},
+  {id: 15, value: "ecpm", label: "ECPM"},
 ]
 /*플랫폼 현황 차트 데이터*/
 export const platformStatusAtom = atom([])
@@ -34,9 +33,12 @@ export const platformTotalCont = {
   costAmount:0,//costAmount 합산
   cpc:0,//avgCpc 평균 계산
   conversionRate:0,//conversionRate 평균 계산
-  conversionPerSales:0,//conversionPerSales 평균 계산
+  costPerConversion:0,//costPerConversion 평균 계산
   avgConversionAmount:0,//avgConversionAmount 평균 계산
-  roas:0,//roas 평균 계산
+  sessionRoas:0,//세션매출 평균 계산
+  directRoas:0,//직접매출 평균 계산
+  exposureRoas:0,//노출매출 평균 계산
+  totalRoas:0,//총매출 평균 계산
   ecpm:0,//ecpm 평균 계산
 }
 export const lineDataAtom = atom(null)

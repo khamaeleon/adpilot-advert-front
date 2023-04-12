@@ -54,13 +54,14 @@ function PlatformResponsiveBar(props) {
   const {onOff, dataType, dataType2, platformData} = props
   let clickData = [], exposureData = [], conversionData = [], userData = [], totalExposureData = [],
     totalClickData = [], clickRateData = [], costAmountData = [], cpcData = [], conversionRateData = [],
-    conversionPerSalesData = [], avgConversionAmountData = [], roasData = [], ecpmData = [];
+    costPerConversionData = [], avgConversionAmountData = [], sessionRoasData = [], directRoasData = [], exposureRoasData = [], totalRoasData = [], ecpmData = [];
   const [lineData, setLineData] = useAtom(lineDataAtom)
   const [cloneLineData, setCloneLineData] = useAtom(cloneLineDataAtom)
 
   useEffect(() => {
     let lineDataMap={}
     if (platformData !== null) {
+      console.log(platformData)
       platformData.map((data, index) => {
         clickData = [...clickData, {x: data.historyDate, y: data.clickCount}]
         exposureData = [...exposureData, {x: data.historyDate, y: data.exposureCount}]
@@ -68,14 +69,17 @@ function PlatformResponsiveBar(props) {
         userData = [...userData, {x: data.historyDate, y: data?.userCount}]
         totalExposureData = [...totalExposureData, {x: data.historyDate, y: data?.totalExposureCount}]
         totalClickData = [...totalClickData, {x: data.historyDate, y: data?.totalClickCount}]
-        clickRateData = [...clickRateData, {x: data.historyDate, y: data?.clickRate}]
+        clickRateData = [...clickRateData, {x: data.historyDate, y: data.clickCount / (data.exposureCount*100)}]
         costAmountData = [...costAmountData, {x: data.historyDate, y: data?.costAmount}]
-        cpcData = [...cpcData, {x: data.historyDate, y: data?.cpc}]
-        conversionRateData = [...conversionRateData, {x: data.historyDate, y: data?.conversionRate}]
-        conversionPerSalesData = [...conversionPerSalesData, {x: data.historyDate, y: data?.conversionPerSales}]
-        avgConversionAmountData = [...avgConversionAmountData, {x: data.historyDate, y: data?.avgConversionAmount}]
-        roasData = [...roasData, {x: data.historyDate, y: data?.roas}]
-        ecpmData = [...ecpmData, {x: data.historyDate, y: data?.ecpm}]
+        cpcData = [...cpcData, {x: data.historyDate, y: data?.costAmount / data.clickCount}]
+        conversionRateData = [...conversionRateData, {x: data.historyDate, y: data.conversionCount / (data.clickCount*100)}]
+        costPerConversionData = [...costPerConversionData, {x: data.historyDate, y: data?.costAmount / data.conversionCount}]
+        avgConversionAmountData = [...avgConversionAmountData, {x: data.historyDate, y: data.totalConversionAmount / data.conversionCount}]
+        sessionRoasData = [...sessionRoasData, {x: data.historyDate, y: data.sessionConversionAmount / (data.costAmount *100)}]
+        directRoasData = [...directRoasData, {x: data.historyDate, y: data.directConversionAmount / (data.costAmount *100)}]
+        exposureRoasData = [...exposureRoasData, {x: data.historyDate, y: data.exposureConversionAmount / (data.costAmount *100)}]
+        totalRoasData = [...totalRoasData, {x: data.historyDate, y: data.totalConversionAmount / (data.costAmount *100)}]
+        ecpmData = [...ecpmData, {x: data.historyDate, y: data?.costAmount / (data.exposureCount*1000)}]
       })
       lineDataMap = [
           {id: 'clickCount', data: clickData}, //클릭수
@@ -88,9 +92,12 @@ function PlatformResponsiveBar(props) {
           {id: "costAmount", data: costAmountData},//비용
           {id: "cpc", data: cpcData},//평균 CPC
           {id: "conversionRate", data: conversionRateData},//전환율
-          {id: "conversionPerSales", data: conversionPerSalesData},//전환 단가
+          {id: "costPerConversion", data: costPerConversionData},//전환 단가
           {id: "avgConversionAmount", data: avgConversionAmountData},//평균 구매액
-          {id: "roas", data: roasData},//Roas
+          {id: "sessionRoas", data: sessionRoasData},//Roas
+          {id: "directRoas", data: directRoasData},//Roas
+          {id: "exposureRoas", data: exposureRoasData},//Roas
+          {id: "totalRoas", data: totalRoasData},//Roas
           {id: "ecpm", data: ecpmData},//Ecpm
         ]
 
@@ -150,8 +157,8 @@ function PlatformResponsiveBar(props) {
         enableCrosshair={false}
         enableSlices={'x'}
         sliceTooltip={(props) => {
-          const toolTip = props.slice.points?.map(data => {
-            return <p>
+          const toolTip = props.slice.points?.map((data, key) => {
+            return <p key={key}>
               <span style={{color: data.serieColor}}>{data.serieId} : </span><span>{data.data.y}</span>
             </p>
           })
@@ -185,7 +192,7 @@ function DashBoardIndex() {
   const [platformStatusData, setPlatformStatusData] = useAtom(platformStatusAtom)
   const [platformChartTotal, setPlatformChartTotal] = useState(platformTotalCont)
   const [isCheckedAll, setIsCheckedAll] = useState(true)
-  const [dataType, setDataType] = useState('userCount')
+  const [dataType, setDataType] = useState('cpc')
   const [dataType2, setDataType2] = useState('costAmount')
   const [onOff, setOnOff] = useState({clickCount: true, exposureCount: true, conversionCount: true})
   const [lineData, setLineData] = useAtom(lineDataAtom)
@@ -228,7 +235,7 @@ function DashBoardIndex() {
   }, [searchCondition.agentTypes]);
   const handlePlatformData = (response) => {
     let clickCount, exposureCount, conversionCount, userCount, totalExposureCount, totalClickCount, costAmount,
-      conversionAmount
+      conversionAmount, sessionConversionAmount, directConversionAmount, exposureConversionAmount, totalConversionAmount
     if (response) {
       setPlatformStatusData(response)
       //response?.map(data => {
@@ -265,6 +272,18 @@ function DashBoardIndex() {
       conversionAmount = response.reduce((prev, next) => {
         return prev + next.conversionAmount
       }, 0);
+      totalConversionAmount = response.reduce((prev, next) => {
+        return prev + next.totalConversionAmount
+      }, 0);
+      exposureConversionAmount = response.reduce((prev, next) => {
+        return prev + next.exposureConversionAmount
+      }, 0);
+      directConversionAmount = response.reduce((prev, next) => {
+        return prev + next.directConversionAmount
+      }, 0);
+      sessionConversionAmount  = response.reduce((prev, next) => {
+        return prev + next.sessionConversionAmount
+      }, 0);
 
       setPlatformChartTotal({
         ...platformChartTotal,
@@ -278,9 +297,12 @@ function DashBoardIndex() {
         costAmount: costAmount, //비용 합산
         cpc: costAmount / totalClickCount, //cpc 평균(총비용 / 총클릭)
         conversionRate: conversionCount / clickCount,// 전환율 평균 (전환 수 / 클릭 수)
-        conversionPerSales: costAmount / conversionCount,// 전환 단가 평균 (비용 / 전환수)
+        costPerConversion: costAmount / conversionCount,// 전환 단가 평균 (비용 / 전환수)
         avgConversionAmount: conversionAmount / conversionCount, //평균 구매액 (총 수익 / 전환 수)
-        roas: conversionAmount / costAmount, // roas 평균 (총 수익 / 비용)
+        sessionRoas: sessionConversionAmount / costAmount, // roas 평균 (총 수익 / 비용)
+        directRoas: directConversionAmount / costAmount, // roas 평균 (총 수익 / 비용)
+        exposureRoas: exposureConversionAmount / costAmount, // roas 평균 (총 수익 / 비용)
+        totalRoas: totalConversionAmount  / costAmount, // roas 평균 (총 수익 / 비용)
         ecpm: conversionAmount / (exposureCount * 1000), // ecpm 평균 (수익 / 노출 * 1000)
       })
     }
