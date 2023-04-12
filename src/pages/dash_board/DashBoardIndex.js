@@ -44,22 +44,14 @@ import TableDetail from "../../components/table/TableDetail";
 import {retrievePlatformStatus, retrieveUserPlatformStatus} from "../../services/dash_board/ChartAxios";
 import {tokenResultAtom} from "../login/entity/Common";
 
-const activeBottomStyle = {borderBottom:'4px solid #f5811f'}
-const activeRightStyle = {borderRight: activeBottomStyle.borderBottom, color: '#f5811f'}
-
 /** 플래폼 현황 차트 **/
 function PlatformResponsiveBar(props) {
-  const {dataType, platformData} = props
-  let clickData=[], exposureData=[], conversionData=[], userData=[], totalExposureData=[], totalClickData=[], clickRateData=[], costAmountData=[], avgCpcData=[], conversionRateData=[], conversionPerSalesData=[], avgConversionAmountData=[], roasData=[], ecpmData=[];
-  const [lineData, setLineData] = useState([
-    {
-      id: 'clickCount',
-      data: []
-    },
-  ])
+  const {onOff, dataType, dataType2, platformData} = props
+  let clickData=[], exposureData=[], conversionData=[], userData=[], totalExposureData=[], totalClickData=[], clickRateData=[], costAmountData=[], cpcData=[], conversionRateData=[], conversionPerSalesData=[], avgConversionAmountData=[], roasData=[], ecpmData=[];
+  const [lineData,setLineData] = useState([])
 
   useEffect(() => {
-    let lineData=[]
+    let lineDataMap=[]
     if (platformData !== null) {
       platformData.map((data,index) =>{
         clickData = [...clickData, {x:data.historyDate,y:data.clickCount}]
@@ -70,33 +62,40 @@ function PlatformResponsiveBar(props) {
         totalClickData = [...totalClickData, {x:data.historyDate,y:data?.totalClickCount}]
         clickRateData = [...clickRateData, {x:data.historyDate,y:data?.clickRate}]
         costAmountData = [...costAmountData, {x:data.historyDate,y:data?.costAmount}]
-        avgCpcData = [...avgCpcData, {x:data.historyDate,y:data?.avgCpc}]
+        cpcData = [...cpcData, {x:data.historyDate,y:data?.cpc}]
         conversionRateData = [...conversionRateData, {x:data.historyDate,y:data?.conversionRate}]
         conversionPerSalesData = [...conversionPerSalesData, {x:data.historyDate,y:data?.conversionPerSales}]
         avgConversionAmountData = [...avgConversionAmountData, {x:data.historyDate,y:data?.avgConversionAmount}]
         roasData = [...roasData, {x:data.historyDate,y:data?.roas}]
         ecpmData = [...ecpmData, {x:data.historyDate,y:data?.ecpm}]
       })
-      lineData = [
-        ...lineData,
-        {id: 'clickCount', data:clickData},
-        {id: 'exposureCount', data:exposureData},
-        {id: 'conversionCount', data:conversionData},
-        {id: "userCount", data: userData},
-        {id: "totalExposureCount", data: totalExposureData},
-        {id: "totalClickCount", data: totalClickData},
-        {id: "clickRate", data: clickRateData},
-        {id: "costAmount", data: costAmountData},
-        {id: "avgCpc", data: avgCpcData},
-        {id: "conversionRate", data: conversionRateData},
-        {id: "conversionPerSales", data: conversionPerSalesData},
-        {id: "avgConversionAmount", data: avgConversionAmountData},
-        {id: "roas", data: roasData},
-        {id: "ecpm", data: ecpmData},
+      lineDataMap = [
+        {id: 'clickCount', data: clickData}, //클릭수
+        {id: 'exposureCount', data:exposureData},//노출수
+        {id: 'conversionCount', data:conversionData},//전환수
+        {id: "userCount", data: userData},//광고주수
+        {id: "totalExposureCount", data: totalExposureData},//총 노출 수
+        {id: "totalClickCount", data: totalClickData},//총 클릭 수
+        {id: "clickRate", data: clickRateData},//클릭률
+        {id: "costAmount", data: costAmountData},//비용
+        {id: "cpc", data: cpcData},//평균 CPC
+        {id: "conversionRate", data: conversionRateData},//전환율
+        {id: "conversionPerSales", data: conversionPerSalesData},//전환 단가
+        {id: "avgConversionAmount", data: avgConversionAmountData},//평균 구매액
+        {id: "roas", data: roasData},//Roas
+        {id: "ecpm", data: ecpmData},//Ecpm
       ]
-      setLineData(lineData)
+      console.log(onOff['clickCount'])
+        setLineData([
+          lineDataMap[0],
+          lineDataMap[1],
+          lineDataMap[2],
+          lineDataMap.find(value => value.id === dataType),
+          lineDataMap.find(value => value.id === dataType2),
+        ])
+
     }
-  }, [platformData]);
+  }, [platformData, dataType, dataType2, onOff]);
 
   const getColor = () => {
     const color = {
@@ -113,9 +112,10 @@ function PlatformResponsiveBar(props) {
     <div style={{height: 300}}>
       <ResponsiveLine
         data={lineData}
-        margin={{top: 30, right: 100, bottom: 30, left: 100}}
+        margin={{top: 30, right: 50, bottom: 30, left: 50}}
         padding={0.75}
         yScale={{
+          base: 10,
           type: 'linear',
           min: 'auto',
           max: 'auto',
@@ -123,7 +123,7 @@ function PlatformResponsiveBar(props) {
           reverse: false
       }}
         //colors={[getColor()]}
-        axisLeft={true}
+        axisLeft={null}
         axisBottom={{
           tickSize: 0,
           tickPadding: 15,
@@ -133,19 +133,21 @@ function PlatformResponsiveBar(props) {
         enableGridY={false}
         useMesh={true}
         enableCrosshair={false}
-        tooltip={({ point }) => {
+        enableSlices={'x'}
+        sliceTooltip={(props) => {
+          const toolTip = props.slice.points?.map( data => {
+            return <p>
+                    <span style={{color: data.serieColor}}>{data.serieId} : </span><span>{data.data.y}</span>
+                  </p>
+          })
           return (
             <div style={{
-              background: '#fff',
-              padding: '3px 10px',
-              border: '1px solid #ccc',
-              borderRadius: '3px',
-              textAlign: "center"
-          }}>
-              <p style={{
-                color: point.serieColor
-              }}>{point.serieId}</p>
-              <p>{point.data.y}</p>
+                background: '#fff',
+                padding: '3px 10px',
+                border: '1px solid #ccc',
+                borderRadius: '3px',
+            }}>
+              {toolTip}
             </div>
           )
         }}
@@ -168,8 +170,9 @@ function DashBoardIndex(){
   const [platformStatusData, setPlatformStatusData] = useAtom(platformStatusAtom)
   const [platformChartTotal, setPlatformChartTotal] = useState(platformTotalCont)
   const [isCheckedAll, setIsCheckedAll] = useState(true)
-  const [dataType, setDataType] = useState('avgCpc')
+  const [dataType, setDataType] = useState('userCount')
   const [dataType2, setDataType2] = useState('costAmount')
+  const [onOff, setOnOff] = useState({clickCount: true, exposureCount: true, conversionCount: true})
 
   useEffect(()=>{
     tokenUserInfo.role !== 'NORMAL' ? retrievePlatformStatus(searchCondition).then( response => {
@@ -190,37 +193,44 @@ function DashBoardIndex(){
     }
   }, [searchCondition.agentTypes]);
  const handlePlatformData = (response) => {
-    let clickCount=0 ,exposureCount=0, conversionCount = 0, userCount=0, totalExposureCount=0, totalClickCount=0, costAmount=0, avgCpc=0, conversionRate=0, avgConversionAmount=0, roas=0, ecpm=0;
+    let clickCount, exposureCount, conversionCount, userCount, totalExposureCount, totalClickCount, costAmount, conversionAmount
     if (response) {
       setPlatformStatusData(response)
-      response?.map(data => {
-        clickCount += data.clickCount
-        exposureCount += data.exposureCount
-        conversionCount += data.conversionCount
-        userCount += data?.userCount
-        totalExposureCount += data.totalExposureCount
-        totalClickCount += data.totalClickCount
-        costAmount += data.costAmount
-        avgCpc += data.avgCpc
-        conversionRate += data.conversionRate
-        avgConversionAmount += data.avgConversionAmount
-        roas += data.roas
-        ecpm += data.ecpm
-      })
+      //response?.map(data => {
+      //   clickCount += data.clickCount
+      //   exposureCount += data.exposureCount
+      //   conversionCount += data.conversionCount
+      //   userCount += data?.userCount
+      //   totalExposureCount += data.totalExposureCount
+      //   totalClickCount += data.totalClickCount
+      //   costAmount += data.costAmount
+      //   conversionAmount += data.conversionAmount
+      //})
+      clickCount = response.reduce((prev, next) => {return prev + next.clickCount},0);
+      exposureCount = response.reduce((prev, next) => {return prev + next.exposureCount},0);
+      conversionCount = response.reduce((prev, next) => {return prev + next.conversionCount},0);
+      userCount = response.reduce((prev, next) => {return prev + next.userCount},0);
+      totalExposureCount = response.reduce((prev, next) => {return prev + next.totalExposureCount},0);
+      totalClickCount = response.reduce((prev, next) => {return prev + next.totalClickCount},0);
+      costAmount = response.reduce((prev, next) => {return prev + next.costAmount},0);
+      conversionAmount = response.reduce((prev, next) => {return prev + next.conversionAmount},0);
+
       setPlatformChartTotal({
         ...platformChartTotal,
-        clickCountTotal: clickCount,
-        exposureCountTotal: exposureCount,
-        conversionCountTotal: conversionCount,
-        userCount: userCount,
-        totalExposureCount: totalExposureCount,
-        totalClickCount: totalClickCount,
-        costAmount: costAmount,
-        avgCpc: avgCpc/response?.length,
-        conversionRate: conversionRate/response?.length,
-        avgConversionAmount: avgConversionAmount/response?.length,
-        roas: roas/response?.length,
-        ecpm: ecpm/response?.length,
+        clickCountTotal: clickCount, //클릭수(유효) 합산
+        exposureCountTotal: exposureCount, //노출수 합산
+        conversionCountTotal: conversionCount, //전환수 합산
+        userCount: userCount, //광고주 수 합산
+        totalExposureCount: totalExposureCount, //총 노출수 합산
+        totalClickCount: totalClickCount, //총 클릭수(유효,무효) 합산
+        clickRate: clickCount / (exposureCount * 100), // 클릭률 평균( 클릭수 / (노출수 * 100) )
+        costAmount: costAmount, //비용 합산
+        cpc: costAmount/totalClickCount, //cpc 평균(총비용 / 총클릭)
+        conversionRate: conversionCount/clickCount,// 전환율 평균 (전환 수 / 클릭 수)
+        conversionPerSales: costAmount/conversionCount,// 전환 단가 평균 (비용 / 전환수)
+        avgConversionAmount: conversionAmount/conversionCount, //평균 구매액 (총 수익 / 전환 수)
+        roas: conversionAmount/costAmount, // roas 평균 (총 수익 / 비용)
+        ecpm: conversionAmount/( exposureCount * 1000 ), // ecpm 평균 (수익 / 노출 * 1000)
       })
     }
   }
@@ -345,6 +355,15 @@ function DashBoardIndex(){
     setDataType2(type.value)
   }
 
+  const chartOnOff = (e) => {
+    e.stopPropagation()
+    let keyTarget = e.currentTarget.id
+    setOnOff({
+      ...onOff,
+      [keyTarget] : !onOff[keyTarget]
+    })
+  }
+
   // const handleFetchDetailData = useCallback(async ({}) => {
   //   return selAdverPixelDetailList(userId)
   // },[])
@@ -453,15 +472,17 @@ function DashBoardIndex(){
                 </RangePicker>
               </div>
             </ColSpan0>
-            <ColSpan1 style={{marginLeft: 20}}>
-              <ColTitle style={{paddingLeft: 0}}>검색어</ColTitle>
-              <Input type={'text'}
-                     placeholder={'광고주명 및 아이디 검색'}
-                     value={searchCondition.keyword}
-                     onChange={handleSearchValue}
-              />
-              <SearchButton onClick={handleData}>검색</SearchButton>
-            </ColSpan1>
+            {tokenUserInfo.role !== 'NORMAL' &&
+              <ColSpan1 style={{marginLeft: 20}}>
+                <ColTitle style={{paddingLeft: 0}}>검색어</ColTitle>
+                <Input type={'text'}
+                       placeholder={'광고주명 및 아이디 검색'}
+                       value={searchCondition.keyword}
+                       onChange={handleSearchValue}
+                />
+                <SearchButton onClick={handleData}>검색</SearchButton>
+              </ColSpan1>
+            }
           </RowSpan>
         </BoardSearchDetail>
       </DashBoardCard>
@@ -470,15 +491,15 @@ function DashBoardIndex(){
         <DashBoardBody>
           <ChartContainer>
             <ChartLabel>
-              <div>
+              <div id='clickCount' onClick={(e)=> chartOnOff(e)}>
                 <p>클릭수</p>
                 <span>{platformChartTotal.clickCountTotal}</span>
               </div>
-              <div>
+              <div id='exposureCount' onClick={(e)=> chartOnOff(e)}>
                 <p>노출수</p>
                 <span>{platformChartTotal.exposureCountTotal}</span>
               </div>
-              <div>
+              <div id='conversionCount' onClick={(e)=> chartOnOff(e)}>
                 <p>전환수</p>
                 <span>{platformChartTotal.conversionCountTotal}</span>
               </div>
@@ -490,7 +511,7 @@ function DashBoardIndex(){
                         isOptionDisabled={option=> option.value === dataType2}
                         onChange={handleChangeChartKey}
                 />
-                <span>123456789</span>
+                <span>{platformChartTotal[dataType]}</span>
               </div>
               <div>
                 <Select styles={defaultStyle}
@@ -500,10 +521,10 @@ function DashBoardIndex(){
                         isOptionDisabled={option=> option.value === dataType}
                         onChange={handleChangeChartKey2}
                 />
-                <span>{platformChartTotal?.dataType2}</span>
+                <span>{platformChartTotal[dataType2]}</span>
               </div>
             </ChartLabel>
-            <PlatformResponsiveBar dataType={dataType} platformData={platformStatusData}/>
+            <PlatformResponsiveBar dataType={dataType} dataType2={dataType2} onOff={onOff} platformData={platformStatusData}/>
           </ChartContainer>
         </DashBoardBody>
         <DashBoardHeader style={{marginTop: 30}}>광고주 현황</DashBoardHeader>
