@@ -110,7 +110,7 @@ function PlatformResponsiveBar(props) {
         lineDataMap.find(value => value.id === dataType2),
       ])
     }
-  }, []);
+  }, [platformData]);
 
   const getColor = () => {
     const color = {
@@ -202,6 +202,22 @@ function DashBoardIndex() {
       totalCount: 1
     })
   }, [])
+  useEffect(() => {
+    if(cloneLineData !==null){
+      let dummyArray =lineData
+      if (!onOff.clickCount) {
+        dummyArray = dummyArray.filter(value => value.id !== 'clickCount')
+      }
+      if (!onOff.exposureCount) {
+        dummyArray = dummyArray.filter(value => value.id !== 'exposureCount')
+      }
+      if (!onOff.conversionCount) {
+        dummyArray = dummyArray.filter(value => value.id !== 'conversionCount')
+      }
+      console.log(dummyArray)
+      setCloneLineData(dummyArray)
+    }
+  },[onOff])
 
   useEffect(() => {
     if (searchCondition.agentTypes.length === 4) {
@@ -391,19 +407,14 @@ function DashBoardIndex() {
   }
 
   const chartOnOff = (e) => {
-    e.stopPropagation()
-    let keyTarget = e.currentTarget.id
     setOnOff({
       ...onOff,
-      [keyTarget]: !onOff[keyTarget]
+      [e.currentTarget.id]: !onOff[e.currentTarget.id]
     })
-    //여기서 챠트에있는 데이터를 핸들링 해
-    if(onOff[keyTarget]){
-      setCloneLineData(cloneLineData.filter(value => value.id !== keyTarget))
-    }else{
-      setCloneLineData(lineData)
-    }
-
+    // //여기서 챠트에있는 데이터를 핸들링 해
+    // if(onOff[e.currentTarget.id]){
+    //   setCloneLineData(cloneLineData.filter(value => value.id !== e.currentTarget.id))
+    // }
   }
 
   // const handleFetchDetailData = useCallback(async ({}) => {
