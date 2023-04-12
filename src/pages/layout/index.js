@@ -118,7 +118,7 @@ function Layout() {
         {/* 보고서 */}
         {['reports', 'customReports'].includes(params.id) && <Reports/>}
         {/* 설정 */}
-        {['settings', 'settingsDetail', 'budgetEvent', 'budgetEventDetail', 'budgetTime', 'budgetTimeDetail'].includes(params.id) &&
+        {['settings', 'settingsDetail', 'budgetEvent', 'budgetEventDetail', 'budgetTime', 'budgetTimeDetail','budgetTimeList'].includes(params.id) &&
           <Settings/>}
         {/* 플랫폼 관리 */}
         {['platform', 'platformDetail', 'categoryManage', 'productManage', 'conversionManage', 'paymentManage'].includes(params.id) &&

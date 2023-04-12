@@ -78,7 +78,8 @@ export const columnUserData = [
   {
     name: 'hostType',
     header: '솔루션 타입',
-    render: ({value}) => {
+    render: ({value,cellProps}) => {
+      console.log(cellProps)
       return (
         <>{hostList.find(obj => obj.value === value).label}</>
       )

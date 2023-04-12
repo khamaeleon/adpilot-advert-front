@@ -11,6 +11,7 @@ import BudgetEvent from "./BudgetEvent";
 import BudgetEventDetail from "./BudgetEventDetail";
 import BudgetTime from "./BudgetTime";
 import BudgetTimeDetail from "./BudgetTimeDetail";
+import BudgetTimeList from "./BudgetTimeList";
 
 export default function Settings() {
   const params = useParams()
@@ -28,6 +29,7 @@ export default function Settings() {
         {params.id === 'budgetEventDetail' && <BudgetEventDetail/>}
         {params.id === 'budgetTime' && <BudgetTime/>}
         {params.id === 'budgetTimeDetail' && <BudgetTimeDetail/>}
+        {params.id === 'budgetTimeList' && <BudgetTimeList/>}
       </BoardContainer>
     </main>
   )
