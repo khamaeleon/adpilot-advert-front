@@ -16,9 +16,10 @@ import {modalController} from "../../../store";
 import {Controller, useFormContext} from "react-hook-form";
 import TimeTable from "../../../components/modal/TimeTable";
 import {biddingTypeAll, campaignBasicInfoAtom, campaignBudgetInfoAtom} from "../entity/Info";
-import {selBudgetTimeList} from "../../../services/settings/BudgetTimeAxios";
+import {selBudgetTimeDetailInfo, selBudgetTimeList} from "../../../services/settings/BudgetTimeAxios";
 import {selBudgetEventList} from "../../../services/settings/BudgetEventAxios";
 import {selPriceEventList} from "../../../services/settings/EventPriceAxios";
+import {timeBudgetDetailDataAtom} from "../../settings/entity/BudgetTime";
 
 export function CampaignTwo() {
   const [stepCampaign, setStepCampaign] = useAtom(stepCampaignAtom)
@@ -29,7 +30,7 @@ export function CampaignTwo() {
   const [budgetEventListState, setBudgetEventListState] =useState(null)
   const [priceEventListState, setPriceEventListState] =useState(null)
   const [biddingType] =useState(biddingTypeAll)
-
+  const [timeBudgetDetailDataState, setTimeBudgetDetailDataState] = useAtom(timeBudgetDetailDataAtom)
   const setModal = useSetAtom(modalController)
   const {register,handleSubmit ,control, formState:{errors}} = useFormContext()
   const [stepTwo, setStepTwo] = useState({
@@ -56,6 +57,7 @@ export function CampaignTwo() {
     })
     selBudgetTimeList(campaignBasicInfo.userId).then(response => {
       if(response){
+        setTimeBudgetDetailDataState(response)
         let budgetTimeList = []
         response.timeGroups.map(data => {
           budgetTimeList = [...budgetTimeList, {value: data.eventId, label: data.groupName}]
@@ -90,6 +92,10 @@ export function CampaignTwo() {
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
       budgetTimeId:selectedBudgetTime,
+    })
+    selBudgetTimeDetailInfo(campaignBasicInfoAtom.userId, selectedBudgetTime.value).then(response => {
+      console.log(response)
+      setTimeBudgetDetailDataState(response)
     })
   }
   /**
@@ -284,7 +290,7 @@ export function CampaignTwo() {
                 </ColSpan1>
                 {stepTwo.timeGroup.value !== "" &&
                   <ColSpan1>
-                    <TimeTable title={'설정된 시간별 예산'} readOnly={true}/>
+                    <TimeTable exposeTimeType={timeBudgetDetailDataState.exposeTimeType} title={'설정된 시간별 예산'} readOnly={true}/>
                   </ColSpan1>
                 }
                 {errors.budgetTimeId && <ColSpan1><ValidationScript>{errors.budgetTimeId.message}</ValidationScript></ColSpan1>}
