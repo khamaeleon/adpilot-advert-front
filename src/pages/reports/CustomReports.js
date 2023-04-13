@@ -6,14 +6,14 @@ import {
   CalendarBox,
   CalendarIcon,
   ColSpan1,
-  ColSpan2,
+  ColSpan2, ColSpan3, ColTitle,
   CustomDatePicker,
   DateContainer,
   DefaultButton,
   DeleteButton,
   RangePicker,
   RowSpan,
-  selectStyle,
+  selectStyle, Span1,
   Span4
 } from "../../assets/GlobalStyles";
 import {ValidationGroup} from "../campaign/styles/common";
@@ -110,19 +110,19 @@ export default function CustomReports() {
           </RowSpan>
           <RowSpan>
             <ColSpan1>
-              <Span4>광고 상품</Span4>
+              <ColTitle><Span4>광고 상품</Span4></ColTitle>
               <Select styles={selectStyle} options={[{key:1,value:1,label: '전체'}]}/>
             </ColSpan1>
             <ColSpan1/>
             <ColSpan1>
-              <Span4>디바이스</Span4>
+              <ColTitle><Span4>디바이스</Span4></ColTitle>
               <Select styles={selectStyle} options={[{key:1,value:1,label: '전체'}]}/>
             </ColSpan1>
             <ColSpan1/>
           </RowSpan>
           <RowSpan>
             <ColSpan1>
-              <Span4>기간</Span4>
+              <Span1>기간</Span1>
               <div style={{width:'100%'}}>
                 <DateContainer>
                   <CalendarBox>

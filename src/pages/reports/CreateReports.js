@@ -1,7 +1,8 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchResult, ColSpan1, ColSpan2,
+  BoardSearchResult,
+  ColSpan1, ColSpan2,
   Input,
   RelativeDiv,
   RowSpan,
@@ -16,12 +17,14 @@ import {Row} from "../campaign/styles/common";
 import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
 import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 import {OpenReports} from "../../components/modal/OpenReports";
+import {customReportsData} from "./entity/Common";
+import {toast, ToastContainer} from "react-toastify";
 
 const columnList= {
-  date: "날짜",
   daily:"일별",
   weeks:"주별",
   month:"월별",
+  eventName: "이벤트 명",
   advertiserCnt:"광고주수",
   advertiserName:"광고주명",
   advertiserId:"광고주 아이디",
@@ -41,19 +44,24 @@ const columnList= {
   ecpm:"eCPM",
 }
 export default function CreateReports() {
-  const [columns, setColumns] = useState([
-    {
-      name: 'date',
-      header:'날짜별',
-      textAlign: 'center',
-      resizable: false,
-      sortable: false,
-      showColumnMenuTool: false,
-      headerProps: {style: {backgroundColor: '#fafafa',color: '#222'}}
-    }
-  ])
+  const [columns, setColumns] = useState([])
+  const [reportName, setReportName] = useState("")
   const handleSearchAdvertiser = () => {
 
+  }
+
+  const handleAddPeriodItem = (item) => {
+    const data = {
+      name: item,
+      header: columnList[item],
+      textAlign: 'center',
+      sortable: false,
+      resizable: false,
+      showColumnMenuTool: false,
+      draggable: false,
+    }
+    setColumns([data])
+    console.log(columns)
   }
 
   const handleAddReportsItem = (item) => {
@@ -64,19 +72,38 @@ export default function CreateReports() {
       sortable: false,
       resizable: false,
       showColumnMenuTool: false,
-      headerProps: {style: {backgroundColor: '#fafafa',color: '#222'}}
+      draggable:false,
     }
-    if(columns.filter(datum => datum.name === item).length === 0){
-      setColumns(prev => [...prev, data])
+    if(columns.length === 0){
+      toast("기간을 설정해주세요")
     } else {
-      const newColumnData = columns.filter(datum => datum.name !== item)
-      setColumns(newColumnData)
+      if(columns.filter(datum => datum.name === item).length === 0){
+        setColumns(prev => [...prev, data])
+      } else {
+        const newColumnData = columns.filter(datum => datum.name !== item)
+        setColumns(newColumnData)
+      }
     }
+    console.log(columns)
   }
 
   const includeItem = (name) => {
     const i = columns.filter((item) => { return item.name === name });
     return i[0]?.name === name
+  }
+
+  const handleChangeReportName = (e) => {
+    setReportName(e.target.value)
+  }
+  const handleCreateReports = () => {
+    if(columns.length < 3){
+      toast("보고서 항목을 선택해주세요")
+    } else if(reportName === ""){
+      toast("보고서 명을 작성해주세요")
+
+    } else {
+      console.log(reportName)
+    }
   }
 
   return(
@@ -101,22 +128,27 @@ export default function CreateReports() {
           <ReportsItemContainer>
             <RowSpan box={true} column={true}>
               <Row>
-                <Span4>기준 항목</Span4>
+                <Span4>기간</Span4>
               </Row>
               <Row>
                 <DefaultItemContainer>
                   <DefaultItemButton
                     active={includeItem('daily')}
-                    onClick={()=>handleAddReportsItem('daily')}>일별</DefaultItemButton>
+                    onClick={()=>handleAddPeriodItem('daily')}>일별</DefaultItemButton>
                   <DefaultItemButton
                     active={includeItem('weeks')}
-                    onClick={()=>handleAddReportsItem('weeks')}>주별</DefaultItemButton>
+                    onClick={()=>handleAddPeriodItem('weeks')}>주별</DefaultItemButton>
                   <DefaultItemButton
                     active={includeItem('month')}
-                    onClick={()=>handleAddReportsItem('month')}>월별</DefaultItemButton>
-                  <DefaultItemButton
-                    active={includeItem('advertiserCnt')}
-                    onClick={()=>handleAddReportsItem('advertiserCnt')}>광고주수</DefaultItemButton>
+                    onClick={()=>handleAddPeriodItem('month')}>월별</DefaultItemButton>
+                </DefaultItemContainer>
+              </Row>
+              <VerticalRule/>
+              <Row>
+                <Span4>광고 정보</Span4>
+              </Row>
+              <Row>
+                <DefaultItemContainer>
                   <DefaultItemButton
                     active={includeItem('advertiserName')}
                     onClick={()=>handleAddReportsItem('advertiserName')}>광고주명</DefaultItemButton>
@@ -129,6 +161,9 @@ export default function CreateReports() {
                   <DefaultItemButton
                     active={includeItem('creative')}
                     onClick={()=>handleAddReportsItem('creative')}>광고 상품</DefaultItemButton>
+                  <DefaultItemButton
+                    active={includeItem('eventName')}
+                    onClick={()=>handleAddReportsItem('eventName')}>이벤트 명</DefaultItemButton>
                 </DefaultItemContainer>
               </Row>
               <VerticalRule/>
@@ -137,6 +172,9 @@ export default function CreateReports() {
               </Row>
               <Row>
                 <DefaultItemContainer>
+                  <DefaultItemButton
+                    active={includeItem('advertiserCnt')}
+                    onClick={()=>handleAddReportsItem('advertiserCnt')}>광고주수</DefaultItemButton>
                   <DefaultItemButton
                     active={includeItem('exposureAll')}
                     onClick={()=>handleAddReportsItem('exposureAll')}>총 노출수</DefaultItemButton>
@@ -181,14 +219,17 @@ export default function CreateReports() {
         <BoardSearchResult>
           <div style={{display:'flex'}}>
             <Span4>보고서 생성 결과</Span4>
-            <small>* 현재 보고서에 생성된 데이터는 예시입니다.</small>
+            <small>* 현재 보고서에 생성된 데이터는 예시입니다. 컬럼의 순서는 변경이 가능합니다.</small>
           </div>
           <RowSpan column={true}>
             <RowSpan>
-              <ColSpan1>
-                <Span4>보고서 명</Span4>
-                <Input placeholder={'보고서 명을 작성해주세요'}/>
-              </ColSpan1>
+              <ColSpan2>
+                <Span4><span style={{color:'red'}}>*</span> 보고서 명</Span4>
+                <Input
+                  onChange={handleChangeReportName}
+                  value={reportName || ""}
+                  placeholder={'보고서 명을 작성해주세요'}/>
+              </ColSpan2>
             </RowSpan>
             <RowSpan>
               <ReactDataGrid
@@ -199,14 +240,25 @@ export default function CreateReports() {
                 showZebraRows={false}
                 activateRowOnFocus
                 emptyText={'데이터가 없습니다.'}
+                {...customReportsData}
               />
             </RowSpan>
           </RowSpan>
         </BoardSearchResult>
       </Board>
       <SubmitContainer>
-        <SubmitButton type={'button'}>보고서 생성</SubmitButton>
+        <SubmitButton type={'button'} onClick={handleCreateReports}>보고서 생성</SubmitButton>
       </SubmitContainer>
+      <ToastContainer position="top-center"
+                      autoClose={1500}
+                      hideProgressBar
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                      style={{zIndex: 9999999}}/>
     </>
   )
 }
