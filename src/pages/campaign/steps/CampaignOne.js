@@ -10,7 +10,7 @@ import {
 } from "../../../assets/GlobalStyles";
 import {BorderSpan, CampaignTypeItem, CampaignTypeItem2, Validation, ValidationGroup} from "../styles/common";
 import Select from "react-select";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {SearchAdvertiser} from "../../../components/common/SearchAdvertiser";
 import {useAtom, useSetAtom} from "jotai";
 import {modalController} from "../../../store";
@@ -21,40 +21,53 @@ import {campaignBasicInfo, campaignBasicInfoAtom, goalConversionType} from "../e
 import {PixelModal} from "../../pixel/PixelList";
 import {pixelDataAtom} from "../../pixel/entity/Pixel";
 import {selAdverPixelDetailList} from "../../../services/header/ManagePixelAxios";
+import {resistCampaignBasic, selEnumInfo} from "../../../services/campaign/InfoAxios";
 
-export function CampaignOne () {
+export function CampaignOne() {
   const [stepCampaign, setStepCampaign] = useAtom(stepCampaignAtom)
   const [campaignBasicInfo, setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
   const [adverInfo, setAdverInfo] = useState(null)
-  const [goalList, setGoalList] = useState(goalConversionType)
+  const [goalList, setGoalList] = useState(null)
   const setModal = useSetAtom(modalController)
-  const [pixelList,setPixelList] =useState(null)
-  const {register,handleSubmit ,control, formState:{errors}} = useFormContext()
+  const [pixelList, setPixelList] = useState(null)
+  const {register, handleSubmit, setValue, setError, control, formState: {errors}} = useFormContext()
   const [stepOne, setStepOne] = useState({
     advertiser: '',
-    pixel:'',
+    pixel: '',
     productType: 'banner',
-    productTarget: 'transform',
-    targetDetail:''
+    productTarget: 'CAMPAIGN_CONVERSION_GOAL',
+    targetDetail: ''
   })
-
+  useEffect(() => {
+    setCampaignBasicInfo({
+      ...campaignBasicInfo,
+      productType:'BANNER',
+      pixelId:'',
+      goal:'',
+      goalValue:0
+    })
+    selEnumInfo('CAMPAIGN_CONVERSION_GOAL').then(response => {
+      setGoalList(response.data)
+    })
+  }, [])
   const handleSearchAdvertiser = (data) => {
     console.log(data)
     setCampaignBasicInfo({
       ...campaignBasicInfo,
-      userId:data.id,
-      username:data.username
+      userId: data.id,
+      username: data.username
     })
+    setValue('username', data.username);
     setAdverInfo({
-      userId:data.id,
-      username:data.username,
-      managerName:data.staffName,
-      adverName:data.adverName
+      userId: data.id,
+      username: data.username,
+      managerName: data.staffName,
+      adverName: data.adverName
     })
-    selAdverPixelDetailList(data.id).then(response =>{
-      let clonePixelList =[]
-      response.map(data =>{
-        clonePixelList =[...clonePixelList, {value:data.pixelId,label:data.pixelName}]
+    selAdverPixelDetailList(data.id).then(response => {
+      let clonePixelList = []
+      response.map(data => {
+        clonePixelList = [...clonePixelList, {value: data.pixelId, label: data.pixelName}]
       })
       setPixelList(clonePixelList)
     })
@@ -64,30 +77,56 @@ export function CampaignOne () {
   const handleChangePixel = (pixelValue) => {
     setCampaignBasicInfo({
       ...campaignBasicInfo,
-      pixelId:pixelValue,
+      pixelId: pixelValue,
     })
   }
 
-  const handleChangeTargetDetail = (target) => {
-    setStepOne({
-      ...stepOne,
-      targetDetail: target.value
+  const handleChangeTargetDetail = (goalInfo) => {
+    setCampaignBasicInfo({
+      ...campaignBasicInfo,
+      goal: goalInfo,
     })
   }
 
   const handleChangeProductType = (type) => {
     setCampaignBasicInfo({
       ...campaignBasicInfo,
-      productType:type,
+      productType: type,
     })
   }
 
   const handleChangeProductTarget = (type) => {
-    setGoalList()
+    selEnumInfo(type).then(response => {
+      setGoalList(response.data)
+    })
+    setCampaignBasicInfo({
+      ...campaignBasicInfo,
+      goal: '',
+    })
+    setStepOne({
+      ...stepOne,
+      productTarget: type
+    })
   }
+
+  const handleGoalValue = (event) =>{
+    setCampaignBasicInfo({
+      ...campaignBasicInfo,
+      goalValue: parseInt(event.target.value)
+    })
+  }
+
   const onSubmit = (data) => {
-    console.log(data)
-    setStepCampaign({steps:1})
+    console.log(campaignBasicInfo)
+    setStepCampaign({steps: 1})
+    resistCampaignBasic({...campaignBasicInfo,goal:campaignBasicInfo.goal.value,pixelId:campaignBasicInfo.pixelId.value}).then(response =>{
+      if(response){
+        setCampaignBasicInfo({
+          ...campaignBasicInfo,
+          campaignId:response.value
+        })
+      }
+    })
   }
 
   return (
@@ -100,13 +139,14 @@ export function CampaignOne () {
               <Span4>광고주 설정</Span4>
               <ColSpan2>
                 <Input
+                  type={'text'}
                   style={{width: 300}}
-                  readOnly
+                  readOnly={true}
+                  value={campaignBasicInfo !== null && campaignBasicInfo.username || ''}
                   placeholder={'광고주를 검색해주세요'}
                   {...register("username", {
                     required: "광고주를 검색해주세요",
                   })}
-                  value={campaignBasicInfo !==null ? campaignBasicInfo.username :''}
                 />
                 <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
               </ColSpan2>
@@ -131,12 +171,12 @@ export function CampaignOne () {
                   control={control}
                   rules={{
                     required: {
-                      value: pixelList !==null && pixelList.pixelId === "",
+                      value: campaignBasicInfo?.pixelId === '',
                       message: "최적화 픽셀을 선택해주세요"
                     }
                   }}
                   render={({field}) => (
-                    <Select options={pixelList !==null && pixelList}
+                    <Select options={pixelList !== null ? pixelList :[]}
                             placeholder={'최적화 픽셀 선택'}
                             {...field}
                             value={campaignBasicInfo !== null ? campaignBasicInfo.pixelId : ''}
@@ -151,12 +191,12 @@ export function CampaignOne () {
                     />
                   )}
                 />
-                <PixelModal title={'추가'} data={adverInfo !==null && adverInfo}/>
+                <PixelModal title={'추가'} data={adverInfo !== null && adverInfo}/>
               </BorderSpan>
             </ColSpan4>
           </RowSpan>
           <ValidationGroup>
-            {errors.pixelId &&<Validation>{errors.pixelId?.message}</Validation>}
+            {errors.pixelId && <Validation>{errors.pixelId?.message}</Validation>}
             <div/>
           </ValidationGroup>
           <RowSpan>
@@ -167,12 +207,18 @@ export function CampaignOne () {
           <RowSpan>
             <ColSpan4>
               <CampaignType>
-                <CampaignTypeItem active={campaignBasicInfo !==null ? campaignBasicInfo.productType === 'BANNER' : false} onClick={()=>handleChangeProductType('BANNER')}>
-                  <img src={`../assets/images/campaign/img_banner_${campaignBasicInfo !==null && campaignBasicInfo.productType === 'BANNER' ? "on" : "off"}.png`}/>
+                <CampaignTypeItem
+                  active={campaignBasicInfo !== null ? campaignBasicInfo.productType === 'BANNER' : false}
+                  onClick={() => handleChangeProductType('BANNER')}>
+                  <img
+                    src={`../assets/images/campaign/img_banner_${campaignBasicInfo !== null && campaignBasicInfo.productType === 'BANNER' ? "on" : "off"}.png`}/>
                   <p>배너</p>
                 </CampaignTypeItem>
-                <CampaignTypeItem active={campaignBasicInfo !==null ? campaignBasicInfo.productType === 'POP_UNDER' : false} onClick={()=>handleChangeProductType('POP_UNDER')}>
-                  <img src={`../assets/images/campaign/img_popunder_${campaignBasicInfo !==null && campaignBasicInfo.productType === 'POP_UNDER' ? "on" : "off"}.png`}/>
+                <CampaignTypeItem
+                  active={campaignBasicInfo !== null ? campaignBasicInfo.productType === 'POP_UNDER' : false}
+                  onClick={() => handleChangeProductType('POP_UNDER')}>
+                  <img
+                    src={`../assets/images/campaign/img_popunder_${campaignBasicInfo !== null && campaignBasicInfo.productType === 'POP_UNDER' ? "on" : "off"}.png`}/>
                   <p>팝언더</p>
                 </CampaignTypeItem>
               </CampaignType>
@@ -186,9 +232,21 @@ export function CampaignOne () {
           <RowSpan>
             <ColSpan4>
               <CampaignType>
-                <CampaignTypeItem2 active={stepOne.productTarget === 'CONVERSION'} onClick={()=>handleChangeProductTarget('CONVERSION')}><div>전환</div><div>전환 가능성과 관심도가 높은 대상에게 구매 또는 참여, 설치 등의 행동을 유도 합니다.</div></CampaignTypeItem2>
-                <CampaignTypeItem2 active={stepOne.productTarget === 'VISIT'} onClick={()=>handleChangeProductTarget('VISIT')}><div>방문</div><div>원하는 랜딩으로 사용자들의 방문을 극대화해서 마케팅 목표를 달성합니다.</div></CampaignTypeItem2>
-                <CampaignTypeItem2 active={stepOne.productTarget === 'VIEW'} onClick={()=>handleChangeProductTarget('VIEW')}><div>노출</div><div>광고주의 크리에이티브 노출을 극대화해서 홍보 및 브랜딩을 강화합니다.</div></CampaignTypeItem2>
+                <CampaignTypeItem2 active={stepOne.productTarget === 'CAMPAIGN_CONVERSION_GOAL'}
+                                   onClick={() => handleChangeProductTarget('CAMPAIGN_CONVERSION_GOAL')}>
+                  <div>전환</div>
+                  <div>전환 가능성과 관심도가 높은 대상에게 구매 또는 참여, 설치 등의 행동을 유도 합니다.</div>
+                </CampaignTypeItem2>
+                <CampaignTypeItem2 active={stepOne.productTarget === 'CAMPAIGN_VISIT_GOAL'}
+                                   onClick={() => handleChangeProductTarget('CAMPAIGN_VISIT_GOAL')}>
+                  <div>방문</div>
+                  <div>원하는 랜딩으로 사용자들의 방문을 극대화해서 마케팅 목표를 달성합니다.</div>
+                </CampaignTypeItem2>
+                <CampaignTypeItem2 active={stepOne.productTarget === 'CAMPAIGN_VIEW_GOAL'}
+                                   onClick={() => handleChangeProductTarget('CAMPAIGN_VIEW_GOAL')}>
+                  <div>노출</div>
+                  <div>광고주의 크리에이티브 노출을 극대화해서 홍보 및 브랜딩을 강화합니다.</div>
+                </CampaignTypeItem2>
               </CampaignType>
             </ColSpan4>
           </RowSpan>
@@ -196,34 +254,53 @@ export function CampaignOne () {
             <ColSpan4>
               <Span4>캠페인 상세 목표 선택</Span4>
               <ColSpan3>
-                <Controller
-                  name="targetDetail"
-                  control={control}
-                  rules={{
-                    required: {
-                      value: stepOne.targetDetail === "",
-                      message: "캠페인 상세 목표를 설정해주세요"
-                    }
-                  }}
-                  render={({field}) => (
-                    <Select
-                      options={[{key:1,value:'',label:'노출'}]}
-                      styles={selectStyle}
-                      placeholder={'목표 선택'}
-                      {...field}
-                      value={stepOne.targetDetail !== '' ? stepOne.targetDetail : ''}
-                      onChange={handleChangeTargetDetail}
-                    />
-                  )}
-                />
-              <Input style={{width: 300,  textAlign:'right'}} disabled value={'1,000,000회'}/>
+                <div>
+                  <Controller
+                    name="goal"
+                    control={control}
+                    rules={{
+                      required: {
+                        value: campaignBasicInfo !== null && campaignBasicInfo.goal === "",
+                        message: "캠페인 상세 목표를 설정해주세요"
+                      }
+                    }}
+                    render={({field}) => (
+                      <Select
+                        options={goalList !== null ? goalList : []}
+                        styles={selectStyle}
+                        placeholder={'목표 선택'}
+                        {...field}
+                        value={campaignBasicInfo !== null && campaignBasicInfo.goal ? campaignBasicInfo.goal : ''}
+                        onChange={handleChangeTargetDetail}
+                      />
+                    )}
+                  />
+                  {errors.goal && <ValidationScript>{errors.goal?.message}</ValidationScript>}
+                </div>
+                <div>
+                  <Controller
+                    name="goalValue"
+                    control={control}
+                    rules={{
+                      required: {
+                        value: campaignBasicInfo !== null && campaignBasicInfo.goalValue === 0,
+                        message: "캠페인 상세 목표 금액을 입력해주세요."
+                      }
+                    }}
+                    render={({ field }) =>(
+                      <Input type={'number'}
+                             min={0}
+                             placeholder={"캠페인 상세 목표 금액을 입력해주세요."}
+                             style={{width: 300, textAlign: 'right'}}
+                             value={campaignBasicInfo !== null && campaignBasicInfo.goalValue}
+                             onChange={(e)=>handleGoalValue(e)}
+                      /> )}
+                  />
+                  {errors.goalValue && <ValidationScript>{errors.goalValue?.message}</ValidationScript>}
+                </div>
               </ColSpan3>
             </ColSpan4>
           </RowSpan>
-          <ValidationGroup>
-            {errors.targetDetail &&<Validation>{errors.targetDetail?.message}</Validation>}
-            <div/>
-          </ValidationGroup>
         </BoardSearchResult>
       </Board>
       <SubmitContainer>

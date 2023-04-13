@@ -832,6 +832,9 @@ export const ColSpan3 = styled.div`
   align-items: center;
   width: 75%;
   gap: 10px;
+  & > div {
+    position: relative;
+  }
   & > div:first-child {
     white-space: nowrap;
     flex-shrink: 0;

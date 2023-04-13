@@ -45,9 +45,11 @@ function SearchModal (props) {
   }
 
   const handleSearch = (e) => {
-    selKeywordUser(searchKeyword).then(response => {
-      setAdverSearchInfo(response)
-    })
+    if(searchKeyword!==''){
+      selKeywordUser(searchKeyword).then(response => {
+        setAdverSearchInfo(response)
+      })
+    }
   }
 
   return (
@@ -75,7 +77,7 @@ function SearchModal (props) {
               <table>
                 <thead>
                 <tr>
-                  <th>매체명</th>
+                  <th>광고주명</th>
                   <th>아이디</th>
                   <th>담당자명</th>
                 </tr>

@@ -1,9 +1,9 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
   Board,
   BoardHeader,
   BoardSearchResult, CancelButton, ColSpan1, ColSpan2,
-  ColSpan4, Input,
+  ColSpan4, Input, inputStyle,
   RelativeDiv,
   RowSpan, selectStyle, Span1, Span2,
   Span4, SubmitButton, SubmitContainer, ValidationScript
@@ -15,9 +15,21 @@ import {stepCampaignAtom} from "../entity";
 import {modalController} from "../../../store";
 import {Controller, useFormContext} from "react-hook-form";
 import TimeTable from "../../../components/modal/TimeTable";
+import {biddingTypeAll, campaignBasicInfoAtom, campaignBudgetInfoAtom} from "../entity/Info";
+import {selBudgetTimeList} from "../../../services/settings/BudgetTimeAxios";
+import {selBudgetEventList} from "../../../services/settings/BudgetEventAxios";
+import {selPriceEventList} from "../../../services/settings/EventPriceAxios";
 
 export function CampaignTwo() {
   const [stepCampaign, setStepCampaign] = useAtom(stepCampaignAtom)
+  const [campaignBasicInfo, setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
+  const [campaignBudgetInfo, setCampaignBudgetInfo] = useAtom(campaignBudgetInfoAtom)
+
+  const [budgetTimeListState, setBudgetTimeListState] =useState(null)
+  const [budgetEventListState, setBudgetEventListState] =useState(null)
+  const [priceEventListState, setPriceEventListState] =useState(null)
+  const [biddingType] =useState(biddingTypeAll)
+
   const setModal = useSetAtom(modalController)
   const {register,handleSubmit ,control, formState:{errors}} = useFormContext()
   const [stepTwo, setStepTwo] = useState({
@@ -31,32 +43,128 @@ export function CampaignTwo() {
     eventUnitPrice: "",
     weightGroup: ""
   })
+  useEffect(() =>{
+    setCampaignBudgetInfo({
+      ...campaignBudgetInfo,
+      campaignId:campaignBasicInfo.campaignId,
+      budgetTimeId:'',
+      budgetEventId:'',
+      priceEventId:'',
+      biddingType:'CPC',
+      infiniteBudget:false,
+      budgetRate: 50
+    })
+    selBudgetTimeList(campaignBasicInfo.userId).then(response => {
+      if(response){
+        let budgetTimeList = []
+        response.timeGroups.map(data => {
+          budgetTimeList = [...budgetTimeList, {value: data.eventId, label: data.groupName}]
+        })
+        setBudgetTimeListState(budgetTimeList)
+      }
+    })
+    selBudgetEventList(campaignBasicInfo.userId).then(response => {
+      if(response){
+        let budgetEventList = []
+        response.budgetEventDtos.map(data => {
+          budgetEventList = [...budgetEventList, {value: data.eventId, label: data.groupName}]
+        })
+        setBudgetEventListState(budgetEventList)
+      }
+    })
+    selPriceEventList(campaignBasicInfo.userId).then(response => {
+      if(response){
+        let priceEventList = []
+        response.priceEventDtos.map(data => {
+          priceEventList = [...priceEventList, {value: data.eventId, label: data.groupName}]
+        })
+        setPriceEventListState(priceEventList)
+      }
+    })
+  },[])
+  /**
+   * 시간대별 예산 셀렉트
+   * @param selectedBudgetTime
+   */
+  const handleChangeBudgetTimes =(selectedBudgetTime)=>{
+    setCampaignBudgetInfo({
+      ...campaignBudgetInfo,
+      budgetTimeId:selectedBudgetTime,
+    })
+  }
+  /**
+   * 이벤트 단가 셀렉트
+   * @param selectedPriceEvent
+   */
+  const handleChangePriceEvent =(selectedPriceEvent)=>{
+    setCampaignBudgetInfo({
+      ...campaignBudgetInfo,
+      priceEventId:selectedPriceEvent,
+    })
+  }
+  /**
+   * 이벤트 예산 셀렉트
+   * @param selectedBudgetEvents
+   */
+  const handleChangeBudgetEvents =(selectedBudgetEvents)=>{
+    setCampaignBudgetInfo({
+      ...campaignBudgetInfo,
+      budgetEventId:selectedBudgetEvents,
+    })
+  }
+
+  const handleBiddingType =(selectedBiddingType)=>{
+    setCampaignBudgetInfo({
+      ...campaignBudgetInfo,
+      biddingType:selectedBiddingType,
+    })
+  }
+
 
   const handleCheckInfiniteBudget = (e) => {
-    setStepTwo({
-      ...stepTwo,
+    setCampaignBudgetInfo({
+      ...campaignBudgetInfo,
       infiniteBudget: e.target.checked
     })
   }
 
-  const handleChangeDailyBudget = (e) => {
-    setStepTwo({
-      ...stepTwo,
-      dailyBudget: e.target.value
+  const handleChangeDailyBudget = (event) => {
+    setCampaignBudgetInfo({
+      ...campaignBudgetInfo,
+      dailyAvgBudget: parseInt(event.target.value),
+      pcBudget:parseInt(event.target.value)-((parseInt(event.target.value)*campaignBudgetInfo.budgetRate)/100),
+      mobBudget:(parseInt(event.target.value)*campaignBudgetInfo.budgetRate)/100
     })
   }
 
+  const handleChangePcBudget = (event) => {
+    setCampaignBudgetInfo({
+      ...campaignBudgetInfo,
+      pcBudget: parseInt(event.target.value),
+      mobBudget:campaignBudgetInfo.dailyAvgBudget - parseInt(event.target.value)
+    })
+  }
+
+  const handleChangeMobileBudget = (event) => {
+    setCampaignBudgetInfo({
+      ...campaignBudgetInfo,
+      mobBudget: parseInt(event.target.value),
+      pcBudget: campaignBudgetInfo.dailyAvgBudget - parseInt(event.target.value),
+    })
+  }
   const handleChangeInputRange = (e) => {
-    setStepTwo({
-      ...stepTwo,
-      budgetRate: e.target.value
+    setCampaignBudgetInfo({
+      ...campaignBudgetInfo,
+      budgetRate:e.target.value,
+      pcBudget:campaignBudgetInfo.dailyAvgBudget-((campaignBudgetInfo.dailyAvgBudget*e.target.value)/100),
+      mobBudget:(campaignBudgetInfo.dailyAvgBudget*e.target.value)/100
     })
   }
 
   const handleChangeMaxBid = (e) => {
-    setStepTwo({
-      ...stepTwo,
-      maxBid: e.target.value
+    setCampaignBudgetInfo({
+      ...campaignBudgetInfo,
+      maxBiddingPrice:e.target.value
     })
   }
   const onSubmit = (data) => {
@@ -76,16 +184,26 @@ export function CampaignTwo() {
               <Span4>일일 평균 예산</Span4>
               <RelativeDiv>
                 <ColSpan1>
-                  <Input
-                    readOnly={stepTwo.infiniteBudget}
-                    value={stepTwo.dailyBudget || 0}
-                    {...register('dailyBudget',{
-                    required: {
-                      value: stepTwo.dailyBudget === '',
-                      message: '일일 평균 예산을 설정해주세요.'
-                    },
-                    onChange: handleChangeDailyBudget
-                  })}/>
+                  <Controller
+                    name="dailyAvgBudget"
+                    control={control}
+                    rules={{
+                      required: {
+                        value: campaignBudgetInfo !== null && campaignBudgetInfo.dailyAvgBudget === 0,
+                        message: '일일 평균 예산을 설정해주세요.'
+                      }
+                    }}
+                    render={({ field }) =>(
+                      <Input type={'number'}
+                             min={100}
+                             readOnly={campaignBudgetInfo !== null && campaignBudgetInfo.infiniteBudget}
+                             placeholder={'일일 평균 예산을 설정해주세요.'}
+                             style={{width: 300, textAlign: 'right'}}
+                             value={campaignBudgetInfo !== null && campaignBudgetInfo.dailyAvgBudget}
+                             onChange={(e)=>handleChangeDailyBudget(e)}
+                      /> )}
+                  />
+                  {errors.dailyAvgBudget && <ValidationScript>{errors.dailyAvgBudget?.message}</ValidationScript>}
                   <Won/>
                 </ColSpan1>
                 <ColSpan1>
@@ -95,7 +213,7 @@ export function CampaignTwo() {
                     <span>일일 예산 무제한</span>
                   </label>
                 </ColSpan1>
-                <ColSpan1> {errors.dailyBudget && <ValidationScript>{errors.dailyBudget.message}</ValidationScript>}</ColSpan1>
+                <ColSpan1> {errors.dailyAvgBudget && <ValidationScript>{errors.dailyAvgBudget.message}</ValidationScript>}</ColSpan1>
               </RelativeDiv>
             </ColSpan4>
             <ColSpan4>
@@ -103,26 +221,32 @@ export function CampaignTwo() {
               <RelativeDiv>
                 <ColSpan1>
                   <Span1>PC</Span1>
-                  <Input
-                    value={stepTwo.dailyBudget-((stepTwo.dailyBudget*stepTwo.budgetRate)/100)}
+                  <Input type={'number'}
+                         min={100}
+                         style={{width: 300, textAlign: 'right'}}
+                         value={campaignBudgetInfo !== null && campaignBudgetInfo.pcBudget}
+                         onChange={(e)=>handleChangePcBudget(e)}
                   />
                   <Won/>
                 </ColSpan1>
                 <ColSpan1>
                   <input
                     type="range"
-                    value={stepTwo.budgetRate}
+                    value={campaignBudgetInfo !== null && campaignBudgetInfo?.budgetRate}
                     onChange={handleChangeInputRange}
                     style={{
-                      background: `linear-gradient(to right, #f5811f 0%, #f5811f ${stepTwo.budgetRate}%, #ddd ${stepTwo.budgetRate}%, #ddd 100%)`
+                      background: `linear-gradient(to right, #f5811f 0%, #f5811f ${campaignBudgetInfo?.budgetRate}%, #ddd ${campaignBudgetInfo?.budgetRate}%, #ddd 100%)`
                     }}
                   />
-                  <Span1>{100-stepTwo.budgetRate}:{stepTwo.budgetRate}</Span1>
+                  <Span1>{100-campaignBudgetInfo?.budgetRate}:{campaignBudgetInfo?.budgetRate}</Span1>
                 </ColSpan1>
                 <ColSpan1>
                   <Span2>MOBILE</Span2>
-                  <Input
-                    value={(stepTwo.dailyBudget*stepTwo.budgetRate)/100}
+                  <Input type={'number'}
+                         min={100}
+                         style={{width: 300, textAlign: 'right'}}
+                         value={campaignBudgetInfo !== null && campaignBudgetInfo.mobBudget}
+                         onChange={(e)=>handleChangeMobileBudget(e)}
                   />
                   <Won/>
                 </ColSpan1>
@@ -133,28 +257,37 @@ export function CampaignTwo() {
               <RelativeDiv>
                 <ColSpan1>
                   <Controller
+                    name="budgetTimeId"
                     control={control}
-                    name='timeGroup'
                     rules={{
                       required: {
-                        value: stepTwo.timeGroup === "",
-                        message: "캠페인 상세 목표를 설정해주세요"
+                        value: campaignBudgetInfo?.budgetTimeId === '',
+                        message: "시간대 예산을 선택해주세요"
                       }
                     }}
                     render={({field}) => (
-                      <Select
-                        styles={selectStyle}
-                        {...field}
-                        options={[{key:1,value:1,label:'00:00 ~ 03:59'}]}/>
+                      <Select options={budgetTimeListState !== null ? budgetTimeListState :[]}
+                              placeholder={'시간대 예산 선택'}
+                              {...field}
+                              value={campaignBasicInfo !== null ? campaignBasicInfo.budgetTimeId : ''}
+                              onChange={handleChangeBudgetTimes}
+                              styles={{
+                                input: (baseStyles, state) => (
+                                  {
+                                    ...baseStyles,
+                                    minWidth: "300px",
+                                  })
+                              }}
+                      />
                     )}
-                    />
+                  />
                 </ColSpan1>
                 {stepTwo.timeGroup.value !== "" &&
                   <ColSpan1>
                     <TimeTable title={'설정된 시간별 예산'} readOnly={true}/>
                   </ColSpan1>
                 }
-                {errors.timeGroup && <ColSpan1><ValidationScript>{errors.timeGroup.message}</ValidationScript></ColSpan1>}
+                {errors.budgetTimeId && <ColSpan1><ValidationScript>{errors.budgetTimeId.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>
             <ColSpan4>
@@ -162,23 +295,32 @@ export function CampaignTwo() {
               <RelativeDiv>
                 <ColSpan1>
                   <Controller
+                    name="budgetEventId"
                     control={control}
-                    name='eventGroup'
                     rules={{
                       required: {
-                        value: stepTwo.eventGroup === "",
-                        message: "캠페인 상세 목표를 설정해주세요"
+                        value: campaignBudgetInfo?.budgetEventId === '',
+                        message: "시간대 예산을 선택해주세요"
                       }
                     }}
                     render={({field}) => (
-                      <Select
-                        styles={selectStyle}
-                        {...field}
-                        options={[{key:1,value:1,label:'쇼퍼 맞춤'}]}/>
+                      <Select options={budgetEventListState !== null ? budgetEventListState :[]}
+                              placeholder={'시간대 예산 선택'}
+                              {...field}
+                              value={campaignBasicInfo !== null ? campaignBasicInfo.budgetEventId : ''}
+                              onChange={handleChangeBudgetEvents}
+                              styles={{
+                                input: (baseStyles, state) => (
+                                  {
+                                    ...baseStyles,
+                                    minWidth: "300px",
+                                  })
+                              }}
+                      />
                     )}
                   />
                 </ColSpan1>
-                {errors.eventGroup && <ColSpan1><ValidationScript>{errors.eventGroup.message}</ValidationScript></ColSpan1>}
+                {errors.budgetEventId && <ColSpan1><ValidationScript>{errors.budgetEventId.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
@@ -190,24 +332,13 @@ export function CampaignTwo() {
               <Span4>입찰 방식</Span4>
               <RelativeDiv>
                 <ColSpan1>
-                  <Controller
-                    control={control}
-                    name='bidingType'
-                    rules={{
-                      required: {
-                        value: stepTwo.bidingType === "",
-                        message: "캠페인 상세 목표를 설정해주세요"
-                      }
-                    }}
-                    render={({field}) => (
-                      <Select
-                        styles={selectStyle}
-                        {...field}
-                        options={[{key:1,value:'',label:'입찰 방식 선택'}]}/>
-                    )}
+                  <Select styles={inputStyle}
+                          components={{IndicatorSeparator: () => null}}
+                          options={biddingType}
+                          value={biddingType.find(value => value.value === campaignBudgetInfo?.biddingType)}
+                          onChange={handleBiddingType}
                   />
                 </ColSpan1>
-                {errors.bidingType && <ColSpan1><ValidationScript>{errors.bidingType.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>
             <ColSpan4>
@@ -215,9 +346,9 @@ export function CampaignTwo() {
               <RelativeDiv>
                 <ColSpan1>
                   <Input
-                    {...register('maxBid',{
+                    {...register('maxBiddingPrice',{
                       required:{
-                        value: stepTwo.maxBid === '',
+                        value: campaignBudgetInfo !==null &&campaignBudgetInfo.maxBiddingPrice === '',
                         message: "최대 입찰가를 설정해주세요"
                       },
                       onChange: handleChangeMaxBid
@@ -225,7 +356,7 @@ export function CampaignTwo() {
                   />
                   <Won/>
                 </ColSpan1>
-                {errors.maxBid && <ColSpan1><ValidationScript>{errors.maxBid.message}</ValidationScript></ColSpan1>}
+                {errors.maxBiddingPrice && <ColSpan1><ValidationScript>{errors.maxBiddingPrice.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>
             <ColSpan4>
@@ -233,47 +364,32 @@ export function CampaignTwo() {
               <RelativeDiv>
                 <ColSpan1>
                   <Controller
+                    name="priceEventId"
                     control={control}
-                    name='eventUnitPrice'
                     rules={{
                       required: {
-                        value: stepTwo.eventUnitPrice === "",
-                        message: "캠페인 상세 목표를 설정해주세요"
+                        value: campaignBudgetInfo?.priceEventId === '',
+                        message: "시간대 예산을 선택해주세요"
                       }
                     }}
                     render={({field}) => (
-                      <Select
-                        styles={selectStyle}
-                        {...field}
-                        options={[{key:1,value:'',label:'입찰 방식 선택'}]}/>
+                      <Select options={priceEventListState !== null ? priceEventListState :[]}
+                              placeholder={'시간대 예산 선택'}
+                              {...field}
+                              value={campaignBasicInfo !== null ? campaignBasicInfo.priceEventId : ''}
+                              onChange={handleChangePriceEvent}
+                              styles={{
+                                input: (baseStyles, state) => (
+                                  {
+                                    ...baseStyles,
+                                    minWidth: "300px",
+                                  })
+                              }}
+                      />
                     )}
                   />
                 </ColSpan1>
-                {errors.eventUnitPrice && <ColSpan1><ValidationScript>{errors.eventUnitPrice.message}</ValidationScript></ColSpan1>}
-              </RelativeDiv>
-            </ColSpan4>
-            <ColSpan4>
-              <Span4>모수 가중치 그룹</Span4>
-              <RelativeDiv>
-                <ColSpan1>
-                  <Controller
-                    control={control}
-                    name='weightGroup'
-                    rules={{
-                      required: {
-                        value: stepTwo.weightGroup === "",
-                        message: "캠페인 상세 목표를 설정해주세요"
-                      }
-                    }}
-                    render={({field}) => (
-                      <Select
-                        styles={selectStyle}
-                        {...field}
-                        options={[{key:1,value:'',label:'모수 가중치'}]}/>
-                    )}
-                  />
-                </ColSpan1>
-                {errors.weightGroup && <ColSpan1><ValidationScript>{errors.weightGroup.message}</ValidationScript></ColSpan1>}
+                {errors.priceEventId && <ColSpan1><ValidationScript>{errors.priceEventId.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>

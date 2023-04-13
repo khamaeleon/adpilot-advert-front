@@ -2,6 +2,8 @@ import {atom} from "jotai";
 
 export const campaignBasicInfoAtom =atom(null)
 
+export const campaignBudgetInfoAtom =atom(null)
+
 export const goalConversionType = [
   {key:0, value:'CONVERSION_SESSION_ROAS', label:'정상 수집'},
   {key:1, value:'CONVERSION_DIRECT_ROAS', label:'수집 중지'},
@@ -21,4 +23,9 @@ export const goalVisitType = [
 export const goalViewType = [
   {key:0, value:'VIEW_COUNT', label:'정상 수집'},
   {key:1, value:'VIEW_CPM_COST', label:'수집 중지'}
+]
+
+export const biddingTypeAll = [
+  {key:0, value:'CPC', label:'CPC'},
+  {key:1, value:'CPM', label:'CPM'}
 ]
