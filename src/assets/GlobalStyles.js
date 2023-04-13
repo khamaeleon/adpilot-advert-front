@@ -1033,11 +1033,18 @@ export const ChartContainer = styled.div`
 export const ChartLabel = styled.div`
   display: flex;
   align-items: center;
-  gap: 50px;
+  gap: 25px;
   > div {
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-width: 100px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    &.off {
+      color: #ccc
+    }
     > p {
       display: flex;
       align-items: center;
@@ -1051,6 +1058,13 @@ export const ChartLabel = styled.div`
       }
     }
     > span {
+      display: flex;
+      width: 100%;
+      height: 30px;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+      border-top: 1px solid #ccc;
     }
   }
 `
@@ -1258,8 +1272,10 @@ export const CopyCode = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   background-size: 20px;
+  cursor: pointer;
   &:hover {
-    background-color: #f9fafb;
+    background-image: url("/assets/images/table/icon_copy_on.png");
+  background-image: -webkit-image-set(url("/assets/images/table/icon_copy_on.png") 1x, url("/assets/images/table/icon_copy_on@2x.png") 2x, url("/assets/images/table/icon_copy_on@3x.png") 3x);
   }
 `
 

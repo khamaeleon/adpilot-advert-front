@@ -39,20 +39,29 @@ import Select from "react-select";
 import Checkbox from "../../components/common/Checkbox";
 import {
   cloneLineDataAtom,
-  lineDataAtom,
+  lineDataAtom, onOffStatus,
   platformStatusAtom,
   platformStatusType,
   platformTotalCont
 } from "./entity/Chart";
-import {adverStatusAtom,} from "./entity/Campaign";
+import {adverListColumn, adverStatusAtom, adverStatusDetailAtom, adverStatusDetailColumn,} from "./entity/Campaign";
 import {productType, searchConditionAtom} from "./entity/Common";
-import {retrievePlatformStatus, retrieveUserPlatformStatus} from "../../services/dash_board/ChartAxios";
+import {
+  retrieveAdverOverview,
+  retrieveOverview,
+} from "../../services/dash_board/ChartAxios";
 import {tokenResultAtom} from "../login/entity/Common";
+import TableDetail from "../../components/table/TableDetail";
+import {
+  retrieveAdvertiserCampaignStatus,
+  retrieveAdvertiserStatus
+} from "../../services/dash_board/ManageCampaignAxios";
+import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../common/StringUtils";
 
 /** 플래폼 현황 차트 **/
 function PlatformResponsiveBar(props) {
   const {onOff, dataType, dataType2, platformData} = props
-  let clickData = [], exposureData = [], conversionData = [], userData = [], totalExposureData = [],
+  let clickData = [], exposureData = [], totalConversionData = [], userData = [], totalExposureData = [],
     totalClickData = [], clickRateData = [], costAmountData = [], cpcData = [], conversionRateData = [],
     costPerConversionData = [], avgConversionAmountData = [], sessionRoasData = [], directRoasData = [], exposureRoasData = [], totalRoasData = [], ecpmData = [];
   const [lineData, setLineData] = useAtom(lineDataAtom)
@@ -61,20 +70,19 @@ function PlatformResponsiveBar(props) {
   useEffect(() => {
     let lineDataMap={}
     if (platformData !== null) {
-      console.log(platformData)
       platformData.map((data, index) => {
         clickData = [...clickData, {x: data.historyDate, y: data.clickCount}]
         exposureData = [...exposureData, {x: data.historyDate, y: data.exposureCount}]
-        conversionData = [...conversionData, {x: data.historyDate, y: data.conversionCount}]
+        totalConversionData = [...totalConversionData, {x: data.historyDate, y: data.totalConversionCount}]
         userData = [...userData, {x: data.historyDate, y: data?.userCount}]
         totalExposureData = [...totalExposureData, {x: data.historyDate, y: data?.totalExposureCount}]
         totalClickData = [...totalClickData, {x: data.historyDate, y: data?.totalClickCount}]
         clickRateData = [...clickRateData, {x: data.historyDate, y: data.clickCount / (data.exposureCount*100)}]
         costAmountData = [...costAmountData, {x: data.historyDate, y: data?.costAmount}]
         cpcData = [...cpcData, {x: data.historyDate, y: data?.costAmount / data.clickCount}]
-        conversionRateData = [...conversionRateData, {x: data.historyDate, y: data.conversionCount / (data.clickCount*100)}]
-        costPerConversionData = [...costPerConversionData, {x: data.historyDate, y: data?.costAmount / data.conversionCount}]
-        avgConversionAmountData = [...avgConversionAmountData, {x: data.historyDate, y: data.totalConversionAmount / data.conversionCount}]
+        conversionRateData = [...conversionRateData, {x: data.historyDate, y: data.totalConversionCount / (data.clickCount*100)}]
+        costPerConversionData = [...costPerConversionData, {x: data.historyDate, y: data?.costAmount / data.totalConversionCount}]
+        avgConversionAmountData = [...avgConversionAmountData, {x: data.historyDate, y: data.totalConversionAmount / data.totalConversionCount}]
         sessionRoasData = [...sessionRoasData, {x: data.historyDate, y: data.sessionConversionAmount / (data.costAmount *100)}]
         directRoasData = [...directRoasData, {x: data.historyDate, y: data.directConversionAmount / (data.costAmount *100)}]
         exposureRoasData = [...exposureRoasData, {x: data.historyDate, y: data.exposureConversionAmount / (data.costAmount *100)}]
@@ -84,7 +92,7 @@ function PlatformResponsiveBar(props) {
       lineDataMap = [
           {id: 'clickCount', data: clickData}, //클릭수
           {id: 'exposureCount', data: exposureData},//노출수
-          {id: 'conversionCount', data: conversionData},//전환수
+          {id: 'totalConversionCount', data: totalConversionData},//전환수
           {id: "userCount", data: userData},//광고주수
           {id: "totalExposureCount", data: totalExposureData},//총 노출 수
           {id: "totalClickCount", data: totalClickData},//총 클릭 수
@@ -101,7 +109,6 @@ function PlatformResponsiveBar(props) {
           {id: "ecpm", data: ecpmData},//Ecpm
         ]
 
-      console.log(lineDataMap)
       setLineData([
         lineDataMap[0],
         lineDataMap[1],
@@ -184,6 +191,7 @@ function DashBoardIndex() {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [totalInfo, setTotalInfo] = useState(dataTotalInfo)
   const [adverStatusData, setAdverStatusData] = useAtom(adverStatusAtom)
+  const [adverStatusDetailData, setAdverStatusDetailData] = useAtom(adverStatusDetailAtom)
   const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
   const [dateRange, setDateRange] = useState([new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
@@ -194,34 +202,62 @@ function DashBoardIndex() {
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [dataType, setDataType] = useState('cpc')
   const [dataType2, setDataType2] = useState('costAmount')
-  const [onOff, setOnOff] = useState({clickCount: true, exposureCount: true, conversionCount: true})
+  const [onOff, setOnOff] = useState(onOffStatus)
   const [lineData, setLineData] = useAtom(lineDataAtom)
   const [cloneLineData, setCloneLineData] = useAtom(cloneLineDataAtom)
 
+  useEffect(() => {
+    setOnOff({
+      ...onOff,
+      [dataType]: true,
+      [dataType2]: true,
+    })
+  },[])
 
   useEffect(() => {
-    tokenUserInfo.role !== 'NORMAL' ? retrievePlatformStatus(searchCondition).then(response => {
-      handlePlatformData(response)
-    }) : retrieveUserPlatformStatus(tokenUserInfo.id, searchCondition).then(response => {
-      handlePlatformData(response)
-    })
-    setTotalInfo({
-      totalCount: 1
-    })
-  }, [])
+    if(tokenUserInfo.role !== 'NORMAL') {
+      //플랫폼 현황 조회
+      retrieveOverview(searchCondition).then(response => {
+        handlePlatformData(response)
+      })
+      //광고주 현황 조회
+      retrieveAdvertiserStatus(searchCondition).then(response => {
+        if(response !== null) {
+          setAdverStatusData(response)
+          setTotalInfo({
+            totalCount: response?.length
+          })
+        } else {
+          setAdverStatusData([])
+        }
+      })
+    } else {
+      //특정 광고주 광고 현황 조회
+      retrieveAdverOverview(tokenUserInfo.id, searchCondition).then(response => {
+        handlePlatformData(response)
+      })
+      //특정 광고주 캠페인 기준 조회
+
+    }
+  }, [searchCondition])
   useEffect(() => {
-    if(cloneLineData !==null){
-      let dummyArray =lineData
+    if(cloneLineData !== null){
+      let dummyArray = lineData
       if (!onOff.clickCount) {
         dummyArray = dummyArray.filter(value => value.id !== 'clickCount')
       }
       if (!onOff.exposureCount) {
         dummyArray = dummyArray.filter(value => value.id !== 'exposureCount')
       }
-      if (!onOff.conversionCount) {
-        dummyArray = dummyArray.filter(value => value.id !== 'conversionCount')
+      if (!onOff.totalConversionCount) {
+        dummyArray = dummyArray.filter(value => value.id !== 'totalConversionCount')
       }
-      console.log(dummyArray)
+      if(!onOff[dataType]) {
+        dummyArray = dummyArray.filter(value => value.id !== dataType)
+      }
+      if(!onOff[dataType2]) {
+        dummyArray = dummyArray.filter(value => value.id !== dataType2)
+      }
       setCloneLineData(dummyArray)
     }
   },[onOff])
@@ -233,29 +269,20 @@ function DashBoardIndex() {
       setIsCheckedAll(false)
     }
   }, [searchCondition.agentTypes]);
+
   const handlePlatformData = (response) => {
-    let clickCount, exposureCount, conversionCount, userCount, totalExposureCount, totalClickCount, costAmount,
+    let clickCount, exposureCount, totalConversionCount, userCount, totalExposureCount, totalClickCount, costAmount,
       conversionAmount, sessionConversionAmount, directConversionAmount, exposureConversionAmount, totalConversionAmount
     if (response) {
       setPlatformStatusData(response)
-      //response?.map(data => {
-      //   clickCount += data.clickCount
-      //   exposureCount += data.exposureCount
-      //   conversionCount += data.conversionCount
-      //   userCount += data?.userCount
-      //   totalExposureCount += data.totalExposureCount
-      //   totalClickCount += data.totalClickCount
-      //   costAmount += data.costAmount
-      //   conversionAmount += data.conversionAmount
-      //})
       clickCount = response.reduce((prev, next) => {
         return prev + next.clickCount
       }, 0);
       exposureCount = response.reduce((prev, next) => {
         return prev + next.exposureCount
       }, 0);
-      conversionCount = response.reduce((prev, next) => {
-        return prev + next.conversionCount
+      totalConversionCount = response.reduce((prev, next) => {
+        return prev + next.totalConversionCount
       }, 0);
       userCount = response.reduce((prev, next) => {
         return prev + next.userCount
@@ -287,24 +314,26 @@ function DashBoardIndex() {
 
       setPlatformChartTotal({
         ...platformChartTotal,
-        clickCountTotal: clickCount, //클릭수(유효) 합산
-        exposureCountTotal: exposureCount, //노출수 합산
-        conversionCountTotal: conversionCount, //전환수 합산
-        userCount: userCount, //광고주 수 합산
-        totalExposureCount: totalExposureCount, //총 노출수 합산
-        totalClickCount: totalClickCount, //총 클릭수(유효,무효) 합산
-        clickRate: clickCount / (exposureCount * 100), // 클릭률 평균( 클릭수 / (노출수 * 100) )
-        costAmount: costAmount, //비용 합산
-        cpc: costAmount / totalClickCount, //cpc 평균(총비용 / 총클릭)
-        conversionRate: conversionCount / clickCount,// 전환율 평균 (전환 수 / 클릭 수)
-        costPerConversion: costAmount / conversionCount,// 전환 단가 평균 (비용 / 전환수)
-        avgConversionAmount: conversionAmount / conversionCount, //평균 구매액 (총 수익 / 전환 수)
-        sessionRoas: sessionConversionAmount / costAmount, // roas 평균 (총 수익 / 비용)
-        directRoas: directConversionAmount / costAmount, // roas 평균 (총 수익 / 비용)
-        exposureRoas: exposureConversionAmount / costAmount, // roas 평균 (총 수익 / 비용)
-        totalRoas: totalConversionAmount  / costAmount, // roas 평균 (총 수익 / 비용)
-        ecpm: conversionAmount / (exposureCount * 1000), // ecpm 평균 (수익 / 노출 * 1000)
+        clickCountTotal: decimalFormat(clickCount), //클릭수(유효) 합산
+        exposureCountTotal: decimalFormat(exposureCount), //노출수 합산
+        totalConversionCount: decimalFormat(totalConversionCount), //전환수 합산
+        userCount: decimalFormat(userCount), //광고주 수 합산
+        totalExposureCount: decimalFormat(totalExposureCount), //총 노출수 합산
+        totalClickCount: decimalFormat(totalClickCount), //총 클릭수(유효,무효) 합산
+        clickRate: numberToFixedFormat(clickCount / (exposureCount * 100)) +' %', // 클릭률 평균( 클릭수 / (노출수 * 100) )
+        costAmount: moneyToFixedFormat(costAmount) +' 원', //비용 합산
+        cpc: moneyToFixedFormat(costAmount / totalClickCount) +' 원', //cpc 평균(총비용 / 총클릭)
+        conversionRate: numberToFixedFormat(totalConversionCount / clickCount) +' %',// 전환율 평균 (전환 수 / 클릭 수)
+        costPerConversion: moneyToFixedFormat(costAmount / totalConversionCount) +' 원',// 전환 단가 평균 (비용 / 전환수)
+        avgConversionAmount: moneyToFixedFormat(conversionAmount / totalConversionCount) +' 원', //평균 구매액 (총 수익 / 전환 수)
+        sessionRoas: moneyToFixedFormat(sessionConversionAmount / costAmount) +' 원', // roas 평균 (총 수익 / 비용)
+        directRoas: moneyToFixedFormat(directConversionAmount / costAmount) +' 원', // roas 평균 (총 수익 / 비용)
+        exposureRoas: moneyToFixedFormat(exposureConversionAmount / costAmount) +' 원', // roas 평균 (총 수익 / 비용)
+        totalRoas: moneyToFixedFormat(totalConversionAmount  / costAmount) +' 원', // roas 평균 (총 수익 / 비용)
+        ecpm: moneyToFixedFormat(conversionAmount / (exposureCount * 1000)) +' 원', // ecpm 평균 (수익 / 노출 * 1000)
       })
+    } else {
+      setPlatformStatusData([])
     }
   }
   /**
@@ -414,7 +443,7 @@ function DashBoardIndex() {
    * @param searchCondition
    */
   const handleData = () => {
-    console.log(searchCondition.keyword)
+    console.log(searchCondition)
   }
 
   /**
@@ -423,33 +452,37 @@ function DashBoardIndex() {
    */
   const handleChangeChartKey = (type) => {
     setDataType(type.value)
+    setOnOff({
+      ...onOff,
+      [type.value]: !onOff[type.value]
+    })
   }
   const handleChangeChartKey2 = (type) => {
     setDataType2(type.value)
-  }
-
-  const chartOnOff = (e) => {
     setOnOff({
       ...onOff,
-      [e.currentTarget.id]: !onOff[e.currentTarget.id]
+      [type.value]: !onOff[type.value]
     })
-    // //여기서 챠트에있는 데이터를 핸들링 해
-    // if(onOff[e.currentTarget.id]){
-    //   setCloneLineData(cloneLineData.filter(value => value.id !== e.currentTarget.id))
-    // }
   }
 
-  // const handleFetchDetailData = useCallback(async ({}) => {
-  //   return selAdverPixelDetailList(userId)
-  // },[])
+  const chartOnOff = (id) => {
+    setOnOff({
+      ...onOff,
+      [id]: !onOff[id]
+    })
+  }
 
-  const handleFetchDetailData = useCallback(async ({}) => {
-    return [
-      {
-        name: 'linkUrl',
+  const handleFetchDetailData = useCallback(async ({userId}) => {
+    retrieveAdvertiserCampaignStatus(userId, searchCondition).then(response => {
+      console.log(response)
+      if(response !== null) {
+        setAdverStatusDetailData(response)
+      } else {
+        setAdverStatusDetailData([])
       }
-    ]
-  }, [])
+    })
+    return adverStatusDetailData
+  },[])
 
   return (
     <>
@@ -566,37 +599,39 @@ function DashBoardIndex() {
         <DashBoardBody>
           <ChartContainer>
             <ChartLabel>
-              <div id='clickCount' onClick={(e) => chartOnOff(e)}>
+              <div className={onOff['clickCount'] ? null : 'off'} onClick={() => chartOnOff('clickCount')}>
                 <p>클릭수</p>
                 <span>{platformChartTotal.clickCountTotal}</span>
               </div>
-              <div id='exposureCount' onClick={(e) => chartOnOff(e)}>
+              <div className={onOff['exposureCount'] ? null : 'off'} onClick={() => chartOnOff('exposureCount')}>
                 <p>노출수</p>
                 <span>{platformChartTotal.exposureCountTotal}</span>
               </div>
-              <div id='conversionCount' onClick={(e) => chartOnOff(e)}>
+              <div className={onOff['totalConversionCount'] ? null : 'off'} onClick={() => chartOnOff('totalConversionCount')}>
                 <p>전환수</p>
-                <span>{platformChartTotal.conversionCountTotal}</span>
+                <span>{platformChartTotal.totalConversionCount}</span>
               </div>
-              <div>
+              <div className={onOff[dataType] ? null : 'off'}>
                 <Select styles={defaultStyle}
+                        isDisabled={!onOff[dataType]}
                         components={{IndicatorSeparator: () => null}}
                         options={platformStatusTypeSelect}
                         value={platformStatusTypeSelect.filter(options => options.value === dataType)}
                         isOptionDisabled={option => option.value === dataType2}
                         onChange={handleChangeChartKey}
                 />
-                <span>{platformChartTotal[dataType]}</span>
+                <span onClick={() => chartOnOff(dataType)}>{platformChartTotal[dataType]}</span>
               </div>
-              <div>
+              <div className={onOff[dataType2] ? null : 'off'}>
                 <Select styles={defaultStyle}
+                        isDisabled={!onOff[dataType2]}
                         components={{IndicatorSeparator: () => null}}
                         options={platformStatusTypeSelect}
                         value={platformStatusTypeSelect.filter(options => options.value === dataType2)}
                         isOptionDisabled={option => option.value === dataType}
                         onChange={handleChangeChartKey2}
                 />
-                <span>{platformChartTotal[dataType2]}</span>
+                <span onClick={() => chartOnOff(dataType2)}>{platformChartTotal[dataType2]}</span>
               </div>
             </ChartLabel>
             <PlatformResponsiveBar dataType={dataType} dataType2={dataType2} onOff={onOff}
@@ -605,16 +640,16 @@ function DashBoardIndex() {
         </DashBoardBody>
         <DashBoardHeader style={{marginTop: 30}}>광고주 현황</DashBoardHeader>
         <DashBoardBody>
-          {/*<TableDetail columns={adverListColumn}*/}
-          {/*             totalCount={[totalInfo.totalCount, '광고주']}*/}
-          {/*             showHoverRows={false}*/}
-          {/*             activeCell={[0]}*/}
-          {/*             data={adverStatusData}*/}
-          {/*             detailData={handleFetchDetailData}*/}
-          {/*             detailColumn={adverStatusDetailColumn}*/}
-          {/*             detailGroups={false}*/}
-          {/*             idProperty={'userId'}*/}
-          {/*             groups={false}/>*/}
+          <TableDetail columns={adverListColumn}
+                       totalCount={[totalInfo.totalCount, '광고주']}
+                       showHoverRows={false}
+                       activeCell={[0]}
+                       data={adverStatusData}
+                       detailData={handleFetchDetailData}
+                       detailColumn={adverStatusDetailColumn}
+                       detailGroups={false}
+                       idProperty={'userId'}
+                       groups={false}/>
         </DashBoardBody>
       </DashBoardCard>
     </>
