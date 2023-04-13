@@ -17,6 +17,8 @@ import PlatformAdminDetail from "../platform_manage/AdminDetail";
 import PaymentManageUser from "../platform_manage/PaymentManageUser"
 import DashBoard from "../dash_board";
 import DashBoardIndex from "../dash_board/DashBoardIndex";
+import {BoardContainer, TitleContainer} from "../../assets/GlobalStyles";
+import Navigator from "../../components/common/Navigator";
 
 function Layout() {
   const params = useParams()
@@ -143,13 +145,21 @@ function Layout() {
         {/* 보고서 */}
         {['reports', 'customReports'].includes(params.id) && <Reports/>}
         {/* 설정 */}
-        {['settings', 'settingsDetail', 'budgetEvent', 'budgetEventDetail', 'budgetTime', 'budgetTimeDetail'].includes(params.id) &&
+        {['settings', 'settingsDetail', 'budgetEvent', 'budgetEventDetail', 'budgetTime', 'budgetTimeDetail','budgetTimeList'].includes(params.id) &&
           <Settings/>}
         {/* 플랫폼 관리 */}
         {['platform', 'platformDetail', 'categoryManage', 'productManage', 'conversionManage', 'paymentManage'].includes(params.id) &&
           <PlatformManage/>}
         {params.id === 'paymentManageUser' && <PaymentManageUser/>}
-        {params.id === 'myPageUser' && <PlatformUserDetail/>}
+        {params.id === 'myPageUser' && <main>
+                                        <BoardContainer>
+                                          <TitleContainer>
+                                            <h1>나의 정보</h1>
+                                            <Navigator/>
+                                          </TitleContainer>
+                                          <PlatformUserDetail/>
+                                        </BoardContainer>
+                                      </main>}
         {params.id === 'myPageAdmin' && <PlatformAdminDetail/>}
       </BoardBody>
       <Modal></Modal>

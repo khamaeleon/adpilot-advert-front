@@ -17,47 +17,18 @@ import {modalController} from "../../../store";
 import {ModalBody, ModalContainer, ModalFooter, ModalHeader} from "../../../components/modal/Modal";
 import {stepCampaignAtom} from "../entity";
 import {Controller, useFormContext} from "react-hook-form";
-function PixelComponent (props) {
-  return(
-    <ModalContainer>
-      <ModalHeader title={"픽셀 추가"}/>
-      <ModalBody>
-        <RowSpan>
-          <ColSpan0>
-            <Span4>광고주명</Span4>
-            <Input/>
-          </ColSpan0>
-          <ColSpan0>
-            <Span4>아이디</Span4>
-            <Input/>
-          </ColSpan0>
-          <ColSpan0>
-            <Span4>담당자</Span4>
-            <Input/>
-          </ColSpan0>
-        </RowSpan>
-        <RowSpan>
-          <ColSpan4>
-            <Span2>픽셀명</Span2>
-            <Input/>
-          </ColSpan4>
-        </RowSpan>
-        <RowSpan>
-          <ColSpan4>
-            <Span2>연동 url</Span2>
-            <Input/>
-          </ColSpan4>
-        </RowSpan>
-      </ModalBody>
-      <ModalFooter>
-        <DefaultButton>픽셀 추가</DefaultButton>
-      </ModalFooter>
-    </ModalContainer>
-  )
-}
+import {campaignBasicInfo, campaignBasicInfoAtom, goalConversionType} from "../entity/Info";
+import {PixelModal} from "../../pixel/PixelList";
+import {pixelDataAtom} from "../../pixel/entity/Pixel";
+import {selAdverPixelDetailList} from "../../../services/header/ManagePixelAxios";
+
 export function CampaignOne () {
   const [stepCampaign, setStepCampaign] = useAtom(stepCampaignAtom)
+  const [campaignBasicInfo, setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
+  const [adverInfo, setAdverInfo] = useState(null)
+  const [goalList, setGoalList] = useState(goalConversionType)
   const setModal = useSetAtom(modalController)
+  const [pixelList,setPixelList] =useState(null)
   const {register,handleSubmit ,control, formState:{errors}} = useFormContext()
   const [stepOne, setStepOne] = useState({
     advertiser: '',
@@ -67,21 +38,33 @@ export function CampaignOne () {
     targetDetail:''
   })
 
-  const handleSearchAdvertiser = () => {
-
-  }
-  const handleAddPixel = () => {
-    setModal({
-      isShow: true,
-      width: 700,
-      modalComponent: () => <PixelComponent/>
+  const handleSearchAdvertiser = (data) => {
+    console.log(data)
+    setCampaignBasicInfo({
+      ...campaignBasicInfo,
+      userId:data.id,
+      username:data.username
+    })
+    setAdverInfo({
+      userId:data.id,
+      username:data.username,
+      managerName:data.staffName,
+      adverName:data.adverName
+    })
+    selAdverPixelDetailList(data.id).then(response =>{
+      let clonePixelList =[]
+      response.map(data =>{
+        clonePixelList =[...clonePixelList, {value:data.pixelId,label:data.pixelName}]
+      })
+      setPixelList(clonePixelList)
     })
   }
 
+
   const handleChangePixel = (pixelValue) => {
-    setStepOne({
-      ...stepOne,
-      pixel: pixelValue.value
+    setCampaignBasicInfo({
+      ...campaignBasicInfo,
+      pixelId:pixelValue,
     })
   }
 
@@ -93,17 +76,14 @@ export function CampaignOne () {
   }
 
   const handleChangeProductType = (type) => {
-    setStepOne({
-      ...stepOne,
-      productType: type
+    setCampaignBasicInfo({
+      ...campaignBasicInfo,
+      productType:type,
     })
   }
 
   const handleChangeProductTarget = (type) => {
-    setStepOne({
-      ...stepOne,
-      productTarget: type
-    })
+    setGoalList()
   }
   const onSubmit = (data) => {
     console.log(data)
@@ -122,12 +102,11 @@ export function CampaignOne () {
                 <Input
                   style={{width: 300}}
                   readOnly
-                  {...register("advertiser",{
-                    required: {
-                      value: stepOne.advertiser === "",
-                      message: "광고주를 검색해주세요"
-                    },
+                  placeholder={'광고주를 검색해주세요'}
+                  {...register("username", {
+                    required: "광고주를 검색해주세요",
                   })}
+                  value={campaignBasicInfo !==null ? campaignBasicInfo.username :''}
                 />
                 <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
               </ColSpan2>
@@ -135,7 +114,7 @@ export function CampaignOne () {
           </RowSpan>
         </BoardSearchResult>
         <ValidationGroup>
-          {errors.advertiser && <Validation>{errors.advertiser.message}</Validation>}
+          {errors.username && <Validation>{errors.username.message}</Validation>}
           <div/>
         </ValidationGroup>
       </Board>
@@ -148,19 +127,19 @@ export function CampaignOne () {
               <BorderSpan>
                 <Span4>최적화 픽셀 선택</Span4>
                 <Controller
-                  name="pixel"
+                  name="pixelId"
                   control={control}
                   rules={{
                     required: {
-                      value: stepOne.pixel === "",
+                      value: pixelList !==null && pixelList.pixelId === "",
                       message: "최적화 픽셀을 선택해주세요"
                     }
                   }}
                   render={({field}) => (
-                    <Select options={[{key:1,value:'pixel1',label:'픽셀'}]}
+                    <Select options={pixelList !==null && pixelList}
                             placeholder={'최적화 픽셀 선택'}
                             {...field}
-                            value={stepOne.pixel !== '' ? stepOne.pixel : ''}
+                            value={campaignBasicInfo !== null ? campaignBasicInfo.pixelId : ''}
                             onChange={handleChangePixel}
                             styles={{
                               input: (baseStyles, state) => (
@@ -172,33 +151,14 @@ export function CampaignOne () {
                     />
                   )}
                 />
-                <DefaultButton onClick={handleAddPixel}>픽셀추가</DefaultButton>
+                <PixelModal title={'추가'} data={adverInfo !==null && adverInfo}/>
               </BorderSpan>
             </ColSpan4>
           </RowSpan>
           <ValidationGroup>
-            {errors.pixel &&<Validation>{errors.pixel?.message}</Validation>}
+            {errors.pixelId &&<Validation>{errors.pixelId?.message}</Validation>}
             <div/>
           </ValidationGroup>
-          <RowSpan>
-            <ColSpan1>
-              <Span4>캠페인 목표 선택</Span4>
-            </ColSpan1>
-          </RowSpan>
-          <RowSpan>
-            <ColSpan4>
-              <CampaignType>
-                <CampaignTypeItem active={stepOne.productType === 'banner'} onClick={()=>handleChangeProductType('banner')}>
-                  <img src={`../assets/images/campaign/img_banner_${stepOne.productType === 'banner' ? "on" : "off"}.png`}/>
-                  <p>배너</p>
-                </CampaignTypeItem>
-                <CampaignTypeItem active={stepOne.productType === 'popunder'} onClick={()=>handleChangeProductType('popunder')}>
-                  <img src={`../assets/images/campaign/img_popunder_${stepOne.productType === 'popunder' ? "on" : "off"}.png`}/>
-                  <p>팝언더</p>
-                </CampaignTypeItem>
-              </CampaignType>
-            </ColSpan4>
-          </RowSpan>
           <RowSpan>
             <ColSpan1>
               <Span4>캠페인 상품 선택</Span4>
@@ -207,9 +167,28 @@ export function CampaignOne () {
           <RowSpan>
             <ColSpan4>
               <CampaignType>
-                <CampaignTypeItem2 active={stepOne.productTarget === 'transform'} onClick={()=>handleChangeProductTarget('transform')}><div>전환</div><div>전환 가능성과 관심도가 높은 대상에게 구매 또는 참여, 설치 등의 행동을 유도 합니다.</div></CampaignTypeItem2>
-                <CampaignTypeItem2 active={stepOne.productTarget === 'visit'} onClick={()=>handleChangeProductTarget('visit')}><div>방문</div><div>원하는 랜딩으로 사용자들의 방문을 극대화해서 마케팅 목표를 달성합니다.</div></CampaignTypeItem2>
-                <CampaignTypeItem2 active={stepOne.productTarget === 'exposure'} onClick={()=>handleChangeProductTarget('exposure')}><div>노출</div><div>광고주의 크리에이티브 노출을 극대화해서 홍보 및 브랜딩을 강화합니다.</div></CampaignTypeItem2>
+                <CampaignTypeItem active={campaignBasicInfo !==null ? campaignBasicInfo.productType === 'BANNER' : false} onClick={()=>handleChangeProductType('BANNER')}>
+                  <img src={`../assets/images/campaign/img_banner_${campaignBasicInfo !==null && campaignBasicInfo.productType === 'BANNER' ? "on" : "off"}.png`}/>
+                  <p>배너</p>
+                </CampaignTypeItem>
+                <CampaignTypeItem active={campaignBasicInfo !==null ? campaignBasicInfo.productType === 'POP_UNDER' : false} onClick={()=>handleChangeProductType('POP_UNDER')}>
+                  <img src={`../assets/images/campaign/img_popunder_${campaignBasicInfo !==null && campaignBasicInfo.productType === 'POP_UNDER' ? "on" : "off"}.png`}/>
+                  <p>팝언더</p>
+                </CampaignTypeItem>
+              </CampaignType>
+            </ColSpan4>
+          </RowSpan>
+          <RowSpan>
+            <ColSpan1>
+              <Span4>캠페인 목표 선택</Span4>
+            </ColSpan1>
+          </RowSpan>
+          <RowSpan>
+            <ColSpan4>
+              <CampaignType>
+                <CampaignTypeItem2 active={stepOne.productTarget === 'CONVERSION'} onClick={()=>handleChangeProductTarget('CONVERSION')}><div>전환</div><div>전환 가능성과 관심도가 높은 대상에게 구매 또는 참여, 설치 등의 행동을 유도 합니다.</div></CampaignTypeItem2>
+                <CampaignTypeItem2 active={stepOne.productTarget === 'VISIT'} onClick={()=>handleChangeProductTarget('VISIT')}><div>방문</div><div>원하는 랜딩으로 사용자들의 방문을 극대화해서 마케팅 목표를 달성합니다.</div></CampaignTypeItem2>
+                <CampaignTypeItem2 active={stepOne.productTarget === 'VIEW'} onClick={()=>handleChangeProductTarget('VIEW')}><div>노출</div><div>광고주의 크리에이티브 노출을 극대화해서 홍보 및 브랜딩을 강화합니다.</div></CampaignTypeItem2>
               </CampaignType>
             </ColSpan4>
           </RowSpan>

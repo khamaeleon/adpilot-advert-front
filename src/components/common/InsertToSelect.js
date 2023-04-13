@@ -1,7 +1,9 @@
 import "../../assets/dragSelect.css"
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {toast} from "react-toastify";
+import {useAtom} from "jotai/index";
+import {budgetTimesDirect, timeBudgetDetailDataAtom} from "../../pages/settings/entity/BudgetTime";
 const dtoList = [
   {"time" : 1,"ratio" :0},
   {"time" : 2,"ratio" :0},
@@ -29,64 +31,36 @@ const dtoList = [
   {"time" : 24,"ratio" :0},
 ]
 const weeksInfo = {
-  'MONDAY':'월',
-  'TUESDAY':'화',
-  'WEDNESDAY':'수',
-  'THURSDAY':'목',
-  'FRIDAY':'금',
-  'SATURDAY':'토',
-  'SUNDAY':'일'
+  0:'월',
+  1:'화',
+  2:'수',
+  3:'목',
+  4:'금',
+  5:'토',
+  6:'일'
 }
 export default function InsertToSelect({userId}) {
   const disabled = "cell-disabled"
   const enabled = "cell-enabled-input"
-  const allowTimes = [
-    {
-      "dayOfWeek": "MONDAY",
-      "dtoList" : []
-    },
-    {
-      "dayOfWeek": "TUESDAY",
-      "dtoList" : []
-    },
-    {
-      "dayOfWeek": "WEDNESDAY",
-      "dtoList" : []
-    },
-    {
-      "dayOfWeek": "THURSDAY",
-      "dtoList" : []
-    },
-    {
-      "dayOfWeek": "FRIDAY",
-      "dtoList" : []
-    },
-    {
-      "dayOfWeek": "SATURDAY",
-      "dtoList" : []
-    },
-    {
-      "dayOfWeek": "SUNDAY",
-      "dtoList" : []
-    },
-  ]
-  const [insertDayTimeRatio, setInsertDayTimeRatio] = useState([])
+  const [timeBudgetDetailDataState, setTimeBudgetDetailDataState] = useAtom(timeBudgetDetailDataAtom)
+
   const {register, handleSubmit,formState:{errors}} = useForm()
+  useEffect(() => {
+    setTimeBudgetDetailDataState({
+      ...timeBudgetDetailDataState,
+      allowTimes:budgetTimesDirect
+    })
+  }, [])
+
   const handleChangeInput = (e) => {
     if((/^(0|[1-9]\d*)(\.\d+)?$/).test(e.target.value) || e.target.value === "") {
       if(e.target.value <= 100) {
-        setInsertDayTimeRatio({
-          ...insertDayTimeRatio,
-          [e.target.name]: {
-            value: {
-              dayOfWeek:e.target.className,
-              time:e.target.id,
-              ratio: e.target.value
-            }
-          }
+        let cloneBudgetTimesDirect =budgetTimesDirect
+        cloneBudgetTimesDirect[e.target.id][e.target.name] =e.target.value
+        setTimeBudgetDetailDataState({
+          ...timeBudgetDetailDataState,
+          allowTimes:cloneBudgetTimesDirect
         })
-        console.log(`uniqueKey: ${e.target.name},dayOfWeek: ${e.target.className}, time:${e.target.id}, ratio: ${e.target.value}`)
-        console.log(insertDayTimeRatio[e.target.name]?.value.ratio)
       } else {
         toast('100보다 큰 수는 입력할수없습니다.')
       }
@@ -129,19 +103,19 @@ export default function InsertToSelect({userId}) {
           <td className={disabled}>23시</td>
           <td className={disabled}>24시</td>
         </tr>
-        {allowTimes.map((weeks,key) => {
+        {timeBudgetDetailDataState.allowTimes.map((weeks,key) => {
           return (
             <tr key={key}>
-              <td className={disabled}>{weeksInfo[weeks.dayOfWeek]}</td>
-              {dtoList.map((day, idx) => {
+              <td className={disabled}>{weeksInfo[key]}</td>
+              {weeks.map((day, idx) => {
                 return (
                   <td className={enabled} key={idx}>
                     <input
                       type={'text'}
-                      className={weeks.dayOfWeek}
-                      id={idx}
-                      name={`${weeks.dayOfWeek}${idx}`}
-                      value={insertDayTimeRatio[`${weeks.dayOfWeek}${idx}`]?.value.ratio || ''}
+                      className={key+'-'+day}
+                      id={key}
+                      name={`${idx}`}
+                      value={day}
                       onChange={(e) => handleChangeInput(e)}
                     />
                     <span className={'cell-input-percent'}>%</span>

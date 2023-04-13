@@ -1,7 +1,9 @@
 import {atom} from "jotai/index";
 import {Link} from "react-router-dom";
-import {Icon} from "../../../components/table";
 import React from "react";
+import store from "../../../store";
+import {cellsAtom} from "../../../components/common/DragToSelect";
+
 
 
 /**
@@ -15,6 +17,28 @@ export const budgetTimeDataAtom = atom(null)
  * @type {Atom<unknown>}
  */
 export const timeBudgetDetailDataAtom = atom(null)
+
+export const budgetTimeListAtom = atom(null)
+export const userIdAtom = atom(null)
+export const budgetTimes = [
+  [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+]
+
+export const budgetTimesDirect = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+]
 
 /**
  * 시간 예산 광고주 리스트 컬럼세팅
@@ -32,7 +56,7 @@ export const adverTimeBudgetColumns = [ //시간 단가 컬럼
     },
     render: (props) => {
       return (
-        <Link to={'/board/budgetTimeDetail'} state={{id: props.data.userId}}>{props.value}</Link>
+        <Link to={'/board/budgetTimeList'} state={{id: props.data.userId}}>{props.value}</Link>
       )
     }
   },
@@ -50,10 +74,26 @@ export const adverTimeBudgetColumns = [ //시간 단가 컬럼
   },
   {
     name: 'count',
-    header: '등록된 이벤트 단가 그룹',
+    header: '이벤트 예산 그룹',
     defaultFlex: 1,
     resizable: false
   }
+]
+
+const exposeTimeTypeAll =[
+  {id: "1", value: "EQUAL_DISTRIBUTION", label: "균등분배"},
+  {id: "2", value: "FAST_EXHAUSTION", label: "빠른소진"},
+  {id: "3", value: "DIRECT_SETTINGS", label: "직접설정"}
+]
+
+const dayOfWeeksAll =[
+  {id: "1", value: "MONDAY", label: "월"},
+  {id: "2", value: "TUESDAY", label: "화"},
+  {id: "3", value: "WEDNESDAY", label: "수"},
+  {id: "4", value: "THURSDAY", label: "목"},
+  {id: "5", value: "FRIDAY", label: "금"},
+  {id: "6", value: "SATURDAY", label: "토"},
+  {id: "7", value: "SUNDAY", label: "일"},
 ]
 
 /**
@@ -65,52 +105,34 @@ export const budgetTimeDetailColumns = [ //시간 예산 상세 컬럼
     name: 'groupName',
     header: '시간별 예산 그룹명',
     defaultFlex: 1,
-    render: ({value, cellProps}) => {
+    render: (props) => {
       return (
-        <div style={{display: "flex", alignItems: 'center'}}><p>{value}</p><Icon saveType={'edit'} cellProps={cellProps.data} label={'pct'} /></div>
+        <Link to={'/board/budgetTimeDetail'} state={{id: props.data.userId,groupId:props.data.eventId}}>{props.value}</Link>
       )
     }
   },
   {
-    name: 'shopperMatching',
-    header: '00:00 – 03:59',
+    name: 'exposeTimeType',
+    header: '예산 소진 설정',
     defaultFlex: 1,
     resizable: false,
-    render: ({ value })=> <p className={'pct'}>{value}</p>
+    render: ({value}) => {
+      return (
+        <span>{exposeTimeTypeAll.find(type => type.value === value).label}</span>
+      )
+    }
   },
   {
-    name: 'cartRecommendations',
-    header: '04:00 – 07:59',
+    name: 'dayOfWeeks',
+    header: '요일설정',
     defaultFlex: 1,
     resizable: false,
-    render: ({ value })=> <p className={'pct'}>{value}</p>
-  },
-  {
-    name: 'productRecommendations',
-    header: '08:00 – 11:59',
-    defaultFlex: 1,
-    resizable: false,
-    render: ({ value })=> <p className={'pct'}>{value}</p>
-  },
-  {
-    name: 'userMatching',
-    header: '12:00 – 15:59',
-    defaultFlex: 1,
-    resizable: false,
-    render: ({ value })=> <p className={'pct'}>{value}</p>
-  },
-  {
-    name: 'audience',
-    header: '16:00 – 19:59',
-    defaultFlex: 1,
-    resizable: false,
-    render: ({ value })=> <p className={'pct'}>{value}</p>
-  },
-  {
-    name: 'userOptimization',
-    header: '20:00 – 23:59',
-    defaultFlex: 1,
-    resizable: false,
-    render: ({ value })=> <p className={'pct'}>{value}</p>
+    render: ({value, cellProps}) => {
+      return (
+        <span>{
+          value.map((data) => dayOfWeeksAll.find(type => type.value === data).label).join(',')
+        }</span>
+      )
+    }
   }
 ]

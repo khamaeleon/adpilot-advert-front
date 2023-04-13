@@ -13,13 +13,18 @@ import {useAtom} from "jotai";
 import Table from "../../components/table";
 import {ToastContainer} from "react-toastify";
 import {adverTimeBudgetColumns, budgetTimeDataAtom} from "./entity/BudgetTime";
+import {selBudgetTimeAdverList} from "../../services/settings/BudgetTimeAxios";
 
 function BudgetTime() {
-  const [budgetTimeDataState, setBudgetTimeDataState] = useAtom(budgetTimeDataAtom)
+  const [budgetTimeAdverDataState, setBudgetTimeAdverDataState] = useAtom(budgetTimeDataAtom)
   const [searchParams, setSearchParams] = useState({ keyword:''})
 
   useEffect(() => {
-
+    selBudgetTimeAdverList(searchParams).then(response =>{
+      if(response){
+        setBudgetTimeAdverDataState(response)
+      }
+    })
   }, [])
   const handleSearch = (event) => {
     setSearchParams({
@@ -28,7 +33,12 @@ function BudgetTime() {
     })
   }
 
-  const onSearchAdverEventBudget =() =>{
+  const onSearchAdverBudgetTime =() =>{
+    selBudgetTimeAdverList(searchParams).then(response =>{
+      if(response){
+        setBudgetTimeAdverDataState(response)
+      }
+    })
   }
   return (
     <>
@@ -42,14 +52,14 @@ function BudgetTime() {
                      value={searchParams.keyword}
                      onChange={handleSearch}
               />
-              <DefaultButton onClick={onSearchAdverEventBudget}>검색</DefaultButton>
+              <DefaultButton onClick={onSearchAdverBudgetTime}>검색</DefaultButton>
             </ColSpan1>
           </RowSpan>
         </BoardSearchDetail>
         <BoardTableContainer>
-          { budgetTimeDataState !== null &&
+          { budgetTimeAdverDataState !== null &&
           <Table columns={adverTimeBudgetColumns}
-                 data={budgetTimeDataState.eventDtos}
+                 data={budgetTimeAdverDataState.eventDtos}
                  showHoverRows={false}
                  activeCell={[0]}
                  emptyText={'시간 예산 현황 내역이 없습니다.'}/>

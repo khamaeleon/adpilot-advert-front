@@ -74,6 +74,7 @@ export const pixelColumns = [
     showColumnMenuTool: false,
     sortable: false,
     render: ({value, cellProps}) => {
+      console.log(cellProps.data)
       return (
         <PixelModal title={'추가'} data={cellProps.data} />
       )

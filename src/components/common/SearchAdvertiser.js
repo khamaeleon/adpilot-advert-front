@@ -24,7 +24,7 @@ export function SearchAdvertiser(props) {
 
 function SearchModal (props) {
   const [, setModal] = useAtom(modalController)
-  const [mediaSearchInfo, setMediaSearchInfo] = useState([])
+  const [adverSearchInfo, setAdverSearchInfo] = useState([])
   const [selectedItem, setSelectedItem] = useState({})
   const [searchKeyword, setSearchKeyword] = useState('')
 
@@ -46,7 +46,7 @@ function SearchModal (props) {
 
   const handleSearch = (e) => {
     selKeywordUser(searchKeyword).then(response => {
-      setMediaSearchInfo(response)
+      setAdverSearchInfo(response)
     })
   }
 
@@ -70,7 +70,7 @@ function SearchModal (props) {
           </div>
         </MediaSearchColumn>
         <MediaSearchResult>
-          {mediaSearchInfo.length !== 0 &&
+          {adverSearchInfo.length !== 0 &&
             <>
               <table>
                 <thead>
@@ -81,15 +81,15 @@ function SearchModal (props) {
                 </tr>
                 </thead>
                 <tbody>
-                {mediaSearchInfo.map((item, key) => {
+                {adverSearchInfo.map((item, key) => {
                   return (
                     <tr key={key}
                         onClick={() => handleSelect(item)}
-                        style={selectedItem.siteName === item.siteName ? {
+                        style={selectedItem.adverName === item.adverName ? {
                           backgroundColor: "#f5811f",
                           color: '#fff'
                         } : null}>
-                      <td>{item.siteName}</td>
+                      <td>{item.adverName}</td>
                       <td>{item.username}</td>
                       <td>{item.staffName}</td>
                     </tr>

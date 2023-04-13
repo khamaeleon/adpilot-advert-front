@@ -9,7 +9,7 @@ const SLASH = '/';
 const USER_LIST = USER_MANAGE_URL+'/list'
 const USER_INFO = USER_MANAGE_URL+'/uuid'
 const MY_PAGE_INFO =ACTION_URL+'/uuid'
-const USER_KEYWORD_SEARCH = ACTION_URL + '/find/by-media'
+const USER_KEYWORD_SEARCH = USER_MANAGE_URL + '/find/by-adver'
 const BY_USER_INFO = ACTION_URL+'/username'
 
 const TERMS_INFO = '/policy/latest-terms'
@@ -154,13 +154,13 @@ export async function selChangePassword(userInfo) {
 }
 
 /**
- * 매체 검색 api
+ * 광고주 검색 api
  * @param keyword
  * @returns {Promise<null>}
  */
 export async function selKeywordUser(keyword) {
   let returnVal = null;
-  await AdverAxios('GET', USER_KEYWORD_SEARCH + '?keyword=' + keyword, null)
+  await AdminAxios('GET', USER_KEYWORD_SEARCH + '?keyword=' + keyword, null)
   .then((response) => {
     if(response.responseCode.statusCode ===200){
       returnVal = response.data

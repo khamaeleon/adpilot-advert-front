@@ -32,7 +32,7 @@ import {
 } from "../../services/Platform/CategoryAxios";
 import {atom} from "jotai/index";
 import {useNavigate} from "react-router-dom";
-import {pixelColumns, pixelDetailColumns} from "./entity/Pixel";
+import {pixelColumns, pixelDataAtom, pixelDetailColumns} from "./entity/Pixel";
 
 const pixelAtom = atom({
   pixelName: '',
@@ -47,6 +47,7 @@ export function PixelModal(props) {
       isShow: true,
       width: 800,
       modalComponent: () => {
+        console.log(data)
         return (
           <PixelAdd data={data} title={title} />
         )
@@ -79,6 +80,7 @@ function PixelAdd(props){
     defaultValues: pixelInfoListState
   })
   useEffect(() => {
+    console.log(data)
     retrieveTopLevelCategoryKeyValue().then(response => {
       setTopLevelCategoryList(response)
     })
@@ -335,7 +337,7 @@ function PixelAdd(props){
 }
 function PixelList() {
   const [searchParams, setSearchParams] = useState({ keyword:''})
-  const [pixelDataState,setPixelDataState] = useState([])
+  const [pixelDataState,setPixelDataState] = useState(pixelDataAtom)
 
   useEffect(()=>{
     selAdverPixelList(searchParams).then(response =>{
