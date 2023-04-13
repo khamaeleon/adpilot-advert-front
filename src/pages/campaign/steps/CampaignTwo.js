@@ -277,13 +277,7 @@ export function CampaignTwo() {
                               {...field}
                               value={campaignBasicInfo !== null ? campaignBasicInfo.budgetTimeId : ''}
                               onChange={handleChangeBudgetTimes}
-                              styles={{
-                                input: (baseStyles, state) => (
-                                  {
-                                    ...baseStyles,
-                                    minWidth: "300px",
-                                  })
-                              }}
+                              styles={selectStyle}
                       />
                     )}
                   />
@@ -315,13 +309,7 @@ export function CampaignTwo() {
                               {...field}
                               value={campaignBasicInfo !== null ? campaignBasicInfo.budgetEventId : ''}
                               onChange={handleChangeBudgetEvents}
-                              styles={{
-                                input: (baseStyles, state) => (
-                                  {
-                                    ...baseStyles,
-                                    minWidth: "300px",
-                                  })
-                              }}
+                              styles={selectStyle}
                       />
                     )}
                   />
@@ -338,7 +326,7 @@ export function CampaignTwo() {
               <Span4>입찰 방식</Span4>
               <RelativeDiv>
                 <ColSpan1>
-                  <Select styles={inputStyle}
+                  <Select styles={selectStyle}
                           components={{IndicatorSeparator: () => null}}
                           options={biddingType}
                           value={biddingType.find(value => value.value === campaignBudgetInfo?.biddingType)}
@@ -384,13 +372,7 @@ export function CampaignTwo() {
                               {...field}
                               value={campaignBasicInfo !== null ? campaignBasicInfo.priceEventId : ''}
                               onChange={handleChangePriceEvent}
-                              styles={{
-                                input: (baseStyles, state) => (
-                                  {
-                                    ...baseStyles,
-                                    minWidth: "300px",
-                                  })
-                              }}
+                              styles={selectStyle}
                       />
                     )}
                   />

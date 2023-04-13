@@ -521,6 +521,7 @@ export const selectStyle = {
   container:(baseStyles,state) => (
     {
       ...baseStyles,
+      width: '100%',
       height: buttonHeightSize,
     }
   ),
@@ -533,6 +534,7 @@ export const selectStyle = {
   control: (baseStyles,state) => (
     {
       ...baseStyles,
+      width: '100%',
       minHeight: buttonHeightSize,
       marginRight: '0 !important',
       border: '1px solid #e5e5e5'
@@ -541,7 +543,7 @@ export const selectStyle = {
   input: (baseStyles,state) => (
     {
       ...baseStyles,
-      minWidth: 250,
+      width: '100%',
       height: buttonHeightSize - 10,
       borderRadius: 5,
     }
@@ -791,10 +793,6 @@ export const ColSpan1 = styled.div`
   align-items: center;
   width: 25%;
   gap: 10px;
-  & > div {
-    position: relative;
-    width: 100%;
-  }
   & > div:first-child {
     white-space: nowrap;
     flex-shrink: 0;
@@ -818,10 +816,6 @@ export const ColSpan2 = styled.div`
   align-items: ${(props)=>props.column ? 'flex-start' : 'center'};
   width: 50%;
   gap: 10px;
-  & > div {
-    position: relative;
-    width: 100%;
-  }
   & > div:first-child {
     white-space: nowrap;
     flex-shrink: 0;
@@ -840,10 +834,6 @@ export const ColSpan3 = styled.div`
   align-items: center;
   width: 75%;
   gap: 10px;
-  & > div {
-    position: relative;
-    width: 100%;
-  }
   & > div:first-child {
     white-space: nowrap;
     flex-shrink: 0;
@@ -867,10 +857,6 @@ export const ColSpan4 = styled.div`
   align-items: center;
   width: 100%;
   gap: 10px;
-  & > div {
-    position: relative;
-    width: 100%;
-  }
   & > div:first-child {
     white-space: nowrap;
     flex-shrink: 0;

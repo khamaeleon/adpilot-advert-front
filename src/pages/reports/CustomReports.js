@@ -110,19 +110,28 @@ export default function CustomReports() {
           </RowSpan>
           <RowSpan>
             <ColSpan1>
-              <ColTitle><Span4>광고 상품</Span4></ColTitle>
-              <Select styles={selectStyle} options={[{key:1,value:1,label: '전체'}]}/>
+              <ColTitle><Span1>광고 상품</Span1></ColTitle>
+              <div>
+                <Select styles={selectStyle} options={[{key:1,value:1,label: '전체'}]}/>
+              </div>
             </ColSpan1>
-            <ColSpan1/>
             <ColSpan1>
-              <ColTitle><Span4>디바이스</Span4></ColTitle>
-              <Select styles={selectStyle} options={[{key:1,value:1,label: '전체'}]}/>
+              <ColTitle><Span1>이벤트</Span1></ColTitle>
+              <div>
+                <Select styles={selectStyle} options={[{key:1,value:1,label: '전체'}]}/>
+              </div>
+            </ColSpan1>
+            <ColSpan1>
+              <ColTitle><Span1>디바이스</Span1></ColTitle>
+              <div>
+                <Select styles={selectStyle} options={[{key:1,value:1,label: '전체'}]}/>
+              </div>
             </ColSpan1>
             <ColSpan1/>
           </RowSpan>
           <RowSpan>
             <ColSpan1>
-              <Span1>기간</Span1>
+              <ColTitle><Span1>기간</Span1></ColTitle>
               <div style={{width:'100%'}}>
                 <DateContainer>
                   <CalendarBox>
