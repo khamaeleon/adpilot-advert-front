@@ -5,6 +5,7 @@ import React, {useEffect} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
 import {useAtom,} from "jotai";
+import {decimalFormat} from "../../common/StringUtils";
 import {tokenResultAtom} from "../login/entity/Common";
 import {logOutAdmin, logOutUser, refresh, refreshAdmin} from "../../services/auth/AuthAxios";
 import Campaign from "../campaign";
@@ -13,6 +14,7 @@ import Pixel from "../pixel";
 import Reports from "../reports";
 import PlatformUserDetail from "../platform_manage/UserDetail";
 import PlatformAdminDetail from "../platform_manage/AdminDetail";
+import PaymentManageUser from "../platform_manage/PaymentManageUser"
 import DashBoard from "../dash_board";
 import DashBoardIndex from "../dash_board/DashBoardIndex";
 
@@ -92,16 +94,39 @@ function Layout() {
     navigate('/board/pixel')
   }
 
+  const payment = () => {
+    navigate('/board/paymentManageUser')
+  }
+
   return (
     <div id={'container'}>
       <Aside/>
       <BoardBody>
         <BoardHeader>
-          <MyPage onClick={pixel}>픽셀 관리</MyPage>
-          <UserName>
-            <UserIcon/>
-            <span>{tokenUserInfo.name}</span>
-          </UserName>
+          {tokenUserInfo.role === 'NORMAL'?
+            <>
+              <UserName>
+                <UserIcon/>
+                <span>{tokenUserInfo.name}</span>
+                <AdvertisingBalance>
+                  <div/>
+                  <small>광고비 잔액</small>
+                  <small className={'won'}>{decimalFormat(10000)}</small>
+                </AdvertisingBalance>
+              </UserName>
+              {/*[d] 20230411 사용자 화면에서 픽셀 관리 노출 보류*/}
+              {/*<MyPage onClick={pixel}>픽셀 관리</MyPage>*/}
+              <MyPage onClick={payment}>결제</MyPage>
+            </>
+            :
+            <>
+              <MyPage onClick={pixel}>픽셀 관리</MyPage>
+              <UserName>
+                <UserIcon/>
+                <span>{tokenUserInfo.name}</span>
+              </UserName>
+            </>
+          }
           <MyPage onClick={myPage}>
             <span>마이페이지</span>
           </MyPage>
@@ -123,6 +148,7 @@ function Layout() {
         {/* 플랫폼 관리 */}
         {['platform', 'platformDetail', 'categoryManage', 'productManage', 'conversionManage', 'paymentManage'].includes(params.id) &&
           <PlatformManage/>}
+        {params.id === 'paymentManageUser' && <PaymentManageUser/>}
         {params.id === 'myPageUser' && <PlatformUserDetail/>}
         {params.id === 'myPageAdmin' && <PlatformAdminDetail/>}
       </BoardBody>
@@ -188,5 +214,25 @@ const Logout = styled.div`
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 28px;
+  }
+`
+
+const AdvertisingBalance = styled.p`
+  display: flex;
+  margin-left: 20px;
+  color: #f5811f;
+  >div{
+    width: 18px;
+    height: 18px;
+    background-size: cover;
+    background-image: url("/assets/images/common/icon_money.png");
+    background-image: -webkit-image-set(url('/assets/images/common/icon_money.png') 1x,url('/assets/images/common/icon_money@2x.png') 2x, url('/assets/images/common/icon_money@3x.png') 3x);
+    margin-right: 5px;
+  }
+  >small:first-child { 
+    margin-right: 10px;
+  }
+  >small:last-child {
+    
   }
 `
