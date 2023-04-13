@@ -93,7 +93,7 @@ export function CampaignTwo() {
       ...campaignBudgetInfo,
       budgetTimeId:selectedBudgetTime,
     })
-    selBudgetTimeDetailInfo(campaignBasicInfoAtom.userId, selectedBudgetTime.value).then(response => {
+    selBudgetTimeDetailInfo(campaignBasicInfo.userId, selectedBudgetTime.value).then(response => {
       console.log(response)
       setTimeBudgetDetailDataState(response)
     })
@@ -284,7 +284,7 @@ export function CampaignTwo() {
                 </ColSpan1>
                 {stepTwo.timeGroup.value !== "" &&
                   <ColSpan1>
-                    <TimeTable exposeTimeType={timeBudgetDetailDataState.exposeTimeType} title={'설정된 시간별 예산'} readOnly={true}/>
+                    <TimeTable exposeTimeType={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposeTimeType} title={'설정된 시간별 예산'} readOnly={true}/>
                   </ColSpan1>
                 }
                 {errors.budgetTimeId && <ColSpan1><ValidationScript>{errors.budgetTimeId.message}</ValidationScript></ColSpan1>}

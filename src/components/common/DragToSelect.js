@@ -10,6 +10,7 @@ export default function DragToSelect({reset, readOnly}) {
   const [timeBudgetDetailDataState, setTimeBudgetDetailDataState] = useAtom(timeBudgetDetailDataAtom)
   const [cellEnabled, setCellEnabled] = useState(false)
   useEffect(() => {
+    console.log(timeBudgetDetailDataState)
     if (readOnly) {
       setCellEnabled(true)
     }
@@ -77,7 +78,7 @@ export default function DragToSelect({reset, readOnly}) {
           <div>일</div>
         </WeekDiv>
         <TableDragSelect
-          value={timeBudgetDetailDataState?.allowTimes}
+          value={timeBudgetDetailDataState !==null && timeBudgetDetailDataState.allowTimes}
           onChange={cells => onChangeCells(cells)}
         >
           <tr>

@@ -103,7 +103,7 @@ export default function InsertToSelect({userId}) {
           <td className={disabled}>23시</td>
           <td className={disabled}>24시</td>
         </tr>
-        {timeBudgetDetailDataState.allowTimes.map((weeks,key) => {
+        {timeBudgetDetailDataState !==null && timeBudgetDetailDataState.allowTimes.map((weeks,key) => {
           return (
             <tr key={key}>
               <td className={disabled}>{weeksInfo[key]}</td>

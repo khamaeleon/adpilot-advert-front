@@ -26,7 +26,7 @@ function TimeTableComponent (props) {
               <ColTitle><strong>예산 소진 설정 | 직접 설정</strong></ColTitle>
             </RowSpan>
             <RowSpan box={true}>
-              <InsertToSelect/>
+              <InsertToSelect readOnly={props.readOnly}/>
             </RowSpan>
           </>
         }
