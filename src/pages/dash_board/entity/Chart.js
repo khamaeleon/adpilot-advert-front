@@ -25,7 +25,7 @@ export const platformStatusAtom = atom([])
 export const platformTotalCont = {
   clickCountTotal:0, //clickCount 합산
   exposureCountTotal:0,//exposureCount 합산
-  conversionCountTotal:0,//conversionCount 합산
+  totalConversionCount:0,//conversionCount 합산
   userCount:0,//userCount 합산
   totalExposureCount:0,//totalExposureCount 합산
   totalClickCount:0,//totalClickCount 합산
@@ -43,3 +43,22 @@ export const platformTotalCont = {
 }
 export const lineDataAtom = atom(null)
 export const cloneLineDataAtom = atom(null)
+export const onOffStatus = {
+  clickCount: true,
+  exposureCount: true,
+  totalConversionCount: true,
+  userCount: false,
+  totalExposureCount: false,
+  totalClickCount: false,
+  clickRate: false,
+  costAmount: false,
+  cpc: false,
+  conversionRate: false,
+  costPerConversion: false,
+  avgConversionAmount: false,
+  sessionRoas: false,
+  directRoas: false,
+  exposureRoas: false,
+  totalRoas: false,
+  ecpm: false
+}

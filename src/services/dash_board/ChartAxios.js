@@ -7,7 +7,7 @@ const OVERVIEW = 'overview';
  * 플랫폼 현황 조회
  * @returns {Promise<null>}
  */
-export async function retrievePlatformStatus(param) {
+export async function retrieveOverview(param) {
   let returnVal = null;
   await AdminAxios('POST', ACTION_URL+OVERVIEW, param)
     .then((response) => {
@@ -22,9 +22,10 @@ export async function retrievePlatformStatus(param) {
 
 /**
  * 특정 광고주 플랫폼 현황 조회
+ * @param userId
  * @returns {Promise<null>}
  */
-export async function retrieveUserPlatformStatus(userId, param) {
+export async function retrieveAdverOverview(userId, param) {
   let returnVal = null;
   await AdverAxios('POST', ACTION_URL+userId+'/'+OVERVIEW, param)
     .then((response) => {

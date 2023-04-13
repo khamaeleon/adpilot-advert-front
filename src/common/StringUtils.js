@@ -140,6 +140,32 @@ export const decimalFormat = (money) => {
   }
 }
 
+// 소수점 세번째 반올림 (%)
+export const numberToFixedFormat = (number) => {
+  if(number == null || number === 0) return 0;
+  if(number !== 0){
+    return number.toFixed(2);
+  }else{
+    return '0';
+  }
+}
+
+export const moneyToFixedFormat = (money) => {
+  if(money == null || money === 0) return 0;
+  if(money !== 0){
+    const int = decimalFormat(money.toString().split('.')[0]);
+    const oneDecimal = money.toString().split('.')[1];
+    if (oneDecimal !== undefined) {
+      return `${int}.${oneDecimal.slice(0, 1)}`;
+    } else {
+      return int
+    }
+
+  }else{
+    return '0';
+  }
+}
+
 export const dateLineFormat = (date) => {
   if(date == null) return '';
   if(date === 0) return '';
