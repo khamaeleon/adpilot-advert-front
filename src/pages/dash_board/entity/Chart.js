@@ -62,3 +62,23 @@ export const onOffStatus = {
   totalRoas: false,
   ecpm: false
 }
+
+export const toolTipLabel = {
+  clickCount: '클릭수',
+  exposureCount: '노출수',
+  totalConversionCount: '전환수',
+  userCount: '광고주수',
+  totalExposureCount: '총 노출수',
+  totalClickCount: '총 클릭수',
+  clickRate: '클릭률',
+  costAmount: '비용',
+  cpc: 'CPC',
+  conversionRate: '전환율',
+  costPerConversion: '전환 단가',
+  avgConversionAmount: '평균 구매액',
+  sessionRoas: '세션매출',
+  directRoas: '직접매출',
+  exposureRoas: '노출매출',
+  totalRoas: '총매출',
+  ecpm: 'ECPM'
+}

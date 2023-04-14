@@ -42,7 +42,7 @@ import {
   lineDataAtom, onOffStatus,
   platformStatusAtom,
   platformStatusType,
-  platformTotalCont
+  platformTotalCont, toolTipLabel
 } from "./entity/Chart";
 import {adverListColumn, adverStatusAtom, adverStatusDetailAtom, adverStatusDetailColumn,} from "./entity/Campaign";
 import {productType, searchConditionAtom} from "./entity/Common";
@@ -60,12 +60,13 @@ import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../comm
 
 /** 플래폼 현황 차트 **/
 function PlatformResponsiveBar(props) {
-  const {onOff, dataType, dataType2, platformData} = props
+  const {dataType, dataType2, platformData, onOff} = props
   let clickData = [], exposureData = [], totalConversionData = [], userData = [], totalExposureData = [],
     totalClickData = [], clickRateData = [], costAmountData = [], cpcData = [], conversionRateData = [],
     costPerConversionData = [], avgConversionAmountData = [], sessionRoasData = [], directRoasData = [], exposureRoasData = [], totalRoasData = [], ecpmData = [];
-  const [lineData, setLineData] = useAtom(lineDataAtom)
+  const [, setLineData] = useAtom(lineDataAtom)
   const [cloneLineData, setCloneLineData] = useAtom(cloneLineDataAtom)
+  const [label] = useState(toolTipLabel)
 
   useEffect(() => {
     let lineDataMap={}
@@ -90,7 +91,7 @@ function PlatformResponsiveBar(props) {
         ecpmData = [...ecpmData, {x: data.historyDate, y: data?.costAmount / (data.exposureCount*1000)}]
       })
       lineDataMap = [
-          {id: 'clickCount', data: clickData}, //클릭수
+          {id: 'clickCount', data: clickData, yFormatted: '원'}, //클릭수
           {id: 'exposureCount', data: exposureData},//노출수
           {id: 'totalConversionCount', data: totalConversionData},//전환수
           {id: "userCount", data: userData},//광고주수
@@ -102,11 +103,11 @@ function PlatformResponsiveBar(props) {
           {id: "conversionRate", data: conversionRateData},//전환율
           {id: "costPerConversion", data: costPerConversionData},//전환 단가
           {id: "avgConversionAmount", data: avgConversionAmountData},//평균 구매액
-          {id: "sessionRoas", data: sessionRoasData},//Roas
-          {id: "directRoas", data: directRoasData},//Roas
-          {id: "exposureRoas", data: exposureRoasData},//Roas
-          {id: "totalRoas", data: totalRoasData},//Roas
-          {id: "ecpm", data: ecpmData},//Ecpm
+          {id: "sessionRoas", data: sessionRoasData},//세션매출
+          {id: "directRoas", data: directRoasData},//직접매출
+          {id: "exposureRoas", data: exposureRoasData},//노출매출
+          {id: "totalRoas", data: totalRoasData},//총매출
+          {id: "ecpm", data: ecpmData},//ecpm
         ]
 
       setLineData([
@@ -116,6 +117,7 @@ function PlatformResponsiveBar(props) {
         lineDataMap.find(value => value.id === dataType),
         lineDataMap.find(value => value.id === dataType2),
       ])
+
       setCloneLineData([
         lineDataMap[0],
         lineDataMap[1],
@@ -126,17 +128,17 @@ function PlatformResponsiveBar(props) {
     }
   }, [platformData]);
 
-  const getColor = () => {
-    const color = {
-      PROCEEDS: '#f5811f',
-      REQUEST_COUNT: '#f25108',
-      EXPOSURE_COUNT: '#ffd1af',
-      CLICK_COUNT: '#fecfcf',
-      CLICK: '#fecfcf'
+  const yFormatted = (data) => {
+    let value;
+    if (['clickRate','conversionRate'].includes(data.serieId)) {
+      value = numberToFixedFormat(data.data.y)+'%'
+    } else if(['clickCount','exposureCount','totalConversionCount','userCount','totalExposureCount','totalClickCount'].includes(data.serieId)) {
+      value = decimalFormat(data.data.y)
+    } else {
+      value = moneyToFixedFormat(data.data.y)+'원'
     }
-    return color[dataType]
+    return value
   }
-
   return (
     <div style={{height: 300}}>
       <ResponsiveLine
@@ -151,7 +153,7 @@ function PlatformResponsiveBar(props) {
           stacked: false,
           reverse: false
         }}
-        //colors={[getColor()]}
+        //colors={[,,,,]}
         axisLeft={null}
         axisBottom={{
           tickSize: 0,
@@ -164,9 +166,10 @@ function PlatformResponsiveBar(props) {
         enableCrosshair={false}
         enableSlices={'x'}
         sliceTooltip={(props) => {
+          console.log(props)
           const toolTip = props.slice.points?.map((data, key) => {
             return <p key={key}>
-              <span style={{color: data.serieColor}}>{data.serieId} : </span><span>{data.data.y}</span>
+              <span style={{color: data.serieColor}}>{label[data.serieId]} : </span><span>{yFormatted(data)}</span>
             </p>
           })
           return (
@@ -191,20 +194,20 @@ function DashBoardIndex() {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [totalInfo, setTotalInfo] = useState(dataTotalInfo)
   const [adverStatusData, setAdverStatusData] = useAtom(adverStatusAtom)
-  const [adverStatusDetailData, setAdverStatusDetailData] = useAtom(adverStatusDetailAtom)
   const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
+  const [platformStatusData, setPlatformStatusData] = useAtom(platformStatusAtom)
+  const [lineData, setLineData] = useAtom(lineDataAtom)
+  const [cloneLineData, setCloneLineData] = useAtom(cloneLineDataAtom)
+
   const [dateRange, setDateRange] = useState([new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
-  const [productTypeSelect] = useState(productType)
-  const [platformStatusTypeSelect] = useState(platformStatusType)
-  const [platformStatusData, setPlatformStatusData] = useAtom(platformStatusAtom)
+
   const [platformChartTotal, setPlatformChartTotal] = useState(platformTotalCont)
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [dataType, setDataType] = useState('cpc')
   const [dataType2, setDataType2] = useState('costAmount')
   const [onOff, setOnOff] = useState(onOffStatus)
-  const [lineData, setLineData] = useAtom(lineDataAtom)
-  const [cloneLineData, setCloneLineData] = useAtom(cloneLineDataAtom)
+
 
   useEffect(() => {
     setOnOff({
@@ -240,6 +243,7 @@ function DashBoardIndex() {
 
     }
   }, [searchCondition])
+
   useEffect(() => {
     if(cloneLineData !== null){
       let dummyArray = lineData
@@ -473,15 +477,7 @@ function DashBoardIndex() {
   }
 
   const handleFetchDetailData = useCallback(async ({userId}) => {
-    retrieveAdvertiserCampaignStatus(userId, searchCondition).then(response => {
-      console.log(response)
-      if(response !== null) {
-        setAdverStatusDetailData(response)
-      } else {
-        setAdverStatusDetailData([])
-      }
-    })
-    return adverStatusDetailData
+    return await retrieveAdvertiserCampaignStatus(userId, searchCondition)
   },[])
 
   return (
@@ -492,8 +488,8 @@ function DashBoardIndex() {
             <ColSpan0 style={{marginRight: 20}}>
               <ColTitle style={{paddingLeft: 0}}>광고 상품</ColTitle>
               <Select components={{IndicatorSeparator: () => null}}
-                      options={productTypeSelect}
-                      value={productTypeSelect.find(value => value.value === searchCondition.productType)}
+                      options={productType}
+                      value={productType.find(value => value.value === searchCondition.productType)}
                       onChange={handleProductType}
                       styles={{
                         input: (baseStyles, state) => (
@@ -615,8 +611,8 @@ function DashBoardIndex() {
                 <Select styles={defaultStyle}
                         isDisabled={!onOff[dataType]}
                         components={{IndicatorSeparator: () => null}}
-                        options={platformStatusTypeSelect}
-                        value={platformStatusTypeSelect.filter(options => options.value === dataType)}
+                        options={platformStatusType}
+                        value={platformStatusType.filter(options => options.value === dataType)}
                         isOptionDisabled={option => option.value === dataType2}
                         onChange={handleChangeChartKey}
                 />
@@ -626,8 +622,8 @@ function DashBoardIndex() {
                 <Select styles={defaultStyle}
                         isDisabled={!onOff[dataType2]}
                         components={{IndicatorSeparator: () => null}}
-                        options={platformStatusTypeSelect}
-                        value={platformStatusTypeSelect.filter(options => options.value === dataType2)}
+                        options={platformStatusType}
+                        value={platformStatusType.filter(options => options.value === dataType2)}
                         isOptionDisabled={option => option.value === dataType}
                         onChange={handleChangeChartKey2}
                 />
