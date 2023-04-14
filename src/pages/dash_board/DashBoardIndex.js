@@ -57,7 +57,7 @@ import {
   retrieveAdvertiserStatus
 } from "../../services/dash_board/ManageCampaignAxios";
 import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../common/StringUtils";
-import {DashBoardCondition} from "../../components/Platform/Condition";
+import {DashBoardCondition} from "../../components/dashBoard/Condition";
 
 /** 플래폼 현황 차트 **/
 function PlatformResponsiveBar(props) {
@@ -194,6 +194,7 @@ function PlatformResponsiveBar(props) {
 function DashBoardIndex() {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
+  const [keyword, setKeyword] = useState(searchCondition.keyword)
   const [totalInfo, setTotalInfo] = useState(dataTotalInfo)
   const [adverStatusData, setAdverStatusData] = useAtom(adverStatusAtom)
   const [platformStatusData, setPlatformStatusData] = useAtom(platformStatusAtom)
@@ -337,7 +338,10 @@ function DashBoardIndex() {
    * @param searchCondition
    */
   const handleData = () => {
-    console.log(searchCondition)
+    setSearchCondition({
+      ...searchCondition,
+      keyword: keyword
+    })
   }
 
   /**
@@ -373,7 +377,7 @@ function DashBoardIndex() {
   return (
     <>
       <DashBoardCard>
-        <DashBoardCondition role={tokenUserInfo.role} searchType={productType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleData={handleData}/>
+        <DashBoardCondition role={tokenUserInfo.role} searchType={productType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleData={handleData} keyword={keyword} setKeyword={setKeyword}/>
       </DashBoardCard>
       <DashBoardCard>
         <DashBoardHeader>플랫폼 현황</DashBoardHeader>
