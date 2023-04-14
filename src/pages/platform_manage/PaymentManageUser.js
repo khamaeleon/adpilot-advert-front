@@ -1,93 +1,58 @@
 import {
     Board,
     BoardContainer,
-    BoardHeader, BoardSearchDetail,
-    BoardTableContainer, CalendarBox, CalendarIcon, CancelButton,
-    ColSpan1, ColSpan2, ColSpan3, ColSpan4,
-    CustomDatePicker, DateContainer, DefaultButton,
-    RowSpan, selectStyle, Span4,
+    BoardHeader, BoardSearchDetail, BoardSearchResultTitle,
+    CalendarBox, CalendarIcon,
+    ColSpan2, ColSpan4,
+    CustomDatePicker, DateContainer, DefaultButton, Edit,
+    RowSpan, SaveExcelButton,
     TitleContainer,
 } from "../../assets/GlobalStyles";
 import styled from 'styled-components';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import React, {useCallback, useEffect, useState} from "react";
-import {toast, ToastContainer} from "react-toastify";
 import Navigator from "../../components/common/Navigator";
 import ko from "date-fns/locale/ko";
+import { AdChargeButton } from "../../components/payment/user/AdCharge";
+import { RefundRequestButton } from "../../components/payment/user/RefundRequest";
+import { RegisterRefundInformationButton } from "../../components/payment/user/RegisterRefundInformation";
+import { EditRefundInformationButton } from "../../components/payment/user/EditRefundInformation";
 import {
-    getLastDay,
-    getLastMonth, getLastNinetyDay,
-    getLastThirtyDay,
-    getLastWeekDay,
     getThisMonth,
     getToDay
 } from "../../common/DateUtils";
 import {decimalFormat} from "../../common/StringUtils";
-import Table from "../../components/table";
+import {useAtom} from "jotai";
+import {modalController} from "../../store";
+import {TotalCount} from "../../components/table/TableDetail";
 
 function PaymentManageUser(props) {
-    const [dateActive,setDateActive] = useState('')
-    const {searchCondition, setSearchCondition, handleTableData, searchType} = props;
     const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
     const [startDate, endDate] = dateRange;
+
+    //[d] 환불 입력 정보
+    // const [refundData, setRefundData] = useState([])
+    const [refundData, setRefundData] = useState(["테스트1","테스트2","테스트3"])
+    const [paymentDetails, setPaymentDetails] = useState([
+            ["yyyy.mm.dd hh.mm","결제 완료","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","결제 취소","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","환불 완료","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","결제 완료","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","결제 취소","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","환불 완료","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","결제 완료","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","결제 취소","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","환불 완료","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
+        ]
+    )
     /**
      * 날짜 레인지 선택
      * @param rangeType
      */
-    const handleRangeDate = (rangeType) => {
-        setDateActive(rangeType)
-        if (rangeType === 'thisMonth') {
-            setSearchCondition({
-                ...searchCondition,
-                searchStartDate: getThisMonth().startDay,
-                searchEndDate: getThisMonth().endDay
-            })
-            setDateRange([new Date(getThisMonth().startDay), new Date(getThisMonth().endDay)])
-        } else if (rangeType === 'lastMonth') {
-            setSearchCondition({
-                ...searchCondition,
-                searchStartDate: getLastMonth().startDay,
-                searchEndDate: getLastMonth().endDay
-            })
-            setDateRange([new Date(getLastMonth().startDay), new Date(getLastMonth().endDay)])
-        } else if (rangeType === 'today') {
-            setSearchCondition({
-                ...searchCondition,
-                searchStartDate: getToDay(),
-                searchEndDate: getToDay()
-            })
-            setDateRange([new Date(), new Date()])
-        } else if (rangeType === 'lastDay') {
-            setSearchCondition({
-                ...searchCondition,
-                searchStartDate: getLastDay(),
-                searchEndDate: getLastDay()
-            })
-            setDateRange([new Date(getLastDay()), new Date(getLastDay())])
-        } else if (rangeType === 'lastWeekDay') {
-            setSearchCondition({
-                ...searchCondition,
-                searchStartDate: getLastWeekDay().startDay,
-                searchEndDate: getLastWeekDay().endDay
-            })
-            setDateRange([new Date(getLastWeekDay().startDay), new Date(getLastWeekDay().endDay)])
-        } else if (rangeType === 'lastThirtyDay') {
-            setSearchCondition({
-                ...searchCondition,
-                searchStartDate: getLastThirtyDay().startDay,
-                searchEndDate: getLastThirtyDay().endDay
-            })
-            setDateRange([new Date(getLastThirtyDay().startDay), new Date(getLastThirtyDay().endDay)])
-        } else if (rangeType === 'lastNinetyDay') {
-            setSearchCondition({
-                ...searchCondition,
-                searchStartDate: getLastNinetyDay().startDay,
-                searchEndDate: getLastNinetyDay().endDay
-            })
-            setDateRange([new Date(getLastNinetyDay().startDay), new Date(getLastNinetyDay().endDay)])
-        }
-        //call 때려
-    }
+
     return (
         <main>
             <BoardContainer>
@@ -100,11 +65,11 @@ function PaymentManageUser(props) {
                     <BoardSearchDetail>
                         <RowSpan box={true} row={true}>
                             <ColSpan2 column={true} style={{borderRight:"1px solid #ddd", padding:"0 20px 0 0", gap:"0"}}>
-                                <RowSpan style={{width:"100%", margin:"0 0 15px 0"}}>
+                                <RowSpan style={{width:"100%", margin:"0 0 30px 0"}}>
                                     <ColSpan2 style={{alignItems:"baseline"}}>광고비 현황</ColSpan2>
                                     <ColSpan2 style={{justifyContent:"right"}}>
-                                        <DefaultButton>광고비 충전</DefaultButton>
-                                        <DefaultButton style={{background:"#fff", color:"#777"}}>환불신청</DefaultButton>
+                                        <AdChargeButton title={'광고비 충전'} modalInfo={'USER'} onSave={null} onSubmit={null}/>
+                                        <RefundRequestButton title={'환불 신청'} modalInfo={'USER'} onSave={null} onSubmit={null} RefundData={refundData}/>
                                     </ColSpan2>
                                 </RowSpan>
                                 <RowSpan style={{margin:"0"}}>
@@ -115,25 +80,62 @@ function PaymentManageUser(props) {
                                     </ColSpan4>
                                 </RowSpan>
                             </ColSpan2>
-                            <ColSpan2 column={true} style={{padding:"0 20px 0 0", gap:"0"}}>
-                                <RowSpan style={{width:"100%"}}>
-                                    <ColSpan2 style={{alignItems:"baseline"}}>환불 정보</ColSpan2>
-                                    <ColSpan2 style={{justifyContent:"right"}}>
-                                        <DefaultButton>등록</DefaultButton>
-                                    </ColSpan2>
+                            <ColSpan2 column={true} style={{padding:"0", gap:"0"}}>
+                                <RowSpan style={{width:"100%", margin:"0"}}>
+                                    <ColSpan2 style={{alignItems:"baseline", marginBottom:"15px"}}>환불 정보</ColSpan2>
+                                    {refundData.length === 0?
+                                        <ColSpan2 style={{justifyContent:"right"}}>
+                                            <RegisterRefundInformationButton title={'등록'} modalInfo={'USER'} onSave={null} onSubmit={null}/>
+                                        </ColSpan2>
+                                        :
+                                        <ColSpan2 style={{justifyContent:"right", width:"70px", height:"15px"}}>
+                                            <EditRefundInformationButton title={''} modalInfo={'USER'} onSave={null} onSubmit={null}/>
+                                        </ColSpan2>
+                                    }
                                 </RowSpan>
                                 <RowSpan>
                                     <ColSpan4>
-                                        <div>등록된 환불 정보가 없습니다. 환불 정보를 등록해주세요.</div>
-                                        {/*<BoardTableContainer>*/}
-                                        {/*   환불 정보가 있으면 여기 표시 */}
-                                        {/*</BoardTableContainer>*/}
+                                        {refundData.length === 0?
+                                            <AdvertisingCostStatus style={{marginTop: "15px"}}>
+                                                <small>등록된 환불 정보가 없습니다. 환불 정보를 등록해주세요.</small>
+                                            </AdvertisingCostStatus>
+                                            :
+                                            <RefundInformation>
+                                                <table style={{margin:"0"}}>
+                                                    <thead>
+                                                    <tr>
+                                                        <th>은행</th>
+                                                        <th>계좌번호</th>
+                                                        <th>예금주</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        {refundData.map((item, key) => {
+                                                            return(
+                                                                <td
+                                                                    key={key}
+                                                                >
+                                                                    {item}
+                                                                </td>
+                                                            )
+                                                        })}
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </RefundInformation>
+                                        }
                                     </ColSpan4>
                                 </RowSpan>
                             </ColSpan2>
                         </RowSpan>
                     </BoardSearchDetail>
-                    <div style={{width:'100%', marginTop:'20px', paddingTop:'20px', borderTop:'1px solid #ddd'}}>
+                    <div style={{
+                        width:'100%',
+                        marginTop:'20px',
+                        paddingTop:'20px',
+                        borderTop:'1px solid #ddd'
+                    }}>
                         <div style={{width:'300px'}}>
                             <DateContainer>
                                 <CalendarBox>
@@ -151,39 +153,94 @@ function PaymentManageUser(props) {
                             </DateContainer>
                         </div>
                     </div>
-                    <BoardTableContainer>
-                        여기도 테이블 자리
-                    </BoardTableContainer>
+                    <ColSpan4>
+                        <BoardSearchResultTitle style={{alignItems:"end",}}>
+                            <div>
+                                {paymentDetails &&
+                                    <TotalCount><span style={{marginRight: "10px"}}/>총 <span>{paymentDetails.length}</span> 건의 결제 내역</TotalCount>}
+                            </div>
+                            <div>
+                                <SaveExcelButton>엑셀 저장</SaveExcelButton>
+                            </div>
+                        </BoardSearchResultTitle>
+                    </ColSpan4>
+                    <ColSpan4>
+                        <RefundInformation multiTable={true} style={{overflow:"auto", maxHeight:"350px", alignItems:"start"}}>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>신청 일시</th>
+                                    <th>신청 상태</th>
+                                    <th>결제/신청 방식</th>
+                                    <th>결제/신청 수단</th>
+                                    <th>결제/신청 금액</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {paymentDetails.map((item, key) => {
+                                    return(
+                                    <tr key={key}>
+                                        {item.map((data, key) => {
+                                            return(
+                                                <td key={key}>{data}</td>
+                                            )
+                                        })}
+                                    </tr>
+                                    )
+                                })}
+                                </tbody>
+                            </table>
+                        </RefundInformation>
+                    </ColSpan4>
                 </Board>
-                <ToastContainer position="top-center"
-                                autoClose={1500}
-                                hideProgressBar
-                                newestOnTop={false}
-                                closeOnClick
-                                rtl={false}
-                                pauseOnFocusLoss
-                                draggable
-                                pauseOnHover
-                                style={{zIndex: 9999999}}/>
             </BoardContainer>
         </main>
     )
 }
 
 const AdvertisingCostStatus = styled.div`
-  height: 33px;
-  color: #f5811f;
+  height: 63px;
   padding: 15px;
-  font-size: 25px;
   font-weight: bold;
   background: #fff;
   border-radius: 8px;
   border: solid 1px #e5e5e5;
   >span {
     width: 100%;
+    font-size: 25px;
+    color: #f5811f;
     text-align: right;
   }
+  >small {
+    width: 100%;
+    color: #a2aab2;
+    text-align: center;
+  }
 `
+
+const RefundInformation = styled.div`
+  font-size: 13px;
+  & table {
+    width: 100%;
+    color: #222;
+    & th {
+      width: ${(props) => props.multiTable ? "20%" : "33.33%"};
+      padding: 12px;
+      background-color: #f3f3f3;
+      border-top: 1px solid #e9ebee;
+      border-bottom: 1px solid #e9ebee;
+    }
+
+    & td {
+      text-align: center;
+      padding: 12px;
+      border-bottom: 1px solid #e5e5e5;
+      cursor: pointer;
+      background-color: #fff;
+    }
+  }
+`
+
 
 export default PaymentManageUser
 
