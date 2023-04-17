@@ -3,7 +3,7 @@ import React from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../modal/Modal";
 import Select from "react-select";
 import {modalController} from "../../../store";
-import {ColSpan0, ColSpan1, ColSpan2, ColSpan3, ColSpan4, DefaultButton, inputStyle, RowSpan, Span3} from "../../../assets/GlobalStyles";
+import {ColSpan0, ColSpan1, ColSpan2, ColSpan3, ColSpan4, DefaultButton, inputStyle, RowSpan, Span3, Edit} from "../../../assets/GlobalStyles";
 export function RegisterRefundInformationButton(props) {
     const {onSubmit, modalInfo, onSave, title, refundData, setRefundData} = props;
     const [, setModal] = useAtom(modalController)
@@ -19,7 +19,11 @@ export function RegisterRefundInformationButton(props) {
             }
         })
     }
-    return <DefaultButton type={'button'} onClick={handleModalComponent}>{title}</DefaultButton>
+    return  (
+        <>
+            {refundData.length === 0?(<DefaultButton onClick={handleModalComponent}>{title}</DefaultButton>):(<Edit onClick={handleModalComponent}>{title}</Edit>)}
+        </>
+    )
 }
 
 function RegisterRefundInformationModal (props) {

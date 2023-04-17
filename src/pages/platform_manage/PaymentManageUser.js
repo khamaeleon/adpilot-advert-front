@@ -16,7 +16,6 @@ import ko from "date-fns/locale/ko";
 import { AdChargeButton } from "../../components/payment/user/AdCharge";
 import { RefundRequestButton } from "../../components/payment/user/RefundRequest";
 import { RegisterRefundInformationButton } from "../../components/payment/user/RegisterRefundInformation";
-import { EditRefundInformationButton } from "../../components/payment/user/EditRefundInformation";
 import {
     getThisMonth,
     getToDay
@@ -153,7 +152,7 @@ function PaymentManageUser(props) {
                                         </ColSpan2>
                                         :
                                         <ColSpan2 style={{justifyContent:"right", width:"70px", height:"15px"}}>
-                                            <EditRefundInformationButton title={''} modalInfo={'USER'} onSave={null} onSubmit={null}/>
+                                            <RegisterRefundInformationButton title={''} modalInfo={'USER'} onSave={null} onSubmit={null} refundData={refundData} setRefundData={setRefundData}/>
                                         </ColSpan2>
                                     }
                                 </RowSpan>
