@@ -1,4 +1,8 @@
 import {
+  AgentType,
+  BoardSearchDetail,
+  CalendarBox,
+  CalendarIcon,
   ChartContainer,
   ChartLabel,
   ChartLabels,
@@ -6,10 +10,17 @@ import {
   DashBoardBody,
   DashBoardCard,
   DashBoardHeader,
-  defaultStyle
+  DateContainer,
+  defaultStyle,
+  Input,
+  RangePicker,
+  RelativeDiv,
+  RowSpan,
+  SearchButton
 } from "../../assets/GlobalStyles";
 import {ResponsiveLine} from '@nivo/line'
 import React, {useCallback, useEffect, useState} from "react";
+import {HorizontalRule} from "../../components/common/Common";
 import {useAtom} from "jotai/index";
 import {dataTotalInfo} from "../../components/common/entity";
 import {chartDataAtom, commonProperties, platformStatusType} from "./entity/Chart";

@@ -190,7 +190,7 @@ export const adverStatusDetailColumn = [
 
   },
   {
-    name: 'activeYn',
+    name: 'publishYn',
     header: '연동 상태',
     textAlign: 'center',
     minWidth: 100,
@@ -210,6 +210,7 @@ export const adverStatusDetailColumn = [
     name: 'campaignName',
     header: '캠페인명',
     textAlign: 'center',
+    minWidth: 150,
     showColumnMenuTool: false,
     cellProps: {
       style: {
@@ -217,9 +218,7 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({data, value}) => {
-      return (
-        <Link to={'/board/campaignInfoDetail'} state={{id: data?.campaignId}}>{value}</Link>
-      )
+      return <Link to={'/board/campaignInfoDetail'} state={{id: data?.campaignId}}>{value}</Link>
     }
   },
   {
@@ -227,22 +226,17 @@ export const adverStatusDetailColumn = [
     header: '캠페인 코드',
     textAlign: 'center',
     sortable: false,
-    minWidth: 120,
-    maxWidth: 120,
-
+    minWidth: 90,
+    maxWidth: 90,
     showColumnMenuTool: false,
     render: ({value}) => {
-      return (
-        <div style={{display: "flex", alignItems: 'center', justifyContent: 'center'}}>
-          <span>{'캠페인 코드'}</span>
-          <Icon icon={'copyCode'} value={value} />
-        </div>
-      )
+      return  <Icon icon={'copyCode'} value={value} />
     }
   },
   {
     name: 'campaignBudgetDesc',
     header: '예산설정',
+    minWidth: 150,
     textAlign: 'center',
     showColumnMenuTool: false,
     cellProps: {
@@ -251,15 +245,14 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({value, data}) => {
-      return (
-        <Link to={'/board/campaignBudgetDetail'} state={{id: data?.campaignBudgetId}}>{value}</Link>
-      )
+      return  <Link to={'/board/campaignBudgetDetail'} state={{id: data?.campaignBudgetId}}>{value}</Link>
     }
   },
   {
     name: 'advertiseGroupName',
     header: '광고 그룹',
     textAlign: 'center',
+    minWidth: 150,
     showColumnMenuTool: false,
     cellProps: {
       style: {
@@ -267,15 +260,14 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({value, data}) => {
-      return (
-        <Link to={'/board/campaignGroupDetail'} state={{id: data?.advertiseGroupId}}>{value}</Link>
-      )
+      return <Link to={'/board/campaignGroupDetail'} state={{id: data?.advertiseGroupId}}>{value}</Link>
     }
   },
   {
     name: 'creativeName',
     header: '크리에이티브',
     textAlign: 'center',
+    minWidth: 150,
     showColumnMenuTool: false,
     cellProps: {
       style: {
@@ -283,26 +275,30 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({value, data}) => {
-      return (
-        <Link to={'/board/campaignCreativeDetail'} state={{id: data?.creativeId}}>{value}</Link>
-      )
+      return <Link to={'/board/campaignCreativeDetail'} state={{id: data?.creativeId}}>{value}</Link>
     }
   },
   {
     name: 'exposureCount',
     header: '노출수',
+    minWidth: 150,
     showColumnMenuTool: false,
+    textAlign: 'center',
     render: ({value}) => <p>{decimalFormat(value)}</p>,
   },
   {
     name: 'clickCount',
     header: '클릭수',
+    minWidth: 150,
     showColumnMenuTool: false,
+    textAlign: 'center',
     render: ({value}) => <p>{decimalFormat(value)}</p>,
   },
   {
     name: 'clickRate',
     header: '클릭률',
+    minWidth: 150,
+    textAlign: 'center',
     render: ({data}) => {
       let value = data.clickCount / (data.exposureCount*100);
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
@@ -312,12 +308,16 @@ export const adverStatusDetailColumn = [
   {
     name: 'costAmount',
     header: '비용',
+    minWidth: 150,
+    textAlign: 'center',
     render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
   {
     name: 'cpc',
     header: 'CPC',
+    minWidth: 150,
+    textAlign: 'center',
     render: ({data}) => {
       let value = data?.costAmount / data.clickCount;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -327,12 +327,16 @@ export const adverStatusDetailColumn = [
   {
     name: 'totalConversionCount',
     header: '전환 수',
+    minWidth: 100,
+    textAlign: 'center',
     render: ({value}) => <p>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
   {
     name: 'conversionRate',
     header: '전환률',
+    minWidth: 100,
+    textAlign: 'center',
     render: ({data}) => {
       let value = data.totalConversionCount / (data.clickCount*100);
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
@@ -342,6 +346,8 @@ export const adverStatusDetailColumn = [
   {
     name: 'costPerConversion',
     header: '전환 단가',
+    minWidth: 150,
+    textAlign: 'center',
     render: ({data}) => {
       let value = data?.costAmount / data.totalConversionCount;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -351,6 +357,8 @@ export const adverStatusDetailColumn = [
   {
     name: 'avgConversionAmount',
     header: '평균 구매액',
+    minWidth: 150,
+    textAlign: 'center',
     render: ({data}) => {
       let value = data.totalConversionAmount / data.totalConversionCount;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -359,9 +367,11 @@ export const adverStatusDetailColumn = [
   },
   {
     name: 'sessionRoas',
+    textAlign: 'center',
+    minWidth: 150,
     header: () => {
       return(
-        <div><p>세션매출</p><p>(ROAS)</p></div>
+        <div><p>세션매출</p><p style={{fontSize: 12}}>(ROAS)</p></div>
       )
     },
     render: ({data}) => {
@@ -372,9 +382,11 @@ export const adverStatusDetailColumn = [
   },
   {
     name: 'directRoas',
+    textAlign: 'center',
+    minWidth: 150,
     header: () => {
       return(
-        <div><p>직접매출</p><p>(ROAS)</p></div>
+        <div><p>직접매출</p><p style={{fontSize: 12}}>(ROAS)</p></div>
       )
     },
     render: ({data}) => {
@@ -385,9 +397,11 @@ export const adverStatusDetailColumn = [
   },
   {
     name: 'exposureRoas',
+    textAlign: 'center',
+    minWidth: 150,
     header: () => {
       return(
-        <div><p>노출매출</p><p>(ROAS)</p></div>
+        <div><p>노출매출</p><p style={{fontSize: 12}}>(ROAS)</p></div>
       )
     },
     render: ({data}) => {
@@ -398,9 +412,11 @@ export const adverStatusDetailColumn = [
   },
   {
     name: 'totalRoas',
+    textAlign: 'center',
+    minWidth: 150,
     header: () => {
       return(
-        <div><p>총매출</p><p>(ROAS)</p></div>
+        <div><p>총매출</p><p style={{fontSize: 12}}>(ROAS)</p></div>
       )
     },
     render: ({data}) => {
@@ -411,6 +427,8 @@ export const adverStatusDetailColumn = [
   },
   {
     name: 'epcm',
+    textAlign: 'center',
+    minWidth: 150,
     header: 'EPCM',
     render: ({value}) => <p className={'won'}>{moneyToFixedFormat(value)}</p>,
     showColumnMenuTool: false
