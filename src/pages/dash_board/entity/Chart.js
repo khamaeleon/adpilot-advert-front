@@ -22,63 +22,49 @@ export const platformStatusType = [
 export const platformStatusAtom = atom([])
 
 /*플랫폼 현황 차트 항목별 합산*/
-export const platformTotalCont = {
-  clickCountTotal:0, //clickCount 합산
-  exposureCountTotal:0,//exposureCount 합산
-  totalConversionCount:0,//conversionCount 합산
-  userCount:0,//userCount 합산
-  totalExposureCount:0,//totalExposureCount 합산
-  totalClickCount:0,//totalClickCount 합산
-  clickRate: 0,
-  costAmount:0,//costAmount 합산
-  cpc:0,//avgCpc 평균 계산
-  conversionRate:0,//conversionRate 평균 계산
-  costPerConversion:0,//costPerConversion 평균 계산
-  avgConversionAmount:0,//avgConversionAmount 평균 계산
-  sessionRoas:0,//세션매출 평균 계산
-  directRoas:0,//직접매출 평균 계산
-  exposureRoas:0,//노출매출 평균 계산
-  totalRoas:0,//총매출 평균 계산
-  ecpm:0,//ecpm 평균 계산
-}
 export const lineDataAtom = atom(null)
 export const cloneLineDataAtom = atom(null)
-export const onOffStatus = {
-  clickCount: true,
-  exposureCount: true,
-  totalConversionCount: true,
-  userCount: false,
-  totalExposureCount: false,
-  totalClickCount: false,
-  clickRate: false,
-  costAmount: false,
-  cpc: false,
-  conversionRate: false,
-  costPerConversion: false,
-  avgConversionAmount: false,
-  sessionRoas: false,
-  directRoas: false,
-  exposureRoas: false,
-  totalRoas: false,
-  ecpm: false
-}
+export const chartDataAtom = atom({
+  clickCount: {status: true, label: '클릭수', totalCount: 0},
+  exposureCount: {status: true, label: '노출수', totalCount: 0},
+  totalConversionCount: {status: true, label: '전환수', totalCount: 0},
+  userCount: {status: false, label: '광고주수', totalCount: 0},
+  totalExposureCount: {status: false, label: '총 노출수', totalCount: 0},
+  totalClickCount: {status: false, label: '총 클릭수', totalCount: 0},
+  clickRate: {status: false, label: '클릭률', totalCount: 0},
+  costAmount: {status: false, label: '비용', totalCount: 0},
+  cpc: {status: false, label: 'CPC', totalCount: 0},
+  conversionRate: {status: false, label: '전환율', totalCount: 0},
+  costPerConversion: {status: false, label: '전환 단가', totalCount: 0},
+  avgConversionAmount: {status: false, label: '평균 구매액', totalCount: 0},
+  sessionRoas: {status: false, label: '세션매출', totalCount: 0},
+  directRoas: {status: false, label: '직접매출', totalCount: 0},
+  exposureRoas: {status: false, label: '노출매출', totalCount: 0},
+  totalRoas: {status: false, label: '총매출', totalCount: 0},
+  ecpm: {status: false, label: 'ECPM', totalCount: 0},
+})
 
-export const toolTipLabel = {
-  clickCount: '클릭수',
-  exposureCount: '노출수',
-  totalConversionCount: '전환수',
-  userCount: '광고주수',
-  totalExposureCount: '총 노출수',
-  totalClickCount: '총 클릭수',
-  clickRate: '클릭률',
-  costAmount: '비용',
-  cpc: 'CPC',
-  conversionRate: '전환율',
-  costPerConversion: '전환 단가',
-  avgConversionAmount: '평균 구매액',
-  sessionRoas: '세션매출',
-  directRoas: '직접매출',
-  exposureRoas: '노출매출',
-  totalRoas: '총매출',
-  ecpm: 'ECPM'
-}
+export const commonProperties = {
+  margin:{top: 30, right: 50, bottom: 30, left: 50},
+  padding:0.75,
+  yScale:{
+    base: 10,
+    type: 'linear',
+    min: 'auto',
+    max: 'auto',
+    stacked: false,
+    reverse: false
+  },
+  //colors={[,,,,]}
+  axisLeft:null,
+  axisBottom:{
+    tickSize: 0,
+    tickPadding: 15,
+    tickRotation: 0,
+    legendOffset: 32,
+  },
+  enableGridY:false,
+  useMesh:true,
+  enableCrosshair:false,
+  enableSlices:'x',
+};

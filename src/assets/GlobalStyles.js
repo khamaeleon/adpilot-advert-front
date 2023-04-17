@@ -1030,43 +1030,49 @@ export const ChartContainer = styled.div`
   border: 1px solid #e5e5e5;
   border-radius: 5px;
 `
-export const ChartLabel = styled.div`
+export const ChartLabels = styled.div`
   display: flex;
   align-items: center;
   gap: 25px;
-  > div {
+`
+
+export const ChartLabel = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 100px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: ${(props) => props.active ?'#222':'#ccc' };
+  > p {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    min-width: 100px;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    &.off {
-      color: #ccc
-    }
-    > p {
-      display: flex;
-      align-items: center;
-      height: 36px;
-    }
+    height: 36px;
+  }
+  > div {
+    width: 120px;
     > div {
-      width: 120px;
-      > div { 
-        cursor: pointer;
-        border-width: 0;
-      }
-    }
-    > span {
-      display: flex;
-      width: 100%;
-      height: 30px;
-      align-items: center;
-      flex-direction: column;
-      justify-content: center;
-      border-top: 1px solid #ccc;
+      cursor: pointer;
+      border-width: 0;
     }
   }
+  > span {
+    display: flex;
+    width: 100%;
+    height: 30px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    border-top: 1px solid #ccc;
+  }
+`
+
+export const ChartTooltip = styled.span`
+  background: #fff;
+  padding: 3px 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
 `
 
 export const Span1 = styled.span`
