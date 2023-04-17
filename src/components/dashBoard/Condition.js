@@ -102,18 +102,13 @@ export function DashBoardCondition(props) {
     })
   }
   const handleChangeCheckAll = (event) => {
-    if (event.target.checked) {
+    if (event.target.checked === true) {
       setSearchCondition({
         ...searchCondition,
         agentTypes: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_NATIVE_APP']
       })
-    } else {
-      setSearchCondition({
-        ...searchCondition,
-        agentTypes: []
-      })
+      setIsCheckedAll(event.target.checked)
     }
-    setIsCheckedAll(event.target.checked)
   }
   /**
    * 에이전트 타입 체크
@@ -126,10 +121,12 @@ export function DashBoardCondition(props) {
         agentTypes: searchCondition.agentTypes.concat(event.currentTarget.value)
       })
     } else {
-      setSearchCondition({
-        ...searchCondition,
-        agentTypes: searchCondition.agentTypes.filter(id => id !== event.currentTarget.value)
-      })
+      if(searchCondition.agentTypes.length > 1) {
+        setSearchCondition({
+          ...searchCondition,
+          agentTypes: searchCondition.agentTypes.filter(id => id !== event.currentTarget.value)
+        })
+      }
     }
   }
 

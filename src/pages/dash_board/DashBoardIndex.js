@@ -1,62 +1,35 @@
 import {
-  AgentType,
-  BoardSearchDetail,
-  CalendarBox,
-  CalendarIcon,
   ChartContainer,
   ChartLabel,
-  ColSpan0,
-  ColSpan1,
-  ColSpan3,
-  ColTitle,
-  CustomDatePicker,
   DashBoardBody,
   DashBoardCard,
   DashBoardHeader,
-  DateContainer,
-  defaultStyle,
-  Input,
-  RangePicker,
-  RelativeDiv,
-  RowSpan,
-  SearchButton
+  defaultStyle
 } from "../../assets/GlobalStyles";
 import {ResponsiveLine} from '@nivo/line'
 import React, {useCallback, useEffect, useState} from "react";
-import {HorizontalRule} from "../../components/common/Common";
 import {useAtom} from "jotai/index";
 import {dataTotalInfo} from "../../components/common/entity";
-import {
-  getLastDay,
-  getLastMonth,
-  getLastThirtyDay,
-  getLastWeekDay,
-  getThisMonth,
-  getToDay
-} from "../../common/DateUtils";
-import ko from "date-fns/locale/ko";
 import Select from "react-select";
-import Checkbox from "../../components/common/Checkbox";
 import {
   cloneLineDataAtom,
-  lineDataAtom, onOffStatus,
+  lineDataAtom,
+  onOffStatus,
   platformStatusAtom,
   platformStatusType,
-  platformTotalCont, toolTipLabel
+  platformTotalCont,
+  toolTipLabel
 } from "./entity/Chart";
-import {adverListColumn, adverStatusAtom, adverStatusDetailAtom, adverStatusDetailColumn,} from "./entity/Campaign";
+import {adverListColumn, adverStatusAtom, adverStatusDetailColumn,} from "./entity/Campaign";
 import {productType, searchConditionAtom} from "./entity/Common";
-import {
-  retrieveAdverOverview,
-  retrieveOverview,
-} from "../../services/dash_board/ChartAxios";
+import {retrieveAdverOverview, retrieveOverview,} from "../../services/dash_board/ChartAxios";
 import {tokenResultAtom} from "../login/entity/Common";
 import TableDetail from "../../components/table/TableDetail";
 import {
   retrieveAdvertiserCampaignStatus,
   retrieveAdvertiserStatus
 } from "../../services/dash_board/ManageCampaignAxios";
-import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../common/StringUtils";
+import {dateFormat, decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../common/StringUtils";
 import {DashBoardCondition} from "../../components/dashBoard/Condition";
 
 /** 플래폼 현황 차트 **/
@@ -72,27 +45,29 @@ function PlatformResponsiveBar(props) {
   useEffect(() => {
     let lineDataMap={}
     if (platformData !== null) {
+      let date;
       platformData.map((data, index) => {
-        clickData = [...clickData, {x: data.historyDate, y: data.clickCount}]
-        exposureData = [...exposureData, {x: data.historyDate, y: data.exposureCount}]
-        totalConversionData = [...totalConversionData, {x: data.historyDate, y: data.totalConversionCount}]
-        userData = [...userData, {x: data.historyDate, y: data?.userCount}]
-        totalExposureData = [...totalExposureData, {x: data.historyDate, y: data?.totalExposureCount}]
-        totalClickData = [...totalClickData, {x: data.historyDate, y: data?.totalClickCount}]
-        clickRateData = [...clickRateData, {x: data.historyDate, y: data.clickCount / (data.exposureCount*100)}]
-        costAmountData = [...costAmountData, {x: data.historyDate, y: data?.costAmount}]
-        cpcData = [...cpcData, {x: data.historyDate, y: data?.costAmount / data.clickCount}]
-        conversionRateData = [...conversionRateData, {x: data.historyDate, y: data.totalConversionCount / (data.clickCount*100)}]
-        costPerConversionData = [...costPerConversionData, {x: data.historyDate, y: data?.costAmount / data.totalConversionCount}]
-        avgConversionAmountData = [...avgConversionAmountData, {x: data.historyDate, y: data.totalConversionAmount / data.totalConversionCount}]
-        sessionRoasData = [...sessionRoasData, {x: data.historyDate, y: data.sessionConversionAmount / (data.costAmount *100)}]
-        directRoasData = [...directRoasData, {x: data.historyDate, y: data.directConversionAmount / (data.costAmount *100)}]
-        exposureRoasData = [...exposureRoasData, {x: data.historyDate, y: data.exposureConversionAmount / (data.costAmount *100)}]
-        totalRoasData = [...totalRoasData, {x: data.historyDate, y: data.totalConversionAmount / (data.costAmount *100)}]
-        ecpmData = [...ecpmData, {x: data.historyDate, y: data?.costAmount / (data.exposureCount*1000)}]
+        date = dateFormat(data.historyDate,'MM-DD')
+        clickData = [...clickData, {x: date, y: data.clickCount}]
+        exposureData = [...exposureData, {x: date, y: data.exposureCount}]
+        totalConversionData = [...totalConversionData, {x: date, y: data.totalConversionCount}]
+        userData = [...userData, {x: date, y: data?.userCount}]
+        totalExposureData = [...totalExposureData, {x: date, y: data?.totalExposureCount}]
+        totalClickData = [...totalClickData, {x: date, y: data?.totalClickCount}]
+        clickRateData = [...clickRateData, {x: date, y: data.clickCount / (data.exposureCount*100)}]
+        costAmountData = [...costAmountData, {x: date, y: data?.costAmount}]
+        cpcData = [...cpcData, {x: date, y: data?.costAmount / data.clickCount}]
+        conversionRateData = [...conversionRateData, {x: date, y: data.totalConversionCount / (data.clickCount*100)}]
+        costPerConversionData = [...costPerConversionData, {x: date, y: data?.costAmount / data.totalConversionCount}]
+        avgConversionAmountData = [...avgConversionAmountData, {x: date, y: data.totalConversionAmount / data.totalConversionCount}]
+        sessionRoasData = [...sessionRoasData, {x: date, y: data.sessionConversionAmount / (data.costAmount *100)}]
+        directRoasData = [...directRoasData, {x: date, y: data.directConversionAmount / (data.costAmount *100)}]
+        exposureRoasData = [...exposureRoasData, {x: date, y: data.exposureConversionAmount / (data.costAmount *100)}]
+        totalRoasData = [...totalRoasData, {x: date, y: data.totalConversionAmount / (data.costAmount *100)}]
+        ecpmData = [...ecpmData, {x: date, y: data?.costAmount / (data.exposureCount*1000)}]
       })
       lineDataMap = [
-          {id: 'clickCount', data: clickData, yFormatted: '원'}, //클릭수
+          {id: 'clickCount', data: clickData}, //클릭수
           {id: 'exposureCount', data: exposureData},//노출수
           {id: 'totalConversionCount', data: totalConversionData},//전환수
           {id: "userCount", data: userData},//광고주수
@@ -110,7 +85,6 @@ function PlatformResponsiveBar(props) {
           {id: "totalRoas", data: totalRoasData},//총매출
           {id: "ecpm", data: ecpmData},//ecpm
         ]
-
       setLineData([
         lineDataMap[0],
         lineDataMap[1],
