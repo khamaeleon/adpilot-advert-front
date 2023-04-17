@@ -1,9 +1,9 @@
 import {useAtom} from "jotai";
 import React from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../modal/Modal";
-import styled from "styled-components";
 import {modalController} from "../../../store";
 import {
+    ColSpan0,
     ColSpan1,
     ColSpan2,
     ColSpan3,
@@ -11,13 +11,10 @@ import {
     DefaultButton,
     RelativeDiv,
     RowSpan,
-    Span3
 } from "../../../assets/GlobalStyles";
-import {SmallButton} from "../../../pages/campaign/styles/common";
-import {decimalFormat} from "../../../common/StringUtils";
-
+import {RefundRequestTable} from "../../../pages/platform_manage/PaymentManageUser";
 export function RefundRequestButton(props) {
-    const {onSubmit, modalInfo, onSave, title} = props;
+    const {onSubmit, modalInfo, onSave, title, refundData} = props;
     const [, setModal] = useAtom(modalController)
     const handleModalComponent = () => {
         setModal({
@@ -25,16 +22,16 @@ export function RefundRequestButton(props) {
             width: 650,
             modalComponent: () => {
                 return (
-                    <RefundRequestModal onSave={onSave} modalInfo={modalInfo} onSubmit={onSubmit} title={title}/>
+                    <RefundRequestModal onSave={onSave} modalInfo={modalInfo} onSubmit={onSubmit} title={title} refundData={refundData}/>
                 )
             }
         })
     }
-    return <DefaultButton type={'button'} style={{background:"#fff", color:"#777"}} onClick={handleModalComponent}>{title}</DefaultButton>
+    return <DefaultButton type={'button'} style={{background:"#fff", color:"#777"}} onClick={handleModalComponent} >{title}</DefaultButton>
 }
 
 function RefundRequestModal (props) {
-    const {title} = props
+    const {title, refundData} = props
     const [, setModal] = useAtom(modalController)
     const handleSubmit = () => {
         setModal({
@@ -44,58 +41,73 @@ function RefundRequestModal (props) {
     }
 
     return (
-        <div>
+        <form>
             <ModalHeader title={title}/>
             <ModalBody>
                 <RowSpan>
                     <ColSpan4>
-                        <div style={{display:'flex',flexDirection:'column',width: '100%', alignItems: 'start', marginBottom: '25px'}}>
-                            <RowSpan>
-                                <ColSpan2>결제 방식</ColSpan2>
-                                <ColSpan3>
-                                    <RelativeDiv>
-                                        <label>
-                                            <input
-                                                type={'radio'}
-                                                name={'inventory'}
-                                                value={'auto'}
-                                            />
-                                            <span>카드 결제</span>
-                                        </label>
-                                        <label>
-                                            <input
-                                                type={'radio'}
-                                                name={'inventory'}
-                                                value={'categories'}
-                                            />
-                                            <span>계좌이체</span>
-                                        </label>
-                                    </RelativeDiv>
-                                </ColSpan3>
+                        <div style={{display:'flex', flexDirection:'column', width: '100%', alignItems: 'start', marginBottom: '25px'}}>
+                            <RowSpan style={{width:'100%'}}>
+                                <ColSpan0 style={{paddingTop:"15px", alignItems:"baseline"}}>환불 정보</ColSpan0>
+                                <ColSpan4>
+                                    <RefundRequestTable refundData={refundData}/>
+                                </ColSpan4>
+                            </RowSpan>
+                            <RowSpan style={{width:"100%"}}>
+                                <ColSpan0 style={{alignItems:"start", paddingTop:"11px"}}>환불 금액</ColSpan0>
+                                <ColSpan4>
+                                    <RowSpan column={true} style={{flexWrap:"warp", alignContent:"flex-start", marginTop:"0"}}>
+                                        <RowSpan style={{width:'100%', marginTop:'0'}}>
+                                            <ColSpan2>
+                                                <RelativeDiv>
+                                                    <label>
+                                                        <input
+                                                            type={'radio'}
+                                                            name={'inventory'}
+                                                            value={'auto'}
+                                                        />
+                                                        <span>전액 환불</span>
+                                                    </label>
+                                                </RelativeDiv>
+                                            </ColSpan2>
+                                            <ColSpan0><small>환불 가능 금액(?)</small></ColSpan0>
+                                        </RowSpan>
+                                        <RowSpan style={{width:'100%',  marginTop:'0'}}>
+                                            <ColSpan0>
+                                                <RelativeDiv>
+                                                    <label>
+                                                        <input
+                                                            type={'radio'}
+                                                            name={'inventory'}
+                                                            value={'auto'}
+                                                        />
+                                                        <span>부분 환불</span>
+                                                    </label>
+                                                </RelativeDiv>
+                                            </ColSpan0>
+                                            <ColSpan3><input type={'text'}/>원</ColSpan3>
+                                        </RowSpan>
+                                    </RowSpan>
+                                </ColSpan4>
+                            </RowSpan>
+                            <RowSpan style={{width: "100%"}}>
+                                <ColSpan0>비고</ColSpan0>
+                                <ColSpan4 style={{paddingLeft:"35px"}}>
+                                    <input type={'text'} placeholder='비고 입력' style={{width: "100%"}}/>
+                                </ColSpan4>
                             </RowSpan>
                             <RowSpan>
-                                <ColSpan1>충전 금액</ColSpan1>
-                                <ColSpan2><RelativeDiv><input type={'text'}/> </RelativeDiv></ColSpan2>
-                                <ColSpan2><SmallButton type={'button'}>10만원</SmallButton><SmallButton type={'button'}>50만원</SmallButton><SmallButton type={'button'}>100만원</SmallButton></ColSpan2>
-                            </RowSpan>
-                            <RowSpan>
-                                <div style={{display: "flex", flexDirection:'column'}}>
-                                    <ColSpan4>결제 금액 <small>충전 금액</small><small className={'won'}>{decimalFormat(770000)}</small> | <small>부가세</small><small className={'won'}>{decimalFormat(770000)}</small></ColSpan4>
-                                    <ColSpan4 style={{padding:" 15px 0 0 73px"}}>총 결제 금액 <span className={'won'}>{decimalFormat(770000)}</span></ColSpan4>
-                                </div>
-                            </RowSpan>
-                            <RowSpan>
-                                <ColSpan2>문의</ColSpan2>
-                                <ColSpan1 style={{paddingLeft:"5px"}}>010-4070-3122</ColSpan1>
+                                <ColSpan1>문의</ColSpan1>
+                                <ColSpan4 style={{paddingLeft:"35px"}}>010-4070-3122</ColSpan4>
                             </RowSpan>
                         </div>
                     </ColSpan4>
                 </RowSpan>
             </ModalBody>
             <ModalFooter>
-                <DefaultButton>결제</DefaultButton>
+                <DefaultButton>환불 신청</DefaultButton>
             </ModalFooter>
-        </div>
+        </form>
     )
 }
 

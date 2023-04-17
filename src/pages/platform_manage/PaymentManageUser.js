@@ -4,7 +4,7 @@ import {
     BoardHeader, BoardSearchDetail, BoardSearchResultTitle,
     CalendarBox, CalendarIcon,
     ColSpan2, ColSpan4,
-    CustomDatePicker, DateContainer, DefaultButton, Edit,
+    CustomDatePicker, DateContainer, DefaultButton,
     RowSpan, SaveExcelButton,
     TitleContainer,
 } from "../../assets/GlobalStyles";
@@ -22,18 +22,49 @@ import {
     getToDay
 } from "../../common/DateUtils";
 import {decimalFormat} from "../../common/StringUtils";
-import {useAtom} from "jotai";
-import {modalController} from "../../store";
 import {TotalCount} from "../../components/table/TableDetail";
+import {toast, ToastContainer} from "react-toastify";
+
+export function RefundRequestTable(props) {
+    return (
+        <RefundInformation>
+            <table style={{margin:"0"}}>
+                <thead>
+                <tr>
+                    <th>은행</th>
+                    <th>계좌번호</th>
+                    <th>예금주</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    {props.refundData.map((item, key) => {
+                        return(
+                            <td
+                                key={key}
+                            >
+                                {item}
+                            </td>
+                        )
+                    })}
+                </tr>
+                </tbody>
+            </table>
+        </RefundInformation>
+    )
+}
 
 function PaymentManageUser(props) {
     const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
     const [startDate, endDate] = dateRange;
 
+    const [advertisingBalance, setAdvertisingBalance] = useState(10000) // 광고비 잔액
+    const [requestAmountValue, setRequestAmountValue] = useState(0) // 충전 금액
+
     //[d] 환불 입력 정보
     // const [refundData, setRefundData] = useState([])
-    const [refundData, setRefundData] = useState(["테스트1","테스트2","테스트3"])
-    const [paymentDetails, setPaymentDetails] = useState([
+    const [refundData, setRefundData] = useState(["테스트1","테스트2","테스트3"]) // 환불 정보
+    const [paymentDetails, setPaymentDetails] = useState([ // 환불 내역
             ["yyyy.mm.dd hh.mm","결제 완료","카드 결제","bc12345",550000],
             ["yyyy.mm.dd hh.mm","결제 취소","카드 결제","bc12345",550000],
             ["yyyy.mm.dd hh.mm","환불 완료","카드 결제","bc12345",550000],
@@ -41,6 +72,21 @@ function PaymentManageUser(props) {
             ["yyyy.mm.dd hh.mm","결제 완료","카드 결제","bc12345",550000],
             ["yyyy.mm.dd hh.mm","결제 취소","카드 결제","bc12345",550000],
             ["yyyy.mm.dd hh.mm","환불 완료","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","결제 완료","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","결제 취소","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","환불 완료","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","결제 완료","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","결제 취소","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","환불 완료","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","결제 완료","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","결제 취소","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","환불 완료","카드 결제","bc12345",550000],
+            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
             ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
             ["yyyy.mm.dd hh.mm","결제 완료","카드 결제","bc12345",550000],
             ["yyyy.mm.dd hh.mm","결제 취소","카드 결제","bc12345",550000],
@@ -48,10 +94,15 @@ function PaymentManageUser(props) {
             ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
         ]
     )
-    /**
-     * 날짜 레인지 선택
-     * @param rangeType
-     */
+
+
+    const handleRegisterRefund = () => {
+        if(refundData.length === 0){
+            toast("환불 정보를 등록해 주세요.")
+        } else {
+            console.log("환불 정보", refundData)
+        }
+    }
 
     return (
         <main>
@@ -68,14 +119,27 @@ function PaymentManageUser(props) {
                                 <RowSpan style={{width:"100%", margin:"0 0 30px 0"}}>
                                     <ColSpan2 style={{alignItems:"baseline"}}>광고비 현황</ColSpan2>
                                     <ColSpan2 style={{justifyContent:"right"}}>
-                                        <AdChargeButton title={'광고비 충전'} modalInfo={'USER'} onSave={null} onSubmit={null}/>
-                                        <RefundRequestButton title={'환불 신청'} modalInfo={'USER'} onSave={null} onSubmit={null} RefundData={refundData}/>
+                                        <AdChargeButton
+                                            title={'광고비 충전'}
+                                            modalInfo={'USER'}
+                                            onSave={null}
+                                            onSubmit={null}
+                                            requestAmountValue={requestAmountValue}
+                                            setRequestAmountValue={setRequestAmountValue}
+                                        />
+                                        {refundData.length === 0?
+                                            <DefaultButton onClick={handleRegisterRefund} style={{background:"#fff", color:"#777"}}>환불 신청</DefaultButton>
+                                            :
+                                            <RefundRequestButton title={'환불 신청'} modalInfo={'USER'} onSave={null} onSubmit={null} refundData={refundData}/>
+                                        }
+                                        {/*환불 신청에 값이 없으면 토스트 띄우기*/}
                                     </ColSpan2>
                                 </RowSpan>
                                 <RowSpan style={{margin:"0"}}>
                                     <ColSpan4>
                                         <AdvertisingCostStatus>
-                                            <span className={'won'}>{decimalFormat(10000000)}</span>
+                                            <span className={'won'}>{decimalFormat(advertisingBalance + requestAmountValue)}</span>
+                                            {/*여긴 광고비 잔액이 들어와야 함*/}
                                         </AdvertisingCostStatus>
                                     </ColSpan4>
                                 </RowSpan>
@@ -85,7 +149,7 @@ function PaymentManageUser(props) {
                                     <ColSpan2 style={{alignItems:"baseline", marginBottom:"15px"}}>환불 정보</ColSpan2>
                                     {refundData.length === 0?
                                         <ColSpan2 style={{justifyContent:"right"}}>
-                                            <RegisterRefundInformationButton title={'등록'} modalInfo={'USER'} onSave={null} onSubmit={null}/>
+                                            <RegisterRefundInformationButton title={'등록'} modalInfo={'USER'} onSave={null} onSubmit={null} refundData={refundData} setRefundData={setRefundData}/>
                                         </ColSpan2>
                                         :
                                         <ColSpan2 style={{justifyContent:"right", width:"70px", height:"15px"}}>
@@ -100,30 +164,7 @@ function PaymentManageUser(props) {
                                                 <small>등록된 환불 정보가 없습니다. 환불 정보를 등록해주세요.</small>
                                             </AdvertisingCostStatus>
                                             :
-                                            <RefundInformation>
-                                                <table style={{margin:"0"}}>
-                                                    <thead>
-                                                    <tr>
-                                                        <th>은행</th>
-                                                        <th>계좌번호</th>
-                                                        <th>예금주</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr>
-                                                        {refundData.map((item, key) => {
-                                                            return(
-                                                                <td
-                                                                    key={key}
-                                                                >
-                                                                    {item}
-                                                                </td>
-                                                            )
-                                                        })}
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </RefundInformation>
+                                            <RefundRequestTable refundData={refundData}/>
                                         }
                                     </ColSpan4>
                                 </RowSpan>
@@ -165,7 +206,7 @@ function PaymentManageUser(props) {
                         </BoardSearchResultTitle>
                     </ColSpan4>
                     <ColSpan4>
-                        <RefundInformation multiTable={true} style={{overflow:"auto", maxHeight:"350px", alignItems:"start"}}>
+                        <RefundInformation multiTable={true} style={{maxHeight:"500px", overflow:"auto", alignItems:"start"}}>
                             <table>
                                 <thead>
                                 <tr>
@@ -194,10 +235,22 @@ function PaymentManageUser(props) {
                     </ColSpan4>
                 </Board>
             </BoardContainer>
+            <ToastContainer
+                position="top-center"
+                autoClose={1500}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                style={{zIndex: 9999999}}
+            />
         </main>
     )
 }
-
+/**스타일 시트**/
 const AdvertisingCostStatus = styled.div`
   height: 63px;
   padding: 15px;
