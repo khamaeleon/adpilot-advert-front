@@ -86,7 +86,7 @@ export const CategoryItem = styled.div`
   padding: 10px 17px;
   min-width: 100px;
   text-align: center;
-  border: 1px solid #e5e5e5;
+  border: ${props => props.active ? "1px solid #f5811f" : "1px solid #e5e5e5"};
   border-radius: 3px;
   background-color: #fff;
   font-size: 12px;

@@ -2,11 +2,21 @@ import React, {useEffect, useState} from "react";
 import {
   Board,
   BoardHeader,
-  BoardSearchResult, CancelButton, ColSpan1, ColSpan2,
-  ColSpan4, ColTitle, Input, inputStyle,
+  BoardSearchResult,
+  CancelButton,
+  ColSpan1,
+  ColSpan4,
+  ColTitle,
+  Input,
   RelativeDiv,
-  RowSpan, selectStyle, Span1, Span2, Span3,
-  Span4, SubmitButton, SubmitContainer, ValidationScript
+  RowSpan,
+  selectStyle,
+  Span1,
+  Span2,
+  Span4,
+  SubmitButton,
+  SubmitContainer,
+  ValidationScript
 } from "../../../assets/GlobalStyles";
 import {Won} from "../styles/common";
 import Select from "react-select";
@@ -15,15 +25,17 @@ import {stepCampaignAtom} from "../entity";
 import {modalController} from "../../../store";
 import {Controller, useFormContext} from "react-hook-form";
 import TimeTable from "../../../components/modal/TimeTable";
-import {biddingTypeAll, campaignBasicInfoAtom, campaignBudgetInfoAtom} from "../entity/Info";
+import {biddingTypeAll, campaignBasicInfoAtom} from "../entity/Info";
 import {selBudgetTimeDetailInfo, selBudgetTimeList} from "../../../services/settings/BudgetTimeAxios";
 import {selBudgetEventList} from "../../../services/settings/BudgetEventAxios";
 import {selPriceEventList} from "../../../services/settings/EventPriceAxios";
 import {timeBudgetDetailDataAtom} from "../../settings/entity/BudgetTime";
+import {updateCampaignBudget} from "../../../services/campaign/BudgetAxios";
+import {campaignBudgetInfoAtom} from "../entity/Budget";
 
 export function CampaignTwo() {
   const [stepCampaign, setStepCampaign] = useAtom(stepCampaignAtom)
-  const [campaignBasicInfo, setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
+  const [campaignBasicInfo] = useAtom(campaignBasicInfoAtom)
   const [campaignBudgetInfo, setCampaignBudgetInfo] = useAtom(campaignBudgetInfoAtom)
 
   const [budgetTimeListState, setBudgetTimeListState] =useState(null)
@@ -45,6 +57,7 @@ export function CampaignTwo() {
     weightGroup: ""
   })
   useEffect(() =>{
+    console.log(campaignBasicInfo)
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
       campaignId:campaignBasicInfo.campaignId,
@@ -174,8 +187,20 @@ export function CampaignTwo() {
     })
   }
   const onSubmit = (data) => {
-    console.log(data)
-    setStepCampaign({steps:2})
+    console.log(campaignBudgetInfo)
+    updateCampaignBudget({
+      ...campaignBudgetInfo,
+      campaignId: campaignBasicInfo.campaignId,
+      biddingType: campaignBudgetInfo.biddingType.value,
+      budgetEventId: campaignBudgetInfo.budgetEventId.value,
+      budgetTimeId: campaignBudgetInfo.budgetTimeId.value,
+      priceEventId: campaignBudgetInfo.priceEventId.value,
+    }).then (response =>{
+      if(response){
+        console.log('2차저장')
+      }
+    })
+    // setStepCampaign({steps:2})
   }
   return(
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -282,7 +307,7 @@ export function CampaignTwo() {
                     )}
                   />
                 </ColSpan1>
-                {stepTwo.timeGroup.value !== "" &&
+                {timeBudgetDetailDataState?.exposeTimeType !== undefined &&
                   <ColSpan1>
                     <TimeTable exposeTimeType={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposeTimeType} title={'설정된 시간별 예산'} readOnly={true}/>
                   </ColSpan1>

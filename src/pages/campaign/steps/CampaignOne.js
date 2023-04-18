@@ -22,6 +22,7 @@ import {PixelModal} from "../../pixel/PixelList";
 import {pixelDataAtom} from "../../pixel/entity/Pixel";
 import {selAdverPixelDetailList} from "../../../services/header/ManagePixelAxios";
 import {resistCampaignBasic, selEnumInfo} from "../../../services/campaign/InfoAxios";
+import moment from "moment/moment";
 
 export function CampaignOne() {
   const [stepCampaign, setStepCampaign] = useAtom(stepCampaignAtom)
@@ -44,7 +45,8 @@ export function CampaignOne() {
       productType:'BANNER',
       pixelId:'',
       goal:'',
-      goalValue:0
+      goalValue:0,
+      campaignId:'',
     })
     selEnumInfo('CAMPAIGN_CONVERSION_GOAL').then(response => {
       setGoalList(response.data)
@@ -118,15 +120,21 @@ export function CampaignOne() {
 
   const onSubmit = (data) => {
     console.log(campaignBasicInfo)
-    setStepCampaign({steps: 1})
-    resistCampaignBasic({...campaignBasicInfo,goal:campaignBasicInfo.goal.value,pixelId:campaignBasicInfo.pixelId.value}).then(response =>{
+    resistCampaignBasic({
+      ...campaignBasicInfo,
+      goal:campaignBasicInfo.goal.value,
+      pixelId:campaignBasicInfo.pixelId.value,
+      name:campaignBasicInfo.productType + '_' + campaignBasicInfo.goal.value + '_' + moment().format('YYYY-MM-DD hh:mm:ss').replace(' ' ,'_')
+    }).then(response =>{
       if(response){
         setCampaignBasicInfo({
           ...campaignBasicInfo,
           campaignId:response.value
         })
+        setStepCampaign({steps: 1})
       }
     })
+
   }
 
   return (

@@ -2,7 +2,9 @@ import {atom} from "jotai";
 
 export const campaignBasicInfoAtom =atom(null)
 
-export const campaignBudgetInfoAtom =atom(null)
+
+
+
 
 export const goalConversionType = [
   {key:0, value:'CONVERSION_SESSION_ROAS', label:'정상 수집'},

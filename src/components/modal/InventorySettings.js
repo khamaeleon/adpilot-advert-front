@@ -7,6 +7,8 @@ import {ColSpan2, DefaultButton, defaultStyle, RowSpan, Span4} from "../../asset
 import {SmallButton} from "../../pages/campaign/styles/common";
 import Select from "react-select";
 import {Icon} from "../table";
+import {mediaInventoryInfo, mediaInventoryInfoAtom} from "../../pages/campaign/entity/Group";
+import {selSearchMediaInfo} from "../../services/campaign/GroupAxios";
 
 export function InventoryButton(props) {
   const {title, onSubmit, btnStyle, historyAdd} = props;
@@ -29,6 +31,24 @@ export function InventoryButton(props) {
 function SearchModal (props) {
   const [, setModal] = useAtom(modalController)
   const [selectedInventory, setSelectedInventory] = useState([])
+  const [searchKeyword,setSearchKeyword] =useState('')
+  const [mediaInventoryInfo,setMediaInventoryInfo] = useAtom(mediaInventoryInfoAtom)
+
+  const handleSearchKeyword = (event)=>{
+    setSearchKeyword(event.target.value)
+  }
+  const onSearchMediaInventory =() =>{
+    if(searchKeyword === ''){
+      alert('키워드입력해라')
+    }else{
+      selSearchMediaInfo(searchKeyword).then(response => {
+        if(response){
+          console.log(response)
+          setMediaInventoryInfo(response)
+        }
+      })
+    }
+  }
   const inventory = [
     {inventoryName: '네이트 콘텐츠 배너', code: '1', mediaName: '네이트', userId: 'nate12', category: '언론사', device:'PC',bannerSize:'200*200'},
     {inventoryName: '네이트 콘텐츠 배너', code: '2', mediaName: '네이트', userId: 'nate12', category: '언론사', device:'PC',bannerSize:'200*200'},
@@ -46,8 +66,8 @@ function SearchModal (props) {
 
   const handleClickSelectItem = (selectItem) => {
     if(selectedInventory.length !== 0) {
-      if (selectedInventory.find(item => item.code === selectItem.code) !== undefined){
-        setSelectedInventory([...selectedInventory.filter(item => item.code !== selectItem.code)])
+      if (selectedInventory.find(item => item.inventoryId === selectItem.inventoryId) !== undefined){
+        setSelectedInventory([...selectedInventory.filter(item => item.inventoryId !== selectItem.inventoryId)])
       } else {
         setSelectedInventory([...selectedInventory.concat(selectItem)])
       }
@@ -67,34 +87,33 @@ function SearchModal (props) {
               <SearchInventoryMain>
                 <Span4>지면검색</Span4>
                 <SearchInventoryInputGroup>
-                  <Select styles={defaultStyle}/>
-                  <Select styles={defaultStyle}/>
-                  <Select styles={defaultStyle}/>
-                </SearchInventoryInputGroup>
-                <SearchInventoryInputGroup>
-                  <input type={'text'} placeholder={'지면명, 매체명, 지면 코드, 아이디 검색'}/>
-                  <button>검색</button>
+                  <input type = {'text'}
+                         placeholder= {'지면명, 매체명, 지면 코드'}
+                         value = {searchKeyword}
+                         onChange={handleSearchKeyword}
+                  />
+                  <button type={'button'} onClick={onSearchMediaInventory}>검색</button>
                 </SearchInventoryInputGroup>
               </SearchInventoryMain>
               <SearchInventoryHeader>
-                <InventoryName>지면명</InventoryName>
-                <Code>지면 코드</Code>
                 <MediaName>매체명</MediaName>
+                <InventoryName>지면명</InventoryName>
                 <UserId>아이디</UserId>
                 <Category>카테고리</Category>
+                <Code>사이트보기</Code>
                 <Device>디바이스</Device>
                 <BannerSize>지면 사이즈</BannerSize>
               </SearchInventoryHeader>
               <SearchInventoryItemResult>
-                {inventory.map((item, key) => {
+                {mediaInventoryInfo !==null && mediaInventoryInfo.map((item, key) => {
                   return (
-                    <InventoryItem key={key} onClick={() => handleClickSelectItem(item)} active={selectedInventory.find(is => is.code === item.code) !== undefined ? true : null}>
-                      <InventoryName>{item.inventoryName}</InventoryName>
-                      <Code><span>{item.code}</span><Icon icon={'copyCode'} value={item.code}/></Code>
+                    <InventoryItem key={key} onClick={() => handleClickSelectItem(item)} active={selectedInventory.find(is => is.inventoryId === item.inventoryId) !== undefined ? true : null}>
                       <MediaName>{item.mediaName}</MediaName>
-                      <UserId>{item.userId}</UserId>
+                      <InventoryName>{item.inventoryName}</InventoryName>
+                      <UserId>{item.username}</UserId>
                       <Category>{item.category}</Category>
-                      <Device>{item.category}</Device>
+                      <Code>{item.siteUrl}</Code>
+                      <Device>{item.deviceType}</Device>
                       <BannerSize>{item.bannerSize}</BannerSize>
                     </InventoryItem>
                   )
@@ -109,24 +128,24 @@ function SearchModal (props) {
                 <div>총 <span>3</span>건의 광고 그룹</div>
               </SelectedInventoryMain>
               <SelectedInventoryHeader>
-                <InventoryName>지면명</InventoryName>
-                <Code>지면 코드</Code>
                 <MediaName>매체명</MediaName>
+                <InventoryName>지면명</InventoryName>
                 <UserId>아이디</UserId>
                 <Category>카테고리</Category>
+                <Code>사이트보기</Code>
                 <Device>디바이스</Device>
                 <BannerSize>지면 사이즈</BannerSize>
               </SelectedInventoryHeader>
               <SelectedInventoryResult>
                 {selectedInventory.map((item, key) => {
                   return (
-                    <SelectedInventoryResultItem key={key}>
-                      <InventoryName>{item.inventoryName}</InventoryName>
-                      <Code><span>{item.code}</span><Icon icon={'copyCode'} value={item.code}/></Code>
+                    <SelectedInventoryResultItem key={key} onClick={() => handleClickSelectItem(item)} active={selectedInventory.find(is => is.inventoryId === item.inventoryId) !== undefined ? true : null}>
                       <MediaName>{item.mediaName}</MediaName>
-                      <UserId>{item.userId}</UserId>
+                      <InventoryName>{item.inventoryName}</InventoryName>
+                      <UserId>{item.username}</UserId>
                       <Category>{item.category}</Category>
-                      <Device>{item.category}</Device>
+                      <Code>{item.siteUrl}</Code>
+                      <Device>{item.deviceType}</Device>
                       <BannerSize>{item.bannerSize}</BannerSize>
                     </SelectedInventoryResultItem>
                   )
