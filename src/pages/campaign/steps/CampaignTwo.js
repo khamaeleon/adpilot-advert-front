@@ -3,9 +3,9 @@ import {
   Board,
   BoardHeader,
   BoardSearchResult, CancelButton, ColSpan1, ColSpan2,
-  ColSpan4, Input, inputStyle,
+  ColSpan4, ColTitle, Input, inputStyle,
   RelativeDiv,
-  RowSpan, selectStyle, Span1, Span2,
+  RowSpan, selectStyle, Span1, Span2, Span3,
   Span4, SubmitButton, SubmitContainer, ValidationScript
 } from "../../../assets/GlobalStyles";
 import {Won} from "../styles/common";
@@ -247,7 +247,7 @@ export function CampaignTwo() {
                   <Span1>{100-campaignBudgetInfo?.budgetRate}:{campaignBudgetInfo?.budgetRate}</Span1>
                 </ColSpan1>
                 <ColSpan1>
-                  <Span2>MOBILE</Span2>
+                  <ColTitle><Span1>MOBILE</Span1></ColTitle>
                   <Input type={'number'}
                          min={100}
                          style={{width: 300, textAlign: 'right'}}

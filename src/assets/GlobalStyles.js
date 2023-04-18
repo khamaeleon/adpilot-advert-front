@@ -793,6 +793,9 @@ export const ColSpan1 = styled.div`
   align-items: center;
   width: 25%;
   gap: 10px;
+  & > div.relative {
+    position: relative;
+  }
   & > div:first-child {
     white-space: nowrap;
     flex-shrink: 0;
@@ -816,6 +819,9 @@ export const ColSpan2 = styled.div`
   align-items: ${(props)=>props.column ? 'flex-start' : 'center'};
   width: 50%;
   gap: 10px;
+  & > div.relative {
+    position: relative;
+  }
   & > div:first-child {
     white-space: nowrap;
     flex-shrink: 0;
@@ -834,6 +840,9 @@ export const ColSpan3 = styled.div`
   align-items: center;
   width: 75%;
   gap: 10px;
+  & > div.relative {
+    position: relative;
+  }
   & > div:first-child {
     white-space: nowrap;
     flex-shrink: 0;
@@ -857,6 +866,9 @@ export const ColSpan4 = styled.div`
   align-items: center;
   width: 100%;
   gap: 10px;
+  & > div.relative {
+    position: relative;
+  }
   & > div:first-child {
     white-space: nowrap;
     flex-shrink: 0;

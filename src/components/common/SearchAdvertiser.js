@@ -47,6 +47,7 @@ function SearchModal (props) {
   const handleSearch = (e) => {
     if(searchKeyword!==''){
       selKeywordUser(searchKeyword).then(response => {
+        console.log(response)
         setAdverSearchInfo(response)
       })
     }
@@ -100,6 +101,9 @@ function SearchModal (props) {
                 </tbody>
               </table>
             </>
+          }
+          {adverSearchInfo.length === 0 &&
+            <div>검색결과 에러.</div>
           }
           {props.historyAdd === undefined && <MediaSelectedButton onClick={handleSubmit}>선택 완료</MediaSelectedButton>}
         </MediaSearchResult>

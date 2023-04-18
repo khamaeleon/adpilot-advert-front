@@ -254,9 +254,10 @@ export const Row = styled.div`
 `
 
 export const PrevImage = styled.div`
+  display: inline-block;
   position: relative;
-  margin-right: 0 !important;
-  width: 100%;
+  margin: 10px;
+  width: 300px;
   aspect-ratio: 1/1;
   background-color: #fff;
   border: 1px solid #ddd;

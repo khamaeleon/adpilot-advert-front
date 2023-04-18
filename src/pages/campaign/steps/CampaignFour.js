@@ -287,10 +287,9 @@ function CampaignFourNative (props) {
     <form>
       <RowSpan>
         <ColSpan3><Span4>광고소재</Span4></ColSpan3>
-        <ColSpan1><Span4>미리보기</Span4></ColSpan1>
       </RowSpan>
       <RowSpan>
-        <ColSpan3 style={{alignItems: 'flex-start',flexDirection:'column', paddingLeft:0}}>
+        <ColSpan4 style={{alignItems: 'flex-start',flexDirection:'column', paddingLeft:0}}>
           <RowSpan box={true} column={true} padding={'0'} style={{width: '100%',padding: '20px 30px',backgroundColor:'#fff'}}>
             <Row>
               <span style={{fontSize: 14}}>소재설정</span>
@@ -352,63 +351,57 @@ function CampaignFourNative (props) {
               <Select styles={selectStyle}/>
             </Row>
           </RowSpan>
-          <RowSpan box={true} column={true} padding={'0'} style={{padding: '20px 30px',backgroundColor:'#fff'}}>
-            <Row>
-              <span>서비스 명</span>
-              <input
-                name={'serviceName'}
-                type={'text'}
-                onChange={()=>handleChangeInputs}
-              />
-            </Row>
-            <Row>
-              <Span4>로고 <p><small style={{color:'#ccc'}}>최대 5개 까지 등록</small></p></Span4>
-              <RowSpan style={{marginTop:0,gap: 10,width: '80%',justifyContent:'flex-start'}}>
-                {logoImage.map((item, key) => {
-                  return(
-                    <ColSpan100 padding={'0'} key={key}>
-                      <DeleteIcon onClick={() => handleDeleteLogoImage(key)}/>
-                      <ImageUploadCard>
-                        <img src={item.url} alt={key}/>
-                      </ImageUploadCard>
-                    </ColSpan100>
-                  )
-                })}
-                {logoImage.length < 5 &&
-                  <ColSpan100 padding={'0'} onClick={handleAddLogoImage}>
-                    <CreateImage/>
-                  </ColSpan100>
-                }
-              </RowSpan>
-            </Row>
-            <Row>
-              <span>광고 설명 (선택)</span>
-              <input
-                name={'description'}
-                type={'text'}
-                onChange={()=>handleChangeInputs}
-              />
-            </Row>
-          </RowSpan>
-        </ColSpan3>
-        {bannerImage.length !== 0 &&
-        <ColSpan1 style={{alignItems: 'flex-start',overflowY:'scroll',maxHeight: 700}}>
-          <RowSpan box={true} column={true}>
-            {bannerImage.map((item, key) => {
-              return (
-                <PrevImage style={{backgroundImage: `url(${item.url})`}}>
-                  <ImageTitle>{item.name} 소재</ImageTitle>
-                </PrevImage>
-              )
-            })}
-          </RowSpan>
-        </ColSpan1>
-        }
+        </ColSpan4>
       </RowSpan>
       <RowSpan>
-        <ColSpan3>
-
-        </ColSpan3>
+        <ColSpan1><Span4>미리보기</Span4></ColSpan1>
+      </RowSpan>
+      <div style={{width: '100%', overflowX:'scroll', whiteSpace:"nowrap"}}>
+        {bannerImage.length !== 0 && bannerImage.map((item, key) => {
+          return (
+            <PrevImage style={{backgroundImage: `url(${item.url})`}}>
+              <ImageTitle>{item.name} 소재</ImageTitle>
+            </PrevImage>
+          )
+        })}
+      </div>
+      <RowSpan box={true} column={true} padding={'0'} style={{padding: '20px 30px',backgroundColor:'#fff'}}>
+        <Row>
+          <span>서비스 명</span>
+          <input
+            name={'serviceName'}
+            type={'text'}
+            onChange={()=>handleChangeInputs}
+          />
+        </Row>
+        <Row>
+          <Span4>로고 <p><small style={{color:'#ccc'}}>최대 5개 까지 등록</small></p></Span4>
+          <RowSpan style={{marginTop:0,gap: 10,width: '80%',justifyContent:'flex-start'}}>
+            {logoImage.map((item, key) => {
+              return(
+                <ColSpan100 padding={'0'} key={key}>
+                  <DeleteIcon onClick={() => handleDeleteLogoImage(key)}/>
+                  <ImageUploadCard>
+                    <img src={item.url} alt={key}/>
+                  </ImageUploadCard>
+                </ColSpan100>
+              )
+            })}
+            {logoImage.length < 5 &&
+              <ColSpan100 padding={'0'} onClick={handleAddLogoImage}>
+                <CreateImage/>
+              </ColSpan100>
+            }
+          </RowSpan>
+        </Row>
+        <Row>
+          <span>광고 설명 (선택)</span>
+          <input
+            name={'description'}
+            type={'text'}
+            onChange={()=>handleChangeInputs}
+          />
+        </Row>
       </RowSpan>
       <RowSpan>
         <ColSpan4>
@@ -538,7 +531,7 @@ export function CampaignFour() {
               </ColSpan2>
               <HorizontalRule style={{height:42}}/>
               <ColSpan2>
-                <Span4>MOBILE 인식 코드</Span4>
+                <Span4 style={{letterSpacing: -1}}>MOBILE 인식 코드</Span4>
                 <Input
                   type={'text'}
                   name={'mobileCode'}

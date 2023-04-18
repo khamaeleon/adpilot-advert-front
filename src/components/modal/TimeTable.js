@@ -1,10 +1,10 @@
-import {useAtom, useSetAtom} from "jotai";
+import {useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import DragToSelect from "../common/DragToSelect";
 import {ModalBody, ModalHeader} from "./Modal";
 import React from "react";
 import InsertToSelect from "../common/InsertToSelect";
-import {ColTitle, RelativeDiv, RowSpan, Span4} from "../../assets/GlobalStyles";
+import {ColTitle, RowSpan} from "../../assets/GlobalStyles";
 
 function TimeTableComponent (props) {
   return(

@@ -8,7 +8,7 @@ import {
   RowSpan,
   Span4,
   SubmitButton,
-  SubmitContainer
+  SubmitContainer, ValidationScript
 } from "../../assets/GlobalStyles";
 import React, {useState} from "react";
 import styled from "styled-components";
@@ -19,6 +19,7 @@ import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 import {OpenReports} from "../../components/modal/OpenReports";
 import {customReportsData} from "./entity/Common";
 import {toast, ToastContainer} from "react-toastify";
+import {useForm} from "react-hook-form";
 
 const columnList= {
   daily:"일별",
@@ -46,6 +47,7 @@ const columnList= {
 export default function CreateReports() {
   const [columns, setColumns] = useState([])
   const [reportName, setReportName] = useState("")
+  const { register, trigger, formState: { errors } } = useForm();
   const handleSearchAdvertiser = () => {
 
   }
@@ -84,7 +86,6 @@ export default function CreateReports() {
         setColumns(newColumnData)
       }
     }
-    console.log(columns)
   }
 
   const includeItem = (name) => {
@@ -95,14 +96,14 @@ export default function CreateReports() {
   const handleChangeReportName = (e) => {
     setReportName(e.target.value)
   }
-  const handleCreateReports = () => {
+  const handleCreateReports = async () => {
     if(columns.length < 3){
       toast("보고서 항목을 선택해주세요")
     } else if(reportName === ""){
+      await trigger("reportName")
       toast("보고서 명을 작성해주세요")
-
     } else {
-      console.log(reportName)
+      console.log(`보고서 명: ${reportName}, 컬럼 [${columns.map(datum => datum.name).join(', ')}]`)
     }
   }
 
@@ -225,10 +226,19 @@ export default function CreateReports() {
             <RowSpan>
               <ColSpan2>
                 <Span4><span style={{color:'red'}}>*</span> 보고서 명</Span4>
-                <Input
-                  onChange={handleChangeReportName}
-                  value={reportName || ""}
-                  placeholder={'보고서 명을 작성해주세요'}/>
+                <div style={{position: "relative"}}>
+                  <Input
+
+                    {...register("reportName", {
+                      required: {
+                        value: reportName === "",
+                        message: "보고서 명을 작성해주세요"
+                      },
+                      onChange: handleChangeReportName
+                    })}
+                    style={errors.reportName?.ref?.value === "" ? {border:"1px solid red"} : null}
+                    placeholder={'보고서 명을 작성해주세요'}/>
+                </div>
               </ColSpan2>
             </RowSpan>
             <RowSpan>

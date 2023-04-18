@@ -2,7 +2,7 @@ import {
   Board,
   BoardHeader,
   BoardSearchResult, CampaignType, CancelButton, ColSpan0, ColSpan1, ColSpan2, ColSpan3,
-  ColSpan4,
+  ColSpan4, ColTitle,
   DefaultButton, defaultStyle,
   Input, inputStyle,
   RowSpan, selectStyle, Span1, Span2,
@@ -137,26 +137,26 @@ export function CampaignOne() {
           <RowSpan>
             <ColSpan4>
               <Span4>광고주 설정</Span4>
+
               <ColSpan2>
-                <Input
-                  type={'text'}
-                  style={{width: 300}}
-                  readOnly={true}
-                  value={campaignBasicInfo !== null && campaignBasicInfo.username || ''}
-                  placeholder={'광고주를 검색해주세요'}
-                  {...register("username", {
-                    required: "광고주를 검색해주세요",
-                  })}
-                />
-                <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
+                <div className={'relative'}>
+                  <Input
+                    type={'text'}
+                    style={{width: 300}}
+                    readOnly={true}
+                    value={campaignBasicInfo !== null && campaignBasicInfo.username || ''}
+                    placeholder={'광고주를 검색해주세요'}
+                    {...register("username", {
+                      required: "광고주를 검색해주세요",
+                    })}
+                  />
+                  <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
+                  {errors.username && <ValidationScript>{errors.username.message}</ValidationScript>}
+                </div>
               </ColSpan2>
             </ColSpan4>
           </RowSpan>
         </BoardSearchResult>
-        <ValidationGroup>
-          {errors.username && <Validation>{errors.username.message}</Validation>}
-          <div/>
-        </ValidationGroup>
       </Board>
       <Board>
         <BoardHeader>캠페인 목표 설정</BoardHeader>
@@ -166,39 +166,40 @@ export function CampaignOne() {
               <Span4>픽셀 설정</Span4>
               <BorderSpan>
                 <Span4>최적화 픽셀 선택</Span4>
-                <Controller
-                  name="pixelId"
-                  control={control}
-                  rules={{
-                    required: {
-                      value: campaignBasicInfo?.pixelId === '',
-                      message: "최적화 픽셀을 선택해주세요"
-                    }
-                  }}
-                  render={({field}) => (
-                    <Select options={pixelList !== null ? pixelList :[]}
-                            placeholder={'최적화 픽셀 선택'}
-                            {...field}
-                            value={campaignBasicInfo !== null ? campaignBasicInfo.pixelId : ''}
-                            onChange={handleChangePixel}
-                            styles={{
-                              input: (baseStyles, state) => (
-                                {
-                                  ...baseStyles,
-                                  minWidth: "300px",
-                                })
-                            }}
+                <ColSpan2>
+                  <div className={'relative'}>
+                    <Controller
+                      name="pixelId"
+                      control={control}
+                      rules={{
+                        required: {
+                          value: campaignBasicInfo?.pixelId === '',
+                          message: "최적화 픽셀을 선택해주세요"
+                        }
+                      }}
+                      render={({field}) => (
+                        <Select options={pixelList !== null ? pixelList :[]}
+                                placeholder={'최적화 픽셀 선택'}
+                                {...field}
+                                value={campaignBasicInfo !== null ? campaignBasicInfo.pixelId : ''}
+                                onChange={handleChangePixel}
+                                styles={{
+                                  input: (baseStyles, state) => (
+                                    {
+                                      ...baseStyles,
+                                      minWidth: "300px",
+                                    })
+                                }}
+                        />
+                      )}
                     />
-                  )}
-                />
-                <PixelModal title={'추가'} data={adverInfo !== null && adverInfo}/>
+                    <PixelModal title={'추가'} data={adverInfo !== null && adverInfo}/>
+                    {errors.pixelId && <ValidationScript>{errors.pixelId?.message}</ValidationScript>}
+                  </div>
+                </ColSpan2>
               </BorderSpan>
             </ColSpan4>
           </RowSpan>
-          <ValidationGroup>
-            {errors.pixelId && <Validation>{errors.pixelId?.message}</Validation>}
-            <div/>
-          </ValidationGroup>
           <RowSpan>
             <ColSpan1>
               <Span4>캠페인 상품 선택</Span4>
@@ -252,9 +253,9 @@ export function CampaignOne() {
           </RowSpan>
           <RowSpan>
             <ColSpan4>
-              <Span4>캠페인 상세 목표 선택</Span4>
-              <ColSpan3>
-                <div>
+              <ColTitle><Span4>캠페인 상세 목표 선택</Span4></ColTitle>
+              <ColSpan1>
+                <div className={'relative'}>
                   <Controller
                     name="goal"
                     control={control}
@@ -277,28 +278,33 @@ export function CampaignOne() {
                   />
                   {errors.goal && <ValidationScript>{errors.goal?.message}</ValidationScript>}
                 </div>
-                <div>
-                  <Controller
-                    name="goalValue"
-                    control={control}
-                    rules={{
-                      required: {
-                        value: campaignBasicInfo !== null && campaignBasicInfo.goalValue === 0,
-                        message: "캠페인 상세 목표 금액을 입력해주세요."
-                      }
-                    }}
-                    render={({ field }) =>(
-                      <Input type={'number'}
-                             min={0}
-                             placeholder={"캠페인 상세 목표 금액을 입력해주세요."}
-                             style={{width: 300, textAlign: 'right'}}
-                             value={campaignBasicInfo !== null && campaignBasicInfo.goalValue}
-                             onChange={(e)=>handleGoalValue(e)}
-                      /> )}
-                  />
-                  {errors.goalValue && <ValidationScript>{errors.goalValue?.message}</ValidationScript>}
+
+              </ColSpan1>
+              <ColSpan1>
+                <div className={"relative"}>
+                  <div className={'relative'}>
+                    <Controller
+                      name="goalValue"
+                      control={control}
+                      rules={{
+                        required: {
+                          value: campaignBasicInfo !== null && campaignBasicInfo.goalValue === 0,
+                          message: "캠페인 상세 목표 금액을 입력해주세요."
+                        }
+                      }}
+                      render={({ field }) =>(
+                        <Input type={'number'}
+                               min={0}
+                               placeholder={"캠페인 상세 목표 금액을 입력해주세요."}
+                               style={{width: 300, textAlign: 'right'}}
+                               value={campaignBasicInfo !== null && campaignBasicInfo.goalValue}
+                               onChange={(e)=>handleGoalValue(e)}
+                        /> )}
+                    />
+                    {errors.goalValue && <ValidationScript>{errors.goalValue?.message}</ValidationScript>}
+                  </div>
                 </div>
-              </ColSpan3>
+              </ColSpan1>
             </ColSpan4>
           </RowSpan>
         </BoardSearchResult>
