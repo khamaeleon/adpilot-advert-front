@@ -108,13 +108,13 @@ function SearchModal (props) {
                 {mediaInventoryInfo !==null && mediaInventoryInfo.map((item, key) => {
                   return (
                     <InventoryItem key={key} onClick={() => handleClickSelectItem(item)} active={selectedInventory.find(is => is.inventoryId === item.inventoryId) !== undefined ? true : null}>
-                      <MediaName>{item.mediaName}</MediaName>
+                      <MediaName>{item.siteName}</MediaName>
                       <InventoryName>{item.inventoryName}</InventoryName>
                       <UserId>{item.username}</UserId>
                       <Category>{item.category}</Category>
-                      <Code>{item.siteUrl}</Code>
+                      <Code><a href={item.siteUrl} target={'_blank'}>사이트보기</a></Code>
                       <Device>{item.deviceType}</Device>
-                      <BannerSize>{item.bannerSize}</BannerSize>
+                      <BannerSize>{item.bannerSize.replace('IMG','')}</BannerSize>
                     </InventoryItem>
                   )
                 })}
@@ -125,7 +125,7 @@ function SearchModal (props) {
             <div style={{display:'flex',flexDirection:'column',width: '100%'}}>
               <SelectedInventoryMain>
                 <div>선택된 지면</div>
-                <div>총 <span>3</span>건의 광고 그룹</div>
+                <div>총 <span>{selectedInventory.length}</span>건의 광고 그룹</div>
               </SelectedInventoryMain>
               <SelectedInventoryHeader>
                 <MediaName>매체명</MediaName>
@@ -138,15 +138,16 @@ function SearchModal (props) {
               </SelectedInventoryHeader>
               <SelectedInventoryResult>
                 {selectedInventory.map((item, key) => {
+                  console.log(item)
                   return (
-                    <SelectedInventoryResultItem key={key} onClick={() => handleClickSelectItem(item)} active={selectedInventory.find(is => is.inventoryId === item.inventoryId) !== undefined ? true : null}>
-                      <MediaName>{item.mediaName}</MediaName>
+                    <SelectedInventoryResultItem key={key} onClick={() => handleClickSelectItem(item)}>
+                      <MediaName>{item.siteName}</MediaName>
                       <InventoryName>{item.inventoryName}</InventoryName>
                       <UserId>{item.username}</UserId>
                       <Category>{item.category}</Category>
-                      <Code>{item.siteUrl}</Code>
+                      <Code><a href={item.siteUrl} target={'_blank'}>사이트보기</a></Code>
                       <Device>{item.deviceType}</Device>
-                      <BannerSize>{item.bannerSize}</BannerSize>
+                      <BannerSize>{item.bannerSize.replace('IMG','')}</BannerSize>
                     </SelectedInventoryResultItem>
                   )
                 })}
@@ -198,7 +199,7 @@ const SearchInventoryItemResult = styled.div`
 
 const InventoryItem = styled.div`
   display: flex;
-  border-left: 2px solid #fff;
+  border-left: 2px solid ${(props) => props.active ? '#f5811f': '#fff'};
   border-bottom: 1px solid #e5e5e5;
   color: ${(props) => props.active ? '#f5811f': null};
   background-color: ${(props) => props.active ? '#fffaf1': null};;
@@ -256,7 +257,7 @@ const SelectedInventoryResult = styled.div`
 
 const SelectedInventoryResultItem = styled.div`
   display: flex;
-  border-left: 2px solid #fff;
+  border-left: ${(props) => props.active ? '2px solid #f5811f': '2px solid #fff'};
   border-bottom: 1px solid #e5e5e5;
   color: ${(props) => props.active ? '#f5811f': null};
   &:hover {
@@ -266,12 +267,17 @@ const SelectedInventoryResultItem = styled.div`
     cursor: pointer;
     color: #f5811f;
   }
+  & > div {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 `
 
 const InventoryName = styled.div`
   padding: 9px 0;
   text-align: center;
-  width:20%;
+  width:25%;
 `
 const Code = styled.div`
   display: flex;
@@ -279,18 +285,24 @@ const Code = styled.div`
   justify-content: center;
   text-align: center;
   width:15%;
-  & span {
+  & a {
     display: inline-block;
-    width: 50px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    border: 1px solid #777777;
+    background-color: #ffff;
+    padding: 4px;
+    border-radius: 4px;
+    font-size: 12px;
+    &:hover {
+      border: 1px solid #f5811f;
+      cursor: pointer;
+      color: #f5811f;
+    }
   }
 `
 const MediaName = styled.div`
   padding: 9px 0;
   text-align: center;
-  width:10%;
+  width:15%;
 `
 const UserId = styled.div`
   padding: 9px 0;
