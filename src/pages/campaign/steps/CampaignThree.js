@@ -1,34 +1,66 @@
 import React, {useEffect, useState} from "react";
 import {getThisMonth, getToDay} from "../../../common/DateUtils";
-import {retrieveTopLevelCategory} from "../../../services/Platform/CategoryAxios";
 import {
   AgentType,
   Board,
   BoardHeader,
-  BoardSearchResult, CalendarBox, CalendarIcon, CancelButton, ColSpan1, ColSpan2, ColSpan3,
-  ColSpan4, CustomDatePicker, DateContainer, DefaultButton, Input,
+  BoardSearchResult,
+  CalendarBox,
+  CalendarIcon,
+  CancelButton,
+  ColSpan2,
+  ColSpan4,
+  CustomDatePicker,
+  DateContainer,
+  Input,
   RelativeDiv,
-  RowSpan, smallStyle,
-  Span4, SubmitButton, SubmitContainer, ValidationScript
+  RowSpan,
+  smallStyle,
+  Span4,
+  SubmitButton,
+  SubmitContainer,
+  ValidationScript
 } from "../../../assets/GlobalStyles";
 import Checkbox from "../../../components/common/Checkbox";
-import {CategoryItem, Day, RowInBox, SelectCategory, SmallButton, SmallInput} from "../styles/common";
+import {CategoryItem, Day, RowInBox, SelectCategory, SmallInput} from "../styles/common";
 import ko from "date-fns/locale/ko";
 import DragToSelect from "../../../components/common/DragToSelect";
 import Select from "react-select";
-import {AdGroupButton} from "../../../components/modal/AdGroup";
 import {InventoryButton} from "../../../components/modal/InventorySettings";
-import {useFormContext} from "react-hook-form";
+import {Controller, useFormContext} from "react-hook-form";
 import {useAtom} from "jotai";
 import {stepCampaignAtom} from "../entity";
+import {campaignBasicInfoAtom} from "../entity/Info";
+import {selMediaCategoryInfo} from "../../../services/campaign/GroupAxios";
+import {campaignGroupInfoAtom, mediaCategoryAtom} from "../entity/Group";
 
 export function CampaignThree() {
   const [stepCampaign, setStepCampaign] = useAtom(stepCampaignAtom)
-  const [topLevelCategory, setTopLevelCategoryList] = useState([])
+  const [campaignBasicInfo, setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
+  const [campaignGroupInfo, setCampaignGroupInfo] = useAtom(campaignGroupInfoAtom)
+
+  const [mediaCategory, setMediaCategory] = useAtom(mediaCategoryAtom)
   const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange
-  const [isCheckedAll, setIsCheckedAll] = useState(true)
-  const {register,handleSubmit ,control, formState:{errors}} = useFormContext()
+  const {register,handleSubmit ,setValue,control, formState:{errors}} = useFormContext()
+  const [checked, setChecked] = useState({
+    WEB: true,
+    WEB_APP: true,
+    MOBILE_WEB: true,
+    MOBILE_NATIVE_APP: true,
+  })
+
+  useEffect(()=>{
+    setCampaignGroupInfo({
+      ...campaignGroupInfo,
+      campaignId: campaignBasicInfo.campaignId
+    })
+    selMediaCategoryInfo().then(response => {
+      if(response){
+        setMediaCategory(response)
+      }
+    })
+  },[])
 
   const [stepThree, setStepThree] = useState({
     adGroup: '',
@@ -60,50 +92,49 @@ export function CampaignThree() {
     })
   }
 
-  useEffect(() => {
-    if(stepThree.agentType.length === 4) {
-      setIsCheckedAll(true)
-    } else {
-      setIsCheckedAll(false)
+  const handleAgentType = (event) => {
+    switch (event.target.id) {
+      case 'WEB' : setChecked({...checked, WEB: event.target.checked});break;
+      case 'WEB_APP' : setChecked({...checked, WEB_APP: event.target.checked});break;
+      case 'MOBILE_WEB' : setChecked({...checked, MOBILE_WEB: event.target.checked});break;
+      case 'MOBILE_NATIVE_APP' : setChecked({...checked, MOBILE_NATIVE_APP: event.target.checked});break;
+      default : return null
     }
-  }, [stepThree]);
 
-  useEffect(() => {
-    const fetchData = retrieveTopLevelCategory().then(response => {
-      setTopLevelCategoryList(response)
-    })
-  }, []);
-
-  const handleChangeCheckAll = (event) => {
     if(event.target.checked){
-      setStepThree({
-        ...stepThree,
-        agentType: ['WEB','WEB_APP','MOBILE_WEB','MOBILE_NATIVE_APP']
+      setCampaignGroupInfo({
+        ...campaignGroupInfo,
+        exposeAgentType: campaignGroupInfo.exposeAgentType.concat(event.target.id)
       })
-    } else{
-      setStepThree({
-        ...stepThree,
-        agentType: []
+      setValue('exposeAgentType', campaignGroupInfo.exposeAgentType.concat(event.target.id))
+    }else{
+      setCampaignGroupInfo({
+        ...campaignGroupInfo,
+        exposeAgentType: campaignGroupInfo.exposeAgentType.filter(value => value !== event.target.id)
       })
+      setValue('exposeAgentType', campaignGroupInfo.exposeAgentType.filter(value => value !== event.target.id))
     }
-    setIsCheckedAll(event.target.checked)
   }
-  /**
-   * 에이전트 타입 체크
-   * @param event
-   */
-  const handleChangeCheck = (event) => {
-    if(event.currentTarget.checked){
-      setStepThree({
-        ...stepThree,
-        agentType: stepThree.agentType.concat(event.currentTarget.value)
+  const selectedCategory = (selectedCategory) => {
+    let boolCategory = campaignGroupInfo.allowInventoryCategories.includes(selectedCategory)
+    console.log(boolCategory)
+    if(!boolCategory){
+      setCampaignGroupInfo({
+        ...campaignGroupInfo,
+        allowInventoryCategories:campaignGroupInfo.allowInventoryCategories.concat(selectedCategory)
       })
     }else{
-      setStepThree({
-        ...stepThree,
-        agentType: stepThree.agentType.filter(id => id !== event.currentTarget.value)
+      setCampaignGroupInfo({
+        ...campaignGroupInfo,
+        allowInventoryCategories:campaignGroupInfo.allowInventoryCategories.filter(value => value !== selectedCategory)
       })
     }
+  }
+  const setExposeInventoryType = (exposeInventoryTypeValue) =>{
+    setCampaignGroupInfo({
+      ...campaignGroupInfo,
+      exposeInventoryType:exposeInventoryTypeValue
+    })
   }
 
   const onSubmit = (data) => {
@@ -118,57 +149,31 @@ export function CampaignThree() {
         <BoardSearchResult>
           <RowSpan>
             <ColSpan4>
-              <Span4>광고 그룹 불러오기</Span4>
-              <RelativeDiv>
-                <input type={'hidden'} {...register('adGroup',{
-                  required: {
-                    value: stepThree.adGroup === '',
-                    message: '광고 그룹을 선택해주세요.'
-                  }
-                })}/>
-                <AdGroupButton title={'광고 그룹 선택'}/>
-                {errors.adGroup && <ColSpan1><ValidationScript>{errors.adGroup.message}</ValidationScript></ColSpan1>}
-              </RelativeDiv>
-
-            </ColSpan4>
-          </RowSpan>
-          <RowSpan>
-            <ColSpan4>
               <Span4>노출 영역</Span4>
               <RelativeDiv>
                 <AgentType>
-                  <Checkbox label={'전체'}
-                            type={'c'}
-                            id={'all'}
-                            isChecked={isCheckedAll}
-                            onChange={handleChangeCheckAll}
-                  />
-                  <Checkbox label={'PC 웹'}
-                            type={'c'}
-                            id={'WEB'}
-                            value={'WEB'}
-                            isChecked={stepThree.agentType.includes('WEB') ? true : false}
-                            onChange={handleChangeCheck}/>
-                  <Checkbox label={'PC 어플리케이션'}
-                            type={'c'}
-                            id={'WEB_APP'}
-                            value={'WEB_APP'}
-                            isChecked={stepThree.agentType.includes('WEB_APP') ? true : false}
-                            onChange={handleChangeCheck}/>
-                  <Checkbox label={'모바일 웹'}
-                            type={'c'}
-                            id={'MOBILE_WEB'}
-                            value={'MOBILE_WEB'}
-                            isChecked={stepThree.agentType.includes('MOBILE_WEB') ? true : false}
-                            onChange={handleChangeCheck}/>
-                  <Checkbox label={'모바일 어플리케이션'}
-                            type={'c'}
-                            id={'MOBILE_NATIVE_APP'}
-                            value={'MOBILE_NATIVE_APP'}
-                            isChecked={stepThree.agentType.includes('MOBILE_NATIVE_APP') ? true : false}
-                            onChange={handleChangeCheck}/>
+                  <Controller name={'agentChecked'}
+                              control={control}
+                              render={({field}) =>
+                                <Checkbox {...field} label={'PC 웹'} type={'c'} id={'WEB'} isChecked={checked.WEB}
+                                          onChange={handleAgentType} inputRef={field.ref}/>}/>
+
+                  <Controller name={'agentChecked'}
+                              control={control}
+                              render={({field}) =>
+                                <Checkbox label={'PC 어플리케이션'} type={'c'} id={'WEB_APP'} isChecked={checked.WEB_APP}
+                                          onChange={handleAgentType} inputRef={field.ref}/>}/>
+                  <Controller name={'agentChecked'}
+                              control={control}
+                              render={({field}) =>
+                                <Checkbox label={'모바일 웹'} type={'c'} id={'MOBILE_WEB'} isChecked={checked.MOBILE_WEB}
+                                          onChange={handleAgentType} inputRef={field.ref}/>}/>
+                  <Controller name={'agentChecked'}
+                              control={control}
+                              render={({field}) =>
+                                <Checkbox label={'모바일 APP'} type={'c'} id={'MOBILE_NATIVE_APP'} isChecked={checked.MOBILE_NATIVE_APP}
+                                          onChange={handleAgentType} inputRef={field.ref}/>}/>
                 </AgentType>
-                <p style={{color: '#ccc'}}>팝언더 상품은 PC웹과 MOBILE웹에서만 송출 가능.</p>
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
@@ -185,19 +190,19 @@ export function CampaignThree() {
                   <input
                     type={'radio'}
                     name={'inventory'}
-                    value={'auto'}
-                    onClick={() => setStepThree({...stepThree, inventory: {type:'auto'}})}
-                    {...register('inventory',{value:stepThree.inventory.type})}
+                    id={'AUTO'}
+                    onClick={()=>setExposeInventoryType('AUTO')}
+                    checked={campaignGroupInfo.exposeInventoryType==='AUTO'}
                   />
                   <span>자동 최적화</span>
                 </label>
                 <label>
                   <input
                     type={'radio'}
+                    id={'CATEGORY'}
                     name={'inventory'}
-                    value={'categories'}
-                    onClick={() => setStepThree({...stepThree, inventory: {type:'categories'}})}
-                    {...register('inventory',{value:stepThree.inventory.type})}
+                    onClick={()=>setExposeInventoryType('CATEGORY')}
+                    checked={campaignGroupInfo.exposeInventoryType==='CATEGORY'}
                   />
                   <span>카테고리 설정</span>
                 </label>
@@ -205,27 +210,27 @@ export function CampaignThree() {
                   <label>
                     <input
                       type={'radio'}
+                      id={'MANUAL'}
                       name={'inventory'}
-                      value={'direct'}
-                      onClick={() => setStepThree({...stepThree, inventory: {type:'direct'}})}
-                      {...register('inventory',{value:stepThree.inventory.type})}
+                      onClick={()=>setExposeInventoryType('MANUAL')}
+                      checked={campaignGroupInfo.exposeInventoryType==='MANUAL'}
                     />
                     <span>직접 선택</span>
                   </label>
-                  {stepThree.inventory.type === 'direct' &&
+                  {campaignGroupInfo.exposeInventoryType === 'MANUAL' &&
                   <InventoryButton title={'지면선택'}/>
                   }
                 </ColSpan2>
               </RelativeDiv>
             </ColSpan4>
-            {stepThree.inventory.type === 'categories' &&
+            {campaignGroupInfo.exposeInventoryType === 'CATEGORY' &&
               <ColSpan4>
                 <Span4></Span4>
                 <RelativeDiv>
                   <SelectCategory>
-                    {topLevelCategory.map((item, key) => {
+                    {mediaCategory.data.map((item, key) => {
                       return (
-                        <CategoryItem key={key}>{item.name}</CategoryItem>
+                        <CategoryItem active={campaignGroupInfo !==null && campaignGroupInfo.allowInventoryCategories.includes(item.value)} key={key} onClick={()=>selectedCategory(item.value)} >{item.label}</CategoryItem>
                       )
                     })}
                   </SelectCategory>
@@ -259,31 +264,6 @@ export function CampaignThree() {
                   <input type={'checkbox'} className={'checkbox-type-a'}/>
                   <i/>
                   <span>종료일 미설정</span>
-                </label>
-              </RelativeDiv>
-            </ColSpan4>
-            <ColSpan4>
-              <Span4>게제 요일 및 시간</Span4>
-              <RelativeDiv>
-                <label>
-                  <input
-                    type={'radio'}
-                    name={'customInventory'}
-                    value={'auto'}
-                    onClick={()=> setStepThree({...stepThree, customInventory: {type:'auto'}})}
-                    {...register('customInventory', {value: stepThree.customInventory.type})}
-                  />
-                  <span>자동 최적화</span>
-                </label>
-                <label>
-                  <input
-                    type={'radio'}
-                    name={'customInventory'}
-                    value={'custom'}
-                    onClick={()=> setStepThree({...stepThree, customInventory: {type:'custom'}})}
-                    {...register('customInventory',{value: stepThree.customInventory.type})}
-                  />
-                  <span>개별 설정</span>
                 </label>
               </RelativeDiv>
             </ColSpan4>
