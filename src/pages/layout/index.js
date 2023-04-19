@@ -227,7 +227,7 @@ const Logout = styled.div`
   }
 `
 
-const AdvertisingBalance = styled.p`
+const AdvertisingBalance = styled.div`
   display: flex;
   margin-left: 20px;
   color: #f5811f;

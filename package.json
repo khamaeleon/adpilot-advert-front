@@ -21,6 +21,7 @@
     "jotai-devtools": "^0.2.0",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.23",
+    "kicc-easypay": "^0.1.2",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-confirm-alert": "^3.0.6",
