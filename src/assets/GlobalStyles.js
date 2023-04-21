@@ -1080,7 +1080,7 @@ export const ChartLabel = styled.div`
   }
 `
 
-export const ChartTooltip = styled.span`
+export const ChartTooltip = styled.div`
   background: #fff;
   padding: 3px 10px;
   border: 1px solid #ccc;

@@ -1,8 +1,4 @@
 import {
-  AgentType,
-  BoardSearchDetail,
-  CalendarBox,
-  CalendarIcon,
   ChartContainer,
   ChartLabel,
   ChartLabels,
@@ -10,17 +6,10 @@ import {
   DashBoardBody,
   DashBoardCard,
   DashBoardHeader,
-  DateContainer,
-  defaultStyle,
-  Input,
-  RangePicker,
-  RelativeDiv,
-  RowSpan,
-  SearchButton
+  defaultStyle
 } from "../../assets/GlobalStyles";
 import {ResponsiveLine} from '@nivo/line'
 import React, {useCallback, useEffect, useState} from "react";
-import {HorizontalRule} from "../../components/common/Common";
 import {useAtom} from "jotai/index";
 import {dataTotalInfo} from "../../components/common/entity";
 import {chartDataAtom, commonProperties, platformStatusType} from "./entity/Chart";
@@ -51,36 +40,40 @@ function ChartComponent() {
     if(tokenUserInfo.role !== 'NORMAL') {
       retrieveOverview(searchCondition).then(response => {
         let data = response
-        data.map((item,key) => {
-          Object.assign(data[key],{clickRate: item.clickCount !== 0 ? item.clickCount / (item.exposureCount*100) : 0})
-          Object.assign(data[key],{cpc:item.costAmount !== 0 ? item?.costAmount / item.clickCount : 0})
-          Object.assign(data[key],{costPerConversion: item.costAmount !== 0 ? item?.costAmount / item.totalConversionCount : 0})
-          Object.assign(data[key],{avgConversionAmount: item.totalConversionAmount !== 0 ? item.totalConversionAmount / item.totalConversionCount : 0})
-          Object.assign(data[key],{sessionRoas: item.sessionConversionAmount !== 0 ? item.sessionConversionAmount / (item.costAmount *100) : 0})
-          Object.assign(data[key],{directRoas: item.directConversionAmount !== 0 ? item.directConversionAmount / (item.costAmount *100) : 0})
-          Object.assign(data[key],{exposureRoas: item.exposureConversionAmount !== 0 ? item.exposureConversionAmount / (item.costAmount *100) : 0})
-          Object.assign(data[key],{totalRoas: item.totalConversionAmount !== 0 ? item.totalConversionAmount / (item.costAmount *100) : 0})
-          Object.assign(data[key],{ecpm: item.costAmount !== 0 ?item?.costAmount / (item.exposureCount*1000) : 0},)
-          Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? item.totalConversionCount / (item.clickCount*100) : 0})
-        })
-        setChartDataInfo(data)
+        if(response !== null) {
+          data.map((item,key) => {
+            Object.assign(data[key],{clickRate: item.clickCount !== 0 ? (item.clickCount / item.exposureCount) *100 : 0})
+            Object.assign(data[key],{cpc:item.costAmount !== 0 ? item?.costAmount / item.clickCount : 0})
+            Object.assign(data[key],{costPerConversion: item.costAmount !== 0 ? item?.costAmount / item.totalConversionCount : 0})
+            Object.assign(data[key],{avgConversionAmount: item.totalConversionAmount !== 0 ? item.totalConversionAmount / item.totalConversionCount : 0})
+            Object.assign(data[key],{sessionRoas: item.sessionConversionAmount !== 0 ? (item.sessionConversionAmount / item.costAmount) *100 : 0})
+            Object.assign(data[key],{directRoas: item.directConversionAmount !== 0 ? (item.directConversionAmount / item.costAmount) *100 : 0})
+            Object.assign(data[key],{exposureRoas: item.exposureConversionAmount !== 0 ? (item.exposureConversionAmount / item.costAmount) *100 : 0})
+            Object.assign(data[key],{totalRoas: item.totalConversionAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
+            Object.assign(data[key],{ecpm: item.costAmount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0},)
+            Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.clickCount) *100 : 0})
+          })
+          setChartDataInfo(data)
+        }
       })
     } else {
       retrieveAdverOverview(tokenUserInfo.id, searchCondition).then(response => {
         let data = response
-        data.map((item,key) => {
-          Object.assign(data[key],{clickRate: item.clickCount !== 0 ? item.clickCount / (item.exposureCount*100) : 0})
-          Object.assign(data[key],{cpc:item.costAmount !== 0 ? item?.costAmount / item.clickCount : 0})
-          Object.assign(data[key],{costPerConversion: item.costAmount !== 0 ? item?.costAmount / item.totalConversionCount : 0})
-          Object.assign(data[key],{avgConversionAmount: item.totalConversionAmount !== 0 ? item.totalConversionAmount / item.totalConversionCount : 0})
-          Object.assign(data[key],{sessionRoas: item.sessionConversionAmount !== 0 ? item.sessionConversionAmount / (item.costAmount *100) : 0})
-          Object.assign(data[key],{directRoas: item.directConversionAmount !== 0 ? item.directConversionAmount / (item.costAmount *100) : 0})
-          Object.assign(data[key],{exposureRoas: item.exposureConversionAmount !== 0 ? item.exposureConversionAmount / (item.costAmount *100) : 0})
-          Object.assign(data[key],{totalRoas: item.totalConversionAmount !== 0 ? item.totalConversionAmount / (item.costAmount *100) : 0})
-          Object.assign(data[key],{ecpm: item.costAmount !== 0 ?item?.costAmount / (item.exposureCount*1000) : 0},)
-          Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? item.totalConversionCount / (item.clickCount*100) : 0})
-        })
-        setChartDataInfo(data)
+        if(response !== null) {
+          data.map((item,key) => {
+            Object.assign(data[key],{clickRate: item.clickCount !== 0 ? (item.clickCount / item.exposureCount) *100 : 0})
+            Object.assign(data[key],{cpc:item.costAmount !== 0 ? item?.costAmount / item.clickCount : 0})
+            Object.assign(data[key],{costPerConversion: item.costAmount !== 0 ? item?.costAmount / item.totalConversionCount : 0})
+            Object.assign(data[key],{avgConversionAmount: item.totalConversionAmount !== 0 ? item.totalConversionAmount / item.totalConversionCount : 0})
+            Object.assign(data[key],{sessionRoas: item.sessionConversionAmount !== 0 ? (item.sessionConversionAmount / item.costAmount) *100 : 0})
+            Object.assign(data[key],{directRoas: item.directConversionAmount !== 0 ? (item.directConversionAmount / item.costAmount) *100 : 0})
+            Object.assign(data[key],{exposureRoas: item.exposureConversionAmount !== 0 ? (item.exposureConversionAmount / item.costAmount) *100 : 0})
+            Object.assign(data[key],{totalRoas: item.totalConversionAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
+            Object.assign(data[key],{ecpm: item.costAmount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0},)
+            Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.clickCount) *100 : 0})
+          })
+          setChartDataInfo(data)
+        }
       })
     }
   },[])
@@ -105,6 +98,7 @@ function ChartComponent() {
   }
 
   const handleOnChangeChartStatus = (statusId) => {
+    console.log(statusId)
     setChartData({
       ...chartData,
       [statusId]: {
@@ -115,7 +109,7 @@ function ChartComponent() {
   }
 
   const handleChangeDataType = (e) => {
-    console.log(chartDataInfo)
+    console.log(e.value)
     setChartData({
       ...chartData,
       [e.value]: {
