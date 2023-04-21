@@ -56,7 +56,6 @@ export function RefundRequestTable(props) {
 function PaymentManageUser(props) {
     const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
     const [startDate, endDate] = dateRange;
-
     const [advertisingBalance, setAdvertisingBalance] = useState(10000) // 광고비 잔액
     const [requestAmountValue, setRequestAmountValue] = useState(0) // 충전 금액
 
@@ -163,7 +162,7 @@ function PaymentManageUser(props) {
                                                 <small>등록된 환불 정보가 없습니다. 환불 정보를 등록해주세요.</small>
                                             </AdvertisingCostStatus>
                                             :
-                                            <RefundRequestTable refundData={refundData}/>
+                                            <RefundRequestTable refundData={refundData} advertisingBalance={advertisingBalance} setAdvertisingBalance={setAdvertisingBalance}/>
                                         }
                                     </ColSpan4>
                                 </RowSpan>
