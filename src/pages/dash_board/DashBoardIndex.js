@@ -108,28 +108,68 @@ function ChartComponent() {
     })
   }
 
+  // const handleChangeDataType = (e) => {
+  //   console.log(e.value)
+  //   setChartData({
+  //     ...chartData,
+  //     [e.value]: {
+  //       ...chartData[e.value],
+  //       status: !chartData[e.value].status
+  //     }
+  //   })
+  //   setDataType(e.value)
+  // }
+  //
+  // const handleChangeDataType2 = (e) => {
+  //   setChartData({
+  //     ...chartData,
+  //     [e.value]: {
+  //       ...chartData[e.value],
+  //       status: !chartData[e.value].status
+  //     }
+  //   })
+  //   setDataType2(e.value)
+  // }
+
   const handleChangeDataType = (e) => {
-    console.log(e.value)
-    setChartData({
-      ...chartData,
-      [e.value]: {
-        ...chartData[e.value],
-        status: !chartData[e.value].status
-      }
-    })
-    setDataType(e.value)
-  }
+    setChartData((prevChartData) => {
+      const newData = {};
+      Object.keys(prevChartData).forEach((key) => {
+        newData[key] = {
+          ...prevChartData[key],
+          status:
+              key === e.value ||
+              (['clickCount', 'exposureCount', 'totalConversionCount'].includes(
+                      key
+                  ) &&
+                  prevChartData[key].status) ||
+              (prevChartData[key].status && key === dataType2),
+        };
+      });
+      return newData;
+    });
+    setDataType(e.value);
+  };
 
   const handleChangeDataType2 = (e) => {
-    setChartData({
-      ...chartData,
-      [e.value]: {
-        ...chartData[e.value],
-        status: !chartData[e.value].status
-      }
-    })
-    setDataType2(e.value)
-  }
+    setChartData((prevChartData) => {
+      const newData = {};
+      Object.keys(prevChartData).forEach((key) => {
+        newData[key] = {
+          ...prevChartData[key],
+          status:
+              key === e.value ||
+              (['clickCount', 'exposureCount', 'totalConversionCount'].includes(
+                      key
+                  ) &&
+                  prevChartData[key].status) ||
+              (prevChartData[key].status && key === dataType),
+        };
+      });
+      return newData;
+    });
+    setDataType2(e.value);
+  };
 
   const makeChartData = () => {
     let list = []
