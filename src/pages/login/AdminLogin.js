@@ -114,7 +114,7 @@ function AdminLogin() {
               <h1><BlockLogo/></h1>
             </Title>
             <RowSpan style={{justifyContent: 'flex-end'}}>
-              <Link to={'/login'}>사용자로그인</Link>
+              <Link to={'/'}>사용자로그인</Link>
             </RowSpan>
             <form onSubmit={handleSubmit(onSubmit, onError)}>
               <InputGroup>

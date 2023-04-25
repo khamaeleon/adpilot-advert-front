@@ -20,8 +20,7 @@ export const menuList = [
     name: "dashboard",
     header: "대시보드",
     include: ["dashboard",'campaignInfoDetail','campaignBudgetDetail','campaignGroupDetail','campaignCreativeDetail'],
-    child: [
-    ]
+    child: []
   },
   {
     name: "campaign",
@@ -60,7 +59,7 @@ export const menuList = [
   {
     name: "settings",
     header: "설정",
-    include: ["settings","settingsDetail","budgetEvent","budgetEventDetail","budgetTime","budgetTimeDetail"],
+    include: ["settings","settingsDetail","budgetEvent","budgetEventDetail","budgetTime","budgetTimeDetail","budgetTimeList"],
     child:[
       {
         name: "settings",
@@ -75,7 +74,7 @@ export const menuList = [
       {
         name: "budgetTime",
         header: "시간별 예산 관리",
-        detail: "budgetTimeDetail"
+        detail: "budgetTimeList"
       }
     ]
   },

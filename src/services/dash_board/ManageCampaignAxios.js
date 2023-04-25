@@ -1,4 +1,4 @@
-import {AdminAxios, AdverAxios} from "../../common/Axios";
+import {AdminAxios} from "../../common/Axios";
 
 const ACTION_URL = '/adver/dashboard/';
 const ADVERTISER = 'advertiser-status';
