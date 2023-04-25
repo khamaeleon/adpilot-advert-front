@@ -81,10 +81,21 @@ function ChartComponent() {
   useEffect(() => {
     makeChartData()
   }, [chartData,chartDataInfo]);
+  const variable = {
+    'clickRate': ['clickCount','exposureCount'],
+    'cpc': ['costAmount','totalClickCount']
+  }
 
-  function calculateSum(property) {
+  function calculateSum(property) { //병철과장님 도와주세요
     let calc =  chartDataInfo.reduce((prev, next) => {
-      return prev + next[property]
+      if(['clickCount','exposureCount','totalConversionCount','userCount','totalExposureCount','totalClickCount','costAmount'].includes(property)){
+        return prev + next[property]
+      } else if(['clickRate'].includes(property)) {
+        //prev + next['clickCount']
+        console.log(prev + next['clickCount'])
+        return (prev + next[variable[property][0]]) !== 0 && (prev + next[variable[property][0]] / prev + next[variable[property][1]]) *100
+      }
+
     }, 0)
     let value;
     if (['clickRate','conversionRate'].includes(property)) {

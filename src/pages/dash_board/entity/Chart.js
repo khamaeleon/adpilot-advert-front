@@ -55,7 +55,6 @@ export const commonProperties = {
     stacked: false,
     reverse: false
   },
-  //colors={[,,,,]}
   axisLeft:null,
   axisBottom:{
     tickSize: 0,
