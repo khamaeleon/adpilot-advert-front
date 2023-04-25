@@ -98,7 +98,7 @@ function ChartComponent() {
   }
 
   const handleOnChangeChartStatus = (statusId) => {
-    console.log(statusId)
+    // console.log(statusId)
     setChartData({
       ...chartData,
       [statusId]: {
@@ -108,29 +108,6 @@ function ChartComponent() {
     })
   }
 
-  // const handleChangeDataType = (e) => {
-  //   console.log(e.value)
-  //   setChartData({
-  //     ...chartData,
-  //     [e.value]: {
-  //       ...chartData[e.value],
-  //       status: !chartData[e.value].status
-  //     }
-  //   })
-  //   setDataType(e.value)
-  // }
-  //
-  // const handleChangeDataType2 = (e) => {
-  //   setChartData({
-  //     ...chartData,
-  //     [e.value]: {
-  //       ...chartData[e.value],
-  //       status: !chartData[e.value].status
-  //     }
-  //   })
-  //   setDataType2(e.value)
-  // }
-
   const handleChangeDataType = (e) => {
     setChartData((prevChartData) => {
       const newData = {};
@@ -138,12 +115,8 @@ function ChartComponent() {
         newData[key] = {
           ...prevChartData[key],
           status:
-              key === e.value ||
-              (['clickCount', 'exposureCount', 'totalConversionCount'].includes(
-                      key
-                  ) &&
-                  prevChartData[key].status) ||
-              (prevChartData[key].status && key === dataType2),
+              key === e.value || (['clickCount', 'exposureCount', 'totalConversionCount'].includes(key) &&
+              prevChartData[key].status) || (prevChartData[key].status && key === dataType2),
         };
       });
       return newData;
@@ -158,12 +131,8 @@ function ChartComponent() {
         newData[key] = {
           ...prevChartData[key],
           status:
-              key === e.value ||
-              (['clickCount', 'exposureCount', 'totalConversionCount'].includes(
-                      key
-                  ) &&
-                  prevChartData[key].status) ||
-              (prevChartData[key].status && key === dataType),
+              key === e.value || (['clickCount', 'exposureCount', 'totalConversionCount'].includes(key) &&
+              prevChartData[key].status) || (prevChartData[key].status && key === dataType),
         };
       });
       return newData;
@@ -177,7 +146,8 @@ function ChartComponent() {
       if(chartData[id].status){
         list.push({
           id: id,
-          data: chartDataInfo.map(item => { return {x: item.historyDate, y: item[id] === NaN ? 0 : item[id]}})
+          data: chartDataInfo.map(item => { return {x: item.historyDate, y: item[id] === NaN ? 0 : item[id]}}),
+          color: chartData[id].color
         })
       }
     })
@@ -199,19 +169,31 @@ function ChartComponent() {
   return (
     <ChartContainer>
       <ChartLabels>
-        <ChartLabel active={chartData['clickCount'].status} onClick={() => handleOnChangeChartStatus('clickCount')}>
+        <ChartLabel
+            style={{
+              background:chartData['clickCount'].status === true?chartData['clickCount'].color:null
+            }}
+            active={chartData['clickCount'].status} onClick={() => handleOnChangeChartStatus('clickCount')}>
           <p>클릭수</p>
           <span>{decimalFormat(calculateSum('clickCount'))}</span>
         </ChartLabel>
-        <ChartLabel active={chartData['exposureCount'].status} onClick={() => handleOnChangeChartStatus('exposureCount')}>
+        <ChartLabel
+            style={{
+              background:chartData['exposureCount'].status === true?chartData['exposureCount'].color:null
+            }}
+            active={chartData['exposureCount'].status} onClick={() => handleOnChangeChartStatus('exposureCount')}>
           <p>노출수</p>
           <span>{decimalFormat(calculateSum('exposureCount'))}</span>
         </ChartLabel>
-        <ChartLabel active={chartData['totalConversionCount'].status} onClick={() => handleOnChangeChartStatus('totalConversionCount')}>
+        <ChartLabel
+            style={{
+              background:chartData['totalConversionCount'].status === true?chartData['totalConversionCount'].color:null
+            }}
+            active={chartData['totalConversionCount'].status} onClick={() => handleOnChangeChartStatus('totalConversionCount')}>
           <p>전환수</p>
           <span>{decimalFormat(calculateSum('totalConversionCount'))}</span>
         </ChartLabel>
-        <ChartLabel active={chartData[dataType].status}>
+        <ChartLabel active={chartData[dataType].status} style={{background:chartData[dataType].status === true?chartData[dataType].color:null}}>
           <Select styles={defaultStyle}
                   isDisabled={!chartData[dataType].status}
                   components={{IndicatorSeparator: () => null}}
@@ -222,7 +204,7 @@ function ChartComponent() {
           />
           <span onClick={() => handleOnChangeChartStatus(dataType)}>{calculateSum(dataType)}</span>
         </ChartLabel>
-        <ChartLabel active={chartData[dataType2].status}>
+        <ChartLabel active={chartData[dataType2].status} style={{background:chartData[dataType2].status === true?chartData[dataType2].color:null}}>
           <Select styles={defaultStyle}
                   isDisabled={!chartData[dataType2].status}
                   components={{IndicatorSeparator: () => null}}
@@ -238,6 +220,7 @@ function ChartComponent() {
         <ResponsiveLine
           {...commonProperties}
           data={chartList}
+          colors={(series) => series.color}
           sliceTooltip={(props) => {
             return (
               <ChartTooltip>
