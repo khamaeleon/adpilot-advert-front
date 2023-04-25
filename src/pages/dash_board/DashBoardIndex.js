@@ -146,7 +146,14 @@ function ChartComponent() {
       if(chartData[id].status){
         list.push({
           id: id,
-          data: chartDataInfo.map(item => { return {x: item.historyDate, y: item[id] === NaN ? 0 : item[id]}}),
+          data: chartDataInfo.map(item => {
+            const date = new Date(item.historyDate);
+            const formattedDate = date.toLocaleDateString("en-US", {
+              month: "2-digit",
+              day: "2-digit",
+            });
+            return {x: formattedDate, y: item[id] === NaN ? 0 : item[id]}
+          }),
           color: chartData[id].color
         })
       }
@@ -263,7 +270,7 @@ function DashBoardIndex() {
     }
   }, [searchCondition])
 
-  /**
+  /**색
    * 검색 버튼
    */
   const handleData = () => {
