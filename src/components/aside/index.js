@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import {Link, useParams} from "react-router-dom";
 import {menuList, narrowStyle, selectedIcon, widenStyle} from "./entity";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity/Common";
+import {retrieveCustomReportsList} from "../../services/reports/ReportsAxios";
 
 function AsideList (props) {
   const {id, mode} = props
@@ -29,32 +30,13 @@ function AsideList (props) {
    * @param item
    * @returns {*|string}
    */
-  const calcHeight = (item) => {
-    if(tokenUserInfo.role === 'SUPER_ADMIN'){
-      if(userName !== '' && item.name === 'account'){
-        return item.child.length
-      } else if(userName !== '' || item.name !== 'account') {
-        return item.child.length
-      } else {
-        return '4'
-      }
-    } else {
-      if(tokenUserInfo.role === 'ADMIN' && item.name === 'reports' || item.name === 'platform'){
-        return '3'
-      } else if(tokenUserInfo.role === 'ADMIN' && item.name === 'account'){
-        return '4'
-      } else {
-        if(tokenUserInfo.role === 'NORMAL' && item.name === 'reports') {
-          return '3'
-        } else if (item.name === 'account' || item.name === 'accountHistory') {
-          return '2'
-        } else {
-          return item.child.length
-        }
-        return item.child.length
-      }
-    }
-  }
+
+  useEffect(() => {
+    // retrieveCustomReportsList().then(response => {
+    //
+    // })
+  }, []);
+
 
   return (
     <>
@@ -68,17 +50,32 @@ function AsideList (props) {
                 <span className={mode? "fadeOut" : "fadeIn"}>{item.header}</span>
                 {item.child.length > 0 && <DropIcon className={mode? "fadeOut" : "fadeIn"} style={id.indexOf(item.name) > -1 ? narrowStyle.button : widenStyle.button}/>}
               </Link>
-              <SubMenu className={item.include.includes(id) ? "list slide-down-"+(calcHeight(item)) : 'list'}>
-                {item.child.map((child,key) => {
-                  return (
-                    <div key={key}>
+              {item.child.length > 0 &&
+                <>
+                {item.name === 'reports' ?
+                  <SubMenu active={item.include.includes(id)}>
+                    <div>
                       <div>
-                        <Link to={`/board/${child.name}`} style={id === child.name || id === child.detail ? {color:'#fff'}:null}>{child.header}</Link>
+                        <Link to={`/board/reports`} style={id === 'reports' ? {color:'#fff'}:null}>보고서 생성</Link>
                       </div>
                     </div>
-                  )
-                })}
-              </SubMenu>
+                  </SubMenu>
+                  :
+                  <SubMenu active={item.include.includes(id)}>
+                      {item.child.map((child, key) => {
+                        return (
+                          <div key={key}>
+                            <div>
+                              <Link to={`/board/${child.name}`}
+                                    style={id === child.name || id === child.detail ? {color: '#fff'} : null}>{child.header}</Link>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </SubMenu>
+                  }
+                </>
+              }
             </li>
             }
           </div>
@@ -217,22 +214,21 @@ const BtnNarrow = styled.div`
 
 const SubMenu = styled.div`
   background-color: #212020;
-  transition-duration: 0.5s;
-  transition-delay: 0.5s;
+  transition-duration: 1s;
   overflow: hidden;
   white-space: nowrap;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 52px;
-  height: 0;
-
+  padding-left:52px;
+  padding-top: ${props => props.active ?'10px':0};
+  padding-bottom: ${props => props.active ?'10px':0};
+  max-height: ${props => props.active ? '200px' : '0px'};
   & > div {
-    color: #cccccc;
-
-    & div {
+    & > div {
+      color: #cccccc;
       font-size: 13px;
-      margin: 8px 0
+      padding: 8px 0;
     }
   }
 `

@@ -205,6 +205,7 @@ function Table(props) {
   useEffect(() => {
     if (gridRef) {
       gridRef.current.setColumnSizesToFit()
+      console.info('grid reference',gridRef.current)
     }
   }, [gridRef])
 

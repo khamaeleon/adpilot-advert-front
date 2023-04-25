@@ -16,7 +16,3 @@ export const customReportsColumns = [
     header: '전환율',
   },
 ]
-
-export const customReportsData = [
-  {date:'',campaignName:'',exposureAll:''}
-]

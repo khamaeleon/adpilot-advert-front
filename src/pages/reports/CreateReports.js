@@ -2,13 +2,14 @@ import {
   Board,
   BoardHeader,
   BoardSearchResult,
-  ColSpan1, ColSpan2,
+  ColSpan2, ColTitle,
   Input,
   RelativeDiv,
   RowSpan,
   Span4,
   SubmitButton,
-  SubmitContainer, ValidationScript
+  SubmitContainer,
+  ValidationScript
 } from "../../assets/GlobalStyles";
 import React, {useState} from "react";
 import styled from "styled-components";
@@ -17,39 +18,52 @@ import {Row} from "../campaign/styles/common";
 import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
 import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 import {OpenReports} from "../../components/modal/OpenReports";
-import {customReportsData} from "./entity/Common";
 import {toast, ToastContainer} from "react-toastify";
 import {useForm} from "react-hook-form";
+import {createCustomReportsAxios} from "../../services/reports/ReportsAxios";
+
 
 const columnList= {
-  daily:"일별",
-  weeks:"주별",
-  month:"월별",
-  eventName: "이벤트 명",
-  advertiserCnt:"광고주수",
-  advertiserName:"광고주명",
-  advertiserId:"광고주 아이디",
-  campaignName:"캠페인명",
-  creative:"광고 상품",
-  exposureAll:"총노출수",
-  exposureCount:"노출수",
-  clickCountAll:"총클릭수",
-  clickCount:"클릭수",
-  clickRate:"클릭율",
-  cost:"비용",
-  cpc:"CPC",
-  conversionCount:"전환수",
-  conversionRate:"전환율",
-  averageCost:"평균구매액",
-  roas:"ROAS",
-  ecpm:"eCPM",
+  BY_DAILY: "날짜별",
+  BY_WEEKLY: "주별",
+  BY_MONTHLY: "월별",
+  BY_ADVERTISE: "광고주 명",
+  BY_CAMPAIGN: "캠페인 명",
+  BY_PRODUCT: "광고 상품",
+  BY_EVENT: "이벤트 명",
+  COUNT_BY_ADVERTISE: "광고주 수",
+  TOTAL_EXPOSURE_COUNT: "총 노출수",
+  EXPOSURE_COUNT: "노출수",
+  CLICK_COUNT: "총 클릭수",
+  VALID_CLICK_COUNT: "클릭수",
+  CLICK_RATE: "클릭율",
+  COST_AMOUNT: "비용",
+  CPC: "CPC",
+  CONVERSION_COUNT: "전환수",
+  CONVERSION_RATE: "전환율",
+  CONVERSION_PRICE: "전환비용",
+  AMOUNT_PURCHASED_AVG: "평균",
+  SESSION_CONVERSION_AMOUNT: "세션 매출",
+  SESSION_CONVERSION_ROAS: "세션 ROAS",
+  DIRECT_CONVERSION_AMOUNT: "직접 매출",
+  DIRECT_CONVERSION_ROAS: "직접 ROAS",
+  ROAS: "ROAS",
+  EXPOSURE_CONVERSION_AMOUNT: "노출 매출",
+  EXPOSURE_CONVERSION_ROAS: "노출 ROAS",
+  E_CPM: "eCPM",
 }
-export default function CreateReports() {
-  const [columns, setColumns] = useState([])
-  const [reportName, setReportName] = useState("")
-  const { register, trigger, formState: { errors } } = useForm();
-  const handleSearchAdvertiser = () => {
 
+export default function CreateReports() {
+  const [period, setPeriod] = useState('NONE')
+  const [scopes, setScopes] = useState([])
+  const [dataItems, setDataItems] = useState([])
+  const [columns, setColumns] = useState([])
+  const [creativeInfo, setCreativeInfo] = useState({})
+  const [reportName, setReportName] = useState('')
+  const { register, trigger, formState: { errors } } = useForm();
+  const handleSearchAdvertiser = (creative) => {
+    setCreativeInfo(creative)
+    console.log(creative)
   }
 
   const handleAddPeriodItem = (item) => {
@@ -62,10 +76,51 @@ export default function CreateReports() {
       showColumnMenuTool: false,
       draggable: false,
     }
-    setColumns([data])
-    console.log(columns)
+    if(item === 'NONE') {
+      setPeriod(item)
+      setColumns([])
+      setScopes([])
+    } else if(scopes.length === 0 && item === 'NONE') {
+      toast.warning("기간 광고정보 중 하나는 선택해야합니다.")
+    } else {
+      setColumns([data])
+      setPeriod(item)
+    }
   }
 
+  const handleAddScopesItem = (item) => {
+    const data = {
+      name: item,
+      header: columnList[item],
+      textAlign: 'center',
+      sortable: false,
+      resizable: false,
+      showColumnMenuTool: false,
+      draggable: false,
+    }
+    if(item === 'NONE_SCOPE' && period === 'NONE') {
+      toast.warning("기간 광고정보 중 하나는 선택해야합니다.")
+    } else {
+      if(item === 'NONE_SCOPE') {
+        setScopes([])
+        const newColumnData = columns.filter(datum => !["BY_ADVERTISE","BY_CAMPAIGN","BY_PRODUCT","BY_EVENT"].includes(datum.name))
+        setColumns(newColumnData)
+      } else {
+        if(scopes.filter(datum => datum === item).length === 0) {
+          setScopes(prev => [...prev, item])
+        } else {
+          const newScopesData = columns.filter(datum => datum !== item)
+          setScopes(newScopesData)
+        }
+        if(columns.filter(datum => datum.name === item).length === 0){
+          setColumns(prev => [...prev, data])
+        } else {
+          const newColumnData = columns.filter(datum => datum.name !== item)
+          setColumns(newColumnData)
+        }
+      }
+    }
+  }
   const handleAddReportsItem = (item) => {
     const data = {
       name: item,
@@ -76,14 +131,16 @@ export default function CreateReports() {
       showColumnMenuTool: false,
       draggable:false,
     }
-    if(columns.length === 0){
-      toast("기간을 설정해주세요")
+    if(scopes.length === 0 && period === 'NONE') {
+      toast.warning("기간 광고정보 중 하나는 선택해야합니다.")
     } else {
       if(columns.filter(datum => datum.name === item).length === 0){
         setColumns(prev => [...prev, data])
+        setDataItems(prev => [...prev, data])
       } else {
         const newColumnData = columns.filter(datum => datum.name !== item)
         setColumns(newColumnData)
+        setDataItems(newColumnData)
       }
     }
   }
@@ -97,14 +154,31 @@ export default function CreateReports() {
     setReportName(e.target.value)
   }
   const handleCreateReports = async () => {
-    if(columns.length < 3){
+    if(columns.length < 2){
       toast("보고서 항목을 선택해주세요")
+    } else if (period === 'NONE' && scopes.length === 0) {
+      toast("기간항목, 광고정보항목 중 하나는 선택해야 합니다.")
+    } else if(creativeInfo.id === undefined){
+      await trigger("creativeName")
+      toast("광고주를 검색해주세요")
+    } else if(dataItems.length === 0){
+      toast('데이터 항목을 선택해주세요.')
     } else if(reportName === ""){
       await trigger("reportName")
       toast("보고서 명을 작성해주세요")
     } else {
-      console.log(`보고서 명: ${reportName}, 컬럼 [${columns.map(datum => datum.name).join(', ')}]`)
+      let params = {
+        "userId" : creativeInfo.id,
+        "reportName" : reportName,
+        "groupByPeriod" : period,
+        "groupByScopes" : scopes,
+        "columns" :  dataItems.map(item => item.name)
+      }
+      createCustomReportsAxios(params).then(response => {
+        console.log(response)
+      })
     }
+    console.log(dataItems)
   }
 
   return(
@@ -117,6 +191,13 @@ export default function CreateReports() {
               <Span4>광고주 설정</Span4>
               <Input
                 style={{width: 300}}
+                {...register("creativeName",{
+                  required: {
+                    value: creativeInfo.adverName === "",
+                    message: '광고주를 선택해주세요'
+                  }
+                })}
+                value={creativeInfo.adverName || ""}
                 readOnly
               />
               <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
@@ -124,94 +205,119 @@ export default function CreateReports() {
           </RowSpan>
           <RowSpan>
             <Span4>보고서 항목 선택</Span4>
-            <OpenReports title={'보고서 불러오기'}/>
+            {/*<OpenReports title={'보고서 불러오기'}/>*/}
           </RowSpan>
           <ReportsItemContainer>
             <RowSpan box={true} column={true}>
               <Row>
-                <Span4>기간</Span4>
+                <Span4>기간별 항목 (택1)</Span4>
+                <small>*기간별 항목을 다시 선택할 경우 선택 항목이 초기화 됩니다.</small>
               </Row>
               <Row>
                 <DefaultItemContainer>
                   <DefaultItemButton
-                    active={includeItem('daily')}
-                    onClick={()=>handleAddPeriodItem('daily')}>일별</DefaultItemButton>
+                    active={includeItem('BY_DAILY')}
+                    onClick={()=>handleAddPeriodItem('BY_DAILY')}>일별</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('weeks')}
-                    onClick={()=>handleAddPeriodItem('weeks')}>주별</DefaultItemButton>
+                    active={includeItem('BY_WEEKLY')}
+                    onClick={()=>handleAddPeriodItem('BY_WEEKLY')}>주별</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('month')}
-                    onClick={()=>handleAddPeriodItem('month')}>월별</DefaultItemButton>
+                    active={includeItem('BY_MONTHLY')}
+                    onClick={()=>handleAddPeriodItem('BY_MONTHLY')}>월별</DefaultItemButton>
+                  <DefaultItemButton
+                    active={period === 'NONE'}
+                    onClick={()=>handleAddPeriodItem('NONE')}>설정안함</DefaultItemButton>
                 </DefaultItemContainer>
               </Row>
               <VerticalRule/>
               <Row>
-                <Span4>광고 정보</Span4>
+                <ColTitle>광고 정보 항목 (다중선택)</ColTitle>
               </Row>
               <Row>
                 <DefaultItemContainer>
                   <DefaultItemButton
-                    active={includeItem('advertiserName')}
-                    onClick={()=>handleAddReportsItem('advertiserName')}>광고주명</DefaultItemButton>
+                    active={includeItem('BY_ADVERTISE')}
+                    onClick={()=>handleAddScopesItem('BY_ADVERTISE')}>광고주명</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('advertiserId')}
-                    onClick={()=>handleAddReportsItem('advertiserId')}>광고주 아이디</DefaultItemButton>
+                    active={includeItem('BY_CAMPAIGN')}
+                    onClick={()=>handleAddScopesItem('BY_CAMPAIGN')}>캠페인명</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('campaignName')}
-                    onClick={()=>handleAddReportsItem('campaignName')}>캠페인명</DefaultItemButton>
+                    active={includeItem('BY_PRODUCT')}
+                    onClick={()=>handleAddScopesItem('BY_PRODUCT')}>광고 상품</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('creative')}
-                    onClick={()=>handleAddReportsItem('creative')}>광고 상품</DefaultItemButton>
+                    active={includeItem('BY_EVENT')}
+                    onClick={()=>handleAddScopesItem('BY_EVENT')}>이벤트 명</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('eventName')}
-                    onClick={()=>handleAddReportsItem('eventName')}>이벤트 명</DefaultItemButton>
+                    active={scopes.length === 0}
+                    onClick={()=>handleAddScopesItem('NONE_SCOPE')}>설정안함</DefaultItemButton>
                 </DefaultItemContainer>
               </Row>
               <VerticalRule/>
               <Row>
-                <Span4>데이터 항목</Span4>
+                <ColTitle>데이터 항목 (다중선택)</ColTitle>
               </Row>
               <Row>
                 <DefaultItemContainer>
                   <DefaultItemButton
-                    active={includeItem('advertiserCnt')}
-                    onClick={()=>handleAddReportsItem('advertiserCnt')}>광고주수</DefaultItemButton>
+                    active={includeItem('COUNT_BY_ADVERTISE')}
+                    onClick={()=>handleAddReportsItem('COUNT_BY_ADVERTISE')}>광고주수</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('exposureAll')}
-                    onClick={()=>handleAddReportsItem('exposureAll')}>총 노출수</DefaultItemButton>
+                    active={includeItem('TOTAL_EXPOSURE_COUNT')}
+                    onClick={()=>handleAddReportsItem('TOTAL_EXPOSURE_COUNT')}>총 노출수</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('exposureCount')}
-                    onClick={()=>handleAddReportsItem('exposureCount')}>노출수</DefaultItemButton>
+                    active={includeItem('EXPOSURE_COUNT')}
+                    onClick={()=>handleAddReportsItem('EXPOSURE_COUNT')}>노출수</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('clickCountAll')}
-                    onClick={()=>handleAddReportsItem('clickCountAll')}>총클릭수</DefaultItemButton>
+                    active={includeItem('CLICK_COUNT')}
+                    onClick={()=>handleAddReportsItem('CLICK_COUNT')}>총클릭수</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('clickCount')}
-                    onClick={()=>handleAddReportsItem('clickCount')}>클릭수</DefaultItemButton>
+                    active={includeItem('VALID_CLICK_COUNT')}
+                    onClick={()=>handleAddReportsItem('VALID_CLICK_COUNT')}>클릭수</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('clickRate')}
-                    onClick={()=>handleAddReportsItem('clickRate')}>클릭률</DefaultItemButton>
+                    active={includeItem('CLICK_RATE')}
+                    onClick={()=>handleAddReportsItem('CLICK_RATE')}>클릭률</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('cost')}
-                    onClick={()=>handleAddReportsItem('cost')}>비용</DefaultItemButton>
+                    active={includeItem('COST_AMOUNT')}
+                    onClick={()=>handleAddReportsItem('COST_AMOUNT')}>비용</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('cpc')}
-                    onClick={()=>handleAddReportsItem('cpc')}>CPC</DefaultItemButton>
+                    active={includeItem('CPC')}
+                    onClick={()=>handleAddReportsItem('CPC')}>CPC</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('conversionCount')}
-                    onClick={()=>handleAddReportsItem('conversionCount')}>전환수</DefaultItemButton>
+                    active={includeItem('CONVERSION_PRICE')}
+                    onClick={()=>handleAddReportsItem('CONVERSION_PRICE')}>전환가격</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('conversionRate')}
-                    onClick={()=>handleAddReportsItem('conversionRate')}>전환율</DefaultItemButton>
+                    active={includeItem('AMOUNT_PURCHASED_AVG')}
+                    onClick={()=>handleAddReportsItem('AMOUNT_PURCHASED_AVG')}>평균구매액</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('averageCost')}
-                    onClick={()=>handleAddReportsItem('averageCost')}>평균구매액</DefaultItemButton>
+                    active={includeItem('CONVERSION_COUNT')}
+                    onClick={()=>handleAddReportsItem('CONVERSION_COUNT')}>전환수</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('roas')}
-                    onClick={()=>handleAddReportsItem('roas')}>ROAS</DefaultItemButton>
+                    active={includeItem('CONVERSION_RATE')}
+                    onClick={()=>handleAddReportsItem('CONVERSION_RATE')}>전환율</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('ecpm')}
-                    onClick={()=>handleAddReportsItem('ecpm')}>eCPM</DefaultItemButton>
+                    active={includeItem('SESSION_CONVERSION_AMOUNT')}
+                    onClick={()=>handleAddReportsItem('SESSION_CONVERSION_AMOUNT')}>세션 매출</DefaultItemButton>
+                  <DefaultItemButton
+                    active={includeItem('SESSION_CONVERSION_ROAS')}
+                    onClick={()=>handleAddReportsItem('SESSION_CONVERSION_ROAS')}>세션 ROAS</DefaultItemButton>
+                  <DefaultItemButton
+                    active={includeItem('DIRECT_CONVERSION_AMOUNT')}
+                    onClick={()=>handleAddReportsItem('DIRECT_CONVERSION_AMOUNT')}>직접 매출</DefaultItemButton>
+                  <DefaultItemButton
+                    active={includeItem('DIRECT_CONVERSION_ROAS')}
+                    onClick={()=>handleAddReportsItem('DIRECT_CONVERSION_ROAS')}>직접 ROAS</DefaultItemButton>
+                  <DefaultItemButton
+                    active={includeItem('EXPOSURE_CONVERSION_AMOUNT')}
+                    onClick={()=>handleAddReportsItem('EXPOSURE_CONVERSION_AMOUNT')}>노출 매출</DefaultItemButton>
+                  <DefaultItemButton
+                    active={includeItem('EXPOSURE_CONVERSION_ROAS')}
+                    onClick={()=>handleAddReportsItem('EXPOSURE_CONVERSION_ROAS')}>노출 ROAS</DefaultItemButton>
+                  <DefaultItemButton
+                    active={includeItem('ROAS')}
+                    onClick={()=>handleAddReportsItem('ROAS')}>ROAS</DefaultItemButton>
+                  <DefaultItemButton
+                    active={includeItem('E_CPM')}
+                    onClick={()=>handleAddReportsItem('E_CPM')}>eCPM</DefaultItemButton>
                 </DefaultItemContainer>
               </Row>
             </RowSpan>
@@ -228,20 +334,21 @@ export default function CreateReports() {
                 <Span4><span style={{color:'red'}}>*</span> 보고서 명</Span4>
                 <div style={{position: "relative"}}>
                   <Input
-
                     {...register("reportName", {
                       required: {
                         value: reportName === "",
-                        message: "보고서 명을 작성해주세요"
+                        message: '보고서 명을 작성해주세요'
                       },
+                      value: reportName || "",
                       onChange: handleChangeReportName
                     })}
                     style={errors.reportName?.ref?.value === "" ? {border:"1px solid red"} : null}
                     placeholder={'보고서 명을 작성해주세요'}/>
+                  {errors.reportName?.ref?.value === "" && <ValidationScript>{errors.reportName.message}</ValidationScript>}
                 </div>
               </ColSpan2>
             </RowSpan>
-            <RowSpan>
+            <RowSpan style={{marginTop: 25}}>
               <ReactDataGrid
                 licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
                 columns={columns}
@@ -250,7 +357,6 @@ export default function CreateReports() {
                 showZebraRows={false}
                 activateRowOnFocus
                 emptyText={'데이터가 없습니다.'}
-                {...customReportsData}
               />
             </RowSpan>
           </RowSpan>
