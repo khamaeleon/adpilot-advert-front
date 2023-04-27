@@ -81,22 +81,78 @@ function ChartComponent() {
   useEffect(() => {
     makeChartData()
   }, [chartData,chartDataInfo]);
-  const variable = {
-    'clickRate': ['clickCount','exposureCount'],
-    'cpc': ['costAmount','totalClickCount']
-  }
 
-  function calculateSum(property) { //병철과장님 도와주세요
-    let calc =  chartDataInfo.reduce((prev, next) => {
-      if(['clickCount','exposureCount','totalConversionCount','userCount','totalExposureCount','totalClickCount','costAmount'].includes(property)){
-        return prev + next[property]
-      } else if(['clickRate'].includes(property)) {
-        //prev + next['clickCount']
-        console.log(prev + next['clickCount'])
-        return (prev + next[variable[property][0]]) !== 0 && (prev + next[variable[property][0]] / prev + next[variable[property][1]]) *100
-      }
+  function calculateSum(property) { // 도움 끝~!!!
+    function calculatePropertySum(property) { // 전체 값은 따로 계산식 함수로 값 정리
+      return chartDataInfo.reduce((prev, next) => prev + next[property], 0);
+    }
 
-    }, 0)
+    //[d] 개별 계산값 정리
+    const clickCountSum = calculatePropertySum('clickCount');
+    const exposureCountSum = calculatePropertySum('exposureCount');
+    const costAmountSum = calculatePropertySum('costAmount');
+    const totalConversionCountSum = calculatePropertySum('totalConversionCount');
+    const totalConversionAmountSum = calculatePropertySum('totalConversionAmount');
+    const sessionConversionAmountSum = calculatePropertySum('sessionConversionAmount');
+    const directConversionAmountSum = calculatePropertySum('directConversionAmount');
+    const exposureConversionAmountSum = calculatePropertySum('exposureConversionAmount');
+
+    //[d] 개별 계산값을 포함한 개별 공식 계싼값 switch 문으로 구성
+    let calc = 0;
+    switch (property) {
+      case 'clickCount':
+      case 'exposureCount':
+      case 'totalConversionCount':
+      case 'userCount':
+      case 'totalExposureCount':
+      case 'totalClickCount':
+      case 'costAmount':
+        calc = chartDataInfo.reduce((prev, next) => prev + next[property], 0);
+        break;
+      case 'clickRate':
+        const caseValueA = exposureCountSum;
+        calc = caseValueA !== 0 ? (clickCountSum / exposureCountSum) * 100 : 0;
+        break;
+      case 'cpc':
+        const caseValueB = costAmountSum;
+        calc = caseValueB !== 0 ? clickCountSum / caseValueB : 0;
+        break;
+      case 'conversionRate':
+        const caseValueC = clickCountSum;
+        calc = caseValueC !== 0 ? (totalConversionCountSum / clickCountSum) * 100 : 0;
+        break;
+      case 'costPerConversion':
+        const caseValueD = totalConversionCountSum;
+        calc = caseValueD !== 0 ? costAmountSum / totalConversionCountSum : 0;
+        break;
+      case 'avgConversionAmount':
+        const caseValueE = costAmountSum;
+        calc = caseValueE !== 0 ? totalConversionAmountSum / costAmountSum : 0;
+        break;
+      case 'sessionRoas':
+        const caseValueF = costAmountSum;
+        calc = caseValueF !== 0 ? (sessionConversionAmountSum / costAmountSum) * 100 : 0;
+        break;
+      case 'directRoas':
+        const caseValueG = costAmountSum;
+        calc = caseValueG !== 0 ? (directConversionAmountSum / costAmountSum) * 100 : 0;
+        break;
+      case 'exposureRoas':
+        const caseValueH = costAmountSum;
+        calc = caseValueH !== 0 ? (exposureConversionAmountSum / costAmountSum) * 100 : 0;
+        break;
+      case 'totalRoas':
+        const caseValueI = costAmountSum;
+        calc = caseValueI !== 0 ? (totalConversionAmountSum / costAmountSum) * 100 : 0;
+        break;
+      case 'ecpm':
+        const caseValueJ = exposureCountSum;
+        calc = caseValueJ !== 0 ? (costAmountSum / exposureCountSum) * 1000 : 0;
+        break;
+      default:
+        break;
+    }
+
     let value;
     if (['clickRate','conversionRate'].includes(property)) {
       value = numberToFixedFormat(calc)+'%'
@@ -109,7 +165,6 @@ function ChartComponent() {
   }
 
   const handleOnChangeChartStatus = (statusId) => {
-    // console.log(statusId)
     setChartData({
       ...chartData,
       [statusId]: {
@@ -119,6 +174,7 @@ function ChartComponent() {
     })
   }
 
+  //[d] dataType, dataType2 값에 따라 3개 고정값 status 및 서로 선택한 기본 상태는 유지
   const handleChangeDataType = (e) => {
     setChartData((prevChartData) => {
       const newData = {};
@@ -127,7 +183,7 @@ function ChartComponent() {
           ...prevChartData[key],
           status:
               key === e.value || (['clickCount', 'exposureCount', 'totalConversionCount'].includes(key) &&
-              prevChartData[key].status) || (prevChartData[key].status && key === dataType2),
+                  prevChartData[key].status) || (prevChartData[key].status && key === dataType2),
         };
       });
       return newData;
@@ -143,7 +199,7 @@ function ChartComponent() {
           ...prevChartData[key],
           status:
               key === e.value || (['clickCount', 'exposureCount', 'totalConversionCount'].includes(key) &&
-              prevChartData[key].status) || (prevChartData[key].status && key === dataType),
+                  prevChartData[key].status) || (prevChartData[key].status && key === dataType),
         };
       });
       return newData;
@@ -151,10 +207,21 @@ function ChartComponent() {
     setDataType2(e.value);
   };
 
+  //[d] chartData 객체에 담았던 컬러 값 필요없이 고정 컬러값 5개로 재구성 기획자 요청 색상!!
+  const fixedColors = ['#1A73E8', '#D93025', '#F9AB00', '#1E8E3E', '#7325D9'];
   const makeChartData = () => {
-    let list = []
-    Object.entries(chartData).map(([id,key]) => {
+    let list = [];
+    Object.entries(chartData).map(([id,key], index) => {
       if(chartData[id].status){
+        let colorIndex;
+        //[d] 3개 고정값 외 셀렉트 박스로 선택하는 값은 id === dataType 매칭으로 고정색상 사용
+        if (id === dataType) {
+          colorIndex = 3;
+        } else if (id === dataType2) {
+          colorIndex = 4;
+        } else {
+          colorIndex = index % fixedColors.length;
+        }
         list.push({
           id: id,
           data: chartDataInfo.map(item => {
@@ -165,12 +232,13 @@ function ChartComponent() {
             });
             return {x: formattedDate, y: item[id] === NaN ? 0 : item[id]}
           }),
-          color: chartData[id].color
+          color: fixedColors[colorIndex]
         })
       }
     })
     setChartList(list)
   }
+
 
   const yFormatted = (data) => {
     let value;
@@ -183,78 +251,101 @@ function ChartComponent() {
     }
     return value
   }
+  //[d] 고정 3개값 별도 컴포넌트로 재구성
+  const ChartLabelFixData = ({ label, active, onClick, dataType, color, calculateSum, decimalFormat }) => (
+      <ChartLabel
+          active={active}
+          onClick={onClick}
+      >
+        <p>{label}</p>
+        <span style={{ background: `${active ? color : 'transparent'}`, color: active ? '#fff' : null }}>
+          {decimalFormat(calculateSum(dataType))}
+        </span>
+      </ChartLabel>
+  );
 
   return (
-    <ChartContainer>
-      <ChartLabels>
-        <ChartLabel
-            style={{
-              background:chartData['clickCount'].status === true?chartData['clickCount'].color:null
-            }}
-            active={chartData['clickCount'].status} onClick={() => handleOnChangeChartStatus('clickCount')}>
-          <p>클릭수</p>
-          <span>{decimalFormat(calculateSum('clickCount'))}</span>
-        </ChartLabel>
-        <ChartLabel
-            style={{
-              background:chartData['exposureCount'].status === true?chartData['exposureCount'].color:null
-            }}
-            active={chartData['exposureCount'].status} onClick={() => handleOnChangeChartStatus('exposureCount')}>
-          <p>노출수</p>
-          <span>{decimalFormat(calculateSum('exposureCount'))}</span>
-        </ChartLabel>
-        <ChartLabel
-            style={{
-              background:chartData['totalConversionCount'].status === true?chartData['totalConversionCount'].color:null
-            }}
-            active={chartData['totalConversionCount'].status} onClick={() => handleOnChangeChartStatus('totalConversionCount')}>
-          <p>전환수</p>
-          <span>{decimalFormat(calculateSum('totalConversionCount'))}</span>
-        </ChartLabel>
-        <ChartLabel active={chartData[dataType].status} style={{background:chartData[dataType].status === true?chartData[dataType].color:null}}>
-          <Select styles={defaultStyle}
-                  isDisabled={!chartData[dataType].status}
-                  components={{IndicatorSeparator: () => null}}
-                  options={platformStatusType}
-                  value={platformStatusType.filter(options => options.value === dataType)}
-                  isOptionDisabled={option => option.value === dataType2}
-                  onChange={handleChangeDataType}
+      <ChartContainer>
+        <ChartLabels>
+          <ChartLabelFixData
+              label="클릭수"
+              active={chartData['clickCount'].status}
+              onClick={() => handleOnChangeChartStatus('clickCount')}
+              dataType="clickCount"
+              color={fixedColors[0]}
+              calculateSum={calculateSum}
+              decimalFormat={decimalFormat}
           />
-          <span onClick={() => handleOnChangeChartStatus(dataType)}>{calculateSum(dataType)}</span>
-        </ChartLabel>
-        <ChartLabel active={chartData[dataType2].status} style={{background:chartData[dataType2].status === true?chartData[dataType2].color:null}}>
-          <Select styles={defaultStyle}
-                  isDisabled={!chartData[dataType2].status}
-                  components={{IndicatorSeparator: () => null}}
-                  options={platformStatusType}
-                  value={platformStatusType.filter(options => options.value === dataType2)}
-                  isOptionDisabled={option => option.value === dataType}
-                  onChange={handleChangeDataType2}
+          <ChartLabelFixData
+              label="노출수"
+              active={chartData['exposureCount'].status}
+              onClick={() => handleOnChangeChartStatus('exposureCount')}
+              dataType="exposureCount"
+              color={fixedColors[1]}
+              calculateSum={calculateSum}
+              decimalFormat={decimalFormat}
           />
-          <span onClick={() => handleOnChangeChartStatus(dataType2)}>{calculateSum(dataType2)}</span>
-        </ChartLabel>
-      </ChartLabels>
-      <div style={{height: 300}}>
-        <ResponsiveLine
-          {...commonProperties}
-          data={chartList}
-          colors={(series) => series.color}
-          sliceTooltip={(props) => {
-            return (
-              <ChartTooltip>
-                {props.slice.points?.map((data, key) => {
-                  return (
-                    <p key={key}>
-                      <span style={{color: data.serieColor}}>{chartData[data.serieId].label} : </span><span>{yFormatted(data)}</span>
-                    </p>
-                  )
-                })}
-              </ChartTooltip>
-            )
-          }}
-        />
-      </div>
-    </ChartContainer>
+          <ChartLabelFixData
+              label="전환수"
+              active={chartData['totalConversionCount'].status}
+              onClick={() => handleOnChangeChartStatus('totalConversionCount')}
+              dataType="totalConversionCount"
+              color={fixedColors[2]}
+              calculateSum={calculateSum}
+              decimalFormat={decimalFormat}
+          />
+          <ChartLabel active={chartData[dataType].status}>
+            <Select styles={defaultStyle}
+                    isDisabled={!chartData[dataType].status}
+                    components={{IndicatorSeparator: () => null}}
+                    options={platformStatusType}
+                    value={platformStatusType.filter(options => options.value === dataType)}
+                    isOptionDisabled={option => option.value === dataType2}
+                    onChange={handleChangeDataType}
+            />
+            <span
+                onClick={() => handleOnChangeChartStatus(dataType)}
+                style={{background:`${chartData[dataType].status === true?fixedColors[3]:'transparent'}`,
+                        color:chartData[dataType].status === true?'#fff':null}}>{calculateSum(dataType)}
+            </span>
+          </ChartLabel>
+          <ChartLabel active={chartData[dataType2].status} >
+            <Select styles={defaultStyle}
+                    isDisabled={!chartData[dataType2].status}
+                    components={{IndicatorSeparator: () => null}}
+                    options={platformStatusType}
+                    value={platformStatusType.filter(options => options.value === dataType2)}
+                    isOptionDisabled={option => option.value === dataType}
+                    onChange={handleChangeDataType2}
+            />
+            <span
+                onClick={() => handleOnChangeChartStatus(dataType2)}
+                style={{background:`${chartData[dataType2].status === true?fixedColors[4]:'transparent'}`,
+                        color:chartData[dataType2].status === true?'#fff':null}}>{calculateSum(dataType2)}
+            </span>
+          </ChartLabel>
+        </ChartLabels>
+        <div style={{height: 300}}>
+          <ResponsiveLine
+              {...commonProperties}
+              data={chartList}
+              colors={(series) => series.color}
+              sliceTooltip={(props) => {
+                return (
+                    <ChartTooltip>
+                      {props.slice.points?.map((data, key) => {
+                        return (
+                            <p key={key}>
+                              <span style={{color: data.serieColor}}>{chartData[data.serieId].label} : </span><span>{yFormatted(data)}</span>
+                            </p>
+                        )
+                      })}
+                    </ChartTooltip>
+                )
+              }}
+          />
+        </div>
+      </ChartContainer>
   )
 }
 
@@ -296,30 +387,30 @@ function DashBoardIndex() {
   },[])
 
   return (
-    <>
-      <DashBoardCard>
-        <DashBoardCondition role={tokenUserInfo.role} searchType={productType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleData={handleData} keyword={keyword} setKeyword={setKeyword}/>
-      </DashBoardCard>
-      <DashBoardCard>
-        <DashBoardHeader>플랫폼 현황</DashBoardHeader>
-        <DashBoardBody>
-          <ChartComponent/>
-        </DashBoardBody>
-        <DashBoardHeader style={{marginTop: 30}}>광고주 현황</DashBoardHeader>
-        <DashBoardBody>
-          <TableDetail columns={adverListColumn}
-                       totalCount={[totalInfo.totalCount, '광고주']}
-                       showHoverRows={false}
-                       activeCell={[0]}
-                       data={adverStatusData}
-                       detailData={handleFetchDetailData}
-                       detailColumn={adverStatusDetailColumn}
-                       detailGroups={false}
-                       idProperty={'userId'}
-                       groups={false}/>
-        </DashBoardBody>
-      </DashBoardCard>
-    </>
+      <>
+        <DashBoardCard>
+          <DashBoardCondition role={tokenUserInfo.role} searchType={productType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleData={handleData} keyword={keyword} setKeyword={setKeyword}/>
+        </DashBoardCard>
+        <DashBoardCard>
+          <DashBoardHeader>플랫폼 현황</DashBoardHeader>
+          <DashBoardBody>
+            <ChartComponent/>
+          </DashBoardBody>
+          <DashBoardHeader style={{marginTop: 30}}>광고주 현황</DashBoardHeader>
+          <DashBoardBody>
+            <TableDetail columns={adverListColumn}
+                         totalCount={[totalInfo.totalCount, '광고주']}
+                         showHoverRows={false}
+                         activeCell={[0]}
+                         data={adverStatusData}
+                         detailData={handleFetchDetailData}
+                         detailColumn={adverStatusDetailColumn}
+                         detailGroups={false}
+                         idProperty={'userId'}
+                         groups={false}/>
+          </DashBoardBody>
+        </DashBoardCard>
+      </>
   )
 }
 export default DashBoardIndex
