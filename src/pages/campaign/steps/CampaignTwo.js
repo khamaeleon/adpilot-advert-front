@@ -45,28 +45,11 @@ export function CampaignTwo() {
   const [timeBudgetDetailDataState, setTimeBudgetDetailDataState] = useAtom(timeBudgetDetailDataAtom)
   const setModal = useSetAtom(modalController)
   const {register,handleSubmit ,control, formState:{errors}} = useFormContext()
-  const [stepTwo, setStepTwo] = useState({
-    dailyBudget: 1000,
-    infiniteBudget: false,
-    budgetRate: 50,
-    timeGroup: "",
-    eventGroup: "",
-    bidingType: "",
-    maxBid: '',
-    eventUnitPrice: "",
-    weightGroup: ""
-  })
   useEffect(() =>{
     console.log(campaignBasicInfo)
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
-      campaignId:campaignBasicInfo.campaignId,
-      budgetTimeId:'',
-      budgetEventId:'',
-      priceEventId:'',
-      biddingType:'CPC',
-      infiniteBudget:false,
-      budgetRate: 50
+      campaignId:campaignBasicInfo.campaignId
     })
     selBudgetTimeList(campaignBasicInfo.userId).then(response => {
       if(response){
@@ -135,7 +118,7 @@ export function CampaignTwo() {
   const handleBiddingType =(selectedBiddingType)=>{
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
-      biddingType:selectedBiddingType,
+      biddingType:selectedBiddingType.value,
     })
   }
 
@@ -191,16 +174,16 @@ export function CampaignTwo() {
     updateCampaignBudget({
       ...campaignBudgetInfo,
       campaignId: campaignBasicInfo.campaignId,
-      biddingType: campaignBudgetInfo.biddingType.value,
       budgetEventId: campaignBudgetInfo.budgetEventId.value,
       budgetTimeId: campaignBudgetInfo.budgetTimeId.value,
       priceEventId: campaignBudgetInfo.priceEventId.value,
     }).then (response =>{
       if(response){
         console.log('2차저장')
+        setStepCampaign({steps:2})
       }
     })
-    // setStepCampaign({steps:2})
+
   }
   return(
     <form onSubmit={handleSubmit(onSubmit)}>

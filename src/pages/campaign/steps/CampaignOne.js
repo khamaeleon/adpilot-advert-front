@@ -1,53 +1,47 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchResult, CampaignType, CancelButton, ColSpan0, ColSpan1, ColSpan2, ColSpan3,
-  ColSpan4, ColTitle,
-  DefaultButton, defaultStyle,
-  Input, inputStyle,
-  RowSpan, selectStyle, Span1, Span2,
-  Span4, SubmitButton, SubmitContainer, ValidationScript
+  BoardSearchResult,
+  CampaignType,
+  ColSpan1,
+  ColSpan2,
+  ColSpan4,
+  ColTitle,
+  Input,
+  RowSpan,
+  selectStyle,
+  Span4,
+  SubmitButton,
+  SubmitContainer,
+  ValidationScript
 } from "../../../assets/GlobalStyles";
-import {BorderSpan, CampaignTypeItem, CampaignTypeItem2, Validation, ValidationGroup} from "../styles/common";
+import {BorderSpan, CampaignTypeItem, CampaignTypeItem2} from "../styles/common";
 import Select from "react-select";
 import React, {useEffect, useState} from "react";
 import {SearchAdvertiser} from "../../../components/common/SearchAdvertiser";
-import {useAtom, useSetAtom} from "jotai";
+import {useAtom} from "jotai";
 import {modalController} from "../../../store";
-import {ModalBody, ModalContainer, ModalFooter, ModalHeader} from "../../../components/modal/Modal";
 import {stepCampaignAtom} from "../entity";
 import {Controller, useFormContext} from "react-hook-form";
-import {campaignBasicInfo, campaignBasicInfoAtom, goalConversionType} from "../entity/Info";
+import {campaignBasicInfoAtom, campaignTemporaryListAtom} from "../entity/Info";
 import {PixelModal} from "../../pixel/PixelList";
-import {pixelDataAtom} from "../../pixel/entity/Pixel";
 import {selAdverPixelDetailList} from "../../../services/header/ManagePixelAxios";
-import {resistCampaignBasic, selEnumInfo} from "../../../services/campaign/InfoAxios";
+import {resistCampaignBasic, selEnumInfo, selTemporaryList} from "../../../services/campaign/InfoAxios";
 import moment from "moment/moment";
+import {TemporaryListModal} from "../../../components/campaign/TemporaryListModal";
 
 export function CampaignOne() {
-  const [stepCampaign, setStepCampaign] = useAtom(stepCampaignAtom)
+  const [, setStepCampaign] = useAtom(stepCampaignAtom)
   const [campaignBasicInfo, setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
+  const [campaignTemporaryList, setCampaignTemporaryList] = useAtom(campaignTemporaryListAtom)
   const [adverInfo, setAdverInfo] = useState(null)
+  const [temporaryBool, setTemporaryBool] = useState(false)
+
   const [goalList, setGoalList] = useState(null)
-  const setModal = useSetAtom(modalController)
   const [pixelList, setPixelList] = useState(null)
+  const [, setModal] = useAtom(modalController)
   const {register, handleSubmit, setValue, setError, control, formState: {errors}} = useFormContext()
-  const [stepOne, setStepOne] = useState({
-    advertiser: '',
-    pixel: '',
-    productType: 'banner',
-    productTarget: 'CAMPAIGN_CONVERSION_GOAL',
-    targetDetail: ''
-  })
   useEffect(() => {
-    setCampaignBasicInfo({
-      ...campaignBasicInfo,
-      productType:'BANNER',
-      pixelId:'',
-      goal:'',
-      goalValue:0,
-      campaignId:'',
-    })
     selEnumInfo('CAMPAIGN_CONVERSION_GOAL').then(response => {
       setGoalList(response.data)
     })
@@ -73,6 +67,14 @@ export function CampaignOne() {
       })
       setPixelList(clonePixelList)
     })
+    selTemporaryList(data.id).then(response =>{
+      console.log(response)
+      setCampaignTemporaryList(response)
+      setTemporaryBool(true)
+    })
+  }
+  const handleSelectedTemporaryList =(data) =>{
+    console.log(data)
   }
 
 
@@ -104,10 +106,6 @@ export function CampaignOne() {
     setCampaignBasicInfo({
       ...campaignBasicInfo,
       goal: '',
-    })
-    setStepOne({
-      ...stepOne,
-      productTarget: type
     })
   }
 
@@ -145,7 +143,6 @@ export function CampaignOne() {
           <RowSpan>
             <ColSpan4>
               <Span4>광고주 설정</Span4>
-
               <ColSpan2>
                 <div className={'relative'}>
                   <Input
@@ -159,6 +156,9 @@ export function CampaignOne() {
                     })}
                   />
                   <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
+                  {temporaryBool &&
+                    <TemporaryListModal onSubmit={handleSelectedTemporaryList}/>
+                  }
                   {errors.username && <ValidationScript>{errors.username.message}</ValidationScript>}
                 </div>
               </ColSpan2>
@@ -241,17 +241,17 @@ export function CampaignOne() {
           <RowSpan>
             <ColSpan4>
               <CampaignType>
-                <CampaignTypeItem2 active={stepOne.productTarget === 'CAMPAIGN_CONVERSION_GOAL'}
+                <CampaignTypeItem2 active={campaignBasicInfo !== null && campaignBasicInfo.goalType === 'CAMPAIGN_CONVERSION_GOAL'}
                                    onClick={() => handleChangeProductTarget('CAMPAIGN_CONVERSION_GOAL')}>
                   <div>전환</div>
                   <div>전환 가능성과 관심도가 높은 대상에게 구매 또는 참여, 설치 등의 행동을 유도 합니다.</div>
                 </CampaignTypeItem2>
-                <CampaignTypeItem2 active={stepOne.productTarget === 'CAMPAIGN_VISIT_GOAL'}
+                <CampaignTypeItem2 active={campaignBasicInfo !== null && campaignBasicInfo.goalType === 'CAMPAIGN_VISIT_GOAL'}
                                    onClick={() => handleChangeProductTarget('CAMPAIGN_VISIT_GOAL')}>
                   <div>방문</div>
                   <div>원하는 랜딩으로 사용자들의 방문을 극대화해서 마케팅 목표를 달성합니다.</div>
                 </CampaignTypeItem2>
-                <CampaignTypeItem2 active={stepOne.productTarget === 'CAMPAIGN_VIEW_GOAL'}
+                <CampaignTypeItem2 active={campaignBasicInfo !== null && campaignBasicInfo.goalType === 'CAMPAIGN_VIEW_GOAL'}
                                    onClick={() => handleChangeProductTarget('CAMPAIGN_VIEW_GOAL')}>
                   <div>노출</div>
                   <div>광고주의 크리에이티브 노출을 극대화해서 홍보 및 브랜딩을 강화합니다.</div>

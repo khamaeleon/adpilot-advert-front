@@ -1,8 +1,15 @@
 import {atom} from "jotai";
 
-export const campaignBasicInfoAtom =atom(null)
+export const campaignBasicInfoAtom =atom({
+  productType:'BANNER',
+  goalType:'CAMPAIGN_CONVERSION_GOAL',
+  pixelId:'',
+  goal:'',
+  goalValue:0,
+  campaignId:'',
+})
 
-
+export const campaignTemporaryListAtom =atom(null)
 
 
 

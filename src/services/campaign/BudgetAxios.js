@@ -6,9 +6,9 @@ export async function updateCampaignBudget(campaignInfo) {
   let returnVal = null;
   await AdminAxios('PUT', ACTION_URL+'/'+ campaignInfo.campaignId +BUDGET_UPDATE ,campaignInfo)
     .then((response) => {
-      const {responseCode,data} =response
+      const {responseCode} =response
       if(responseCode.statusCode ===200){
-        returnVal = data
+        returnVal = true
       }else{
         returnVal = false
       }

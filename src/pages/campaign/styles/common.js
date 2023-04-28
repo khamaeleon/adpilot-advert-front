@@ -230,8 +230,7 @@ export const RowBody = styled.div`
   align-content: stretch;
   padding: 10px 30px 20px;
   height: ${(props) => props.fold ? 0:null};
-  transform: scaleY(${(props) => props.fold ? 0:null});
-  overflow: hidden;
+  transform: scaleY(${(props) => props.fold ? 0:null});  
 `
 export const Row = styled.div`
   display: flex;

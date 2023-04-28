@@ -36,44 +36,109 @@ import {
 } from "../styles/common";
 import {HorizontalRule} from "../../../components/common/Common";
 import Select from "react-select";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useFormContext} from "react-hook-form";
-import {CreativeButton} from "../../../components/modal/CreativeOpen";
 import {useAtom} from "jotai";
 import {stepCampaignAtom} from "../entity";
+import {campaignBasicInfoAtom} from "../entity/Info";
+import {selEnumInfo} from "../../../services/campaign/InfoAxios";
+import {bannerSizeAtom, campaignCreativeAtom, clickInducementTypeAtom, creativeTypeAtom} from "../entity/Creative";
+import {DuplicateButton} from "../../signup/styles";
+import ImageUploading from "react-images-uploading";
+import {
+  updateCampaignBanner, updateCampaignNative,
+  uploadBannerImages,
+  uploadLogoImages,
+  uploadNativeImages
+} from "../../../services/campaign/CreativeAxios";
+import moment from "moment";
 
 const RegistryBannerItem = (props) => {
-  const [bannerImage, setBannerImage] = useState([])
+  const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
 
-  const handleAddImage = () => {
-    if(bannerImage.length < 5){
-      setBannerImage((prev) => [...prev, {key:bannerImage.length,url:'../assets/images/common/sample1.png'}])
+  const handleDeleteImage = (imagePath) => {
+    setCampaignCreative({
+      ...campaignCreativeInfo,
+      materials: campaignCreativeInfo.materials.map(value => {
+        if (value.bannerSize === props.size.bannerSize) {
+          return {
+            ...value,
+            images: value.images.filter(item => item.imagePath !== imagePath)
+          }
+        } else {
+          return {
+            ...value
+          }
+        }
+      })
+    })
+  }
+  const onDrop = (pictureFiles) => {
+    if (pictureFiles.length !== 0) {
+      const data = new FormData()
+      pictureFiles.map((item ,index)=>{
+        data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
+      })
+      let boolSaveImages = campaignCreativeInfo.materials.find(value =>value.bannerSize === props.size.bannerSize ).images.length +pictureFiles.length
+
+      if(boolSaveImages < 6 ){
+        uploadBannerImages(data, props.size.bannerSize).then(response => {
+          if (response) {
+            setCampaignCreative({
+              ...campaignCreativeInfo,
+              materials: campaignCreativeInfo.materials.map(value => {
+                if (value.bannerSize === props.size.bannerSize) {
+                  return {
+                    ...value,
+                    images: value.images.concat(response.images)
+                  }
+                } else {
+                  return {
+                    ...value
+                  }
+                }
+              })
+            })
+          }
+        })
+      }else{
+        alert("5개 이상 등록 못함")
+      }
     }
   }
-
-  const handleDeleteImage = (key) => {
-    setBannerImage([...bannerImage.filter(item => item.key !== key)])
-  }
-
   return (
     <RowSpan style={{width: '50%'}}>
       <ColSpan4>
-        <Span4 style={{textAlign:'right',whiteSpace:'nowrap'}}>{props.bannerSize}</Span4>
-        <RowSpan box={true} style={{justifyContent:'flex-start'}}>
-          {bannerImage.map((item, key) => {
+        <Span4 style={{textAlign: 'right', whiteSpace: 'nowrap'}}>{props.size.bannerSize}</Span4>
+        <RowSpan box={true} style={{justifyContent: 'flex-start'}}>
+          {campaignCreativeInfo.materials.find(value => value.bannerSize === props.size.bannerSize).images.map((item, key) => {
             return (
               <ColSpan100 padding={'0'} key={key}>
-                <DeleteIcon onClick={() => handleDeleteImage(key)}/>
+                <DeleteIcon onClick={() => handleDeleteImage(item.imagePath)}/>
                 <ImageUploadCard>
-                  <img src={item.url} alt={'이미지'}/>
+                  <img src={item.thumbnailPath} alt={'이미지'}/>
                 </ImageUploadCard>
               </ColSpan100>
             )
           })}
-          {bannerImage.length < 5 &&
-          <ColSpan100 padding={'0'}>
-            <CreateImage onClick={handleAddImage}/>
-          </ColSpan100>
+          {campaignCreativeInfo.materials.find(value => value.bannerSize === props.size.bannerSize).images.length < 5 &&
+            <ColSpan100 padding={'0'}>
+              <ImageUploading
+                multiple
+                acceptType={["jpg", "gif", "png"]}
+                onChange={onDrop}
+                maxFileSize={10485760}
+                maxNumber={5}
+              >
+                {({onImageUpload}) => (
+                  <button
+                    type={'button'}
+                    onClick={onImageUpload}
+                    style={{width: '100%', height: '100%'}}
+                  >이미지 첨부</button>
+                )}
+              </ImageUploading>
+            </ColSpan100>
           }
         </RowSpan>
       </ColSpan4>
@@ -81,71 +146,104 @@ const RegistryBannerItem = (props) => {
   )
 }
 
-function CampaignFourBanner (props) {
-  const {stepFour, setStepFour, register,handleSubmit ,control, errors} = props
-  const bannerSize = [
-    {name: '250*250'},
-    {name: '250*50'},
-    {name: '300*300'},
-    {name: '120*600'},
-    {name: '728*90'},
-    {name: '320*50'},
-    {name: '320*100'},
-    {name: '300*250'},
-    {name: '300*600'}
-  ]
-
-  const [creative, setCreative] = useState([])
+function CampaignFourBanner(props) {
+  const [campaignBasicInfo] = useAtom(campaignBasicInfoAtom)
+  const [clickInducementType] = useAtom(clickInducementTypeAtom)
+  const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
+  const [bannerSize] = useAtom(bannerSizeAtom)
   const [fold, setFold] = useState(true)
-  const [logoImage, setLogoImage] = useState([])
 
-  const handleAddLogoImage = () => {
-    if(logoImage.length < 5){
-      setLogoImage((prev) => [...prev, {key:logoImage.length,url:'../assets/images/common/sample1.png'}])
-    }
-  }
-
-  const handleDeleteLogoImage = (key) => {
-    setLogoImage([...logoImage.filter(item => item.key !== key)])
+  const handleDeleteLogoImage = (imagePath) => {
+    setCampaignCreative({
+      ...campaignCreativeInfo,
+      logoPaths: campaignCreativeInfo.logoPaths.filter(item =>item.imagePath !==imagePath )
+    })
   }
 
   const handleAddCreative = (e) => {
-    setCreative((prev) => [...prev, {name:e.target.innerText,value:[]}])
+    let materials = {
+      bannerSize: e.target.id,
+      images: [],
+    }
+    const boolActive = campaignCreativeInfo.materials.find(value => value.bannerSize === e.target.id) ? false : true
+
+    if (boolActive || boolActive === undefined) {
+      setCampaignCreative({
+        ...campaignCreativeInfo,
+        materials: campaignCreativeInfo.materials.concat(materials)
+      })
+    } else {
+      setCampaignCreative({
+        ...campaignCreativeInfo,
+        materials: campaignCreativeInfo.materials.filter(value => value.bannerSize !== e.target.id)
+      })
+    }
   }
 
   const handleChangeInputs = (e) => {
-    setStepFour({
-      ...stepFour,
+    setCampaignCreative({
+      ...campaignCreativeInfo,
       [e.target.name]: e.target.value
     })
+  }
+  const handleClickInducementType = (selectedClickInducement) => {
+    setCampaignCreative({
+      ...campaignCreativeInfo,
+      clickInducementType: selectedClickInducement.value
+    })
+  }
+
+  const onLogoDrop = (pictureFiles) => {
+    if (pictureFiles.length !== 0) {
+      const data = new FormData()
+      const imagesLastIndex = pictureFiles.length - 1;
+      console.log(pictureFiles)
+      pictureFiles.map((item ,index)=>{
+        data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
+      })
+      let boolSaveImages = campaignCreativeInfo.logoPaths.length + pictureFiles.length
+      if(boolSaveImages < 6){
+        uploadLogoImages(data).then(response => {
+          if (response) {
+            setCampaignCreative({
+              ...campaignCreativeInfo,
+              logoPaths: campaignCreativeInfo.logoPaths.concat(response)
+            })
+          }
+        })
+      }else{
+        alert("5개 이상 등록 못함")
+      }
+    }
   }
 
   return (
     <>
       <RowSpan column={true}>
         <Span4>광고 소재</Span4>
-        <div style={{marginTop:15}}>
-          <SelectCategory style={{padding:20,borderRadius:'5px 5px 0 0'}}>
-            {bannerSize.map((item, key) => {
+        <div style={{marginTop: 15}}>
+          <SelectCategory style={{padding: 20, borderRadius: '5px 5px 0 0'}}>
+            {bannerSize !== null && bannerSize.map((item, key) => {
               return (
-                <CategoryItem key={key} onClick={handleAddCreative}>{item.name}</CategoryItem>
+                <CategoryItem key={key} onClick={(e) => handleAddCreative(e)} id={item.value}
+                              active={campaignCreativeInfo.materials.find(value => value.bannerSize === item.value)}>{item.label}</CategoryItem>
               )
             })}
           </SelectCategory>
           <ResistBanner>
             <p style={{color: '#ccc'}}>사이즈별 소재는 최대 5개까지 등록 가능합니다.</p>
-            <div style={{display:'flex', flexWrap:'wrap'}}>
-              {creative.map((item, key) => {
+            <div style={{display: 'flex', flexWrap: 'wrap'}}>
+              {campaignCreativeInfo.materials !== undefined && campaignCreativeInfo.materials.map((item, key) => {
                 return (
-                  <RegistryBannerItem key={key} bannerSize={item.name}/>
+                  <RegistryBannerItem key={key} size={item}/>
                 )
               })}
             </div>
           </ResistBanner>
         </div>
       </RowSpan>
-      <RowSpan box={true} column={true} style={{padding:0,backgroundColor:'#fff'}}>
-        <RowHeader onClick={()=> setFold(!fold)}>
+      <RowSpan box={true} column={true} style={{padding: 0, backgroundColor: '#fff'}}>
+        <RowHeader onClick={() => setFold(!fold)}>
           <div>소재 상세 설정 (선택 입력) <small style={{color: '#ccc'}}>로고 이미지 및 광고 문안을 자세히 설정할 수 있습니다.</small></div>
           <FolderButton fold={fold}/>
         </RowHeader>
@@ -158,15 +256,17 @@ function CampaignFourBanner (props) {
               <span>광고 타이틀</span>
               <input
                 type={'text'}
-                name={'name'}
+                name={'title1'}
+                value={campaignCreativeInfo.title1}
                 onChange={handleChangeInputs}
               />
             </Row>
             <Row>
-              <span>광고 제목1<p><small style={{color:'#ccc'}}>최대 5개 까지 등록</small></p></span>
+              <span>광고 제목1<p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p></span>
               <input
                 type={'text'}
-                name={'title1'}
+                name={'title2'}
+                value={campaignCreativeInfo.title2}
                 onChange={handleChangeInputs}
               />
             </Row>
@@ -174,48 +274,65 @@ function CampaignFourBanner (props) {
               <span>광고 제목2</span>
               <input
                 type={'text'}
-                name={'title2'}
+                name={'title3'}
+                value={campaignCreativeInfo.title3}
                 onChange={handleChangeInputs}
               />
             </Row>
             <Row>
-              <span>긴 광고 제목<p><small style={{color:'#ccc'}}>최대 5개 까지 등록</small></p></span>
+              <span>긴 광고 제목<p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p></span>
               <input
                 type={'text'}
-                name={'longTitle'}
+                name={'titleLong'}
                 onChange={handleChangeInputs}
               />
             </Row>
             <Row>
               <span>클릭 유도 문안</span>
-              <Select
-                styles={selectStyle}
-                options={[{key: 1, value: 1, label: '유도 문안'}]}
+              <Select options={clickInducementType}
+                      placeholder={'유도 문안 선택'}
+                      value={campaignCreativeInfo.clickInducementType !== undefined ?
+                        clickInducementType.find(value => value.value === campaignCreativeInfo.clickInducementType) : ''}
+                      onChange={handleClickInducementType}
               />
             </Row>
           </ColSpan2>
-          <div style={{width: 1,margin: '0 30px',backgroundColor:'#ddd'}}/>
+          <div style={{width: 1, margin: '0 30px', backgroundColor: '#ddd'}}/>
           <ColSpan2 column={true}>
             <Row>
               <span style={{fontSize: 14}}>서비스 (회사) 정보</span>
             </Row>
-            <Row style={{alignItems:'flex-start'}}>
-              <span>로고이미지<p><small style={{color:'#ccc'}}>최대 5개 까지 등록</small></p></span>
-              <RowSpan box={true} style={{marginTop:0,width: '80%',justifyContent:'flex-start'}}>
-                {logoImage.map((item,key) => {
-                  return(
-                    <ColSpan100 padding={'0'}  key={key}>
-                      <DeleteIcon onClick={() => handleDeleteLogoImage(key)}/>
+            <Row style={{alignItems: 'flex-start'}}>
+              <span>로고이미지<p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p></span>
+              <RowSpan box={true} style={{marginTop: 0, width: '80%', justifyContent: 'flex-start'}}>
+                {campaignCreativeInfo.logoPaths.length !== 0 && campaignCreativeInfo.logoPaths.map((item, key) => {
+                  return (
+                    <ColSpan100 padding={'0'} key={key}>
+                      <DeleteIcon onClick={() => handleDeleteLogoImage(item.imagePath)}/>
                       <ImageUploadCard>
-                        <img src={item.url} alt={key}/>
+                        <img src={item.imagePath} alt={key}/>
                       </ImageUploadCard>
                     </ColSpan100>
                   )
                 })}
-                {logoImage.length < 5 &&
-                <ColSpan100 padding={'0'}>
-                  <CreateImage onClick={() => handleAddLogoImage()}/>
-                </ColSpan100>
+                {campaignCreativeInfo.logoPaths.length < 5 &&
+                  <ColSpan100 padding={'0'}>
+                    <ImageUploading
+                      multiple
+                      acceptType={["jpg", "gif", "png"]}
+                      onChange={onLogoDrop}
+                      maxFileSize={10485760}
+                      maxNumber={5}
+                    >
+                      {({onImageUpload}) => (
+                        <button
+                          type={'button'}
+                          onClick={onImageUpload}
+                          style={{width: '100%', height: '100%'}}
+                        >로고 첨부</button>
+                      )}
+                    </ImageUploading>
+                  </ColSpan100>
                 }
               </RowSpan>
             </Row>
@@ -224,6 +341,7 @@ function CampaignFourBanner (props) {
               <input
                 type={'text'}
                 name={'serviceName'}
+                value={campaignCreativeInfo.servicName}
                 onChange={handleChangeInputs}
               />
             </Row>
@@ -232,84 +350,138 @@ function CampaignFourBanner (props) {
               <input
                 type={'text'}
                 name={'description'}
+                value={campaignCreativeInfo.description}
                 onChange={handleChangeInputs}
               />
             </Row>
           </ColSpan2>
         </RowBody>
       </RowSpan>
-      <RowSpan>
-        <ColSpan4>
-          <Span4>크리에이티브 명</Span4>
-          <RelativeDiv>
-            <Input value={'픽셀명_광고상품명_설정 목표명_광고 그룹_YYYY.MM.DD HH:MM'} readOnly/>
-          </RelativeDiv>
-        </ColSpan4>
-      </RowSpan>
     </>
   )
 }
 
-function CampaignFourNative (props) {
-  const {stepFour, setStepFour, register,handleSubmit ,control, errors} = props
-  const [bannerImage, setBannerImage] = useState([])
-  const [logoImage, setLogoImage] = useState([])
-  const handleAddImage = () => {
-    if(bannerImage.length < 5){
-      setBannerImage((prev) => [...prev, {key:bannerImage.length,url:'../assets/images/common/sample1.png'}])
-    }
-  }
+function CampaignFourNative(props) {
+  const {stepFour, setStepFour, register, handleSubmit, control, errors} = props
+  const [clickInducementType] = useAtom(clickInducementTypeAtom)
+  const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
 
-  const handleDeleteImage = (key) => {
-    setBannerImage([...bannerImage.filter(item => item.key !== key)])
-  }
-
-
-  const handleAddLogoImage = () => {
-    if(logoImage.length < 5){
-      setLogoImage((prev) => [...prev, {key:logoImage.length,url:'../assets/images/common/sample1.png'}])
-    }
-  }
-
-  const handleDeleteLogoImage = (key) => {
-    setLogoImage([...logoImage.filter(item => item.key !== key)])
-  }
-
-  const handleChangeInputs = (e) => {
-    setStepFour({
-      ...stepFour,
-      [e.target.name]: e.target.value
+  const handleDeleteLogoImage = (imagePath) => {
+    setCampaignCreative({
+      ...campaignCreativeInfo,
+      logoPaths: campaignCreativeInfo.logoPaths.filter(item =>item.imagePath !==imagePath )
     })
   }
 
+  const handleChangeInputs = (e) => {
+    setCampaignCreative({
+      ...campaignCreativeInfo,
+      [e.target.name]: e.target.value
+    })
+  }
+  const handleDeleteNativeImage = (imagePath) => {
+    setCampaignCreative({
+      ...campaignCreativeInfo,
+      nativeMaterials: campaignCreativeInfo.nativeMaterials.filter(item =>item.imagePath !==imagePath )
+    })
+  }
+  const onNativeDrop = (pictureFiles) => {
+    if (pictureFiles.length !== 0) {
+      const data = new FormData()
+      console.log(pictureFiles)
+      pictureFiles.map((item ,index)=>{
+        data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
+      })
+      let boolSaveImages = campaignCreativeInfo.nativeMaterials.length + pictureFiles.length
+      if(boolSaveImages < 6){
+        uploadNativeImages(data).then(response => {
+          if (response) {
+            setCampaignCreative({
+              ...campaignCreativeInfo,
+              nativeMaterials: campaignCreativeInfo.nativeMaterials.concat(response)
+            })
+          }
+        })
+      }else{
+        alert("5개 이상 등록 못함")
+      }
+    }
+  }
 
+  const handleClickInducementType = (selectedClickInducement) => {
+    setCampaignCreative({
+      ...campaignCreativeInfo,
+      clickInducementType: selectedClickInducement.value
+    })
+  }
+
+  const onLogoDrop = (pictureFiles) => {
+    if (pictureFiles.length !== 0) {
+      const data = new FormData()
+      const imagesLastIndex = pictureFiles.length - 1;
+      console.log(pictureFiles)
+      pictureFiles.map((item ,index)=>{
+        data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
+      })
+      let boolSaveImages = campaignCreativeInfo.logoPaths.length + pictureFiles.length
+      if(boolSaveImages < 6){
+        uploadLogoImages(data).then(response => {
+          if (response) {
+            setCampaignCreative({
+              ...campaignCreativeInfo,
+              logoPaths: campaignCreativeInfo.logoPaths.concat(response)
+            })
+          }
+        })
+      }else{
+        alert("5개 이상 등록 못함")
+      }
+    }
+  }
   return (
     <form>
       <RowSpan>
         <ColSpan3><Span4>광고소재</Span4></ColSpan3>
       </RowSpan>
       <RowSpan>
-        <ColSpan4 style={{alignItems: 'flex-start',flexDirection:'column', paddingLeft:0}}>
-          <RowSpan box={true} column={true} padding={'0'} style={{width: '100%',padding: '20px 30px',backgroundColor:'#fff'}}>
+        <ColSpan4 style={{alignItems: 'flex-start', flexDirection: 'column', paddingLeft: 0}}>
+          <RowSpan box={true} column={true} padding={'0'}
+                   style={{width: '100%', padding: '20px 30px', backgroundColor: '#fff'}}>
             <Row>
               <span style={{fontSize: 14}}>소재설정</span>
             </Row>
             <Row>
               <span>이미지</span>
-              <RowSpan style={{marginTop:0,gap: 10,width: '80%',justifyContent:'flex-start'}}>
-                {bannerImage.map((item, key) => {
+              <RowSpan style={{marginTop: 0, gap: 10, width: '80%', justifyContent: 'flex-start'}}>
+                {campaignCreativeInfo.nativeMaterials.length !== 0 && campaignCreativeInfo.nativeMaterials.map((item, key) => {
                   return (
-                    <ColSpan100 padding={'0'}>
-                      <DeleteIcon onClick={() => handleDeleteImage(key)}/>
+                    <ColSpan100 padding={'0'} key={key}>
+                      <DeleteIcon onClick={() => handleDeleteNativeImage(item.imagePath)}/>
                       <ImageUploadCard>
-                        <img src={item.url}/>
+                        <img src={item.imagePath} alt={key}/>
                       </ImageUploadCard>
                     </ColSpan100>
                   )
                 })}
-                {bannerImage.length < 5 &&
-                  <ColSpan100 padding={'0'} onClick={handleAddImage}>
-                    <CreateImage/>
+                {campaignCreativeInfo.nativeMaterials.length < 5 &&
+                  <ColSpan100 padding={'0'}>
+                    <div>
+                    <ImageUploading
+                      multiple
+                      acceptType={["jpg", "gif", "png"]}
+                      onChange={onNativeDrop}
+                      maxFileSize={10485760}
+                      maxNumber={5}
+                    >
+                      {({onImageUpload}) => (
+                        <button
+                          type={'button'}
+                          onClick={onImageUpload}
+                          style={{width: '100%', height: '100%'}}
+                        >이미지 첨부</button>
+                      )}
+                    </ImageUploading>
+                    </div>
                   </ColSpan100>
                 }
               </RowSpan>
@@ -317,248 +489,296 @@ function CampaignFourNative (props) {
             <Row>
               <span>광고 타이틀</span>
               <input
-                name={'name'}
                 type={'text'}
-                onChange={()=>handleChangeInputs}
+                name={'title1'}
+                value={campaignCreativeInfo.title1}
+                onChange={handleChangeInputs}
               />
             </Row>
             <Row>
-              <span>광고 제목1 (선택)<p><small style={{color:'#ccc'}}>최대 5개 까지 등록</small></p></span>
+              <span>광고 제목1<p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p></span>
               <input
-                name={'title'}
                 type={'text'}
-                onChange={()=>handleChangeInputs}
-              />
-            </Row>
-            <Row>
-              <span>광고 제목2 (선택)</span>
-              <input
                 name={'title2'}
-                type={'text'}
-                onChange={()=>handleChangeInputs}
+                value={campaignCreativeInfo.title2}
+                onChange={handleChangeInputs}
               />
             </Row>
             <Row>
-              <span>긴 광고 제목 (선택)<p><small style={{color:'#ccc'}}>최대 5개 까지 등록</small></p></span>
+              <span>광고 제목2</span>
               <input
-                name={'longTitle'}
                 type={'text'}
-                onChange={()=>handleChangeInputs}
+                name={'title3'}
+                value={campaignCreativeInfo.title3}
+                onChange={handleChangeInputs}
               />
             </Row>
             <Row>
-              <span>클릭 유도 문안 (선택)</span>
-              <Select styles={selectStyle}/>
+              <span>긴 광고 제목<p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p></span>
+              <input
+                type={'text'}
+                name={'titleLong'}
+                onChange={handleChangeInputs}
+              />
+            </Row>
+            <Row>
+              <span>클릭 유도 문안</span>
+              <Select options={clickInducementType}
+                      placeholder={'유도 문안 선택'}
+                      value={campaignCreativeInfo.clickInducementType !== undefined ?
+                        clickInducementType.find(value => value.value === campaignCreativeInfo.clickInducementType) : ''}
+                      onChange={handleClickInducementType}
+              />
             </Row>
           </RowSpan>
         </ColSpan4>
       </RowSpan>
-      <RowSpan>
-        <ColSpan1><Span4>미리보기</Span4></ColSpan1>
-      </RowSpan>
-      <div style={{width: '100%', overflowX:'scroll', whiteSpace:"nowrap"}}>
-        {bannerImage.length !== 0 && bannerImage.map((item, key) => {
-          return (
-            <PrevImage style={{backgroundImage: `url(${item.url})`}}>
-              <ImageTitle>{item.name} 소재</ImageTitle>
-            </PrevImage>
-          )
-        })}
-      </div>
-      <RowSpan box={true} column={true} padding={'0'} style={{padding: '20px 30px',backgroundColor:'#fff'}}>
+
+      <RowSpan box={true} column={true} padding={'0'} style={{padding: '20px 30px', backgroundColor: '#fff'}}>
         <Row>
           <span>서비스 명</span>
           <input
-            name={'serviceName'}
             type={'text'}
-            onChange={()=>handleChangeInputs}
+            name={'serviceName'}
+            value={campaignCreativeInfo.servicName}
+            onChange={handleChangeInputs}
           />
         </Row>
         <Row>
-          <Span4>로고 <p><small style={{color:'#ccc'}}>최대 5개 까지 등록</small></p></Span4>
-          <RowSpan style={{marginTop:0,gap: 10,width: '80%',justifyContent:'flex-start'}}>
-            {logoImage.map((item, key) => {
-              return(
+          <Span4>로고 <p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p></Span4>
+          <RowSpan style={{marginTop: 0, gap: 10, width: '80%', justifyContent: 'flex-start'}}>
+            {campaignCreativeInfo.logoPaths.length !== 0 && campaignCreativeInfo.logoPaths.map((item, key) => {
+              return (
                 <ColSpan100 padding={'0'} key={key}>
-                  <DeleteIcon onClick={() => handleDeleteLogoImage(key)}/>
+                  <DeleteIcon onClick={() => handleDeleteLogoImage(item.imagePath)}/>
                   <ImageUploadCard>
-                    <img src={item.url} alt={key}/>
+                    <img src={item.imagePath} alt={key}/>
                   </ImageUploadCard>
                 </ColSpan100>
               )
             })}
-            {logoImage.length < 5 &&
-              <ColSpan100 padding={'0'} onClick={handleAddLogoImage}>
-                <CreateImage/>
+            {campaignCreativeInfo.logoPaths.length < 5 &&
+              <ColSpan100 padding={'0'}>
+                <ImageUploading
+                  multiple
+                  acceptType={["jpg", "gif", "png"]}
+                  onChange={onLogoDrop}
+                  maxFileSize={10485760}
+                  maxNumber={5}
+                >
+                  {({onImageUpload}) => (
+                    <button
+                      type={'button'}
+                      onClick={onImageUpload}
+                      style={{width: '100%', height: '100%'}}
+                    >로고 첨부</button>
+                  )}
+                </ImageUploading>
               </ColSpan100>
             }
           </RowSpan>
         </Row>
         <Row>
-          <span>광고 설명 (선택)</span>
-          <input
-            name={'description'}
-            type={'text'}
-            onChange={()=>handleChangeInputs}
-          />
+          <Row>
+            <span>광고 설명(선택)</span>
+            <input
+              type={'text'}
+              name={'description'}
+              value={campaignCreativeInfo.description}
+              onChange={handleChangeInputs}
+            />
+          </Row>
         </Row>
       </RowSpan>
       <RowSpan>
-        <ColSpan4>
-          <Span4>크리에이티브 명</Span4>
-          <RelativeDiv>
-            <Input value={'픽셀명_광고상품명_설정 목표명_광고 그룹_YYYY.MM.DD HH:MM'} readOnly/>
-          </RelativeDiv>
-        </ColSpan4>
+        <ColSpan1><Span4>미리보기</Span4></ColSpan1>
       </RowSpan>
+      <div style={{width: '100%', overflowX: 'scroll', whiteSpace: "nowrap"}}>
+        {campaignCreativeInfo.nativeMaterials.length !== 0 && campaignCreativeInfo.nativeMaterials.map((item, key) => {
+          return (
+            <PrevImage style={{backgroundImage: `url(${item.imagePath})`}}>
+            </PrevImage>
+          )
+        })}
+      </div>
     </form>
   )
 }
 
 export function CampaignFour() {
-  const [stepCampaign, setStepCampaign] = useAtom(stepCampaignAtom)
-  const [creativeGroup, setCreativeGroup] = useState('banner')
-  const {register,handleSubmit ,control, formState:{errors}} = useFormContext()
-  const [stepFour, setStepFour] = useState({
-    bannerType: 'banner',
-    pcUrl:'',
-    mobileUrl:'',
-    pcCode:'',
-    mobileCode:'',
-    creative: [],
-    options: {
-      name:'',
-      title:'',
-      title2:'',
-      summary: {key:'',value:'',label:''},
-      longTitle:'',
-      logo:[],
-      serviceName:'',
-      description:'',
-    },
-    creativeName:''
-  })
+  const [, setStepCampaign] = useAtom(stepCampaignAtom)
+  const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
+  const [campaignBasicInfo] = useAtom(campaignBasicInfoAtom)
+  const [, setBannerSize] = useAtom(bannerSizeAtom)
+  const [creativeType, setCreativeType] = useAtom(creativeTypeAtom)
+  const [, setClickInducementType] = useAtom(clickInducementTypeAtom)
+  const {register, handleSubmit, control, formState: {errors}} = useFormContext()
 
+  useEffect(() => {
+    console.log(campaignBasicInfo)
+    selEnumInfo('BANNER_SIZE').then(response => {
+      console.log(response.data)
+      setBannerSize(response.data)
+    })
+    selEnumInfo('CLICK_INDUCEMENT_TYPE').then(response => {
+      console.log(response.data)
+      setClickInducementType(response.data)
+    })
+    if (campaignBasicInfo.productType === 'BANNER') {
+      selEnumInfo('CREATIVE_TYPE_BANNER').then(response => {
+        console.log(response.data)
+        setCreativeType(response.data)
+      })
+    } else {
+      selEnumInfo('CREATIVE_TYPE_POP_UNDER').then(response => {
+        console.log(response.data)
+        setCreativeType(response.data)
+      })
+    }
+  }, [])
+  const selCreativeGroup = (selectedCreateType) => {
+    setCampaignCreative({
+      ...campaignCreativeInfo,
+      creativeType: selectedCreateType
+    })
+  }
   const handleChangeInputs = (e) => {
-    setStepFour({
-      ...stepFour,
+    setCampaignCreative({
+      ...campaignCreativeInfo,
       [e.target.name]: e.target.value
     })
   }
+
   const onSubmit = (data) => {
-    console.log(data)
-    setStepCampaign({steps:4})
+    console.log(campaignCreativeInfo)
+    if(campaignCreativeInfo.creativeType ==='BANNER'){
+      updateCampaignBanner({
+        ...campaignCreativeInfo,
+        campaignId:campaignBasicInfo.campaignId,
+        name:creativeType.find(value => value.value === campaignCreativeInfo.creativeType).label+ '_' + campaignBasicInfo.pixelId.label+ '_' +campaignBasicInfo.productType+ '_' +campaignBasicInfo.goal.label+ '_' +moment().format('YYYYMMDDhhmmss')
+      }).then(response => {
+        if(response){
+          alert("등록 완료")
+        }
+      })
+    }else{
+      updateCampaignNative({
+        ...campaignCreativeInfo,
+        campaignId:campaignBasicInfo.campaignId,
+        name:creativeType.find(value => value.value === campaignCreativeInfo.creativeType).label+ '_' + campaignBasicInfo.pixelId.label+ '_' +campaignBasicInfo.productType+ '_' +campaignBasicInfo.goal.label+ '_' +moment().format('YYYYMMDDhhmmss')
+      }).then(response => {
+        if(response){
+          alert("등록 완료")
+        }
+      })
+    }
+
+
+    // setStepCampaign({steps: 4})
   }
-  return(
+  return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Board>
-        <BoardHeader>광고 그룹 설정</BoardHeader>
-        <BoardSearchResult>
-          <Span4>크리에이티브 그룹 선택</Span4>
-          <RowSpan box={true} column={false}>
-            <ColSpan1 padding={'0'}>
-              <CampaignButton
-                onClick={() => setCreativeGroup('banner')}
-                className={creativeGroup === 'banner' ? 'on': null}
-              >고정 배너</CampaignButton>
-              <CampaignButton
-                onClick={() => setCreativeGroup('native')}
-                className={creativeGroup === 'native' ? 'on': null}
-              >네이티브</CampaignButton>
-            </ColSpan1>
-            <HorizontalRule style={{margin: '0',height: 50}}/>
-            <ColSpan1 padding={'0'}>
-              <CreativeButton title={'크리에이티브 불러오기'}/>
-            </ColSpan1>
-            <ColSpan2>
-              <span>나이키_특별 기획_노출 집중그룹_YYYY.MM.DD HH:MM</span>
-            </ColSpan2>
-          </RowSpan>
-          <RowSpan column={true}>
-            <Span4>랜딩 url</Span4>
+      {campaignCreativeInfo !== null &&
+        <Board>
+          <BoardHeader>광고 그룹 설정</BoardHeader>
+          <BoardSearchResult>
+            <Span4>크리에이티브 그룹 선택</Span4>
             <RowSpan box={true} column={false}>
-              <ColSpan2>
-                <Span3>PC 랜딩 url</Span3>
-                <Input
-                  type={'text'}
-                  name={'pcUrl'}
-                  onChange={handleChangeInputs}
-                  {...register('pcUrl',{
-                    required: {
-                      value: stepFour.pcUrl === '',
-                      message: 'PC 랜딩 URL을 작성해주세요'
-                    }
-                  })}
-                />
-              </ColSpan2>
-              <HorizontalRule style={{height:42}}/>
-              <ColSpan2>
-                <Span4>MOBILE 랜딩 url</Span4>
-                <Input
-                  type={'text'}
-                  name={'mobileUrl'}
-                  {...register('mobileUrl',{
-                    required: {
-                      value: stepFour.mobileUrl === '',
-                      message: '모바일 랜딩 URL을 작성해주세요'
-                    },
-                    onChange: () => handleChangeInputs
-                  })}
-                />
-              </ColSpan2>
+              {creativeType !== null &&
+                <ColSpan1 padding={'0'}>
+                  <CampaignButton type={'button'}
+                                  onClick={() => selCreativeGroup('BANNER')}
+                                  className={campaignCreativeInfo.creativeType === 'BANNER' ? 'on' : null}
+                  >
+                    {creativeType.find(value => value.value === 'BANNER').label}
+                  </CampaignButton>
+                  <CampaignButton type={'button'}
+                                  onClick={() => selCreativeGroup('NATIVE')}
+                                  className={campaignCreativeInfo.creativeType === 'NATIVE' ? 'on' : null}
+                  >
+                    {creativeType.find(value => value.value === 'NATIVE').label}
+                  </CampaignButton>
+                </ColSpan1>
+              }
             </RowSpan>
-          </RowSpan>
-          <ValidationGroup>
-            <Validation>{errors.pcUrl && errors.pcUrl.message}</Validation>
-            <Validation>{errors.mobileUrl && errors.mobileUrl.message}</Validation>
-          </ValidationGroup>
-          <RowSpan column={true}>
-            <Span4>인식 코드</Span4>
-            <RowSpan box={true} column={false}>
-              <ColSpan2>
-                <Span3>PC 인식 코드</Span3>
-                <Input
-                  type={'text'}
-                  name={'pcCode'}
-                  {...register('pcCode',{
-                    required: {
-                      value: stepFour.pcCode === '',
-                      message: 'PC 인식 코드를 작성해주세요'
-                    },
-                    onChange: () => handleChangeInputs
-                  })}
-                />
-              </ColSpan2>
-              <HorizontalRule style={{height:42}}/>
-              <ColSpan2>
-                <Span4 style={{letterSpacing: -1}}>MOBILE 인식 코드</Span4>
-                <Input
-                  type={'text'}
-                  name={'mobileCode'}
-                  {...register('mobileCode',{
-                    required: {
-                      value: stepFour.mobileCode === '',
-                      message: '모바일 인식 코드를 작성해주세요'
-                    },
-                    onChange: () => handleChangeInputs
-                  })}
-                />
-              </ColSpan2>
+            <RowSpan column={true}>
+              <Span4>랜딩 url</Span4>
+              <RowSpan box={true} column={false}>
+                <ColSpan2>
+                  <Span3>PC 랜딩 url</Span3>
+                  <Input
+                    type={'text'}
+                    name={'pcLandingUrl'}
+                    value={campaignCreativeInfo.pcLandingUrl}
+                    {...register('pcLandingUrl', {
+                      required: 'PC 랜딩 URL을 작성해주세요',
+                      onChange: (e) => handleChangeInputs(e)
+                    })}
+                  />
+                </ColSpan2>
+                <HorizontalRule style={{height: 42}}/>
+                <ColSpan2>
+                  <Span4>MOBILE 랜딩 url</Span4>
+                  <Input
+                    type={'text'}
+                    name={'mobLandingUrl'}
+                    value={campaignCreativeInfo.mobLandingUrl}
+                    {...register('mobLandingUrl', {
+                      required: '모바일 랜딩 URL을 작성해주세요',
+                      onChange: (e) => handleChangeInputs(e)
+                    })}
+                  />
+                </ColSpan2>
+              </RowSpan>
             </RowSpan>
-          </RowSpan>
-          <ValidationGroup>
-            <Validation>{errors.pcCode && errors.pcCode.message}</Validation>
-            <Validation>{errors.mobileCode && errors.mobileCode.message}</Validation>
-          </ValidationGroup>
-          {creativeGroup === 'banner' &&
-            <CampaignFourBanner stepFour={stepFour} setStepFour={setStepFour} register={register} errors={errors}/>
-            ||
-            <CampaignFourNative stepFour={stepFour} setStepFour={setStepFour} register={register} errors={errors}/>
-          }
-        </BoardSearchResult>
-      </Board>
+            <ValidationGroup>
+              <Validation>{errors.pcLandingUrl && errors.pcLandingUrl.message}</Validation>
+              <Validation>{errors.mobLandingUrl && errors.mobLandingUrl.message}</Validation>
+            </ValidationGroup>
+            <RowSpan column={true}>
+              <Span4>인식 코드</Span4>
+              <RowSpan box={true} column={false}>
+                <ColSpan2>
+                  <Span3>PC 인식 코드</Span3>
+                  <Input
+                    type={'text'}
+                    name={'pcReferralCode'}
+                    value={campaignCreativeInfo.pcReferralCode}
+                    {...register('pcReferralCode', {
+                      required: 'PC 인식 코드를 작성해주세요',
+                      onChange: (e) => handleChangeInputs(e)
+                    })}
+                  />
+                </ColSpan2>
+                <HorizontalRule style={{height: 42}}/>
+                <ColSpan2>
+                  <Span4 style={{letterSpacing: -1}}>MOBILE 인식 코드</Span4>
+                  <Input
+                    type={'text'}
+                    name={'mobReferralCode'}
+                    value={campaignCreativeInfo.mobReferralCode}
+                    {...register('mobReferralCode', {
+                      required: '모바일 인식 코드를 작성해주세요',
+                      onChange: (e) => handleChangeInputs(e)
+                    })}
+                  />
+                </ColSpan2>
+              </RowSpan>
+            </RowSpan>
+            <ValidationGroup>
+              <Validation>{errors.pcReferralCode && errors.pcReferralCode.message}</Validation>
+              <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
+            </ValidationGroup>
+            {campaignCreativeInfo.creativeType === 'BANNER' &&
+              <CampaignFourBanner register={register} errors={errors}/>
+              ||
+              <CampaignFourNative register={register} errors={errors}/>
+            }
+          </BoardSearchResult>
+        </Board>
+      }
       <SubmitContainer>
-        <CancelButton type={'button'} onClick={()=> setStepCampaign({steps:2})}>취소</CancelButton>
+        <CancelButton type={'button'} onClick={() => setStepCampaign({steps: 2})}>취소</CancelButton>
         <SubmitButton type={'submit'}>캠페인 검토</SubmitButton>
       </SubmitContainer>
     </form>

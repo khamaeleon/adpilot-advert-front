@@ -1,5 +1,5 @@
 import {useAtom} from "jotai";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import styled from "styled-components";
 import {modalController} from "../../store";
@@ -7,11 +7,11 @@ import {ColSpan2, DefaultButton, defaultStyle, RowSpan, Span4} from "../../asset
 import {SmallButton} from "../../pages/campaign/styles/common";
 import Select from "react-select";
 import {Icon} from "../table";
-import {mediaInventoryInfo, mediaInventoryInfoAtom} from "../../pages/campaign/entity/Group";
+import {campaignGroupInfoAtom, mediaInventoryInfo, mediaInventoryInfoAtom} from "../../pages/campaign/entity/Group";
 import {selSearchMediaInfo} from "../../services/campaign/GroupAxios";
 
 export function InventoryButton(props) {
-  const {title, onSubmit, btnStyle, historyAdd} = props;
+  const {title, onSubmit, btnStyle, type,historyAdd} = props;
   const [, setModal] = useAtom(modalController)
   const handleModalComponent = () => {
     setModal({
@@ -19,7 +19,7 @@ export function InventoryButton(props) {
       width: 1370,
       modalComponent: () => {
         return (
-          <SearchModal onSubmit={onSubmit} historyAdd={historyAdd}/>
+          <SearchModal onSubmit={onSubmit} historyAdd={historyAdd} type={type} />
         )
       }
     })
@@ -29,10 +29,26 @@ export function InventoryButton(props) {
 }
 
 function SearchModal (props) {
+  const {type} =props
   const [, setModal] = useAtom(modalController)
   const [selectedInventory, setSelectedInventory] = useState([])
   const [searchKeyword,setSearchKeyword] =useState('')
   const [mediaInventoryInfo,setMediaInventoryInfo] = useAtom(mediaInventoryInfoAtom)
+  const [campaignGroupInfo, setCampaignGroupInfo] = useAtom(campaignGroupInfoAtom)
+
+  useEffect(()=>{
+    if(type==='expose'){
+      setCampaignGroupInfo({
+        ...campaignGroupInfo,
+        allowInventoryIds:selectedInventory
+      })
+    }else{
+      setCampaignGroupInfo({
+        ...campaignGroupInfo,
+        disAllowInventoryIds:selectedInventory
+      })
+    }
+  },[type])
 
   const handleSearchKeyword = (event)=>{
     setSearchKeyword(event.target.value)
@@ -49,32 +65,61 @@ function SearchModal (props) {
       })
     }
   }
-  const inventory = [
-    {inventoryName: '네이트 콘텐츠 배너', code: '1', mediaName: '네이트', userId: 'nate12', category: '언론사', device:'PC',bannerSize:'200*200'},
-    {inventoryName: '네이트 콘텐츠 배너', code: '2', mediaName: '네이트', userId: 'nate12', category: '언론사', device:'PC',bannerSize:'200*200'},
-    {inventoryName: '네이트 콘텐츠 배너', code: '3', mediaName: '네이트', userId: 'nate12', category: '언론사', device:'PC',bannerSize:'200*200'},
-    {inventoryName: '네이트 콘텐츠 배너', code: '4', mediaName: '네이트', userId: 'nate12', category: '언론사', device:'PC',bannerSize:'200*200'},
-  ]
 
   const handleSubmit = () => {
     setModal({
       isShow: false,
       modalComponent: null
     })
-    console.log(selectedInventory)
+    console.log(campaignGroupInfo)
   }
 
   const handleClickSelectItem = (selectItem) => {
-    if(selectedInventory.length !== 0) {
-      if (selectedInventory.find(item => item.inventoryId === selectItem.inventoryId) !== undefined){
-        setSelectedInventory([...selectedInventory.filter(item => item.inventoryId !== selectItem.inventoryId)])
+    if(type==='expose'){
+      if(selectedInventory.length !== 0) {
+        if (selectedInventory.find(item => item.inventoryId === selectItem.inventoryId) !== undefined){
+          setSelectedInventory([...selectedInventory.filter(item => item.inventoryId !== selectItem.inventoryId)])
+          setCampaignGroupInfo({
+            ...campaignGroupInfo,
+            allowInventoryIds:[...campaignGroupInfo.allowInventoryIds.filter(value => value !== selectItem.inventoryId)]
+          })
+        } else {
+          setSelectedInventory([...selectedInventory.concat(selectItem)])
+          setCampaignGroupInfo({
+            ...campaignGroupInfo,
+            allowInventoryIds:[...campaignGroupInfo.allowInventoryIds.concat(selectItem.inventoryId)]
+          })
+        }
       } else {
-        setSelectedInventory([...selectedInventory.concat(selectItem)])
+        setSelectedInventory([...selectedInventory,selectItem])
+        setCampaignGroupInfo({
+          ...campaignGroupInfo,
+          allowInventoryIds:[...campaignGroupInfo.allowInventoryIds,selectItem.inventoryId]
+        })
       }
-    } else {
-      setSelectedInventory([...selectedInventory,selectItem])
+    }else{
+      if(selectedInventory.length !== 0) {
+        if (selectedInventory.find(item => item.inventoryId === selectItem.inventoryId) !== undefined){
+          setSelectedInventory([...selectedInventory.filter(item => item.inventoryId !== selectItem.inventoryId)])
+          setCampaignGroupInfo({
+            ...campaignGroupInfo,
+            disAllowInventoryIds:[...campaignGroupInfo.disAllowInventoryIds.filter(value => value !== selectItem.inventoryId)]
+          })
+        } else {
+          setSelectedInventory([...selectedInventory.concat(selectItem)])
+          setCampaignGroupInfo({
+            ...campaignGroupInfo,
+            disAllowInventoryIds:[...campaignGroupInfo.disAllowInventoryIds.concat(selectItem.inventoryId)]
+          })
+        }
+      } else {
+        setSelectedInventory([...selectedInventory,selectItem])
+        setCampaignGroupInfo({
+          ...campaignGroupInfo,
+          disAllowInventoryIds:[...campaignGroupInfo.disAllowInventoryIds,selectItem.inventoryId]
+        })
+      }
     }
-
   }
 
   return (
@@ -111,7 +156,7 @@ function SearchModal (props) {
                       <MediaName>{item.siteName}</MediaName>
                       <InventoryName>{item.inventoryName}</InventoryName>
                       <UserId>{item.username}</UserId>
-                      <Category>{item.category}</Category>
+                      <Category>{item.category1}</Category>
                       <Code><a href={item.siteUrl} target={'_blank'}>사이트보기</a></Code>
                       <Device>{item.deviceType}</Device>
                       <BannerSize>{item.bannerSize.replace('IMG','')}</BannerSize>
@@ -138,13 +183,12 @@ function SearchModal (props) {
               </SelectedInventoryHeader>
               <SelectedInventoryResult>
                 {selectedInventory.map((item, key) => {
-                  console.log(item)
                   return (
                     <SelectedInventoryResultItem key={key} onClick={() => handleClickSelectItem(item)}>
                       <MediaName>{item.siteName}</MediaName>
                       <InventoryName>{item.inventoryName}</InventoryName>
                       <UserId>{item.username}</UserId>
-                      <Category>{item.category}</Category>
+                      <Category>{item.category1}</Category>
                       <Code><a href={item.siteUrl} target={'_blank'}>사이트보기</a></Code>
                       <Device>{item.deviceType}</Device>
                       <BannerSize>{item.bannerSize.replace('IMG','')}</BannerSize>
@@ -195,6 +239,7 @@ const SearchInventoryItemResult = styled.div`
   height: 350px;
   overflow: auto;
   width: 100%;
+  font-size: 12px;
 `
 
 const InventoryItem = styled.div`
@@ -218,6 +263,7 @@ const SearchInventoryHeader = styled.div`
   margin-top: 15px;
   border: 1px solid #e5e5e5;
   background-color: #f3f3f3;
+  font-size: 12px;
 `
 
 
@@ -248,11 +294,13 @@ const SelectedInventoryHeader = styled.div`
   background-color: #f3f3f3;
   border-top: 1px solid #e5e5e5;
   text-align: center;
+  font-size: 12px;
 `
 const SelectedInventoryResult = styled.div`
   width: 100%;
   height: 350px;
   overflow: auto;
+  font-size: 12px;
 `
 
 const SelectedInventoryResultItem = styled.div`

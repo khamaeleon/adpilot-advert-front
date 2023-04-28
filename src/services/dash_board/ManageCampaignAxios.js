@@ -1,4 +1,4 @@
-import {AdminAxios} from "../../common/Axios";
+import {AdminAxios} from "../../common/Axios"; // eslint-disable-line no-unused-vars
 
 const ACTION_URL = '/adver/dashboard/';
 const ADVERTISER = 'advertiser-status';
