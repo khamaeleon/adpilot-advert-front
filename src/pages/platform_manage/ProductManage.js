@@ -1,20 +1,11 @@
 import React, {useEffect, useState} from "react";
-import {
-  Board,
-  BoardHeader,
-  BoardSearchDetail,
-  BoardSearchResult,
-  ColSpan2,
-  RowSpan,
-  Span4
-} from "../../assets/GlobalStyles";
+import {Board, BoardHeader, BoardSearchDetail, BoardSearchResult} from "../../assets/GlobalStyles";
 import Table from "../../components/table";
 import {useAtom} from "jotai/index";
 import {PlatformCondition} from "../../components/Platform/Condition";
 import {modalController} from "../../store";
 import {useSetAtom} from "jotai";
 import {ModalBody, ModalHeader} from "../../components/modal/Modal";
-import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
 import {retrieveProduct} from "../../services/Platform/PlatformAxios";
 import {searchConditionAtom} from "./entity/Common";
 import {productListColumn, productListDataAtom, searchProductType} from "./entity/Product";
@@ -73,34 +64,37 @@ function ProductManage() {
 
   useEffect(() => {
     retrieveProduct(searchCondition).then(response =>{
-      console.log(response)
-      setProductData(response)
+      if(response){
+        setProductData(response)
+      }
     })
   }, [])
 
   const handleSearchResult = () => {
     retrieveProduct(searchCondition).then(response =>{
-      setProductData(response)
+      if(response){
+        setProductData(response)
+      }
     })
   }
 
   return (
     <>
-        <Board>
-          <BoardHeader>상품 수집 현황</BoardHeader>
-          <BoardSearchDetail>
-            <PlatformCondition searchType={searchProductType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleTableData={handleSearchResult}/>
-          </BoardSearchDetail>
-          <BoardSearchResult>
-            {productData !==null &&
-              <Table columns={productListColumn}
-                     totalCount={[productData.totalCount,'상품수']}
-                     data={productData.rows}
-                     idProperty={'id'}
-              />
-            }
-          </BoardSearchResult>
-        </Board>
+      <Board>
+        <BoardHeader>상품 수집 현황</BoardHeader>
+        <BoardSearchDetail>
+          <PlatformCondition searchType={searchProductType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleTableData={handleSearchResult}/>
+        </BoardSearchDetail>
+        <BoardSearchResult>
+          {productData !==null &&
+            <Table columns={productListColumn}
+                   totalCount={[productData.totalCount,'상품수']}
+                   data={productData !== null ? productData.rows : []}
+                   idProperty={'id'}
+            />
+          }
+        </BoardSearchResult>
+      </Board>
     </>
   )
 }
