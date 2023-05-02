@@ -37,6 +37,7 @@ import {SearchAdvertiser} from "../common/SearchAdvertiser";
 import {retrieveProduct} from "../../services/Platform/PlatformAxios";
 import {useAtom} from "jotai";
 import {productListDataAtom} from "../../pages/platform_manage/entity/Product";
+import {useParams} from "react-router-dom";
 
 export function PlatformCondition(props) {
   const [dateActive,setDateActive] = useState('')
@@ -204,7 +205,9 @@ export function PaymentCondition(props) {
   const [startDate, endDate] = dateRange
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [searchTypeSelect] = useState(searchType)
+  const [searchCostTypeSelect] = useState()
   const [searchSelected, setSearchSelected] = useState(searchTypeSelect[0])
+  const params = useParams()
 
   useEffect(() => {
     setSearchCondition({
@@ -215,7 +218,9 @@ export function PaymentCondition(props) {
   },[dateRange])
 
   useEffect(() => {
-    if(searchCondition.statusList.length == 7) {
+    if(searchCondition.statusList.length === 2 && params.id !== 'costPayment') {
+      setIsCheckedAll(true)
+    } else if(searchCondition.statusList.length === 4 && params.id === 'costPayment') {
       setIsCheckedAll(true)
     } else {
       setIsCheckedAll(false)
@@ -232,7 +237,22 @@ export function PaymentCondition(props) {
     if(event.target.checked){
       setSearchCondition({
         ...searchCondition,
-        statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE']
+        statusList: ['PAYMENT_COMPLETED', 'PAYMENT_FAILED']
+      })
+    } else{
+      setSearchCondition({
+        ...searchCondition,
+        statusList: []
+      })
+    }
+    setIsCheckedAll(event.target.checked)
+  }
+
+  const handleChangeCostCheckAll = (event) => {
+    if(event.target.checked){
+      setSearchCondition({
+        ...searchCondition,
+        statusList: ['COST_DECREASE', 'COST_DECREASE','REFUND_APPLIED','REFUND_COMPLETE']
       })
     } else{
       setSearchCondition({
@@ -244,6 +264,21 @@ export function PaymentCondition(props) {
   }
 
   const handleChangeChecked = (event) => {
+    //체크박스 핸들링
+    if(event.currentTarget.checked){
+      setSearchCondition({
+        ...searchCondition,
+        statusList: searchCondition.statusList.concat(event.currentTarget.id)
+      })
+    }else{
+      setSearchCondition({
+        ...searchCondition,
+        statusList: searchCondition.statusList.filter(id => id !== event.currentTarget.id)
+      })
+    }
+  }
+
+  const handleChangeCostChecked = (event) => {
     //체크박스 핸들링
     if(event.currentTarget.checked){
       setSearchCondition({
@@ -276,7 +311,6 @@ export function PaymentCondition(props) {
       {/*line1*/}
       <RowSpan>
         <ColSpan1>
-          <ColTitle><span>기간</span></ColTitle>
           <div style={{width: '100%'}}>
             <DateContainer>
               <CalendarBox>
@@ -299,47 +333,56 @@ export function PaymentCondition(props) {
           <ColTitle><span>신청 상태</span></ColTitle>
           <div>
             <AgentType>
-              <Checkbox label={'전체'}
-                        type={'c'}
-                        id={'ALL'}
-                        isChecked={isCheckedAll}
-                        onChange={handleChangeCheckAll}
-              />
-              <Checkbox label={'정산 신청'}
-                        type={'c'}
-                        id={'INVOICE_REQUEST'}
-                        isChecked={searchCondition.statusList.includes('INVOICE_REQUEST') ? true : false}
-                        onChange={handleChangeChecked}/>
-              <Checkbox label={'심사 완료'}
-                        type={'c'}
-                        id={'EXAMINED_COMPLETED'}
-                        isChecked={searchCondition.statusList.includes('EXAMINED_COMPLETED') ? true : false}
-                        onChange={handleChangeChecked}/>
-              <Checkbox label={'반려'}
-                        type={'c'}
-                        id={'REJECT'}
-                        isChecked={searchCondition.statusList.includes('REJECT') ? true : false}
-                        onChange={handleChangeChecked}/>
-              <Checkbox label={'지급 완료'}
-                        type={'c'}
-                        id={'PAYMENT_COMPLETED'}
-                        isChecked={searchCondition.statusList.includes('PAYMENT_COMPLETED') ? true : false}
-                        onChange={handleChangeChecked}/>
-              <Checkbox label={'지급 보류'}
-                        type={'c'}
-                        id={'WITHHELD_PAYMENT'}
-                        isChecked={searchCondition.statusList.includes('WITHHELD_PAYMENT') ? true : false}
-                        onChange={handleChangeChecked}/>
-              <Checkbox label={'수익 증가'}
-                        type={'c'}
-                        id={'REVENUE_INCREASE'}
-                        isChecked={searchCondition.statusList.includes('REVENUE_INCREASE') ? true : false}
-                        onChange={handleChangeChecked}/>
-              <Checkbox label={'수익 감소'}
-                        type={'c'}
-                        id={'REVENUE_DECREASE'}
-                        isChecked={searchCondition.statusList.includes('REVENUE_DECREASE') ? true : false}
-                        onChange={handleChangeChecked}/>
+              {params.id === 'costPayment' &&
+                <>
+                  <Checkbox label={'전체'}
+                            type={'c'}
+                            id={'ALL'}
+                            isChecked={isCheckedAll}
+                            onChange={handleChangeCostCheckAll}
+                  />
+                  <Checkbox label={'광고비 지급'}
+                            type={'c'}
+                            id={'COST_DECREASE'}
+                            isChecked={searchCondition.statusList.includes('COST_DECREASE')}
+                            onChange={handleChangeCostChecked}/>
+                  <Checkbox label={'광고비 차감'}
+                            type={'c'}
+                            id={'COST_DECREASE'}
+                            isChecked={searchCondition.statusList.includes('COST_DECREASE')}
+                            onChange={handleChangeCostChecked}/>
+                  <Checkbox label={'환불 신청'}
+                            type={'c'}
+                            id={'REFUND_APPLIED'}
+                            isChecked={searchCondition.statusList.includes('REFUND_APPLIED')}
+                            onChange={handleChangeCostChecked}/>
+                  <Checkbox label={'환불 완료'}
+                            type={'c'}
+                            id={'REFUND_COMPLETE'}
+                            isChecked={searchCondition.statusList.includes('REFUND_COMPLETE')}
+                            onChange={handleChangeCostChecked}/>
+                </>
+              }
+              {params.id === 'paymentManage' &&
+                <>
+                  <Checkbox label={'전체'}
+                            type={'c'}
+                            id={'ALL'}
+                            isChecked={isCheckedAll}
+                            onChange={handleChangeCheckAll}
+                  />
+                  <Checkbox label={'결제 완료'}
+                            type={'c'}
+                            id={'PAYMENT_COMPLETED'}
+                            isChecked={searchCondition.statusList.includes('PAYMENT_COMPLETED')}
+                            onChange={handleChangeChecked}/>
+                  <Checkbox label={'결제 실패'}
+                            type={'c'}
+                            id={'PAYMENT_FAILED'}
+                            isChecked={searchCondition.statusList.includes('PAYMENT_FAILED')}
+                            onChange={handleChangeChecked}/>
+                </>
+              }
             </AgentType>
           </div>
         </ColSpan3>

@@ -18,6 +18,7 @@ export const navigationName = {
   "/board/conversionManage": "홈/플랫폼 관리/전환 관리",
   "/board/paymentManageUser": "홈/결제",
   "/board/paymentManage": "홈/플랫폼 관리/결재 관리",
+  "/board/costPayment": "홈/플랫폼 관리/광고비 지급 관리",
   "/board/settings": "홈/설정/이벤트 단가 관리",
   "/board/settingsDetail": "홈/설정/이벤트 단가 상세 관리",
   "/board/budgetEvent": "홈/설정/이벤트 예산 관리",

@@ -223,7 +223,7 @@ const SubMenu = styled.div`
   padding-left:52px;
   padding-top: ${props => props.active ?'10px':0};
   padding-bottom: ${props => props.active ?'10px':0};
-  max-height: ${props => props.active ? '200px' : '0px'};
+  max-height: ${props => props.active ? '250px' : '0px'};
   & > div {
     & > div {
       color: #cccccc;

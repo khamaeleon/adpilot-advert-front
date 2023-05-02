@@ -17,13 +17,12 @@ import {
 } from "./entity/Payment";
 import {StatusBtn} from "./styles/common";
 
-function PaymentManage() {
+function CostPayment() {
   const [paymentDataState, setPaymentDataState] = useAtom(paymentDataAtom)
   const [searchPaymentParamsState, setSearchPaymentParamsState] = useAtom(searchPaymentParams)
   const [updatePaymentStatusParams, setUpdatePaymentStatusParams] = useState(updatePaymentStatus)
 
   useEffect(() => {
-    handlePaymentTableData()
   }, [])
 
   // useEffect(() => {
@@ -138,6 +137,18 @@ function PaymentManage() {
         <BoardHeader>결재 현황</BoardHeader>
         <PaymentCondition searchType={searchPaymentType} searchCondition={searchPaymentParamsState} setSearchCondition={setSearchPaymentParamsState} handleTableData={handlePaymentTableData} />
         <BoardTableContainer>
+          <RowSpan>
+            <ColSpan2 style={{marginTop: 20, paddingLeft: 0}}>
+              <Checkbox label={'전체'}
+                        type={'c'}
+                        id={'AllSelect'}
+                        isChecked={checkboxAllSelect}
+                        onChange={(e)=> handlePaymentCheckAll(e)}
+              />
+              <StatusBtn type={'button'} id={'EXAMINED_COMPLETED'} onClick={(event)=> handlePaymentStatus(event.currentTarget.id)}>환불완료</StatusBtn>
+            </ColSpan2>
+            <div style={{display: 'flex', justifyContent: 'flex-end'}}><SearchUser title={'이력 추가'} className={'listUp'} onSubmit={handleHistoryAdd} btnStyle={'historyAddButton'} historyAdd={true}/></div>
+          </RowSpan>
           <Table columns={paymentColumns}
                  data={paymentDataAtom}
                  idProperty="id"
@@ -147,7 +158,7 @@ function PaymentManage() {
                  emptyText={'결재 현황 내역이 없습니다.'}
                  showHoverRows={false}
                  dataCallback={dataCallback}
-                 />
+          />
         </BoardTableContainer>
       </Board>
       <ToastContainer position="top-center"
@@ -164,5 +175,5 @@ function PaymentManage() {
   )
 }
 
-export default PaymentManage
+export default CostPayment
 

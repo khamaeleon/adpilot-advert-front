@@ -8,6 +8,7 @@ import ProductManage from "./ProductManage";
 import ConversionManage from "./ConversionManage";
 import PaymentManage from "./PaymentManage";
 import PlatformUserDetail from "./UserDetail";
+import CostPayment from "./CostPayment";
 
 function PlatformUser(){
   const params = useParams()
@@ -24,6 +25,7 @@ function PlatformUser(){
         {params.id === 'productManage' && <ProductManage/>}
         {params.id === 'conversionManage' && <ConversionManage/>}
         {params.id === 'paymentManage' && <PaymentManage/>}
+        {params.id === 'costPayment' && <CostPayment/>}
       </BoardContainer>
     </main>
   )

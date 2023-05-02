@@ -148,7 +148,7 @@ function Layout() {
         {['settings', 'settingsDetail', 'budgetEvent', 'budgetEventDetail', 'budgetTime', 'budgetTimeDetail','budgetTimeList'].includes(params.id) &&
           <Settings/>}
         {/* 플랫폼 관리 */}
-        {['platform', 'platformDetail', 'categoryManage', 'productManage', 'conversionManage', 'paymentManage'].includes(params.id) &&
+        {['platform', 'platformDetail', 'categoryManage', 'productManage', 'conversionManage', 'paymentManage','costPayment'].includes(params.id) &&
           <PlatformManage/>}
         {params.id === 'paymentManageUser' && <PaymentManageUser/>}
         {params.id === 'myPageUser' && <main>
