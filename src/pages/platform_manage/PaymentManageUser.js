@@ -11,6 +11,7 @@ import {
 import styled from 'styled-components';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import React, {useCallback, useEffect, useState} from "react";
+import {useAtom} from "jotai";
 import Navigator from "../../components/common/Navigator";
 import ko from "date-fns/locale/ko";
 import { AdChargeButton } from "../../components/payment/user/AdCharge";
@@ -21,8 +22,14 @@ import {
     getToDay
 } from "../../common/DateUtils";
 import {decimalFormat} from "../../common/StringUtils";
-import {TotalCount} from "../../components/table/TableDetail";
 import {toast, ToastContainer} from "react-toastify";
+import {PaymentDetailsColumns, PaymentDetailsDataAtom, PointDetailsDataAtom, PointDetailsColumns} from "./entity/PaymentUser";
+import Table from "../../components/table";
+import {dataTotalInfo} from "../../components/common/entity";
+// import {retrieveAdvertiserStatus} from "../../services/dash_board/ManageCampaignAxios";
+import {tokenResultAtom} from "../login/entity/Common";
+// import {searchConditionAtom} from "../dash_board/entity/Common";
+// import {adverStatusAtom} from "../dash_board/entity/Campaign";
 
 export function RefundRequestTable(props) {
     return (
@@ -54,6 +61,15 @@ export function RefundRequestTable(props) {
 }
 
 function PaymentManageUser(props) {
+    const [tokenUserInfo] = useAtom(tokenResultAtom)
+    const [paymentDetails, setPaymentDetails] = useAtom(PaymentDetailsDataAtom)
+    const [pointDetails, setPointDetails] = useAtom(PointDetailsDataAtom)
+    // const [totalInfo, setTotalInfo] = useState(dataTotalInfo)
+    const [totalInfo, setTotalInfo] = useState(0)
+    // const [adverStatusData, setAdverStatusData] = useAtom(adverStatusAtom)
+    // const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
+
+
     const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
     const [startDate, endDate] = dateRange;
     const [advertisingBalance, setAdvertisingBalance] = useState(10000) // 광고비 잔액
@@ -62,36 +78,27 @@ function PaymentManageUser(props) {
     //[d] 환불 입력 정보
     // const [refundData, setRefundData] = useState([])
     const [refundData, setRefundData] = useState(["테스트1","테스트2","테스트3"]) // 환불 정보
-    const [paymentDetails, setPaymentDetails] = useState([ // 환불 내역
-            ["yyyy.mm.dd hh.mm","결제 완료","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","결제 취소","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","환불 완료","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","결제 완료","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","결제 취소","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","환불 완료","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","결제 완료","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","결제 취소","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","환불 완료","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","결제 완료","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","결제 취소","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","환불 완료","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","결제 완료","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","결제 취소","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","환불 완료","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","결제 완료","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","결제 취소","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","환불 완료","카드 결제","bc12345",550000],
-            ["yyyy.mm.dd hh.mm","환불 신청","카드 결제","bc12345",550000],
-        ]
-    )
+
+
+
+
+
+    // useEffect(() => {
+    //     if(tokenUserInfo.role !== 'NORMAL') {
+    //         //광고주 현황 조회
+    //         retrieveAdvertiserStatus(searchCondition).then(response => {
+    //             if(response !== null) {
+    //                 setAdverStatusData(response)
+    //                 setTotalInfo({
+    //                     totalCount: response?.length
+    //                 })
+    //             } else {
+    //                 setAdverStatusData([])
+    //             }
+    //         })
+    //     }
+    // }, [searchCondition])
+
 
 
     const handleRegisterRefund = () => {
@@ -192,46 +199,37 @@ function PaymentManageUser(props) {
                             </DateContainer>
                         </div>
                     </div>
-                    <ColSpan4>
-                        <BoardSearchResultTitle style={{alignItems:"end",}}>
-                            <div>
-                                {paymentDetails &&
-                                    <TotalCount><span style={{marginRight: "10px"}}/>총 <span>{paymentDetails.length}</span> 건의 결제 내역</TotalCount>}
-                            </div>
+                    <ColSpan4 style={{display:'block'}}>
+                        <BoardSearchResultTitle style={{alignItems:"end", padding: "0"}}>
+                            <div/>
                             <div>
                                 <SaveExcelButton>엑셀 저장</SaveExcelButton>
                             </div>
                         </BoardSearchResultTitle>
+                        <Table columns={PaymentDetailsColumns}
+                               // totalCount={[totalInfo.totalCount, '결제 내역']}
+                               totalCount={[totalInfo, '결제 내역']}
+                               data={paymentDetails}
+                               showHoverRows={false}
+                               activeCell={[0]}
+                               pagenations={true}
+                               emptyText={''}
+                               noDirectives={true}
+                               emptyText={'결제 내역이 없습니다.'}
+                        />
+                        <Table columns={PointDetailsColumns}
+                               // totalCount={[totalInfo.totalCount, '포인트 지급 내역']}
+                               totalCount={[totalInfo, '포인트 지급 내역']}
+                               data={pointDetails}
+                               showHoverRows={false}
+                               activeCell={[0]}
+                               pagenations={true}
+                               emptyText={''}
+                               noDirectives={true}
+                               emptyText={'포인트 지급 내역이 없습니다.'}
+                        />
                     </ColSpan4>
-                    <ColSpan4>
-                        <RefundInformation multiTable={true} style={{maxHeight:"500px", overflow:"auto", alignItems:"start"}}>
-                            <table>
-                                <thead>
-                                <tr>
-                                    <th>신청 일시</th>
-                                    <th>신청 상태</th>
-                                    <th>결제/신청 방식</th>
-                                    <th>결제/신청 수단</th>
-                                    <th>결제/신청 금액</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {paymentDetails.map((item, key) => {
-                                    return(
-                                    <tr key={key}>
-                                        {item.map((data, key) => {
-                                            return(
-                                                <td key={key}>{data}</td>
-                                            )
-                                        })}
-                                    </tr>
-                                    )
-                                })}
-                                </tbody>
-                            </table>
-                        </RefundInformation>
-                    </ColSpan4>
-                </Board>
+                    </Board>
             </BoardContainer>
             <ToastContainer
                 position="top-center"

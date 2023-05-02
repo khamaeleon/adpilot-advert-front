@@ -171,7 +171,7 @@ export function Icon(props) {
 }
 
 function Table(props) {
-  const {columns, data, settings, groups } = props
+  const {columns, data, settings, groups, noDirectives } = props
   const [activeCell, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = {minHeight: 550}
@@ -199,7 +199,6 @@ function Table(props) {
 
   const emptyText = <p style={{
     fontSize: 16,
-
   }}>{props.emptyText !== undefined ? props.emptyText : '데이터가 없습니다.'}</p>
 
   useEffect(() => {
@@ -236,7 +235,7 @@ function Table(props) {
           {props.totalCount &&
             <TotalCount><span/>총 <span>{props?.totalCount[0]}</span> 건의 {props?.totalCount[1]}</TotalCount>}
         </ColSpan2>
-        <Small>* shift를 누른 상태에서 스크롤시 좌우 스크롤이 가능합니다.</Small>
+        {noDirectives === true ? null : <Small>* shift를 누른 상태에서 스크롤시 좌우 스크롤이 가능합니다.</Small>}
       </RowSpan>
       {gridElement}
     </>
