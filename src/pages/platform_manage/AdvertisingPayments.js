@@ -65,9 +65,8 @@ export const costPaymentColumns = [
     render: ({value}) => <>{value.label}</>
   },
   {
-    name: 'otherdata',
+    name: 'otherData',
     header: '환불 정보',
-    defaultFlex: 1,
     showColumnMenuTool: false,
   },
   {
