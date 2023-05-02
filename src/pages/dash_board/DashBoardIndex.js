@@ -30,7 +30,7 @@ import {DashBoardCondition} from "../../components/dashBoard/Condition";
 function ChartComponent() {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [chartData, setChartData] = useAtom(chartDataAtom);
-  const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
+  const [searchCondition, setSearchCondition] = useAtom(searchConditionAtom)
   const [dataType, setDataType] = useState('userCount')
   const [dataType2, setDataType2] = useState('costAmount')
   const [chartDataInfo, setChartDataInfo] = useState([])
@@ -76,7 +76,7 @@ function ChartComponent() {
         }
       })
     }
-  },[])
+  },[searchCondition])
 
   useEffect(() => {
     makeChartData()
@@ -354,7 +354,7 @@ function DashBoardIndex() {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [totalInfo, setTotalInfo] = useState(dataTotalInfo)
   const [adverStatusData, setAdverStatusData] = useAtom(adverStatusAtom)
-  const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
+  const [searchCondition, setSearchCondition] = useAtom(searchConditionAtom)
   const [keyword, setKeyword] = useState('')
   useEffect(() => {
     if(tokenUserInfo.role !== 'NORMAL') {
