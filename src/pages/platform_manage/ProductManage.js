@@ -89,7 +89,7 @@ function ProductManage() {
           {productData !==null &&
             <Table columns={productListColumn}
                    totalCount={[productData.totalCount,'상품수']}
-                   data={productData !== null ? productData.rows : []}
+                   data={productData.rows !== undefined ? productData.rows : []}
                    idProperty={'id'}
             />
           }
