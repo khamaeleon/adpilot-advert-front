@@ -25,12 +25,13 @@ import {
 import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../common/StringUtils";
 import Select from "react-select";
 import {DashBoardCondition} from "../../components/dashBoard/Condition";
+import {getThisMonth} from "../../common/DateUtils";
 
 /** 플래폼 현황 차트 **/
-function ChartComponent() {
+function ChartComponent(props) {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [chartData, setChartData] = useAtom(chartDataAtom);
-  const [searchCondition, setSearchCondition] = useAtom(searchConditionAtom)
+  const {searchCondition} = props
   const [dataType, setDataType] = useState('userCount')
   const [dataType2, setDataType2] = useState('costAmount')
   const [chartDataInfo, setChartDataInfo] = useState([])
@@ -354,8 +355,9 @@ function DashBoardIndex() {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [totalInfo, setTotalInfo] = useState(dataTotalInfo)
   const [adverStatusData, setAdverStatusData] = useAtom(adverStatusAtom)
-  const [searchCondition, setSearchCondition] = useAtom(searchConditionAtom)
+  const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
   const [keyword, setKeyword] = useState('')
+
   useEffect(() => {
     if(tokenUserInfo.role !== 'NORMAL') {
       //광고주 현황 조회
@@ -394,7 +396,7 @@ function DashBoardIndex() {
         <DashBoardCard>
           <DashBoardHeader>플랫폼 현황</DashBoardHeader>
           <DashBoardBody>
-            <ChartComponent/>
+            <ChartComponent searchCondition={searchCondition} />
           </DashBoardBody>
           <DashBoardHeader style={{marginTop: 30}}>광고주 현황</DashBoardHeader>
           <DashBoardBody>
