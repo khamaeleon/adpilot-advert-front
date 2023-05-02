@@ -16,11 +16,100 @@ import {
   updatePaymentStatus
 } from "./entity/Payment";
 import {StatusBtn} from "./styles/common";
+import {atom} from "jotai/index";
+import {dateFormat, decimalFormat} from "../../common/StringUtils";
+import {getToDay} from "../../common/DateUtils";
+
+const costPaymentDataAtom = atom([{
+  name: 'id',
+}])
+export const updateCostPaymentStatus = {
+  paymentIdList: [],
+  paymentStatus: "",
+}
+
+/**
+ * 결재 관리 현황 조회
+ */
+export const searchCostPaymentParams = atom({
+  startAt: dateFormat(getToDay(), 'YYYY-MM'),
+  endAt: dateFormat(getToDay(), 'YYYY-MM'),
+  statusList: ['COST_DECREASE', 'COST_DECREASE','REFUND_APPLIED','REFUND_COMPLETE'],
+  searchType: 'DEFAULT',
+  search: ''
+})
+
+/**
+ * 결재 관리 리스트 컬럼 설정
+ */
+export const costPaymentColumns = [
+  {
+    name: 'id',
+    header: 'id',
+    defaultVisible: false,
+  },
+  {
+    name: 'recordMonth',
+    header: '신청 일시',
+    width: 150,
+    showColumnMenuTool: false,
+    render: ({value}) => {
+      return <p>{dateFormat(value, 'YYYY.MM.DD HH:mm')}</p>
+    }
+  },
+  {
+    name: 'status',
+    header: '신청 상태',
+    width: 120,
+    showColumnMenuTool: false,
+    render: ({value}) => <>{value.label}</>
+  },
+  {
+    name: 'username',
+    header: '환불 정보',
+    defaultFlex: 1,
+    showColumnMenuTool: false,
+  },
+  {
+    name: 'username',
+    header: '광고주명',
+    showColumnMenuTool: false,
+  },
+  {
+    name: 'requesterId',
+    header: '광고주 아이디',
+    showColumnMenuTool: false,
+  },
+  {
+    name: 'requesterId',
+    header: '신청 아이디',
+    showColumnMenuTool: false,
+  },
+  {
+    name: 'revenueAmount',
+    header: '광고비',
+    showColumnMenuTool: false,
+    render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>
+  },
+  {
+    name: 'updateAt',
+    header: '상태 변경일',
+    width: 120,
+    showColumnMenuTool: false,
+  },
+  {
+    name: 'etc',
+    header: '비고',
+    width: 180,
+    sortable: false,
+    showColumnMenuTool: false,
+  }
+]
 
 function CostPayment() {
-  const [paymentDataState, setPaymentDataState] = useAtom(paymentDataAtom)
-  const [searchPaymentParamsState, setSearchPaymentParamsState] = useAtom(searchPaymentParams)
-  const [updatePaymentStatusParams, setUpdatePaymentStatusParams] = useState(updatePaymentStatus)
+  const [paymentDataState, setPaymentDataState] = useAtom(costPaymentDataAtom)
+  const [searchPaymentParamsState, setSearchPaymentParamsState] = useAtom(searchCostPaymentParams)
+  const [updatePaymentStatusParams, setUpdatePaymentStatusParams] = useState(updateCostPaymentStatus)
 
   useEffect(() => {
   }, [])
@@ -122,7 +211,7 @@ function CostPayment() {
           <Checkbox label={''}
                     type={'a'}
                     disabled={disabledArr.includes(cellProps.data?.status?.value)}
-                    isChecked={paymentStatusSelected.includes(cellProps.data.id) ? true : false}
+                    isChecked={paymentStatusSelected.includes(cellProps.data.id)}
                     onChange={ e => {
                       handlePaymentStatusCheckbox(e, cellProps)
                     }}/>
@@ -149,8 +238,8 @@ function CostPayment() {
             </ColSpan2>
             <div style={{display: 'flex', justifyContent: 'flex-end'}}><SearchUser title={'이력 추가'} className={'listUp'} onSubmit={handleHistoryAdd} btnStyle={'historyAddButton'} historyAdd={true}/></div>
           </RowSpan>
-          <Table columns={paymentColumns}
-                 data={paymentDataAtom}
+          <Table columns={costPaymentColumns}
+                 data={costPaymentDataAtom}
                  idProperty="id"
                  selected={checkboxAllSelect}
                  checkboxColumn={checkboxColumn} //체크박스 커스텀
