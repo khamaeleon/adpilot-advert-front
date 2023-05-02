@@ -106,7 +106,7 @@ export const costPaymentColumns = [
   }
 ]
 
-function CostPayment() {
+function AdvertisingPayments() {
   const [paymentDataState, setPaymentDataState] = useAtom(costPaymentDataAtom)
   const [searchPaymentParamsState, setSearchPaymentParamsState] = useAtom(searchCostPaymentParams)
   const [updatePaymentStatusParams, setUpdatePaymentStatusParams] = useState(updateCostPaymentStatus)
@@ -264,5 +264,5 @@ function CostPayment() {
   )
 }
 
-export default CostPayment
+export default AdvertisingPayments
 
