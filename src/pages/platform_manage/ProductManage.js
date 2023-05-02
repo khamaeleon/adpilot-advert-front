@@ -86,13 +86,11 @@ function ProductManage() {
           <PlatformCondition searchType={searchProductType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleTableData={handleSearchResult}/>
         </BoardSearchDetail>
         <BoardSearchResult>
-          {productData !==null &&
-            <Table columns={productListColumn}
-                   totalCount={[productData.totalCount,'상품수']}
-                   data={productData.rows !== undefined ? productData.rows : []}
-                   idProperty={'id'}
-            />
-          }
+          <Table columns={productListColumn}
+                 totalCount={[productData.totalCount !== undefined ? productData.totalCount : 0,'상품수']}
+                 data={productData.rows !== undefined ? productData.rows : []}
+                 idProperty={'id'}
+          />
         </BoardSearchResult>
       </Board>
     </>
