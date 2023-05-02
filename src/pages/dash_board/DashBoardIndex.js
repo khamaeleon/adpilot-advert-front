@@ -10,7 +10,7 @@ import {
 } from "../../assets/GlobalStyles";
 import {ResponsiveLine} from '@nivo/line'
 import React, {useCallback, useEffect, useState} from "react";
-import {useAtom} from "jotai/index";
+import {useAtom} from "jotai";
 import {dataTotalInfo} from "../../components/common/entity";
 import {chartDataAtom, commonProperties, platformStatusType} from "./entity/Chart";
 import {adverListColumn, adverStatusAtom, adverStatusDetailColumn,} from "./entity/Campaign";
@@ -372,7 +372,7 @@ function DashBoardIndex() {
     }
   }, [searchCondition])
 
-  /**색
+  /**
    * 검색 버튼
    */
   const handleData = () => {
