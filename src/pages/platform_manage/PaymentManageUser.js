@@ -1,31 +1,39 @@
 import {
     Board,
     BoardContainer,
-    BoardHeader, BoardSearchDetail, BoardSearchResultTitle,
-    CalendarBox, CalendarIcon,
-    ColSpan2, ColSpan4,
-    CustomDatePicker, DateContainer, DefaultButton,
-    RowSpan, SaveExcelButton,
+    BoardHeader,
+    BoardSearchDetail,
+    BoardSearchResultTitle,
+    CalendarBox,
+    CalendarIcon,
+    ColSpan2,
+    ColSpan4,
+    CustomDatePicker,
+    DateContainer,
+    DefaultButton,
+    RowSpan,
+    SaveExcelButton,
     TitleContainer,
 } from "../../assets/GlobalStyles";
 import styled from 'styled-components';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useAtom} from "jotai";
 import Navigator from "../../components/common/Navigator";
 import ko from "date-fns/locale/ko";
-import { AdChargeButton } from "../../components/payment/user/AdCharge";
-import { RefundRequestButton } from "../../components/payment/user/RefundRequest";
-import { RegisterRefundInformationButton } from "../../components/payment/user/RegisterRefundInformation";
-import {
-    getThisMonth,
-    getToDay
-} from "../../common/DateUtils";
+import {AdChargeButton} from "../../components/payment/user/AdCharge";
+import {RefundRequestButton} from "../../components/payment/user/RefundRequest";
+import {RegisterRefundInformationButton} from "../../components/payment/user/RegisterRefundInformation";
+import {getThisMonth, getToDay} from "../../common/DateUtils";
 import {decimalFormat} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
-import {PaymentDetailsColumns, PaymentDetailsDataAtom, PointDetailsDataAtom, PointDetailsColumns} from "./entity/PaymentUser";
+import {
+    PaymentDetailsColumns,
+    PaymentDetailsDataAtom,
+    PointDetailsColumns,
+    PointDetailsDataAtom
+} from "./entity/PaymentUser";
 import Table from "../../components/table";
-import {dataTotalInfo} from "../../components/common/entity";
 // import {retrieveAdvertiserStatus} from "../../services/dash_board/ManageCampaignAxios";
 import {tokenResultAtom} from "../login/entity/Common";
 // import {searchConditionAtom} from "../dash_board/entity/Common";
