@@ -1,4 +1,4 @@
-import {AdminAxios} from "../../common/Axios"; // eslint-disable-line no-unused-vars
+import {AdminAxios, AdverAxios} from "../../common/Axios"; // eslint-disable-line no-unused-vars
 
 const ACTION_URL = '/adver/dashboard/';
 const ADVERTISER = 'advertiser-status';
@@ -28,6 +28,24 @@ export async function retrieveAdvertiserStatus(param) {
 export async function retrieveAdvertiserCampaignStatus(userId, param) {
   let returnVal = null;
   await AdminAxios('POST', ACTION_URL+userId+'/'+ADVERTISER, param)
+    .then((response) => {
+      if (response.responseCode.statusCode === 200) {
+        returnVal = response.data
+      } else {
+        returnVal = null
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+}
+
+/**
+ * 광고주 캠페인 리스트 조회
+ * @param userId
+ * @returns {Promise<null>}
+ */
+export async function retrieveUserAdvertiserCampaignStatus(userId, param) {
+  let returnVal = null;
+  await AdverAxios('POST', '/dashboard/'+userId+'/'+ADVERTISER, param)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data

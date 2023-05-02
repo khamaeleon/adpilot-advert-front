@@ -12,20 +12,21 @@ import {ResponsiveLine} from '@nivo/line'
 import React, {useCallback, useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import {dataTotalInfo} from "../../components/common/entity";
-import {chartDataAtom, commonProperties, platformStatusType} from "./entity/Chart";
-import {adverListColumn, adverStatusAtom, adverStatusDetailColumn,} from "./entity/Campaign";
+import {chartDataAtom, commonProperties, platformStatusType, userPlatformStatusType} from "./entity/Chart";
+import {adverListColumn, adverStatusAtom, adverStatusDetailColumn, userCampaignListColumn,} from "./entity/Campaign";
 import {productType, searchConditionAtom} from "./entity/Common";
 import {retrieveAdverOverview, retrieveOverview,} from "../../services/dash_board/ChartAxios";
 import {tokenResultAtom} from "../login/entity/Common";
 import TableDetail from "../../components/table/TableDetail";
 import {
   retrieveAdvertiserCampaignStatus,
-  retrieveAdvertiserStatus
+  retrieveAdvertiserStatus, retrieveUserAdvertiserCampaignStatus
 } from "../../services/dash_board/ManageCampaignAxios";
 import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../common/StringUtils";
 import Select from "react-select";
 import {DashBoardCondition} from "../../components/dashBoard/Condition";
 import {getThisMonth} from "../../common/DateUtils";
+import Table from "../../components/table";
 
 /** 플래폼 현황 차트 **/
 function ChartComponent(props) {
@@ -66,9 +67,6 @@ function ChartComponent(props) {
             Object.assign(data[key],{cpc:item.costAmount !== 0 ? item?.costAmount / item.clickCount : 0})
             Object.assign(data[key],{costPerConversion: item.costAmount !== 0 ? item?.costAmount / item.totalConversionCount : 0})
             Object.assign(data[key],{avgConversionAmount: item.totalConversionAmount !== 0 ? item.totalConversionAmount / item.totalConversionCount : 0})
-            Object.assign(data[key],{sessionRoas: item.sessionConversionAmount !== 0 ? (item.sessionConversionAmount / item.costAmount) *100 : 0})
-            Object.assign(data[key],{directRoas: item.directConversionAmount !== 0 ? (item.directConversionAmount / item.costAmount) *100 : 0})
-            Object.assign(data[key],{exposureRoas: item.exposureConversionAmount !== 0 ? (item.exposureConversionAmount / item.costAmount) *100 : 0})
             Object.assign(data[key],{totalRoas: item.totalConversionAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
             Object.assign(data[key],{ecpm: item.costAmount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0},)
             Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.clickCount) *100 : 0})
@@ -299,7 +297,7 @@ function ChartComponent(props) {
             <Select styles={defaultStyle}
                     isDisabled={!chartData[dataType].status}
                     components={{IndicatorSeparator: () => null}}
-                    options={platformStatusType}
+                    options={tokenUserInfo.role !== 'NORMAL' ? platformStatusType : userPlatformStatusType}
                     value={platformStatusType.filter(options => options.value === dataType)}
                     isOptionDisabled={option => option.value === dataType2}
                     onChange={handleChangeDataType}
@@ -314,7 +312,7 @@ function ChartComponent(props) {
             <Select styles={defaultStyle}
                     isDisabled={!chartData[dataType2].status}
                     components={{IndicatorSeparator: () => null}}
-                    options={platformStatusType}
+                    options={tokenUserInfo.role !== 'NORMAL' ? platformStatusType : userPlatformStatusType}
                     value={platformStatusType.filter(options => options.value === dataType2)}
                     isOptionDisabled={option => option.value === dataType}
                     onChange={handleChangeDataType2}
@@ -371,6 +369,17 @@ function DashBoardIndex() {
           setAdverStatusData([])
         }
       })
+    } else {
+      retrieveUserAdvertiserCampaignStatus(tokenUserInfo.id, searchCondition).then(response => {
+        if(response !== null) {
+          setAdverStatusData(response)
+          setTotalInfo({
+            totalCount: response?.length
+          })
+        } else {
+          setAdverStatusData([])
+        }
+      })
     }
   }, [searchCondition])
 
@@ -394,22 +403,29 @@ function DashBoardIndex() {
           <DashBoardCondition role={tokenUserInfo.role} searchType={productType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleData={handleData} keyword={keyword} setKeyword={setKeyword}/>
         </DashBoardCard>
         <DashBoardCard>
-          <DashBoardHeader>플랫폼 현황</DashBoardHeader>
+          <DashBoardHeader>{tokenUserInfo.role !== 'NORMAL' ? '플랫폼' : '광고'} 현황</DashBoardHeader>
           <DashBoardBody>
             <ChartComponent searchCondition={searchCondition} />
           </DashBoardBody>
-          <DashBoardHeader style={{marginTop: 30}}>광고주 현황</DashBoardHeader>
+          <DashBoardHeader style={{marginTop: 30}}>{tokenUserInfo.role !== 'NORMAL' ? '광고주' : '캠페인'} 현황</DashBoardHeader>
           <DashBoardBody>
-            <TableDetail columns={adverListColumn}
-                         totalCount={[totalInfo.totalCount, '광고주']}
-                         showHoverRows={false}
-                         activeCell={[0]}
-                         data={adverStatusData}
-                         detailData={handleFetchDetailData}
-                         detailColumn={adverStatusDetailColumn}
-                         detailGroups={false}
-                         idProperty={'userId'}
-                         groups={false}/>
+            {tokenUserInfo.role !== 'NORMAL' ?
+              <TableDetail columns={adverListColumn}
+                           totalCount={[totalInfo.totalCount, '광고주']}
+                           showHoverRows={false}
+                           activeCell={[0]}
+                           data={adverStatusData}
+                           detailData={handleFetchDetailData}
+                           detailColumn={adverStatusDetailColumn}
+                           detailGroups={false}
+                           idProperty={'userId'}
+                           groups={false}/>
+              : <Table columns={userCampaignListColumn}
+                       totalCount={[totalInfo.totalCount, '캠페인']}
+                       showHoverRows={false}
+                       activeCell={[0]}
+                       data={adverStatusData}/>
+            }
           </DashBoardBody>
         </DashBoardCard>
       </>

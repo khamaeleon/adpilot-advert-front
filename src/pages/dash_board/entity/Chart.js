@@ -18,12 +18,23 @@ export const platformStatusType = [
   {id: 14, value: "totalRoas", label: "총매출"},
   {id: 15, value: "ecpm", label: "ECPM"},
 ]
-/*플랫폼 현황 차트 데이터*/
-export const platformStatusAtom = atom([])
+
+/* 특정 광고주 광고 현황 차트 셀렉트 */
+export const userPlatformStatusType = [
+  {id: 1, value: "userCount", label: "광고주수"},
+  {id: 2, value: "totalExposureCount", label: "총노출수"},
+  {id: 3, value: "totalClickCount", label: "총클릭수"},
+  {id: 4, value: "clickRate", label: "클릭률"},
+  {id: 5, value: "costAmount", label: "비용"},
+  {id: 6, value: "cpc", label: "CPC"},
+  {id: 7, value: "conversionRate", label: "전환율"},
+  {id: 8, value: "costPerConversion", label: "전환단가"},
+  {id: 9, value: "avgConversionAmount", label: "구매액"},
+  {id: 14, value: "totalRoas", label: "총매출"},
+  {id: 15, value: "ecpm", label: "ECPM"},
+]
 
 /*플랫폼 현황 차트 항목별 합산*/
-export const lineDataAtom = atom(null)
-export const cloneLineDataAtom = atom(null)
 export const chartDataAtom = atom({
   clickCount: {status: true, label: '클릭수', totalCount: 0},
   exposureCount: {status: true, label: '노출수', totalCount: 0},

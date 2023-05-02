@@ -171,8 +171,8 @@ export const adverListColumn = [
     showColumnMenuTool: false
   },
   {
-    name: 'epcm',
-    header: 'EPCM',
+    name: 'ecpm',
+    header: 'ECPM',
     minWidth: 100,
     render: ({value}) => <p className={'won'}>{moneyToFixedFormat(value)}</p>,
     showColumnMenuTool: false
@@ -245,7 +245,8 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({value, data}) => {
-      return  <Link to={'/board/campaignBudgetDetail'} state={{id: data?.campaignBudgetId}}>{value}</Link>
+      let valueFormat = value < 0 ? '무제한': <p>{decimalFormat(value)} 원</p>
+      return  <Link to={'/board/campaignBudgetDetail'} state={{id: data?.campaignBudgetId}}>{valueFormat}</Link>
     }
   },
   {
@@ -300,7 +301,7 @@ export const adverStatusDetailColumn = [
     minWidth: 150,
     textAlign: 'center',
     render: ({data}) => {
-      let value = data.clickCount / (data.exposureCount*100);
+      let value = (data.clickCount / data.exposureCount)*100;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -338,7 +339,7 @@ export const adverStatusDetailColumn = [
     minWidth: 100,
     textAlign: 'center',
     render: ({data}) => {
-      let value = data.totalConversionCount / (data.clickCount*100);
+      let value = (data.totalConversionCount / data.clickCount)*100;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -375,7 +376,7 @@ export const adverStatusDetailColumn = [
       )
     },
     render: ({data}) => {
-      let value = data.sessionConversionAmount / (data.costAmount *100);
+      let value = (data.sessionConversionAmount / data.costAmount) *100;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -390,7 +391,7 @@ export const adverStatusDetailColumn = [
       )
     },
     render: ({data}) => {
-      let value = data.directConversionAmount / (data.costAmount *100);
+      let value = (data.directConversionAmount / data.costAmount) *100;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -405,7 +406,7 @@ export const adverStatusDetailColumn = [
       )
     },
     render: ({data}) => {
-      let value = data.exposureConversionAmount / (data.costAmount *100);
+      let value = (data.exposureConversionAmount / data.costAmount) *100;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -420,17 +421,210 @@ export const adverStatusDetailColumn = [
       )
     },
     render: ({data}) => {
-      let value = data.totalConversionAmount / (data.costAmount *100);
+      let value = (data.totalConversionAmount / data.costAmount) *100;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
   },
   {
-    name: 'epcm',
+    name: 'ecpm',
     textAlign: 'center',
     minWidth: 150,
-    header: 'EPCM',
-    render: ({value}) => <p className={'won'}>{moneyToFixedFormat(value)}</p>,
+    header: 'ECPM',
+    render: ({data}) => {
+      let value = (data.totalConversionAmount / data.exposureCount) *1000;
+      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    },
+    showColumnMenuTool: false
+  }
+]
+
+/**
+ * 특정 광고주 캠페인 현황 리스트 컬럼
+ */
+export const userCampaignListColumn = [
+  {
+    name: 'publishYn',
+    header: '연동 상태',
+    textAlign: 'center',
+    minWidth: 100,
+    maxWidth: 100,
+    showColumnMenuTool: false,
+    sortable: false,
+    render: ({value}) => <p>{value !== 'N' ? 'OFF' : 'ON'}</p>
+  },
+  {
+    name: 'campaignName',
+    header: '캠페인명',
+    textAlign: 'center',
+    minWidth: 150,
+    showColumnMenuTool: false,
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
+    render: ({data, value}) => {
+      return <Link to={'/board/campaignInfoDetail'} state={{id: data?.campaignId}}>{value}</Link>
+    }
+  },
+  {
+    name: 'campaignBudgetDesc',
+    header: '예산설정',
+    minWidth: 150,
+    textAlign: 'center',
+    showColumnMenuTool: false,
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
+    render: ({value, data}) => {
+      let valueFormat = value < 0 ? '무제한': <p>{decimalFormat(value)} 원</p>
+      return  <Link to={'/board/campaignBudgetDetail'} state={{id: data?.campaignBudgetId}}>{valueFormat}</Link>
+    }
+  },
+  {
+    name: 'advertiseGroupName',
+    header: '광고 그룹',
+    textAlign: 'center',
+    minWidth: 150,
+    showColumnMenuTool: false,
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
+    render: ({value, data}) => {
+      return <Link to={'/board/campaignGroupDetail'} state={{id: data?.advertiseGroupId}}>{value}</Link>
+    }
+  },
+  {
+    name: 'creativeName',
+    header: '크리에이티브',
+    textAlign: 'center',
+    minWidth: 150,
+    showColumnMenuTool: false,
+    cellProps: {
+      style: {
+        textDecoration: 'underline'
+      }
+    },
+    render: ({value, data}) => {
+      return <Link to={'/board/campaignCreativeDetail'} state={{id: data?.creativeId}}>{value}</Link>
+    }
+  },
+  {
+    name: 'exposureCount',
+    header: '노출수',
+    minWidth: 150,
+    showColumnMenuTool: false,
+    textAlign: 'center',
+    render: ({value}) => <p>{decimalFormat(value)}</p>,
+  },
+  {
+    name: 'clickCount',
+    header: '클릭수',
+    minWidth: 150,
+    showColumnMenuTool: false,
+    textAlign: 'center',
+    render: ({value}) => <p>{decimalFormat(value)}</p>,
+  },
+  {
+    name: 'clickRate',
+    header: '클릭률',
+    minWidth: 150,
+    textAlign: 'center',
+    render: ({data}) => {
+      let value = (data.clickCount / data.exposureCount)*100;
+      return <p className={'pct'}>{numberToFixedFormat(value)}</p>
+    },
+    showColumnMenuTool: false
+  },
+  {
+    name: 'costAmount',
+    header: '비용',
+    minWidth: 150,
+    textAlign: 'center',
+    render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>,
+    showColumnMenuTool: false
+  },
+  {
+    name: 'cpc',
+    header: 'CPC',
+    minWidth: 150,
+    textAlign: 'center',
+    render: ({data}) => {
+      let value = data?.costAmount / data.clickCount;
+      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    },
+    showColumnMenuTool: false
+  },
+  {
+    name: 'totalConversionCount',
+    header: '전환 수',
+    minWidth: 100,
+    textAlign: 'center',
+    render: ({value}) => <p>{decimalFormat(value)}</p>,
+    showColumnMenuTool: false
+  },
+  {
+    name: 'conversionRate',
+    header: '전환률',
+    minWidth: 100,
+    textAlign: 'center',
+    render: ({data}) => {
+      let value = (data.totalConversionCount / data.clickCount)*100;
+      return <p className={'pct'}>{numberToFixedFormat(value)}</p>
+    },
+    showColumnMenuTool: false
+  },
+  {
+    name: 'costPerConversion',
+    header: '전환 단가',
+    minWidth: 150,
+    textAlign: 'center',
+    render: ({data}) => {
+      let value = data?.costAmount / data.totalConversionCount;
+      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    },
+    showColumnMenuTool: false
+  },
+  {
+    name: 'avgConversionAmount',
+    header: '평균 구매액',
+    minWidth: 150,
+    textAlign: 'center',
+    render: ({data}) => {
+      let value = data.totalConversionAmount / data.totalConversionCount;
+      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    },
+    showColumnMenuTool: false
+  },
+  {
+    name: 'totalRoas',
+    textAlign: 'center',
+    minWidth: 150,
+    header: () => {
+      return(
+        <div><p>총매출</p><p style={{fontSize: 12}}>(ROAS)</p></div>
+      )
+    },
+    render: ({data}) => {
+      let value = (data.totalConversionAmount / data.costAmount) *100;
+      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    },
+    showColumnMenuTool: false
+  },
+  {
+    name: 'ecpm',
+    textAlign: 'center',
+    minWidth: 150,
+    header: 'ECPM',
+    render: ({data}) => {
+      let value = (data.totalConversionAmount / data.exposureCount) *1000;
+      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    },
     showColumnMenuTool: false
   }
 ]

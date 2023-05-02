@@ -16,25 +16,25 @@ export async function retrieveOverview(param) {
       } else {
         returnVal = null
       }
-    }).catch((e) => returnVal = false)
+    }).catch((e) => returnVal = null)
   return returnVal;
 }
 
 /**
- * 특정 광고주 플랫폼 현황 조회
+ * 특정 광고주 광고 현황 조회
  * @param userId
  * @returns {Promise<null>}
  */
 export async function retrieveAdverOverview(userId, param) {
   let returnVal = null;
-  await AdverAxios('POST', ACTION_URL+userId+'/'+OVERVIEW, param)
+  await AdverAxios('POST', '/dashboard/'+userId+'/'+OVERVIEW, param)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
       } else {
         returnVal = null
       }
-    }).catch((e) => returnVal = false)
+    }).catch((e) => returnVal = null)
   return returnVal;
 }
 
