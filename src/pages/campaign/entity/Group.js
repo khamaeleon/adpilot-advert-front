@@ -28,11 +28,10 @@ export const allowInventoryIdsAtom = atom(null)
 export const disAllowInventoryIdsAtom = atom(null)
 
 export const noViewType = [
-    {key:0, value:'DIRECT', label:'직접선택'},
-    {key:1, value:'3', label:'3일'},
-    {key:2, value:'5', label:'5일'},
-    {key:3, value:'7', label:'7일'},
-    {key:4, value:'10', label:'10일'},
-    {key:5, value:'15', label:'15일'}
+    {key:1, value:3, label:'3일'},
+    {key:2, value:5, label:'5일'},
+    {key:3, value:7, label:'7일'},
+    {key:4, value:10, label:'10일'},
+    {key:5, value:15, label:'15일'}
 ]
 

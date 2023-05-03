@@ -47,9 +47,10 @@ export function CampaignTwo() {
   const {register, handleSubmit,reset,setError,setValue, control, formState: {errors}} = useFormContext()
 
   useEffect(() => {
-    console.log(campaignBudgetInfo)
+
     if (campaignBasicInfo.step !=='INIT') {
       //수정
+      console.log(campaignBudgetInfo)
       selBudgetInfo(campaignBasicInfo.campaignId).then(response => {
         console.log(response)
         setCampaignBudgetInfo(response)
