@@ -26,14 +26,14 @@ import {Controller, useFormContext} from "react-hook-form";
 import {campaignBasicInfoAtom, campaignTemporaryListAtom} from "../entity/Info";
 import {PixelModal} from "../../pixel/PixelList";
 import {selAdverPixelDetailList} from "../../../services/header/ManagePixelAxios";
-import {resistCampaignBasic, selEnumInfo, selTemporaryList} from "../../../services/campaign/InfoAxios";
+import {resistCampaignBasic, selBasicInfo, selEnumInfo, selTemporaryList} from "../../../services/campaign/InfoAxios";
 import moment from "moment/moment";
 import {TemporaryListModal} from "../../../components/campaign/TemporaryListModal";
 
 export function CampaignOne() {
   const [, setStepCampaign] = useAtom(stepCampaignAtom)
   const [campaignBasicInfo, setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
-  const [campaignTemporaryList, setCampaignTemporaryList] = useAtom(campaignTemporaryListAtom)
+  const [, setCampaignTemporaryList] = useAtom(campaignTemporaryListAtom)
   const [adverInfo, setAdverInfo] = useState(null)
   const [temporaryBool, setTemporaryBool] = useState(false)
 
@@ -68,13 +68,43 @@ export function CampaignOne() {
       setPixelList(clonePixelList)
     })
     selTemporaryList(data.id).then(response =>{
-      console.log(response)
       setCampaignTemporaryList(response)
       setTemporaryBool(true)
     })
   }
   const handleSelectedTemporaryList =(data) =>{
-    console.log(data)
+    selBasicInfo(data.id).then(response => {
+      console.log(response)
+      let goalTypeTemp=''
+      if(response.goal.indexOf('CONVERSION') ===0 ){
+        goalTypeTemp = 'CAMPAIGN_CONVERSION_GOAL'
+        selEnumInfo('CAMPAIGN_CONVERSION_GOAL').then(response => {
+          setGoalList(response.data)
+        })
+      }else if(response.goal.indexOf('VISIT') ===0 ){
+        goalTypeTemp = 'CAMPAIGN_VISIT_GOAL'
+        selEnumInfo('CAMPAIGN_VISIT_GOAL').then(response => {
+          setGoalList(response.data)
+        })
+      }else if(response.goal.indexOf('VIEW') ===0 ){
+        goalTypeTemp='CAMPAIGN_VIEW_GOAL'
+        selEnumInfo('CAMPAIGN_VIEW_GOAL').then(response => {
+          setGoalList(response.data)
+        })
+      }
+      setCampaignBasicInfo({
+        ...campaignBasicInfo,
+        campaignId: data.id,
+        pixelId: response.pixelId,
+        goal:response.goal,
+        goalValue:response.goalValue,
+        goalType: goalTypeTemp,
+        productType:response.productType,
+        name:response.name,
+        step:response.step
+      })
+    })
+    setTemporaryBool(false)
   }
 
 
@@ -105,6 +135,7 @@ export function CampaignOne() {
     })
     setCampaignBasicInfo({
       ...campaignBasicInfo,
+      goalType: type,
       goal: '',
     })
   }
@@ -118,21 +149,26 @@ export function CampaignOne() {
 
   const onSubmit = (data) => {
     console.log(campaignBasicInfo)
-    resistCampaignBasic({
-      ...campaignBasicInfo,
-      goal:campaignBasicInfo.goal.value,
-      pixelId:campaignBasicInfo.pixelId.value,
-      name:campaignBasicInfo.productType + '_' + campaignBasicInfo.goal.value + '_' + moment().format('YYYY-MM-DD hh:mm:ss').replace(' ' ,'_')
-    }).then(response =>{
-      if(response){
-        setCampaignBasicInfo({
-          ...campaignBasicInfo,
-          campaignId:response.value
-        })
-        setStepCampaign({steps: 1})
-      }
-    })
-
+    if(campaignBasicInfo.step !==undefined){
+      setStepCampaign({steps: 1})
+     //수정
+    }else{
+      resistCampaignBasic({
+        ...campaignBasicInfo,
+        goal:campaignBasicInfo.goal.value,
+        pixelId:campaignBasicInfo.pixelId.value,
+        name:campaignBasicInfo.productType + '_' + campaignBasicInfo.goal.value + '_' + moment().format('YYYY-MM-DD hh:mm:ss').replace(' ' ,'_')
+      }).then(response =>{
+        if(response){
+          setCampaignBasicInfo({
+            ...campaignBasicInfo,
+            campaignId:response.value,
+            step:'INIT'
+          })
+          setStepCampaign({steps: 1})
+        }
+      })
+    }
   }
 
   return (
@@ -189,7 +225,7 @@ export function CampaignOne() {
                         <Select options={pixelList !== null ? pixelList :[]}
                                 placeholder={'최적화 픽셀 선택'}
                                 {...field}
-                                value={campaignBasicInfo !== null ? campaignBasicInfo.pixelId : ''}
+                                value={campaignBasicInfo !== null && pixelList !== null  ? pixelList.find(item =>item.value ===campaignBasicInfo.pixelId) : ''}
                                 onChange={handleChangePixel}
                                 styles={{
                                   input: (baseStyles, state) => (
@@ -279,7 +315,7 @@ export function CampaignOne() {
                         styles={selectStyle}
                         placeholder={'목표 선택'}
                         {...field}
-                        value={campaignBasicInfo !== null && campaignBasicInfo.goal ? campaignBasicInfo.goal : ''}
+                        value={campaignBasicInfo !== null && goalList !== null ? goalList.find(item =>item.value  === campaignBasicInfo.goal) : ''}
                         onChange={handleChangeTargetDetail}
                       />
                     )}

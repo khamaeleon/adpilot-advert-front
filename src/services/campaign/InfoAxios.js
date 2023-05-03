@@ -17,10 +17,10 @@ export async function selEnumInfo(enumInfo) {
 };
 export async function resistCampaignBasic(campaignInfo) {
   let returnVal = null;
-  await AdminAxios('POST', ACTION_URL ,campaignInfo)
+  await AdminAxios('PUT', ACTION_URL ,campaignInfo)
     .then((response) => {
       const {responseCode,data} =response
-      if(responseCode.statusCode ===201){
+      if(responseCode.statusCode ===200){
         returnVal = data
       }else{
         returnVal = false
@@ -42,3 +42,15 @@ export async function selTemporaryList(userId) {
   return returnVal;
 };
 
+export async function selBasicInfo(userId) {
+  let returnVal = null;
+  await AdminAxios('GET', ACTION_URL+'/'+userId)
+    .then((response) => {
+      if(response.responseCode.statusCode ===200){
+        returnVal = response.data
+      }else{
+        returnVal = null
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+};

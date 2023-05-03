@@ -615,7 +615,7 @@ export function CampaignFour() {
   const {register, handleSubmit, control, formState: {errors}} = useFormContext()
 
   useEffect(() => {
-    console.log(campaignBasicInfo)
+    console.log(campaignCreativeInfo)
     selEnumInfo('BANNER_SIZE').then(response => {
       console.log(response.data)
       setBannerSize(response.data)
@@ -690,13 +690,13 @@ export function CampaignFour() {
                                   onClick={() => selCreativeGroup('BANNER')}
                                   className={campaignCreativeInfo.creativeType === 'BANNER' ? 'on' : null}
                   >
-                    {creativeType.find(value => value.value === 'BANNER').label}
+                    {creativeType.find(value => value.value === 'BANNER')}
                   </CampaignButton>
                   <CampaignButton type={'button'}
                                   onClick={() => selCreativeGroup('NATIVE')}
                                   className={campaignCreativeInfo.creativeType === 'NATIVE' ? 'on' : null}
                   >
-                    {creativeType.find(value => value.value === 'NATIVE').label}
+                    {creativeType.find(value => value.value === 'NATIVE')}
                   </CampaignButton>
                 </ColSpan1>
               }
@@ -712,6 +712,10 @@ export function CampaignFour() {
                     value={campaignCreativeInfo.pcLandingUrl}
                     {...register('pcLandingUrl', {
                       required: 'PC 랜딩 URL을 작성해주세요',
+                      pattern:{
+                        value:  /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi,
+                        message: "http(s)://가 포함된 url 주소를 확인해주세요."
+                      },
                       onChange: (e) => handleChangeInputs(e)
                     })}
                   />
@@ -725,6 +729,10 @@ export function CampaignFour() {
                     value={campaignCreativeInfo.mobLandingUrl}
                     {...register('mobLandingUrl', {
                       required: '모바일 랜딩 URL을 작성해주세요',
+                      pattern:{
+                        value:  /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi,
+                        message: "http(s)://가 포함된 url 주소를 확인해주세요."
+                      },
                       onChange: (e) => handleChangeInputs(e)
                     })}
                   />

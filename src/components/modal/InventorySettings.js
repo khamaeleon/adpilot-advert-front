@@ -7,8 +7,12 @@ import {ColSpan2, DefaultButton, defaultStyle, RowSpan, Span4} from "../../asset
 import {SmallButton} from "../../pages/campaign/styles/common";
 import Select from "react-select";
 import {Icon} from "../table";
-import {campaignGroupInfoAtom, mediaInventoryInfo, mediaInventoryInfoAtom} from "../../pages/campaign/entity/Group";
-import {selSearchMediaInfo} from "../../services/campaign/GroupAxios";
+import {
+  allowInventoryIdsAtom,
+  campaignGroupInfoAtom, disAllowInventoryIdsAtom,
+  mediaInventoryInfoAtom
+} from "../../pages/campaign/entity/Group";
+import {selSearchMediaInfo, selSearchMediaList} from "../../services/campaign/GroupAxios";
 
 export function InventoryButton(props) {
   const {title, onSubmit, btnStyle, type,historyAdd} = props;
@@ -31,24 +35,26 @@ export function InventoryButton(props) {
 function SearchModal (props) {
   const {type} =props
   const [, setModal] = useAtom(modalController)
-  const [selectedInventory, setSelectedInventory] = useState([])
+  const [allowInventoryIds, setAllowInventoryIds] = useAtom(allowInventoryIdsAtom)
+  const [disAllowInventoryIds, setDisAllowInventoryIds] = useAtom(disAllowInventoryIdsAtom)
   const [searchKeyword,setSearchKeyword] =useState('')
   const [mediaInventoryInfo,setMediaInventoryInfo] = useAtom(mediaInventoryInfoAtom)
   const [campaignGroupInfo, setCampaignGroupInfo] = useAtom(campaignGroupInfoAtom)
 
   useEffect(()=>{
-    if(type==='expose'){
-      setCampaignGroupInfo({
-        ...campaignGroupInfo,
-        allowInventoryIds:selectedInventory
+    console.log(campaignGroupInfo.allowInventoryIds)
+    if(type==='allow'){
+      let param ={inventoryIds:campaignGroupInfo.allowInventoryIds }
+      selSearchMediaList(param).then(response => {
+        setAllowInventoryIds(response)
       })
     }else{
-      setCampaignGroupInfo({
-        ...campaignGroupInfo,
-        disAllowInventoryIds:selectedInventory
+      let param ={inventoryIds:campaignGroupInfo.disAllowInventoryIds }
+      selSearchMediaList(param).then(response => {
+        setDisAllowInventoryIds(response)
       })
     }
-  },[type])
+  },[])
 
   const handleSearchKeyword = (event)=>{
     setSearchKeyword(event.target.value)
@@ -75,45 +81,45 @@ function SearchModal (props) {
   }
 
   const handleClickSelectItem = (selectItem) => {
-    if(type==='expose'){
-      if(selectedInventory.length !== 0) {
-        if (selectedInventory.find(item => item.inventoryId === selectItem.inventoryId) !== undefined){
-          setSelectedInventory([...selectedInventory.filter(item => item.inventoryId !== selectItem.inventoryId)])
+    if(type==='allow'){
+      if(allowInventoryIds.length !== 0) {
+        if (allowInventoryIds.find(item => item.inventoryId === selectItem.inventoryId) !== undefined){
+          setAllowInventoryIds([...allowInventoryIds.filter(item => item.inventoryId !== selectItem.inventoryId)])
           setCampaignGroupInfo({
             ...campaignGroupInfo,
             allowInventoryIds:[...campaignGroupInfo.allowInventoryIds.filter(value => value !== selectItem.inventoryId)]
           })
         } else {
-          setSelectedInventory([...selectedInventory.concat(selectItem)])
+          setAllowInventoryIds([...allowInventoryIds.concat(selectItem)])
           setCampaignGroupInfo({
             ...campaignGroupInfo,
             allowInventoryIds:[...campaignGroupInfo.allowInventoryIds.concat(selectItem.inventoryId)]
           })
         }
       } else {
-        setSelectedInventory([...selectedInventory,selectItem])
+        setAllowInventoryIds([...allowInventoryIds,selectItem])
         setCampaignGroupInfo({
           ...campaignGroupInfo,
           allowInventoryIds:[...campaignGroupInfo.allowInventoryIds,selectItem.inventoryId]
         })
       }
     }else{
-      if(selectedInventory.length !== 0) {
-        if (selectedInventory.find(item => item.inventoryId === selectItem.inventoryId) !== undefined){
-          setSelectedInventory([...selectedInventory.filter(item => item.inventoryId !== selectItem.inventoryId)])
+      if(disAllowInventoryIds.length !== 0) {
+        if (disAllowInventoryIds.find(item => item.inventoryId === selectItem.inventoryId) !== undefined){
+          setDisAllowInventoryIds([...disAllowInventoryIds.filter(item => item.inventoryId !== selectItem.inventoryId)])
           setCampaignGroupInfo({
             ...campaignGroupInfo,
             disAllowInventoryIds:[...campaignGroupInfo.disAllowInventoryIds.filter(value => value !== selectItem.inventoryId)]
           })
         } else {
-          setSelectedInventory([...selectedInventory.concat(selectItem)])
+          setDisAllowInventoryIds([...disAllowInventoryIds.concat(selectItem)])
           setCampaignGroupInfo({
             ...campaignGroupInfo,
             disAllowInventoryIds:[...campaignGroupInfo.disAllowInventoryIds.concat(selectItem.inventoryId)]
           })
         }
       } else {
-        setSelectedInventory([...selectedInventory,selectItem])
+        setDisAllowInventoryIds([...disAllowInventoryIds,selectItem])
         setCampaignGroupInfo({
           ...campaignGroupInfo,
           disAllowInventoryIds:[...campaignGroupInfo.disAllowInventoryIds,selectItem.inventoryId]
@@ -152,7 +158,7 @@ function SearchModal (props) {
               <SearchInventoryItemResult>
                 {mediaInventoryInfo !==null && mediaInventoryInfo.map((item, key) => {
                   return (
-                    <InventoryItem key={key} onClick={() => handleClickSelectItem(item)} active={selectedInventory.find(is => is.inventoryId === item.inventoryId) !== undefined ? true : null}>
+                    <InventoryItem key={key} onClick={() => handleClickSelectItem(item)} active={type ==='allow' ? allowInventoryIds.find(is => is.inventoryId === item.inventoryId) !== undefined ? true : null :disAllowInventoryIds.find(is => is.inventoryId === item.inventoryId) !== undefined ? true : null}>
                       <MediaName>{item.siteName}</MediaName>
                       <InventoryName>{item.inventoryName}</InventoryName>
                       <UserId>{item.username}</UserId>
@@ -170,7 +176,7 @@ function SearchModal (props) {
             <div style={{display:'flex',flexDirection:'column',width: '100%'}}>
               <SelectedInventoryMain>
                 <div>선택된 지면</div>
-                <div>총 <span>{selectedInventory.length}</span>건의 광고 그룹</div>
+                <div>총 <span>{type ==='allow' ? allowInventoryIds!==null && allowInventoryIds.length : disAllowInventoryIds !==null && disAllowInventoryIds.length}</span>건의 광고 그룹</div>
               </SelectedInventoryMain>
               <SelectedInventoryHeader>
                 <MediaName>매체명</MediaName>
@@ -182,7 +188,20 @@ function SearchModal (props) {
                 <BannerSize>지면 사이즈</BannerSize>
               </SelectedInventoryHeader>
               <SelectedInventoryResult>
-                {selectedInventory.map((item, key) => {
+                {type ==='allow' && allowInventoryIds !== null && allowInventoryIds.map((item, key) => {
+                  return (
+                    <SelectedInventoryResultItem key={key} onClick={() => handleClickSelectItem(item)}>
+                      <MediaName>{item.siteName}</MediaName>
+                      <InventoryName>{item.inventoryName}</InventoryName>
+                      <UserId>{item.username}</UserId>
+                      <Category>{item.category1}</Category>
+                      <Code><a href={item.siteUrl} target={'_blank'}>사이트보기</a></Code>
+                      <Device>{item.deviceType}</Device>
+                      <BannerSize>{item.bannerSize.replace('IMG','')}</BannerSize>
+                    </SelectedInventoryResultItem>
+                  )
+                })}
+                {type !=='allow' && disAllowInventoryIds !== null && disAllowInventoryIds.map((item, key) => {
                   return (
                     <SelectedInventoryResultItem key={key} onClick={() => handleClickSelectItem(item)}>
                       <MediaName>{item.siteName}</MediaName>

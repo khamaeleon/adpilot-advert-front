@@ -7,5 +7,7 @@ export const campaignBudgetInfoAtom =atom({
   priceEventId:'',
   biddingType:'CPC',
   infiniteBudget:false,
-  budgetRate: 50
+  budgetRate: 50,
+  maxBiddingPrice:0,
+  dailyAvgBudget:0
 })

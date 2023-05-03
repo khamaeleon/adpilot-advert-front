@@ -23,10 +23,8 @@ export function TemporaryListModal(props) {
 
 function TemporaryList (props) {
   const [, setModal] = useAtom(modalController)
-  const [campaignTemporaryList, setCampaignTemporaryList] = useAtom(campaignTemporaryListAtom)
-  const [adverSearchInfo, setAdverSearchInfo] = useState([])
+  const [campaignTemporaryList] = useAtom(campaignTemporaryListAtom)
   const [selectedItem, setSelectedItem] = useState({})
-  const [searchKeyword, setSearchKeyword] = useState('')
 
   const handleSelect = (item) => {
     setSelectedItem(item)
@@ -40,10 +38,10 @@ function TemporaryList (props) {
   }
   return (
     <div>
-      <ModalHeader title={"광고주 검색"}/>
+      <ModalHeader title={"임시저장 리스트"}/>
       <ModalBody>
         <MediaSearchResult>
-          {campaignTemporaryList.length !== 0 &&
+          {campaignTemporaryList !==null && campaignTemporaryList.length !== 0 &&
             <>
               <table>
                 <thead>
@@ -56,7 +54,7 @@ function TemporaryList (props) {
                   return (
                     <tr key={key}
                         onClick={() => handleSelect(item)}
-                        style={selectedItem.adverName === item.name ? {
+                        style={selectedItem.name === item.name ? {
                           backgroundColor: "#f5811f",
                           color: '#fff'
                         } : null}>
@@ -68,8 +66,8 @@ function TemporaryList (props) {
               </table>
             </>
           }
-          {campaignTemporaryList.length === 0 &&
-            <div>검색결과 에러.</div>
+          {campaignTemporaryList !==null && campaignTemporaryList.length === 0 &&
+            <div>임시저장된 정보가 없습니다.</div>
           }
           {props.historyAdd === undefined && <MediaSelectedButton onClick={handleSubmit}>선택 완료</MediaSelectedButton>}
         </MediaSearchResult>

@@ -30,7 +30,7 @@ import {Controller, useFormContext} from "react-hook-form";
 import {useAtom} from "jotai";
 import {stepCampaignAtom} from "../entity";
 import {campaignBasicInfoAtom} from "../entity/Info";
-import {selMediaCategoryInfo, updateCampaignConfigInventory} from "../../../services/campaign/GroupAxios";
+import {selGroupInfo, selMediaCategoryInfo, updateCampaignConfigInventory} from "../../../services/campaign/GroupAxios";
 import {campaignGroupInfoAtom, mediaCategoryAtom, noViewType} from "../entity/Group";
 import {dateFormat} from "../../../common/StringUtils";
 
@@ -55,10 +55,12 @@ export function CampaignThree() {
 
   useEffect(() => {
     console.log(campaignBasicInfo)
-    setCampaignGroupInfo({
-      ...campaignGroupInfo,
-
-    })
+    if(campaignBasicInfo.step.includes('STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED')){
+      selGroupInfo(campaignBasicInfo.campaignId).then(response =>{
+        console.log(response)
+        setCampaignGroupInfo(response)
+      })
+    }
     selMediaCategoryInfo().then(response => {
       if (response) {
         setMediaCategory(response)
@@ -210,7 +212,10 @@ export function CampaignThree() {
   const setAudienceTargetConfigType = (audienceTargetConfigType) =>{
     setCampaignGroupInfo({
       ...campaignGroupInfo,
-      audienceTargetConfigType: audienceTargetConfigType
+      audienceTargetConfigType: audienceTargetConfigType,
+      audienceTargetConfig:{
+
+      }
     })
   }
   const handleNoViewTypeAudience = (noViewTypeAudience) => {
@@ -342,7 +347,7 @@ export function CampaignThree() {
                     <span>직접 선택</span>
                   </label>
                   {campaignGroupInfo.exposeInventoryType === 'MANUAL' &&
-                    <InventoryButton title={'지면선택'} type={'expose'}/>
+                    <InventoryButton title={'지면선택'} type={'allow'}/>
                   }
                 </ColSpan2>
               </RelativeDiv>
@@ -475,6 +480,7 @@ export function CampaignThree() {
                     name={'targetCustomer'}
                     id={'MANUAL'}
                     onClick={() => setUserTargetConfigType('MANUAL')}
+                    checked={campaignGroupInfo.userTargetConfigType === 'MANUAL'}
                   />
                   <span>개별 설정</span>
                 </label>
@@ -752,13 +758,11 @@ export function CampaignThree() {
               <Input
                 type={'text'}
                 placeholder={'광고 그룹명'}
+                value={campaignGroupInfo.name}
                 {...register('name', {
-                  required: {
-                    value: campaignGroupInfo.name === '',
-                    message: '광고 그룹명을 입력해주세요'
-                  }
+                  required: '광고 그룹명을 입력해주세요',
+                  onChange:onChangeGroupName
                 })}
-                onChange={onChangeGroupName}
               />
               {errors.name && <ValidationScript>{errors.name.message}</ValidationScript>}
             </RelativeDiv>
