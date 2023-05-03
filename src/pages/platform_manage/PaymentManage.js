@@ -1,4 +1,4 @@
-import {Board, BoardHeader, BoardTableContainer, ColSpan2, RowSpan} from "../../assets/GlobalStyles";
+import {Board, BoardHeader, BoardTableContainer} from "../../assets/GlobalStyles";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import React, {useCallback, useEffect, useState} from "react";
@@ -7,7 +7,6 @@ import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
 import {toast, ToastContainer} from "react-toastify";
 import {PaymentCondition} from "../../components/Platform/Condition";
-import {SearchUser} from "../../components/common/SearchUser";
 import {
   paymentColumns,
   paymentDataAtom,
@@ -15,7 +14,6 @@ import {
   searchPaymentType,
   updatePaymentStatus
 } from "./entity/Payment";
-import {StatusBtn} from "./styles/common";
 
 function PaymentManage() {
   const [paymentDataState, setPaymentDataState] = useAtom(paymentDataAtom)

@@ -81,7 +81,7 @@ export const menuList = [
   {
     name: "platform",
     header: "플랫폼 관리",
-    include: ["platform",'platformDetail',"categoryManage","productManage",'conversionManage','paymentManage','costPayment'],
+    include: ["platform",'platformDetail',"categoryManage","productManage",'conversionManage','paymentManage','advertisingPayments'],
     child:[
       {
         name: "platform",
@@ -105,7 +105,7 @@ export const menuList = [
         header: "결재 관리"
       },
       {
-        name: "costPayment", //Advertising cost payment management
+        name: "advertisingPayments", //Advertising cost payment management
         header: "광고비 지급 관리"
       }
     ]

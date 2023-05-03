@@ -218,9 +218,9 @@ export function PaymentCondition(props) {
   },[dateRange])
 
   useEffect(() => {
-    if(searchCondition.statusList.length === 2 && params.id !== 'costPayment') {
+    if(searchCondition.statusList.length === 2 && params.id !== 'advertisingPayments') {
       setIsCheckedAll(true)
-    } else if(searchCondition.statusList.length === 4 && params.id === 'costPayment') {
+    } else if(searchCondition.statusList.length === 4 && params.id === 'advertisingPayments') {
       setIsCheckedAll(true)
     } else {
       setIsCheckedAll(false)
@@ -228,7 +228,7 @@ export function PaymentCondition(props) {
   },[searchCondition.statusList.length])
   /**
    * 이벤트 유형 선택
-   * @param event
+   * @param date
    */
   const handleRangeDate = (date) => {
     setDateRange(date)
@@ -333,7 +333,7 @@ export function PaymentCondition(props) {
           <ColTitle><span>신청 상태</span></ColTitle>
           <div>
             <AgentType>
-              {params.id === 'costPayment' &&
+              {params.id === 'advertisingPayments' &&
                 <>
                   <Checkbox label={'전체'}
                             type={'c'}

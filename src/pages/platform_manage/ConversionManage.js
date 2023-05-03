@@ -44,36 +44,34 @@ function ConversionManage() {
 
   return (
     <main>
-      <>
-        <Board>
-          <BoardHeader>전환 현황</BoardHeader>
-          <BoardSearchDetail>
-            <PlatformCondition searchType={searchConversionType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleTableData={handleSearch}/>
-          </BoardSearchDetail>
-          <BoardTableContainer>
-            { conversionListDataState !== null &&
-              <TableDetail columns={columnConversionData}
-                           data={conversionListDataState}
-                           detailData={handleFetchDetailData}
-                           detailColumn={columnConversionDetailData}
-                           detailGroups={false}
-                           idProperty={'conversionId'}
-                           groups={false}
-                           style={{minHeight: 500}}/>
-            }
-          </BoardTableContainer>
-        </Board>
-        <ToastContainer position="top-center"
-                        autoClose={1500}
-                        hideProgressBar
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        style={{zIndex: 9999999}}/>
-      </>
+      <Board>
+        <BoardHeader>전환 현황</BoardHeader>
+        <BoardSearchDetail>by
+          <PlatformCondition searchType={searchConversionType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleTableData={handleSearch}/>
+        </BoardSearchDetail>
+        <BoardTableContainer>
+          { conversionListDataState !== null &&
+            <TableDetail columns={columnConversionData}
+                         data={conversionListDataState}
+                         detailData={handleFetchDetailData}
+                         detailColumn={columnConversionDetailData}
+                         detailGroups={false}
+                         idProperty={'conversionId'}
+                         groups={false}
+                         style={{minHeight: 500}}/>
+          }
+        </BoardTableContainer>
+      </Board>
+      <ToastContainer position="top-center"
+                      autoClose={1500}
+                      hideProgressBar
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                      style={{zIndex: 9999999}}/>
     </main>
   )
 }
