@@ -65,6 +65,7 @@ function PaymentManageUser(props) {
     const [paymentDetails, setPaymentDetails] = useAtom(PaymentDetailsDataAtom)
     const [pointDetails, setPointDetails] = useAtom(PointDetailsDataAtom)
     // const [totalInfo, setTotalInfo] = useState(dataTotalInfo)
+    // 이거도 2개 생성 결제내역 하나, 포인트 지급 하나
     const [totalInfo, setTotalInfo] = useState(0)
     // const [adverStatusData, setAdverStatusData] = useAtom(adverStatusAtom)
     // const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
@@ -79,10 +80,7 @@ function PaymentManageUser(props) {
     // const [refundData, setRefundData] = useState([])
     const [refundData, setRefundData] = useState(["테스트1","테스트2","테스트3"]) // 환불 정보
 
-
-
-
-
+    // axios 데이터 불러와서 날짜 검색이랑 / 게시물 수 불러서 아래 토큰값 감지해서 뿌려주기~
     // useEffect(() => {
     //     if(tokenUserInfo.role !== 'NORMAL') {
     //         //광고주 현황 조회
@@ -207,6 +205,7 @@ function PaymentManageUser(props) {
                             </div>
                         </BoardSearchResultTitle>
                         <Table columns={PaymentDetailsColumns}
+                               // totalInfo 내부 totacCount 값이 아직 없으니까 임시로 0값 맹글어 두자~
                                // totalCount={[totalInfo.totalCount, '결제 내역']}
                                totalCount={[totalInfo, '결제 내역']}
                                data={paymentDetails}
