@@ -6,21 +6,22 @@ import {
   CalendarBox,
   CalendarIcon,
   ColSpan1,
-  ColSpan2, ColSpan3, ColTitle,
+  ColSpan2,
+  ColTitle,
   CustomDatePicker,
   DateContainer,
   DefaultButton,
   DeleteButton,
   RangePicker,
   RowSpan,
-  selectStyle, Span1,
-  Span4
+  selectStyle,
+  Span1
 } from "../../assets/GlobalStyles";
 import {ValidationGroup} from "../campaign/styles/common";
 import Select from "react-select";
 import ko from "date-fns/locale/ko";
 import {HorizontalRule, VerticalRule} from "../../components/common/Common";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
   getLastDay,
   getLastMonth,
@@ -31,13 +32,69 @@ import {
   getToDay
 } from "../../common/DateUtils";
 import Table from "../../components/table";
-import {customReportsColumns} from "./entity/Common";
+import {deleteCustomReportsAxios, retrieveCustomReportsDetail} from "../../services/reports/ReportsAxios";
+import {useAtom, useAtomValue} from "jotai";
+import {tokenResultAtom} from "../login/entity/Common";
+import {useNavigate} from "react-router-dom";
+import {arrayDateFormat} from "../../common/StringUtils";
+import {reportsInfoAtom} from "../../components/aside/entity";
 
+const defaultColumn = {
+  'BY_DAILY':{
+    name: 'statisticsDate',
+    header: '일별'
+  },
+  'BY_WEEKLY': {
+    name: 'statisticsStartDate',
+    header: '주별',
+    render: ({cellProps}) => {
+      return <span><p>{arrayDateFormat(cellProps.statisticsStartDate)} ~ </p><p>{arrayDateFormat(cellProps.statisticsEndDate)} ~ </p></span>
+    }
+  },
+  'BY_MONTHLY': {
+    name: 'statisticsDate',
+    header: '월별',
+  },
+}
 export default function CustomReports() {
-  const [searchCondition, setSearchCondition] = useState()
+  const [searchCondition, setSearchCondition] = useState({
+    pageSize: 10,
+    currentPage: 1,
+    searchStartDate: getLastMonth().startDay,
+    searchEndDate: getToDay(),
+    productType: null,
+    deviceType: null
+  })
   const [dateActive,setDateActive] = useState('')
   const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
+  const tokenResult = useAtomValue(tokenResultAtom)
+  const [campaignColumn, setCampaignColumn] = useState([])
+  const [campaignData, setCampaignData] = useState([])
+  const [reportInfo, setReportInfo] = useState({})
+  const navigate = useNavigate()
+  const [reportsInfo, setReportsInfo] = useAtom(reportsInfoAtom)
+
+  useEffect(() => {
+    const params = {
+      pageSize: 10,
+      currentPage: 1,
+      searchStartDate: getLastMonth().startDay,
+      searchEndDate: getToDay(),
+    }
+    if(reportsInfo.id === null) {
+      navigate('/board/reports')
+    }
+    if(tokenResult.id !== undefined && tokenResult.role === 'NORMAL'){
+      retrieveCustomReportsDetail(tokenResult.id, reportsInfo.id, params).then(response => {
+        let newObject = [defaultColumn[reportsInfo.groupBy]].concat(response.headers)
+        setCampaignColumn(newObject)
+        setCampaignData(response.reportStatistics.content)
+        setReportInfo(response.userSetting)
+      })
+    }
+  }, [tokenResult, reportsInfo.id]);
+
   /**
    * 날짜 레인지 선택
    * @param rangeType
@@ -97,37 +154,64 @@ export default function CustomReports() {
     //call 때려
   }
 
+  const handleChangeProduct = (event) => {
+    console.log(event.value)
+    setSearchCondition({
+      ...searchCondition,
+      productType: event.value
+    })
+  }
+
+  const handleChangeDevice = (event) => {
+    console.log(event.value)
+    setSearchCondition({
+      ...searchCondition,
+      deviceType: event.value
+    })
+  }
+
+  const handleSearchReports = () => {
+    console.log(searchCondition)
+    retrieveCustomReportsDetail(tokenResult.id, reportsInfo.id, searchCondition).then(response => {
+      setCampaignData(response.reportStatistics.content)
+    })
+  }
+
+  const handleDeleteReport = async () => {
+    await deleteCustomReportsAxios({userId:tokenResult.id, userReportSettingId:reportsInfo.id}).then(()=>{
+      setReportsInfo({
+        id:null,
+        groupBy: null
+      })
+      navigate('/board/reports')
+    })
+  }
+
   return(
     <Board>
-      <BoardHeader>나이키_일별 보고서</BoardHeader>
+      <BoardHeader>{`${tokenResult.name}_${reportInfo.reportName}`}</BoardHeader>
       <BoardSearchDetail>
         <RowSpan box={true} column={true}>
           <RowSpan>
             <ColSpan1 style={{borderBottom: '1px solid #ddd', justifyContent: "space-between"}}>
-              <div style={{padding: 10}}>나이키_일별 보고서</div>
-              <DeleteButton style={{padding: 8}}/>
+              <div style={{padding: 10}}>{`${tokenResult.name}_${reportInfo.reportName}`}</div>
+              <DeleteButton style={{padding: 8}} onClick={handleDeleteReport}/>
             </ColSpan1>
           </RowSpan>
           <RowSpan>
             <ColSpan1>
               <ColTitle><Span1>광고 상품</Span1></ColTitle>
               <div>
-                <Select styles={selectStyle} options={[{key:1,value:1,label: '전체'}]}/>
-              </div>
-            </ColSpan1>
-            <ColSpan1>
-              <ColTitle><Span1>이벤트</Span1></ColTitle>
-              <div>
-                <Select styles={selectStyle} options={[{key:1,value:1,label: '전체'}]}/>
+                <Select styles={selectStyle} options={[{key:1,value:null,label: '전체'},{key:2,value:'BANNER',label: '배너'},{key:3,value:'POP_UNDER',label: '팝언더'}]} onChange={handleChangeProduct}/>
               </div>
             </ColSpan1>
             <ColSpan1>
               <ColTitle><Span1>디바이스</Span1></ColTitle>
               <div>
-                <Select styles={selectStyle} options={[{key:1,value:1,label: '전체'}]}/>
+                <Select styles={selectStyle} options={[{key:1,value:null,label: '전체'},{key:2,value:'PC',label: 'PC 웹'},{key:3,value:'MOBILE',label: '모바일'},{key:4,value:'RESPONSIVE_WEB',label: '반응형'}]} onChange={handleChangeDevice}/>
               </div>
             </ColSpan1>
-            <ColSpan1/>
+            <ColSpan2/>
           </RowSpan>
           <RowSpan>
             <ColSpan1>
@@ -172,14 +256,15 @@ export default function CustomReports() {
           </RowSpan>
           <VerticalRule style={{height:0.5}}/>
           <ValidationGroup>
-            <DefaultButton>검색</DefaultButton>
+            <DefaultButton onClick={handleSearchReports}>검색</DefaultButton>
           </ValidationGroup>
         </RowSpan>
       </BoardSearchDetail>
       <BoardSearchResult>
         <Table
-          columns={customReportsColumns}
-          data={[]}
+          columns={campaignColumn}
+          data={campaignData}
+          idProperty={reportsInfo.groupBy !== 'BY_WEEKLY' ? 'statisticsDate' : 'statisticsStartDate'}
         />
       </BoardSearchResult>
     </Board>

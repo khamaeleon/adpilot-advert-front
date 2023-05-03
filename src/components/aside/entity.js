@@ -1,3 +1,5 @@
+import {atom} from "jotai/index";
+
 export const defaultIcon = {
   dashboard: "/assets/images/aside/gmd_menu_01_off@3x.png",
   campaign:'/assets/images/aside/gmd_menu_02_off@3x.png',
@@ -136,3 +138,5 @@ export const widenStyle = {
     width: 148,
   },
 }
+
+export const reportsInfoAtom = atom({id:null, groupBy: null})

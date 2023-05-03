@@ -1,6 +1,6 @@
-import {AdminAxios} from "../../common/Axios";
+import {AdverAxios, AdminAxios} from "../../common/Axios";
 
-const ACTION_URL = '/adver/statistics';
+const ACTION_URL = '/statistics';
 const CREATE_STATISTICS = ACTION_URL+'/custom-report'
 /**
  * 보고서 생성
@@ -9,7 +9,7 @@ const CREATE_STATISTICS = ACTION_URL+'/custom-report'
 export async function createCustomReportsAxios(params) {
   let returnVal = null;
   console.log(params)
-  await AdminAxios('POST', CREATE_STATISTICS, params)
+  await AdverAxios('POST', CREATE_STATISTICS, params)
     .then((response) => {
       returnVal = response.responseCode.statusCode === 200 ? response.data : null;
     }).catch((e) => returnVal = false)
@@ -23,7 +23,7 @@ export async function createCustomReportsAxios(params) {
  */
 export async function deleteCustomReportsAxios(deleteInfo) {
   let returnVal = null;
-  await AdminAxios('DELETE', CREATE_STATISTICS, deleteInfo)
+  await AdverAxios('DELETE', CREATE_STATISTICS, deleteInfo)
     .then((response) => {
       returnVal = response.responseCode.statusCode === 200 ? response.data : null;
     }).catch((e) => returnVal = false)
@@ -35,7 +35,7 @@ export async function deleteCustomReportsAxios(deleteInfo) {
  */
 export async function retrieveCustomReportsList(userId){
   let returnVal = null;
-  await AdminAxios('GET', `/statistics/${userId}/custom-report`,null)
+  await AdverAxios('GET', `/statistics/${userId}/custom-report`,null)
     .then((response) => {
       returnVal = response.responseCode.statusCode === 200 ? response.data : null
     }).catch((e) => returnVal = false)
@@ -45,9 +45,10 @@ export async function retrieveCustomReportsList(userId){
  * 보고서 상세 조회 (id)
  * return columns, dataSources
  */
-export async function retrieveCustomReportsDaily({userId, reportUserSettingId}) {
+export async function retrieveCustomReportsDetail(userId, reportUserSettingId, params) {
+  console.log(reportUserSettingId)
   let returnVal = null;
-  await AdminAxios('POST', `/statistics/${userId}/custom-report/${reportUserSettingId}`,null)
+  await AdverAxios('POST', `/statistics/${userId}/custom-report/${reportUserSettingId}`,params)
     .then((response) => {
       returnVal = response.responseCode.statusCode === 200 ? response.data : null
     }).catch((e) => returnVal = false)

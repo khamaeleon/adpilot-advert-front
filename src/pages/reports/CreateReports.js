@@ -2,7 +2,8 @@ import {
   Board,
   BoardHeader,
   BoardSearchResult,
-  ColSpan2, ColTitle,
+  ColSpan2,
+  ColTitle,
   Input,
   RelativeDiv,
   RowSpan,
@@ -11,16 +12,19 @@ import {
   SubmitContainer,
   ValidationScript
 } from "../../assets/GlobalStyles";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {VerticalRule} from "../../components/common/Common";
 import {Row} from "../campaign/styles/common";
 import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
 import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
-import {OpenReports} from "../../components/modal/OpenReports";
 import {toast, ToastContainer} from "react-toastify";
 import {useForm} from "react-hook-form";
-import {createCustomReportsAxios} from "../../services/reports/ReportsAxios";
+import {createCustomReportsAxios, retrieveCustomReportsList} from "../../services/reports/ReportsAxios";
+import {tokenResultAtom} from "../login/entity/Common";
+import {useAtom, useAtomValue} from "jotai";
+import {useNavigate} from "react-router-dom";
+import {reportsInfoAtom} from "../../components/aside/entity";
 
 
 const columnList= {
@@ -61,6 +65,18 @@ export default function CreateReports() {
   const [creativeInfo, setCreativeInfo] = useState({})
   const [reportName, setReportName] = useState('')
   const { register, trigger, formState: { errors } } = useForm();
+  const tokenResult = useAtomValue(tokenResultAtom)
+  const [reportsInfo, setReportsInfo] = useAtom(reportsInfoAtom)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    console.log(tokenResult)
+    setCreativeInfo({
+      ...creativeInfo,
+      id: tokenResult.id
+    })
+  }, []);
+
   const handleSearchAdvertiser = (creative) => {
     setCreativeInfo(creative)
     console.log(creative)
@@ -132,7 +148,9 @@ export default function CreateReports() {
       draggable:false,
     }
     if(scopes.length === 0 && period === 'NONE') {
-      toast.warning("기간 광고정보 중 하나는 선택해야합니다.")
+      toast.warning("기간항목과 광고정보항목을 선택해야 합니다.")
+    } else if(scopes.length === 0) {
+      toast.warning("광고 정보 항목을 선택해주세요.")
     } else {
       if(columns.filter(datum => datum.name === item).length === 0){
         setColumns(prev => [...prev, data])
@@ -154,10 +172,10 @@ export default function CreateReports() {
     setReportName(e.target.value)
   }
   const handleCreateReports = async () => {
-    if(columns.length < 2){
+    if (period === 'NONE' && scopes.length === 0) {
+      toast.warning("기간항목과 광고정보항목을 선택해야 합니다.")
+    } else if(columns.length < 3){
       toast("보고서 항목을 선택해주세요")
-    } else if (period === 'NONE' && scopes.length === 0) {
-      toast("기간항목, 광고정보항목 중 하나는 선택해야 합니다.")
     } else if(creativeInfo.id === undefined){
       await trigger("creativeName")
       toast("광고주를 검색해주세요")
@@ -174,11 +192,14 @@ export default function CreateReports() {
         "groupByScopes" : scopes,
         "columns" :  dataItems.map(item => item.name)
       }
-      createCustomReportsAxios(params).then(response => {
-        console.log(response)
+      createCustomReportsAxios(params).then().then(() => {
+        retrieveCustomReportsList(tokenResult.id).then(response => {
+          const data  = response[response.length-1]
+          setReportsInfo({id: data.id, groupBy: data.groupByPeriod})
+          navigate('/board/customReports')
+        })
       })
     }
-    console.log(dataItems)
   }
 
   return(
@@ -188,19 +209,29 @@ export default function CreateReports() {
         <BoardSearchResult>
           <RowSpan>
             <RelativeDiv>
-              <Span4>광고주 설정</Span4>
-              <Input
-                style={{width: 300}}
-                {...register("creativeName",{
-                  required: {
-                    value: creativeInfo.adverName === "",
-                    message: '광고주를 선택해주세요'
-                  }
-                })}
-                value={creativeInfo.adverName || ""}
-                readOnly
-              />
-              <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
+              {tokenResult.role !== 'NORMAL' &&
+                <>
+                  <Span4>광고주 설정</Span4>
+                  <Input
+                    style={{width: 300}}
+                    {...register("creativeName",{
+                      required: {
+                        value: creativeInfo.adverName === "",
+                        message: '광고주를 선택해주세요'
+                      }
+                    })}
+                    value={creativeInfo.adverName || ""}
+                    readOnly
+                  />
+                  <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
+                </>
+              }
+              {tokenResult.role === 'NORMAL' &&
+                <>
+                  <Span4>광고주</Span4>
+                  <ColSpan2>{tokenResult.name}</ColSpan2>
+                </>
+              }
             </RelativeDiv>
           </RowSpan>
           <RowSpan>

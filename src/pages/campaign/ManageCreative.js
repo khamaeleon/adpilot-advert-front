@@ -8,63 +8,29 @@ import {
   RowSpan, SearchButton,
   SearchInput
 } from "../../assets/GlobalStyles";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
+import {findCreativeGroupList, retrieveCreativeByUserId} from "../../services/campaign/CreativeManageAxios";
+import {useAtomValue} from "jotai/index";
+import {tokenResultAtom} from "../login/entity/Common";
 
 export function ManageCreative() {
   const [open, setOpen] = useState({id: 0})
   const [slideMove, setSlideMove] = useState(0)
-  const creativeData = [
-    {
-      id: 1,
-      name: '노스페이스',
-      userId: 'north55',
-      managerName: '홍길동',
-      creativeGroup: 10,
-    },
-    {
-      id: 2,
-      name: '아디다스',
-      userId: 'hsad_adidas',
-      managerName: '홍길동',
-      creativeGroup: 0,
-    },
-    {
-      id: 3,
-      name: '나이키',
-      userId: 'nike98',
-      managerName: '홍길동',
-      creativeGroup: 3,
-    },
-  ]
-  const creativeDetailData =  [
-    {
-      id: 1,
-      creativeGroupName: '노스페이스 신규 프로모션',
-      creativeType:'네이티브',
-      creativeInfo: [
-        {key:1, url: '/assets/images/common/sample1.png'},
-        {key:2, url: '/assets/images/common/sample2.png'},
-        {key:3, url: '/assets/images/common/sample3.png'},
-        {key:4, url: '/assets/images/common/sample4.png'},
-        {key:5, url: '/assets/images/common/sample5.png'},
-        {key:6, url: '/assets/images/common/sample1.png'},
-        {key:7, url: '/assets/images/common/sample2.png'},
-        {key:8, url: '/assets/images/common/sample3.png'},
-        {key:9, url: '/assets/images/common/sample4.png'},
-        {key:10, url: '/assets/images/common/sample5.png'}
-      ]
-    },
-    {
-      id: 1,
-      creativeGroupName: '나이키 신규 프로모션',
-      creativeType:'고정배너',
-      creativeInfo: [
-        {key:1, url: '/assets/images/common/sample1.png'},
-        {key:2, url: '/assets/images/common/sample2.png'},
-      ]
+  const tokenResult = useAtomValue(tokenResultAtom)
+  const [creativeData, setCreativeData] = useState([])
+  const [creativeDetailData, setCreativeDetailData] =  useState([])
+  const [keyword, setKeyword] = useState('')
+
+  useEffect(() => {
+    if(tokenResult.role !== 'NORMAL'){
+      findCreativeGroupList(keyword).then(response => {
+        console.log(response)
+        setCreativeData(response.creativeGroupDtos)
+      })
     }
-  ]
+  }, []);
+
 
   const handleSlideLeft = (length) => {
     if(slideMove < (length/5) -1 ){
@@ -82,9 +48,26 @@ export function ManageCreative() {
     }
   }
 
-  const handleDetailData = (id) => {
-    setOpen({
-      id: id
+  const handleDetailData = (userId) => {
+    retrieveCreativeByUserId(userId).then(response => {
+      setCreativeDetailData(response)
+      if(open.id === 0){
+        setOpen({
+          id: userId
+        })
+      } else {
+        setOpen({
+          id: 0
+        })
+      }
+
+    })
+  }
+  const handleSearchKeyword = () => {
+    findCreativeGroupList(keyword).then(response => {
+      setCreativeData(response.creativeGroupDtos)
+      setOpen({id: 0})
+      setCreativeDetailData([])
     })
   }
   const detailTable = () => {
@@ -95,17 +78,18 @@ export function ManageCreative() {
           <CreativeGroup>크리에이티브 그룹명</CreativeGroup>
           <CreativeInfo>크리에이티브 정보</CreativeInfo>
         </CustomDetailHeader>
-        {creativeDetailData.map((item,key) => {
+        {creativeDetailData.length !== 0 && creativeDetailData.map((item,key) => {
           return(
             <CustomDetailRow key={key}>
-              <CreativeGroup>{item.creativeGroupName}</CreativeGroup>
+              <CreativeGroup>{item.creativeName}</CreativeGroup>
               <CreativeType>{item.creativeType}</CreativeType>
+              <CreativeType>{item.productType}</CreativeType>
               <CreativeInfo>
                 <div>
-                  {item.creativeInfo.map((info,idx) => {
+                  {item.images.map((info,idx) => {
                     return(
-                      <CreativeImage>
-                        <img src={info.url}/>
+                      <CreativeImage key={idx}>
+                        <img src={info.imagePath}/>
                       </CreativeImage>
                     )
                   })}
@@ -125,11 +109,11 @@ export function ManageCreative() {
         <RowSpan>
           <ColSpan2>
             <SearchInput>
-              <input type={'text'}/>
+              <input type={'text'} value={keyword} onChange={(e) => setKeyword(e.target.value)}/>
             </SearchInput>
           </ColSpan2>
           <ColSpan2>
-            <SearchButton>검색</SearchButton>
+            <SearchButton onClick={handleSearchKeyword}>검색</SearchButton>
           </ColSpan2>
         </RowSpan>
       </BoardSearchDetail>
@@ -141,17 +125,17 @@ export function ManageCreative() {
             <div>담당자</div>
             <div>크리에이티브 그룹</div>
           </CustomTableHeader>
-          {creativeData.map((item,key) => {
+          {creativeData.length !== 0 && creativeData.map((item,key) => {
             return(
-              <>
-                <CustomTableRow onClick={() => handleDetailData(item.id)} style={{color: item.id === open.id ? '#f5811f':null}}>
-                  <div>{item.name}</div>
-                  <div>{item.userId}</div>
+              <div key={key}>
+                <CustomTableRow onClick={() => handleDetailData(item.userId)} style={{color: item.userId === open.id ? '#f5811f':null}}>
+                  <div>{item.adverName}</div>
+                  <div>{item.username}</div>
                   <div>{item.managerName}</div>
-                  <div>{item.creativeGroup}</div>
+                  <div>{item.creativeCount}</div>
                 </CustomTableRow>
-                {item.id === open.id && detailTable()}
-              </>
+                {item.userId === open.id && detailTable()}
+              </div>
             )
           })}
         </CustomTable>
