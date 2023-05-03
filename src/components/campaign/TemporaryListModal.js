@@ -4,6 +4,8 @@ import {ModalBody, ModalHeader} from "../modal/Modal";
 import styled from "styled-components";
 import {modalController} from "../../store";
 import {campaignTemporaryListAtom} from "../../pages/campaign/entity/Info";
+import {toast} from "react-toastify";
+import {DeleteIcon, SmallButton} from "../../pages/campaign/styles/common";
 
 export function TemporaryListModal(props) {
   const {title, onSubmit, btnStyle, historyAdd} = props;
@@ -30,11 +32,19 @@ function TemporaryList (props) {
     setSelectedItem(item)
   }
   const handleSubmit = () => {
-    setModal({
-      isShow: false,
-      modalComponent: null
-    })
-    props.onSubmit(selectedItem)
+    console.log(selectedItem)
+    if(selectedItem.id !== undefined){
+      setModal({
+        isShow: false,
+        modalComponent: null
+      })
+      props.onSubmit(selectedItem)
+    } else {
+      toast.warning('임시 저장된 캠페인을 선택해주세요.')
+    }
+  }
+  const handleDeleteTemporaryItem = (item) => {
+    console.log(item)
   }
   return (
     <div>
@@ -46,19 +56,19 @@ function TemporaryList (props) {
               <table>
                 <thead>
                 <tr>
-                  <th>캠페인명</th>
+                  <th colSpan={2}>캠페인명</th>
                 </tr>
                 </thead>
                 <tbody>
                 {campaignTemporaryList.map((item, key) => {
                   return (
                     <tr key={key}
-                        onClick={() => handleSelect(item)}
                         style={selectedItem.name === item.name ? {
                           backgroundColor: "#f5811f",
                           color: '#fff'
                         } : null}>
-                      <td>{item.name}</td>
+                      <td onClick={() => handleSelect(item)}>{item.name}</td>
+                      <td><SmallButton type={'button'}  onClick={() => handleDeleteTemporaryItem(item.id)}>삭제</SmallButton></td>
                     </tr>
                   )
                 })}

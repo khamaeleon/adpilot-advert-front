@@ -188,7 +188,6 @@ export const ShadowEffect = styled.div`
   opacity: 0.15;
   background-image: linear-gradient(to bottom, hsl(27, 60%, 33%), hsla(27, 60%, 33%, 0));
   z-index: 999;
-}
 `
 
 export const CustomDetailHeader = styled.div`

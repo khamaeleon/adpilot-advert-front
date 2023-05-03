@@ -19,7 +19,7 @@ import {BorderSpan, CampaignTypeItem, CampaignTypeItem2} from "../styles/common"
 import Select from "react-select";
 import React, {useEffect, useState} from "react";
 import {SearchAdvertiser} from "../../../components/common/SearchAdvertiser";
-import {useAtom} from "jotai";
+import {useAtom, useSetAtom} from "jotai";
 import {modalController} from "../../../store";
 import {stepCampaignAtom} from "../entity";
 import {Controller, useFormContext} from "react-hook-form";
@@ -31,21 +31,26 @@ import moment from "moment/moment";
 import {TemporaryListModal} from "../../../components/campaign/TemporaryListModal";
 
 export function CampaignOne() {
-  const [, setStepCampaign] = useAtom(stepCampaignAtom)
+  const setStepCampaign = useSetAtom(stepCampaignAtom)
+  const setCampaignTemporaryList = useSetAtom(campaignTemporaryListAtom)
   const [campaignBasicInfo, setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
-  const [, setCampaignTemporaryList] = useAtom(campaignTemporaryListAtom)
   const [adverInfo, setAdverInfo] = useState(null)
   const [temporaryBool, setTemporaryBool] = useState(false)
-
   const [goalList, setGoalList] = useState(null)
   const [pixelList, setPixelList] = useState(null)
-  const [, setModal] = useAtom(modalController)
   const {register, handleSubmit, setValue, setError, control, formState: {errors}} = useFormContext()
+  /**
+   * 캠페인 목표 설정
+   */
   useEffect(() => {
     selEnumInfo('CAMPAIGN_CONVERSION_GOAL').then(response => {
       setGoalList(response.data)
     })
   }, [])
+  /**
+   * 광고주 설정
+   * @param data
+   */
   const handleSearchAdvertiser = (data) => {
     console.log(data)
     setCampaignBasicInfo({
@@ -60,6 +65,9 @@ export function CampaignOne() {
       managerName: data.staffName,
       adverName: data.adverName
     })
+    /**
+     * 픽셀 설정
+     */
     selAdverPixelDetailList(data.id).then(response => {
       let clonePixelList = []
       response.map(data => {
@@ -67,12 +75,19 @@ export function CampaignOne() {
       })
       setPixelList(clonePixelList)
     })
+    /**
+     * 최적화 픽셀 선택
+     */
     selTemporaryList(data.id).then(response =>{
       setCampaignTemporaryList(response)
       setTemporaryBool(true)
     })
   }
-  const handleSelectedTemporaryList =(data) =>{
+  /**
+   * 최적화 픽셀 리스트
+   * @param data
+   */
+  const handleSelectedTemporaryList = (data) =>{
     selBasicInfo(data.id).then(response => {
       console.log(response)
       let goalTypeTemp=''
@@ -106,22 +121,30 @@ export function CampaignOne() {
     })
     setTemporaryBool(false)
   }
-
-
+  /**
+   * 픽셀 변경 업데이트
+   * @param pixelValue
+   */
   const handleChangePixel = (pixelValue) => {
     setCampaignBasicInfo({
       ...campaignBasicInfo,
       pixelId: pixelValue,
     })
   }
-
+  /**
+   * 캠페인 선택
+   * @param goalInfo
+   */
   const handleChangeTargetDetail = (goalInfo) => {
     setCampaignBasicInfo({
       ...campaignBasicInfo,
       goal: goalInfo,
     })
   }
-
+  /**
+   * 캠페인 상품 선택
+   * @param type
+   */
   const handleChangeProductType = (type) => {
     setCampaignBasicInfo({
       ...campaignBasicInfo,
@@ -183,7 +206,7 @@ export function CampaignOne() {
                 <div className={'relative'}>
                   <Input
                     type={'text'}
-                    style={{width: 300}}
+                    style={{width: '100%'}}
                     readOnly={true}
                     value={campaignBasicInfo !== null && campaignBasicInfo.username || ''}
                     placeholder={'광고주를 검색해주세요'}
@@ -191,12 +214,14 @@ export function CampaignOne() {
                       required: "광고주를 검색해주세요",
                     })}
                   />
-                  <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
-                  {temporaryBool &&
-                    <TemporaryListModal onSubmit={handleSelectedTemporaryList}/>
-                  }
                   {errors.username && <ValidationScript>{errors.username.message}</ValidationScript>}
                 </div>
+              </ColSpan2>
+              <ColSpan2>
+                <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
+                {temporaryBool &&
+                  <TemporaryListModal onSubmit={handleSelectedTemporaryList}/>
+                }
               </ColSpan2>
             </ColSpan4>
           </RowSpan>
@@ -238,7 +263,7 @@ export function CampaignOne() {
                       )}
                     />
                     <PixelModal title={'추가'} data={adverInfo !== null && adverInfo}/>
-                    {errors.pixelId && <ValidationScript>{errors.pixelId?.message}</ValidationScript>}
+                    {errors.pixelId && <ValidationScript style={{bottom: -25}}>{errors.pixelId?.message}</ValidationScript>}
                   </div>
                 </ColSpan2>
               </BorderSpan>

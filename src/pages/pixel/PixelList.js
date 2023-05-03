@@ -3,12 +3,12 @@ import {
   BoardHeader,
   BoardSearchDetail,
   BoardTableContainer,
-  ColSpan1,
+  ColSpan1, ColSpan2, ColSpan3,
   ColSpan4,
   DefaultButton,
-  Input,
+  Input, inputStyle,
   RelativeDiv,
-  RowSpan,
+  RowSpan, selectStyle,
   Span1,
   Span2,
   Span3,
@@ -43,16 +43,20 @@ export function PixelModal(props) {
   const [, setModal] = useAtom(modalController)
 
   const handleModalComponent = () => {
-    setModal({
-      isShow: true,
-      width: 800,
-      modalComponent: () => {
-        console.log(data)
-        return (
-          <PixelAdd data={data} title={title} />
-        )
-      }
-    })
+    if(data) {
+      setModal({
+        isShow: true,
+        width: 800,
+        modalComponent: () => {
+          console.log(data)
+          return (
+            <PixelAdd data={data} title={title} />
+          )
+        }
+      })
+    } else {
+      toast.warning('광고주를 설정해주세요.')
+    }
   }
   return (
     <TableButton type={'button'} onClick={handleModalComponent}>{title}</TableButton>
@@ -161,39 +165,41 @@ function PixelAdd(props){
       <ModalHeader title={'픽셀 추가'}/>
       <ModalBody>
         <RowSpan>
-          <ColSpan1 style={{width: '33%'}}>
-            <Span2>광고주명</Span2>
-            <RelativeDiv>
-              <Input
-                style={{marginRight: 0}}
-                type={'text'}
-                value={data.adverName}
-                readOnly={true}
-              />
-            </RelativeDiv>
-          </ColSpan1>
-          <ColSpan1 style={{width: '33%'}}>
-            <Span1>아이디</Span1>
-            <RelativeDiv>
-              <Input
-                style={{marginRight: 0}}
-                type={'text'}
-                value={data.username}
-                readOnly={true}
-              />
-            </RelativeDiv>
-          </ColSpan1>
-          <ColSpan1 style={{width: '33%'}}>
-            <Span1>담당자</Span1>
-            <RelativeDiv>
-              <Input
-                style={{marginRight: 0}}
-                type={'text'}
-                value={data.managerName}
-                readOnly={true}
-              />
-            </RelativeDiv>
-          </ColSpan1>
+          <ColSpan4>
+            <Span3>광고주명</Span3>
+            <ColSpan1 style={{width: '33%', paddingLeft: 0}}>
+              <RelativeDiv>
+                <Input
+                  style={{marginRight: 0}}
+                  type={'text'}
+                  value={data.adverName}
+                  readOnly={true}
+                />
+              </RelativeDiv>
+            </ColSpan1>
+            <ColSpan1 style={{width: '33%'}}>
+              <Span1>아이디</Span1>
+              <RelativeDiv>
+                <Input
+                  style={{marginRight: 0}}
+                  type={'text'}
+                  value={data.username}
+                  readOnly={true}
+                />
+              </RelativeDiv>
+            </ColSpan1>
+            <ColSpan1 style={{width: '33%'}}>
+              <Span1>담당자</Span1>
+              <RelativeDiv>
+                <Input
+                  style={{marginRight: 0}}
+                  type={'text'}
+                  value={data.managerName}
+                  readOnly={true}
+                />
+              </RelativeDiv>
+            </ColSpan1>
+          </ColSpan4>
         </RowSpan>
         <RowSpan>
           <ColSpan4>
@@ -238,7 +244,7 @@ function PixelAdd(props){
         <RowSpan>
           <ColSpan4>
             <Span3>카테고리설정</Span3>
-            <div>
+            <RelativeDiv style={{width: '50%',paddingLeft: 0}}>
               <Controller
                 name="mainCategoryCode"
                 control={control}
@@ -254,52 +260,40 @@ function PixelAdd(props){
                           {...field}
                           value={pixelInfoListState.mainCategoryCode !== '' ? topLevelCategoryList.find(value => value.value === pixelInfoListState.mainCategoryCode) : ''}
                           onChange={handleSelectTopCategory}
-                          styles={{
-                            input: (baseStyles, state) => (
-                              {
-                                ...baseStyles,
-                                minWidth: "250px",
-                              })
-                          }}
+                          styles={selectStyle}
                   />
                 )}
               />
                 {errors.mainCategoryCode && <ValidationScript>{errors.mainCategoryCode?.message}</ValidationScript>}
-              <div style={{marginRight: 0}}>
-                <Controller
-                  name="subCategoryCode"
-                  control={control}
-                  rules={{
-                    required: {
-                      value: pixelInfoListState.subCategoryCode === "",
-                      message: "카테고리를 선택해주세요"
-                    }
-                  }}
-                  render={({field}) => (
-                    <Select options={rowLevelCategoryList}
-                            placeholder={'서브 카테고리 선택'}
-                            {...field}
-                            value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
-                            onChange={handleSelectRowCategory}
-                            styles={{
-                              input: (baseStyles, state) => (
-                                {
-                                  ...baseStyles,
-                                  minWidth: "250px",
-                                })
-                            }}
-                    />
-                  )}
-                />
-              </div>
-                {errors.subCategoryCode && <ValidationScript>{errors.subCategoryCode?.message}</ValidationScript>}
-              </div>
+            </RelativeDiv>
+            <RelativeDiv style={{width: '50%',paddingLeft: 0}}>
+              <Controller
+                name="subCategoryCode"
+                control={control}
+                rules={{
+                  required: {
+                    value: pixelInfoListState.subCategoryCode === "",
+                    message: "카테고리를 선택해주세요"
+                  }
+                }}
+                render={({field}) => (
+                  <Select options={rowLevelCategoryList}
+                          placeholder={'서브 카테고리 선택'}
+                          {...field}
+                          value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
+                          onChange={handleSelectRowCategory}
+                          styles={selectStyle}
+                  />
+                )}
+              />
+              {errors.subCategoryCode && <ValidationScript>{errors.subCategoryCode?.message}</ValidationScript>}
+            </RelativeDiv>
           </ColSpan4>
         </RowSpan>
         <RowSpan>
-          <ColSpan4>
+          <ColSpan4 style={{marginRight:0}}>
             <Span3>호스팅 설정</Span3>
-            <div>
+            <RelativeDiv style={{marginRight:0}}>
               <Controller
                 name="hostType"
                 control={control}
@@ -315,17 +309,12 @@ function PixelAdd(props){
                           {...field}
                           value={pixelInfoListState.hostType !== '' ? hostList.find(value => value.value === pixelInfoListState.hostType) : ''}
                           onChange={handleSelectHosting}
-                          styles={{
-                            input: (baseStyles, state) => (
-                              {
-                                ...baseStyles,
-                                minWidth: "250px",
-                              })
-                          }}
+                          styles={selectStyle}
                   />
                 )}
               />
-              {errors.hostType && <ValidationScript>{errors.hostType?.message}</ValidationScript>}</div>
+              {errors.hostType && <ValidationScript>{errors.hostType?.message}</ValidationScript>}
+            </RelativeDiv>
           </ColSpan4>
         </RowSpan>
       </ModalBody>

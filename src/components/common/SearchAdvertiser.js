@@ -4,6 +4,7 @@ import {ModalBody, ModalHeader} from "../modal/Modal";
 import styled from "styled-components";
 import {selKeywordUser} from "../../services/Platform/ManageUserAxios";
 import {modalController} from "../../store";
+import {toast} from "react-toastify";
 export function SearchAdvertiser(props) {
   const {title, onSubmit, btnStyle, historyAdd} = props;
   const [, setModal] = useAtom(modalController)
@@ -33,11 +34,17 @@ function SearchModal (props) {
   }
 
   const handleSubmit = () => {
-    setModal({
-      isShow: false,
-      modalComponent: null
-    })
-    props.onSubmit(selectedItem)
+    if(searchKeyword === '') {
+      toast.warning('검색어를 입력해주세요.')
+    } else if (selectedItem.id === undefined) {
+      toast.warning('광고주를 선택해주세요')
+    } else {
+      setModal({
+        isShow: false,
+        modalComponent: null
+      })
+      props.onSubmit(selectedItem)
+    }
   }
 
   const handleOnSearchKeyword = (e) => {
@@ -50,6 +57,8 @@ function SearchModal (props) {
         console.log(response)
         setAdverSearchInfo(response)
       })
+    } else {
+      toast.warning('검색어를 입력해주세요.')
     }
   }
 
@@ -101,9 +110,6 @@ function SearchModal (props) {
                 </tbody>
               </table>
             </>
-          }
-          {adverSearchInfo.length === 0 &&
-            <div>검색결과 에러.</div>
           }
           {props.historyAdd === undefined && <MediaSelectedButton onClick={handleSubmit}>선택 완료</MediaSelectedButton>}
         </MediaSearchResult>

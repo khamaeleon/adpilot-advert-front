@@ -32,22 +32,21 @@ import {selPriceEventList} from "../../../services/settings/EventPriceAxios";
 import {timeBudgetDetailDataAtom} from "../../settings/entity/BudgetTime";
 import {selBudgetInfo, updateCampaignBudget} from "../../../services/campaign/BudgetAxios";
 import {campaignBudgetInfoAtom} from "../entity/Budget";
+import {useAtomValue} from "jotai/index";
 
 export function CampaignTwo() {
-  const [stepCampaign, setStepCampaign] = useAtom(stepCampaignAtom)
-  const [campaignBasicInfo] = useAtom(campaignBasicInfoAtom)
+  const setStepCampaign = useSetAtom(stepCampaignAtom)
+  const campaignBasicInfo = useAtomValue(campaignBasicInfoAtom)
   const [campaignBudgetInfo, setCampaignBudgetInfo] = useAtom(campaignBudgetInfoAtom)
-
   const [budgetTimeListState, setBudgetTimeListState] = useState(null)
   const [budgetEventListState, setBudgetEventListState] = useState(null)
   const [priceEventListState, setPriceEventListState] = useState(null)
   const [biddingType] = useState(biddingTypeAll)
   const [timeBudgetDetailDataState, setTimeBudgetDetailDataState] = useAtom(timeBudgetDetailDataAtom)
-  const setModal = useSetAtom(modalController)
+
   const {register, handleSubmit,reset,setError,setValue, control, formState: {errors}} = useFormContext()
 
   useEffect(() => {
-
     if (campaignBasicInfo.step !=='INIT') {
       //수정
       console.log(campaignBudgetInfo)
@@ -213,10 +212,10 @@ export function CampaignTwo() {
                     render={({field}) => (
                       <Input type={'number'}
                              min={100}
-                             readOnly={campaignBudgetInfo !== null && campaignBudgetInfo.infiniteBudget}
+                             readOnly={campaignBudgetInfo.infiniteBudget}
                              placeholder={'일일 평균 예산을 설정해주세요.'}
                              style={{color:'#f5811f'}}
-                             value={campaignBudgetInfo !== null && campaignBudgetInfo.dailyAvgBudget}
+                             value={campaignBudgetInfo.dailyAvgBudget}
                              onChange={(e) => handleChangeDailyBudget(e)}
                       />)}
                   />
@@ -224,8 +223,9 @@ export function CampaignTwo() {
                 </ColSpan1>
                 <ColSpan1>
                   <label>
-                    <input type={'checkbox'} className={'checkbox-type-a'} onChange={handleCheckInfiniteBudget}/>
+                    <input type={'checkbox'} value={campaignBudgetInfo.infiniteBudget || ''} checked={campaignBudgetInfo.infiniteBudget} className={'checkbox-type-a'} onChange={handleCheckInfiniteBudget}/>
                     <i/>
+                    {/*배너일때 infiniteBudget 항목 없음*/}
                     <span>일일 예산 무제한</span>
                   </label>
                 </ColSpan1>
@@ -240,6 +240,7 @@ export function CampaignTwo() {
                   <Span1>PC</Span1>
                   <Input type={'number'}
                          min={100}
+                         readOnly
                          style={{color:'#f5811f'}}
                          value={campaignBudgetInfo !== null && campaignBudgetInfo.pcBudget}
                          onChange={(e) => handleChangePcBudget(e)}
@@ -250,7 +251,7 @@ export function CampaignTwo() {
                   {campaignBudgetInfo !== null &&
                     <input
                       type="range"
-                      value={campaignBudgetInfo.budgetRate !==undefined ? campaignBudgetInfo.budgetRate: 50}
+                      value={campaignBudgetInfo.budgetRate !== undefined ? campaignBudgetInfo.budgetRate : 50}
                       onChange={handleChangeInputRange}
                       style={{
                         background: `linear-gradient(to right, #f5811f 0%, #f5811f ${campaignBudgetInfo.budgetRate !==undefined ? campaignBudgetInfo.budgetRate: 50}%, #ddd ${campaignBudgetInfo.budgetRate !==undefined ? campaignBudgetInfo.budgetRate: 50}%, #ddd 100%)`
@@ -265,6 +266,7 @@ export function CampaignTwo() {
                   <ColTitle><Span1>MOBILE</Span1></ColTitle>
                   <Input type={'number'}
                          min={100}
+                         readOnly
                          style={{color:'#f5811f'}}
                          value={campaignBudgetInfo !== null && campaignBudgetInfo.mobBudget}
                          onChange={(e) => handleChangeMobileBudget(e)}
