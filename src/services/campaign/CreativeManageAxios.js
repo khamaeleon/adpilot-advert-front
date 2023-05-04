@@ -1,4 +1,4 @@
-import {AdverAxios, AdminAxios} from "../../common/Axios";
+import {AdminAxios} from "../../common/Axios";
 
 export async function findCreativeGroupList(keyword) {
   let returnVal = null;

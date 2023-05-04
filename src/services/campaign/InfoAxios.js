@@ -17,10 +17,10 @@ export async function selEnumInfo(enumInfo) {
 };
 export async function resistCampaignBasic(campaignInfo) {
   let returnVal = null;
-  await AdminAxios('PUT', ACTION_URL ,campaignInfo)
+  await AdminAxios('POST', ACTION_URL ,campaignInfo)
     .then((response) => {
       const {responseCode,data} =response
-      if(responseCode.statusCode ===200){
+      if(responseCode.statusCode ===201){
         returnVal = data
       }else{
         returnVal = false

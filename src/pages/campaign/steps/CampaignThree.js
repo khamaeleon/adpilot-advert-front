@@ -43,10 +43,7 @@ export function CampaignThree() {
   const [mediaCategory, setMediaCategory] = useAtom(mediaCategoryAtom)
   const [agentTypeState ,setAgentTypeState] =useState([])
   const [noViewTypeState] =useState(noViewType)
-  const [dateRange, setDateRange] = useState([
-    new Date(getToDay()),
-    new Date(getToDay())
-  ]);
+  const [dateRange, setDateRange] = useState([]);
   const [startDate, endDate] = dateRange
   const {register, handleSubmit, reset,setValue, control, formState: {errors}} = useFormContext()
 
@@ -55,10 +52,11 @@ export function CampaignThree() {
       selGroupInfo(campaignBasicInfo.campaignId).then(response =>{
         console.log(response)
         setCampaignGroupInfo(response)
+        reset(response)
         setDateRange([
           new Date(campaignGroupInfo.startDate !==undefined ? campaignGroupInfo.startDate: getToDay()),
-          new Date(campaignGroupInfo.endDate !==undefined ? campaignGroupInfo.endDate: getToDay())])
-        reset(response)
+          new Date(campaignGroupInfo.endDate !==undefined ? campaignGroupInfo.endDate: getToDay())
+        ])
       })
     }
     selMediaCategoryInfo().then(response => {
@@ -67,7 +65,6 @@ export function CampaignThree() {
       }
     })
     selEnumInfo('AGENT_TYPE').then(response => {
-      console.log(response)
       setAgentTypeState(response.data)
     })
   }, [])
