@@ -46,7 +46,8 @@ import {bannerSizeAtom, campaignCreativeAtom, clickInducementTypeAtom, creativeT
 import {DuplicateButton} from "../../signup/styles";
 import ImageUploading from "react-images-uploading";
 import {
-  updateCampaignBanner, updateCampaignNative,
+  selCreativeBannerInfo, selCreativeNativeInfo,
+  updateCampaignBanner, updateCampaignNative, updateCampaignPopUnder,
   uploadBannerImages,
   uploadLogoImages,
   uploadNativeImages
@@ -284,6 +285,7 @@ function CampaignFourBanner(props) {
               <input
                 type={'text'}
                 name={'titleLong'}
+                value={campaignCreativeInfo.titleLong}
                 onChange={handleChangeInputs}
               />
             </Row>
@@ -341,7 +343,7 @@ function CampaignFourBanner(props) {
               <input
                 type={'text'}
                 name={'serviceName'}
-                value={campaignCreativeInfo.servicName}
+                value={campaignCreativeInfo.serviceName}
                 onChange={handleChangeInputs}
               />
             </Row>
@@ -518,6 +520,7 @@ function CampaignFourNative(props) {
               <input
                 type={'text'}
                 name={'titleLong'}
+                value={campaignCreativeInfo.titleLong}
                 onChange={handleChangeInputs}
               />
             </Row>
@@ -605,16 +608,35 @@ function CampaignFourNative(props) {
   )
 }
 
-export function CampaignFour() {
+export function CampaignFour(props) {
+  const [state] =useState({creativeType:'BANNER'})
   const [, setStepCampaign] = useAtom(stepCampaignAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
-  const [campaignBasicInfo] = useAtom(campaignBasicInfoAtom)
+  const [campaignBasicInfo,setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
   const [, setBannerSize] = useAtom(bannerSizeAtom)
   const [creativeType, setCreativeType] = useAtom(creativeTypeAtom)
   const [, setClickInducementType] = useAtom(clickInducementTypeAtom)
-  const {register, handleSubmit, control, formState: {errors}} = useFormContext()
+  const {register, handleSubmit, reset, formState: {errors}} = useFormContext()
 
   useEffect(() => {
+    if(state.creativeType ==='BANNER' ){
+      console.log('수정')
+      selCreativeBannerInfo('78552c2e-3bfa-4fd7-8a4b-aee34513af01').then(response =>{
+        console.log(response)
+        setCampaignCreative(response)
+        setCampaignBasicInfo({
+          campaignId: '78552c2e-3bfa-4fd7-8a4b-aee34513af01',
+          productType: 'BANNER'
+        })
+        reset(response)
+      })
+    }else if(state.creativeType ==='NATIVE'){
+      selCreativeNativeInfo(campaignBasicInfo.campaignId).then(response =>{
+        setCampaignCreative(response)
+      })
+    }else if(state.creativeType ==='POP_UNDER'){
+
+    }
     console.log(campaignCreativeInfo)
     selEnumInfo('BANNER_SIZE').then(response => {
       console.log(response.data)
@@ -633,6 +655,10 @@ export function CampaignFour() {
       selEnumInfo('CREATIVE_TYPE_POP_UNDER').then(response => {
         console.log(response.data)
         setCreativeType(response.data)
+        setCampaignCreative({
+          ...campaignCreativeInfo,
+          creativeType: 'POP_UNDER'
+        })
       })
     }
   }, [])
@@ -655,26 +681,34 @@ export function CampaignFour() {
       updateCampaignBanner({
         ...campaignCreativeInfo,
         campaignId:campaignBasicInfo.campaignId,
-        name:creativeType.find(value => value.value === campaignCreativeInfo.creativeType).label+ '_' + campaignBasicInfo.pixelId.label+ '_' +campaignBasicInfo.productType+ '_' +campaignBasicInfo.goal.label+ '_' +moment().format('YYYYMMDDhhmmss')
+        name:campaignCreativeInfo.name !==undefined ? campaignCreativeInfo.name : creativeType.find(value => value.value === campaignCreativeInfo.creativeType).label+ '_' + campaignBasicInfo.pixelId.label+ '_' +campaignBasicInfo.productType+ '_' +campaignBasicInfo.goal.label+ '_' +moment().format('YYYYMMDDhhmmss')
       }).then(response => {
         if(response){
           alert("등록 완료")
         }
       })
-    }else{
+    }else if(campaignCreativeInfo.creativeType ==='NATIVE'){
       updateCampaignNative({
         ...campaignCreativeInfo,
         campaignId:campaignBasicInfo.campaignId,
-        name:creativeType.find(value => value.value === campaignCreativeInfo.creativeType).label+ '_' + campaignBasicInfo.pixelId.label+ '_' +campaignBasicInfo.productType+ '_' +campaignBasicInfo.goal.label+ '_' +moment().format('YYYYMMDDhhmmss')
+        name:campaignCreativeInfo.name !==undefined ? campaignCreativeInfo.name :  creativeType.find(value => value.value === campaignCreativeInfo.creativeType).label+ '_' + campaignBasicInfo.pixelId.label+ '_' +campaignBasicInfo.productType+ '_' +campaignBasicInfo.goal.label+ '_' +moment().format('YYYYMMDDhhmmss')
+      }).then(response => {
+        if(response){
+          alert("등록 완료")
+        }
+      })
+    }else if(campaignCreativeInfo.creativeType ==='POP_UNDER'){
+      updateCampaignPopUnder({
+        ...campaignCreativeInfo,
+        campaignId:campaignBasicInfo.campaignId,
+        name:campaignCreativeInfo.name !==undefined ? campaignCreativeInfo.name :  creativeType.find(value => value.value === campaignCreativeInfo.creativeType).label+ '_' + campaignBasicInfo.pixelId.label+ '_' +campaignBasicInfo.productType+ '_' +campaignBasicInfo.goal.label+ '_' +moment().format('YYYYMMDDhhmmss')
       }).then(response => {
         if(response){
           alert("등록 완료")
         }
       })
     }
-
-
-    // setStepCampaign({steps: 4})
+    setStepCampaign({steps: 4})
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -684,19 +718,28 @@ export function CampaignFour() {
           <BoardSearchResult>
             <Span4>크리에이티브 그룹 선택</Span4>
             <RowSpan box={true} column={false}>
-              {creativeType !== null &&
+              {creativeType !== null && campaignBasicInfo.productType ==='BANNER' &&
                 <ColSpan1 padding={'0'}>
                   <CampaignButton type={'button'}
                                   onClick={() => selCreativeGroup('BANNER')}
                                   className={campaignCreativeInfo.creativeType === 'BANNER' ? 'on' : null}
                   >
-                    {creativeType.find(value => value.value === 'BANNER')}
+                    {creativeType.find(value => value.value === 'BANNER').label}
                   </CampaignButton>
                   <CampaignButton type={'button'}
                                   onClick={() => selCreativeGroup('NATIVE')}
                                   className={campaignCreativeInfo.creativeType === 'NATIVE' ? 'on' : null}
                   >
-                    {creativeType.find(value => value.value === 'NATIVE')}
+                    {creativeType.find(value => value.value === 'NATIVE').label}
+                  </CampaignButton>
+                </ColSpan1>
+              }
+              {creativeType !== null && campaignBasicInfo.productType ==='POP_UNDER' &&
+                <ColSpan1 padding={'0'}>
+                  <CampaignButton type={'button'}
+                                  className={ 'on'}
+                  >
+                    {creativeType.find(value => value.value === 'POP_UNDER').label}
                   </CampaignButton>
                 </ColSpan1>
               }
@@ -777,9 +820,10 @@ export function CampaignFour() {
               <Validation>{errors.pcReferralCode && errors.pcReferralCode.message}</Validation>
               <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
             </ValidationGroup>
-            {campaignCreativeInfo.creativeType === 'BANNER' &&
+            {campaignCreativeInfo.creativeType === 'BANNER' && campaignBasicInfo.productType ==='BANNER' &&
               <CampaignFourBanner register={register} errors={errors}/>
-              ||
+            }
+            {campaignCreativeInfo.creativeType === 'NATIVE' && campaignBasicInfo.productType ==='BANNER' &&
               <CampaignFourNative register={register} errors={errors}/>
             }
           </BoardSearchResult>

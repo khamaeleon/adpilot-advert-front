@@ -7,6 +7,33 @@ const IMAGE_NATIVE='/native-banner/image'
 const IMAGE_LOGO ='/image/logo'
 const CREATE_BANNER ='/config/creative/banner'
 const CREATE_NATIVE ='/config/creative/native'
+const CREATE_POP_UNDER ='/config/creative/pop-under'
+
+export async function selCreativeBannerInfo(campaignId) {
+  let returnVal = null;
+  await AdminAxios('GET', ACTION_URL+'/'+ campaignId +CREATE_BANNER)
+    .then((response) => {
+      if(response.responseCode.statusCode ===200){
+        returnVal = response.data
+      }else{
+        returnVal = null
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+};
+
+export async function selCreativeNativeInfo(campaignId) {
+  let returnVal = null;
+  await AdminAxios('GET', ACTION_URL+'/'+ campaignId +CREATE_NATIVE)
+    .then((response) => {
+      if(response.responseCode.statusCode ===200){
+        returnVal = response.data
+      }else{
+        returnVal = null
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+};
 
 export async function uploadBannerImages(data,bannerSize) {
   let returnVal = null;
@@ -72,6 +99,20 @@ export async function updateCampaignBanner(creativeInfo) {
 export async function updateCampaignNative(creativeInfo) {
   let returnVal = null;
   await AdminAxios('PUT', ACTION_URL+'/'+ creativeInfo.campaignId +CREATE_NATIVE ,creativeInfo)
+    .then((response) => {
+      const {responseCode} =response
+      if(responseCode.statusCode ===200){
+        returnVal = true
+      }else{
+        returnVal = false
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+};
+
+export async function updateCampaignPopUnder(creativeInfo) {
+  let returnVal = null;
+  await AdminAxios('PUT', ACTION_URL+'/'+ creativeInfo.campaignId +CREATE_POP_UNDER ,creativeInfo)
     .then((response) => {
       const {responseCode} =response
       if(responseCode.statusCode ===200){
