@@ -892,6 +892,10 @@ export const ColSpan100 = styled.div`
   align-items: center;
   max-width: 100px;
   width: 100%;
+  & > div {
+    width: 100%;
+    height: 100%;
+  }
 `
 export const ColTitle = styled.div`
   padding: 0 0 0 10px;

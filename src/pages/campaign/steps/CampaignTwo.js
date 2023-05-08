@@ -52,7 +52,10 @@ export function CampaignTwo() {
       console.log(campaignBudgetInfo)
       selBudgetInfo(campaignBasicInfo.campaignId).then(response => {
         console.log(response)
-        setCampaignBudgetInfo(response)
+        const data = response
+        let budgetRate = {budgetRate : response.pcBudget * 100 / response.dailyAvgBudget}
+        Object.assign(data,budgetRate)
+        setCampaignBudgetInfo(data)
         reset(response)
       })
     }
@@ -140,24 +143,31 @@ export function CampaignTwo() {
       ...campaignBudgetInfo,
       dailyAvgBudget: parseInt(event.target.value),
       pcBudget: parseInt(event.target.value) - ((parseInt(event.target.value) * campaignBudgetInfo.budgetRate) / 100),
-      mobBudget: (parseInt(event.target.value) * campaignBudgetInfo.budgetRate) / 100
+      mobBudget: (parseInt(event.target.value) * campaignBudgetInfo.budgetRate) / 100,
+      budgetRate: (campaignBudgetInfo.pcBudget / parseInt(event.target.value)) * 1000
     })
   }
 
   const handleChangePcBudget = (event) => {
-    setCampaignBudgetInfo({
-      ...campaignBudgetInfo,
-      pcBudget: parseInt(event.target.value),
-      mobBudget: campaignBudgetInfo.dailyAvgBudget - parseInt(event.target.value)
-    })
+    if(event.target.value <= campaignBudgetInfo.dailyAvgBudget) {
+      setCampaignBudgetInfo({
+        ...campaignBudgetInfo,
+        pcBudget: parseInt(event.target.value),
+        mobBudget: campaignBudgetInfo.dailyAvgBudget - parseInt(event.target.value),
+        budgetRate: parseInt(event.target.value) * 100 / campaignBudgetInfo.dailyAvgBudget
+      })
+    }
   }
 
   const handleChangeMobileBudget = (event) => {
-    setCampaignBudgetInfo({
-      ...campaignBudgetInfo,
-      mobBudget: parseInt(event.target.value),
-      pcBudget: campaignBudgetInfo.dailyAvgBudget - parseInt(event.target.value),
-    })
+    if(event.target.value <= campaignBudgetInfo.dailyAvgBudget){
+      setCampaignBudgetInfo({
+        ...campaignBudgetInfo,
+        mobBudget: parseInt(event.target.value),
+        pcBudget: campaignBudgetInfo.dailyAvgBudget - parseInt(event.target.value),
+        budgetRate: parseInt(event.target.value) * 100 / campaignBudgetInfo.dailyAvgBudget
+      })
+    }
   }
   const handleChangeInputRange = (e) => {
     setCampaignBudgetInfo({
@@ -240,7 +250,6 @@ export function CampaignTwo() {
                   <Span1>PC</Span1>
                   <Input type={'number'}
                          min={100}
-                         readOnly
                          style={{color:'#f5811f'}}
                          value={campaignBudgetInfo !== null && campaignBudgetInfo.pcBudget}
                          onChange={(e) => handleChangePcBudget(e)}
@@ -248,25 +257,20 @@ export function CampaignTwo() {
                   <Won/>
                 </ColSpan1>
                 <ColSpan1>
-                  {campaignBudgetInfo !== null &&
-                    <input
-                      type="range"
-                      value={campaignBudgetInfo.budgetRate !== undefined ? campaignBudgetInfo.budgetRate : 50}
-                      onChange={handleChangeInputRange}
-                      style={{
-                        background: `linear-gradient(to right, #f5811f 0%, #f5811f ${campaignBudgetInfo.budgetRate !==undefined ? campaignBudgetInfo.budgetRate: 50}%, #ddd ${campaignBudgetInfo.budgetRate !==undefined ? campaignBudgetInfo.budgetRate: 50}%, #ddd 100%)`
-                      }}
-                    />
-                  }
-                  {campaignBudgetInfo !== null &&
-                    <Span1>{campaignBudgetInfo.dailyAvgBudget !==0 ? Math.round(campaignBudgetInfo.pcBudget/ campaignBudgetInfo.dailyAvgBudget * 100) : 50}:{campaignBudgetInfo.dailyAvgBudget !==0 ? Math.round(campaignBudgetInfo.mobBudget /campaignBudgetInfo.dailyAvgBudget * 100) :50}</Span1>
-                  }
+                  <input
+                    type="range"
+                    value={campaignBudgetInfo.budgetRate !== undefined ? campaignBudgetInfo.budgetRate : 50}
+                    onChange={handleChangeInputRange}
+                    style={{
+                      background: `linear-gradient(to right, #f5811f 0%, #f5811f ${campaignBudgetInfo.budgetRate !==undefined ? campaignBudgetInfo.budgetRate: 50}%, #ddd ${campaignBudgetInfo.budgetRate !==undefined ? campaignBudgetInfo.budgetRate: 50}%, #ddd 100%)`
+                    }}
+                  />
+                  <Span1>{campaignBudgetInfo.dailyAvgBudget !==0 ? Math.round(campaignBudgetInfo.pcBudget/ campaignBudgetInfo.dailyAvgBudget * 100) : 50}:{campaignBudgetInfo.dailyAvgBudget !==0 ? Math.round(campaignBudgetInfo.mobBudget /campaignBudgetInfo.dailyAvgBudget * 100) :50}</Span1>
                 </ColSpan1>
                 <ColSpan1>
                   <ColTitle><Span1>MOBILE</Span1></ColTitle>
                   <Input type={'number'}
                          min={100}
-                         readOnly
                          style={{color:'#f5811f'}}
                          value={campaignBudgetInfo !== null && campaignBudgetInfo.mobBudget}
                          onChange={(e) => handleChangeMobileBudget(e)}
