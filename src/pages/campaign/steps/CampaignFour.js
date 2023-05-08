@@ -48,6 +48,7 @@ import {
   uploadNativeImages
 } from "../../../services/campaign/CreativeAxios";
 import moment from "moment";
+import {toast} from "react-toastify";
 
 const RegistryBannerItem = (props) => {
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
@@ -426,7 +427,7 @@ function CampaignFourNative(props) {
           }
         })
       }else{
-        alert("5개 이상 등록 못함")
+        toast.warning('이미지는 5개 까지만 등록 가능합니다.')
       }
     }
   }
@@ -443,7 +444,7 @@ function CampaignFourNative(props) {
               <span style={{fontSize: 14}}>소재설정</span>
             </Row>
             <Row>
-              <span>이미지</span>
+              <span>이미지<p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p></span>
               <RowSpan box={true} style={{marginTop: 0, gap: 10, width: '80%', justifyContent: 'flex-start'}}>
                 {campaignCreativeInfo.nativeMaterials.length !== 0 && campaignCreativeInfo.nativeMaterials.map((item, key) => {
                   return (
@@ -576,14 +577,13 @@ function CampaignFourNative(props) {
       <RowSpan>
         <ColSpan1><Span4>미리보기</Span4></ColSpan1>
       </RowSpan>
-      <div style={{width: '100%',minHeight: 300, overflowX: 'scroll', whiteSpace: "nowrap"}}>
+      <RowSpan box={true}>
         {campaignCreativeInfo.nativeMaterials.length !== 0 && campaignCreativeInfo.nativeMaterials.map((item, key) => {
           return (
-            <PrevImage style={{backgroundImage: `url(${item.imagePath})`}}>
-            </PrevImage>
+            <PrevImage style={{backgroundImage: `url(${item.imagePath})`}} />
           )
         })}
-      </div>
+      </RowSpan>
     </form>
   )
 }

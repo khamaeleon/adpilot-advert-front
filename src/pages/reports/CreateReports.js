@@ -75,6 +75,10 @@ export default function CreateReports() {
       ...creativeInfo,
       id: tokenResult.id
     })
+    setReportsInfo({
+      id: null,
+      groupBy: null
+    })
   }, []);
 
   const handleSearchAdvertiser = (creative) => {

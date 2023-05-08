@@ -256,7 +256,7 @@ export const PrevImage = styled.div`
   display: inline-block;
   position: relative;
   margin: 10px;
-  width: 300px;
+  width: 200px;
   aspect-ratio: 1/1;
   background-color: #fff;
   border: 1px solid #ddd;
