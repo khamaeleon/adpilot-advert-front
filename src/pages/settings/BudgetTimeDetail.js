@@ -40,8 +40,8 @@ function BudgetTimeDetail() {
   const handleRadioSelect = (e) => {
     setTimeBudgetDetailDataState({
       ...timeBudgetDetailDataState,
-      exposeTimeType: e.target.value,
-      allowTimes: timeBudgetDetailDataState.exposeTimeType === 'DIRECT_SETTINGS' ? budgetTimesDirect: budgetTimes,
+      exposureTimeType: e.target.value,
+      allowTimes: timeBudgetDetailDataState.exposureTimeType === 'DIRECT_SETTINGS' ? budgetTimesDirect: budgetTimes,
     })
   }
   useEffect(() => {
@@ -55,7 +55,7 @@ function BudgetTimeDetail() {
     } else {
       setTimeBudgetDetailDataState({
         allowTimes: budgetTimes,
-        exposeTimeType: 'EQUAL_DISTRIBUTION',
+        exposureTimeType: 'EQUAL_DISTRIBUTION',
         groupName: '시간별 예산 그룹명',
         userId: id
       })
@@ -128,7 +128,7 @@ function BudgetTimeDetail() {
                   type={'radio'}
                   name={'exhaust'}
                   value={'EQUAL_DISTRIBUTION'}
-                  checked={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposeTimeType === 'EQUAL_DISTRIBUTION'}
+                  checked={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType === 'EQUAL_DISTRIBUTION'}
                   onChange={handleRadioSelect}
                 />
                 <span>균등 소진</span>
@@ -138,7 +138,7 @@ function BudgetTimeDetail() {
                   type={'radio'}
                   name={'exhaust'}
                   value={'FAST_EXHAUSTION'}
-                  checked={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposeTimeType === 'FAST_EXHAUSTION'}
+                  checked={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType === 'FAST_EXHAUSTION'}
                   onChange={handleRadioSelect}
                 />
                 <span>빠른 소진</span>
@@ -148,7 +148,7 @@ function BudgetTimeDetail() {
                   type={'radio'}
                   name={'exhaust'}
                   value={'DIRECT_SETTINGS'}
-                  checked={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposeTimeType === 'DIRECT_SETTINGS'}
+                  checked={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType === 'DIRECT_SETTINGS'}
                   onChange={handleRadioSelect}
                 />
                 <span>직접 설정</span>
@@ -156,7 +156,7 @@ function BudgetTimeDetail() {
             </RelativeDiv>
           </RowSpan>
         </BoardSearchDetail>
-        {['EQUAL_DISTRIBUTION', 'FAST_EXHAUSTION'].includes(timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposeTimeType) &&
+        {['EQUAL_DISTRIBUTION', 'FAST_EXHAUSTION'].includes(timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType) &&
           <BoardSearchResult>
             <RowSpan>
               <div><strong>광고 노출 요일 및 시간 설정</strong></div>
@@ -175,7 +175,7 @@ function BudgetTimeDetail() {
             </RowSpan>
           </BoardSearchResult>
         }
-        {timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposeTimeType === 'DIRECT_SETTINGS' &&
+        {timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType === 'DIRECT_SETTINGS' &&
           <BoardSearchResult>
             <RowSpan>
               <div><strong>요일 및 시간별 예산 설정</strong></div>

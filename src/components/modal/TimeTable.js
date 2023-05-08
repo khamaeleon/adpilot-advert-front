@@ -11,7 +11,7 @@ function TimeTableComponent (props) {
     <div>
       <ModalHeader title={"설정된 시간별 예산"}/>
       <ModalBody>
-        {props.exposeTimeType !== "DIRECT_SETTINGS"  &&
+        {props.exposureTimeType !== "DIRECT_SETTINGS"  &&
           <>
             <RowSpan>
               <ColTitle><strong>예산 소진 설정 | 균등소진/빠른소진</strong></ColTitle>
@@ -40,7 +40,7 @@ export default function TimeTable(props){
     setModal({
       isShow: true,
       width: 1200,
-      modalComponent: () => <TimeTableComponent exposeTimeType={props.exposeTimeType} readOnly={props} />
+      modalComponent: () => <TimeTableComponent exposureTimeType={props.exposureTimeType} readOnly={props} />
     })
   }
   return (

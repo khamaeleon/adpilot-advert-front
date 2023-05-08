@@ -28,14 +28,14 @@ export function SwitchComponent(props){
 
   const handleClick = (confirm) => {
     if(confirm){
-      cellProps.data.interlock = !cellProps.data.interlock;
+      cellProps.data.interlockYn = !cellProps.data.interlockYn;
       eventClick();
     }
-    setSelect(cellProps.data.interlock)
+    setSelect(cellProps.data.interlockYn)
     setModal({isShow:false});
   }
   const showModal = () => {
-    setSelect(!cellProps.data.interlock)
+    setSelect(!cellProps.data.interlockYn)
     setModal({
       isShow: true,
       width: 660,
@@ -45,7 +45,7 @@ export function SwitchComponent(props){
             <ModalHeader title={'연동 상태 변경'}/>
             <ModalBody>
               <ScriptSubject>
-                {!cellProps.data.interlock ?
+                {!cellProps.data.interlockYn ?
                   <div>연동을 사용 하시겠습니까?<br/>
                   </div>
                   :

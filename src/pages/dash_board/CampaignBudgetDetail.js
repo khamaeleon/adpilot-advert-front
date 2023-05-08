@@ -24,7 +24,7 @@ function CampaignBudgetDetail() {
   const navigate =useNavigate()
   const [budget, setBudget] = useState({
     dailyBudget: 1000,
-    infiniteBudget: false,
+    infiniteBudgetYn: false,
     budgetRate: 50,
     timeGroup: "",
     eventGroup: "",
@@ -46,7 +46,7 @@ function CampaignBudgetDetail() {
   const handleCheckInfiniteBudget = (e) => {
     setBudget({
       ...budget,
-      infiniteBudget: e.target.checked
+      infiniteBudgetYn: e.target.checked
     })
   }
 
@@ -88,7 +88,7 @@ function CampaignBudgetDetail() {
               <RelativeDiv>
                 <ColSpan1>
                   <Input
-                    readOnly={budget.infiniteBudget}
+                    readOnly={budget.infiniteBudgetYn}
                     value={budget.dailyBudget || 0}
                     {...register('dailyBudget',{
                       required: {

@@ -88,7 +88,7 @@ export const pixelColumns = [
  */
 export const pixelDetailColumns = [
   {
-    name: 'interlock',
+    name: 'interlockYn',
     header: '연동 상태',
     minWidth:200,
     maxWidth:200,
@@ -146,7 +146,7 @@ export const pixelDetailColumns = [
 
 export const pixelDetailInfoColumns = [
   {
-    name: 'interlock',
+    name: 'interlockYn',
     header: '연동 상태',
     minWidth:90,
     maxWidth:90,

@@ -131,7 +131,7 @@ export function CampaignTwo() {
   const handleCheckInfiniteBudget = (e) => {
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
-      infiniteBudget: e.target.checked
+      infiniteBudgetYn: e.target.checked
     })
   }
 
@@ -212,7 +212,7 @@ export function CampaignTwo() {
                     render={({field}) => (
                       <Input type={'number'}
                              min={100}
-                             readOnly={campaignBudgetInfo.infiniteBudget}
+                             readOnly={campaignBudgetInfo.infiniteBudgetYn}
                              placeholder={'일일 평균 예산을 설정해주세요.'}
                              style={{color:'#f5811f'}}
                              value={campaignBudgetInfo.dailyAvgBudget}
@@ -223,7 +223,7 @@ export function CampaignTwo() {
                 </ColSpan1>
                 <ColSpan1>
                   <label>
-                    <input type={'checkbox'} value={campaignBudgetInfo.infiniteBudget || ''} checked={campaignBudgetInfo.infiniteBudget} className={'checkbox-type-a'} onChange={handleCheckInfiniteBudget}/>
+                    <input type={'checkbox'} value={campaignBudgetInfo.infiniteBudgetYn || ''} checked={campaignBudgetInfo.infiniteBudget} className={'checkbox-type-a'} onChange={handleCheckInfiniteBudget}/>
                     <i/>
                     {/*배너일때 infiniteBudget 항목 없음*/}
                     <span>일일 예산 무제한</span>
@@ -299,10 +299,10 @@ export function CampaignTwo() {
                     )}
                   />
                 </ColSpan1>
-                {timeBudgetDetailDataState?.exposeTimeType !== undefined &&
+                {timeBudgetDetailDataState?.exposureTimeType !== undefined &&
                   <ColSpan1>
                     <TimeTable
-                      exposeTimeType={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposeTimeType}
+                        exposureTimeType={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType}
                       title={'설정된 시간별 예산'} readOnly={true}/>
                   </ColSpan1>
                 }

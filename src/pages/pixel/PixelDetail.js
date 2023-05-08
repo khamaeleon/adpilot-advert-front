@@ -104,8 +104,8 @@ function PixelDetail() {
     })
   }
   let textColor = {color: pixelInfoListState !== null ? statusTypeAll.find(type => type.value === pixelInfoListState.status).color : ''};
-  const background = !pixelInfoListState?.interlock ? {background: '#ddd', cursor: 'default'} : {background: '#f5811f', cursor: 'default'};
-  const position = pixelInfoListState?.interlock ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null;
+  const background = !pixelInfoListState?.interlockYn ? {background: '#ddd', cursor: 'default'} : {background: '#f5811f', cursor: 'default'};
+  const position = pixelInfoListState?.interlockYn ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null;
 
   return (
     <>
@@ -252,7 +252,7 @@ function PixelDetail() {
                     style={background}
                   >
                     <label style={position}/>
-                    {pixelInfoListState?.interlock ? <On>ON</On>:  <Off>OFF</Off>}
+                    {pixelInfoListState?.interlockYn ? <On>ON</On>:  <Off>OFF</Off>}
                   </SwitchBox>
                   {/*<SwitchComponent background={pixelInfoListState?.interlock} styles={{cursor: 'default'}}/>*/}
                 </div>
