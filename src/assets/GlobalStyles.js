@@ -892,10 +892,6 @@ export const ColSpan100 = styled.div`
   align-items: center;
   max-width: 100px;
   width: 100%;
-  & > div {
-    width: 100%;
-    height: 100%;
-  }
 `
 export const ColTitle = styled.div`
   padding: 0 0 0 10px;
@@ -931,6 +927,7 @@ export const DateContainer = styled.div`
   border: 1px solid ${lightGray};
   border-radius: 5px;
   overflow: hidden;
+  background-color: ${(props)=> props.disabled ? "#f9fafb" : null};
 `
 
 export const CalendarBox = styled.div`
@@ -939,7 +936,6 @@ export const CalendarBox = styled.div`
   border-right: 1px solid ${lightGray};
   justify-content: center;
   align-items: center;
-  background-color: #f9f9f9;
 `
 
 export const CalendarIcon = styled.div`

@@ -408,7 +408,7 @@ export function CampaignThree() {
             <RowSpan>
               <Span4>게재 기간</Span4>
               <ColSpan1>
-                <DateContainer>
+                <DateContainer disabled={exposeDayChecked}>
                   <CalendarBox>
                     <CalendarIcon/>
                   </CalendarBox>

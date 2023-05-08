@@ -465,7 +465,6 @@ function CampaignFourNative(props) {
                 })}
                 {campaignCreativeInfo.nativeMaterials.length < 5 &&
                   <ColSpan100 padding={'0'}>
-                    <div>
                     <ImageUploading
                       multiple
                       acceptType={["jpg", "gif", "png"]}
@@ -477,11 +476,10 @@ function CampaignFourNative(props) {
                         <button
                           type={'button'}
                           onClick={onImageUpload}
-                          style={{width: '100%', height: '100%'}}
+                          style={{width: '100%', height: '100px'}}
                         >이미지 첨부</button>
                       )}
                     </ImageUploading>
-                    </div>
                   </ColSpan100>
                 }
               </RowSpan>
@@ -571,7 +569,7 @@ function CampaignFourNative(props) {
                     <button
                       type={'button'}
                       onClick={onImageUpload}
-                      style={{width: '100%', height: '100%'}}
+                      style={{width: '100%', height: '100px'}}
                     >로고 첨부</button>
                   )}
                 </ImageUploading>
@@ -594,7 +592,7 @@ function CampaignFourNative(props) {
       <RowSpan>
         <ColSpan1><Span4>미리보기</Span4></ColSpan1>
       </RowSpan>
-      <div style={{width: '100%', overflowX: 'scroll', whiteSpace: "nowrap"}}>
+      <div style={{width: '100%',minHeight: 300, overflowX: 'scroll', whiteSpace: "nowrap"}}>
         {campaignCreativeInfo.nativeMaterials.length !== 0 && campaignCreativeInfo.nativeMaterials.map((item, key) => {
           return (
             <PrevImage style={{backgroundImage: `url(${item.imagePath})`}}>
