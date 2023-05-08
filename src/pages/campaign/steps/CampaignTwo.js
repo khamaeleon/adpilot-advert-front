@@ -52,7 +52,7 @@ export function CampaignTwo() {
     if (campaignBasicInfo.step !=='INIT' || state.campaignId !==undefined ) {
       //수정
       console.log(campaignBasicInfo)
-      let campaignId = campaignBasicInfo.campaignId !== '' ? campaignBasicInfo.campaignId : state.campaignId
+      let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
       selBudgetInfo(campaignId).then(response => {
         console.log(response)
         const data = response
@@ -62,7 +62,7 @@ export function CampaignTwo() {
         reset(response)
       })
     }
-    let userId = state.userId !== undefined ? state.userId : campaignBasicInfo.userId
+    let userId = state !== null ? state.userId : campaignBasicInfo.userId
     selBudgetTimeList(userId).then(response => {
       if (response) {
         setTimeBudgetDetailDataState(response)
@@ -190,14 +190,14 @@ export function CampaignTwo() {
   }
   const onSubmit = (data) => {
     console.log(campaignBudgetInfo)
-    let campaignId = campaignBasicInfo.campaignId !== '' ? campaignBasicInfo.campaignId : state.campaignId
-    updateCampaignBudget({
+    let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
+      updateCampaignBudget({
       ...campaignBudgetInfo,
       campaignId: campaignId
     }).then(response => {
       if (response) {
         console.log('2차저장')
-        state.userId !== undefined ? navigate('/board/dashboard') : setStepCampaign({steps: 2})
+        state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 2})
       }
     })
 
@@ -425,8 +425,8 @@ export function CampaignTwo() {
         </BoardSearchResult>
       </Board>
       <SubmitContainer>
-        <CancelButton type={'button'} onClick={() => state.campaignId !== '' ? navigate('/board/dashboard') : setStepCampaign({steps: 0})}>취소</CancelButton>
-        <SubmitButton type={'submit'}>{state.campaignId !== '' ? '수정' : '다음[2/4]'}</SubmitButton>
+        <CancelButton type={'button'} onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 0})}>취소</CancelButton>
+        <SubmitButton type={'submit'}>{state !== null ? '수정' : '다음[2/4]'}</SubmitButton>
       </SubmitContainer>
     </form>
   )
