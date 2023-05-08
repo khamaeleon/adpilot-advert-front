@@ -353,6 +353,7 @@ function DashBoardIndex() {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [totalInfo, setTotalInfo] = useState(dataTotalInfo)
   const [adverStatusData, setAdverStatusData] = useAtom(adverStatusAtom)
+  const [adverStatusDetailData, setAdverStatusDetailData] = useAtom(adverStatusAtom)
   const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
   const [keyword, setKeyword] = useState('')
 
@@ -360,10 +361,11 @@ function DashBoardIndex() {
     if(tokenUserInfo.role !== 'NORMAL') {
       //광고주 현황 조회
       retrieveAdvertiserStatus(searchCondition).then(response => {
+        console.log(searchCondition)
         if(response !== null) {
           setAdverStatusData(response)
           setTotalInfo({
-            totalCount: response?.length
+            totalCount: response.length
           })
         } else {
           setAdverStatusData([])
@@ -394,7 +396,11 @@ function DashBoardIndex() {
   }
 
   const handleFetchDetailData = useCallback(async ({userId}) => {
-    return await retrieveAdvertiserCampaignStatus(userId, searchCondition)
+    let adverStatusTempDetail = await retrieveAdvertiserCampaignStatus(userId, searchCondition)
+    adverStatusTempDetail = adverStatusTempDetail.map(item =>{
+      return {...item,userId:userId}
+    })
+    return adverStatusTempDetail
   },[])
 
   return (

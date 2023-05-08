@@ -1,9 +1,5 @@
 export const navigationName = {
   "/board/dashboard": "홈/대시보드",
-  "/board/campaignInfoDetail": "홈/대시보드/캠페인 설정 상세",
-  "/board/campaignBudgetDetail": "홈/대시보드/예산 설정 상세",
-  "/board/campaignGroupDetail": "홈/대시보드/그룹 설정 상세",
-  "/board/campaignCreativeDetail": "홈/대시보드/크리에이티브 설정 상세",
   "/board/myPageUser": "홈/마이페이지",
   "/board/myPageAdmin": "홈/마이페이지",
   "/board/campaign": "홈/광고 관리/캠페인생성",

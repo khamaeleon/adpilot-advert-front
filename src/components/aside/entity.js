@@ -21,7 +21,7 @@ export const menuList = [
   {
     name: "dashboard",
     header: "대시보드",
-    include: ["dashboard",'campaignInfoDetail','campaignBudgetDetail','campaignGroupDetail','campaignCreativeDetail'],
+    include: ["dashboard", 'campaignLookOver', 'campaignTwo'],
     child: []
   },
   {
