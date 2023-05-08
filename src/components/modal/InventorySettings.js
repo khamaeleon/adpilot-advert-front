@@ -89,49 +89,69 @@ function SearchModal (props) {
 
   const handleClickSelectItem = (selectItem) => {
     if(type==='allow'){
-      if(allowInventoryIds.length !== 0) {
-        if (allowInventoryIds.find(item => item.inventoryId === selectItem.inventoryId) !== undefined){
-          setAllowInventoryIds([...allowInventoryIds.filter(item => item.inventoryId !== selectItem.inventoryId)])
-          setCampaignGroupInfo({
-            ...campaignGroupInfo,
-            allowInventoryIds:[...campaignGroupInfo.allowInventoryIds.filter(value => value !== selectItem.inventoryId)]
-          })
-        } else {
-          setAllowInventoryIds([...allowInventoryIds.concat(selectItem)])
-          setCampaignGroupInfo({
-            ...campaignGroupInfo,
-            allowInventoryIds:[...campaignGroupInfo.allowInventoryIds.concat(selectItem.inventoryId)]
-          })
-        }
-      } else {
-        setAllowInventoryIds([...allowInventoryIds,selectItem])
+      console.log(allowInventoryIds)
+
+      if(allowInventoryIds === null){
+        setAllowInventoryIds([selectItem])
         setCampaignGroupInfo({
           ...campaignGroupInfo,
-          allowInventoryIds:[...campaignGroupInfo.allowInventoryIds,selectItem.inventoryId]
+          allowInventoryIds:[selectItem.inventoryId]
         })
+      } else {
+        if(allowInventoryIds.length !== 0) {
+          if (allowInventoryIds.find(item => item.inventoryId === selectItem.inventoryId) !== undefined){
+            setAllowInventoryIds([...allowInventoryIds.filter(item => item.inventoryId !== selectItem.inventoryId)])
+            setCampaignGroupInfo({
+              ...campaignGroupInfo,
+              allowInventoryIds:[...campaignGroupInfo.allowInventoryIds.filter(value => value !== selectItem.inventoryId)]
+            })
+          } else {
+            setAllowInventoryIds([...allowInventoryIds.concat(selectItem)])
+            setCampaignGroupInfo({
+              ...campaignGroupInfo,
+              allowInventoryIds:[...campaignGroupInfo.allowInventoryIds.concat(selectItem.inventoryId)]
+            })
+          }
+        } else {
+          setAllowInventoryIds([...allowInventoryIds,selectItem])
+          setCampaignGroupInfo({
+            ...campaignGroupInfo,
+            allowInventoryIds:[...campaignGroupInfo.allowInventoryIds,selectItem.inventoryId]
+          })
+        }
       }
+
     }else{
-      if(disAllowInventoryIds.length !== 0) {
-        if (disAllowInventoryIds.find(item => item.inventoryId === selectItem.inventoryId) !== undefined){
-          setDisAllowInventoryIds([...disAllowInventoryIds.filter(item => item.inventoryId !== selectItem.inventoryId)])
-          setCampaignGroupInfo({
-            ...campaignGroupInfo,
-            disAllowInventoryIds:[...campaignGroupInfo.disAllowInventoryIds.filter(value => value !== selectItem.inventoryId)]
-          })
-        } else {
-          setDisAllowInventoryIds([...disAllowInventoryIds.concat(selectItem)])
-          setCampaignGroupInfo({
-            ...campaignGroupInfo,
-            disAllowInventoryIds:[...campaignGroupInfo.disAllowInventoryIds.concat(selectItem.inventoryId)]
-          })
-        }
-      } else {
-        setDisAllowInventoryIds([...disAllowInventoryIds,selectItem])
+      if(disAllowInventoryIds === null) {
+        setDisAllowInventoryIds([selectItem])
         setCampaignGroupInfo({
           ...campaignGroupInfo,
-          disAllowInventoryIds:[...campaignGroupInfo.disAllowInventoryIds,selectItem.inventoryId]
+          disAllowInventoryIds:[selectItem.inventoryId]
         })
+      } else {
+        if(disAllowInventoryIds.length !== 0) {
+          if (disAllowInventoryIds.find(item => item.inventoryId === selectItem.inventoryId) !== undefined){
+            setDisAllowInventoryIds([...disAllowInventoryIds.filter(item => item.inventoryId !== selectItem.inventoryId)])
+            setCampaignGroupInfo({
+              ...campaignGroupInfo,
+              disAllowInventoryIds:[...campaignGroupInfo.disAllowInventoryIds.filter(value => value !== selectItem.inventoryId)]
+            })
+          } else {
+            setDisAllowInventoryIds([...disAllowInventoryIds.concat(selectItem)])
+            setCampaignGroupInfo({
+              ...campaignGroupInfo,
+              disAllowInventoryIds:[...campaignGroupInfo.disAllowInventoryIds.concat(selectItem.inventoryId)]
+            })
+          }
+        } else {
+          setDisAllowInventoryIds([...disAllowInventoryIds,selectItem])
+          setCampaignGroupInfo({
+            ...campaignGroupInfo,
+            disAllowInventoryIds:[...campaignGroupInfo.disAllowInventoryIds,selectItem.inventoryId]
+          })
+        }
       }
+
     }
   }
 
@@ -165,7 +185,7 @@ function SearchModal (props) {
               <SearchInventoryItemResult>
                 {mediaInventoryInfo !== null && mediaInventoryInfo.map((item, key) => {
                   return (
-                    <InventoryItem key={key} onClick={() => handleClickSelectItem(item)} active={type ==='allow' ? allowInventoryIds.find(is => is.inventoryId === item.inventoryId) !== undefined ? true : null :disAllowInventoryIds.find(is => is.inventoryId === item.inventoryId) !== undefined ? true : null}>
+                    <InventoryItem key={key} onClick={() => handleClickSelectItem(item)} active={type ==='allow' ? allowInventoryIds !== null && allowInventoryIds.find(is => is.inventoryId === item.inventoryId) !== undefined ? true : null : disAllowInventoryIds !== null && disAllowInventoryIds.find(is => is.inventoryId === item.inventoryId) !== undefined ? true : null}>
                       <MediaName>{item.siteName}</MediaName>
                       <InventoryName>{item.inventoryName}</InventoryName>
                       <UserId>{item.username}</UserId>
