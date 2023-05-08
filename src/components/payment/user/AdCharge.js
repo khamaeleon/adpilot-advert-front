@@ -8,6 +8,8 @@ import { ColSpan2, ColSpan3, ColSpan4, DefaultButton, RowSpan, RelativeDiv, Vali
 import {SmallButton} from "../../../pages/campaign/styles/common";
 import {decimalFormat, removeStr} from "../../../common/StringUtils";
 import {useForm} from "react-hook-form";
+import {paymentRequest} from "../../../services/payment/user/paymentUserAxios";
+import {tokenResultAtom} from "../../../pages/login/entity/Common";
 
 export function AdChargeButton(props) {
     const {onSubmit, modalInfo, onSave, title, requestAmountValue, setRequestAmountValue} = props;
@@ -34,6 +36,7 @@ export function AdChargeButton(props) {
 }
 
 function AdChargeModal (props) {
+    const [tokenUserInfo] = useAtom(tokenResultAtom)
     const [,setModal] = useAtom(modalController)
     const {title, setRequestAmountValue} = props
     const {register, handleSubmit, setError, formState:{errors} } = useForm()
@@ -61,33 +64,53 @@ function AdChargeModal (props) {
         setChargeAmount(0)
         setInputValue(1)
     }
-    const payWithEasypay = async (paymentMethod, amount) => {
-        try {
-            const response = await axios.post('java로 보낼 주소', {
-                paymentMethod: paymentMethod,
-                amount: amount
-            });
-            return response.data;
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    // const payWithEasypay = async (paymentServiceUid, amount, paymentMethod, ) => {
+    //     try {
+    //         const response = await axios.post('/payments/ADVERTISE/payment-request', {
+    //             paymentServiceUid: paymentServiceUid,
+    //             amount: amount,
+    //             payMethodType: paymentMethod,
+    //         });
+    //         return response.data;
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }
     const onSubmit = async () => {
         if (chargeAmount <= 0) {
             setError('chargeAmount', {type: 'required', message:'충전 금액을 입력해 주세요'})
         } else {
             // 거래타입, 충전금액 데이터 post 값으로 넘기기
             setRequestAmountValue(requestAmountValue => requestAmountValue + calcAmount());
-            await payWithEasypay(payMethod, calcAmount)
+
+            const userId = tokenUserInfo.id
+
+            const requestData = {
+                paymentServiceUid: userId,
+                amount: (chargeAmount / 10) + chargeAmount,
+                payMethodType: payMethod
+            }
+
+            await paymentRequest ( requestData )
                 .then(response => {
-                    console.log("성공 응답 처리",response);
                     // 성공적인 응답 처리
-                    setModal({isShow: false});
+                    let data = response;
+                    console.log("성공 응답 처리",data);
+                    // setModal({isShow: false});
+                    // iframe 화면 띄우는 부분
+                    const newWindow = window.open('', '_blank', 'width=500,height=500');
+                    const iframe = document.createElement('iframe');
+                    iframe.src = 'https://testapi.co.kr?authenticationId=01023012301';
+                    iframe.width = '100%';
+                    iframe.height = '100%';
+                    newWindow.document.body.appendChild(iframe);
+
                 })
                 .catch(error => {
-                    console.error("실패 응답 처리",error);
                     // 실패한 응답 처리
+                    console.error("실패 응답 처리",error);
                     // 에러 메시지 등을 사용자에게 알려줄 수 있습니다.
+                    // 에러 상태, 결제 실패 기타 등등 상황에 맞게 토스트 날립시다
                 });
         }
     }
