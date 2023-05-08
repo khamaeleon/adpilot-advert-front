@@ -17,7 +17,7 @@ import {
 } from "../../../assets/GlobalStyles";
 import {
   CampaignButton,
-  CategoryItem,
+  CategoryItem, CreateImage,
   DeleteIcon,
   FolderButton,
   ImageUploadCard,
@@ -127,11 +127,7 @@ const RegistryBannerItem = (props) => {
                 maxNumber={5}
               >
                 {({onImageUpload}) => (
-                  <button
-                    type={'button'}
-                    onClick={onImageUpload}
-                    style={{width: '100%', height: '100px'}}
-                  >이미지 첨부</button>
+                  <CreateImage onClick={onImageUpload}/>
                 )}
               </ImageUploading>
             </ColSpan100>
@@ -322,11 +318,7 @@ function CampaignFourBanner(props) {
                       maxNumber={5}
                     >
                       {({onImageUpload}) => (
-                        <button
-                          type={'button'}
-                          onClick={onImageUpload}
-                          style={{width: '100%', height: '100%'}}
-                        >로고 첨부</button>
+                        <CreateImage onClick={onImageUpload}/>
                       )}
                     </ImageUploading>
                   </ColSpan100>
@@ -452,7 +444,7 @@ function CampaignFourNative(props) {
             </Row>
             <Row>
               <span>이미지</span>
-              <RowSpan style={{marginTop: 0, gap: 10, width: '80%', justifyContent: 'flex-start'}}>
+              <RowSpan box={true} style={{marginTop: 0, gap: 10, width: '80%', justifyContent: 'flex-start'}}>
                 {campaignCreativeInfo.nativeMaterials.length !== 0 && campaignCreativeInfo.nativeMaterials.map((item, key) => {
                   return (
                     <ColSpan100 padding={'0'} key={key}>
@@ -474,11 +466,7 @@ function CampaignFourNative(props) {
                       maxNumber={5}
                     >
                       {({onImageUpload}) => (
-                        <button
-                          type={'button'}
-                          onClick={onImageUpload}
-                          style={{width: '100%', height: '100%'}}
-                        >이미지 첨부</button>
+                        <CreateImage onClick={onImageUpload}/>
                       )}
                     </ImageUploading>
                     </div>
@@ -547,7 +535,7 @@ function CampaignFourNative(props) {
         </Row>
         <Row>
           <Span4>로고 <p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p></Span4>
-          <RowSpan style={{marginTop: 0, gap: 10, width: '80%', justifyContent: 'flex-start'}}>
+          <RowSpan box={true} style={{marginTop: 0, gap: 10, width: '80%', justifyContent: 'flex-start'}}>
             {campaignCreativeInfo.logoPaths.length !== 0 && campaignCreativeInfo.logoPaths.map((item, key) => {
               return (
                 <ColSpan100 padding={'0'} key={key}>
@@ -568,11 +556,7 @@ function CampaignFourNative(props) {
                   maxNumber={5}
                 >
                   {({onImageUpload}) => (
-                    <button
-                      type={'button'}
-                      onClick={onImageUpload}
-                      style={{width: '100%', height: '100%'}}
-                    >로고 첨부</button>
+                    <CreateImage onClick={onImageUpload}/>
                   )}
                 </ImageUploading>
               </ColSpan100>
