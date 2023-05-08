@@ -1,18 +1,18 @@
 import {useAtom} from "jotai";
 import React, {useEffect, useState} from "react";
-import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
+import {ModalBody, ModalFooter, ModalHeader} from "./Modal";
 import styled from "styled-components";
 import {modalController} from "../../store";
-import {ColSpan2, DefaultButton, defaultStyle, RowSpan, Span4} from "../../assets/GlobalStyles";
+import {ColSpan2, DefaultButton, RowSpan, Span4} from "../../assets/GlobalStyles";
 import {SmallButton} from "../../pages/campaign/styles/common";
-import Select from "react-select";
-import {Icon} from "../table";
 import {
   allowInventoryIdsAtom,
-  campaignGroupInfoAtom, disAllowInventoryIdsAtom,
+  campaignGroupInfoAtom,
+  disAllowInventoryIdsAtom,
   mediaInventoryInfoAtom
 } from "../../pages/campaign/entity/Group";
 import {selSearchMediaInfo, selSearchMediaList} from "../../services/campaign/GroupAxios";
+import {toast} from "react-toastify";
 
 export function InventoryButton(props) {
   const {title, onSubmit, btnStyle, type,historyAdd} = props;
@@ -42,7 +42,6 @@ function SearchModal (props) {
   const [campaignGroupInfo, setCampaignGroupInfo] = useAtom(campaignGroupInfoAtom)
 
   useEffect(()=>{
-    console.log(campaignGroupInfo.allowInventoryIds)
     if(type==='allow'){
       let param ={inventoryIds:campaignGroupInfo.allowInventoryIds }
       selSearchMediaList(param).then(response => {
@@ -54,6 +53,9 @@ function SearchModal (props) {
         setDisAllowInventoryIds(response)
       })
     }
+    return () => {
+      setMediaInventoryInfo([])
+    }
   },[])
 
   const handleSearchKeyword = (event)=>{
@@ -61,7 +63,7 @@ function SearchModal (props) {
   }
   const onSearchMediaInventory =() =>{
     if(searchKeyword === ''){
-      alert('키워드입력해라')
+      toast.warning('키워드를 입력해주세요.')
     }else{
       selSearchMediaInfo(searchKeyword).then(response => {
         if(response){
@@ -73,11 +75,16 @@ function SearchModal (props) {
   }
 
   const handleSubmit = () => {
-    setModal({
-      isShow: false,
-      modalComponent: null
-    })
-    console.log(campaignGroupInfo)
+    console.log(allowInventoryIds)
+    if(allowInventoryIds !== null && allowInventoryIds.length > 0) {
+      setModal({
+        isShow: false,
+        modalComponent: null
+      })
+      console.log(campaignGroupInfo)
+    } else {
+      toast.warning('광고 그룹을 선택해주세요')
+    }
   }
 
   const handleClickSelectItem = (selectItem) => {
@@ -156,7 +163,7 @@ function SearchModal (props) {
                 <BannerSize>지면 사이즈</BannerSize>
               </SearchInventoryHeader>
               <SearchInventoryItemResult>
-                {mediaInventoryInfo !==null && mediaInventoryInfo.map((item, key) => {
+                {mediaInventoryInfo !== null && mediaInventoryInfo.map((item, key) => {
                   return (
                     <InventoryItem key={key} onClick={() => handleClickSelectItem(item)} active={type ==='allow' ? allowInventoryIds.find(is => is.inventoryId === item.inventoryId) !== undefined ? true : null :disAllowInventoryIds.find(is => is.inventoryId === item.inventoryId) !== undefined ? true : null}>
                       <MediaName>{item.siteName}</MediaName>
@@ -169,6 +176,9 @@ function SearchModal (props) {
                     </InventoryItem>
                   )
                 })}
+                {mediaInventoryInfo === null || mediaInventoryInfo.length === 0 &&
+                  <Centered>데이터가 없습니다. 지면을 검색해주세요.</Centered>
+                }
               </SearchInventoryItemResult>
             </div>
           </ColSpan2>
@@ -254,6 +264,7 @@ const SearchInventoryInputGroup = styled.div`
 `
 
 const SearchInventoryItemResult = styled.div`
+  position: relative;
   border: 1px solid #e5e5e5;
   height: 350px;
   overflow: auto;
@@ -268,7 +279,7 @@ const InventoryItem = styled.div`
   color: ${(props) => props.active ? '#f5811f': null};
   background-color: ${(props) => props.active ? '#fffaf1': null};;
   &:hover {
-    background-color: #fffaf1;
+    background-color: #ffe3cb;
     border-left: 2px solid #ffe3cb;
     border-bottom: 1px solid #ffe3cb;
     cursor: pointer;
@@ -390,4 +401,10 @@ const BannerSize = styled.div`
   padding: 9px 0;
   text-align: center;
   width:15%;
+`
+const Centered = styled.span`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
 `
