@@ -19,10 +19,17 @@ import DashBoard from "../dash_board";
 import DashBoardIndex from "../dash_board/DashBoardIndex";
 import {BoardContainer, TitleContainer} from "../../assets/GlobalStyles";
 import Navigator from "../../components/common/Navigator";
+import {CampaignLookOver} from "../campaign/steps/CampaignLookOver";
+import {CampaignTwo} from "../campaign/steps/CampaignTwo";
+import {FormProvider, useForm} from "react-hook-form";
+import {CampaignThree} from "../campaign/steps/CampaignThree";
+import {CampaignFour} from "../campaign/steps/CampaignFour";
+
 
 function Layout() {
   const params = useParams()
   const navigate = useNavigate()
+  const methods = useForm()
   const [tokenUserInfo, setTokenUserInfo] = useAtom(tokenResultAtom)
 
   useEffect(() => {
@@ -137,7 +144,16 @@ function Layout() {
           </Logout>
         </BoardHeader>
         {/* 대시보드 */}
-        {['dashboard','campaignInfoDetail','campaignBudgetDetail','campaignGroupDetail','campaignCreativeDetail'].includes(params.id) && <DashBoard/>}
+        {params.id === 'dashboard' && <DashBoard/>}
+        {/* 대시보드 캠페인명 수정*/}
+        {params.id === 'campaignLookOver' && <main><BoardContainer><FormProvider {...methods}><CampaignLookOver/></FormProvider></BoardContainer></main>}
+        {/* 대시보드 캠페인 예산 설정*/}
+        {params.id === 'campaignTwo' && <main><BoardContainer><FormProvider {...methods}><CampaignTwo/></FormProvider></BoardContainer></main>}
+        {/* 대시보드 광고 그룹 설정*/}
+        {params.id === 'campaignThree' && <main><BoardContainer><FormProvider {...methods}><CampaignThree/></FormProvider></BoardContainer></main>}
+        {/* 대시보드 크리에이티브 설정*/}
+        {params.id === 'campaignFour' && <main><BoardContainer><FormProvider {...methods}><CampaignFour/></FormProvider></BoardContainer></main>}
+
         {/* 픽셀 관리*/}
         {['pixel', 'pixelDetail'].includes(params.id) && <Pixel/>}
         {/* 광고 관리 */}

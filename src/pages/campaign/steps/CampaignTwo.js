@@ -33,6 +33,7 @@ import {timeBudgetDetailDataAtom} from "../../settings/entity/BudgetTime";
 import {selBudgetInfo, updateCampaignBudget} from "../../../services/campaign/BudgetAxios";
 import {campaignBudgetInfoAtom} from "../entity/Budget";
 import {useAtomValue} from "jotai/index";
+import {useLocation, useNavigate} from "react-router-dom";
 
 export function CampaignTwo() {
   const setStepCampaign = useSetAtom(stepCampaignAtom)
@@ -43,14 +44,16 @@ export function CampaignTwo() {
   const [priceEventListState, setPriceEventListState] = useState(null)
   const [biddingType] = useState(biddingTypeAll)
   const [timeBudgetDetailDataState, setTimeBudgetDetailDataState] = useAtom(timeBudgetDetailDataAtom)
-
+  const {state} =useLocation()
+  const navigate = useNavigate()
   const {register, handleSubmit,reset,setError,setValue, control, formState: {errors}} = useFormContext()
 
   useEffect(() => {
-    if (campaignBasicInfo.step !=='INIT') {
+    if (campaignBasicInfo.step !=='INIT' || state.campaignId !==undefined ) {
       //수정
-      console.log(campaignBudgetInfo)
-      selBudgetInfo(campaignBasicInfo.campaignId).then(response => {
+      console.log(campaignBasicInfo)
+      let campaignId = campaignBasicInfo.campaignId !== '' ? campaignBasicInfo.campaignId : state.campaignId
+      selBudgetInfo(campaignId).then(response => {
         console.log(response)
         const data = response
         let budgetRate = {budgetRate : response.pcBudget * 100 / response.dailyAvgBudget}
@@ -59,7 +62,8 @@ export function CampaignTwo() {
         reset(response)
       })
     }
-    selBudgetTimeList(campaignBasicInfo.userId).then(response => {
+    let userId = state.userId !== undefined ? state.userId : campaignBasicInfo.userId
+    selBudgetTimeList(userId).then(response => {
       if (response) {
         setTimeBudgetDetailDataState(response)
         let budgetTimeList = []
@@ -69,7 +73,7 @@ export function CampaignTwo() {
         setBudgetTimeListState(budgetTimeList)
       }
     })
-    selBudgetEventList(campaignBasicInfo.userId).then(response => {
+    selBudgetEventList(userId).then(response => {
       if (response) {
         let budgetEventList = []
         response.budgetEventDtos.map(data => {
@@ -78,7 +82,7 @@ export function CampaignTwo() {
         setBudgetEventListState(budgetEventList)
       }
     })
-    selPriceEventList(campaignBasicInfo.userId).then(response => {
+    selPriceEventList(userId).then(response => {
       if (response) {
         let priceEventList = []
         response.priceEventDtos.map(data => {
@@ -186,13 +190,14 @@ export function CampaignTwo() {
   }
   const onSubmit = (data) => {
     console.log(campaignBudgetInfo)
+    let campaignId = campaignBasicInfo.campaignId !== '' ? campaignBasicInfo.campaignId : state.campaignId
     updateCampaignBudget({
       ...campaignBudgetInfo,
-      campaignId: campaignBasicInfo.campaignId
+      campaignId: campaignId
     }).then(response => {
       if (response) {
         console.log('2차저장')
-        setStepCampaign({steps: 2})
+        state.userId !== undefined ? navigate('/board/dashboard') : setStepCampaign({steps: 2})
       }
     })
 
@@ -420,8 +425,8 @@ export function CampaignTwo() {
         </BoardSearchResult>
       </Board>
       <SubmitContainer>
-        <CancelButton type={'button'} onClick={() => setStepCampaign({steps: 0})}>취소</CancelButton>
-        <SubmitButton type={'submit'}>다음[2/4]</SubmitButton>
+        <CancelButton type={'button'} onClick={() => state.campaignId !== '' ? navigate('/board/dashboard') : setStepCampaign({steps: 0})}>취소</CancelButton>
+        <SubmitButton type={'submit'}>{state.campaignId !== '' ? '수정' : '다음[2/4]'}</SubmitButton>
       </SubmitContainer>
     </form>
   )
