@@ -37,6 +37,7 @@ import {campaignGroupInfoAtom, mediaCategoryAtom, noViewType} from "../entity/Gr
 import {dateFormat} from "../../../common/StringUtils";
 import {selEnumInfo} from "../../../services/campaign/InfoAxios";
 import {toast} from "react-toastify";
+import {useLocation, useNavigate} from "react-router-dom";
 
 export function CampaignThree() {
   const [, setStepCampaign] = useAtom(stepCampaignAtom)
@@ -49,10 +50,13 @@ export function CampaignThree() {
   const [dateRange, setDateRange] = useState([]);
   const [startDate, endDate] = dateRange
   const {register, handleSubmit, reset,setValue, control, formState: {errors}} = useFormContext()
-
+  const {state} =useLocation()
+  const navigate = useNavigate()
   useEffect(() => {
-    if(campaignBasicInfo.step.includes('STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED')){
-      selGroupInfo(campaignBasicInfo.campaignId).then(response =>{
+    console.log(campaignBasicInfo)
+    if((campaignBasicInfo.step !== undefined && campaignBasicInfo.step.includes('STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED')) || state.campaignId !== undefined){
+      let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
+        selGroupInfo(campaignId).then(response =>{
         console.log(response)
         setCampaignGroupInfo(response)
         reset(response)
@@ -254,10 +258,11 @@ export function CampaignThree() {
     if(campaignGroupInfo.exposeAgentType.length === 0) {
       toast.warning('노출 영역은 최소한 하나는 입력해주세요')
     } else {
-      updateCampaignConfigInventory({...campaignGroupInfo, campaignId: campaignBasicInfo.campaignId}).then(response => {
+      let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
+      updateCampaignConfigInventory({...campaignGroupInfo, campaignId: campaignId}).then(response => {
         if (response) {
           console.log("저장됨")
-          setStepCampaign({steps: 3})
+          state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 3})
         }
       })
     }
@@ -761,8 +766,8 @@ export function CampaignThree() {
         </BoardSearchResult>
       </Board>
       <SubmitContainer>
-        <CancelButton type={'button'} onClick={() => setStepCampaign({steps: 1})}>취소</CancelButton>
-        <SubmitButton type={'submit'}>다음[3/4]</SubmitButton>
+        <CancelButton type={'button'} onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 1})}>취소</CancelButton>
+        <SubmitButton type={'submit'}>{state !== null ? '수정' : '다음[3/4]'}</SubmitButton>
       </SubmitContainer>
     </form>
   )

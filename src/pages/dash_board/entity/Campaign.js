@@ -259,7 +259,7 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({value, data}) => {
-      return <Link to={'/board/campaignThree'} state={{id: data?.advertiseGroupId}}>{value}</Link>
+      return <Link to={'/board/campaignThree'} state={{campaignId: data?.campaignId}}>{value}</Link>
     }
   },
   {
@@ -274,7 +274,7 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({value, data}) => {
-      return <Link to={'/board/campaignFour'} state={{id: data?.creativeId}}>{value}</Link>
+      return <Link to={'/board/campaignFour'} state={{campaignId: data?.campaignId}}>{value}</Link>
     }
   },
   {
