@@ -8,7 +8,9 @@ import {
   CalendarBox,
   CalendarIcon,
   CancelButton,
+  ColSpan1,
   ColSpan2,
+  ColSpan3,
   ColSpan4,
   CustomDatePicker,
   DateContainer,
@@ -34,6 +36,7 @@ import {selGroupInfo, selMediaCategoryInfo, updateCampaignConfigInventory} from 
 import {campaignGroupInfoAtom, mediaCategoryAtom, noViewType} from "../entity/Group";
 import {dateFormat} from "../../../common/StringUtils";
 import {selEnumInfo} from "../../../services/campaign/InfoAxios";
+import {toast} from "react-toastify";
 
 export function CampaignThree() {
   const [, setStepCampaign] = useAtom(stepCampaignAtom)
@@ -248,12 +251,16 @@ export function CampaignThree() {
   }
   const onSubmit = (data) => {
     console.log(campaignGroupInfo);
-    updateCampaignConfigInventory({...campaignGroupInfo,campaignId:campaignBasicInfo.campaignId}).then(response => {
-      if(response){
-        console.log("저장됨")
-        setStepCampaign({steps:3})
-      }
-    })
+    if(campaignGroupInfo.exposeAgentType.length === 0) {
+      toast.warning('노출 영역은 최소한 하나는 입력해주세요')
+    } else {
+      updateCampaignConfigInventory({...campaignGroupInfo, campaignId: campaignBasicInfo.campaignId}).then(response => {
+        if (response) {
+          console.log("저장됨")
+          setStepCampaign({steps: 3})
+        }
+      })
+    }
   }
 
   return (
@@ -287,7 +294,7 @@ export function CampaignThree() {
           </RowSpan>
           <RowSpan box={true} column={true} style={{backgroundColor: '#ffffff'}}>
             <ColSpan4>
-              <Span4>게제 지면</Span4>
+              <Span4>게재 지면</Span4>
               <RelativeDiv>
                 <label>
                   <input
@@ -398,9 +405,9 @@ export function CampaignThree() {
                 </RelativeDiv>
               </ColSpan4>
             }
-            <ColSpan4>
+            <RowSpan>
               <Span4>게재 기간</Span4>
-              <RelativeDiv>
+              <ColSpan1>
                 <DateContainer>
                   <CalendarBox>
                     <CalendarIcon/>
@@ -417,17 +424,19 @@ export function CampaignThree() {
                     isClearable={false}
                   />
                 </DateContainer>
+              </ColSpan1>
+              <ColSpan3>
                 <label>
                   <input type={'checkbox'}
                          className={'checkbox-type-a'}
-                         isChecked={exposureDayChecked}
+                         checked={exposureDayChecked}
                          onClick={handleCheckExposureDay}
                   />
                   <i/>
                   <span>종료일 미설정</span>
                 </label>
-              </RelativeDiv>
-            </ColSpan4>
+              </ColSpan3>
+            </RowSpan>
           </RowSpan>
           <RowSpan>
             <ColSpan4>
@@ -590,7 +599,7 @@ export function CampaignThree() {
               </ColSpan4>
             }
             <ColSpan4>
-              <Span4>유저 데이터 분석 설정</Span4>
+              <Span4 style={{letterSpacing: -1.2}}>유저 데이터 분석 설정</Span4>
               <RelativeDiv>
                 <label>
                   <input

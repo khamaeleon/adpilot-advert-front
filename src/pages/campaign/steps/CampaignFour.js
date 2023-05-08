@@ -9,9 +9,7 @@ import {
   ColSpan3,
   ColSpan4,
   Input,
-  RelativeDiv,
   RowSpan,
-  selectStyle,
   Span3,
   Span4,
   SubmitButton,
@@ -20,10 +18,8 @@ import {
 import {
   CampaignButton,
   CategoryItem,
-  CreateImage,
   DeleteIcon,
   FolderButton,
-  ImageTitle,
   ImageUploadCard,
   PrevImage,
   ResistBanner,
@@ -43,7 +39,6 @@ import {stepCampaignAtom} from "../entity";
 import {campaignBasicInfoAtom} from "../entity/Info";
 import {selEnumInfo} from "../../../services/campaign/InfoAxios";
 import {bannerSizeAtom, campaignCreativeAtom, clickInducementTypeAtom, creativeTypeAtom} from "../entity/Creative";
-import {DuplicateButton} from "../../signup/styles";
 import ImageUploading from "react-images-uploading";
 import {
   selCreativeBannerInfo, selCreativeNativeInfo,
@@ -135,7 +130,7 @@ const RegistryBannerItem = (props) => {
                   <button
                     type={'button'}
                     onClick={onImageUpload}
-                    style={{width: '100%', height: '100%'}}
+                    style={{width: '100%', height: '100px'}}
                   >이미지 첨부</button>
                 )}
               </ImageUploading>
@@ -368,6 +363,9 @@ function CampaignFourNative(props) {
   const [clickInducementType] = useAtom(clickInducementTypeAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
 
+  useEffect(()=>{
+    console.log(campaignCreativeInfo)
+  },[])
   const handleDeleteLogoImage = (imagePath) => {
     setCampaignCreative({
       ...campaignCreativeInfo,
@@ -623,7 +621,10 @@ export function CampaignFour(props) {
       console.log('수정')
       selCreativeBannerInfo('78552c2e-3bfa-4fd7-8a4b-aee34513af01').then(response =>{
         console.log(response)
-        setCampaignCreative(response)
+        setCampaignCreative({
+          ...campaignCreativeInfo,
+          response
+        })
         setCampaignBasicInfo({
           campaignId: '78552c2e-3bfa-4fd7-8a4b-aee34513af01',
           productType: 'BANNER'
