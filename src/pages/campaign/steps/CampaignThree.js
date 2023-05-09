@@ -53,8 +53,7 @@ export function CampaignThree() {
   const {state} =useLocation()
   const navigate = useNavigate()
   useEffect(() => {
-    console.log(campaignBasicInfo)
-    if((campaignBasicInfo.step !== undefined && campaignBasicInfo.step.includes('STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED')) || state.campaignId !== undefined){
+    if((campaignBasicInfo.step !== undefined && campaignBasicInfo.step.includes('STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED')) || state !== null){
       let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
         selGroupInfo(campaignId).then(response =>{
         console.log(response)
