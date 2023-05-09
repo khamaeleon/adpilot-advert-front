@@ -4,7 +4,9 @@ import {menuList, narrowStyle, reportsInfoAtom, selectedIcon, widenStyle} from "
 import {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity/Common";
-import {retrieveCustomReportsList} from "../../services/reports/ReportsAxios";
+import {
+  retrieveCustomReportsList
+} from "../../services/reports/ReportsAxios";
 
 function AsideList (props) {
   const {id, mode} = props

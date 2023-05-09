@@ -81,14 +81,14 @@ export const budgetEventDetailColumns = [ //이벤트 예산 상세 컬럼
     render: ({ value })=> <p className={'pct'}>{value}</p>
   },
   {
-    name: 'cartRecommendations',
+    name: 'cartRecommendation',
     header: '카트 추천',
     defaultFlex: 1,
     resizable: false,
     render: ({ value })=> <p className={'pct'}>{value}</p>
   },
   {
-    name: 'productRecommendations',
+    name: 'productRecommendation',
     header: '상품 추천',
     defaultFlex: 1,
     resizable: false,

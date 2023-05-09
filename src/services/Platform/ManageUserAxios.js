@@ -96,7 +96,15 @@ export async function selPolicyLatestTerms() {
  * @returns {Promise<*>}
  */
 export async function signUp(userInfo) {
-  return responseFormatMessage(await AdverAxios('POST', SIGNUP_URL, userInfo))
+
+  let param = {
+    ...userInfo,
+    isAgreedByOperationTerms: userInfo.isAgreedByOperationTerms ? 'Y' : 'N',
+  isAgreedByPrivacyTerms: userInfo.isAgreedByPrivacyTerms ? 'Y' : 'N',
+  isAgreedByServiceTerms: userInfo.isAgreedByServiceTerms ? 'Y' : 'N'
+}
+
+  return responseFormatMessage(await AdverAxios('POST', SIGNUP_URL, param))
 }
 
 /**

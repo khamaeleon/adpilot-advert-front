@@ -20,7 +20,7 @@ import SettingAdd from "../common/SettingModal";
 import {BorderBox, Off, On, PreviewSubmit, ScriptSubject, Small, SwitchBox, TitColor} from "./styles";
 
 export function SwitchComponent(props){
-  const {value, cellProps, eventClick} = props
+  const {value, cellProps, type, eventClick} = props
   const [select, setSelect] = useState(value)
   const [, setModal] = useAtom(modalController)
   const background = !select ? {background: '#ddd'} : {background: '#f5811f'};
@@ -28,14 +28,19 @@ export function SwitchComponent(props){
 
   const handleClick = (confirm) => {
     if(confirm){
-      cellProps.data.interlock = !cellProps.data.interlock;
       eventClick();
+      if(type === 'publish'){
+        cellProps.data.publishYn = cellProps.data.publishYn === 'Y' ? 'N' : 'Y';
+      }else{
+        cellProps.data.interlockYn = cellProps.data.interlockYn === 'Y' ? 'N' : 'Y';
+      }
+    }else{
+      setSelect(select)
     }
-    setSelect(cellProps.data.interlock)
     setModal({isShow:false});
   }
   const showModal = () => {
-    setSelect(!cellProps.data.interlock)
+    setSelect(!select)
     setModal({
       isShow: true,
       width: 660,
@@ -45,12 +50,10 @@ export function SwitchComponent(props){
             <ModalHeader title={'연동 상태 변경'}/>
             <ModalBody>
               <ScriptSubject>
-                {!cellProps.data.interlock ?
-                  <div>연동을 사용 하시겠습니까?<br/>
-                  </div>
+                {!select ?
+                  type === 'publish' ? <div>게재 하시겠습니까?</div> : <div>연동을 사용 하시겠습니까?</div>
                   :
-                  <div>연동을 중지 하시겠습니까?<br/>
-                  </div>
+                    type === 'publish' ? <div>중지 하시겠습니까?</div> :<div>연동을 중지 하시겠습니까?</div>
                 }
               </ScriptSubject>
             </ModalBody>
@@ -204,7 +207,6 @@ function Table(props) {
   useEffect(() => {
     if (gridRef) {
       gridRef.current.setColumnSizesToFit()
-      console.info('grid reference',gridRef.current)
     }
   }, [gridRef])
 

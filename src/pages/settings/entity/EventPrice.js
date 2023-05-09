@@ -82,14 +82,14 @@ export const eventUnitPriceDetailColumns = [ //이벤트 단가 상세 컬럼
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
-    name: 'cartRecommendations',
+    name: 'cartRecommendation',
     header: '카트 추천',
     defaultFlex: 1,
     resizable: false,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
-    name: 'productRecommendations',
+    name: 'productRecommendation',
     header: '상품 추천',
     defaultFlex: 1,
     resizable: false,

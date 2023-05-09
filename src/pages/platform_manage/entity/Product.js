@@ -223,7 +223,7 @@ export const productListColumn = [
     showColumnMenuTool: false
   },
   {
-    name: 'reviewCnt',
+    name: 'reviewCount',
     header: '리뷰수',
     textAlign: 'center',
     showColumnMenuTool: false

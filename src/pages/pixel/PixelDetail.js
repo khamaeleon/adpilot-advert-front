@@ -104,8 +104,8 @@ function PixelDetail() {
     })
   }
   let textColor = {color: pixelInfoListState !== null ? statusTypeAll.find(type => type.value === pixelInfoListState.status).color : ''};
-  const background = !pixelInfoListState?.interlock ? {background: '#ddd', cursor: 'default'} : {background: '#f5811f', cursor: 'default'};
-  const position = pixelInfoListState?.interlock ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null;
+  const background = pixelInfoListState?.interlockYn !== 'Y' ? {background: '#ddd', cursor: 'default'} : {background: '#f5811f', cursor: 'default'};
+  const position = pixelInfoListState?.interlockYn === 'Y' ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null;
 
   return (
     <>
@@ -248,12 +248,9 @@ function PixelDetail() {
               <div className={'row'}>
                 <p className={'tit'}>연동 상태</p>
                 <div className={'txt'}>
-                  <SwitchBox
-                    style={background}
-                  >
-                    <label style={position}/>
-                    {pixelInfoListState?.interlock ? <On>ON</On>:  <Off>OFF</Off>}
-                  </SwitchBox>
+                  <p className={'tit'}>
+                    {pixelInfoListState?.interlockYn === 'Y' ? 'ON' : 'OFF'}
+                  </p>
                   {/*<SwitchComponent background={pixelInfoListState?.interlock} styles={{cursor: 'default'}}/>*/}
                 </div>
               </div>

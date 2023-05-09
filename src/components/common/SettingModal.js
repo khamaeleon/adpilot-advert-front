@@ -31,10 +31,10 @@ function SettingChangeModal(props) {
   const {state} = useLocation()
   const [dataState, setDataState] = useState(saveType !== 'create' ? data : {
     audience: '',
-    cartRecommendations: '',
+    cartRecommendation: '',
     eventId: '',
     groupName: '',
-    productRecommendations: '',
+    productRecommendation: '',
     shopperMatching: '',
     userMatching: '',
     userOptimization: ''
@@ -78,10 +78,10 @@ function SettingChangeModal(props) {
    * 카트 추천
    * @param event
    */
-  const handleCartRecommendations = (event) => {
+  const handleCartRecommendation = (event) => {
     setDataState({
       ...dataState,
-      cartRecommendations: event.target.value
+      cartRecommendation: event.target.value
     })
   }
 
@@ -89,10 +89,10 @@ function SettingChangeModal(props) {
    * 상품 추천
    * @param event
    */
-  const handleProductRecommendations = (event) => {
+  const handleProductRecommendation = (event) => {
     setDataState({
       ...dataState,
-      productRecommendations: event.target.value
+      productRecommendation: event.target.value
     })
   }
 
@@ -241,14 +241,14 @@ function SettingChangeModal(props) {
                 <Input
                   type={'text'}
                   placeholder={'금액을 입력해주세요'}
-                  {...register("cartRecommendations", {
+                  {...register("cartRecommendation", {
                     required: "금액을 입력해주세요",
-                    onChange: (e) => handleCartRecommendations(e)
+                    onChange: (e) => handleCartRecommendation(e)
                   })}
-                  value={dataState?.cartRecommendations !== 0 ? dataState?.cartRecommendations : ''}
+                  value={dataState?.cartRecommendation !== 0 ? dataState?.cartRecommendation : ''}
                 />
-                {errors.cartRecommendations &&
-                  <ValidationScript>{errors.cartRecommendations?.message}</ValidationScript>}
+                {errors.cartRecommendation &&
+                  <ValidationScript>{errors.cartRecommendation?.message}</ValidationScript>}
                 <span className={label}></span>
               </RelativeDiv>
             </ColSpan4>
@@ -260,14 +260,14 @@ function SettingChangeModal(props) {
                 <Input
                   type={'text'}
                   placeholder={'금액을 입력해주세요'}
-                  {...register("productRecommendations", {
+                  {...register("productRecommendation", {
                     required: "금액을 입력해주세요",
-                    onChange: (e) => handleProductRecommendations(e)
+                    onChange: (e) => handleProductRecommendation(e)
                   })}
-                  value={dataState?.productRecommendations !== 0 ? dataState?.productRecommendations : ''}
+                  value={dataState?.productRecommendation !== 0 ? dataState?.productRecommendation : ''}
                 />
-                {errors.productRecommendations &&
-                  <ValidationScript>{errors.productRecommendations?.message}</ValidationScript>}
+                {errors.productRecommendation &&
+                  <ValidationScript>{errors.productRecommendation?.message}</ValidationScript>}
                 <span className={label}></span>
               </RelativeDiv>
             </ColSpan4>

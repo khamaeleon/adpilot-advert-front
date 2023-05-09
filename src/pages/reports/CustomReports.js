@@ -36,24 +36,31 @@ import {deleteCustomReportsAxios, retrieveCustomReportsDetail} from "../../servi
 import {useAtom, useAtomValue} from "jotai";
 import {tokenResultAtom} from "../login/entity/Common";
 import {useNavigate} from "react-router-dom";
-import {arrayDateFormat} from "../../common/StringUtils";
+import {dateFormat} from "../../common/StringUtils";
 import {reportsInfoAtom} from "../../components/aside/entity";
+import {deviceType, productType} from "../dash_board/entity/Common";
 
 const defaultColumn = {
   'BY_DAILY':{
     name: 'statisticsDate',
-    header: '일별'
+    header: '일별',
+    render: ({cellProps}) => {
+      return <span><p>{dateFormat(cellProps.data.statisticsDate, 'yyyy-MM-DD')}</p></span>
+    }
   },
   'BY_WEEKLY': {
     name: 'statisticsStartDate',
     header: '주별',
     render: ({cellProps}) => {
-      return <span><p>{arrayDateFormat(cellProps.statisticsStartDate)} ~ </p><p>{arrayDateFormat(cellProps.statisticsEndDate)} ~ </p></span>
+      return <span><p>{dateFormat(cellProps.data.statisticsStartDate, 'MM-W')}</p></span>
     }
   },
   'BY_MONTHLY': {
     name: 'statisticsDate',
     header: '월별',
+    render: ({cellProps}) => {
+      return <span><p>{dateFormat(cellProps.data.statisticsStartDate, 'yyyy년 MM월')} </p></span>
+    }
   },
 }
 export default function CustomReports() {
@@ -66,7 +73,7 @@ export default function CustomReports() {
     deviceType: null
   })
   const [dateActive,setDateActive] = useState('')
-  const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
+  const [dateRange, setDateRange] = useState([ new Date(getLastMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
   const tokenResult = useAtomValue(tokenResultAtom)
   const [campaignColumn, setCampaignColumn] = useState([])
@@ -85,14 +92,12 @@ export default function CustomReports() {
     if(reportsInfo.id === null) {
       navigate('/board/reports')
     }
-    if(tokenResult.id !== undefined && tokenResult.role === 'NORMAL'){
       retrieveCustomReportsDetail(tokenResult.id, reportsInfo.id, params).then(response => {
         let newObject = [defaultColumn[reportsInfo.groupBy]].concat(response.headers)
         setCampaignColumn(newObject)
         setCampaignData(response.reportStatistics.content)
         setReportInfo(response.userSetting)
       })
-    }
   }, [tokenResult, reportsInfo.id]);
 
   /**
@@ -202,19 +207,19 @@ export default function CustomReports() {
             <ColSpan1>
               <ColTitle><Span1>광고 상품</Span1></ColTitle>
               <div>
-                <Select styles={selectStyle} options={[{key:1,value:null,label: '전체'},{key:2,value:'BANNER',label: '배너'},{key:3,value:'POP_UNDER',label: '팝언더'}]} onChange={handleChangeProduct}/>
+                <Select styles={selectStyle} defaultValue={productType[0]} options={productType} onChange={handleChangeProduct}/>
               </div>
             </ColSpan1>
             <ColSpan1>
               <ColTitle><Span1>디바이스</Span1></ColTitle>
               <div>
-                <Select styles={selectStyle} options={[{key:1,value:null,label: '전체'},{key:2,value:'PC',label: 'PC 웹'},{key:3,value:'MOBILE',label: '모바일'},{key:4,value:'RESPONSIVE_WEB',label: '반응형'}]} onChange={handleChangeDevice}/>
+                <Select styles={selectStyle} defaultValue={deviceType[0]} options={deviceType} onChange={handleChangeDevice}/>
               </div>
             </ColSpan1>
             <ColSpan2/>
           </RowSpan>
           <RowSpan>
-            <ColSpan1>
+            <ColSpan2>
               <ColTitle><Span1>기간</Span1></ColTitle>
               <div style={{width:'100%'}}>
                 <DateContainer>
@@ -232,7 +237,7 @@ export default function CustomReports() {
                   />
                 </DateContainer>
               </div>
-            </ColSpan1>
+            </ColSpan2>
             <ColSpan2>
               <div>
                 <RangePicker style={{backgroundColor: '#fff', width: '100%', justifyContent: 'space-around'}}>

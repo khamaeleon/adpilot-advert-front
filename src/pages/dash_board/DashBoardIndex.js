@@ -36,7 +36,7 @@ function ChartComponent(props) {
   const [dataType, setDataType] = useState('userCount')
   const [dataType2, setDataType2] = useState('costAmount')
   const [chartDataInfo, setChartDataInfo] = useState([])
-  const [chartList, setChartList] = useState([{id: 'clickCount', data:[]}])
+  const [chartList, setChartList] = useState([{id: 'validClickCount', data:[]}])
 
   useEffect(()=>{
     if(tokenUserInfo.role !== 'NORMAL') {
@@ -44,16 +44,16 @@ function ChartComponent(props) {
         let data = response
         if(response !== null) {
           data.map((item,key) => {
-            Object.assign(data[key],{clickRate: item.clickCount !== 0 ? (item.clickCount / item.exposureCount) *100 : 0})
-            Object.assign(data[key],{cpc:item.costAmount !== 0 ? item?.costAmount / item.clickCount : 0})
+            Object.assign(data[key],{clickRate: item.validClickCount !== 0 ? (item.validClickCount / item.exposureCount) *100 : 0})
+            Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
             Object.assign(data[key],{costPerConversion: item.costAmount !== 0 ? item?.costAmount / item.totalConversionCount : 0})
-            Object.assign(data[key],{avgConversionAmount: item.totalConversionAmount !== 0 ? item.totalConversionAmount / item.totalConversionCount : 0})
-            Object.assign(data[key],{sessionRoas: item.sessionConversionAmount !== 0 ? (item.sessionConversionAmount / item.costAmount) *100 : 0})
-            Object.assign(data[key],{directRoas: item.directConversionAmount !== 0 ? (item.directConversionAmount / item.costAmount) *100 : 0})
-            Object.assign(data[key],{exposureRoas: item.exposureConversionAmount !== 0 ? (item.exposureConversionAmount / item.costAmount) *100 : 0})
-            Object.assign(data[key],{totalRoas: item.totalConversionAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
-            Object.assign(data[key],{ecpm: item.costAmount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0},)
-            Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.clickCount) *100 : 0})
+            Object.assign(data[key],{avgConversionAmount: item.totalConversionCount !== 0 ? item.totalConversionAmount / item.totalConversionCount : 0})
+            Object.assign(data[key],{sessionRoas: item.costAmount !== 0 ? (item.sessionConversionAmount / item.costAmount) *100 : 0})
+            Object.assign(data[key],{directRoas: item.costAmount !== 0 ? (item.directConversionAmount / item.costAmount) *100 : 0})
+            Object.assign(data[key],{exposureRoas: item.costAmount !== 0 ? (item.exposureConversionAmount / item.costAmount) *100 : 0})
+            Object.assign(data[key],{totalRoas: item.costAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
+            Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0},)
+            Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.validClickCount) *100 : 0})
           })
           setChartDataInfo(data)
         }
@@ -63,13 +63,13 @@ function ChartComponent(props) {
         let data = response
         if(response !== null) {
           data.map((item,key) => {
-            Object.assign(data[key],{clickRate: item.clickCount !== 0 ? (item.clickCount / item.exposureCount) *100 : 0})
-            Object.assign(data[key],{cpc:item.costAmount !== 0 ? item?.costAmount / item.clickCount : 0})
-            Object.assign(data[key],{costPerConversion: item.costAmount !== 0 ? item?.costAmount / item.totalConversionCount : 0})
+            Object.assign(data[key],{clickRate: item.validClickCount !== 0 ? (item.validClickCount / item.exposureCount) *100 : 0})
+            Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
+            Object.assign(data[key],{costPerConversion: item.totalConversionCount !== 0 ? item?.costAmount / item.totalConversionCount : 0})
             Object.assign(data[key],{avgConversionAmount: item.totalConversionAmount !== 0 ? item.totalConversionAmount / item.totalConversionCount : 0})
             Object.assign(data[key],{totalRoas: item.totalConversionAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
-            Object.assign(data[key],{ecpm: item.costAmount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0},)
-            Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.clickCount) *100 : 0})
+            Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0},)
+            Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.validClickCount) *100 : 0})
           })
           setChartDataInfo(data)
         }
@@ -87,7 +87,7 @@ function ChartComponent(props) {
     }
 
     //[d] 개별 계산값 정리
-    const clickCountSum = calculatePropertySum('clickCount');
+    const clickCountSum = calculatePropertySum('validClickCount');
     const exposureCountSum = calculatePropertySum('exposureCount');
     const costAmountSum = calculatePropertySum('costAmount');
     const totalConversionCountSum = calculatePropertySum('totalConversionCount');
@@ -99,7 +99,7 @@ function ChartComponent(props) {
     //[d] 개별 계산값을 포함한 개별 공식 계싼값 switch 문으로 구성
     let calc = 0;
     switch (property) {
-      case 'clickCount':
+      case 'validClickCount':
       case 'exposureCount':
       case 'totalConversionCount':
       case 'userCount':
@@ -155,7 +155,7 @@ function ChartComponent(props) {
     let value;
     if (['clickRate','conversionRate'].includes(property)) {
       value = numberToFixedFormat(calc)+'%'
-    } else if(['clickCount','exposureCount','totalConversionCount','userCount','totalExposureCount','totalClickCount'].includes(property)) {
+    } else if(['validClickCount','exposureCount','totalConversionCount','userCount','totalExposureCount','totalClickCount'].includes(property)) {
       value = decimalFormat(calc)
     } else {
       value = moneyToFixedFormat(calc)+'원'
@@ -181,7 +181,7 @@ function ChartComponent(props) {
         newData[key] = {
           ...prevChartData[key],
           status:
-              key === e.value || (['clickCount', 'exposureCount', 'totalConversionCount'].includes(key) &&
+              key === e.value || (['validClickCount', 'exposureCount', 'totalConversionCount'].includes(key) &&
                   prevChartData[key].status) || (prevChartData[key].status && key === dataType2),
         };
       });
@@ -197,7 +197,7 @@ function ChartComponent(props) {
         newData[key] = {
           ...prevChartData[key],
           status:
-              key === e.value || (['clickCount', 'exposureCount', 'totalConversionCount'].includes(key) &&
+              key === e.value || (['validClickCount', 'exposureCount', 'totalConversionCount'].includes(key) &&
                   prevChartData[key].status) || (prevChartData[key].status && key === dataType),
         };
       });
@@ -243,7 +243,7 @@ function ChartComponent(props) {
     let value;
     if (['clickRate','conversionRate'].includes(data.serieId)) {
       value = numberToFixedFormat(data.data.y)+'%'
-    } else if(['clickCount','exposureCount','totalConversionCount','userCount','totalExposureCount','totalClickCount'].includes(data.serieId)) {
+    } else if(['validClickCount','exposureCount','totalConversionCount','userCount','totalExposureCount','totalClickCount'].includes(data.serieId)) {
       value = decimalFormat(data.data.y)
     } else {
       value = moneyToFixedFormat(data.data.y)+'원'
@@ -268,9 +268,9 @@ function ChartComponent(props) {
         <ChartLabels>
           <ChartLabelFixData
               label="클릭수"
-              active={chartData['clickCount'].status}
-              onClick={() => handleOnChangeChartStatus('clickCount')}
-              dataType="clickCount"
+              active={chartData['validClickCount'].status}
+              onClick={() => handleOnChangeChartStatus('validClickCount')}
+              dataType="validClickCount"
               color={fixedColors[0]}
               calculateSum={calculateSum}
               decimalFormat={decimalFormat}
@@ -329,6 +329,7 @@ function ChartComponent(props) {
               {...commonProperties}
               data={chartList}
               colors={(series) => series.color}
+              margin={{ top: 50, right: 60, bottom: 50, left: 120 }}
               sliceTooltip={(props) => {
                 return (
                     <ChartTooltip>

@@ -1,6 +1,6 @@
 import {AdminAxios} from "../../common/Axios";
 
-const PRODUCT = '/product'
+const PRODUCT = '/adver/product'
 
 /**
  * 상품 관리

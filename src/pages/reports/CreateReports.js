@@ -38,7 +38,7 @@ const columnList= {
   COUNT_BY_ADVERTISE: "광고주 수",
   TOTAL_EXPOSURE_COUNT: "총 노출수",
   EXPOSURE_COUNT: "노출수",
-  CLICK_COUNT: "총 클릭수",
+  TOTAL_CLICK_COUNT: "총 클릭수",
   VALID_CLICK_COUNT: "클릭수",
   CLICK_RATE: "클릭율",
   COST_AMOUNT: "비용",
@@ -303,8 +303,8 @@ export default function CreateReports() {
                     active={includeItem('EXPOSURE_COUNT')}
                     onClick={()=>handleAddReportsItem('EXPOSURE_COUNT')}>노출수</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('CLICK_COUNT')}
-                    onClick={()=>handleAddReportsItem('CLICK_COUNT')}>총클릭수</DefaultItemButton>
+                    active={includeItem('TOTAL_CLICK_COUNT')}
+                    onClick={()=>handleAddReportsItem('TOTAL_CLICK_COUNT')}>총클릭수</DefaultItemButton>
                   <DefaultItemButton
                     active={includeItem('VALID_CLICK_COUNT')}
                     onClick={()=>handleAddReportsItem('VALID_CLICK_COUNT')}>클릭수</DefaultItemButton>
