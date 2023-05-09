@@ -428,6 +428,7 @@ function DashBoardIndex() {
                            groups={false}/>
               : <Table columns={userCampaignListColumn}
                        totalCount={[totalInfo.totalCount, '캠페인']}
+                       rowHeight={null}
                        showHoverRows={false}
                        activeCell={[0]}
                        data={adverStatusData}/>
