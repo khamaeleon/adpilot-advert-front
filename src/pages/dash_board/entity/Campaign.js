@@ -216,7 +216,7 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({data, value}) => {
-      return <Link to={'/board/campaignLookOver'} state={{id: data?.campaignId}}>{value}</Link>
+      return <Link to={'/board/campaignLookOver'} state={{campaignId: data?.campaignId, userId: data?.userId ,creativeType: data?.creativeType}}>{value}</Link>
     }
   },
   {
@@ -274,7 +274,7 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({value, data}) => {
-      return <Link to={'/board/campaignFour'} state={{campaignId: data?.campaignId}}>{value}</Link>
+      return <Link to={'/board/campaignFour'} state={{campaignId: data?.campaignId, creativeType: data?.creativeType}}>{value}</Link>
     }
   },
   {
@@ -479,7 +479,7 @@ export const userCampaignListColumn = [
     },
     render: ({value, data}) => {
       let valueFormat = value < 0 ? '무제한': <p>{decimalFormat(value)} 원</p>
-      return  <Link to={'/board/campaignBudgetDetail'} state={{id: data?.campaignBudgetId}}>{valueFormat}</Link>
+      return  <Link to={'/board/campaignTwo'} state={{campaignId: data?.campaignId, userId: data?.userId }}>{valueFormat}</Link>
     }
   },
   {
@@ -494,7 +494,7 @@ export const userCampaignListColumn = [
       }
     },
     render: ({value, data}) => {
-      return <Link to={'/board/campaignGroupDetail'} state={{id: data?.advertiseGroupId}}>{value}</Link>
+      return <Link to={'/board/campaignThree'} state={{campaignId: data?.campaignId}}>{value}</Link>
     }
   },
   {
@@ -509,7 +509,7 @@ export const userCampaignListColumn = [
       }
     },
     render: ({value, data}) => {
-      return <Link to={'/board/campaignCreativeDetail'} state={{id: data?.creativeId}}>{value}</Link>
+      return <Link to={'/board/campaignFour'} state={{campaignId: data?.campaignId, creativeType: data?.creativeType}}>{value}</Link>
     }
   },
   {
@@ -534,7 +534,7 @@ export const userCampaignListColumn = [
     minWidth: 150,
     textAlign: 'center',
     render: ({data}) => {
-      let value = (data.validClickCount / data.exposureCount)*100;
+      let value = data.exposureCount !== 0 ? (data.validClickCount / data.exposureCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -553,7 +553,7 @@ export const userCampaignListColumn = [
     minWidth: 150,
     textAlign: 'center',
     render: ({data}) => {
-      let value = data?.costAmount / data.validClickCount;
+      let value = data.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -572,7 +572,7 @@ export const userCampaignListColumn = [
     minWidth: 100,
     textAlign: 'center',
     render: ({data}) => {
-      let value = (data.totalConversionCount / data.validClickCount)*100;
+      let value = data.validClickCount !== 0 ? (data.totalConversionCount / data.validClickCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -583,7 +583,7 @@ export const userCampaignListColumn = [
     minWidth: 150,
     textAlign: 'center',
     render: ({data}) => {
-      let value = data?.costAmount / data.totalConversionCount;
+      let value = data.totalConversionCount !== 0 ? data?.costAmount / data.totalConversionCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -594,7 +594,7 @@ export const userCampaignListColumn = [
     minWidth: 150,
     textAlign: 'center',
     render: ({data}) => {
-      let value = data.totalConversionAmount / data.totalConversionCount;
+      let value = data.totalConversionCount !== 0 ? data.totalConversionAmount / data.totalConversionCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -609,7 +609,7 @@ export const userCampaignListColumn = [
       )
     },
     render: ({data}) => {
-      let value = (data.totalConversionAmount / data.costAmount) *100;
+      let value = data.costAmount !== 0 ? (data.totalConversionAmount / data.costAmount) * 100 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -620,7 +620,7 @@ export const userCampaignListColumn = [
     minWidth: 150,
     header: 'ECPM',
     render: ({data}) => {
-      let value = (data.totalConversionAmount / data.exposureCount) *1000;
+      let value = data.exposureCount !== 0 ? (data.totalConversionAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
