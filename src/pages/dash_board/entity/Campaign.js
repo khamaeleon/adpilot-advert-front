@@ -218,7 +218,7 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({data, value}) => {
-      return <Link to={'/board/campaignLookOver'} state={{campaignId: data?.campaignId, userId: data?.userId ,creativeType: data?.creativeType}}>{value}</Link>
+      return <Link to={'/board/campaignLookOver'} state={{campaignId: data?.campaignId}}>{value}</Link>
     }
   },
   {
@@ -276,7 +276,7 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({value, data}) => {
-      return <Link to={'/board/campaignFour'} state={{campaignId: data?.campaignId, creativeType: data?.creativeType}}>{value}</Link>
+      return <Link to={'/board/campaignFour'} state={{campaignId: data?.campaignId, creativeType: data?.creativeType, productType: data.productType}}>{value}</Link>
     }
   },
   {
@@ -465,7 +465,7 @@ export const userCampaignListColumn = [
       }
     },
     render: ({data, value}) => {
-      return <Link to={'/board/campaignInfoDetail'} state={{id: data?.campaignId}}>{value}</Link>
+      return <Link to={'/board/campaignLookOver'} state={{campaignId: data?.campaignId}}>{value}</Link>
     }
   },
   {
@@ -474,15 +474,6 @@ export const userCampaignListColumn = [
     minWidth: 150,
     textAlign: 'center',
     showColumnMenuTool: false,
-    cellProps: {
-      style: {
-        textDecoration: 'underline'
-      }
-    },
-    render: ({value, data}) => {
-      let valueFormat = value < 0 ? '무제한': <p>{decimalFormat(value)} 원</p>
-      return  <Link to={'/board/campaignTwo'} state={{campaignId: data?.campaignId, userId: data?.userId }}>{valueFormat}</Link>
-    }
   },
   {
     name: 'advertiseGroupName',
@@ -490,14 +481,6 @@ export const userCampaignListColumn = [
     textAlign: 'center',
     minWidth: 150,
     showColumnMenuTool: false,
-    cellProps: {
-      style: {
-        textDecoration: 'underline'
-      }
-    },
-    render: ({value, data}) => {
-      return <Link to={'/board/campaignThree'} state={{campaignId: data?.campaignId}}>{value}</Link>
-    }
   },
   {
     name: 'creativeName',
@@ -505,14 +488,6 @@ export const userCampaignListColumn = [
     textAlign: 'center',
     minWidth: 150,
     showColumnMenuTool: false,
-    cellProps: {
-      style: {
-        textDecoration: 'underline'
-      }
-    },
-    render: ({value, data}) => {
-      return <Link to={'/board/campaignFour'} state={{campaignId: data?.campaignId, creativeType: data?.creativeType}}>{value}</Link>
-    }
   },
   {
     name: 'exposureCount',
