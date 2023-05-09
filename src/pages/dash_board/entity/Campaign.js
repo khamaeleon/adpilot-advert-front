@@ -4,6 +4,7 @@ import React from "react";
 import {Icon, SwitchComponent} from "../../../components/table";
 import {updatePixelInterlock} from "../../../services/header/ManagePixelAxios";
 import {Link} from "react-router-dom";
+import {updateCampaignPublish} from "../../../services/campaign/CreativeAxios";
 
 /*광고주 현황 리스트 데이터*/
 export const adverStatusAtom = atom([])
@@ -196,10 +197,11 @@ export const adverStatusDetailColumn = [
     showColumnMenuTool: false,
     sortable: false,
     render: ({value, cellProps}) => {
+      const valueYn = (value === 'Y');
       return (
         <div style={{display: "flex", alignItems: 'center', justifyContent: 'center'}}>
-          <SwitchComponent value={value !== 'N' && true} />
-          {/*<SwitchComponent value={value} cellProps={cellProps} eventClick={()=> updatePixelInterlock(cellProps.data.pixelId,{interlock:cellProps.data.interlock})}/>*/}
+          {/*<SwitchComponent value={value !== 'N' && true} />*/}
+          <SwitchComponent value={valueYn} type={'publish'} cellProps={cellProps.data.publishYn} eventClick={()=> updateCampaignPublish(cellProps.data.campaignId, valueYn)}/>
         </div>
       );
     }
