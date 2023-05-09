@@ -321,7 +321,7 @@ export default function Basic(props) {
    */
   const onSubmit = (data) => {
     console.log(accountInfo)
-    signUp({...accountInfo,hostType:accountInfo.hostType.value}).then(response => {
+    signUp({...accountInfo, hostType:accountInfo.hostType.value}).then(response => {
       if (response.responseCode.statusCode === 200) {
         setAgreeValidation({
           terms: true,

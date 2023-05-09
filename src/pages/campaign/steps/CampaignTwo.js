@@ -51,11 +51,9 @@ export function CampaignTwo() {
   useEffect(() => {
     if (campaignBasicInfo.step !=='INIT' || state !== null ) {
       //수정
-      console.log(campaignBasicInfo)
       let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
       selBudgetInfo(campaignId).then(response => {
-        console.log(response)
-        const data = response
+        const data = {...response, infiniteBudgetYn: response.infiniteBudgetYn === 'Y'}
         let budgetRate = {budgetRate : response.pcBudget * 100 / response.dailyAvgBudget}
         Object.assign(data,budgetRate)
         setCampaignBudgetInfo(data)
@@ -138,7 +136,7 @@ export function CampaignTwo() {
   const handleCheckInfiniteBudget = (e) => {
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
-      infiniteBudget: e.target.checked
+      infiniteBudgetYn: e.target.checked
     })
   }
 
@@ -189,7 +187,6 @@ export function CampaignTwo() {
     })
   }
   const onSubmit = (data) => {
-    console.log(campaignBudgetInfo)
     let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
       updateCampaignBudget({
       ...campaignBudgetInfo,
@@ -227,7 +224,7 @@ export function CampaignTwo() {
                     render={({field}) => (
                       <Input type={'number'}
                              min={100}
-                             readOnly={campaignBudgetInfo.infiniteBudget}
+                             readOnly={campaignBudgetInfo.infiniteBudgetYn}
                              placeholder={'일일 평균 예산을 설정해주세요.'}
                              style={{color:'#f5811f'}}
                              value={campaignBudgetInfo.dailyAvgBudget}
@@ -238,7 +235,7 @@ export function CampaignTwo() {
                 </ColSpan1>
                 <ColSpan1>
                   <label>
-                    <input type={'checkbox'} value={campaignBudgetInfo.infiniteBudget || ''} checked={campaignBudgetInfo.infiniteBudget} className={'checkbox-type-a'} onChange={handleCheckInfiniteBudget}/>
+                    <input type={'checkbox'} value={campaignBudgetInfo.infiniteBudgetYn || ''} checked={campaignBudgetInfo.infiniteBudgetYn} className={'checkbox-type-a'} onChange={handleCheckInfiniteBudget}/>
                     <i/>
                     {/*배너일때 infiniteBudget 항목 없음*/}
                     <span>일일 예산 무제한</span>
@@ -308,10 +305,10 @@ export function CampaignTwo() {
                     )}
                   />
                 </ColSpan1>
-                {timeBudgetDetailDataState?.exposeTimeType !== undefined &&
+                {timeBudgetDetailDataState?.exposureTimeType !== undefined &&
                   <ColSpan1>
                     <TimeTable
-                      exposeTimeType={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposeTimeType}
+                        exposureTimeType={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType}
                       title={'설정된 시간별 예산'} readOnly={true}/>
                   </ColSpan1>
                 }

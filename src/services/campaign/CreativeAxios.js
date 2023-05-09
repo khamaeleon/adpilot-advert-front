@@ -2,6 +2,7 @@ import {AdminAxios, AxiosImage} from "../../common/Axios";
 
 
 const ACTION_URL ='/adver/campaign'
+const PUBLISH ='/publish'
 const IMAGE_UPDATE ='/banner/image'
 const IMAGE_NATIVE='/native-banner/image'
 const IMAGE_LOGO ='/image/logo'
@@ -113,6 +114,21 @@ export async function updateCampaignNative(creativeInfo) {
 export async function updateCampaignPopUnder(creativeInfo) {
   let returnVal = null;
   await AdminAxios('PUT', ACTION_URL+'/'+ creativeInfo.campaignId +CREATE_POP_UNDER ,creativeInfo)
+    .then((response) => {
+      const {responseCode} =response
+      if(responseCode.statusCode ===200){
+        returnVal = true
+      }else{
+        returnVal = false
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+};
+
+export async function updateCampaignPublish(campaignId, publish) {
+  let returnVal = null;
+  let param = {publishYn: publish ? 'Y' : 'N'};
+  await AdminAxios('PUT', ACTION_URL+'/'+ campaignId +PUBLISH ,param)
     .then((response) => {
       const {responseCode} =response
       if(responseCode.statusCode ===200){

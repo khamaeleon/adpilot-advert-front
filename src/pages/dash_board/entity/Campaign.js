@@ -4,6 +4,7 @@ import React from "react";
 import {Icon, SwitchComponent} from "../../../components/table";
 import {updatePixelInterlock} from "../../../services/header/ManagePixelAxios";
 import {Link} from "react-router-dom";
+import {updateCampaignPublish} from "../../../services/campaign/CreativeAxios";
 
 /*광고주 현황 리스트 데이터*/
 export const adverStatusAtom = atom([])
@@ -43,7 +44,7 @@ export const adverListColumn = [
     showColumnMenuTool: false
   },
   {
-    name: 'clickCount',
+    name: 'validClickCount',
     header: '클릭 수',
     minWidth: 100,
     render: ({value}) => <p>{decimalFormat(value)}</p>,
@@ -54,7 +55,7 @@ export const adverListColumn = [
     header: '클릭률',
     minWidth: 100,
     render: ({data}) => {
-      let value = data.exposureCount !== 0 ? (data.clickCount / data.exposureCount) * 100 : 0;
+      let value = data.exposureCount !== 0 ? (data.validClickCount / data.exposureCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -71,7 +72,7 @@ export const adverListColumn = [
     header: 'CPC',
     minWidth: 100,
     render: ({data}) => {
-      let value = data.clickCount !== 0 ? data?.costAmount / data.clickCount : 0;
+      let value = data.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -88,7 +89,7 @@ export const adverListColumn = [
     header: '전환률',
     minWidth: 100,
     render: ({data}) => {
-      let value = data.clickCount !== 0 ? (data.totalConversionCount / data.clickCount) * 100 : 0;
+      let value = data.validClickCount !== 0 ? (data.totalConversionCount / data.validClickCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -189,17 +190,18 @@ export const adverStatusDetailColumn = [
   },
   {
     name: 'publishYn',
-    header: '연동 상태',
+    header: '게재 여부',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
     showColumnMenuTool: false,
     sortable: false,
     render: ({value, cellProps}) => {
+      const valueYn = (value === 'Y');
       return (
         <div style={{display: "flex", alignItems: 'center', justifyContent: 'center'}}>
-          <SwitchComponent value={value !== 'N' && true} />
-          {/*<SwitchComponent value={value} cellProps={cellProps} eventClick={()=> updatePixelInterlock(cellProps.data.pixelId,{interlock:cellProps.data.interlock})}/>*/}
+          {/*<SwitchComponent value={value !== 'N' && true} />*/}
+          <SwitchComponent value={valueYn} type={'publish'} cellProps={cellProps.data.publishYn} eventClick={()=> updateCampaignPublish(cellProps.data.campaignId, valueYn)}/>
         </div>
       );
     }
@@ -286,7 +288,7 @@ export const adverStatusDetailColumn = [
     render: ({value}) => <p>{decimalFormat(value)}</p>,
   },
   {
-    name: 'clickCount',
+    name: 'validClickCount',
     header: '클릭수',
     minWidth: 150,
     showColumnMenuTool: false,
@@ -299,7 +301,7 @@ export const adverStatusDetailColumn = [
     minWidth: 150,
     textAlign: 'center',
     render: ({data}) => {
-      let value = data.exposureCount !== 0 ? (data.clickCount / data.exposureCount) * 100 : 0;
+      let value = data.exposureCount !== 0 ? (data.validClickCount / data.exposureCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -318,7 +320,7 @@ export const adverStatusDetailColumn = [
     minWidth: 150,
     textAlign: 'center',
     render: ({data}) => {
-      let value = data.clickCount !== 0 ? data?.costAmount / data.clickCount : 0;
+      let value = data.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -337,7 +339,7 @@ export const adverStatusDetailColumn = [
     minWidth: 100,
     textAlign: 'center',
     render: ({data}) => {
-      let value = data.clickCount !== 0 ? (data.totalConversionCount / data.clickCount) * 100 : 0;
+      let value = data.validClickCount !== 0 ? (data.totalConversionCount / data.validClickCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -443,13 +445,13 @@ export const adverStatusDetailColumn = [
 export const userCampaignListColumn = [
   {
     name: 'publishYn',
-    header: '연동 상태',
+    header: '게재 여부',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
     showColumnMenuTool: false,
     sortable: false,
-    render: ({value}) => <p>{value !== 'N' ? 'OFF' : 'ON'}</p>
+    render: ({value}) => <p>{value !== 'N' ? 'ON' : 'OFF'}</p>
   },
   {
     name: 'campaignName',
@@ -521,7 +523,7 @@ export const userCampaignListColumn = [
     render: ({value}) => <p>{decimalFormat(value)}</p>,
   },
   {
-    name: 'clickCount',
+    name: 'validClickCount',
     header: '클릭수',
     minWidth: 150,
     showColumnMenuTool: false,
@@ -534,7 +536,7 @@ export const userCampaignListColumn = [
     minWidth: 150,
     textAlign: 'center',
     render: ({data}) => {
-      let value = data.exposureCount !== 0 ? (data.clickCount / data.exposureCount) * 100 : 0;
+      let value = data.exposureCount !== 0 ? (data.validClickCount / data.exposureCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -553,7 +555,7 @@ export const userCampaignListColumn = [
     minWidth: 150,
     textAlign: 'center',
     render: ({data}) => {
-      let value = data.clickCount !== 0 ? data?.costAmount / data.clickCount : 0;
+      let value = data.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false
@@ -572,7 +574,7 @@ export const userCampaignListColumn = [
     minWidth: 100,
     textAlign: 'center',
     render: ({data}) => {
-      let value = data.clickCount !== 0 ? (data.totalConversionCount / data.clickCount) * 100 : 0;
+      let value = data.validClickCount !== 0 ? (data.totalConversionCount / data.validClickCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
     },
     showColumnMenuTool: false

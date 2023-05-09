@@ -111,7 +111,7 @@ function SignUp() {
           <>
             <Done/>
             <ButtonGroup>
-              <button onClick={() => navigate('/login')}>홈으로</button>
+              <button onClick={() => navigate('/')}>홈으로</button>
             </ButtonGroup>
           </>
         }

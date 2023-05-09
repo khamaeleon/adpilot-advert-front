@@ -80,7 +80,7 @@ export const adverTimeBudgetColumns = [ //시간 단가 컬럼
   }
 ]
 
-const exposeTimeTypeAll =[
+const exposureTimeTypeAll =[
   {id: "1", value: "EQUAL_DISTRIBUTION", label: "균등분배"},
   {id: "2", value: "FAST_EXHAUSTION", label: "빠른소진"},
   {id: "3", value: "DIRECT_SETTINGS", label: "직접설정"}
@@ -112,13 +112,13 @@ export const budgetTimeDetailColumns = [ //시간 예산 상세 컬럼
     }
   },
   {
-    name: 'exposeTimeType',
+    name: 'exposureTimeType',
     header: '예산 소진 설정',
     defaultFlex: 1,
     resizable: false,
     render: ({value}) => {
       return (
-        <span>{exposeTimeTypeAll.find(type => type.value === value).label}</span>
+        <span>{exposureTimeTypeAll.find(type => type.value === value).label}</span>
       )
     }
   },
