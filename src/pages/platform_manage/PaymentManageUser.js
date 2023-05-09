@@ -34,7 +34,7 @@ import {
     PointDetailsDataAtom
 } from "./entity/PaymentUser";
 import Table from "../../components/table";
-import {paymentListRequest} from "../../services/payment/user/RetrievePaymentByServiceUserAxious";
+import {paymentListRequest} from "../../services/payment/user/RetrievePaymentByServiceUserAxios";
 import {tokenResultAtom} from "../login/entity/Common";
 import {searchConditionAtom} from "./entity/Common";
 import {selUserInfo} from "../../services/Platform/ManageUserAxios";
