@@ -73,6 +73,7 @@ function TableDetail (props) {
         enableColumnAutosize={true}
         groups={props.detailGroups}
         emptyText={emptyText}
+        rowHeight={null}
       />
     );
   },[])

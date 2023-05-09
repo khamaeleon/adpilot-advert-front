@@ -49,7 +49,7 @@ export function CampaignTwo() {
   const {register, handleSubmit,reset,setError,setValue, control, formState: {errors}} = useFormContext()
 
   useEffect(() => {
-    if (campaignBasicInfo.step !=='INIT' || state.campaignId !==undefined ) {
+    if (campaignBasicInfo.step !=='INIT' || state !== null ) {
       //수정
       let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
       selBudgetInfo(campaignId).then(response => {
