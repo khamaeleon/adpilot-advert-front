@@ -4,7 +4,10 @@ import {menuList, narrowStyle, reportsInfoAtom, selectedIcon, widenStyle} from "
 import {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity/Common";
-import {retrieveCustomReportsList} from "../../services/reports/ReportsAxios";
+import {
+  retrieveCustomReportsAll,
+  retrieveCustomReportsList
+} from "../../services/reports/ReportsAxios";
 
 function AsideList (props) {
   const {id, mode} = props
@@ -37,6 +40,10 @@ function AsideList (props) {
   useEffect(() => {
     if(tokenUserInfo.role === 'NORMAL'){
       retrieveCustomReportsList(tokenUserInfo.id).then(response => {
+        setReportLists(response)
+      })
+    }else{
+      retrieveCustomReportsAll().then(response => {
         setReportLists(response)
       })
     }

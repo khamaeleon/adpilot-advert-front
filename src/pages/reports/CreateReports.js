@@ -69,14 +69,6 @@ export default function CreateReports() {
   const [reportsInfo, setReportsInfo] = useAtom(reportsInfoAtom)
   const navigate = useNavigate()
 
-  useEffect(() => {
-    console.log(tokenResult)
-    setCreativeInfo({
-      ...creativeInfo,
-      id: tokenResult.id
-    })
-  }, []);
-
   const handleSearchAdvertiser = (creative) => {
     setCreativeInfo(creative)
     console.log(creative)
@@ -172,28 +164,29 @@ export default function CreateReports() {
     setReportName(e.target.value)
   }
   const handleCreateReports = async () => {
+    let userId = tokenResult.role !== 'NORMAL' ? creativeInfo.id : tokenResult.id;
     if (period === 'NONE' && scopes.length === 0) {
       toast.warning("기간항목과 광고정보항목을 선택해야 합니다.")
     } else if(columns.length < 3){
-      toast("보고서 항목을 선택해주세요")
-    } else if(creativeInfo.id === undefined){
+      toast.warning("보고서 항목을 선택해주세요")
+    } else if(userId === undefined){
       await trigger("creativeName")
-      toast("광고주를 검색해주세요")
+      toast.warning("광고주를 검색해주세요")
     } else if(dataItems.length === 0){
-      toast('데이터 항목을 선택해주세요.')
+      toast.warning('데이터 항목을 선택해주세요.')
     } else if(reportName === ""){
       await trigger("reportName")
-      toast("보고서 명을 작성해주세요")
+      toast.warning("보고서 명을 작성해주세요")
     } else {
       let params = {
-        "userId" : creativeInfo.id,
+        "userId" : userId,
         "reportName" : reportName,
         "groupByPeriod" : period,
         "groupByScopes" : scopes,
         "columns" :  dataItems.map(item => item.name)
       }
       createCustomReportsAxios(params).then().then(() => {
-        retrieveCustomReportsList(tokenResult.id).then(response => {
+        retrieveCustomReportsList(userId).then(response => {
           const data  = response[response.length-1]
           setReportsInfo({id: data.id, groupBy: data.groupByPeriod})
           navigate('/board/customReports')
@@ -299,8 +292,8 @@ export default function CreateReports() {
                     active={includeItem('EXPOSURE_COUNT')}
                     onClick={()=>handleAddReportsItem('EXPOSURE_COUNT')}>노출수</DefaultItemButton>
                   <DefaultItemButton
-                    active={includeItem('CLICK_COUNT')}
-                    onClick={()=>handleAddReportsItem('CLICK_COUNT')}>총클릭수</DefaultItemButton>
+                    active={includeItem('TOTAL_CLICK_COUNT')}
+                    onClick={()=>handleAddReportsItem('TOTAL_CLICK_COUNT')}>총클릭수</DefaultItemButton>
                   <DefaultItemButton
                     active={includeItem('VALID_CLICK_COUNT')}
                     onClick={()=>handleAddReportsItem('VALID_CLICK_COUNT')}>클릭수</DefaultItemButton>

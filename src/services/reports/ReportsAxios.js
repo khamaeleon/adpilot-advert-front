@@ -8,7 +8,6 @@ const CREATE_STATISTICS = ACTION_URL+'/custom-report'
  */
 export async function createCustomReportsAxios(params) {
   let returnVal = null;
-  console.log(params)
   await AdverAxios('POST', CREATE_STATISTICS, params)
     .then((response) => {
       returnVal = response.responseCode.statusCode === 200 ? response.data : null;
@@ -33,6 +32,18 @@ export async function deleteCustomReportsAxios(deleteInfo) {
 /**
  * 보고서 리스트 조회 (id)
  */
+export async function retrieveCustomReportsAll(){
+  let returnVal = null;
+  await AdverAxios('GET', `/statistics/custom-report`,null)
+    .then((response) => {
+      returnVal = response.responseCode.statusCode === 200 ? response.data : null
+    }).catch((e) => returnVal = false)
+  return returnVal;
+}
+
+/**
+ * 보고서 리스트 조회 (id)
+ */
 export async function retrieveCustomReportsList(userId){
   let returnVal = null;
   await AdverAxios('GET', `/statistics/${userId}/custom-report`,null)
@@ -46,7 +57,6 @@ export async function retrieveCustomReportsList(userId){
  * return columns, dataSources
  */
 export async function retrieveCustomReportsDetail(userId, reportUserSettingId, params) {
-  console.log(reportUserSettingId)
   let returnVal = null;
   await AdverAxios('POST', `/statistics/${userId}/custom-report/${reportUserSettingId}`,params)
     .then((response) => {

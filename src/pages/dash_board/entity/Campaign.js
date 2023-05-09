@@ -190,7 +190,7 @@ export const adverStatusDetailColumn = [
 
   },
   {
-    name: 'activeYn',
+    name: 'publishYn',
     header: '연동 상태',
     textAlign: 'center',
     minWidth: 100,
@@ -200,8 +200,8 @@ export const adverStatusDetailColumn = [
     render: ({value, cellProps}) => {
       return (
         <div style={{display: "flex", alignItems: 'center', justifyContent: 'center'}}>
-          <SwitchComponent value={value !== 'N' && true} />
-          {/*<SwitchComponent value={value} cellProps={cellProps} eventClick={()=> updatePixelInterlock(cellProps.data.pixelId,{interlock:cellProps.data.interlock})}/>*/}
+          {/*<SwitchComponent value={value !== 'N' && true} />*/}
+          <SwitchComponent value={value !== 'N'} cellProps={cellProps} eventClick={()=> updatePixelInterlock(cellProps.data.pixelId,{interlock:cellProps.data.interlock})}/>
         </div>
       );
     }
