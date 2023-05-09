@@ -24,32 +24,72 @@ export const refundRequestData = {
  */
 export const PaymentDetailsColumns = [
     {
-        name: '',
+        name: 'createdAt',
         header: '신청 일시',
         defaultFlex: 1,
         resizable: false,
+        render: ({ value })=> {
+            const dateString = value;
+            const dateObject = new Date(dateString.split(' ')[0]);
+            const year = dateObject.getFullYear();
+            const month = dateObject.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줍니다.
+            const day = dateObject.getDate();
+            const result = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+            return (<p>{result}</p>)
+        }
     },
     {
-        name: '',
+        name: 'progressType',
         header: '신청 상태',
         defaultFlex: 1,
         resizable: false,
-        render: ({ value })=> <p>{decimalFormat(value)}</p>
+        render: ({ value })=> {
+            let valueType = {
+                REGISTRATION_TRADE: { label: '결제 신청', color: 'blue' },
+                AUTHENTICATION_TRADE: { label: '결제 인증', color: 'orange' },
+                APPROVAL_TRADE: { label: '결제 완료', color: 'green' },
+                REVISE_TRADE: { label: '결제 개정', color: 'pink' },
+                ERROR: { label: 'ERROR', color: 'red' }
+            }[value] || { label: '', color: '' };
+            return (
+                <p style={{ color: valueType.color }}>{valueType.label}</p>
+            )
+        }
     },
     {
-        name: '',
+        name: 'paymentMethodType',
         header: '결제/신청 방식',
         defaultFlex: 1,
         resizable: false,
+        render: ({ value })=> {
+            let valueType = {
+                CARD: '카드 결제',
+                TRANS: '계좌이체',
+                V_BANK: '가상계좌',
+                MOBILE: '휴대폰 결제',
+                ADVANCE_PAYMENT: 'ADVANCE_PAYMENT',
+                SIMPLE_PAYMENT: 'SIMPLE_PAYMENT',
+                BATCH: 'BATCH',
+            }[value] || '';
+            return (
+                <p>{valueType}</p>
+            )
+        }
     },
     {
-        name: '',
-        header: '결제/신청 수단',
+        name: 'creditCardType',
+        header: '결제 수단(카드)',
         defaultFlex: 1,
         resizable: false,
     },
     {
-        name: '',
+        name: 'bankType',
+        header: '결제 수단(계좌번호)',
+        defaultFlex: 1,
+        resizable: false,
+    },
+    {
+        name: 'amount',
         header: '결제/신청 금액',
         defaultFlex: 1,
         resizable: false,

@@ -227,6 +227,7 @@ function Table(props) {
       emptyText={emptyText}
       limit={30}
       style={gridStyle}
+      pagination={props.pagenations}
       {...props}
     />
   )

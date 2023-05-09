@@ -17,14 +17,14 @@ import {
 } from "../../assets/GlobalStyles";
 import styled from 'styled-components';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import React, {useState} from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import {useAtom} from "jotai";
 import Navigator from "../../components/common/Navigator";
 import ko from "date-fns/locale/ko";
 import {AdChargeButton} from "../../components/payment/user/AdCharge";
 import {RefundRequestButton} from "../../components/payment/user/RefundRequest";
 import {RegisterRefundInformationButton} from "../../components/payment/user/RegisterRefundInformation";
-import {getThisMonth, getToDay} from "../../common/DateUtils";
+import {getLastMonth, getThisMonth, getToDay} from "../../common/DateUtils";
 import {decimalFormat} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
 import {
@@ -34,10 +34,11 @@ import {
     PointDetailsDataAtom
 } from "./entity/PaymentUser";
 import Table from "../../components/table";
-// import {retrieveAdvertiserStatus} from "../../services/dash_board/ManageCampaignAxios";
+import {paymentListRequest} from "../../services/payment/user/RetrievePaymentByServiceUserAxious";
 import {tokenResultAtom} from "../login/entity/Common";
-// import {searchConditionAtom} from "../dash_board/entity/Common";
-// import {adverStatusAtom} from "../dash_board/entity/Campaign";
+import {searchConditionAtom} from "./entity/Common";
+import {selUserInfo} from "../../services/Platform/ManageUserAxios";
+import {accountInfoAtom} from "./entity/User";
 
 export function RefundRequestTable(props) {
     return (
@@ -72,11 +73,11 @@ function PaymentManageUser(props) {
     const [tokenUserInfo] = useAtom(tokenResultAtom)
     const [paymentDetails, setPaymentDetails] = useAtom(PaymentDetailsDataAtom)
     const [pointDetails, setPointDetails] = useAtom(PointDetailsDataAtom)
+    const [, setAccountInfoState] = useAtom(accountInfoAtom)
     // const [totalInfo, setTotalInfo] = useState(dataTotalInfo)
     // 이거도 2개 생성 결제내역 하나, 포인트 지급 하나
     const [totalInfo, setTotalInfo] = useState(0)
-    // const [adverStatusData, setAdverStatusData] = useAtom(adverStatusAtom)
-    // const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
+    const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
 
 
     const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
@@ -85,27 +86,79 @@ function PaymentManageUser(props) {
     const [requestAmountValue, setRequestAmountValue] = useState(0) // 충전 금액
 
     //[d] 환불 입력 정보
-    // const [refundData, setRefundData] = useState([])
-    const [refundData, setRefundData] = useState(["테스트1","테스트2","테스트3"]) // 환불 정보
+    const [refundData, setRefundData] = useState([])
+    // const [refundData, setRefundData] = useState(["테스트1","테스트2","테스트3"]) // 환불 정보
 
-    // axios 데이터 불러와서 날짜 검색이랑 / 게시물 수 불러서 아래 토큰값 감지해서 뿌려주기~
-    // useEffect(() => {
-    //     if(tokenUserInfo.role !== 'NORMAL') {
-    //         //광고주 현황 조회
-    //         retrieveAdvertiserStatus(searchCondition).then(response => {
-    //             if(response !== null) {
-    //                 setAdverStatusData(response)
-    //                 setTotalInfo({
-    //                     totalCount: response?.length
-    //                 })
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+
+    // function fetchPaymentDetails() {
+    //     const requestData = {
+    //         pageSize: pageSize,
+    //         currentPage: currentPage,
+    //         searchStartDate: getLastMonth().startDay,
+    //         searchEndDate: getToDay(),
+    //     };
+    //
+    //     const skip = (currentPage - 1) * pageSize;
+    //     const limit = pageSize;
+    //
+    //     paymentListRequest(skip, limit, tokenUserInfo.id, requestData).then(
+    //         (response) => {
+    //             if (response !== null) {
+    //                 setPaymentDetails(response.rows);
+    //                 setTotalInfo(response?.totalCount);
     //             } else {
-    //                 setAdverStatusData([])
+    //                 setPaymentDetails([]);
+    //                 setTotalInfo(0);
     //             }
-    //         })
-    //     }
-    // }, [searchCondition])
+    //         }
+    //     );
+    // }
+    function fetchPaymentDetails() {
+        const requestData = {
+            pageSize: pageSize,
+            currentPage: currentPage, // currentPage를 계산합니다.
+            searchStartDate: getLastMonth().startDay,
+            searchEndDate: getToDay(),
+        };
+
+        const skip = (currentPage - 1) * pageSize;
+        const limit = pageSize;
+
+        return paymentListRequest(skip, limit, tokenUserInfo.id, requestData).then(
+            (response) => {
+                if (response !== null) {
+                    const totalCount = response.totalCount; // totalCount를 response에서 추출합니다.
+                    const data = response.rows; // 데이터 배열을 response에서 추출합니다.
+                    setTotalInfo(response?.totalCount);
+                    return Promise.resolve({ data, count: parseInt(totalCount) });
+                } else {
+                    return Promise.resolve({ data: [], count: 0 });
+                }
+            }
+        );
+    }
+    function fetchAccountInfo() {
+        selUserInfo(tokenUserInfo.id).then((response) => {
+            setAccountInfoState({
+                ...response,
+                status: response.status === "NORMAL" ? "NORMAL" : "SUSPEND",
+            });
+        });
+    }
 
 
+    useEffect(() => {
+        if (tokenUserInfo.role === "NORMAL") {
+            // 광고주 결제 현황 조회
+            fetchPaymentDetails();
+            // 광고주 포인트 현황 조회
+        } else {
+            // 새로고침 시 메인으로..UserDetail.js useEffect 동일하게 NORMAL 아닐 떄 체크하는 부분 사용
+            fetchAccountInfo();
+        }
+    }, [searchCondition]);
 
     const handleRegisterRefund = () => {
         if(refundData.length === 0){
@@ -114,6 +167,13 @@ function PaymentManageUser(props) {
             console.log("환불 정보", refundData)
         }
     }
+    const handlePaymentDetailsReceived = () => {
+        // AdCharge 에서 특정 행위를 실행하면
+        // 부모 컴포넌트의 상태를 업데이트 한다!!
+        fetchPaymentDetails();
+    }
+
+    const dataSource = useCallback(fetchPaymentDetails, []);
 
     return (
         <main>
@@ -137,6 +197,7 @@ function PaymentManageUser(props) {
                                             onSubmit={null}
                                             requestAmountValue={requestAmountValue}
                                             setRequestAmountValue={setRequestAmountValue}
+                                            onPaymentDetailsReceived={handlePaymentDetailsReceived}
                                         />
                                         {refundData.length === 0?
                                             <DefaultButton onClick={handleRegisterRefund} style={{background:"#fff", color:"#777"}}>환불 신청</DefaultButton>
@@ -214,24 +275,23 @@ function PaymentManageUser(props) {
                         </BoardSearchResultTitle>
                         <Table columns={PaymentDetailsColumns}
                                // totalInfo 내부 totacCount 값이 아직 없으니까 임시로 0값 맹글어 두자~
-                               // totalCount={[totalInfo.totalCount, '결제 내역']}
                                totalCount={[totalInfo, '결제 내역']}
-                               data={paymentDetails}
+                               data={dataSource}
                                showHoverRows={false}
                                activeCell={[0]}
-                               pagenations={true}
-                               emptyText={''}
                                noDirectives={true}
+                               pagenations={true}
+                               limit={10}
                                emptyText={'결제 내역이 없습니다.'}
                         />
                         <Table columns={PointDetailsColumns}
                                // totalCount={[totalInfo.totalCount, '포인트 지급 내역']}
-                               totalCount={[totalInfo, '포인트 지급 내역']}
+                               // totalCount={[totalInfo, '포인트 지급 내역']}
+                               totalCount={[0, '포인트 지급 내역']}
                                data={pointDetails}
                                showHoverRows={false}
                                activeCell={[0]}
-                               pagenations={true}
-                               emptyText={''}
+                               pagenations={false}
                                noDirectives={true}
                                emptyText={'포인트 지급 내역이 없습니다.'}
                         />

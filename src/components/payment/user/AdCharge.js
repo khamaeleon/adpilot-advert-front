@@ -12,7 +12,7 @@ import {paymentRequest} from "../../../services/payment/user/paymentUserAxios";
 import {tokenResultAtom} from "../../../pages/login/entity/Common";
 
 export function AdChargeButton(props) {
-    const {onSubmit, modalInfo, onSave, title, requestAmountValue, setRequestAmountValue} = props;
+    const {onSubmit, modalInfo, onSave, title, requestAmountValue, setRequestAmountValue, onPaymentDetailsReceived} = props;
     const [, setModal] = useAtom(modalController)
     const handleModalComponent = () => {
         setModal({
@@ -27,6 +27,7 @@ export function AdChargeButton(props) {
                         title={title}
                         requestAmountValue={requestAmountValue}
                         setRequestAmountValue={setRequestAmountValue}
+                        onPaymentDetailsReceived={onPaymentDetailsReceived}
                     />
                 )
             }
@@ -64,18 +65,7 @@ function AdChargeModal (props) {
         setChargeAmount(0)
         setInputValue(1)
     }
-    // const payWithEasypay = async (paymentServiceUid, amount, paymentMethod, ) => {
-    //     try {
-    //         const response = await axios.post('/payments/ADVERTISE/payment-request', {
-    //             paymentServiceUid: paymentServiceUid,
-    //             amount: amount,
-    //             payMethodType: paymentMethod,
-    //         });
-    //         return response.data;
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }
+
     const onSubmit = async () => {
         if (chargeAmount <= 0) {
             setError('chargeAmount', {type: 'required', message:'충전 금액을 입력해 주세요'})
@@ -104,7 +94,7 @@ function AdChargeModal (props) {
                     iframe.width = '100%';
                     iframe.height = '100%';
                     newWindow.document.body.appendChild(iframe);
-
+                    props.onPaymentDetailsReceived();
                 })
                 .catch(error => {
                     // 실패한 응답 처리
@@ -141,8 +131,8 @@ function AdChargeModal (props) {
                                             <input
                                                 type={'radio'}
                                                 name={'paymentMethod'}
-                                                value="BANK"
-                                                checked={payMethod === 'BANK'}
+                                                value="TRANS"
+                                                checked={payMethod === 'TRANS'}
                                                 onChange={(e) => setPayMethod(e.target.value)}
                                             />
                                             <span>계좌이체</span>
