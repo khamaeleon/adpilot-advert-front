@@ -30,7 +30,7 @@ export function SwitchComponent(props){
     if(confirm){
       eventClick();
       if(type === 'publish'){
-        cellProps.datㅌa.publishYn = cellProps.data.publishYn === 'Y' ? 'N' : 'Y';
+        cellProps.data.publishYn = cellProps.data.publishYn === 'Y' ? 'N' : 'Y';
       }else{
         cellProps.data.interlockYn = cellProps.data.interlockYn === 'Y' ? 'N' : 'Y';
       }
