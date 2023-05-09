@@ -29,8 +29,14 @@ export function SwitchComponent(props){
   const handleClick = (confirm) => {
     if(confirm){
       eventClick();
+      if(type === 'publish'){
+        cellProps.datㅌa.publishYn = cellProps.data.publishYn === 'Y' ? 'N' : 'Y';
+      }else{
+        cellProps.data.interlockYn = cellProps.data.interlockYn === 'Y' ? 'N' : 'Y';
+      }
+    }else{
+      setSelect(select)
     }
-    setSelect(select)
     setModal({isShow:false});
   }
   const showModal = () => {
@@ -44,7 +50,7 @@ export function SwitchComponent(props){
             <ModalHeader title={'연동 상태 변경'}/>
             <ModalBody>
               <ScriptSubject>
-                {cellProps !== 'Y' ?
+                {!select ?
                   type === 'publish' ? <div>게재 하시겠습니까?</div> : <div>연동을 사용 하시겠습니까?</div>
                   :
                     type === 'publish' ? <div>중지 하시겠습니까?</div> :<div>연동을 중지 하시겠습니까?</div>

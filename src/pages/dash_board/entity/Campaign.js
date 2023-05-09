@@ -31,7 +31,7 @@ export const adverListColumn = [
   },
   {
     name: 'campaignCount',
-    header: '캠패인 수',
+    header: '캠페인 수',
     minWidth: 100,
     render: ({value}) => <p>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
@@ -200,8 +200,7 @@ export const adverStatusDetailColumn = [
       const valueYn = (value === 'Y');
       return (
         <div style={{display: "flex", alignItems: 'center', justifyContent: 'center'}}>
-          {/*<SwitchComponent value={value !== 'N' && true} />*/}
-          <SwitchComponent value={valueYn} type={'publish'} cellProps={cellProps.data.publishYn} eventClick={()=> updateCampaignPublish(cellProps.data.campaignId, valueYn)}/>
+          <SwitchComponent value={valueYn} type={'publish'} cellProps={cellProps} eventClick={()=> updateCampaignPublish(cellProps.data.campaignId, !valueYn)}/>
         </div>
       );
     }

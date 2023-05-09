@@ -248,12 +248,9 @@ function PixelDetail() {
               <div className={'row'}>
                 <p className={'tit'}>연동 상태</p>
                 <div className={'txt'}>
-                  <SwitchBox
-                    style={background}
-                  >
-                    <label style={position}/>
-                    {pixelInfoListState?.interlockYn === 'Y' ? <On>ON</On> : <Off>OFF</Off>}
-                  </SwitchBox>
+                  <p className={'tit'}>
+                    {pixelInfoListState?.interlockYn === 'Y' ? 'ON' : 'OFF'}
+                  </p>
                   {/*<SwitchComponent background={pixelInfoListState?.interlock} styles={{cursor: 'default'}}/>*/}
                 </div>
               </div>
