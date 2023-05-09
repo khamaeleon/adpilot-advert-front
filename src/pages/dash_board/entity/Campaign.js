@@ -189,7 +189,7 @@ export const adverStatusDetailColumn = [
   },
   {
     name: 'publishYn',
-    header: '연동 상태',
+    header: '게재 여부',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
@@ -443,13 +443,13 @@ export const adverStatusDetailColumn = [
 export const userCampaignListColumn = [
   {
     name: 'publishYn',
-    header: '연동 상태',
+    header: '게재 여부',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
     showColumnMenuTool: false,
     sortable: false,
-    render: ({value}) => <p>{value !== 'N' ? 'OFF' : 'ON'}</p>
+    render: ({value}) => <p>{value !== 'N' ? 'ON' : 'OFF'}</p>
   },
   {
     name: 'campaignName',

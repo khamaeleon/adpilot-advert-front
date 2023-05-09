@@ -28,14 +28,14 @@ export function SwitchComponent(props){
 
   const handleClick = (confirm) => {
     if(confirm){
-      cellProps.data.interlockYn = !cellProps.data.interlockYn;
+      cellProps.data.interlockYn = (cellProps.data.interlockYn === 'Y') ? 'N' : 'Y';
       eventClick();
     }
-    setSelect(cellProps.data.interlockYn)
+    setSelect((cellProps.data.interlockYn === 'Y'))
     setModal({isShow:false});
   }
   const showModal = () => {
-    setSelect(!cellProps.data.interlockYn)
+    setSelect(!(cellProps.data.interlockYn === 'Y'))
     setModal({
       isShow: true,
       width: 660,

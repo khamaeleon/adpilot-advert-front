@@ -32,18 +32,6 @@ export async function deleteCustomReportsAxios(deleteInfo) {
 /**
  * 보고서 리스트 조회 (id)
  */
-export async function retrieveCustomReportsAll(){
-  let returnVal = null;
-  await AdverAxios('GET', `/statistics/custom-report`,null)
-    .then((response) => {
-      returnVal = response.responseCode.statusCode === 200 ? response.data : null
-    }).catch((e) => returnVal = false)
-  return returnVal;
-}
-
-/**
- * 보고서 리스트 조회 (id)
- */
 export async function retrieveCustomReportsList(userId){
   let returnVal = null;
   await AdverAxios('GET', `/statistics/${userId}/custom-report`,null)

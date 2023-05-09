@@ -57,13 +57,24 @@ export function CampaignThree() {
     if((campaignBasicInfo.step !== undefined && campaignBasicInfo.step.includes('STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED')) || state.campaignId !== undefined){
       let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
         selGroupInfo(campaignId).then(response =>{
-        console.log(response)
-        setCampaignGroupInfo(response)
-        reset(response)
-        setDateRange([
-          new Date(campaignGroupInfo.startDate !==undefined ? campaignGroupInfo.startDate: getToDay()),
-          new Date(campaignGroupInfo.endDate !==undefined ? campaignGroupInfo.endDate: getToDay())
-        ])
+          const data = {
+            ...response,
+            exposureConversionUserYn: response.exposureConversionUserYn === 'Y',
+            exposureShoppingUserYn: response.exposureShoppingUserYn === 'Y',
+            exposureAttentionUserYn: response.exposureAttentionUserYn === 'Y',
+            exposureVisitUserYn: response.exposureVisitUserYn === 'Y',
+            exposureConversionAudienceYn: response.exposureConversionAudienceYn === 'Y',
+            exposureShoppingAudienceYn: response.exposureShoppingAudienceYn === 'Y',
+            exposurePotentialAudienceYn: response.exposurePotentialAudienceYn === 'Y',
+            exposureNewAudienceYn: response.exposureNewAudienceYn === 'Y',
+          }
+
+          setCampaignGroupInfo(data)
+          reset(data)
+          setDateRange([
+            new Date(data.startDate !==undefined ? data.startDate: getToDay()),
+            new Date(data.endDate !==undefined ? data.endDate: getToDay())
+          ])
       })
     }
     selMediaCategoryInfo().then(response => {
@@ -160,10 +171,10 @@ export function CampaignThree() {
     setCampaignGroupInfo({
       ...campaignGroupInfo,
       userTargetConfigType: userTargetConfigType,
-      exposureConversionUser:true,
-      exposureShoppingUser:true,
-      exposureAttentionUser:true,
-      exposureVisitUser:true,
+      exposureConversionUserYn:true,
+      exposureShoppingUserYn:true,
+      exposureAttentionUserYn:true,
+      exposureVisitUserYn:true,
     })
   }
   const handleNoViewType = (noViewType) => {
@@ -176,21 +187,21 @@ export function CampaignThree() {
   const setExposureConversion =(boolExposureConversion)=>{
     setCampaignGroupInfo({
       ...campaignGroupInfo,
-      exposureConversionUser: boolExposureConversion
+      exposureConversionUserYn: boolExposureConversion
     })
   }
 
   const setExposureShoppingUser =(boolExposureShoppingUser)=>{
     setCampaignGroupInfo({
       ...campaignGroupInfo,
-      exposureShoppingUser: boolExposureShoppingUser
+      exposureShoppingUserYn: boolExposureShoppingUser
     })
   }
 
   const setExposureVisitUser =(boolExposureVisitUser)=>{
     setCampaignGroupInfo({
       ...campaignGroupInfo,
-      exposureVisitUser: boolExposureVisitUser
+      exposureVisitUserYn: boolExposureVisitUser
     })
   }
 
@@ -198,7 +209,7 @@ export function CampaignThree() {
   const setExposureAttentionUser =(boolExposureAttentionUser)=>{
     setCampaignGroupInfo({
       ...campaignGroupInfo,
-      exposureAttentionUser: boolExposureAttentionUser
+      exposureAttentionUserYn: boolExposureAttentionUser
     })
   }
 
@@ -206,10 +217,10 @@ export function CampaignThree() {
     setCampaignGroupInfo({
       ...campaignGroupInfo,
       audienceTargetConfigType: audienceTargetConfigType,
-      exposureConversionAudience:true,
-      exposureShoppingAudience:true,
-      exposurePotentialAudience:true,
-      exposureNewAudience:true,
+      exposureConversionAudienceYn:true,
+      exposureShoppingAudienceYn:true,
+      exposurePotentialAudienceYn:true,
+      exposureNewAudienceYn:true,
     })
   }
   const handleNoViewTypeAudience = (noViewTypeAudience) => {
@@ -222,21 +233,21 @@ export function CampaignThree() {
   const setExposureConversionAudience =(boolExposureConversionAudience)=>{
     setCampaignGroupInfo({
       ...campaignGroupInfo,
-      exposureConversionAudience: boolExposureConversionAudience
+      exposureConversionAudienceYn: boolExposureConversionAudience
     })
   }
 
   const setExposureShoppingUserAudience =(boolExposureShoppingAudience)=>{
     setCampaignGroupInfo({
       ...campaignGroupInfo,
-      exposureShoppingAudience: boolExposureShoppingAudience
+      exposureShoppingAudienceYn: boolExposureShoppingAudience
     })
   }
 
   const setExposurePotentialAudience =(boolExposurePotentialAudience)=>{
     setCampaignGroupInfo({
       ...campaignGroupInfo,
-      exposurePotentialAudience: boolExposurePotentialAudience
+      exposurePotentialAudienceYn: boolExposurePotentialAudience
     })
   }
 
@@ -244,7 +255,7 @@ export function CampaignThree() {
   const setExposureNewAudience =(boolExposureNewAudience)=>{
     setCampaignGroupInfo({
       ...campaignGroupInfo,
-      exposureNewAudience: boolExposureNewAudience
+      exposureNewAudienceYn: boolExposureNewAudience
     })
   }
   const onChangeGroupName = (event) => {
@@ -255,7 +266,7 @@ export function CampaignThree() {
   }
   const onSubmit = (data) => {
     console.log(campaignGroupInfo);
-    if(campaignGroupInfo.exposeAgentType.length === 0) {
+    if(campaignGroupInfo.exposureAgentType.length === 0) {
       toast.warning('노출 영역은 최소한 하나는 입력해주세요')
     } else {
       let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
@@ -488,7 +499,7 @@ export function CampaignThree() {
                         <label>
                           <input type={'radio'}
                                  name={'exposureConversionUser'}
-                                 checked={campaignGroupInfo.exposureConversionUser}
+                                 checked={campaignGroupInfo.exposureConversionUserYn}
                                  onClick={() => setExposureConversion(true)}
                           />
                           <span>노출</span>
@@ -496,7 +507,7 @@ export function CampaignThree() {
                         <label>
                           <input type={'radio'}
                                  name={'exposureConversionUser'}
-                                 checked={!campaignGroupInfo.exposureConversionUser}
+                                 checked={!campaignGroupInfo.exposureConversionUserYn}
                                  onClick={() => setExposureConversion(false)}
                           />
                           <span>미노출</span>
@@ -532,7 +543,7 @@ export function CampaignThree() {
                         <label>
                           <input type={'radio'}
                                  name={'exposureShoppingUser'}
-                                 checked={campaignGroupInfo.exposureShoppingUser}
+                                 checked={campaignGroupInfo.exposureShoppingUserYn}
                                  onClick={() => setExposureShoppingUser(true)}
                           />
                           <span>노출</span>
@@ -540,7 +551,7 @@ export function CampaignThree() {
                         <label>
                           <input type={'radio'}
                                  name={'exposureShoppingUser'}
-                                 checked={!campaignGroupInfo.exposureShoppingUser}
+                                 checked={!campaignGroupInfo.exposureShoppingUserYn}
                                  onClick={() => setExposureShoppingUser(false)}
                           />
                           <span>미노출</span>
@@ -558,7 +569,7 @@ export function CampaignThree() {
                         <label>
                           <input type={'radio'}
                                  name={'exposureAttentionUser'}
-                                 checked={campaignGroupInfo.exposureAttentionUser}
+                                 checked={campaignGroupInfo.exposureAttentionUserYn}
                                  onClick={() => setExposureAttentionUser(true)}
                           />
                           <span>노출</span>
@@ -566,7 +577,7 @@ export function CampaignThree() {
                         <label>
                           <input type={'radio'}
                                  name={'exposureAttentionUser'}
-                                 checked={!campaignGroupInfo.exposureAttentionUser}
+                                 checked={!campaignGroupInfo.exposureAttentionUserYn}
                                  onClick={() => setExposureAttentionUser(false)}
                           />
                           <span>미노출</span>
@@ -584,7 +595,7 @@ export function CampaignThree() {
                         <label>
                           <input type={'radio'}
                                  name={'exposureVisitUser'}
-                                 checked={campaignGroupInfo.exposureVisitUser}
+                                 checked={campaignGroupInfo.exposureVisitUserYn}
                                  onClick={() => setExposureVisitUser(true)}
                           />
                           <span>노출</span>
@@ -592,7 +603,7 @@ export function CampaignThree() {
                         <label>
                           <input type={'radio'}
                                  name={'exposureVisitUser'}
-                                 checked={!campaignGroupInfo.exposureVisitUser}
+                                 checked={!campaignGroupInfo.exposureVisitUserYn}
                                  onClick={() => setExposureVisitUser(false)}
                           />
                           <span>미노출</span>
@@ -642,7 +653,7 @@ export function CampaignThree() {
                         <label>
                           <input type={'radio'}
                                  name={'exposureConversionAudience'}
-                                 checked={campaignGroupInfo.exposureConversionAudience}
+                                 checked={campaignGroupInfo.exposureConversionAudienceYn}
                                  onClick={() => setExposureConversionAudience(true)}
                           />
                           <span>노출</span>
@@ -650,7 +661,7 @@ export function CampaignThree() {
                         <label>
                           <input type={'radio'}
                                  name={'exposureConversionAudience'}
-                                 checked={!campaignGroupInfo.exposureConversionAudience}
+                                 checked={!campaignGroupInfo.exposureConversionAudienceYn}
                                  onClick={() => setExposureConversionAudience(false)}
                           />
                           <span>미노출</span>
@@ -676,7 +687,7 @@ export function CampaignThree() {
                         <label>
                           <input type={'radio'}
                                  name={'exposureShoppingAudience'}
-                                 checked={campaignGroupInfo.exposureShoppingAudience}
+                                 checked={campaignGroupInfo.exposureShoppingAudienceYn}
                                  onClick={() => setExposureShoppingUserAudience(true)}
                           />
                           <span>노출</span>
@@ -684,7 +695,7 @@ export function CampaignThree() {
                         <label>
                           <input type={'radio'}
                                  name={'exposureShoppingAudience'}
-                                 checked={!campaignGroupInfo.exposureShoppingAudience}
+                                 checked={!campaignGroupInfo.exposureShoppingAudienceYn}
                                  onClick={() => setExposureShoppingUserAudience(false)}
                           />
                           <span>미노출</span>
@@ -702,7 +713,7 @@ export function CampaignThree() {
                         <label>
                           <input type={'radio'}
                                  name={'exposurePotentialAudience'}
-                                 checked={campaignGroupInfo.exposurePotentialAudience}
+                                 checked={campaignGroupInfo.exposurePotentialAudienceYn}
                                  onClick={() => setExposurePotentialAudience(true)}
                           />
                           <span>노출</span>
@@ -710,7 +721,7 @@ export function CampaignThree() {
                         <label>
                           <input type={'radio'}
                                  name={'exposurePotentialAudience'}
-                                 checked={!campaignGroupInfo.exposurePotentialAudience}
+                                 checked={!campaignGroupInfo.exposurePotentialAudienceYn}
                                  onClick={() => setExposurePotentialAudience(false)}
                           />
                           <span>미노출</span>
@@ -728,7 +739,7 @@ export function CampaignThree() {
                         <label>
                           <input type={'radio'}
                                  name={'exposureNewAudience'}
-                                 checked={campaignGroupInfo.exposureNewAudience}
+                                 checked={campaignGroupInfo.exposureNewAudienceYn}
                                  onClick={() => setExposureNewAudience(true)}
                           />
                           <span>노출</span>
@@ -736,7 +747,7 @@ export function CampaignThree() {
                         <label>
                           <input type={'radio'}
                                  name={'exposureNewAudience'}
-                                 checked={!campaignGroupInfo.exposureNewAudience}
+                                 checked={!campaignGroupInfo.exposureNewAudienceYn}
                                  onClick={() => setExposureNewAudience(false)}
                           />
                           <span>미노출</span>

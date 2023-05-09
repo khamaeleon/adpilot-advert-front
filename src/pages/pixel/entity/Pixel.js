@@ -96,9 +96,10 @@ export const pixelDetailColumns = [
     showColumnMenuTool: false,
     sortable: false,
     render: ({value, cellProps}) => {
+      const valueYn = (value === 'Y');
       return (
         <div style={{display: "flex", alignItems: 'center', justifyContent: 'center'}}>
-          <SwitchComponent value={value} cellProps={cellProps} eventClick={()=> updatePixelInterlock(cellProps.data.pixelId,{interlock:cellProps.data.interlock})}/>
+          <SwitchComponent value={valueYn} cellProps={cellProps} eventClick={()=> updatePixelInterlock(cellProps.data.pixelId, !valueYn)}/>
         </div>
       );
     }
@@ -153,10 +154,10 @@ export const pixelDetailInfoColumns = [
     showColumnMenuTool: false,
     sortable: false,
     render: ({value, cellProps}) => {
-      console.log(value)
+      const valueYn = (value === 'Y');
       return (
         <div style={{display: "flex", alignItems: 'center', justifyContent: 'center'}}>
-          <SwitchComponent value={value} cellProps={cellProps} eventClick={()=> updateEventInterlock(cellProps.data.eventId,{interlock:cellProps.data.interlock})}/></div>
+          <SwitchComponent value={valueYn} cellProps={cellProps} eventClick={()=> updateEventInterlock(cellProps.data.eventId, !valueYn)}/></div>
       );
     }
   },

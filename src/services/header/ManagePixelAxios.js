@@ -38,8 +38,8 @@ export async function resistAdverPixelInfo(pixelInfo) {
 
 export async function updatePixelInterlock(pixelId,interlockYn) {
   let returnVal = null;
-  console.log(interlockYn)
-  await AdminAxios('PUT', ACTION_URL+'/'+pixelId+'/interlock',interlockYn)
+  let params = {interlockYn : interlockYn ? 'Y': 'N'}
+  await AdminAxios('PUT', ACTION_URL+'/'+pixelId+'/interlock',params)
     .then((response) => {
       const {responseCode} =response
       if(responseCode.statusCode ===200){
@@ -53,8 +53,8 @@ export async function updatePixelInterlock(pixelId,interlockYn) {
 
 export async function updateEventInterlock(eventId,interlockYn) {
   let returnVal = null;
-  console.log(interlockYn)
-  await AdminAxios('PUT', ACTION_URL+EVENT+'/'+eventId+'/interlock',interlockYn)
+  let params = {interlockYn : interlockYn ? 'Y': 'N'}
+  await AdminAxios('PUT', ACTION_URL+EVENT+'/'+eventId+'/interlock',params)
     .then((response) => {
       const {responseCode} =response
       if(responseCode.statusCode ===200){

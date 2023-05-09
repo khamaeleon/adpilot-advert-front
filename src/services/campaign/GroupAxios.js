@@ -35,7 +35,8 @@ export async function selSearchMediaInfo(keyword) {
 
 export async function selSearchMediaList(inventoryIds) {
   let returnVal = null;
-  await AdminAxios('POST', MEDIA_SEARCH_ARRAY,inventoryIds)
+
+  await AdminAxios('POST', MEDIA_SEARCH_ARRAY, inventoryIds)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
         returnVal = response.data
@@ -50,7 +51,19 @@ export async function selSearchMediaList(inventoryIds) {
 
 export async function updateCampaignConfigInventory(campaignGroupInfo) {
   let returnVal = null;
-  await AdminAxios('PUT', ACTION_URL+'/'+ campaignGroupInfo.campaignId +CONFIG_INVENTORY ,campaignGroupInfo)
+  let params = {
+    ...campaignGroupInfo,
+    exposureAttentionUserYn: campaignGroupInfo.exposureAttentionUserYn ? 'Y' : 'N',
+    exposureConversionAudienceYn: campaignGroupInfo.exposureConversionAudienceYn ? 'Y' : 'N',
+    exposureConversionUserYn: campaignGroupInfo.exposureConversionUserYn ? 'Y' : 'N',
+    exposureNewAudienceYn: campaignGroupInfo.exposureNewAudienceYn ? 'Y' : 'N',
+    exposurePotentialAudienceYn: campaignGroupInfo.exposurePotentialAudienceYn ? 'Y' : 'N',
+    exposureShoppingAudienceYn: campaignGroupInfo.exposureShoppingAudienceYn ? 'Y' : 'N',
+    exposureShoppingUserYn: campaignGroupInfo.exposureShoppingUserYn ? 'Y' : 'N',
+    exposureVisitUserYn: campaignGroupInfo.exposureVisitUserYn ? 'Y' : 'N'
+  }
+
+  await AdminAxios('PUT', ACTION_URL+'/'+ campaignGroupInfo.campaignId +CONFIG_INVENTORY ,params)
     .then((response) => {
       const {responseCode} =response
       if(responseCode.statusCode ===200){

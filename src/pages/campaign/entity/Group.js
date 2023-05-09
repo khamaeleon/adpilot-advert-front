@@ -11,14 +11,14 @@ export const campaignGroupInfoAtom = atom({
     disAllowInventoryCategories: [],
     nonExposureDaysOfConversionUser:0,
     nonExposureDaysOfConversionAudience:0,
-    exposureConversionUser:true,
-    exposureShoppingUser:true,
-    exposureAttentionUser:true,
-    exposureVisitUser:true,
-    exposureConversionAudience:true,
-    exposureShoppingAudience:true,
-    exposurePotentialAudience:true,
-    exposureNewAudience:true,
+    exposureConversionUserYn:true,
+    exposureShoppingUserYn:true,
+    exposureAttentionUserYn:true,
+    exposureVisitUserYn:true,
+    exposureConversionAudienceYn:true,
+    exposureShoppingAudienceYn:true,
+    exposurePotentialAudienceYn:true,
+    exposureNewAudienceYn:true,
   }
 )
 export const mediaCategoryAtom = atom(null)

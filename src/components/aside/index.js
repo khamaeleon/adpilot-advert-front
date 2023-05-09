@@ -5,7 +5,6 @@ import {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity/Common";
 import {
-  retrieveCustomReportsAll,
   retrieveCustomReportsList
 } from "../../services/reports/ReportsAxios";
 
@@ -40,10 +39,6 @@ function AsideList (props) {
   useEffect(() => {
     if(tokenUserInfo.role === 'NORMAL'){
       retrieveCustomReportsList(tokenUserInfo.id).then(response => {
-        setReportLists(response)
-      })
-    }else{
-      retrieveCustomReportsAll().then(response => {
         setReportLists(response)
       })
     }

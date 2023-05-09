@@ -51,11 +51,9 @@ export function CampaignTwo() {
   useEffect(() => {
     if (campaignBasicInfo.step !=='INIT' || state.campaignId !==undefined ) {
       //수정
-      console.log(campaignBasicInfo)
       let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
       selBudgetInfo(campaignId).then(response => {
-        console.log(response)
-        const data = response
+        const data = {...response, infiniteBudgetYn: response.infiniteBudgetYn === 'Y'}
         let budgetRate = {budgetRate : response.pcBudget * 100 / response.dailyAvgBudget}
         Object.assign(data,budgetRate)
         setCampaignBudgetInfo(data)
@@ -189,7 +187,6 @@ export function CampaignTwo() {
     })
   }
   const onSubmit = (data) => {
-    console.log(campaignBudgetInfo)
     let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
       updateCampaignBudget({
       ...campaignBudgetInfo,
@@ -238,7 +235,7 @@ export function CampaignTwo() {
                 </ColSpan1>
                 <ColSpan1>
                   <label>
-                    <input type={'checkbox'} value={campaignBudgetInfo.infiniteBudgetYn || ''} checked={campaignBudgetInfo.infiniteBudget} className={'checkbox-type-a'} onChange={handleCheckInfiniteBudget}/>
+                    <input type={'checkbox'} value={campaignBudgetInfo.infiniteBudgetYn || ''} checked={campaignBudgetInfo.infiniteBudgetYn} className={'checkbox-type-a'} onChange={handleCheckInfiniteBudget}/>
                     <i/>
                     {/*배너일때 infiniteBudget 항목 없음*/}
                     <span>일일 예산 무제한</span>
