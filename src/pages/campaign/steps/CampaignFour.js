@@ -41,7 +41,7 @@ import {selEnumInfo} from "../../../services/campaign/InfoAxios";
 import {bannerSizeAtom, campaignCreativeAtom, clickInducementTypeAtom, creativeTypeAtom} from "../entity/Creative";
 import ImageUploading from "react-images-uploading";
 import {
-  selCreativeBannerInfo, selCreativeNativeInfo,
+  selCreativeBannerInfo, selCreativeNativeInfo, selCreativePopUnderInfo,
   updateCampaignBanner, updateCampaignNative, updateCampaignPopUnder,
   uploadBannerImages,
   uploadLogoImages,
@@ -49,6 +49,7 @@ import {
 } from "../../../services/campaign/CreativeAxios";
 import moment from "moment";
 import {toast} from "react-toastify";
+import {useLocation} from "react-router-dom";
 
 const RegistryBannerItem = (props) => {
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
@@ -528,7 +529,7 @@ function CampaignFourNative(props) {
           <input
             type={'text'}
             name={'serviceName'}
-            value={campaignCreativeInfo.servicName}
+            value={campaignCreativeInfo.serviceName}
             onChange={handleChangeInputs}
           />
         </Row>
@@ -578,7 +579,7 @@ function CampaignFourNative(props) {
         <ColSpan1><Span4>미리보기</Span4></ColSpan1>
       </RowSpan>
       <RowSpan box={true}>
-        {campaignCreativeInfo.nativeMaterials.length !== 0 && campaignCreativeInfo.nativeMaterials.map((item, key) => {
+        {campaignCreativeInfo.nativeMaterials !==undefined && campaignCreativeInfo.nativeMaterials.length !== 0 && campaignCreativeInfo.nativeMaterials.map((item, key) => {
           return (
             <PrevImage style={{backgroundImage: `url(${item.imagePath})`}} />
           )
@@ -588,8 +589,8 @@ function CampaignFourNative(props) {
   )
 }
 
-export function CampaignFour(props) {
-  const [state] =useState({creativeType:'BANNER'})
+export function CampaignFour() {
+  const {state} =useLocation()
   const [, setStepCampaign] = useAtom(stepCampaignAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
   const [campaignBasicInfo,setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
@@ -600,38 +601,55 @@ export function CampaignFour(props) {
 
   useEffect(() => {
     if(state.creativeType ==='BANNER' ){
-      console.log('수정')
-      selCreativeBannerInfo('78552c2e-3bfa-4fd7-8a4b-aee34513af01').then(response =>{
+      selCreativeBannerInfo(state.campaignId).then(response =>{
         console.log(response)
         setCampaignCreative({
-          ...campaignCreativeInfo,
-          response
+          ...response,
+          nativeMaterials:[]
         })
         setCampaignBasicInfo({
-          campaignId: '78552c2e-3bfa-4fd7-8a4b-aee34513af01',
-          productType: 'BANNER'
+          campaignId: state.campaignId,
+          productType: state.productType
         })
         reset(response)
       })
     }else if(state.creativeType ==='NATIVE'){
-      selCreativeNativeInfo(campaignBasicInfo.campaignId).then(response =>{
-        setCampaignCreative(response)
+      selCreativeNativeInfo(state.campaignId).then(response =>{
+        setCampaignCreative({
+          ...response,
+          materials:[]
+        })
+        setCampaignBasicInfo({
+          campaignId: state.campaignId,
+          productType: state.productType
+        })
+        reset(response)
       })
     }else if(state.creativeType ==='POP_UNDER'){
-
+      selCreativePopUnderInfo(state.campaignId).then(response =>{
+        console.log(response)
+        setCampaignCreative({
+          ...response,
+          materials:[],
+          nativeMaterials:[]
+        })
+        setCampaignBasicInfo({
+          campaignId: state.campaignId,
+          productType: state.productType
+        })
+        reset(response)
+      })
     }
-    console.log(campaignCreativeInfo)
+    console.log(campaignBasicInfo.productType)
     selEnumInfo('BANNER_SIZE').then(response => {
-      console.log(response.data)
       setBannerSize(response.data)
     })
     selEnumInfo('CLICK_INDUCEMENT_TYPE').then(response => {
-      console.log(response.data)
       setClickInducementType(response.data)
     })
-    if (campaignBasicInfo.productType === 'BANNER') {
+
+    if (state.productType === 'BANNER' || state.productType ===undefined) {
       selEnumInfo('CREATIVE_TYPE_BANNER').then(response => {
-        console.log(response.data)
         setCreativeType(response.data)
       })
     } else {
@@ -803,10 +821,10 @@ export function CampaignFour(props) {
               <Validation>{errors.pcReferralCode && errors.pcReferralCode.message}</Validation>
               <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
             </ValidationGroup>
-            {campaignCreativeInfo.creativeType === 'BANNER' && campaignBasicInfo.productType ==='BANNER' &&
+            {campaignCreativeInfo.creativeType === 'BANNER' && (campaignBasicInfo.productType ==='BANNER' || state.productType ==='BANNER') &&
               <CampaignFourBanner register={register} errors={errors}/>
             }
-            {campaignCreativeInfo.creativeType === 'NATIVE' && campaignBasicInfo.productType ==='BANNER' &&
+            {campaignCreativeInfo.creativeType === 'NATIVE' && (campaignBasicInfo.productType ==='BANNER' || state.productType ==='BANNER')&&
               <CampaignFourNative register={register} errors={errors}/>
             }
           </BoardSearchResult>

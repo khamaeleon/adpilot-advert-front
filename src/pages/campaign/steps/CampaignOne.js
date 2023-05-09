@@ -43,6 +43,7 @@ export function CampaignOne() {
    * 캠페인 목표 설정
    */
   useEffect(() => {
+
     selEnumInfo('CAMPAIGN_CONVERSION_GOAL').then(response => {
       setGoalList(response.data)
     })

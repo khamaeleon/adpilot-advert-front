@@ -35,6 +35,19 @@ export async function selCreativeNativeInfo(campaignId) {
   return returnVal;
 };
 
+export async function selCreativePopUnderInfo(campaignId) {
+  let returnVal = null;
+  await AdminAxios('GET', ACTION_URL+'/'+ campaignId +CREATE_POP_UNDER)
+    .then((response) => {
+      if(response.responseCode.statusCode ===200){
+        returnVal = response.data
+      }else{
+        returnVal = null
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+};
+
 export async function uploadBannerImages(data,bannerSize) {
   let returnVal = null;
   await AxiosImage('POST', ACTION_URL+IMAGE_UPDATE+'/'+bannerSize, data)
