@@ -16,7 +16,6 @@ import PlatformUserDetail from "../platform_manage/UserDetail";
 import PlatformAdminDetail from "../platform_manage/AdminDetail";
 import PaymentManageUser from "../platform_manage/PaymentManageUser"
 import DashBoard from "../dash_board";
-import DashBoardIndex from "../dash_board/DashBoardIndex";
 import {BoardContainer, TitleContainer} from "../../assets/GlobalStyles";
 import Navigator from "../../components/common/Navigator";
 import {CampaignLookOver} from "../campaign/steps/CampaignLookOver";
@@ -24,7 +23,6 @@ import {CampaignTwo} from "../campaign/steps/CampaignTwo";
 import {FormProvider, useForm} from "react-hook-form";
 import {CampaignThree} from "../campaign/steps/CampaignThree";
 import {CampaignFour} from "../campaign/steps/CampaignFour";
-
 
 function Layout() {
   const params = useParams()

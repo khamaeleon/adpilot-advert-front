@@ -252,14 +252,15 @@ function CampaignFourBanner(props) {
                 type={'text'}
                 name={'title1'}
                 value={campaignCreativeInfo.title1}
-                onChange={handleChangeInputs}
+                onChange={handleChangeInputs}한
               />
             </Row>
             <Row>
-              <span>광고 제목1<p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p></span>
+              <span>광고 제목1<p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
               <input
                 type={'text'}
                 name={'title2'}
+                maxLength={25}
                 value={campaignCreativeInfo.title2}
                 onChange={handleChangeInputs}
               />
@@ -274,10 +275,11 @@ function CampaignFourBanner(props) {
               />
             </Row>
             <Row>
-              <span>긴 광고 제목<p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p></span>
+              <span>긴 광고 제목<p><small style={{color: '#ccc'}}>최대 90자까지 등록</small></p></span>
               <input
                 type={'text'}
                 name={'titleLong'}
+                maxLength={90}
                 value={campaignCreativeInfo.titleLong}
                 onChange={handleChangeInputs}
               />
@@ -484,10 +486,11 @@ function CampaignFourNative(props) {
               />
             </Row>
             <Row>
-              <span>광고 제목1<p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p></span>
+              <span>광고 제목1<p><small style={{color: '#ccc'}}>최대 25자 까지 등록</small></p></span>
               <input
                 type={'text'}
                 name={'title2'}
+                maxLength={25}
                 value={campaignCreativeInfo.title2}
                 onChange={handleChangeInputs}
               />
@@ -502,10 +505,11 @@ function CampaignFourNative(props) {
               />
             </Row>
             <Row>
-              <span>긴 광고 제목<p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p></span>
+              <span>긴 광고 제목<p><small style={{color: '#ccc'}}>최대 90자까지 등록</small></p></span>
               <input
                 type={'text'}
                 name={'titleLong'}
+                maxLength={90}
                 value={campaignCreativeInfo.titleLong}
                 onChange={handleChangeInputs}
               />

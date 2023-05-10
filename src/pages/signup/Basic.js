@@ -3,7 +3,7 @@ import {useAtom} from "jotai/index";
 import {Controller, useForm} from "react-hook-form";
 import {toast} from "react-toastify";
 import {accountFileUpload, selValidUserId, signUp} from "../../services/Platform/ManageUserAxios";
-import {CancelButton, DefaultButton, Input, RelativeDiv} from "../../assets/GlobalStyles";
+import {CancelButton, DefaultButton, Input, inputStyle, RelativeDiv, selectStyle} from "../../assets/GlobalStyles";
 import {accountInfoAtom, hostList, nextStepAtom} from "./entity/Common";
 import {ButtonGroup, DuplicateButton, Form, SignUpVerify, ValidationScript, VerticalRule} from "./styles";
 import Select from "react-select";
@@ -498,7 +498,7 @@ export default function Basic(props) {
           </RelativeDiv>
           <RelativeDiv>
             <div>호스팅</div>
-            <div>
+            <div style={{width:'50%', fontSize:14,paddingRight: 10}}>
               <Controller
                 name="hostType"
                 control={control}
@@ -514,13 +514,7 @@ export default function Basic(props) {
                           {...field}
                           value={accountInfo.hostType !== '' ? accountInfo.hostType : ''}
                           onChange={handleSelectHosting}
-                          styles={{
-                            input: (baseStyles, state) => (
-                              {
-                                ...baseStyles,
-                                minWidth: "300px",
-                              })
-                          }}
+                          styles={selectStyle}
                   />
                 )}
               />
