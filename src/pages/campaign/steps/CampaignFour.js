@@ -602,49 +602,50 @@ export function CampaignFour() {
   const [creativeType, setCreativeType] = useAtom(creativeTypeAtom)
   const [, setClickInducementType] = useAtom(clickInducementTypeAtom)
   const {register, handleSubmit, reset, formState: {errors}} = useFormContext()
-
+  const [resistBool] =useState(state === null ? true:false)
   useEffect(() => {
-    if(state.creativeType ==='BANNER' ){
-      selCreativeBannerInfo(state.campaignId).then(response =>{
-        console.log(response)
-        setCampaignCreative({
-          ...response,
-          nativeMaterials:[]
+    if(!resistBool){
+      if(state.creativeType ==='BANNER' ){
+        selCreativeBannerInfo(state.campaignId).then(response =>{
+          console.log(response)
+          setCampaignCreative({
+            ...response,
+            nativeMaterials:[]
+          })
+          setCampaignBasicInfo({
+            campaignId: state.campaignId,
+            productType: state.productType
+          })
+          reset(response)
         })
-        setCampaignBasicInfo({
-          campaignId: state.campaignId,
-          productType: state.productType
+      }else if(state.creativeType ==='NATIVE'){
+        selCreativeNativeInfo(state.campaignId).then(response =>{
+          setCampaignCreative({
+            ...response,
+            materials:[]
+          })
+          setCampaignBasicInfo({
+            campaignId: state.campaignId,
+            productType: state.productType
+          })
+          reset(response)
         })
-        reset(response)
-      })
-    }else if(state.creativeType ==='NATIVE'){
-      selCreativeNativeInfo(state.campaignId).then(response =>{
-        setCampaignCreative({
-          ...response,
-          materials:[]
+      }else if(state.creativeType ==='POP_UNDER') {
+        selCreativePopUnderInfo(state.campaignId).then(response => {
+          console.log(response)
+          setCampaignCreative({
+            ...response,
+            materials: [],
+            nativeMaterials: []
+          })
+          setCampaignBasicInfo({
+            campaignId: state.campaignId,
+            productType: state.productType
+          })
+          reset(response)
         })
-        setCampaignBasicInfo({
-          campaignId: state.campaignId,
-          productType: state.productType
-        })
-        reset(response)
-      })
-    }else if(state.creativeType ==='POP_UNDER'){
-      selCreativePopUnderInfo(state.campaignId).then(response =>{
-        console.log(response)
-        setCampaignCreative({
-          ...response,
-          materials:[],
-          nativeMaterials:[]
-        })
-        setCampaignBasicInfo({
-          campaignId: state.campaignId,
-          productType: state.productType
-        })
-        reset(response)
-      })
+      }
     }
-    console.log(campaignBasicInfo.productType)
     selEnumInfo('BANNER_SIZE').then(response => {
       setBannerSize(response.data)
     })
@@ -652,7 +653,7 @@ export function CampaignFour() {
       setClickInducementType(response.data)
     })
 
-    if (state.productType === 'BANNER' || state.productType ===undefined) {
+    if (resistBool || (state !==null && state.productType==='BANNER')) {
       selEnumInfo('CREATIVE_TYPE_BANNER').then(response => {
         setCreativeType(response.data)
       })
@@ -723,7 +724,7 @@ export function CampaignFour() {
           <BoardSearchResult>
             <Span4>크리에이티브 그룹 선택</Span4>
             <RowSpan box={true} column={false}>
-              {creativeType !== null && campaignBasicInfo.productType ==='BANNER' &&
+              {creativeType !== null && (resistBool || (state !==null && state.productType==='BANNER')) &&
                 <ColSpan1 padding={'0'}>
                   <CampaignButton type={'button'}
                                   onClick={() => selCreativeGroup('BANNER')}
@@ -825,10 +826,10 @@ export function CampaignFour() {
               <Validation>{errors.pcReferralCode && errors.pcReferralCode.message}</Validation>
               <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
             </ValidationGroup>
-            {campaignCreativeInfo.creativeType === 'BANNER' && (campaignBasicInfo.productType ==='BANNER' || state.productType ==='BANNER') &&
+            {campaignCreativeInfo.creativeType === 'BANNER' && (resistBool || (state !==null && state.productType==='BANNER')) &&
               <CampaignFourBanner register={register} errors={errors}/>
             }
-            {campaignCreativeInfo.creativeType === 'NATIVE' && (campaignBasicInfo.productType ==='BANNER' || state.productType ==='BANNER')&&
+            {campaignCreativeInfo.creativeType === 'NATIVE' && (resistBool || (state !==null && state.productType==='BANNER')) &&
               <CampaignFourNative register={register} errors={errors}/>
             }
           </BoardSearchResult>
@@ -836,7 +837,7 @@ export function CampaignFour() {
       }
       <SubmitContainer>
         <CancelButton type={'button'} onClick={() => setStepCampaign({steps: 2})}>취소</CancelButton>
-        <SubmitButton type={'submit'}>캠페인 검토</SubmitButton>
+        <SubmitButton type={'submit'}>저장</SubmitButton>
       </SubmitContainer>
     </form>
   )
