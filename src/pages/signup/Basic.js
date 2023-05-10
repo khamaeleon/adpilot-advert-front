@@ -78,7 +78,7 @@ export default function Basic(props) {
         console.log(response)
         if (response.validUsername) {
           //사용가능한 아이디 입니다.
-          toast.warning('사용가능한 아이디입니다')
+          toast.success('사용가능한 아이디입니다')
         } else {
           toast.warning('중복된 아이디입니다')
         }

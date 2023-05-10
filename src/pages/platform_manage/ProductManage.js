@@ -15,7 +15,7 @@ import styled from "styled-components";
 function ImageViewComponent (props) {
   return(
     <div>
-      <ModalHeader title={"매체 검색"}/>
+      <ModalHeader title={"상품 이미지"}/>
       <ModalBody>
         <div style={{height: 500, overflowY: 'scroll'}}>
           <Image src={props.url.imageUrl} alt={'이미지'}/>
