@@ -92,43 +92,25 @@ function PaymentManageUser(props) {
     const [pageSize, setPageSize] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
 
-    // function fetchPaymentDetails() {
-    //     const requestData = {
-    //         pageSize: pageSize,
-    //         currentPage: currentPage,
-    //         searchStartDate: getLastMonth().startDay,
-    //         searchEndDate: getToDay(),
-    //     };
-    //
-    //     const skip = (currentPage - 1) * pageSize;
-    //     const limit = pageSize;
-    //
-    //     paymentListRequest(skip, limit, tokenUserInfo.id, requestData).then(
-    //         (response) => {
-    //             if (response !== null) {
-    //                 setPaymentDetails(response.rows);
-    //                 setTotalInfo(response?.totalCount);
-    //             } else {
-    //                 setPaymentDetails([]);
-    //                 setTotalInfo(0);
-    //             }
-    //         }
-    //     );
-    // }
-    function fetchPaymentDetails() {
+    function fetchPaymentDetails(props) {
+        console.log("props", props)
+        const skip = (currentPage - 1) * pageSize;
+        const limit = pageSize;
+
         const requestData = {
-            pageSize: pageSize,
-            currentPage: currentPage, // currentPage를 계산합니다.
+            pageSize: limit,
+            currentPage: currentPage,
             searchStartDate: getLastMonth().startDay,
             searchEndDate: getToDay(),
         };
 
-        const skip = (currentPage - 1) * pageSize;
-        const limit = pageSize;
+        console.log("skip", skip)
+        console.log("limit", limit)
 
         return paymentListRequest(skip, limit, tokenUserInfo.id, requestData).then(
             (response) => {
                 if (response !== null) {
+                    console.log("얍",response)
                     const totalCount = response.totalCount; // totalCount를 response에서 추출합니다.
                     const data = response.rows; // 데이터 배열을 response에서 추출합니다.
                     setTotalInfo(response?.totalCount);
@@ -173,7 +155,7 @@ function PaymentManageUser(props) {
         fetchPaymentDetails();
     }
 
-    const dataSource = useCallback(fetchPaymentDetails, []);
+    const dataSource = useCallback(fetchPaymentDetails, [currentPage, pageSize]);
 
     return (
         <main>
@@ -283,6 +265,7 @@ function PaymentManageUser(props) {
                                pagenations={true}
                                limit={10}
                                emptyText={'결제 내역이 없습니다.'}
+                               onPageChange={(newPage) => setCurrentPage(newPage)}
                         />
                         <Table columns={PointDetailsColumns}
                                // totalCount={[totalInfo.totalCount, '포인트 지급 내역']}

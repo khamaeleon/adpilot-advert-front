@@ -9,7 +9,6 @@ const LIST = '/list'
  */
 export async function paymentListRequest(skip, limit, userId, param ) {
     let returnVal = null;
-
     await AdverAxios('POST', ACTION_URL + userId + LIST + '?skip=' + skip + '&limit=' + limit , param)
         .then((response) => {
             if (response.responseCode.statusCode === 200) {

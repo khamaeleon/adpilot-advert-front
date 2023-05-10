@@ -228,6 +228,7 @@ function Table(props) {
       limit={30}
       style={gridStyle}
       pagination={props.pagenations}
+      onPageChange={props.onPageChange}
       {...props}
     />
   )
