@@ -146,7 +146,7 @@ export function CampaignTwo() {
       dailyAvgBudget: parseInt(event.target.value),
       pcBudget: parseInt(event.target.value) - ((parseInt(event.target.value) * campaignBudgetInfo.budgetRate) / 100),
       mobBudget: (parseInt(event.target.value) * campaignBudgetInfo.budgetRate) / 100,
-      budgetRate: (campaignBudgetInfo.pcBudget / parseInt(event.target.value)) * 1000
+      budgetRate:  50
     })
   }
 
@@ -227,7 +227,7 @@ export function CampaignTwo() {
                              readOnly={campaignBudgetInfo.infiniteBudgetYn}
                              placeholder={'일일 평균 예산을 설정해주세요.'}
                              style={{color:'#f5811f'}}
-                             value={campaignBudgetInfo.dailyAvgBudget}
+                             value={campaignBudgetInfo.dailyAvgBudget !== 0 ? campaignBudgetInfo.dailyAvgBudget : 0}
                              onChange={(e) => handleChangeDailyBudget(e)}
                       />)}
                   />
@@ -253,7 +253,7 @@ export function CampaignTwo() {
                   <Input type={'number'}
                          min={100}
                          style={{color:'#f5811f'}}
-                         value={campaignBudgetInfo !== null && campaignBudgetInfo.pcBudget}
+                         value={campaignBudgetInfo.pcBudget}
                          onChange={(e) => handleChangePcBudget(e)}
                   />
                   <Won/>
@@ -264,17 +264,18 @@ export function CampaignTwo() {
                     value={campaignBudgetInfo.budgetRate !== undefined ? campaignBudgetInfo.budgetRate : 50}
                     onChange={handleChangeInputRange}
                     style={{
-                      background: `linear-gradient(to right, #f5811f 0%, #f5811f ${campaignBudgetInfo.budgetRate !==undefined ? campaignBudgetInfo.budgetRate: 50}%, #ddd ${campaignBudgetInfo.budgetRate !==undefined ? campaignBudgetInfo.budgetRate: 50}%, #ddd 100%)`
+                      background: `linear-gradient(to right, #f5811f 0%, #f5811f ${campaignBudgetInfo.budgetRate !== undefined ? campaignBudgetInfo.budgetRate: 50}%, #ddd ${campaignBudgetInfo.budgetRate !== undefined ? campaignBudgetInfo.budgetRate: 50}%, #ddd 100%)`
                     }}
                   />
-                  <Span1>{campaignBudgetInfo.dailyAvgBudget !==0 ? Math.round(campaignBudgetInfo.pcBudget/ campaignBudgetInfo.dailyAvgBudget * 100) : 50}:{campaignBudgetInfo.dailyAvgBudget !==0 ? Math.round(campaignBudgetInfo.mobBudget /campaignBudgetInfo.dailyAvgBudget * 100) :50}</Span1>
+                  <Span1>
+                    {!isNaN(campaignBudgetInfo.dailyAvgBudget) && !isNaN(campaignBudgetInfo.pcBudget) && campaignBudgetInfo.dailyAvgBudget !== 0? Math.round(campaignBudgetInfo.pcBudget/ campaignBudgetInfo.dailyAvgBudget * 100) : 50} : {!isNaN(campaignBudgetInfo.dailyAvgBudget) && !isNaN(campaignBudgetInfo.pcBudget)&& campaignBudgetInfo.dailyAvgBudget !== 0 ? Math.round(campaignBudgetInfo.mobBudget /campaignBudgetInfo.dailyAvgBudget * 100) : 50}</Span1>
                 </ColSpan1>
                 <ColSpan1>
                   <ColTitle><Span1>MOBILE</Span1></ColTitle>
                   <Input type={'number'}
                          min={100}
                          style={{color:'#f5811f'}}
-                         value={campaignBudgetInfo !== null && campaignBudgetInfo.mobBudget}
+                         value={campaignBudgetInfo.mobBudget}
                          onChange={(e) => handleChangeMobileBudget(e)}
                   />
                   <Won/>

@@ -48,7 +48,10 @@ function SearchModal (props) {
   }
 
   const handleOnSearchKeyword = (e) => {
-    setSearchKeyword(e.target.value)
+    const regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
+    if(!regExp.test(e.target.value)){
+      setSearchKeyword(e.target.value)
+    }
   }
 
   const handleSearch = (e) => {
