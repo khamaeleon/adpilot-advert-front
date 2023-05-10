@@ -39,6 +39,9 @@ import {tokenResultAtom} from "../login/entity/Common";
 import {searchConditionAtom} from "./entity/Common";
 import {selUserInfo} from "../../services/Platform/ManageUserAxios";
 import {accountInfoAtom} from "./entity/User";
+import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
+import {TotalCount} from "../../components/table/TableDetail";
+import {Small} from "../../components/table/styles";
 
 export function RefundRequestTable(props) {
     return (
@@ -79,6 +82,7 @@ function PaymentManageUser(props) {
     const [totalInfo, setTotalInfo] = useState(0)
     const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
 
+    const gridStyle = {minHeight: 510}
 
     const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
     const [startDate, endDate] = dateRange;
@@ -92,34 +96,32 @@ function PaymentManageUser(props) {
     const [pageSize, setPageSize] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
 
-    function fetchPaymentDetails(props) {
-        console.log("props", props)
-        const skip = (currentPage - 1) * pageSize;
-        const limit = pageSize;
+    function fetchPaymentDetails(props = {}) {
+        const { skip = (currentPage - 1) * pageSize, limit = pageSize } = props;
+
+
+        console.log("skip : ", skip, "limit : ", limit)
 
         const requestData = {
             pageSize: limit,
-            currentPage: currentPage,
-            searchStartDate: getLastMonth().startDay,
+            currentPage: skip / limit + 1,
+            searchStartDate: getThisMonth().startDay,
             searchEndDate: getToDay(),
         };
 
-        console.log("skip", skip)
-        console.log("limit", limit)
+        console.log("requestData", requestData)
 
-        return paymentListRequest(skip, limit, tokenUserInfo.id, requestData).then(
-            (response) => {
-                if (response !== null) {
-                    console.log("얍",response)
-                    const totalCount = response.totalCount; // totalCount를 response에서 추출합니다.
-                    const data = response.rows; // 데이터 배열을 response에서 추출합니다.
-                    setTotalInfo(response?.totalCount);
-                    return Promise.resolve({ data, count: parseInt(totalCount) });
-                } else {
-                    return Promise.resolve({ data: [], count: 0 });
-                }
-            }
-        );
+        return paymentListRequest(skip, limit, tokenUserInfo.id, requestData)
+          .then((response) => {
+              if (response !== null) {
+                  const { totalCount, rows: data } = response;
+                  setTotalInfo(totalCount);
+                  console.log(Promise.resolve({ data, count: parseInt(totalCount)}))
+                  return Promise.resolve({ data, count: parseInt(totalCount) });
+              } else {
+                  return Promise.resolve({ data: [], count: 0 });
+              }
+          });
     }
     function fetchAccountInfo() {
         selUserInfo(tokenUserInfo.id).then((response) => {
@@ -152,10 +154,12 @@ function PaymentManageUser(props) {
     const handlePaymentDetailsReceived = () => {
         // AdCharge 에서 특정 행위를 실행하면
         // 부모 컴포넌트의 상태를 업데이트 한다!!
+        // 그럼 fetchPaymentDetails 내부에서 totalInfo 값을 업데이트 하고
+        // 아래 dataSource 의존성 배열 내부 값이 변경 되면서 그리드도 다시 그려줍니다.
         fetchPaymentDetails();
     }
 
-    const dataSource = useCallback(fetchPaymentDetails, [currentPage, pageSize]);
+    const dataSource = useCallback(fetchPaymentDetails, [totalInfo]);
 
     return (
         <main>
@@ -249,23 +253,42 @@ function PaymentManageUser(props) {
                         </div>
                     </div>
                     <ColSpan4 style={{display:'block'}}>
-                        <BoardSearchResultTitle style={{alignItems:"end", padding: "0"}}>
-                            <div/>
+                        <BoardSearchResultTitle style={{alignItems:"end", paddingBottom: "10px"}}>
+                            <div>
+                                {totalInfo &&
+                                  <TotalCount><span/>총 <span>{totalInfo}</span> 건의 결제 내역</TotalCount>}
+                            </div>
                             <div>
                                 <SaveExcelButton>엑셀 저장</SaveExcelButton>
                             </div>
                         </BoardSearchResultTitle>
-                        <Table columns={PaymentDetailsColumns}
-                               // totalInfo 내부 totacCount 값이 아직 없으니까 임시로 0값 맹글어 두자~
-                               totalCount={[totalInfo, '결제 내역']}
-                               data={dataSource}
-                               showHoverRows={false}
-                               activeCell={[0]}
-                               noDirectives={true}
-                               pagenations={true}
-                               limit={10}
-                               emptyText={'결제 내역이 없습니다.'}
-                               onPageChange={(newPage) => setCurrentPage(newPage)}
+                        {/*<Table columns={PaymentDetailsColumns}*/}
+                        {/*       // totalInfo 내부 totacCount 값이 아직 없으니까 임시로 0값 맹글어 두자~*/}
+                        {/*       totalCount={[totalInfo, '결제 내역']}*/}
+                        {/*       data={dataSource}*/}
+                        {/*       showHoverRows={false}*/}
+                        {/*       activeCell={[0]}*/}
+                        {/*       noDirectives={true}*/}
+                        {/*       pagenations={true}*/}
+                        {/*       limit={10}*/}
+                        {/*       emptyText={'결제 내역이 없습니다.'}*/}
+                        {/*/>*/}
+                        <ReactDataGrid
+                            licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
+                            handle={null}
+                            columns={PaymentDetailsColumns}
+                            dataSource={dataSource}
+                            headerHeight={48}
+                            showZebraRows={true}
+                            showCellBorders={'horizontal'}
+                            enableColumnAutosize={true}
+                            showColumnMenuLockOptions={false}
+                            showColumnMenuGroupOptions={false}
+                            emptyText={'결제 내역이 없습니다.'}
+                            limit={10}
+                            pagination={true}
+                            sortable={false}
+                            style={gridStyle}
                         />
                         <Table columns={PointDetailsColumns}
                                // totalCount={[totalInfo.totalCount, '포인트 지급 내역']}
