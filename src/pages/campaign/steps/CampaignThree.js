@@ -157,13 +157,21 @@ export function CampaignThree() {
     setDateRange(date)
   }
 
-  const handleCheckExposureDay =(event) =>{
+  const handleCheckExposureDay = (event) =>{
     setExposureDayChecked(event.target.checked)
     setCampaignGroupInfo({
       ...campaignGroupInfo,
       startDate: dateFormat(new Date(), 'YYYY-MM-DD'),
       endDate:dateFormat(new Date('3000-12-31'), 'YYYY-MM-DD'),
     })
+    if(event.target.checked){
+      setDateRange([
+        new Date(),
+        new Date('3000-12-31'),
+      ])
+    } else {
+      setDateRange([])
+    }
   }
 
   const setUserTargetConfigType = (userTargetConfigType) =>{
@@ -278,8 +286,10 @@ export function CampaignThree() {
     }
   }
 
+  const onError = (error) => console.log(error)
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit, onError)}>
       <Board>
         <BoardHeader>광고 그룹 설정</BoardHeader>
         <BoardSearchResult>
@@ -427,18 +437,30 @@ export function CampaignThree() {
                   <CalendarBox>
                     <CalendarIcon/>
                   </CalendarBox>
-                  <CustomDatePicker
-                    selectsRange={true}
-                    disabled={exposureDayChecked}
-                    startDate={startDate}
-                    endDate={endDate}
-                    minDate={new Date()}
-                    onChange={(date) => handleRangeDate(date)}
-                    dateFormat="yyyy-MM-dd"
-                    locale={ko}
-                    isClearable={false}
+                  <Controller
+                    control={control}
+                    name="endDate"
+                    rules={{required: {value: dateRange[1] === undefined, message:'게제기간을 설정해주세요'}}}
+                    render={({ field: { onChange, onBlur, value, ref } }) => (
+                      <CustomDatePicker
+                        selectsRange={true}
+                        disabled={exposureDayChecked}
+                        startDate={startDate}
+                        endDate={endDate}
+                        minDate={new Date()}
+                        onChange={(date) => handleRangeDate(date)}
+                        dateFormat="yyyy-MM-dd"
+                        locale={ko}
+                        isClearable={false}
+                        onBlur={onBlur}
+                        selected={value}
+                        inputRef={ref}
+                      />
+                    )}
                   />
+                  {errors.endDate && <ValidationScript>{errors.endDate.message}</ValidationScript>}
                 </DateContainer>
+
               </ColSpan1>
               <ColSpan3>
                 <label>
