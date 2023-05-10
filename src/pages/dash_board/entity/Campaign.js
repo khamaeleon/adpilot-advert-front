@@ -473,6 +473,7 @@ export const userCampaignListColumn = [
     minWidth: 150,
     textAlign: 'center',
     showColumnMenuTool: false,
+    render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>,
   },
   {
     name: 'advertiseGroupName',

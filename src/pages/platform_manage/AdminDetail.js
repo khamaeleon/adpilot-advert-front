@@ -47,9 +47,16 @@ function PlatformAdminDetail() {
 
   useEffect(() => {
     selAdminInfo().then(response => {
+      console.log(response)
       if (response) {
-        setAdminInfoState(response)
-        reset(response)
+        setAdminInfoState({
+              ...response,
+              activeYn: response.status === 'NORMAL' ? 'Y' : 'N'
+            })
+        reset({
+          ...response,
+          activeYn: response.status === 'NORMAL' ? 'Y' : 'N'
+        })
       }
     })
   }, [])

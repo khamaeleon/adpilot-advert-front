@@ -196,7 +196,7 @@ export default function CreateReports() {
         "groupByScopes" : scopes,
         "columns" :  dataItems.map(item => item.name)
       }
-      createCustomReportsAxios(params).then().then(() => {
+      createCustomReportsAxios(params).then(() => {
         retrieveCustomReportsList(tokenResult.id).then(response => {
           const data  = response[response.length-1]
           setReportsInfo({id: data.id, groupBy: data.groupByPeriod})

@@ -40,19 +40,86 @@ import {dateFormat} from "../../common/StringUtils";
 import {reportsInfoAtom} from "../../components/aside/entity";
 import {deviceType, productType} from "../dash_board/entity/Common";
 
+function weekNumberByMonth(dateFormat) {
+  const inputDate = new Date(dateFormat);
+
+  // 인풋의 년, 월
+  let year = inputDate.getFullYear();
+  let month = inputDate.getMonth() + 1;
+
+  // 목요일 기준 주차 구하기
+  const weekNumberByThurFnc = (paramDate) => {
+
+    const year = paramDate.getFullYear();
+    const month = paramDate.getMonth();
+    const date = paramDate.getDate();
+
+    // 인풋한 달의 첫 날과 마지막 날의 요일
+    const firstDate = new Date(year, month, 1);
+    const lastDate = new Date(year, month+1, 0);
+    const firstDayOfWeek = firstDate.getDay() === 0 ? 7 : firstDate.getDay();
+    const lastDayOfweek = lastDate.getDay();
+
+    // 인풋한 달의 마지막 일
+    const lastDay = lastDate.getDate();
+
+    // 첫 날의 요일이 금, 토, 일요일 이라면 true
+    const firstWeekCheck = firstDayOfWeek === 5 || firstDayOfWeek === 6 || firstDayOfWeek === 7;
+    // 마지막 날의 요일이 월, 화, 수라면 true
+    const lastWeekCheck = lastDayOfweek === 1 || lastDayOfweek === 2 || lastDayOfweek === 3;
+
+    // 해당 달이 총 몇주까지 있는지
+    const lastWeekNo = Math.ceil((firstDayOfWeek - 1 + lastDay) / 7);
+
+    // 날짜 기준으로 몇주차 인지
+    let weekNo = Math.ceil((firstDayOfWeek - 1 + date) / 7);
+
+    // 인풋한 날짜가 첫 주에 있고 첫 날이 월, 화, 수로 시작한다면 'prev'(전달 마지막 주)
+    if(weekNo === 1 && firstWeekCheck) weekNo = 'prev';
+    // 인풋한 날짜가 마지막 주에 있고 마지막 날이 월, 화, 수로 끝난다면 'next'(다음달 첫 주)
+    else if(weekNo === lastWeekNo && lastWeekCheck) weekNo = 'next';
+    // 인풋한 날짜의 첫 주는 아니지만 첫날이 월, 화 수로 시작하면 -1;
+    else if(firstWeekCheck) weekNo = weekNo -1;
+
+    return weekNo;
+  };
+
+  // 목요일 기준의 주차
+  let weekNo = weekNumberByThurFnc(inputDate);
+
+  // 이전달의 마지막 주차일 떄
+  if(weekNo === 'prev') {
+    // 이전 달의 마지막날
+    const afterDate = new Date(year, month-1, 0);
+    year = month === 1 ? year - 1 : year;
+    month = month === 1 ? 12 : month - 1;
+    weekNo = weekNumberByThurFnc(afterDate);
+  }
+  // 다음달의 첫 주차일 때
+  if(weekNo === 'next') {
+    year = month === 12 ? year + 1 : year;
+    month = month === 12 ? 1 : month + 1;
+    weekNo = 1;
+  }
+
+  return {year, month, weekNo};
+}
+
+
 const defaultColumn = {
   'BY_DAILY':{
     name: 'statisticsDate',
     header: '일별',
     render: ({cellProps}) => {
-      return <span><p>{dateFormat(cellProps.data.statisticsDate, 'yyyy-MM-DD')}</p></span>
+      return <span><p>{dateFormat(cellProps.data.statisticsDate, 'yyyy년MM월DD일')}</p></span>
     }
   },
   'BY_WEEKLY': {
     name: 'statisticsStartDate',
     header: '주별',
     render: ({cellProps}) => {
-      return <span><p>{dateFormat(cellProps.data.statisticsStartDate, 'MM-W')}</p></span>
+      const weeks = weekNumberByMonth(cellProps.data.statisticsStartDate)
+      return <span><p>{weeks.month}월 {weeks.weekNo}주차</p></span>
     }
   },
   'BY_MONTHLY': {
@@ -62,7 +129,72 @@ const defaultColumn = {
       return <span><p>{dateFormat(cellProps.data.statisticsStartDate, 'yyyy년 MM월')} </p></span>
     }
   },
+  'BY_CAMPAIGN': "캠페인 명",
+  'BY_PRODUCT': "광고 상품",
+  'BY_EVENT': "이벤트 명",
+  'clickRate': {
+    render: (props) => {
+      const clickRate = (props.data.validClickCount / props.data.exposureCount) * 100
+      return <span>{clickRate.toFixed(2)}%</span>
+    }
+  },
+  'cpc': {
+    render: (props) => {
+      const cpc = props.data.costAmount / props.data.validClickCount
+      return <span>{cpc.toFixed(2)}</span>
+    }
+  },
+  'conversionRate': {
+    render: (props) => {
+      const conversionRate = (props.data.conversionCount / props.data.totalClickCount) * 100
+      return <span>{conversionRate.toFixed(2)} %</span>
+    }
+  },
+  'conversionPrice': {
+    render: (props) => {
+      const costPerConversion = props.data.costAmount / props.data.conversionCount
+      return <span>{costPerConversion.toFixed(2)}</span>
+    }
+  },
+  'amountPurchasedAvg':{
+    render: (props) => {
+      const amountPurchased = (props.data.costAmount / props.data.conversionCount)
+      return <span>{amountPurchased.toFixed(2)}</span>
+    }
+  },
+  'sessionConversionRoas': {
+    render: (props) => {
+      const sessionRoas = (props.data.sessionConversionAmount  / props.data.costAmount) * 100
+      return <span>{sessionRoas.toFixed(2)}</span>
+    }
+  },
+  'directConversionRoas': {
+    render: (props) => {
+      const directRoas = (props.data.directConversionAmount  / props.data.costAmount) * 100
+      return <span>{directRoas.toFixed(2)}</span>
+    }
+  },
+  'roas': {
+    render: (props) => {
+      const roas = ((props.data.sessionConversionAmount + props.data.exposureConversionAmount + props.data.directConversionAmount)/ props.data.costAmount) * 100
+      return <span>{roas.toFixed(2)}</span>
+    }
+  },
+  'exposureConversionRoas': {
+    render: (props) => {
+      const exposureRoas = (props.data.exposureConversionAmount  / props.data.costAmount) * 100
+      return <span>{exposureRoas.toFixed(2)}</span>
+    }
+  },
+  'eCpm': {
+    render: (props) => {
+      const ecpm = (props.data.costAmount / props.data.exposureCount) * 1000
+      return <span>{ecpm.toFixed(2)}</span>
+    }
+  },
 }
+
+
 export default function CustomReports() {
   const [searchCondition, setSearchCondition] = useState({
     pageSize: 10,
@@ -93,7 +225,13 @@ export default function CustomReports() {
       navigate('/board/reports')
     }
       retrieveCustomReportsDetail(tokenResult.id, reportsInfo.id, params).then(response => {
+        console.log(response)
         let newObject = [defaultColumn[reportsInfo.groupBy]].concat(response.headers)
+        console.log(newObject)
+        newObject.map((item, key) => {
+          console.log(item.name)
+          Object.assign(newObject[key], defaultColumn[item.name])
+        })
         setCampaignColumn(newObject)
         setCampaignData(response.reportStatistics.content)
         setReportInfo(response.userSetting)
