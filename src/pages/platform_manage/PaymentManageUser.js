@@ -1,3 +1,4 @@
+import React, {useState, useEffect, useCallback} from "react";
 import {
     Board,
     BoardContainer,
@@ -17,7 +18,6 @@ import {
 } from "../../assets/GlobalStyles";
 import styled from 'styled-components';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import React, {useState, useEffect, useCallback} from "react";
 import {useAtom} from "jotai";
 import Navigator from "../../components/common/Navigator";
 import ko from "date-fns/locale/ko";
@@ -27,21 +27,20 @@ import {RegisterRefundInformationButton} from "../../components/payment/user/Reg
 import {getLastMonth, getThisMonth, getToDay} from "../../common/DateUtils";
 import {decimalFormat} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
+import Table from "../../components/table";
+import {paymentListRequest} from "../../services/payment/user/RetrievePaymentByServiceUserAxios";
+import {selUserInfo} from "../../services/Platform/ManageUserAxios";
+import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
+import {tokenResultAtom} from "../login/entity/Common";
+import {searchConditionAtom} from "./entity/Common";
+import {accountInfoAtom} from "./entity/User";
+import {TotalCount} from "../../components/table/TableDetail";
 import {
     PaymentDetailsColumns,
     PaymentDetailsDataAtom,
     PointDetailsColumns,
     PointDetailsDataAtom
 } from "./entity/PaymentUser";
-import Table from "../../components/table";
-import {paymentListRequest} from "../../services/payment/user/RetrievePaymentByServiceUserAxios";
-import {tokenResultAtom} from "../login/entity/Common";
-import {searchConditionAtom} from "./entity/Common";
-import {selUserInfo} from "../../services/Platform/ManageUserAxios";
-import {accountInfoAtom} from "./entity/User";
-import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
-import {TotalCount} from "../../components/table/TableDetail";
-import {Small} from "../../components/table/styles";
 
 export function RefundRequestTable(props) {
     return (
@@ -73,44 +72,43 @@ export function RefundRequestTable(props) {
 }
 
 function PaymentManageUser(props) {
-    const [tokenUserInfo] = useAtom(tokenResultAtom)
+    const [tokenUserInfo] = useAtom(tokenResultAtom) // userId
+
     const [paymentDetails, setPaymentDetails] = useAtom(PaymentDetailsDataAtom)
     const [pointDetails, setPointDetails] = useAtom(PointDetailsDataAtom)
-    const [, setAccountInfoState] = useAtom(accountInfoAtom)
-    // const [totalInfo, setTotalInfo] = useState(dataTotalInfo)
-    // 이거도 2개 생성 결제내역 하나, 포인트 지급 하나
+
+    const [, setAccountInfoState] = useAtom(accountInfoAtom) // 새로 고침 시
+
+    //[d] totalInfo 2개 생성 결제내역 하나, 포인트 지급 하나
     const [totalInfo, setTotalInfo] = useState(0)
     const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
 
-    const gridStyle = {minHeight: 510}
-
+    //[d] 날짜
     const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
     const [startDate, endDate] = dateRange;
+
+    //[d] 광고비 잔액 충전 금액 목 데이터
     const [advertisingBalance, setAdvertisingBalance] = useState(10000) // 광고비 잔액
     const [requestAmountValue, setRequestAmountValue] = useState(0) // 충전 금액
 
-    //[d] 환불 입력 정보
+    //[d] 환불 입력 정보 조회해서 여기다 담기
     const [refundData, setRefundData] = useState([])
     // const [refundData, setRefundData] = useState(["테스트1","테스트2","테스트3"]) // 환불 정보
 
-    const [pageSize, setPageSize] = useState(10);
-    const [currentPage, setCurrentPage] = useState(1);
+    //[d] 그리드 데이터
+    const [pageSize, ] = useState(10); // 한 페이지 보여줄 데이터
+    const [currentPage, ] = useState(1); // 현재 페이지
+    const gridStyle = {minHeight: 510}
 
+    //[d] 결제 내역 데이터
     function fetchPaymentDetails(props = {}) {
         const { skip = (currentPage - 1) * pageSize, limit = pageSize } = props;
-
-
-        console.log("skip : ", skip, "limit : ", limit)
-
         const requestData = {
             pageSize: limit,
             currentPage: skip / limit + 1,
             searchStartDate: getThisMonth().startDay,
             searchEndDate: getToDay(),
         };
-
-        console.log("requestData", requestData)
-
         return paymentListRequest(skip, limit, tokenUserInfo.id, requestData)
           .then((response) => {
               if (response !== null) {
@@ -123,6 +121,7 @@ function PaymentManageUser(props) {
               }
           });
     }
+    //[d] 새로고침시 정보 유실 로그인 페이지로 날림
     function fetchAccountInfo() {
         selUserInfo(tokenUserInfo.id).then((response) => {
             setAccountInfoState({
@@ -131,8 +130,23 @@ function PaymentManageUser(props) {
             });
         });
     }
-
-
+    //[d] 환불 정보 없는 상태에서 환불 신청 시 경고문
+    const handleRegisterRefund = () => {
+        if(refundData.length === 0){
+            toast("환불 정보를 등록해 주세요.")
+        } else {
+            console.log("환불 정보", refundData)
+        }
+    }
+    //[d] 광고비 충전 감지
+    const handlePaymentDetailsReceived = () => {
+        // AdCharge 에서 특정 행위를 실행하면
+        // 부모 컴포넌트의 상태를 업데이트 한다!!
+        // 그럼 fetchPaymentDetails 내부에서 totalInfo 값을 업데이트 하고
+        // 아래 dataSource 의존성 배열 내부 값이 변경 되면서 그리드도 다시 그려줍니다.
+        fetchPaymentDetails();
+    }
+    //[d] 최초 화면 접근시 유저 상태이면 결제내역 데이터 조회 아니면 로그인
     useEffect(() => {
         if (tokenUserInfo.role === "NORMAL") {
             // 광고주 결제 현황 조회
@@ -143,22 +157,7 @@ function PaymentManageUser(props) {
             fetchAccountInfo();
         }
     }, [searchCondition]);
-
-    const handleRegisterRefund = () => {
-        if(refundData.length === 0){
-            toast("환불 정보를 등록해 주세요.")
-        } else {
-            console.log("환불 정보", refundData)
-        }
-    }
-    const handlePaymentDetailsReceived = () => {
-        // AdCharge 에서 특정 행위를 실행하면
-        // 부모 컴포넌트의 상태를 업데이트 한다!!
-        // 그럼 fetchPaymentDetails 내부에서 totalInfo 값을 업데이트 하고
-        // 아래 dataSource 의존성 배열 내부 값이 변경 되면서 그리드도 다시 그려줍니다.
-        fetchPaymentDetails();
-    }
-
+    //[d] 차트 데이터에서 역으로 변동값 감지해서 다시 던저주기 paging 처리 관련...
     const dataSource = useCallback(fetchPaymentDetails, [totalInfo]);
 
     return (
