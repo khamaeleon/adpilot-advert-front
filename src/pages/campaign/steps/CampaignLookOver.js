@@ -14,7 +14,7 @@ import {
 import React, {useEffect, useState} from "react";
 import {HorizontalRule} from "../../../components/common/Common";
 import {Row, ValueText} from "../styles/common";
-import {useAtom} from "jotai";
+import {useAtom, useAtomValue} from "jotai";
 import {stepCampaignAtom} from "../entity";
 import {useLocation, useNavigate} from "react-router-dom";
 import {decimalFormat} from "../../../common/StringUtils";
@@ -27,10 +27,12 @@ import {tokenResultAtom} from "../../login/entity/Common";
 import {selEnumInfo} from "../../../services/campaign/InfoAxios";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import {campaignBasicInfoAtom} from "../entity/Info";
 
 export function CampaignLookOver() {
   const {state} = useLocation()
   const navigate = useNavigate()
+  const campaignBasicInfo = useAtomValue(campaignBasicInfoAtom)
   const [stepCampaign, setStepCampaign] = useAtom(stepCampaignAtom)
   const [campaignData, setCampaignData] = useState(null)
   const [campaignName, setCampaignName] = useState('')
@@ -38,39 +40,46 @@ export function CampaignLookOver() {
   const [audienceTargetConfig, setAudienceTargetConfig] = useState('')
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [agentTypeState, setAgentTypeState] = useState([])
-
+  const inventoryExposure = (inventoryDetail) => {
+    setUserTargetConfig(
+      `
+            ${inventoryDetail.exposureConversionUserYn !== 'Y' ? '전환 고객 노출' : `전환 고객 미노출[${inventoryDetail.nonExposureDaysOfConversionUser}일]`},
+            ${inventoryDetail.exposureShoppingUserYn !== 'Y' ? ' 쇼핑 고객 노출' : ' 쇼핑 고객 미노출'},
+            ${inventoryDetail.exposureAttentionUserYn !== 'Y' ? ' 관심 고객 노출' : ' 관심 고객 미노출'},
+            ${inventoryDetail.exposureVisitUserYn !== 'Y' ? '방문 고객 노출' : '방문 고객 미노출'}
+          `
+    )
+    setAudienceTargetConfig(
+      `
+            ${inventoryDetail.exposureConversionAudienceYn !== 'Y' ? '전환 고객 노출' : `전환 고객 미노출[${inventoryDetail.nonExposureDaysOfConversionAudience}일]`},
+            ${inventoryDetail.exposureShoppingAudienceYn !== 'Y' ? ' 쇼핑 고객 노출' : ' 쇼핑 고객 미노출'},
+            ${inventoryDetail.exposurePotentialAudienceYn !== 'Y' ? ' 관심 고객 노출' : ' 관심 고객 미노출'},
+            ${inventoryDetail.exposureNewAudienceYn !== 'Y' ? '방문 고객 노출' : '방문 고객 미노출'}
+          `
+    )
+  }
   useEffect(() => {
     selEnumInfo('AGENT_TYPE').then(response => {
       setAgentTypeState(response.data)
     })
-    if (state !== null) {
-      tokenUserInfo !== 'NORMAL' ? retrieveConfirm(state.campaignId).then(response => {
+
+    if (campaignBasicInfo.campaignId !== '' || state !== null) {
+
+      let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
+
+      tokenUserInfo !== 'NORMAL' ? retrieveConfirm(campaignId).then(response => {
           setCampaignData({
             ...response
           })
           setCampaignName(response.name)
-          setUserTargetConfig(
-            `
-            ${response.inventoryDetail.exposureConversionUserYn !== 'Y' ? '전환 고객 노출' : `전환 고객 미노출[${response.inventoryDetail.nonExposureDaysOfConversionUser}일]`},
-            ${response.inventoryDetail.exposureShoppingUserYn !== 'Y' ? ' 쇼핑 고객 노출' : ' 쇼핑 고객 미노출'},
-            ${response.inventoryDetail.exposureAttentionUserYn !== 'Y' ? ' 관심 고객 노출' : ' 관심 고객 미노출'},
-            ${response.inventoryDetail.exposureVisitUserYn !== 'Y' ? '방문 고객 노출' : '방문 고객 미노출'}
-          `
-          )
-          setAudienceTargetConfig(
-            `
-            ${response.inventoryDetail.exposureConversionAudienceYn !== 'Y' ? '전환 고객 노출' : `전환 고객 미노출[${response.inventoryDetail.nonExposureDaysOfConversionAudience}일]`},
-            ${response.inventoryDetail.exposureShoppingAudienceYn !== 'Y' ? ' 쇼핑 고객 노출' : ' 쇼핑 고객 미노출'},
-            ${response.inventoryDetail.exposurePotentialAudienceYn !== 'Y' ? ' 관심 고객 노출' : ' 관심 고객 미노출'},
-            ${response.inventoryDetail.exposureNewAudienceYn !== 'Y' ? '방문 고객 노출' : '방문 고객 미노출'}
-          `
-          )
+          inventoryExposure(response.inventoryDetail)
         })
-        : retrieveAdverConfirm(state.campaignId).then(response => {
+        :
+        retrieveAdverConfirm(state.campaignId).then(response => {
           setCampaignData({
             ...response
           })
-
+          inventoryExposure(response.inventoryDetail)
         })
     }
   }, [])
@@ -273,9 +282,9 @@ export function CampaignLookOver() {
       />
       <SubmitContainer>
         <CancelButton type={'button'}
-                      onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 3})}>{tokenUserInfo.role !== 'NORMAL' ? '취소' : '목록'}</CancelButton>
-        {tokenUserInfo.role !== 'NORMAL' &&
-          <SubmitButton type={'button'} onClick={()=> onSubmit()}>{state !== null ? '저장' : '캠페인 생성'}</SubmitButton>}
+                      onClick={() => state !== null ? navigate('/board/dashboard') : navigate('/board/campaign')}>{tokenUserInfo.role !== 'NORMAL' ? '취소' : '목록'}</CancelButton>
+        {tokenUserInfo.role !== 'NORMAL' && state !== null &&
+          <SubmitButton type={'button'} onClick={()=> onSubmit()}>저장</SubmitButton>}
       </SubmitContainer>
     </>
   )
