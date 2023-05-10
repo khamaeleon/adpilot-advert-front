@@ -14,6 +14,18 @@ export async function retrieveConfirm(campaignId) {
     }).catch((e) => returnVal = false)
   return returnVal;
 };
+export async function UpdateCampaignDefaultInfo(campaignId, name) {
+  let returnVal = null;
+  await AdminAxios('PUT', ACTION_URL+campaignId, name)
+    .then((response) => {
+      if(response.responseCode.statusCode ===200){
+        returnVal = true
+      }else{
+        returnVal = false
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+};
 export async function retrieveAdverConfirm(campaignId) {
   let returnVal = null;
   await AdverAxios('GET', ACTION_URL+campaignId+CONFIRM)

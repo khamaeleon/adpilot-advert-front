@@ -18,16 +18,22 @@ import {useAtom} from "jotai";
 import {stepCampaignAtom} from "../entity";
 import {useLocation, useNavigate} from "react-router-dom";
 import {decimalFormat} from "../../../common/StringUtils";
-import {retrieveAdverConfirm, retrieveConfirm} from "../../../services/campaign/ConfirmAxios";
+import {
+  retrieveAdverConfirm,
+  retrieveConfirm,
+  UpdateCampaignDefaultInfo
+} from "../../../services/campaign/ConfirmAxios";
 import {tokenResultAtom} from "../../login/entity/Common";
 import {selEnumInfo} from "../../../services/campaign/InfoAxios";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export function CampaignLookOver() {
   const {state} = useLocation()
   const navigate = useNavigate()
   const [stepCampaign, setStepCampaign] = useAtom(stepCampaignAtom)
   const [campaignData, setCampaignData] = useState(null)
-  const [exposureAgentType, setExposureAgentType] = useState('')
+  const [campaignName, setCampaignName] = useState('')
   const [userTargetConfig, setUserTargetConfig] = useState('')
   const [audienceTargetConfig, setAudienceTargetConfig] = useState('')
   const [tokenUserInfo] = useAtom(tokenResultAtom)
@@ -42,6 +48,7 @@ export function CampaignLookOver() {
           setCampaignData({
             ...response
           })
+          setCampaignName(response.name)
           setUserTargetConfig(
             `
             ${response.inventoryDetail.exposureConversionUserYn !== 'Y' ? '전환 고객 노출' : `전환 고객 미노출[${response.inventoryDetail.nonExposureDaysOfConversionUser}일]`},
@@ -67,8 +74,14 @@ export function CampaignLookOver() {
         })
     }
   }, [])
-  console.log(campaignData)
-  // console.log(goalList)
+  const handleChangeName = (e) => {
+    setCampaignName(e.target.value)
+  }
+  const onSubmit = () =>{
+    campaignName !== '' ? UpdateCampaignDefaultInfo(state.campaignId, campaignName).then(response => {
+      response ? toast.success('캠페인명 수정이 완료되었습니다.') : toast.error('캠페인명 수정이 실패하였습니다.')
+    }) : toast.warning('캠페인명을 입력해주세요.')
+  }
   return (
     <>
       <Board>
@@ -83,7 +96,7 @@ export function CampaignLookOver() {
                 <ColSpan4>
                   <Span4>캠페인명</Span4>
                   {
-                    tokenUserInfo.role !== 'NORMAL' ? <Input value={campaignData.name}/>
+                    tokenUserInfo.role !== 'NORMAL' ? <Input value={campaignName} onChange={handleChangeName}/>
                       :
                       <ValueText>{campaignData.name}</ValueText>
                   }
@@ -246,11 +259,23 @@ export function CampaignLookOver() {
           </BoardSearchResult>
         }
       </Board>
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        style={{zIndex: 9999999}}
+      />
       <SubmitContainer>
         <CancelButton type={'button'}
                       onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 3})}>{tokenUserInfo.role !== 'NORMAL' ? '취소' : '목록'}</CancelButton>
         {tokenUserInfo.role !== 'NORMAL' &&
-          <SubmitButton type={'submit'}>{state !== null ? '저장' : '캠페인 생성'}</SubmitButton>}
+          <SubmitButton type={'button'} onClick={()=> onSubmit()}>{state !== null ? '저장' : '캠페인 생성'}</SubmitButton>}
       </SubmitContainer>
     </>
   )
