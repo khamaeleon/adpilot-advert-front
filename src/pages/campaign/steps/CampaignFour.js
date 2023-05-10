@@ -730,20 +730,20 @@ export function CampaignFour() {
                                   onClick={() => selCreativeGroup('BANNER')}
                                   className={campaignCreativeInfo.creativeType === 'BANNER' ? 'on' : null}
                   >
-                    {creativeType.find(value => value.value === 'BANNER')?.label}
+                    {creativeType.find(value => value.value === 'BANNER').label}
                   </CampaignButton>
                   <CampaignButton type={'button'}
                                   onClick={() => selCreativeGroup('NATIVE')}
                                   className={campaignCreativeInfo.creativeType === 'NATIVE' ? 'on' : null}
                   >
-                    {creativeType.find(value => value.value === 'NATIVE')?.label}
+                    {creativeType.find(value => value.value === 'NATIVE').label}
                   </CampaignButton>
                 </ColSpan1>
               }
               {creativeType !== null && campaignBasicInfo.productType ==='POP_UNDER' &&
                 <ColSpan1 padding={'0'}>
                   <CampaignButton type={'button'}
-                                  className={ 'on'}
+                                  className={'on'}
                   >
                     {creativeType.find(value => value.value === 'POP_UNDER')?.label}
                   </CampaignButton>

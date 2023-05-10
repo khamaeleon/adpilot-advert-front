@@ -20,7 +20,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {decimalFormat} from "../../../common/StringUtils";
 import {
   retrieveAdverConfirm,
-  retrieveConfirm,
+  retrieveConfirm, selAdverEnumInfo,
   UpdateCampaignDefaultInfo
 } from "../../../services/campaign/ConfirmAxios";
 import {tokenResultAtom} from "../../login/entity/Common";
@@ -33,7 +33,7 @@ export function CampaignLookOver() {
   const {state} = useLocation()
   const navigate = useNavigate()
   const campaignBasicInfo = useAtomValue(campaignBasicInfoAtom)
-  const [stepCampaign, setStepCampaign] = useAtom(stepCampaignAtom)
+  const [, setStepCampaign] = useAtom(stepCampaignAtom)
   const [campaignData, setCampaignData] = useState(null)
   const [campaignName, setCampaignName] = useState('')
   const [userTargetConfig, setUserTargetConfig] = useState('')
@@ -59,34 +59,35 @@ export function CampaignLookOver() {
     )
   }
   useEffect(() => {
-    selEnumInfo('AGENT_TYPE').then(response => {
-      setAgentTypeState(response.data)
-    })
-
-    if (campaignBasicInfo.campaignId !== '' || state !== null) {
-
-      let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
-
-      tokenUserInfo !== 'NORMAL' ? retrieveConfirm(campaignId).then(response => {
-          setCampaignData({
-            ...response
-          })
-          setCampaignName(response.name)
-          inventoryExposure(response.inventoryDetail)
+    if(tokenUserInfo.role !== 'NORMAL'){
+      console.log(campaignBasicInfo)
+      selEnumInfo('AGENT_TYPE').then(response => {
+        setAgentTypeState(response.data)
+      })
+      let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId;
+      (campaignBasicInfo.campaignId !== '' || state !== null) && retrieveConfirm(campaignId).then(response => {
+        setCampaignData({
+          ...response
         })
-        :
-        retrieveAdverConfirm(state.campaignId).then(response => {
-          setCampaignData({
-            ...response
-          })
-          inventoryExposure(response.inventoryDetail)
+        setCampaignName(response.name)
+        inventoryExposure(response.inventoryDetail)
+      })
+    } else {
+      selAdverEnumInfo('AGENT_TYPE').then(response => {
+        setAgentTypeState(response.data)
+      })
+      retrieveAdverConfirm(state.campaignId).then(response => {
+        setCampaignData({
+          ...response
         })
+        inventoryExposure(response.inventoryDetail)
+      })
     }
   }, [])
   const handleChangeName = (e) => {
     setCampaignName(e.target.value)
   }
-  const onSubmit = () =>{
+  const onSubmit = () => {
     campaignName !== '' ? UpdateCampaignDefaultInfo(state.campaignId, campaignName).then(response => {
       response ? toast.success('캠페인명 수정이 완료되었습니다.') : toast.error('캠페인명 수정이 실패하였습니다.')
     }) : toast.warning('캠페인명을 입력해주세요.')
@@ -105,7 +106,7 @@ export function CampaignLookOver() {
                 <ColSpan4>
                   <Span4>캠페인명</Span4>
                   {
-                    tokenUserInfo.role !== 'NORMAL' ? <Input value={campaignName} onChange={handleChangeName}/>
+                    (tokenUserInfo.role !== 'NORMAL' && state !== null)  ? <Input value={campaignName} onChange={handleChangeName}/>
                       :
                       <ValueText>{campaignData.name}</ValueText>
                   }
@@ -130,7 +131,7 @@ export function CampaignLookOver() {
                 <HorizontalRule/>
                 <ColSpan2>
                   <Span4>최적화 픽셀</Span4>
-                  <ValueText>{campaignData.pixelName} - {campaignData.pixelLinkUrl} ({campaignData.pixelStatus})</ValueText>
+                  <ValueText>{campaignData.pixelName} - {campaignData?.pixelLinkUrl} ({campaignData?.pixelStatus})</ValueText>
                 </ColSpan2>
               </Row>
             </RowSpan>
@@ -175,7 +176,7 @@ export function CampaignLookOver() {
               <Row>
                 <ColSpan2>
                   <Span4>이벤트 단가 그룹</Span4>
-                  <ValueText>{campaignData.priceEventName}</ValueText>
+                  <ValueText>{campaignData?.priceEventName}</ValueText>
                 </ColSpan2>
               </Row>
             </RowSpan>
@@ -186,7 +187,7 @@ export function CampaignLookOver() {
               <Row>
                 <ColSpan2>
                   <Span4>노출 영역</Span4>
-                  <ValueText>{campaignData.inventoryDetail.exposureAgentType.length !== agentTypeState.length ?  campaignData.inventoryDetail.exposureAgentType.map(item => {
+                  <ValueText>{campaignData.inventoryDetail?.exposureAgentType.length !== agentTypeState.length ?  campaignData.inventoryDetail?.exposureAgentType.map(item => {
                     return agentTypeState.find(value => value.value === item).label
                   }).join(',') : '전체'
                   }
@@ -195,7 +196,7 @@ export function CampaignLookOver() {
                 <HorizontalRule/>
                 <ColSpan2>
                   <Span4>송출 제한 지면</Span4>
-                  <ValueText>{campaignData.inventoryDetail.disAllowInventoryIds.length !== 0 ? `${campaignData.inventoryDetail.disAllowInventoryIds.length} 개 지면 송출 제한 설정` : '송출 제한 지면 없음'}</ValueText>
+                  <ValueText>{campaignData.inventoryDetail?.disAllowInventoryIds.length !== 0 ? `${campaignData.inventoryDetail?.disAllowInventoryIds.length} 개 지면 송출 제한 설정` : '송출 제한 지면 없음'}</ValueText>
                 </ColSpan2>
               </Row>
               <Row>
@@ -203,8 +204,8 @@ export function CampaignLookOver() {
                   <Span4>게제 지면</Span4>
                   <ValueText>
                     {
-                      campaignData.inventoryDetail.exposureInventoryType !== 'MANUAL' ?
-                        (campaignData.inventoryDetail.exposureInventoryType !== 'AUTO' ? '카테고리 설정' : '자동 최적화')
+                      campaignData.inventoryDetail?.exposureInventoryType !== 'MANUAL' ?
+                        (campaignData.inventoryDetail?.exposureInventoryType !== 'AUTO' ? '카테고리 설정' : '자동 최적화')
                         : '개별 설정'
                     }
                   </ValueText>
@@ -212,18 +213,18 @@ export function CampaignLookOver() {
                 <HorizontalRule/>
                 <ColSpan2>
                   <Span4>게제 기간</Span4>
-                  <ValueText>{campaignData.inventoryDetail.startDate} ~ {campaignData.inventoryDetail.endDate}</ValueText>
+                  <ValueText>{campaignData.inventoryDetail?.startDate} ~ {campaignData.inventoryDetail?.endDate}</ValueText>
                 </ColSpan2>
               </Row>
               <Row>
                 <ColSpan2>
                   <Span4>고객 정보 기반 설정</Span4>
-                  <ValueText>{campaignData.inventoryDetail.userTargetConfigType !== 'AUTO' ? userTargetConfig : '자동 최적화'}</ValueText>
+                  <ValueText>{campaignData.inventoryDetail?.userTargetConfigType !== 'AUTO' ? userTargetConfig : '자동 최적화'}</ValueText>
                 </ColSpan2>
                 <HorizontalRule/>
                 <ColSpan2>
                   <Span4>유저 데이터 분석 설정</Span4>
-                  <ValueText>{campaignData.inventoryDetail.audienceTargetConfigType !== 'AUTO' ? audienceTargetConfig : '자동 최적화'}</ValueText>
+                  <ValueText>{campaignData.inventoryDetail?.audienceTargetConfigType !== 'AUTO' ? audienceTargetConfig : '자동 최적화'}</ValueText>
                 </ColSpan2>
               </Row>
             </RowSpan>
@@ -239,7 +240,7 @@ export function CampaignLookOver() {
                 <HorizontalRule/>
                 <ColSpan2>
                   <Span4>크리에이티브명</Span4>
-                  <ValueText>{campaignData.creativeName}</ValueText>
+                  <ValueText>{campaignData?.creativeName}</ValueText>
                 </ColSpan2>
               </Row>
               <Row>
@@ -282,7 +283,7 @@ export function CampaignLookOver() {
       />
       <SubmitContainer>
         <CancelButton type={'button'}
-                      onClick={() => state !== null ? navigate('/board/dashboard') : navigate('/board/campaign')}>{tokenUserInfo.role !== 'NORMAL' ? '취소' : '목록'}</CancelButton>
+                      onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 0})}>{(tokenUserInfo.role !== 'NORMAL' && state !== null) ? '취소' : '확인'}</CancelButton>
         {tokenUserInfo.role !== 'NORMAL' && state !== null &&
           <SubmitButton type={'button'} onClick={()=> onSubmit()}>저장</SubmitButton>}
       </SubmitContainer>
