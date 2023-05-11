@@ -155,7 +155,7 @@ function Layout() {
         {/* 픽셀 관리*/}
         {['pixel', 'pixelDetail'].includes(params.id) && <Pixel/>}
         {/* 광고 관리 */}
-        {['campaign', 'createCreative', 'manageCreative'].includes(params.id) && <Campaign/>}
+        {['campaign', 'manageCreative'].includes(params.id) && <Campaign/>}
         {/* 보고서 */}
         {['reports', 'customReports'].includes(params.id) && <Reports/>}
         {/* 설정 */}
