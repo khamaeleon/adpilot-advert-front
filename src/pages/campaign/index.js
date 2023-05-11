@@ -3,7 +3,7 @@ import CreateCampaign from "./CreateCampaign";
 import ScrollToTop from "../../components/common/ScrollToTop";
 import {BoardContainer, TitleContainer} from "../../assets/GlobalStyles";
 import Navigator from "../../components/common/Navigator";
-import CreateCreative from "./CreateCreative";
+import {CreateCreative} from "./CreateCreative";
 import {ManageCreative} from "./ManageCreative";
 
 export default function Campaign(){

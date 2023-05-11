@@ -173,6 +173,7 @@ export function CampaignThree() {
       exposureVisitUserYn:'Y',
     })
   }
+
   const handleNoViewType = (noViewType) => {
     setCampaignGroupInfo({
       ...campaignGroupInfo,
@@ -200,7 +201,6 @@ export function CampaignThree() {
       exposureVisitUserYn: boolExposureVisitUser
     })
   }
-
 
   const setExposureAttentionUser =(boolExposureAttentionUser)=>{
     setCampaignGroupInfo({

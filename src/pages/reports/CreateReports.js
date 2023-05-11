@@ -25,6 +25,8 @@ import {tokenResultAtom} from "../login/entity/Common";
 import {useAtom, useAtomValue} from "jotai";
 import {useNavigate} from "react-router-dom";
 import {reportsInfoAtom} from "../../components/aside/entity";
+import {selAdverPixelDetailList} from "../../services/header/ManagePixelAxios";
+import {selTemporaryList} from "../../services/campaign/InfoAxios";
 
 
 const columnList= {
@@ -80,10 +82,13 @@ export default function CreateReports() {
       groupBy: null
     })
   }, []);
-
-  const handleSearchAdvertiser = (creative) => {
-    setCreativeInfo(creative)
-    console.log(creative)
+  const handleSearchAdvertiser = (data) => {
+    console.log({
+      userId: data.id,
+      username: data.username
+    })
+    setCreativeInfo(data)
+    console.log(data)
   }
 
   const handleAddPeriodItem = (item) => {
@@ -191,6 +196,7 @@ export default function CreateReports() {
     } else {
       let params = {
         "userId" : creativeInfo.id,
+        "name": creativeInfo.name,
         "reportName" : reportName,
         "groupByPeriod" : period,
         "groupByScopes" : scopes,

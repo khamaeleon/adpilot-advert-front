@@ -583,9 +583,9 @@ function CampaignFourNative(props) {
         <ColSpan1><Span4>미리보기</Span4></ColSpan1>
       </RowSpan>
       <RowSpan box={true}>
-        {campaignCreativeInfo.nativeMaterials !==undefined && campaignCreativeInfo.nativeMaterials.length !== 0 && campaignCreativeInfo.nativeMaterials.map((item, key) => {
+        {campaignCreativeInfo.nativeMaterials.length !== 0 && campaignCreativeInfo.nativeMaterials.map((item, key) => {
           return (
-            <PrevImage style={{backgroundImage: `url(${item.imagePath})`}} />
+            <PrevImage key={key} style={{backgroundImage: `url(${item.imagePath})`}} />
           )
         })}
       </RowSpan>
@@ -602,7 +602,7 @@ export function CampaignFour() {
   const [creativeType, setCreativeType] = useAtom(creativeTypeAtom)
   const [, setClickInducementType] = useAtom(clickInducementTypeAtom)
   const {register, handleSubmit, reset, formState: {errors}} = useFormContext()
-  const [resistBool] =useState(state === null ? true:false)
+  const [resistBool] =useState(state === null)
   useEffect(() => {
     if(!resistBool){
       if(state.creativeType ==='BANNER' ){
@@ -826,10 +826,10 @@ export function CampaignFour() {
               <Validation>{errors.pcReferralCode && errors.pcReferralCode.message}</Validation>
               <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
             </ValidationGroup>
-            {campaignCreativeInfo.creativeType === 'BANNER' && (resistBool || (state !==null && state.productType==='BANNER')) &&
+            {campaignCreativeInfo.creativeType === 'BANNER' && (resistBool || (state !== null && state.productType==='BANNER')) &&
               <CampaignFourBanner register={register} errors={errors}/>
             }
-            {campaignCreativeInfo.creativeType === 'NATIVE' && (resistBool || (state !==null && state.productType==='BANNER')) &&
+            {campaignCreativeInfo.creativeType === 'NATIVE' && (resistBool || (state !== null && state.productType==='BANNER')) &&
               <CampaignFourNative register={register} errors={errors}/>
             }
           </BoardSearchResult>

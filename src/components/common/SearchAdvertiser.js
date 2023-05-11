@@ -70,7 +70,7 @@ function SearchModal (props) {
       <ModalHeader title={"광고주 검색"}/>
       <ModalBody>
         <MediaSearchColumn>
-          <div>매체명</div>
+          <div>광고주명</div>
           <div>
             <InputGroup>
               <input type={'text'}
