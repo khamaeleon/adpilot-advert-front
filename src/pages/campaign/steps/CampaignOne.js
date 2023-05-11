@@ -174,21 +174,25 @@ export function CampaignOne() {
 
   const onSubmit = (data) => {
     console.log(campaignBasicInfo)
-    resistCampaignBasic({
-      ...campaignBasicInfo,
-      goal:campaignBasicInfo.goal.value,
-      pixelId:campaignBasicInfo.pixelId.value,
-      name:campaignBasicInfo.productType + '_' + campaignBasicInfo.goal.value + '_' + moment().format('YYYY-MM-DD hh:mm:ss').replace(' ' ,'_')
-    }).then(response =>{
-      if(response){
-        setCampaignBasicInfo({
-          ...campaignBasicInfo,
-          campaignId:response.value,
-          step:'INIT'
-        })
-        setStepCampaign({steps: 1})
-      }
-    })
+    if(campaignBasicInfo.step !==undefined){
+      setStepCampaign({steps: 1})
+    }else{
+      resistCampaignBasic({
+        ...campaignBasicInfo,
+        goal:campaignBasicInfo.goal.value,
+        pixelId:campaignBasicInfo.pixelId.value,
+        name:campaignBasicInfo.productType + '_' + campaignBasicInfo.goal.value + '_' + moment().format('YYYY-MM-DD hh:mm:ss').replace(' ' ,'_')
+      }).then(response =>{
+        if(response){
+          setCampaignBasicInfo({
+            ...campaignBasicInfo,
+            campaignId:response.value,
+            step:'INIT'
+          })
+          setStepCampaign({steps: 1})
+        }
+      })
+    }
   }
 
   return (
