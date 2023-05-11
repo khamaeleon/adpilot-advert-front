@@ -52,16 +52,17 @@ export function CampaignThree() {
   const {register, handleSubmit, reset, setValue, control, formState: {errors}} = useFormContext()
   const {state} =useLocation()
   const navigate = useNavigate()
+
   useEffect(() => {
     if((campaignBasicInfo.step !== undefined && campaignBasicInfo.step.includes('STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED')) || state !== null){
       let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
       selGroupInfo(campaignId).then(response =>{
         setCampaignGroupInfo(response)
+        reset({name:response.name})
         setDateRange([
           new Date(campaignGroupInfo.startDate !==undefined ? campaignGroupInfo.startDate: getToDay()),
           new Date(campaignGroupInfo.endDate !==undefined ? campaignGroupInfo.endDate: getToDay())
         ])
-        //reset(response)
       })
     }
     selMediaCategoryInfo().then(response => {

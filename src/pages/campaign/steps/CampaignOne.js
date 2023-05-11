@@ -43,7 +43,6 @@ export function CampaignOne() {
    * 캠페인 목표 설정
    */
   useEffect(() => {
-
     selEnumInfo('CAMPAIGN_CONVERSION_GOAL').then(response => {
       setGoalList(response.data)
     })
@@ -77,20 +76,22 @@ export function CampaignOne() {
       setPixelList(clonePixelList)
     })
     /**
-     * 최적화 픽셀 선택
+     * 임시저장 선택
      */
     selTemporaryList(data.id).then(response =>{
-      setCampaignTemporaryList(response)
-      setTemporaryBool(true)
+      console.log(response)
+      if(response !== null && response.length !==0) {
+        setCampaignTemporaryList(response)
+        setTemporaryBool(true)
+      }
     })
   }
   /**
-   * 최적화 픽셀 리스트
+   * 임시저장 리스트 선택 된 정보 가져오기
    * @param data
    */
   const handleSelectedTemporaryList = (data) =>{
     selBasicInfo(data.id).then(response => {
-      console.log(response)
       let goalTypeTemp=''
       if(response.goal.indexOf('CONVERSION') ===0 ){
         goalTypeTemp = 'CAMPAIGN_CONVERSION_GOAL'
@@ -173,26 +174,21 @@ export function CampaignOne() {
 
   const onSubmit = (data) => {
     console.log(campaignBasicInfo)
-    if(campaignBasicInfo.step !==undefined){
-      setStepCampaign({steps: 1})
-     //수정
-    }else{
-      resistCampaignBasic({
-        ...campaignBasicInfo,
-        goal:campaignBasicInfo.goal.value,
-        pixelId:campaignBasicInfo.pixelId.value,
-        name:campaignBasicInfo.productType + '_' + campaignBasicInfo.goal.value + '_' + moment().format('YYYY-MM-DD hh:mm:ss').replace(' ' ,'_')
-      }).then(response =>{
-        if(response){
-          setCampaignBasicInfo({
-            ...campaignBasicInfo,
-            campaignId:response.value,
-            step:'INIT'
-          })
-          setStepCampaign({steps: 1})
-        }
-      })
-    }
+    resistCampaignBasic({
+      ...campaignBasicInfo,
+      goal:campaignBasicInfo.goal.value,
+      pixelId:campaignBasicInfo.pixelId.value,
+      name:campaignBasicInfo.productType + '_' + campaignBasicInfo.goal.value + '_' + moment().format('YYYY-MM-DD hh:mm:ss').replace(' ' ,'_')
+    }).then(response =>{
+      if(response){
+        setCampaignBasicInfo({
+          ...campaignBasicInfo,
+          campaignId:response.value,
+          step:'INIT'
+        })
+        setStepCampaign({steps: 1})
+      }
+    })
   }
 
   return (
