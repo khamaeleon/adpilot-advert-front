@@ -19,7 +19,6 @@ function SignUp() {
     step3: false
   })
   const handleNextStep = () => {
-    console.log(steps)
     if (agreeValidation.terms) {
       if (!steps.step1 && !steps.step2 && !steps.step3) {
         setStep({

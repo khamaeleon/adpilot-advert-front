@@ -221,7 +221,7 @@ export default function Basic(props) {
   const handleTaxEmail = (event) => {
     setAccountInfo({
       ...accountInfo,
-      businessLicense: event.target.value
+      taxInvoiceEmail: event.target.value
     })
   }
   /**
@@ -437,7 +437,7 @@ export default function Basic(props) {
                   required: "광고주명을 입력해주세요",
                   onChange: (e) => handleAdverName(e)
                 })}
-                value={accountInfo.adverName}
+                value={accountInfo.adverName || ""}
 
               />
               {errors.adverName && <ValidationScript>{errors.adverName?.message}</ValidationScript>}
@@ -453,7 +453,7 @@ export default function Basic(props) {
                   required: "담당자 명을 입력해주세요",
                   onChange: (e) => handleManagerName(e)
                 })}
-                value={accountInfo.managerName}
+                value={accountInfo.managerName || ""}
               />
               {errors.managerName && <ValidationScript>{errors.managerName.message}</ValidationScript>}
             </div>
@@ -472,7 +472,7 @@ export default function Basic(props) {
                   },
                   onChange: (e) => handleManagerPhone(e)
                 })}
-                value={accountInfo.managerPhone}
+                value={accountInfo.managerPhone || ""}
               />
               {errors.managerPhone && <ValidationScript>{errors.managerPhone?.message}</ValidationScript>}
             </div>
@@ -491,7 +491,7 @@ export default function Basic(props) {
                   },
                   onChange: (e) => handleManagerEmail(e)
                 })}
-                value={accountInfo.managerEmail}
+                value={accountInfo.managerEmail || ""}
               />
               {errors.managerEmail && <ValidationScript>{errors.managerEmail?.message}</ValidationScript>}
             </div>
@@ -532,7 +532,7 @@ export default function Basic(props) {
                   required: "담당자 명을 입력해주세요",
                   onChange: (e) => handleCompanyName(e)
                 })}
-                value={accountInfo.companyName}
+                value={accountInfo.companyName || ""}
               />
               {errors.companyName && <ValidationScript>{errors.companyName?.message}</ValidationScript>}
             </div>
@@ -547,7 +547,7 @@ export default function Basic(props) {
                   required: "사업자 조회를 해주세요",
                   onChange: (e) => handleBusinessNumber(e)
                 })}
-                value={accountInfo.businessNumber}
+                value={accountInfo.businessNumber || ""}
                 readOnly={true}
               />
               {errors.businessNumber && <ValidationScript>{errors.businessNumber?.message}</ValidationScript>}
@@ -564,12 +564,11 @@ export default function Basic(props) {
                 {...register("businessLicenseWebPath", {
                   required: "사업자 등록증을 등록해주세요",
                 })}
-                value={accountInfo.businessLicenseWebPath}
+                value={accountInfo.businessLicenseWebPath || ""}
                 readOnly={true}
               />
               {errors.businessLicenseWebPath &&
                 <ValidationScript>{errors.businessLicenseWebPath?.message}</ValidationScript>}
-              <DuplicateButton type={'button'}>
                 <ImageUploading
                   acceptType={["jpg", "gif", "png"]}
                   onChange={onDrop}
@@ -577,13 +576,12 @@ export default function Basic(props) {
                   maxNumber={1}
                 >
                   {({onImageUpload}) => (
-                    <button
-                      onClick={onImageUpload}
-                      style={{width: '100%', height: '100%'}}
-                    >파일 첨부</button>
+                    <DuplicateButton
+                        type={'button'}
+                        onClick={onImageUpload}
+                    >파일 첨부</DuplicateButton>
                   )}
                 </ImageUploading>
-              </DuplicateButton>
             </div>
           </RelativeDiv>
           <RelativeDiv>
@@ -592,7 +590,7 @@ export default function Basic(props) {
               <Input
                 type={'text'}
                 placeholder={'대표자 명을 입력해주세요.'}
-                value={accountInfo.ceoName}
+                value={accountInfo.ceoName || ""}
                 {...register("ceoName", {
                   required: "대표자 명을 입력해주세요",
                   onChange: (e) => handleCeoName(e)
@@ -608,7 +606,7 @@ export default function Basic(props) {
                 type={'text'}
                 placeholder={'업태를 입력해주세요'}
                 onChange={(e) => handleTypeOfBusiness(e)}
-                value={accountInfo.typeOfBusiness}
+                value={accountInfo.typeOfBusiness || ""}
               />
             </div>
           </RelativeDiv>
@@ -630,7 +628,7 @@ export default function Basic(props) {
                 <input
                   type={'text'}
                   placeholder={'주소를 입력해주세요.'}
-                  value={accountInfo.location}
+                  value={accountInfo.location || ""}
                   {...register("location", {
                     required: "주소를 입력해주세요",
                     onChange: (e) => handleLocation(e)
@@ -642,7 +640,7 @@ export default function Basic(props) {
                 <input
                   type={'text'}
                   placeholder={'상세 주소를 입력해주세요.'}
-                  value={accountInfo.locationDetail}
+                  value={accountInfo.locationDetail || ""}
                   onChange={(e) => handleLocationDetail(e)}
                 />
               </div>
@@ -654,7 +652,7 @@ export default function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'이메일을 입력해주세요.'}
-                value={accountInfo.taxInvoiceEmail}
+                value={accountInfo.taxInvoiceEmail || ""}
                 {...register("taxInvoiceEmail", {
                   required: "이메일을 입력해주세요",
                   onChange: (e) => handleTaxEmail(e)

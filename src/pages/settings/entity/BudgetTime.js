@@ -17,6 +17,42 @@ export const budgetTimeDataAtom = atom(null)
  * @type {Atom<unknown>}
  */
 export const timeBudgetDetailDataAtom = atom(null)
+export const timesInfo = [
+  {"time" : '',"ratio" :'', "label": ''},
+  {"time" : 1,"ratio" :0, "label": '시'},
+  {"time" : 2,"ratio" :0, "label": '시'},
+  {"time" : 3,"ratio" :0, "label": '시'},
+  {"time" : 4,"ratio" :0, "label": '시'},
+  {"time" : 5,"ratio" :0, "label": '시'},
+  {"time" : 6,"ratio" :0, "label": '시'},
+  {"time" : 7,"ratio" :0, "label": '시'},
+  {"time" : 8,"ratio" :0, "label": '시'},
+  {"time" : 9,"ratio" :0, "label": '시'},
+  {"time" : 10,"ratio" :0, "label": '시'},
+  {"time" : 11,"ratio" :0, "label": '시'},
+  {"time" : 12,"ratio" :0, "label": '시'},
+  {"time" : 13,"ratio" :0, "label": '시'},
+  {"time" : 14,"ratio" :0, "label": '시'},
+  {"time" : 15,"ratio" :0, "label": '시'},
+  {"time" : 16,"ratio" :0, "label": '시'},
+  {"time" : 17,"ratio" :0, "label": '시'},
+  {"time" : 18,"ratio" :0, "label": '시'},
+  {"time" : 19,"ratio" :0, "label": '시'},
+  {"time" : 20,"ratio" :0, "label": '시'},
+  {"time" : 21,"ratio" :0, "label": '시'},
+  {"time" : 22,"ratio" :0, "label": '시'},
+  {"time" : 23,"ratio" :0, "label": '시'},
+  {"time" : 24,"ratio" :0, "label": '시'},
+]
+export const weeksInfo = [
+  {"week": '월'},
+  {"week": '화'},
+  {"week": '수'},
+  {"week": '목'},
+  {"week": '금'},
+  {"week": '토'},
+  {"week": '일'}
+]
 
 export const budgetTimeListAtom = atom(null)
 export const userIdAtom = atom(null)

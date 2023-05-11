@@ -16,7 +16,7 @@ import {
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
-import {ToastContainer} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
 import {budgetTimes, budgetTimesDirect, timeBudgetDetailDataAtom} from "./entity/BudgetTime";
@@ -31,7 +31,8 @@ function BudgetTimeDetail() {
   const [timeBudgetDetailDataState, setTimeBudgetDetailDataState] = useAtom(timeBudgetDetailDataAtom)
   const navigate = useNavigate()
   const [saveType, setSaveType] = useState('update')
-  const state = useLocation()
+  const [checkIndex, setCheckIndex] = useState(null)
+  const {state} = useLocation()
   const {register, handleSubmit, reset, formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: timeBudgetDetailDataState
@@ -41,14 +42,14 @@ function BudgetTimeDetail() {
     setTimeBudgetDetailDataState({
       ...timeBudgetDetailDataState,
       exposureTimeType: e.target.value,
-      allowTimes: timeBudgetDetailDataState.exposureTimeType === 'DIRECT_SETTINGS' ? budgetTimesDirect: budgetTimes,
+      allowTimes: e.target.value === 'DIRECT_SETTINGS' ? budgetTimesDirect: budgetTimes,
     })
+    setCheckIndex(null)
   }
   useEffect(() => {
-    const {id, groupId} = state.state
-    if (state.state !== null && state.state.groupId !== undefined) {
+    const {id, groupId} = state
+    if (state !== null && groupId !== undefined) {
       selBudgetTimeDetailInfo(id, groupId).then(response => {
-        console.log(response)
         setTimeBudgetDetailDataState(response)
       })
       setSaveType('update')
@@ -62,6 +63,8 @@ function BudgetTimeDetail() {
       setSaveType('resist')
     }
   }, [])
+
+
   const handleGroupName = (e) =>{
     setTimeBudgetDetailDataState({
       ...timeBudgetDetailDataState,
@@ -69,19 +72,31 @@ function BudgetTimeDetail() {
     })
   }
   const onSaveBudgetTimes = () => {
-    if(saveType === 'resist'){
-      resistBudgetTimes(timeBudgetDetailDataState).then(response => {
-        if (response) {
-          navigate('/board/budgetTimeList', {state: {id: timeBudgetDetailDataState.userId}})
-        }
-      })
+
+    let isWeeksPerAvailable = false;
+    timeBudgetDetailDataState.allowTimes.map((rowData,i)=>{
+      if(rowData.map(d=>parseInt(d)).reduce((a,b)=>{return a+b;}) > 100){
+        isWeeksPerAvailable = true;
+        setCheckIndex(i);
+      }
+    })
+    if(!isWeeksPerAvailable){
+      if(saveType === 'resist'){
+        resistBudgetTimes(timeBudgetDetailDataState).then(response => {
+          if (response) {
+            navigate('/board/budgetTimeList', {state: {id: timeBudgetDetailDataState.userId}})
+          }
+        })
+      }else{
+        updateBudgetTimes(timeBudgetDetailDataState).then(response => {
+          console.log(response)
+          if (response) {
+            navigate('/board/budgetTimeList', {state: {id: timeBudgetDetailDataState.userId}})
+          }
+        })
+      }
     }else{
-      updateBudgetTimes(timeBudgetDetailDataState).then(response => {
-        console.log(response)
-        if (response) {
-          navigate('/board/budgetTimeList', {state: {id: timeBudgetDetailDataState.userId}})
-        }
-      })
+      toast.warning('[해당 요일]의 \n시간별 예산 설정을 확인해주세요.')
     }
   }
   return (
@@ -185,13 +200,13 @@ function BudgetTimeDetail() {
                 <ColSpan4 style={{color: '#ccc', marginBottom: 10, justifyContent: 'space-between'}}>
                   <div style={{minHeight: 24}}>요일 및 시간별 예산을 % 단위로 설정해주세요</div>
                 </ColSpan4>
-                <InsertToSelect userId={'id'}/>
+                <InsertToSelect checkWeek={checkIndex}/>
               </RelativeDiv>
             </RowSpan>
           </BoardSearchResult>
         }
         <SubmitContainer>
-          <CancelButton onClick={() => navigate('/board/budgetTimeList', {state: {id: state.id}})}>목록</CancelButton>
+          <CancelButton type={'button'} onClick={() => navigate('/board/budgetTimeList', {state: {id: state.id}})}>목록</CancelButton>
           <DefaultButton type={'submit'}>저장</DefaultButton>
         </SubmitContainer>
         </form>

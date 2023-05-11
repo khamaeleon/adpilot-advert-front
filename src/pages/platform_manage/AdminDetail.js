@@ -47,7 +47,6 @@ function PlatformAdminDetail() {
 
   useEffect(() => {
     selAdminInfo().then(response => {
-      console.log(response)
       if (response) {
         setAdminInfoState({
               ...response,

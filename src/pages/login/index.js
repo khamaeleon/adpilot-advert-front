@@ -82,7 +82,7 @@ function FindPassword(props) {
           <div>
             <input type={'text'}
                    placeholder={'아이디를 입력 해주세요'}
-                   value={findPasswordInfo.username}
+                   value={findPasswordInfo.username || ""}
                    {...register('username',{
                      required: "아이디를 입력 해주세요",
                      onChange:(e) => handleMemberId(e)
@@ -98,7 +98,7 @@ function FindPassword(props) {
           <FindCorporationNo>
             <input type={'text'}
                    placeholder={'연락처를 입력해주세요'}
-                   value={findPasswordInfo.phone}
+                   value={findPasswordInfo.phone || ""}
                    {...register('phone',{
                      required: "연락처를 입력해주세요,",
                      onChange:(e) => handleManagerPhone(e)
@@ -114,7 +114,7 @@ function FindPassword(props) {
           <div>
             <input type={'text'}
                    placeholder={'담당자 이메일을 입력해주세요.'}
-                   value={findPasswordInfo.email}
+                   value={findPasswordInfo.email || ""}
                    onChange={(e) => handleManagerEmail(e)}
                    {...register('email',{
                      required: "이메일을 입력해주세요,",

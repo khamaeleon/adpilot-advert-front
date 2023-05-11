@@ -2,15 +2,18 @@ import {useAtom} from "jotai";
 import TableDragSelect from "react-table-drag-select";
 import "../../assets/dragSelect.css"
 import {useEffect, useState} from "react";
-import {budgetTimes, timeBudgetDetailDataAtom} from "../../pages/settings/entity/BudgetTime";
+import {
+  budgetTimes,
+  timeBudgetDetailDataAtom,
+  timesInfo, weeksInfo
+} from "../../pages/settings/entity/BudgetTime";
 import styled from "styled-components";
 
 
-export default function DragToSelect({reset, readOnly}) {
+export default function DragToSelect({readOnly}) {
   const [timeBudgetDetailDataState, setTimeBudgetDetailDataState] = useAtom(timeBudgetDetailDataAtom)
   const [cellEnabled, setCellEnabled] = useState(false)
   useEffect(() => {
-    console.log(timeBudgetDetailDataState)
     if (readOnly) {
       setCellEnabled(true)
     }
@@ -21,248 +24,38 @@ export default function DragToSelect({reset, readOnly}) {
       ...timeBudgetDetailDataState,
       allowTimes:cells
     })
-    console.log(cells)
-    // let allowTimes =[]
-    // let timeList =[]
-    // cells.map((weeks, key) => {
-    //   weeks.map((day, idx) => {
-    //     if(day){
-    //       timeList=[...timeList,{time:idx}]
-    //     }
-    //   })
-    //   if(weeks.find(value =>value===true)){
-    //     allowTimes=[...allowTimes,{dayOfWeek:key,timeList:timeList}]
-    //   }
-    //   timeList =[]
-    //   console.log(allowTimes)
-    //   //
-    // })
   }
+
+  function trtd() {
+    let arr=[];
+    for(let i = 0; i < 7; i++) {
+      let colArr=[];
+      for(let j = 0; j < 24; j++) {
+        colArr.push(<td key={j} disabled={cellEnabled} className={'col' + j}/>)
+      }
+      arr.push(<tr key={i}>{colArr}</tr>)
+    }
+    return arr;
+  }
+
   return (
     <TimeTableContainer>
       <TimeContainer>
-        <div>&nbsp;</div>
-        <div>1시</div>
-        <div>2시</div>
-        <div>3시</div>
-        <div>4시</div>
-        <div>5시</div>
-        <div>6시</div>
-        <div>7시</div>
-        <div>8시</div>
-        <div>9시</div>
-        <div>10시</div>
-        <div>11시</div>
-        <div>12시</div>
-        <div>13시</div>
-        <div>14시</div>
-        <div>15시</div>
-        <div>16시</div>
-        <div>17시</div>
-        <div>18시</div>
-        <div>19시</div>
-        <div>20시</div>
-        <div>21시</div>
-        <div>22시</div>
-        <div>23시</div>
-        <div>24시</div>
+        {timesInfo.map((data, index) => {
+          return <div key={index}>{data.time + data.label}</div>
+        })}
       </TimeContainer>
       <div style={{display: "flex"}}>
         <WeekDiv>
-          <div>월</div>
-          <div>화</div>
-          <div>수</div>
-          <div>목</div>
-          <div>금</div>
-          <div>토</div>
-          <div>일</div>
+          {weeksInfo.map((data, index) => {
+            return <div key={index}>{data.week}</div>
+          })}
         </WeekDiv>
         <TableDragSelect
-          value={timeBudgetDetailDataState !==null && timeBudgetDetailDataState.allowTimes}
+          value={timeBudgetDetailDataState.allowTimes}
           onChange={cells => onChangeCells(cells)}
         >
-          <tr>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-          </tr>
-          <tr>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-          </tr>
-          <tr>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-          </tr>
-          <tr>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-          </tr>
-          <tr>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-          </tr>
-          <tr>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-          </tr>
-          <tr>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-            <td disabled={cellEnabled}/>
-          </tr>
+          {trtd()}
         </TableDragSelect>
       </div>
     </TimeTableContainer>

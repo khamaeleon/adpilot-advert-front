@@ -13,7 +13,6 @@ export default function Terms() {
 
   useEffect(() => {
     selPolicyLatestTerms().then(response => {
-      console.log(response)
       setTermsInfo(response)
       setAccountInfo({
         ...accountInfo,
@@ -40,7 +39,6 @@ export default function Terms() {
         validation: false
       })
     }
-    console.log(accountInfo)
   }, [accountInfo, isAgreeAll]);
 
   /**

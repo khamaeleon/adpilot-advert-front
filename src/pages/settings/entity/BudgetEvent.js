@@ -62,7 +62,7 @@ export const adverEventBudgetColumns = [ //이벤트 단가 컬럼
 export const budgetEventDetailColumns = [ //이벤트 예산 상세 컬럼
   {
     name: 'groupName',
-    header: '이벤트 단가 그룹명',
+    header: '이벤트 예산 그룹명',
     defaultFlex: 1,
     render: (props) => {
       return (

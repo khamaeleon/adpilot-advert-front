@@ -29,7 +29,6 @@ function EventTimeList() {
   useEffect(() => {
     selBudgetTimeList(state.id).then(response => {
       if(response){
-        console.log(response)
         setBudgetTimeListState(response)
       }
     })

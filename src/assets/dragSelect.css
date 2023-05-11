@@ -28,7 +28,12 @@
     padding-left: 0rem;
     padding-right: 0rem;
 }
-
+/* Cells that cannot be interacted with */
+.table-drag-select tr.not-validation td {
+    /* Put yer css here */
+    background-color: #f5811f;
+    color: #fff;
+}
 /* Cells that can be interacted with */
 .table-drag-select td.cell-enabled {
     background-color: #fff;

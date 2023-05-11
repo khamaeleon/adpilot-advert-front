@@ -221,13 +221,14 @@ function SettingChangeModal(props) {
               <ColTitle><Span2>쇼퍼 맞춤</Span2></ColTitle>
               <RelativeDiv>
                 <Input
-                  type={'text'}
+                  type={'number'}
+                  min={0}
                   placeholder={'금액을 입력해주세요'}
                   {...register("shopperMatching", {
                     required: "금액을 입력해주세요",
                     onChange: (e) => handleShopperMatching(e)
                   })}
-                  value={dataState?.shopperMatching !== 0 ? dataState?.shopperMatching : ''}
+                  value={dataState?.shopperMatching}
                 />
                 {errors.shopperMatching && <ValidationScript>{errors.shopperMatching?.message}</ValidationScript>}
                 <span className={label}></span>
@@ -239,13 +240,14 @@ function SettingChangeModal(props) {
               <ColTitle><Span2>카트 추천</Span2></ColTitle>
               <RelativeDiv>
                 <Input
-                  type={'text'}
+                  type={'number'}
+                  min={0}
                   placeholder={'금액을 입력해주세요'}
                   {...register("cartRecommendation", {
                     required: "금액을 입력해주세요",
                     onChange: (e) => handleCartRecommendation(e)
                   })}
-                  value={dataState?.cartRecommendation !== 0 ? dataState?.cartRecommendation : ''}
+                  value={dataState?.cartRecommendation}
                 />
                 {errors.cartRecommendation &&
                   <ValidationScript>{errors.cartRecommendation?.message}</ValidationScript>}
@@ -258,13 +260,14 @@ function SettingChangeModal(props) {
               <ColTitle><Span2>상품 추천</Span2></ColTitle>
               <RelativeDiv>
                 <Input
-                  type={'text'}
+                  type={'number'}
+                  min={0}
                   placeholder={'금액을 입력해주세요'}
                   {...register("productRecommendation", {
                     required: "금액을 입력해주세요",
                     onChange: (e) => handleProductRecommendation(e)
                   })}
-                  value={dataState?.productRecommendation !== 0 ? dataState?.productRecommendation : ''}
+                  value={dataState?.productRecommendation}
                 />
                 {errors.productRecommendation &&
                   <ValidationScript>{errors.productRecommendation?.message}</ValidationScript>}
@@ -277,13 +280,14 @@ function SettingChangeModal(props) {
               <ColTitle><Span2>유저 매치</Span2></ColTitle>
               <RelativeDiv>
                 <Input
-                  type={'text'}
+                  type={'number'}
+                  min={0}
                   placeholder={'금액을 입력해주세요'}
                   {...register("userMatching", {
                     required: "금액을 입력해주세요",
                     onChange: (e) => handleUserMatching(e)
                   })}
-                  value={dataState?.userMatching !== 0 ? dataState?.userMatching : ''}
+                  value={dataState?.userMatching}
                 />
                 {errors.userMatching && <ValidationScript>{errors.userMatching?.message}</ValidationScript>}
                 <span className={label}></span>
@@ -295,13 +299,14 @@ function SettingChangeModal(props) {
               <ColTitle><Span2>오디언스</Span2></ColTitle>
               <RelativeDiv>
                 <Input
-                  type={'text'}
+                  type={'number'}
+                  min={0}
                   placeholder={'금액을 입력해주세요'}
                   {...register("audience", {
                     required: "금액을 입력해주세요",
                     onChange: (e) => handleAudience(e)
                   })}
-                  value={dataState?.audience !== 0 ? dataState?.audience : ''}
+                  value={dataState?.audience}
                 />
                 {errors.audience && <ValidationScript>{errors.audience?.message}</ValidationScript>}
                 <span className={label}></span>
@@ -313,13 +318,14 @@ function SettingChangeModal(props) {
               <ColTitle><Span2>유저 최적화</Span2></ColTitle>
               <RelativeDiv>
                 <Input
-                  type={'text'}
+                  type={'number'}
+                  min={0}
                   placeholder={'금액을 입력해주세요'}
                   {...register("userOptimization", {
                     required: "금액을 입력해주세요",
                     onChange: (e) => handleUserOptimization(e)
                   })}
-                  value={dataState.userOptimization !== 0 ? dataState.userOptimization : ''}
+                  value={dataState?.userOptimization}
                 />
                 {errors.userOptimization && <ValidationScript>{errors.userOptimization?.message}</ValidationScript>}
                 <span className={label}></span>
@@ -328,7 +334,7 @@ function SettingChangeModal(props) {
           </RowSpan>
         </ModalBody>
         <ModalFooter>
-          <CancelButton onClick={() => setModal({
+          <CancelButton type={"button"} onClick={() => setModal({
             isShow: false,
           })}>취소</CancelButton>
           <SubmitButton type={"submit"}>{saveType !== 'create' ? '수정' : '추가'}</SubmitButton>

@@ -177,28 +177,15 @@ function PlatformUserDetail() {
   const {state} = useLocation();
 
   useEffect(() => {
-    console.log(state.id)
     if(tokenUserInfo.role ==='NORMAL'){
       selUserMyPageInfo(state.id).then(response => {
-        setAccountInfoState({
-          ...response,
-          status: response.status ==='NORMAL'? 'NORMAL' :'SUSPEND'
-        })
-        reset({
-          ...response,
-          status: response.status ==='NORMAL'? 'NORMAL' :'SUSPEND'
-        })
+        setAccountInfoState(response)
+        reset(response)
       })
     }else{
       selUserInfo(state.id).then(response => {
-        setAccountInfoState({
-          ...response,
-          status: response.status ==='NORMAL'? 'NORMAL' :'SUSPEND'
-        })
-        reset({
-          ...response,
-          status: response.status ==='NORMAL'? 'NORMAL' :'SUSPEND'
-        })
+        setAccountInfoState(response)
+        reset(response)
       })
     }
   }, [])
@@ -378,10 +365,7 @@ function PlatformUserDetail() {
     if(tokenUserInfo.role==='NORMAL'){
       updateMyPageUser(accountInfoState).then(response => {
         if (response) {
-          setModal({
-            isShow: false,
-            modalComponent: null
-          })
+          navigate('/board/dashboard')
         } else {
           toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
         }
@@ -747,13 +731,13 @@ function PlatformUserDetail() {
                       <input type={'radio'}
                              id={'normal'}
                              name={'status'}
-                             checked={accountInfoState.status !== 'NORMAL' ? false : true}
+                             checked={accountInfoState.status === 'NORMAL'}
                              onChange={() => handleStatus('NORMAL')}/>
                       <label htmlFor={'normal'}>사용</label>
                       <input type={'radio'}
                              id={'suspend'}
                              name={'status'}
-                             checked={accountInfoState.status !== 'NORMAL' ? true : false}
+                             checked={accountInfoState.status === 'SUSPEND'}
                              onChange={() => handleStatus('SUSPEND')}/>
                       <label htmlFor={'suspend'}>미사용</label>
                     </RelativeDiv>
@@ -765,7 +749,10 @@ function PlatformUserDetail() {
         </>
       }
       <SubmitContainer>
-        <CancelButton type={'button'} onClick={()=>navigate('/board/platform')}>목록</CancelButton>
+        {tokenUserInfo.role !== 'NORMAL' &&
+            <CancelButton type={'button'} onClick={() => navigate(
+                '/board/platform')}>목록</CancelButton>
+        }
         <SubmitButton type={"submit"}>저장</SubmitButton>
       </SubmitContainer>
     </form>
