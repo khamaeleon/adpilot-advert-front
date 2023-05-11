@@ -14,7 +14,7 @@ import {useAtom} from "jotai";
 import {dataTotalInfo} from "../../components/common/entity";
 import {chartDataAtom, commonProperties, platformStatusType, userPlatformStatusType} from "./entity/Chart";
 import {adverListColumn, adverStatusAtom, adverStatusDetailColumn, userCampaignListColumn,} from "./entity/Campaign";
-import {productType, searchConditionAtom} from "./entity/Common";
+import {eventType, productType, searchConditionAtom} from "./entity/Common";
 import {retrieveAdverOverview, retrieveOverview,} from "../../services/dash_board/ChartAxios";
 import {tokenResultAtom} from "../login/entity/Common";
 import TableDetail from "../../components/table/TableDetail";
@@ -33,7 +33,7 @@ function ChartComponent(props) {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [chartData, setChartData] = useAtom(chartDataAtom);
   const {searchCondition} = props
-  const [dataType, setDataType] = useState('userCount')
+  const [dataType, setDataType] = useState('cpc')
   const [dataType2, setDataType2] = useState('costAmount')
   const [chartDataInfo, setChartDataInfo] = useState([])
   const [chartList, setChartList] = useState([{id: 'validClickCount', data:[]}])
@@ -81,7 +81,7 @@ function ChartComponent(props) {
     makeChartData()
   }, [chartData,chartDataInfo]);
 
-  function calculateSum(property) { // 도움 끝~!!!
+  function calculateSum(property) {
     function calculatePropertySum(property) { // 전체 값은 따로 계산식 함수로 값 정리
       return chartDataInfo.reduce((prev, next) => prev + next[property], 0);
     }
@@ -92,9 +92,9 @@ function ChartComponent(props) {
     const costAmountSum = calculatePropertySum('costAmount');
     const totalConversionCountSum = calculatePropertySum('totalConversionCount');
     const totalConversionAmountSum = calculatePropertySum('totalConversionAmount');
-    const sessionConversionAmountSum = calculatePropertySum('sessionConversionAmount');
-    const directConversionAmountSum = calculatePropertySum('directConversionAmount');
-    const exposureConversionAmountSum = calculatePropertySum('exposureConversionAmount');
+    // const sessionConversionAmountSum = calculatePropertySum('sessionConversionAmount');
+    // const directConversionAmountSum = calculatePropertySum('directConversionAmount');
+    // const exposureConversionAmountSum = calculatePropertySum('exposureConversionAmount');
 
     //[d] 개별 계산값을 포함한 개별 공식 계싼값 switch 문으로 구성
     let calc = 0;
@@ -106,6 +106,10 @@ function ChartComponent(props) {
       case 'totalExposureCount':
       case 'totalClickCount':
       case 'costAmount':
+      case 'sessionRoas':
+      case 'directRoas':
+      case 'exposureRoas':
+      case 'totalRoas':
         calc = chartDataInfo.reduce((prev, next) => prev + next[property], 0);
         break;
       case 'clickRate':
@@ -128,22 +132,22 @@ function ChartComponent(props) {
         const caseValueE = costAmountSum;
         calc = caseValueE !== 0 ? totalConversionAmountSum / costAmountSum : 0;
         break;
-      case 'sessionRoas':
-        const caseValueF = costAmountSum;
-        calc = caseValueF !== 0 ? (sessionConversionAmountSum / costAmountSum) * 100 : 0;
-        break;
-      case 'directRoas':
-        const caseValueG = costAmountSum;
-        calc = caseValueG !== 0 ? (directConversionAmountSum / costAmountSum) * 100 : 0;
-        break;
-      case 'exposureRoas':
-        const caseValueH = costAmountSum;
-        calc = caseValueH !== 0 ? (exposureConversionAmountSum / costAmountSum) * 100 : 0;
-        break;
-      case 'totalRoas':
-        const caseValueI = costAmountSum;
-        calc = caseValueI !== 0 ? (totalConversionAmountSum / costAmountSum) * 100 : 0;
-        break;
+      // case 'sessionRoas':
+      //   const caseValueF = costAmountSum;
+      //   calc = caseValueF !== 0 ? (sessionConversionAmountSum / costAmountSum) * 100 : 0;
+      //   break;
+      // case 'directRoas':
+      //   const caseValueG = costAmountSum;
+      //   calc = caseValueG !== 0 ? (directConversionAmountSum / costAmountSum) * 100 : 0;
+      //   break;
+      // case 'exposureRoas':
+      //   const caseValueH = costAmountSum;
+      //   calc = caseValueH !== 0 ? (exposureConversionAmountSum / costAmountSum) * 100 : 0;
+      //   break;
+      // case 'totalRoas':
+      //   const caseValueI = costAmountSum;
+      //   calc = caseValueI !== 0 ? (totalConversionAmountSum / costAmountSum) * 100 : 0;
+      //   break;
       case 'ecpm':
         const caseValueJ = exposureCountSum;
         calc = caseValueJ !== 0 ? (costAmountSum / exposureCountSum) * 1000 : 0;
@@ -329,7 +333,7 @@ function ChartComponent(props) {
               {...commonProperties}
               data={chartList}
               colors={(series) => series.color}
-              margin={{ top: 50, right: 60, bottom: 50, left: 120 }}
+              axisLeft={null}
               sliceTooltip={(props) => {
                 return (
                     <ChartTooltip>
@@ -354,7 +358,6 @@ function DashBoardIndex() {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [totalInfo, setTotalInfo] = useState(dataTotalInfo)
   const [adverStatusData, setAdverStatusData] = useAtom(adverStatusAtom)
-  const [adverStatusDetailData, setAdverStatusDetailData] = useAtom(adverStatusAtom)
   const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
   const [keyword, setKeyword] = useState('')
 
@@ -398,7 +401,7 @@ function DashBoardIndex() {
 
   const handleFetchDetailData = useCallback(async ({userId}) => {
     let adverStatusTempDetail = await retrieveAdvertiserCampaignStatus(userId, searchCondition)
-    adverStatusTempDetail = adverStatusTempDetail.map(item =>{
+    adverStatusTempDetail = adverStatusTempDetail?.map(item =>{
       return {...item,userId:userId}
     })
     return adverStatusTempDetail
@@ -407,7 +410,7 @@ function DashBoardIndex() {
   return (
       <>
         <DashBoardCard>
-          <DashBoardCondition role={tokenUserInfo.role} searchType={productType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleData={handleData} keyword={keyword} setKeyword={setKeyword}/>
+          <DashBoardCondition role={tokenUserInfo.role} productType={productType} eventType={eventType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleData={handleData} keyword={keyword} setKeyword={setKeyword}/>
         </DashBoardCard>
         <DashBoardCard>
           <DashBoardHeader>{tokenUserInfo.role !== 'NORMAL' ? '플랫폼' : '광고'} 현황</DashBoardHeader>

@@ -3,7 +3,6 @@ import React from "react";
 
 /* 플랫폼 현황 차트 셀렉트 */
 export const platformStatusType = [
-  {id: 1, value: "userCount", label: "광고주수"},
   {id: 2, value: "totalExposureCount", label: "총노출수"},
   {id: 3, value: "totalClickCount", label: "총클릭수"},
   {id: 4, value: "clickRate", label: "클릭률"},
@@ -21,7 +20,6 @@ export const platformStatusType = [
 
 /* 특정 광고주 광고 현황 차트 셀렉트 */
 export const userPlatformStatusType = [
-  {id: 1, value: "userCount", label: "광고주수"},
   {id: 2, value: "totalExposureCount", label: "총노출수"},
   {id: 3, value: "totalClickCount", label: "총클릭수"},
   {id: 4, value: "clickRate", label: "클릭률"},
@@ -39,12 +37,11 @@ export const chartDataAtom = atom({
   validClickCount: {status: true, label: '클릭수', totalCount: 0},
   exposureCount: {status: true, label: '노출수', totalCount: 0},
   totalConversionCount: {status: true, label: '전환수', totalCount: 0},
-  userCount: {status: true, label: '광고주수', totalCount: 0},
   totalExposureCount: {status: false, label: '총 노출수', totalCount: 0},
   totalClickCount: {status: false, label: '총 클릭수', totalCount: 0},
   clickRate: {status: false, label: '클릭률', totalCount: 0},
   costAmount: {status: true, label: '비용', totalCount: 0},
-  cpc: {status: false, label: 'CPC', totalCount: 0},
+  cpc: {status: true, label: 'CPC', totalCount: 0},
   conversionRate: {status: false, label: '전환율', totalCount: 0},
   costPerConversion: {status: false, label: '전환 단가', totalCount: 0},
   avgConversionAmount: {status: false, label: '평균 구매액', totalCount: 0},

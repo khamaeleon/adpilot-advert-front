@@ -115,58 +115,59 @@ export const adverListColumn = [
     showColumnMenuTool: false
   },
   {
-    name: 'sessionRoas',
+    name: 'sessionConversionAmount',
     minWidth: 150,
     header: () => {
       return(
-        <div><p>세션매출</p><p>(ROAS)</p></div>
+        <div><p>세션매출</p><small>(ROAS)</small></div>
       )
     },
-    render: ({data}) => {
-      let value = data.costAmount !== 0 ? (data.sessionConversionAmount / data.costAmount) * 100 : 0;
-      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    render: ({value,data}) => {
+      let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },
   {
-    name: 'directRoas',
+    name: 'directConversionAmount',
     minWidth: 150,
     header: () => {
       return(
-        <div><p>직접매출</p><p>(ROAS)</p></div>
+        <div><p>직접매출</p><small>(ROAS)</small></div>
       )
     },
-    render: ({data}) => {
-      let value = data.costAmount !== 0 ? (data.directConversionAmount / data.costAmount) * 100 : 0;
-      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    render: ({value,data}) => {
+      let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },
   {
-    name: 'exposureRoas',
+    name: 'exposureConversionAmount',
     minWidth: 150,
     header: () => {
       return(
-        <div><p>노출매출</p><p>(ROAS)</p></div>
+        <div><p>노출매출</p><small>(ROAS)</small></div>
       )
     },
-    render: ({data}) => {
-      let value = data.costAmount !== 0 ? (data.exposureConversionAmount / data.costAmount) * 100 : 0;
-      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    render: ({value,data}) => {
+      let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },
   {
-    name: 'totalRoas',
+    name: 'totalConversionAmount',
+    textAlign: 'center',
     minWidth: 150,
     header: () => {
       return(
-        <div><p>총매출</p><p>(ROAS)</p></div>
+        <div><p>총매출</p><small>(ROAS)</small></div>
       )
     },
-    render: ({data}) => {
-      let value = data.costAmount !== 0 ? (data.totalConversionAmount / data.costAmount) * 100 : 0;
-      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    render: ({value,data}) => {
+      let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },
@@ -366,62 +367,62 @@ export const adverStatusDetailColumn = [
     showColumnMenuTool: false
   },
   {
-    name: 'sessionRoas',
+    name: 'sessionConversionAmount',
     textAlign: 'center',
     minWidth: 150,
     header: () => {
       return(
-        <div><p>세션매출</p><p style={{fontSize: 12}}>(ROAS)</p></div>
+        <div><p>세션매출</p><small>(ROAS)</small></div>
       )
     },
-    render: ({data}) => {
-      let value = data.costAmount !== 0 ? (data.sessionConversionAmount / data.costAmount) * 100 : 0;
-      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    render: ({value,data}) => {
+      let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },
   {
-    name: 'directRoas',
+    name: 'directConversionAmount',
     textAlign: 'center',
     minWidth: 150,
     header: () => {
       return(
-        <div><p>직접매출</p><p style={{fontSize: 12}}>(ROAS)</p></div>
+        <div><p>직접매출</p><small>(ROAS)</small></div>
       )
     },
-    render: ({data}) => {
-      let value = data.costAmount !== 0 ? (data.directConversionAmount / data.costAmount) * 100 : 0;
-      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    render: ({value,data}) => {
+      let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },
   {
-    name: 'exposureRoas',
+    name: 'exposureConversionAmount',
     textAlign: 'center',
     minWidth: 150,
     header: () => {
       return(
-        <div><p>노출매출</p><p style={{fontSize: 12}}>(ROAS)</p></div>
+        <div><p>노출매출</p><small>(ROAS)</small></div>
       )
     },
-    render: ({data}) => {
-      let value = data.costAmount !== 0 ? (data.exposureConversionAmount / data.costAmount) * 100 : 0;
-      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    render: ({value,data}) => {
+      let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },
   {
-    name: 'totalRoas',
+    name: 'totalConversionAmount',
     textAlign: 'center',
     minWidth: 150,
     header: () => {
       return(
-        <div><p>총매출</p><p style={{fontSize: 12}}>(ROAS)</p></div>
+        <div><p>총매출</p><small>(ROAS)</small></div>
       )
     },
-    render: ({data}) => {
-      let value = data.costAmount !== 0 ? (data.totalConversionAmount / data.costAmount) * 100 : 0;
-      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    render: ({value,data}) => {
+      let pctValue = data.costAmount !== 0 ? (data.totalConversionAmount / data.costAmount) * 100 : 0;
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },
@@ -577,17 +578,17 @@ export const userCampaignListColumn = [
     showColumnMenuTool: false
   },
   {
-    name: 'totalRoas',
+    name: 'totalConversionAmount',
     textAlign: 'center',
     minWidth: 150,
     header: () => {
       return(
-        <div><p>총매출</p><p style={{fontSize: 12}}>(ROAS)</p></div>
+        <div><p>총매출</p><small>(ROAS)</small></div>
       )
     },
-    render: ({data}) => {
-      let value = data.costAmount !== 0 ? (data.totalConversionAmount / data.costAmount) * 100 : 0;
-      return <p className={'won'}>{moneyToFixedFormat(value)}</p>
+    render: ({value,data}) => {
+      let pctValue = data.costAmount !== 0 ? (data.totalConversionAmount / data.costAmount) * 100 : 0;
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },

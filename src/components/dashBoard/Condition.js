@@ -30,7 +30,7 @@ import Checkbox from "../common/Checkbox";
 import Select from "react-select";
 
 export function DashBoardCondition(props) {
-  const {role, searchCondition, setSearchCondition, keyword, setKeyword, handleData, searchType} = props
+  const {role, searchCondition, setSearchCondition, keyword, setKeyword, handleData, productType, eventType} = props
   const [dateRange, setDateRange] = useState([new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
   const [isCheckedAll, setIsCheckedAll] = useState(true)
@@ -91,6 +91,7 @@ export function DashBoardCondition(props) {
       setDateRange([new Date(getLastThirtyDay().startDay), new Date(getLastThirtyDay().endDay)])
     }
   }
+
   /**
    * 광고 상품 선택
    * @param productType
@@ -101,6 +102,23 @@ export function DashBoardCondition(props) {
       productType: selectProductType.value
     })
   }
+
+  /**
+   * 이벤트 타입 선택
+   * @param eventType
+   */
+  const handleEventType = (selectEventType) => {
+    setSearchCondition({
+      ...searchCondition,
+      eventType: selectEventType.value
+    })
+  }
+
+  /**
+   * 에이전트 타입 체크
+   * @param event
+   */
+
   const handleChangeCheckAll = (event) => {
     if (event.target.checked === true) {
       setSearchCondition({
@@ -110,10 +128,7 @@ export function DashBoardCondition(props) {
       setIsCheckedAll(event.target.checked)
     }
   }
-  /**
-   * 에이전트 타입 체크
-   * @param event
-   */
+
   const handleChangeCheck = (event) => {
     if (event.currentTarget.checked) {
       setSearchCondition({
@@ -143,9 +158,24 @@ export function DashBoardCondition(props) {
         <ColSpan0 style={{marginRight: 20}}>
           <ColTitle style={{paddingLeft: 0}}>광고 상품</ColTitle>
           <Select components={{IndicatorSeparator: () => null}}
-                  options={searchType}
-                  value={searchType.find(value => value.value === searchCondition.productType)}
+                  options={productType}
+                  value={productType.find(value => value.value === searchCondition.productType)}
                   onChange={handleProductType}
+                  styles={{
+                    input: (baseStyles, state) => (
+                      {
+                        ...baseStyles,
+                        width: "100px",
+                      })
+                  }}
+          />
+        </ColSpan0>
+        <ColSpan0 style={{marginRight: 20}}>
+          <ColTitle style={{paddingLeft: 0}}>이벤트 타입</ColTitle>
+          <Select components={{IndicatorSeparator: () => null}}
+                  options={eventType}
+                  value={eventType.find(value => value.value === searchCondition.eventType)}
+                  onChange={handleEventType}
                   styles={{
                     input: (baseStyles, state) => (
                       {
