@@ -171,7 +171,7 @@ export function DashBoardCondition(props) {
           />
         </ColSpan0>
         <ColSpan0 style={{marginRight: 20}}>
-          <ColTitle style={{paddingLeft: 0}}>이벤트 타입</ColTitle>
+          <ColTitle style={{paddingLeft: 0}}>타겟팅</ColTitle>
           <Select components={{IndicatorSeparator: () => null}}
                   options={eventType}
                   value={eventType.find(value => value.value === searchCondition.eventType)}
