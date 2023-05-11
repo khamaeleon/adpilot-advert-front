@@ -4,7 +4,7 @@ const ACTION_URL = '/payments/ADVERTISE/';
 const LIST = '/list'
 
 /**
- * 결제 요청
+ * 특정 유저 결제 정보 요청
  * @returns {Promise<null>}
  */
 export async function paymentListRequest(skip, limit, userId, param ) {

@@ -11,9 +11,56 @@ export const PointDetailsDataAtom = atom([])
 /*은행 리스트 테스트 값 */
 export const refundRequestData = {
     bankType: [
-        {key: "1", value: 'ke', label: 'KEB하나은행'},
-        {key: "2", value: 'sc', label: 'SC제일은행'},
-        {key: "3", value: 'kb', label: '국민은행'},
+        {key: "1", value: 'KDB_BANK', label: 'KDB산업은행'},
+        {key: "2", value: 'IBK_BANK', label: 'IBK기업은행'},
+        {key: "3", value: 'KOOKMIN_BANK', label: '국민은행'},
+        {key: "4", value: 'KEB_BANK', label: 'KEB하나은행'},
+        {key: "5", value: 'SUHYUP_BANK', label: '수협'},
+        {key: "6", value: 'NONGHYUP_BANK', label: '농협'},
+        {key: "7", value: 'REGIONAL_NONGHYUP_BANK', label: '농협중앙회'},
+        {key: "8", value: 'WOORI_BANK', label: '우리은행'},
+        {key: "9", value: 'SC_BANK', label: 'SC제일은행'},
+        {key: "10", value: 'SHINHAN_BANK', label: '신한은행'},
+        {key: "11", value: 'CITY_BANK', label: '시티은행'},
+        {key: "12", value: 'DAEGU_BANK', label: '대구은행'},
+        {key: "13", value: 'BUSAN_BANK', label: '부산은행'},
+        {key: "14", value: 'GWANGJU_BANK', label: '광주은행'},
+        {key: "15", value: 'JEJU_BANK', label: '제주은행'},
+        {key: "16", value: 'JEONBUK_BANK', label: '전북은행'},
+        {key: "17", value: 'GYEONGNAM_BANK', label: '경남은행'},
+        {key: "18", value: 'KFCC_BANK', label: '새마을금고'},
+        {key: "19", value: 'SHINHYUP_BANK', label: '신협'},
+        {key: "20", value: 'FSB_BANK', label: '저축은행중앙회'},
+        {key: "21", value: 'NFCF_BANK', label: '산립조합중앙회'},
+        {key: "22", value: 'EPOST_BANK', label: '우체국'},
+        {key: "23", value: 'HANA_BANK', label: '하나은행'},
+        {key: "24", value: 'K_BANK', label: '케이뱅크'},
+        {key: "25", value: 'KAKAO_BANK', label: '카카오뱅크'},
+        {key: "26", value: 'TOSS_BANK', label: '토스뱅크'},
+
+        // 증권사 목록
+        // {key: "28", value: 'KB_SEC', label: '국민은행'},
+        // {key: "29", value: 'KTB_SEC', label: '국민은행'},
+        // {key: "30", value: 'MIRAEASSET_SEC', label: '국민은행'},
+        // {key: "31", value: 'SAMSUNG_SEC', label: '국민은행'},
+        // {key: "32", value: 'KI_SEC', label: '국민은행'},
+        // {key: "33", value: 'NH_SEC', label: '국민은행'},
+        // {key: "34", value: 'KYOBO_SEC', label: '국민은행'},
+        // {key: "35", value: 'HI_SEC', label: '국민은행'},
+        // {key: "36", value: 'HMC_SEC', label: '국민은행'},
+        // {key: "37", value: 'KIWOOM_SEC', label: '국민은행'},
+        // {key: "38", value: 'EBEST_SEC', label: '국민은행'},
+        // {key: "39", value: 'SK_SEC', label: '국민은행'},
+        //
+        // {key: "40", value: 'DAISHIN_SEC', label: '국민은행'},
+        // {key: "41", value: 'HANWHA_SEC', label: '국민은행'},
+        // {key: "42", value: 'HANA_SEC', label: '국민은행'},
+        // {key: "43", value: 'TOSS_SEC', label: '국민은행'},
+        // {key: "44", value: 'SHINHAN_SEC', label: '국민은행'},
+        // {key: "45", value: 'DONGBU_SEC', label: '국민은행'},
+        // {key: "46", value: 'EUGENE_SEC', label: '국민은행'},
+        // {key: "47", value: 'MERITZ_SEC', label: '국민은행'},
+
     ],
     sortType: null
 }
@@ -28,6 +75,7 @@ export const PaymentDetailsColumns = [
         header: '신청 일시',
         defaultFlex: 1,
         resizable: false,
+        textAlign: 'center',
         render: ({ value })=> {
             const dateString = value;
             const dateObject = new Date(dateString.split(' ')[0]);
@@ -43,6 +91,7 @@ export const PaymentDetailsColumns = [
         header: '신청 상태',
         defaultFlex: 1,
         resizable: false,
+        textAlign: 'center',
         render: ({ value })=> {
             let valueType = {
                 REGISTRATION_TRADE: { label: '결제 신청', color: 'blue' },
@@ -61,6 +110,7 @@ export const PaymentDetailsColumns = [
         header: '결제/신청 방식',
         defaultFlex: 1,
         resizable: false,
+        textAlign: 'center',
         render: ({ value })=> {
             let valueType = {
                 CARD: '카드 결제',
@@ -81,18 +131,21 @@ export const PaymentDetailsColumns = [
         header: '결제 수단(카드)',
         defaultFlex: 1,
         resizable: false,
+        textAlign: 'center',
     },
     {
         name: 'bankType',
         header: '결제 수단(계좌번호)',
         defaultFlex: 1,
         resizable: false,
+        textAlign: 'center',
     },
     {
         name: 'amount',
         header: '결제/신청 금액',
         defaultFlex: 1,
         resizable: false,
+        textAlign: 'center',
         render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
     },
 ]

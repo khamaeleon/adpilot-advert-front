@@ -29,6 +29,7 @@ import {decimalFormat} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
 import Table from "../../components/table";
 import {paymentListRequest} from "../../services/payment/user/RetrievePaymentByServiceUserAxios";
+import {retrieveUserRefundInfoRequestAxios} from "../../services/payment/user/RetrieveUserRefundInfoRequestAxios";
 import {selUserInfo} from "../../services/Platform/ManageUserAxios";
 import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 import {tokenResultAtom} from "../login/entity/Common";
@@ -39,7 +40,7 @@ import {
   PaymentDetailsColumns,
   PaymentDetailsDataAtom,
   PointDetailsColumns,
-  PointDetailsDataAtom
+  PointDetailsDataAtom, refundRequestData
 } from "./entity/PaymentUser";
 
 export function RefundRequestTable(props) {
@@ -47,24 +48,24 @@ export function RefundRequestTable(props) {
     <RefundInformation>
       <table style={{margin:"0"}}>
         <thead>
-        <tr>
-          <th>은행</th>
-          <th>계좌번호</th>
-          <th>예금주</th>
-        </tr>
+          <tr>
+            <th>은행</th>
+            <th>계좌번호</th>
+            <th>예금주</th>
+          </tr>
         </thead>
         <tbody>
-        <tr>
-          {props.refundData.map((item, key) => {
-            return(
-              <td
-                key={key}
-              >
-                {item}
-              </td>
-            )
-          })}
-        </tr>
+          <tr>
+            {Object.values(props.refundData).map((item, key) => {
+              return(
+                <td
+                  key={key}
+                >
+                  {item}
+                </td>
+              )
+            })}
+          </tr>
         </tbody>
       </table>
     </RefundInformation>
@@ -92,13 +93,12 @@ function PaymentManageUser(props) {
   const [requestAmountValue, setRequestAmountValue] = useState(0) // 충전 금액
 
   //[d] 환불 입력 정보 조회해서 여기다 담기
-  const [refundData, setRefundData] = useState([])
-  // const [refundData, setRefundData] = useState(["테스트1","테스트2","테스트3"]) // 환불 정보
+  const [refundData, setRefundData] = useState({})
 
   //[d] 그리드 데이터
   const [pageSize, ] = useState(10); // 한 페이지 보여줄 데이터
   const [currentPage, ] = useState(1); // 현재 페이지
-  const gridStyle = {minHeight: 510}
+  const gridStyle = {minHeight: 510, textAlign: 'center'}
 
   //[d] 결제 내역 데이터
   function fetchPaymentDetails(props = {}) {
@@ -106,8 +106,8 @@ function PaymentManageUser(props) {
     const requestData = {
       pageSize: limit,
       currentPage: skip / limit + 1,
-      searchStartDate: getThisMonth().startDay,
-      searchEndDate: getToDay(),
+      searchStartDate: startDate,
+      searchEndDate: endDate,
     };
     return paymentListRequest(skip, limit, tokenUserInfo.id, requestData)
       .then((response) => {
@@ -129,9 +129,29 @@ function PaymentManageUser(props) {
       });
     });
   }
+  //[d] 환불 정보 조회
+  const retrieveUserRefundInfo = async() => {
+    await retrieveUserRefundInfoRequestAxios (tokenUserInfo.id)
+      .then(response => {
+        // 성공적인 응답 처리
+        let data = response;
+        const updateValue = (data, refundRequestData) => {
+          const match = refundRequestData.bankType.find(option => option.value === data.refundBankType);
+          if (match) {
+            data.refundBankType = match.label
+          }
+        }
+        updateValue(data, refundRequestData);
+        setRefundData(data)
+      })
+      .catch(error => {
+        // 실패한 응답 처리
+        console.error("실패 응답 처리",error);
+      });
+  }
   //[d] 환불 정보 없는 상태에서 환불 신청 시 경고문
   const handleRegisterRefund = () => {
-    if(refundData.length === 0){
+    if(refundData.refundBankType === null){
       toast("환불 정보를 등록해 주세요.")
     } else {
       console.log("환불 정보", refundData)
@@ -139,11 +159,12 @@ function PaymentManageUser(props) {
   }
   //[d] 광고비 충전 감지
   const handlePaymentDetailsReceived = () => {
-    // AdCharge 에서 특정 행위를 실행하면
+    // AdCharge, 환불 정보 에서 특정 행위를 실행하면
     // 부모 컴포넌트의 상태를 업데이트 한다!!
     // 그럼 fetchPaymentDetails 내부에서 totalInfo 값을 업데이트 하고
     // 아래 dataSource 의존성 배열 내부 값이 변경 되면서 그리드도 다시 그려줍니다.
     fetchPaymentDetails();
+    retrieveUserRefundInfo();
   }
   //[d] 최초 화면 접근시 유저 상태이면 결제내역 데이터 조회 아니면 로그인
   useEffect(() => {
@@ -151,11 +172,13 @@ function PaymentManageUser(props) {
       // 광고주 결제 현황 조회
       fetchPaymentDetails();
       // 광고주 포인트 현황 조회
+      // 환불 정보 조회
+      retrieveUserRefundInfo();
     } else {
       // 새로고침 시 메인으로..UserDetail.js useEffect 동일하게 NORMAL 아닐 떄 체크하는 부분 사용
       fetchAccountInfo();
     }
-  }, [searchCondition]);
+  }, [dateRange]);
   //[d] 차트 데이터에서 역으로 변동값 감지해서 다시 던저주기 paging 처리 관련...
   const dataSource = useCallback(fetchPaymentDetails, [totalInfo]);
 
@@ -183,7 +206,7 @@ function PaymentManageUser(props) {
                       setRequestAmountValue={setRequestAmountValue}
                       onPaymentDetailsReceived={handlePaymentDetailsReceived}
                     />
-                    {refundData.length === 0?
+                    {refundData.refundBankType === null?
                       <DefaultButton onClick={handleRegisterRefund} style={{background:"#fff", color:"#777"}}>환불 신청</DefaultButton>
                       :
                       <RefundRequestButton title={'환불 신청'} modalInfo={'USER'} onSave={null} onSubmit={null} refundData={refundData}/>
@@ -203,19 +226,19 @@ function PaymentManageUser(props) {
               <ColSpan2 column={true} style={{padding:"0", gap:"0"}}>
                 <RowSpan style={{width:"100%", margin:"0"}}>
                   <ColSpan2 style={{alignItems:"baseline", marginBottom:"15px"}}>환불 정보</ColSpan2>
-                  {refundData.length === 0?
+                  {refundData.refundBankType === null?
                     <ColSpan2 style={{justifyContent:"right"}}>
-                      <RegisterRefundInformationButton title={'등록'} modalInfo={'USER'} onSave={null} onSubmit={null} refundData={refundData} setRefundData={setRefundData}/>
+                      <RegisterRefundInformationButton onPaymentDetailsReceived={handlePaymentDetailsReceived} title={'등록'} modalInfo={'USER'} onSave={null} onSubmit={null} refundData={refundData} setRefundData={setRefundData}/>
                     </ColSpan2>
                     :
                     <ColSpan2 style={{justifyContent:"right", width:"70px", height:"15px"}}>
-                      <RegisterRefundInformationButton title={''} modalInfo={'USER'} onSave={null} onSubmit={null} refundData={refundData} setRefundData={setRefundData}/>
+                      <RegisterRefundInformationButton onPaymentDetailsReceived={handlePaymentDetailsReceived} title={''} modalInfo={'USER'} onSave={null} onSubmit={null} refundData={refundData} setRefundData={setRefundData}/>
                     </ColSpan2>
                   }
                 </RowSpan>
                 <RowSpan>
                   <ColSpan4>
-                    {refundData.length === 0?
+                    {refundData.refundBankType === null?
                       <AdvertisingCostStatus style={{marginTop: "15px"}}>
                         <small>등록된 환불 정보가 없습니다. 환불 정보를 등록해주세요.</small>
                       </AdvertisingCostStatus>
@@ -253,8 +276,7 @@ function PaymentManageUser(props) {
           <ColSpan4 style={{display:'block'}}>
             <BoardSearchResultTitle style={{alignItems:"end", paddingBottom: "10px"}}>
               <div>
-                {totalInfo &&
-                  <TotalCount><span/>총 <span>{totalInfo}</span> 건의 결제 내역</TotalCount>}
+                <TotalCount><span/>총 <span>{totalInfo}</span> 건의 결제 내역</TotalCount>
               </div>
               <div>
                 <SaveExcelButton>엑셀 저장</SaveExcelButton>

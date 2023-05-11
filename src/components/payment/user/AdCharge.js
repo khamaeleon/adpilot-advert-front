@@ -85,9 +85,6 @@ function AdChargeModal (props) {
         .then(response => {
           // 성공적인 응답 처리
           let data = response;
-          console.log("성공 응답 처리",data);
-          // setModal({isShow: false});
-          // iframe 화면 띄우는 부분
           const newWindow = window.open('', '_blank', 'width=500,height=500');
           const iframe = document.createElement('iframe');
           iframe.src = 'https://testapi.co.kr?authenticationId=01023012301';
