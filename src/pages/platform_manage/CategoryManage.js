@@ -48,7 +48,7 @@ export function CategoryManage() {
    * 카테고리 조회
    */
   useEffect(() => {
-    const fetchData = retrieveTopLevelCategory().then(response => {
+    const fetchData = retrieveTopLevelCategory(searchKeyword).then(response => {
       setTopLevelCategoryList(response)
     })
   }, [refresh]);
@@ -58,7 +58,7 @@ export function CategoryManage() {
    */
   const handleSelectCategory = async (code) => {
     setSelectCategory(code)
-    const fetData = await retrieveCategoryByParentCode(code).then(response => {
+    const fetData = await retrieveCategoryByParentCode(code, searchKeyword).then(response => {
       setCategoryList(response)
     })
   }

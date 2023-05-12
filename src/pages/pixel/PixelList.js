@@ -84,7 +84,6 @@ function PixelAdd(props){
     defaultValues: pixelInfoListState
   })
   useEffect(() => {
-    console.log(data)
     retrieveTopLevelCategoryKeyValue().then(response => {
       setTopLevelCategoryList(response)
     })
@@ -258,7 +257,7 @@ function PixelAdd(props){
                   <Select options={topLevelCategoryList}
                           placeholder={'카테고리선택 선택'}
                           {...field}
-                          value={pixelInfoListState.mainCategoryCode !== '' ? topLevelCategoryList.find(value => value.value === pixelInfoListState.mainCategoryCode) : ''}
+                          value={pixelInfoListState.mainCategoryCode !== '' ? topLevelCategoryList?.find(value => value.value === pixelInfoListState.mainCategoryCode) : ''}
                           onChange={handleSelectTopCategory}
                           styles={selectStyle}
                   />
@@ -280,7 +279,7 @@ function PixelAdd(props){
                   <Select options={rowLevelCategoryList}
                           placeholder={'서브 카테고리 선택'}
                           {...field}
-                          value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
+                          value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList?.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
                           onChange={handleSelectRowCategory}
                           styles={selectStyle}
                   />
