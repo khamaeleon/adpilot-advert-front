@@ -7,6 +7,7 @@ import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
 import {toast, ToastContainer} from "react-toastify";
 import {PaymentCondition} from "../../components/Platform/Condition";
+import {paymentAllListRequest} from "../../services/payment/admin/PaymentAllListRequestAxios"
 import {
   paymentColumns,
   paymentDataAtom,
@@ -14,11 +15,23 @@ import {
   searchPaymentType,
   updatePaymentStatus
 } from "./entity/Payment";
+import moment from "moment/moment";
+import {getThisMonth, getToDay} from "../../common/DateUtils";
+
 
 function PaymentManage() {
+  const [totalInfo, setTotalInfo] = useState(0)
   const [paymentDataState, setPaymentDataState] = useAtom(paymentDataAtom)
   const [searchPaymentParamsState, setSearchPaymentParamsState] = useAtom(searchPaymentParams)
   const [updatePaymentStatusParams, setUpdatePaymentStatusParams] = useState(updatePaymentStatus)
+
+  //[d] 날짜
+  const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
+  const [startDate, endDate] = dateRange;
+
+  //[d] 그리드 데이터
+  const [pageSize, ] = useState(10); // 한 페이지 보여줄 데이터
+  const [currentPage, ] = useState(1); // 현재 페이지
 
   useEffect(() => {
     handlePaymentTableData()
@@ -36,9 +49,47 @@ function PaymentManage() {
     //   return data
     // })
     // return fetchData
+
     handlePaymentStatus('')
     setPaymentStatusSelected([])
     setCheckboxAllSelect(false)
+
+    const requestData = {
+      pageSize: pageSize,
+      currentPage: currentPage,
+      searchStartDate: moment(startDate).format('YYYY-MM-DD'),
+      searchEndDate: moment(endDate).format('YYYY-MM-DD'),
+    };
+
+
+    await paymentAllListRequest ( requestData )
+      .then(response => {
+        // 성공적인 응답 처리
+        if (response !== null) {
+          const { totalCount, rows: data } = response;
+          console.log(response, data)
+          setTotalInfo(totalCount);
+          setPaymentDataState(data)
+        }else{
+          console.error("실패 응답 처리");
+        }
+      })
+      .catch(error => {
+        // 실패한 응답 처리
+        console.error("실패 응답 처리",error);
+      });
+
+    // await paymentAllListRequest ( requestData )
+    //   .then((response) => {
+    //     if (response !== null) {
+    //       const { totalCount, rows: data } = response;
+    //       console.log(response, data)
+    //       setTotalInfo(totalCount);
+    //       setPaymentDataState(data)
+    //     }else{
+    //       console.error("실패 응답 처리");
+    //     }
+    //   });
   }
 
   /**
@@ -137,15 +188,18 @@ function PaymentManage() {
         <PaymentCondition searchType={searchPaymentType} searchCondition={searchPaymentParamsState} setSearchCondition={setSearchPaymentParamsState} handleTableData={handlePaymentTableData} />
         <BoardTableContainer>
           <Table columns={paymentColumns}
-                 data={paymentDataAtom}
+                 // data={paymentDataAtom} 아톰 사용시 호출 못함?? 확인...
+                 data={paymentDataState}
                  idProperty="id"
+                 totalCount={[totalInfo, '결제 현황']}
                  selected={checkboxAllSelect}
                  checkboxColumn={checkboxColumn} //체크박스 커스텀
                  onSelectionChange={paymentStatusSelected} // 선택한 체크박스 정보 가져오기
                  emptyText={'결재 현황 내역이 없습니다.'}
                  showHoverRows={false}
                  dataCallback={dataCallback}
-                 />
+                 limit={10}
+          />
         </BoardTableContainer>
       </Board>
       <ToastContainer position="top-center"
@@ -163,4 +217,5 @@ function PaymentManage() {
 }
 
 export default PaymentManage
+
 
