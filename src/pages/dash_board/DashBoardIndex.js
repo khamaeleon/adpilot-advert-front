@@ -124,7 +124,7 @@ function ChartComponent(props) {
         break;
       case 'cpc':
         const caseValueB = costAmountSum;
-        calc = caseValueB !== 0 ? clickCountSum / caseValueB : 0;
+        calc = caseValueB !== 0 ? caseValueB / clickCountSum  : 0;
         break;
       case 'conversionRate':
         const caseValueC = clickCountSum;
