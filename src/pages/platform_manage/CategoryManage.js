@@ -51,12 +51,9 @@ export function CategoryManage() {
     setSearchKeyword('')
     retrieveTopLevelAllCategory().then(response => {
       setTopLevelCategoryList(response)
+      if(response.length !== 0) handleSelectCategory(response[category ? response.length -1 : 0].code)
     })
-    if(selectCategory != undefined && selectCategory != ''){
-      retrieveCategoryByParentCode(selectCategory, searchKeyword).then(response => {
-        setCategoryList(response)
-      })
-    }
+
   }, [refresh]);
   /**
    * 카테고리 선택
@@ -132,7 +129,11 @@ export function CategoryManage() {
     retrieveTopLevelCategory(searchKeyword).then(response => {
       setTopLevelCategoryList(response)
 
-      if(response.length !== 0) handleSelectCategory(response[0]?.code)
+      if(response.length !== 0) {
+        handleSelectCategory(response[0]?.code)
+      } else {
+        setCategoryList([])
+      }
     })
   }
 
