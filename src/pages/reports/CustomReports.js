@@ -39,6 +39,10 @@ import {useNavigate} from "react-router-dom";
 import {dateFormat} from "../../common/StringUtils";
 import {reportsInfoAtom} from "../../components/aside/entity";
 import {deviceType, productType} from "../dash_board/entity/Common";
+import {
+  deleteCustomReportsAdminAxios,
+  retrieveCustomReportsAdminDetail
+} from "../../services/reports/ReportsAdminAxios";
 
 function weekNumberByMonth(dateFormat) {
   const inputDate = new Date(dateFormat);
@@ -107,6 +111,11 @@ function weekNumberByMonth(dateFormat) {
 
 
 const defaultColumn = {
+  'default':{
+    name: 'statisticsDate',
+    header: '일별',
+    defaultVisible: false,
+  },
   'BY_DAILY':{
     name: 'statisticsDate',
     header: '일별',
@@ -135,61 +144,61 @@ const defaultColumn = {
   'clickRate': {
     render: (props) => {
       const clickRate = (props.data.validClickCount / props.data.exposureCount) * 100
-      return <span>{clickRate.toFixed(2)}%</span>
+      return <span>{!isNaN(clickRate) ? clickRate.toFixed(2) : 0}%</span>
     }
   },
   'cpc': {
     render: (props) => {
       const cpc = props.data.costAmount / props.data.validClickCount
-      return <span>{cpc.toFixed(2)}</span>
+      return <span>{!isNaN(cpc) ? cpc.toFixed(2) : 0}</span>
     }
   },
   'conversionRate': {
     render: (props) => {
       const conversionRate = (props.data.conversionCount / props.data.totalClickCount) * 100
-      return <span>{conversionRate.toFixed(2)} %</span>
+      return <span>{!isNaN(conversionRate) ? conversionRate.toFixed(2) : 0} %</span>
     }
   },
   'conversionPrice': {
     render: (props) => {
       const costPerConversion = props.data.costAmount / props.data.conversionCount
-      return <span>{costPerConversion.toFixed(2)}</span>
+      return <span>{!isNaN(costPerConversion) ? costPerConversion.toFixed(2) : 0}</span>
     }
   },
   'amountPurchasedAvg':{
     render: (props) => {
       const amountPurchased = (props.data.costAmount / props.data.conversionCount)
-      return <span>{amountPurchased.toFixed(2)}</span>
+      return <span>{!isNaN(amountPurchased) ? amountPurchased.toFixed(2) : 0}</span>
     }
   },
   'sessionConversionRoas': {
     render: (props) => {
       const sessionRoas = (props.data.sessionConversionAmount  / props.data.costAmount) * 100
-      return <span>{sessionRoas.toFixed(2)}</span>
+      return <span>{!isNaN(sessionRoas) ? sessionRoas.toFixed(2) : 0}</span>
     }
   },
   'directConversionRoas': {
     render: (props) => {
       const directRoas = (props.data.directConversionAmount  / props.data.costAmount) * 100
-      return <span>{directRoas.toFixed(2)}</span>
+      return <span>{!isNaN(directRoas) ? directRoas.toFixed(2) : 0}</span>
     }
   },
   'roas': {
     render: (props) => {
       const roas = ((props.data.sessionConversionAmount + props.data.exposureConversionAmount + props.data.directConversionAmount)/ props.data.costAmount) * 100
-      return <span>{roas.toFixed(2)}</span>
+      return <span>{!isNaN(roas) ? roas.toFixed(2) : 0}</span>
     }
   },
   'exposureConversionRoas': {
     render: (props) => {
       const exposureRoas = (props.data.exposureConversionAmount  / props.data.costAmount) * 100
-      return <span>{exposureRoas.toFixed(2)}</span>
+      return <span>{!isNaN(exposureRoas) ? exposureRoas.toFixed(2) : 0}</span>
     }
   },
   'eCpm': {
     render: (props) => {
       const ecpm = (props.data.costAmount / props.data.exposureCount) * 1000
-      return <span>{ecpm.toFixed(2)}</span>
+      return <span>{!isNaN(ecpm) ? ecpm.toFixed(2) : 0}</span>
     }
   },
 }
@@ -224,8 +233,22 @@ export default function CustomReports() {
     if(reportsInfo.id === null) {
       navigate('/board/reports')
     }
-      retrieveCustomReportsDetail(tokenResult.id, reportsInfo.id, params).then(response => {
+    if(tokenResult.role !== "NORMAL") {
+      retrieveCustomReportsAdminDetail(tokenResult.id, reportsInfo.id, params).then(response => {
         console.log(response)
+        if(response){
+          let newObject = [defaultColumn[reportsInfo.groupBy]].concat(response.headers)
+          newObject.map((item, key) => {
+            console.log(item.name)
+            Object.assign(newObject[key], defaultColumn[item.name])
+          })
+          setCampaignColumn(newObject)
+          setCampaignData(response.pagingCommonResponse.rows)
+          setReportInfo(response.adminSetting)
+        }
+      })
+    } else {
+      retrieveCustomReportsDetail(tokenResult.id, reportsInfo.id, params).then(response => {
         let newObject = [defaultColumn[reportsInfo.groupBy]].concat(response.headers)
         console.log(newObject)
         newObject.map((item, key) => {
@@ -233,9 +256,10 @@ export default function CustomReports() {
           Object.assign(newObject[key], defaultColumn[item.name])
         })
         setCampaignColumn(newObject)
-        setCampaignData(response.reportStatistics.content)
+        setCampaignData(response.pagingCommonResponse.rows)
         setReportInfo(response.userSetting)
       })
+    }
   }, [tokenResult, reportsInfo.id]);
 
   /**
@@ -315,29 +339,47 @@ export default function CustomReports() {
 
   const handleSearchReports = () => {
     console.log(searchCondition)
-    retrieveCustomReportsDetail(tokenResult.id, reportsInfo.id, searchCondition).then(response => {
-      setCampaignData(response.reportStatistics.content)
-    })
+    if(tokenResult.role !== "NORMAL") {
+      retrieveCustomReportsAdminDetail(tokenResult.id, reportsInfo.id, searchCondition).then(response => {
+        setCampaignData(response.pagingCommonResponse.rows)
+      })
+    }else {
+      retrieveCustomReportsDetail(tokenResult.id, reportsInfo.id, searchCondition).then(response => {
+        setCampaignData(response.pagingCommonResponse.rows)
+      })
+    }
+
   }
 
   const handleDeleteReport = async () => {
-    await deleteCustomReportsAxios({userId:tokenResult.id, userReportSettingId:reportsInfo.id}).then(()=>{
-      setReportsInfo({
-        id:null,
-        groupBy: null
+    if(tokenResult.role === 'NORMAL') {
+      await deleteCustomReportsAxios({userId:tokenResult.id, userReportSettingId:reportsInfo.id}).then(()=>{
+        setReportsInfo({
+          id:null,
+          groupBy: null
+        })
+        navigate('/board/reports')
       })
-      navigate('/board/reports')
-    })
+    } else {
+      await deleteCustomReportsAdminAxios({email:tokenResult.id, adminReportSettingId:reportsInfo.id}).then(()=>{
+        setReportsInfo({
+          id:null,
+          groupBy: null
+        })
+        navigate('/board/reports')
+      })
+    }
+
   }
 
   return(
     <Board>
-      <BoardHeader>{`${tokenResult.name}_${reportInfo.reportName}`}</BoardHeader>
+      <BoardHeader>{`${reportInfo.adverName !== null ? reportInfo.adverName : '관리자'} 보고서`}</BoardHeader>
       <BoardSearchDetail>
         <RowSpan box={true} column={true}>
           <RowSpan>
             <ColSpan1 style={{borderBottom: '1px solid #ddd', justifyContent: "space-between"}}>
-              <div style={{padding: 10}}>{`${tokenResult.name}_${reportInfo.reportName}`}</div>
+              <div style={{padding: 10}}>{`${reportInfo.reportName}`}</div>
               <DeleteButton style={{padding: 8}} onClick={handleDeleteReport}/>
             </ColSpan1>
           </RowSpan>

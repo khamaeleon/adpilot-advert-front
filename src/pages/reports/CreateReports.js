@@ -27,6 +27,7 @@ import {useNavigate} from "react-router-dom";
 import {reportsInfoAtom} from "../../components/aside/entity";
 import {selAdverPixelDetailList} from "../../services/header/ManagePixelAxios";
 import {selTemporaryList} from "../../services/campaign/InfoAxios";
+import {createCustomReportsAdminAxios, retrieveCustomReportsAdminList} from "../../services/reports/ReportsAdminAxios";
 
 
 const columnList= {
@@ -72,21 +73,26 @@ export default function CreateReports() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    console.log(tokenResult)
-    setCreativeInfo({
-      ...creativeInfo,
-      id: tokenResult.id
-    })
+    console.log(creativeInfo)
+    if(tokenResult.role !== 'NORMAL') {
+      setCreativeInfo({
+        ...creativeInfo,
+        email: tokenResult.id
+      })
+    } else {
+      setCreativeInfo({
+        ...creativeInfo,
+        id: tokenResult.id
+      })
+    }
+
     setReportsInfo({
       id: null,
       groupBy: null
     })
   }, []);
   const handleSearchAdvertiser = (data) => {
-    console.log({
-      userId: data.id,
-      username: data.username
-    })
+    console.log(data)
     setCreativeInfo(data)
     console.log(data)
   }
@@ -131,18 +137,16 @@ export default function CreateReports() {
         const newColumnData = columns.filter(datum => !["BY_ADVERTISE","BY_CAMPAIGN","BY_PRODUCT","BY_EVENT"].includes(datum.name))
         setColumns(newColumnData)
       } else {
-        if(scopes.filter(datum => datum === item).length === 0) {
-          setScopes(prev => [...prev, item])
-        } else {
-          const newScopesData = columns.filter(datum => datum !== item)
-          setScopes(newScopesData)
-        }
         if(columns.filter(datum => datum.name === item).length === 0){
           setColumns(prev => [...prev, data])
+          setScopes(prev => [...prev, data.name])
         } else {
           const newColumnData = columns.filter(datum => datum.name !== item)
+          const newScopesData = columns.filter(datum => datum !== item)
           setColumns(newColumnData)
+          setScopes(newScopesData)
         }
+        console.log(scopes, item)
       }
     }
   }
@@ -163,7 +167,7 @@ export default function CreateReports() {
     } else {
       if(columns.filter(datum => datum.name === item).length === 0){
         setColumns(prev => [...prev, data])
-        setDataItems(prev => [...prev, data])
+        setDataItems(prev => [...prev, data.name])
       } else {
         const newColumnData = columns.filter(datum => datum.name !== item)
         setColumns(newColumnData)
@@ -181,34 +185,56 @@ export default function CreateReports() {
     setReportName(e.target.value)
   }
   const handleCreateReports = async () => {
+    let params;
     if (period === 'NONE' && scopes.length === 0) {
-      toast.warning("기간항목과 광고정보항목을 선택해야 합니다.")
-    } else if(columns.length < 3){
+      toast.warning("기간별 항목과 광고정보항목을 중 하나는 필수로 선택해야 합니다.")
+    } else if(columns.length < 2){
       toast("보고서 항목을 선택해주세요")
-    } else if(creativeInfo.id === undefined){
-      await trigger("creativeName")
-      toast("광고주를 검색해주세요")
     } else if(dataItems.length === 0){
       toast('데이터 항목을 선택해주세요.')
     } else if(reportName === ""){
       await trigger("reportName")
       toast("보고서 명을 작성해주세요")
     } else {
-      let params = {
-        "userId" : creativeInfo.id,
-        "name": creativeInfo.name,
-        "reportName" : reportName,
-        "groupByPeriod" : period,
-        "groupByScopes" : scopes,
-        "columns" :  dataItems.map(item => item.name)
-      }
-      createCustomReportsAxios(params).then(() => {
-        retrieveCustomReportsList(tokenResult.id).then(response => {
-          const data  = response[response.length-1]
-          setReportsInfo({id: data.id, groupBy: data.groupByPeriod})
-          navigate('/board/customReports')
+
+      if(tokenResult.role !== "NORMAL") {
+        params = {
+          "email": tokenResult.id,
+          "reportName" : reportName,
+          "groupByPeriod" : period,
+          "groupByScopes" : scopes.length !== 0 ? scopes : ['NONE'],
+          "columns" :  dataItems.map(item => item.name)
+        }
+
+        if(creativeInfo.id !== undefined) {
+          params.userId = creativeInfo.id
+          params.adverName = creativeInfo.adverName
+        }
+        createCustomReportsAdminAxios(params).then(() => {
+          retrieveCustomReportsAdminList(tokenResult.id).then(response => {
+            const data  = response[response.length-1]
+            setReportsInfo({id: data.id, groupBy: data.groupByPeriod})
+            navigate('/board/customReports')
+          })
         })
-      })
+      } else {
+        params = {
+          "userId" : creativeInfo.id,
+          "name": creativeInfo.name,
+          "reportName" : reportName,
+          "groupByPeriod" : period,
+          "groupByScopes" : scopes.length !== 0 ? scopes : ['NONE'],
+          "columns" :  dataItems.map(item => item.name)
+        }
+        createCustomReportsAxios(params).then(() => {
+          retrieveCustomReportsList(tokenResult.id).then(response => {
+            const data  = response[response.length-1]
+            setReportsInfo({id: data.id, groupBy: data.groupByPeriod})
+            navigate('/board/customReports')
+          })
+        })
+      }
+
     }
   }
 
@@ -234,6 +260,7 @@ export default function CreateReports() {
                     readOnly
                   />
                   <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
+                  <small>* 광고주 설정이 없을 경우 전체 보고서가 생성됩니다.</small>
                 </>
               }
               {tokenResult.role === 'NORMAL' &&
@@ -289,7 +316,7 @@ export default function CreateReports() {
                     active={includeItem('BY_EVENT')}
                     onClick={()=>handleAddScopesItem('BY_EVENT')}>이벤트 명</DefaultItemButton>
                   <DefaultItemButton
-                    active={scopes.length === 0}
+                    active={columns.length === 0}
                     onClick={()=>handleAddScopesItem('NONE_SCOPE')}>설정안함</DefaultItemButton>
                 </DefaultItemContainer>
               </Row>
