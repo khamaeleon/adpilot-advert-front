@@ -111,11 +111,6 @@ function weekNumberByMonth(dateFormat) {
 
 
 const defaultColumn = {
-  'default':{
-    name: 'statisticsDate',
-    header: '일별',
-    defaultVisible: false,
-  },
   'BY_DAILY':{
     name: 'statisticsDate',
     header: '일별',
@@ -237,9 +232,8 @@ export default function CustomReports() {
       retrieveCustomReportsAdminDetail(tokenResult.id, reportsInfo.id, params).then(response => {
         console.log(response)
         if(response){
-          let newObject = [defaultColumn[reportsInfo.groupBy]].concat(response.headers)
+          let newObject = response.adminSetting.groupByPeriod !== 'NONE' ? [defaultColumn[reportsInfo.groupBy]].concat(response.headers) : [].concat(response.headers)
           newObject.map((item, key) => {
-            console.log(item.name)
             Object.assign(newObject[key], defaultColumn[item.name])
           })
           setCampaignColumn(newObject)
@@ -249,15 +243,16 @@ export default function CustomReports() {
       })
     } else {
       retrieveCustomReportsDetail(tokenResult.id, reportsInfo.id, params).then(response => {
-        let newObject = [defaultColumn[reportsInfo.groupBy]].concat(response.headers)
-        console.log(newObject)
+        console.log(response)
+
+        let newObject =  response.userSetting.groupByPeriod !== 'NONE' ? [defaultColumn[reportsInfo.groupBy]].concat(response.headers) : [].concat(response.headers)
         newObject.map((item, key) => {
-          console.log(item.name)
           Object.assign(newObject[key], defaultColumn[item.name])
         })
         setCampaignColumn(newObject)
         setCampaignData(response.pagingCommonResponse.rows)
         setReportInfo(response.userSetting)
+        console.log(newObject)
       })
     }
   }, [tokenResult, reportsInfo.id]);
@@ -369,12 +364,11 @@ export default function CustomReports() {
         navigate('/board/reports')
       })
     }
-
   }
 
   return(
     <Board>
-      <BoardHeader>{`${reportInfo.adverName !== null ? reportInfo.adverName : '관리자'} 보고서`}</BoardHeader>
+      <BoardHeader>{`${tokenResult.role !== 'NORMAL' ? reportInfo.adverName !== null ? reportInfo.adverName: '어드민' : tokenResult.name} 보고서`}</BoardHeader>
       <BoardSearchDetail>
         <RowSpan box={true} column={true}>
           <RowSpan>

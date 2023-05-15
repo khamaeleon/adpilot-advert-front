@@ -85,12 +85,15 @@ export default function CreateReports() {
         id: tokenResult.id
       })
     }
-
     setReportsInfo({
       id: null,
       groupBy: null
     })
   }, []);
+
+  useEffect(()=>{
+    console.log(columns)
+  },[columns])
   const handleSearchAdvertiser = (data) => {
     console.log(data)
     setCreativeInfo(data)
@@ -108,14 +111,14 @@ export default function CreateReports() {
       draggable: false,
     }
     if(item === 'NONE') {
-      setPeriod(item)
-      setColumns([])
+      setPeriod('NONE')
       setScopes([])
+      setColumns([])
     } else if(scopes.length === 0 && item === 'NONE') {
       toast.warning("기간 광고정보 중 하나는 선택해야합니다.")
     } else {
-      setColumns([data])
       setPeriod(item)
+      setColumns([data])
     }
   }
 
@@ -129,24 +132,20 @@ export default function CreateReports() {
       showColumnMenuTool: false,
       draggable: false,
     }
-    if(item === 'NONE_SCOPE' && period === 'NONE') {
-      toast.warning("기간 광고정보 중 하나는 선택해야합니다.")
+    console.log(item)
+    if(item === 'NONE') {
+      setScopes([])
+      setPeriod('NONE')
+      setColumns([])
     } else {
-      if(item === 'NONE_SCOPE') {
-        setScopes([])
-        const newColumnData = columns.filter(datum => !["BY_ADVERTISE","BY_CAMPAIGN","BY_PRODUCT","BY_EVENT"].includes(datum.name))
-        setColumns(newColumnData)
+      if(columns.filter(datum => datum.name === item).length === 0){
+        setScopes(prev => [...prev, item])
+        setColumns(prev => [...prev, data])
       } else {
-        if(columns.filter(datum => datum.name === item).length === 0){
-          setColumns(prev => [...prev, data])
-          setScopes(prev => [...prev, data.name])
-        } else {
-          const newColumnData = columns.filter(datum => datum.name !== item)
-          const newScopesData = columns.filter(datum => datum !== item)
-          setColumns(newColumnData)
-          setScopes(newScopesData)
-        }
-        console.log(scopes, item)
+        const newScopesData = scopes.filter(datum => datum !== item)
+        const newColumnData = columns.filter(datum => datum.name !== data.name)
+        setScopes(newScopesData)
+        setColumns(newColumnData)
       }
     }
   }
@@ -162,9 +161,8 @@ export default function CreateReports() {
     }
     if(scopes.length === 0 && period === 'NONE') {
       toast.warning("기간항목과 광고정보항목을 선택해야 합니다.")
-    } else if(scopes.length === 0) {
-      toast.warning("광고 정보 항목을 선택해주세요.")
     } else {
+      console.log(columns)
       if(columns.filter(datum => datum.name === item).length === 0){
         setColumns(prev => [...prev, data])
         setDataItems(prev => [...prev, data.name])
@@ -189,21 +187,20 @@ export default function CreateReports() {
     if (period === 'NONE' && scopes.length === 0) {
       toast.warning("기간별 항목과 광고정보항목을 중 하나는 필수로 선택해야 합니다.")
     } else if(columns.length < 2){
-      toast("보고서 항목을 선택해주세요")
+      toast.warning("보고서 항목을 선택해주세요")
     } else if(dataItems.length === 0){
-      toast('데이터 항목을 선택해주세요.')
+      toast.warning('데이터 항목을 선택해주세요.')
     } else if(reportName === ""){
       await trigger("reportName")
-      toast("보고서 명을 작성해주세요")
+      toast.warning("보고서 명을 작성해주세요")
     } else {
-
       if(tokenResult.role !== "NORMAL") {
         params = {
           "email": tokenResult.id,
           "reportName" : reportName,
           "groupByPeriod" : period,
           "groupByScopes" : scopes.length !== 0 ? scopes : ['NONE'],
-          "columns" :  dataItems.map(item => item.name)
+          "columns" :  dataItems
         }
 
         if(creativeInfo.id !== undefined) {
@@ -220,11 +217,11 @@ export default function CreateReports() {
       } else {
         params = {
           "userId" : creativeInfo.id,
-          "name": creativeInfo.name,
+          "name": tokenResult.name,
           "reportName" : reportName,
           "groupByPeriod" : period,
           "groupByScopes" : scopes.length !== 0 ? scopes : ['NONE'],
-          "columns" :  dataItems.map(item => item.name)
+          "columns" :  dataItems
         }
         createCustomReportsAxios(params).then(() => {
           retrieveCustomReportsList(tokenResult.id).then(response => {
@@ -316,8 +313,8 @@ export default function CreateReports() {
                     active={includeItem('BY_EVENT')}
                     onClick={()=>handleAddScopesItem('BY_EVENT')}>이벤트 명</DefaultItemButton>
                   <DefaultItemButton
-                    active={columns.length === 0}
-                    onClick={()=>handleAddScopesItem('NONE_SCOPE')}>설정안함</DefaultItemButton>
+                    active={scopes.length === 0}
+                    onClick={()=>handleAddScopesItem('NONE')}>설정안함</DefaultItemButton>
                 </DefaultItemContainer>
               </Row>
               <VerticalRule/>
