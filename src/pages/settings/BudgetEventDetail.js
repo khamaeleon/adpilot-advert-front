@@ -2,7 +2,8 @@ import {
   Board,
   BoardHeader,
   BoardSearchDetail,
-  BoardTableContainer, BoardTableCustomContainer,
+  BoardTableContainer,
+  BoardTableCustomContainer,
   CancelButton,
   ColSpan0,
   ColTitle,
@@ -16,21 +17,24 @@ import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
 import SettingAdd from "../../components/common/SettingModal";
-import {modalController} from "../../store";
 import {budgetEventDetailColumns, eventBudgetDetailDataAtom} from "./entity/BudgetEvent";
 import {selBudgetEventList} from "../../services/settings/BudgetEventAxios";
-
 
 function BudgetEventDetail() {
   const [eventBudgetDetailDataState, setEventBudgetDetailDataState] = useAtom(eventBudgetDetailDataAtom)
   const navigate = useNavigate()
-  const [saveTypeState] =useState('create')
-  const {state} =useLocation()
+  const [saveTypeState] = useState('create')
+  const {state} = useLocation()
 
   useEffect(() => {
-    selBudgetEventList(state.id).then(response => {
-      setEventBudgetDetailDataState(response)
-    })
+    if(state !== null && state.id !== undefined){
+      selBudgetEventList(state.id).then(response => {
+        if(response !== null && response.length !==0){
+          setEventBudgetDetailDataState(response)
+        }
+      })
+    }
+
   }, [])
 
   return (
@@ -41,7 +45,7 @@ function BudgetEventDetail() {
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
             <ColSpan0>
               <ColTitle>최근 수정</ColTitle>
-              <div>{dateFormat(eventBudgetDetailDataState !==null && eventBudgetDetailDataState.lastModifiedAt, 'YYYY.MM.DD HH:mm')}</div>
+              <div>{dateFormat(eventBudgetDetailDataState !== null && eventBudgetDetailDataState.lastModifiedAt, 'YYYY.MM.DD HH:mm')}</div>
             </ColSpan0>
           </RowSpan>
           <BoardTableCustomContainer>
@@ -54,13 +58,13 @@ function BudgetEventDetail() {
               </tr>
               </thead>
               {
-                eventBudgetDetailDataState !==null &&
+                eventBudgetDetailDataState !== null &&
                 <tbody>
-                  <tr>
-                    <td>{eventBudgetDetailDataState.adverName}</td>
-                    <td>{eventBudgetDetailDataState.username}</td>
-                    <td>{eventBudgetDetailDataState.managerName}</td>
-                  </tr>
+                <tr>
+                  <td>{eventBudgetDetailDataState.adverName}</td>
+                  <td>{eventBudgetDetailDataState.username}</td>
+                  <td>{eventBudgetDetailDataState.managerName}</td>
+                </tr>
                 </tbody>
               }
             </table>
@@ -71,9 +75,9 @@ function BudgetEventDetail() {
             <SettingAdd title={'추가'} saveType={saveTypeState} data={null} label={'pct'}/>
           </RowSpan>
           <div>
-            총 <span>{eventBudgetDetailDataState !==null && eventBudgetDetailDataState.totalCount}</span>건
+            총 <span>{eventBudgetDetailDataState !== null && eventBudgetDetailDataState.totalCount}</span>건
           </div>
-          {eventBudgetDetailDataState !==null &&
+          {eventBudgetDetailDataState !== null &&
             <Table columns={budgetEventDetailColumns}
                    data={eventBudgetDetailDataState?.budgetEventDtos}
                    showHoverRows={false}
@@ -82,7 +86,7 @@ function BudgetEventDetail() {
           }
         </BoardTableContainer>
         <SubmitContainer>
-          <CancelButton onClick={()=>navigate('/board/settings')}>목록</CancelButton>
+          <CancelButton onClick={() => navigate('/board/settings')}>목록</CancelButton>
         </SubmitContainer>
       </Board>
       <ToastContainer position="top-center"
@@ -98,4 +102,5 @@ function BudgetEventDetail() {
     </>
   )
 }
+
 export default BudgetEventDetail
