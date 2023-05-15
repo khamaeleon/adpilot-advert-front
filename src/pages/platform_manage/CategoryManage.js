@@ -8,7 +8,7 @@ import {
   RowSpan,
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
-import {useAtom} from "jotai/index";
+import {useAtom} from "jotai";
 import {useResetAtom} from "jotai/utils";
 import {
   createNewCategory,
@@ -27,6 +27,7 @@ import {
   SubCategoryBody,
   SubCategoryItem
 } from "./styles/common";
+import {toast, ToastContainer} from "react-toastify";
 
 
 export function CategoryManage() {
@@ -101,21 +102,30 @@ export function CategoryManage() {
    * @returns {Promise<void>}
    */
   const handleCreateCategory = async () => {
-    const fetchData = await createNewCategory(createCategory.category).then(response => {
-      setRefresh(!refresh)
-    }).then(() => resetCategory())
+    if(createCategory.category.name !== '') {
+      const fetchData = await createNewCategory(createCategory.category).then(response => {
+        setRefresh(!refresh)
+      }).then(() => resetCategory())
+    } else {
+      toast.warning('상위 카테고리 명을 입력해주세요')
+    }
+
   }
   /**
    * 카테고리 등록 (서브카테고리)
    * @returns {Promise<void>}
    */
   const handleCreateSubCategory = async () => {
-    const fetchData = await createNewCategory(createCategory.subCategory).then(response => {
-      setRefresh(!refresh)
-    }).then(() => resetCategory())
-    const fetData = await retrieveCategoryByParentCode(selectCategory).then(response => {
-      setCategoryList(response)
-    })
+    if(createCategory.subCategory.name !== '') {
+      const fetchData = await createNewCategory(createCategory.subCategory).then(response => {
+        setRefresh(!refresh)
+      }).then(() => resetCategory())
+      const fetData = await retrieveCategoryByParentCode(selectCategory).then(response => {
+        setCategoryList(response)
+      })
+    } else {
+      toast.warning('하위 카테고리 명를 입력해주세요')
+    }
   }
 
   /**
@@ -123,7 +133,16 @@ export function CategoryManage() {
    * @returns {Promise<void>}
    */
   const handleSearchCategory = async () => {
+    retrieveTopLevelCategory(searchKeyword).then(response => {
+      setTopLevelCategoryList(response)
+      setCategoryList([])
+    })
+  }
 
+  const handleKeyPress = async (e) => {
+    if (e.key === "Enter") {
+      await handleSearchCategory();
+    }
   }
 
   return(
@@ -134,7 +153,7 @@ export function CategoryManage() {
           <RowSpan>
             <ColSpan3/>
             <ColSpan1>
-              <Input value={searchKeyword} onChange={handleChangeSearchCategory} placeholder={'검색'}/>
+              <Input value={searchKeyword} onChange={handleChangeSearchCategory} placeholder={'검색'} onKeyPress={handleKeyPress} />
               <SearchButton onClick={handleSearchCategory}>검색</SearchButton>
             </ColSpan1>
           </RowSpan>
@@ -186,6 +205,7 @@ export function CategoryManage() {
           </SubCategory>
         </CategoryContainer>
       </Board>
+      <ToastContainer/>
     </>
   )
 }
