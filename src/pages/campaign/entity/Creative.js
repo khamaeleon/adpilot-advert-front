@@ -1,6 +1,7 @@
 import {atom} from "jotai/index";
+import {atomWithReset} from "jotai/utils";
 
-export const campaignCreativeAtom = atom(
+export const campaignCreativeAtom = atomWithReset(
   {
     campaignId: '',
     creativeType: 'BANNER',

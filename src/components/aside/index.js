@@ -7,6 +7,7 @@ import {tokenResultAtom} from "../../pages/login/entity/Common";
 import {
   retrieveCustomReportsList
 } from "../../services/reports/ReportsAxios";
+import {retrieveCustomReportsAdminList} from "../../services/reports/ReportsAdminAxios";
 
 function AsideList (props) {
   const {id, mode} = props
@@ -41,6 +42,14 @@ function AsideList (props) {
       retrieveCustomReportsList(tokenUserInfo.id).then(response => {
         setReportLists(response)
       })
+    } else {
+      console.log(tokenUserInfo)
+      if(tokenUserInfo.id !== '') {
+        retrieveCustomReportsAdminList(tokenUserInfo.id).then(response => {
+          setReportLists(response)
+        })
+      }
+
     }
   }, [tokenUserInfo, reportsInfo.id]);
 
@@ -75,7 +84,7 @@ function AsideList (props) {
                       {reportLists.length !== 0 && reportLists.map((list, index) => {
                         return(
                           <div key={index}>
-                            <Link to={`/board/customReports`} onClick={() =>handleChangeReportsInfo(list.id,list.groupByPeriod)} style={list.id === reportsInfo.id ? {color:'#fff'}:null}>{list.reportName}</Link>
+                            <Link to={`/board/customReports`} onClick={() =>handleChangeReportsInfo(list.id,list.groupByPeriod)} style={list.id === reportsInfo.id ? {color:'#fff'}:null}>{list.adverName} {list.reportName}</Link>
                           </div>
                         )
                       })}

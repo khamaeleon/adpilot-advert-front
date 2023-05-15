@@ -1,7 +1,6 @@
 import {atom} from "jotai/index";
-import {Link} from "react-router-dom";
-import {Icon} from "../../../components/table";
 import {decimalFormat} from "../../../common/StringUtils";
+import moment from "moment";
 import React from "react";
 
 
@@ -77,13 +76,8 @@ export const PaymentDetailsColumns = [
         resizable: false,
         textAlign: 'center',
         render: ({ value })=> {
-            const dateString = value;
-            const dateObject = new Date(dateString.split(' ')[0]);
-            const year = dateObject.getFullYear();
-            const month = dateObject.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줍니다.
-            const day = dateObject.getDate();
-            const result = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-            return (<p>{result}</p>)
+            const dateString = moment(value).format('YYYY-MM-DD');
+            return (<p>{dateString}</p>)
         }
     },
     {

@@ -24,79 +24,98 @@ export const searchPaymentType = [
  * 결재 관리 리스트 컬럼 설정
  */
 export const paymentColumns = [
+  // {
+  //   name: 'id',
+  //   header: 'id',
+  //   defaultVisible: false,
+  // },
   {
-    name: 'id',
-    header: 'id',
-    defaultVisible: false,
-  },
-  {
-    name: 'recordMonth',
+    name: 'createdAt',
     header: '신청 일시',
     width: 150,
     showColumnMenuTool: false,
     render: ({value}) => {
-      return <p>{dateFormat(value, 'YYYY.MM.DD HH:mm')}</p>
+      return <p>{dateFormat(value, 'YYYY.MM.DD')}</p>
     }
   },
   {
-    name: 'status',
+    name: 'progressType',
     header: '신청 상태',
     width: 120,
     showColumnMenuTool: false,
-    render: ({value}) => <>{value.label}</>
+    render: ({ value })=> {
+      let valueType = {
+        REGISTRATION_TRADE: { label: '결제 신청', color: 'blue' },
+        AUTHENTICATION_TRADE: { label: '결제 인증', color: 'orange' },
+        APPROVAL_TRADE: { label: '결제 완료', color: 'green' },
+        REVISE_TRADE: { label: '결제 개정', color: 'pink' },
+        ERROR: { label: 'ERROR', color: 'red' }
+      }[value] || { label: '', color: '' };
+      return (
+        <p style={{ color: valueType.color }}>{valueType.label}</p>
+      )
+    }
   },
   {
-    name: 'username',
-    header: '결재/환불 정보',
+    name: 'creditCardType',
+    header: '결제 정보(카드)',
     defaultFlex: 1,
     showColumnMenuTool: false,
   },
   {
-    name: 'username',
+    name: 'bankType',
+    header: '결제 정보(계좌)',
+    defaultFlex: 1,
+    showColumnMenuTool: false,
+  },
+  {
+    name: 'mallName',
     header: '광고주명',
     showColumnMenuTool: false,
   },
   {
-    name: 'requesterId',
+    name: 'mallId',
     header: '광고주 아이디',
     showColumnMenuTool: false,
   },
   {
-    name: 'requesterId',
+    name: 'value1',
     header: '신청 아이디',
     showColumnMenuTool: false,
   },
   {
-    name: 'revenueAmount',
+    name: 'amount',
     header: '광고비',
     showColumnMenuTool: false,
     render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
-    name: 'requestAmountVAT',
-    header: '결재 금액(VAT포함)',
+    //광고비, 결제 금액 api 구분이 없음 일단 name값이 겹치면 오류가 생겨서 다른 값으로 설정 함..
+    name: 'remainAmount',
+    header: '결제 금액(VAT포함)',
     width: 160,
     showColumnMenuTool: false,
     render: ({data}) => {
-      let vat = data.requestAmount + (data.requestAmount / 10)
+      let vat = data.remainAmount - (data.remainAmount / 1.1)
+      let result = data.remainAmount - Math.floor(vat)
       return (
-        <span className={'won'}>{decimalFormat(vat)}</span>
+        <span className={'won'}>{decimalFormat(result)}</span>
       )
     }
   },
-  {
-    name: 'updateAt',
-    header: '상태 변경일',
-    width: 120,
-    showColumnMenuTool: false,
-  },
-  {
-    name: 'etc',
-    header: '비고',
-    width: 180,
-    sortable: false,
-    showColumnMenuTool: false,
-  }
+  // {
+  //   name: 'updateAt',
+  //   header: '상태 변경일',
+  //   width: 120,
+  //   showColumnMenuTool: false,
+  // },
+  // {
+  //   name: 'etc',
+  //   header: '비고',
+  //   width: 180,
+  //   sortable: false,
+  //   showColumnMenuTool: false,
+  // }
 ]
 
 /**

@@ -14,17 +14,15 @@ export default function InsertToSelect(props) {
   const handleChangeInput = (e) => {
     if((/^(0|[1-9]\d*)(\.\d+)?$/).test(e.target.value) || e.target.value === "") {
       if(e.target.value <= 100) {
-        let cloneBudgetTimesDirect = timeBudgetDetailDataState.allowTimes;
-        cloneBudgetTimesDirect[e.target.id][e.target.name] = e.target.value;
         setTimeBudgetDetailDataState({
           ...timeBudgetDetailDataState,
-          allowTimes: cloneBudgetTimesDirect
+          allowTimes: timeBudgetDetailDataState.allowTimes.map((r,i)=> {return i === parseInt(e.target.id) ? r.map((c,j)=> {return j === parseInt(e.target.name) ? e.target.value : c}) : r})
         })
       } else {
         toast('100보다 큰 수는 입력할수없습니다.')
       }
     } else {
-      toast('숫자만 입력해줘요')
+      toast('숫자만 입력해주세요')
     }
   }
 

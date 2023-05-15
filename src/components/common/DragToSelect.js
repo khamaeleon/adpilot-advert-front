@@ -3,7 +3,6 @@ import TableDragSelect from "react-table-drag-select";
 import "../../assets/dragSelect.css"
 import {useEffect, useState} from "react";
 import {
-  budgetTimes,
   timeBudgetDetailDataAtom,
   timesInfo, weeksInfo
 } from "../../pages/settings/entity/BudgetTime";

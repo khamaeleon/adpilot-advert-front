@@ -17,6 +17,7 @@ import {
   TitleContainer,
 } from "../../assets/GlobalStyles";
 import styled from 'styled-components';
+import moment from 'moment';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import {useAtom} from "jotai";
 import Navigator from "../../components/common/Navigator";
@@ -25,7 +26,7 @@ import {AdChargeButton} from "../../components/payment/user/AdCharge";
 import {RefundRequestButton} from "../../components/payment/user/RefundRequest";
 import {RegisterRefundInformationButton} from "../../components/payment/user/RegisterRefundInformation";
 import {getLastMonth, getThisMonth, getToDay} from "../../common/DateUtils";
-import {decimalFormat} from "../../common/StringUtils";
+import {decimalFormat, dateFormat} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
 import Table from "../../components/table";
 import {paymentListRequest} from "../../services/payment/user/RetrievePaymentByServiceUserAxios";
@@ -103,13 +104,15 @@ function PaymentManageUser(props) {
   //[d] 결제 내역 데이터
   function fetchPaymentDetails(props = {}) {
     const { skip = (currentPage - 1) * pageSize, limit = pageSize } = props;
+
     const requestData = {
       pageSize: limit,
       currentPage: skip / limit + 1,
-      searchStartDate: startDate,
-      searchEndDate: endDate,
+      searchStartDate: moment(startDate).format('YYYY-MM-DD'),
+      searchEndDate: moment(endDate).format('YYYY-MM-DD'),
     };
-    return paymentListRequest(skip, limit, tokenUserInfo.id, requestData)
+
+    return paymentListRequest( tokenUserInfo.id, requestData)
       .then((response) => {
         if (response !== null) {
           const { totalCount, rows: data } = response;

@@ -268,6 +268,8 @@ export function DashBoardCondition(props) {
                    placeholder={'광고주명 및 아이디 검색'}
                    value={keyword}
                    onChange={handleSearchValue}
+                   onKeyDown={e => (e.code === 'Enter') && handleData() }
+
             />
             <SearchButton onClick={handleData}>검색</SearchButton>
           </ColSpan1>

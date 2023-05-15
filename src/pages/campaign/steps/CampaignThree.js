@@ -36,8 +36,9 @@ import {selGroupInfo, selMediaCategoryInfo, updateCampaignConfigInventory} from 
 import {campaignGroupInfoAtom, mediaCategoryAtom, noViewType} from "../entity/Group";
 import {dateFormat} from "../../../common/StringUtils";
 import {selEnumInfo} from "../../../services/campaign/InfoAxios";
-import {toast} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import {useLocation, useNavigate} from "react-router-dom";
+import {useResetAtom} from "jotai/utils";
 
 export function CampaignThree() {
   const [, setStepCampaign] = useAtom(stepCampaignAtom)
@@ -52,6 +53,8 @@ export function CampaignThree() {
   const {register, handleSubmit, reset, setValue, control, formState: {errors}} = useFormContext()
   const {state} =useLocation()
   const navigate = useNavigate()
+  const resetInfo = useResetAtom(campaignGroupInfoAtom)
+
 
   useEffect(() => {
     if((campaignBasicInfo.step !== undefined && campaignBasicInfo.step.includes('STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED')) || state !== null){
@@ -268,8 +271,15 @@ export function CampaignThree() {
       let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
       updateCampaignConfigInventory({...campaignGroupInfo, campaignId: campaignId}).then(response => {
         if (response) {
-          console.log("저장됨")
-          state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 3})
+          if (state !== null) {
+            toast.success("수정되었습니다.",{autoClose:100, delay:0})
+            toast.onChange(payload => {
+              if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
+                navigate('/board/dashboard')
+                resetInfo()
+              }
+            })
+          } else setStepCampaign({steps: 3})
         }
       })
     }
@@ -293,7 +303,7 @@ export function CampaignThree() {
                                          control={control}
                                          key={key}
                                          render={({field}) =>
-                                           <Checkbox label={data.label} type={'c'} id={data.value} isChecked={campaignGroupInfo.exposureAgentType.some(event => event === data.value)}
+                                           <Checkbox label={data.label} type={'c'} id={data.value} isChecked={campaignGroupInfo.exposureAgentType?.some(event => event === data.value)}
                                                      onChange={handleAgentType} inputRef={field.ref}/>}/>
                     })
                   }
@@ -523,14 +533,16 @@ export function CampaignThree() {
                           <span>미노출</span>
                         </label>
                       </div>
-                      <div>
-                        <Select styles={smallStyle}
-                                placeholder={'미노출기간 선택'}
-                                options={noViewTypeState}
-                                value={noViewTypeState.find(item =>item.value === campaignGroupInfo.nonExposureDaysOfConversionUser)}
-                                onChange={handleNoViewType}
-                        />
-                      </div>
+                      {
+                        campaignGroupInfo.exposureConversionUserYn ==='N' && <div>
+                          <Select styles={smallStyle}
+                                  placeholder={'미노출기간 선택'}
+                                  options={noViewTypeState}
+                                  value={noViewTypeState.find(item =>item.value === campaignGroupInfo.nonExposureDaysOfConversionUser)}
+                                  onChange={handleNoViewType}
+                          />
+                        </div>
+                      }
                       {/*<div>
                         <SmallInput>
                           <input type={'text'}
@@ -677,14 +689,16 @@ export function CampaignThree() {
                           <span>미노출</span>
                         </label>
                       </div>
-                      <div>
-                        <Select styles={smallStyle}
-                                placeholder={'미노출기간 선택'}
-                                options={noViewTypeState}
-                                value={noViewTypeState.find(item =>item.value === campaignGroupInfo.nonExposureDaysOfConversionAudience)}
-                                onChange={handleNoViewTypeAudience}
-                        />
-                      </div>
+                      {
+                        campaignGroupInfo.exposureConversionAudienceYn === 'N' && <div>
+                          <Select styles={smallStyle}
+                                  placeholder={'미노출기간 선택'}
+                                  options={noViewTypeState}
+                                  value={noViewTypeState.find(item =>item.value === campaignGroupInfo.nonExposureDaysOfConversionAudience)}
+                                  onChange={handleNoViewTypeAudience}
+                          />
+                        </div>
+                      }
                     </div>
                   </RowInBox>
                   <RowInBox>
@@ -787,9 +801,21 @@ export function CampaignThree() {
         </BoardSearchResult>
       </Board>
       <SubmitContainer>
-        <CancelButton type={'button'} onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 1})}>취소</CancelButton>
+        <CancelButton type={'button'} onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 1})}>{state !== null ? '취소' : '이전'}</CancelButton>
         <SubmitButton type={'submit'}>{state !== null ? '수정' : '다음[3/4]'}</SubmitButton>
       </SubmitContainer>
+      <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        style={{zIndex: 9999999}}
+      />
     </form>
   )
 }

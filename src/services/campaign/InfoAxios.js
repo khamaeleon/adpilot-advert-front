@@ -54,3 +54,17 @@ export async function selBasicInfo(userId) {
     }).catch((e) => returnVal = false)
   return returnVal;
 };
+
+/**
+ * 임시 저장 캠페인 삭제
+ * @param campaignId
+ * @returns {Promise<false>}
+ */
+export async function deleteTemporary(campaignId) {
+  let returnVal = null;
+  await AdminAxios('DELETE', ACTION_URL+'/'+campaignId+'/temporary', null)
+    .then((response) => {
+      returnVal = response.responseCode.statusCode === 200 ? true : false;
+    }).catch((e) => returnVal = false)
+  return returnVal;
+}

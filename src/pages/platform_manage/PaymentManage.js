@@ -7,6 +7,7 @@ import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
 import {toast, ToastContainer} from "react-toastify";
 import {PaymentCondition} from "../../components/Platform/Condition";
+import {paymentAllListRequest} from "../../services/payment/admin/PaymentAllListRequestAxios"
 import {
   paymentColumns,
   paymentDataAtom,
@@ -14,11 +15,27 @@ import {
   searchPaymentType,
   updatePaymentStatus
 } from "./entity/Payment";
+import moment from "moment/moment";
+import {getThisMonth, getToDay} from "../../common/DateUtils";
+import {PaymentDetailsColumns} from "./entity/PaymentUser";
+import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
+
 
 function PaymentManage() {
+  const [totalInfo, setTotalInfo] = useState(0)
   const [paymentDataState, setPaymentDataState] = useAtom(paymentDataAtom)
   const [searchPaymentParamsState, setSearchPaymentParamsState] = useAtom(searchPaymentParams)
   const [updatePaymentStatusParams, setUpdatePaymentStatusParams] = useState(updatePaymentStatus)
+
+  //[d] 날짜
+  const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
+  const [startDate, endDate] = dateRange;
+
+  //[d] 그리드 데이터
+  const [pageSize, ] = useState(10); // 한 페이지 보여줄 데이터
+  const [currentPage, ] = useState(1); // 현재 페이지
+
+  const gridStyle = {minHeight: 510, textAlign: 'center'}
 
   useEffect(() => {
     handlePaymentTableData()
@@ -28,17 +45,48 @@ function PaymentManage() {
   //   updatePaymentStatusParams.paymentStatus !== '' && updatePayment(updatePaymentStatusParams)
   // }, [updatePaymentStatusParams.paymentIdList])
 
-  const handlePaymentTableData = async() => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
-    // const userName = adminInfoState.convertedUser !== '' ? adminInfoState.convertedUser : ''
-    // const fetchData = await accountHistoryTableData(userName,searchAccountHistoryParamsState).then(response => {
-    //   const data = response
-    //   response !== null && setAccountHistoryDataState(response)
-    //   return data
-    // })
-    // return fetchData
+  const handlePaymentTableData = (props={}) => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
+    const { skip = (currentPage - 1) * pageSize, limit = pageSize } = props;
+
     handlePaymentStatus('')
     setPaymentStatusSelected([])
     setCheckboxAllSelect(false)
+
+    const requestData = {
+      pageSize: limit,
+      currentPage: skip / limit + 1,
+      searchStartDate: moment(startDate).format('YYYY-MM-DD'),
+      searchEndDate: moment(endDate).format('YYYY-MM-DD'),
+    };
+
+
+    return paymentAllListRequest ( requestData )
+      .then(response => {
+        // 성공적인 응답 처리
+        if (response !== null) {
+          const { totalCount, rows: data } = response;
+          setTotalInfo(totalCount);
+          return Promise.resolve({ data, count: parseInt(totalCount) });
+        } else {
+          return Promise.resolve({ data: [], count: 0 });
+        }
+      })
+      .catch(error => {
+        // 실패한 응답 처리
+        console.error("실패 응답 처리",error);
+      });
+
+    // await paymentAllListRequest ( requestData )
+    //   .then((response) => {
+    //     if (response !== null) {
+    //       const { totalCount, rows: data } = response;
+    //       console.log(response, data)
+    //       setTotalInfo(totalCount);
+    //       setPaymentDataState(data)
+    //     }else{
+    //       console.error("실패 응답 처리");
+    //     }
+    //   });
   }
 
   /**
@@ -59,7 +107,7 @@ function PaymentManage() {
     // })
   }
 
-  const dataCallback = useCallback( handlePaymentTableData , [paymentDataState])
+  const dataCallback = useCallback( handlePaymentTableData , [totalInfo])
 
   const updatePayment = (params) => {
     confirmAlert({
@@ -136,16 +184,35 @@ function PaymentManage() {
         <BoardHeader>결재 현황</BoardHeader>
         <PaymentCondition searchType={searchPaymentType} searchCondition={searchPaymentParamsState} setSearchCondition={setSearchPaymentParamsState} handleTableData={handlePaymentTableData} />
         <BoardTableContainer>
-          <Table columns={paymentColumns}
-                 data={paymentDataAtom}
-                 idProperty="id"
-                 selected={checkboxAllSelect}
-                 checkboxColumn={checkboxColumn} //체크박스 커스텀
-                 onSelectionChange={paymentStatusSelected} // 선택한 체크박스 정보 가져오기
-                 emptyText={'결재 현황 내역이 없습니다.'}
-                 showHoverRows={false}
-                 dataCallback={dataCallback}
-                 />
+          {/*<Table columns={paymentColumns}*/}
+          {/*       // data={paymentDataAtom} 아톰 사용시 호출 못함?? 확인...*/}
+          {/*       data={paymentDataState}*/}
+          {/*       idProperty="id"*/}
+          {/*       totalCount={[totalInfo, '결제 현황']}*/}
+          {/*       // checkboxColumn={checkboxColumn} //체크박스 커스텀*/}
+          {/*       // onSelectionChange={paymentStatusSelected} // 선택한 체크박스 정보 가져오기*/}
+          {/*       emptyText={'결재 현황 내역이 없습니다.'}*/}
+          {/*       showHoverRows={false}*/}
+          {/*       dataCallback={dataCallback}*/}
+          {/*       limit={10}*/}
+          {/*/>*/}
+          <ReactDataGrid
+            licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
+            handle={null}
+            columns={paymentColumns}
+            dataSource={dataCallback}
+            headerHeight={48}
+            showZebraRows={true}
+            showCellBorders={'horizontal'}
+            enableColumnAutosize={true}
+            showColumnMenuLockOptions={false}
+            showColumnMenuGroupOptions={false}
+            emptyText={'결제 내역이 없습니다.'}
+            limit={10}
+            pagination={true}
+            sortable={false}
+            style={gridStyle}
+          />
         </BoardTableContainer>
       </Board>
       <ToastContainer position="top-center"
@@ -163,4 +230,5 @@ function PaymentManage() {
 }
 
 export default PaymentManage
+
 

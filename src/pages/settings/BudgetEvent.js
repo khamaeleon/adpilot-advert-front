@@ -47,9 +47,10 @@ function BudgetEvent() {
           <RowSpan>
             <ColSpan1>
               <Input style={{width: 300}}
-                     placeholder={'광고주 명 및 아이디 검색'}
+                     placeholder={'광고주명 및 아이디 검색'}
                      value={searchParams.keyword}
                      onChange={handleSearch}
+                     onKeyDown={e => (e.code === 'Enter') && onSearchAdverEventBudget() }
               />
               <DefaultButton onClick={onSearchAdverEventBudget}>검색</DefaultButton>
             </ColSpan1>

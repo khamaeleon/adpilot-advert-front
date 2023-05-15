@@ -42,15 +42,12 @@ function PixelDetail() {
   })
   const onError = (error) => console.log(error)
   useEffect(() => {
-    let mainCategory =[]
     retrieveTopLevelCategoryKeyValue().then(response => {
       setTopLevelCategoryList(response)
     })
     selPixelInfoList(state.id).then(response => {
-      console.log(response)
       setPixelInfoListState(response)
       retrieveSubLevelCategoryKeyValue(response.mainCategoryCode).then(response => {
-        console.log(response)
         setRowLevelCategoryList(response)
       })
     })

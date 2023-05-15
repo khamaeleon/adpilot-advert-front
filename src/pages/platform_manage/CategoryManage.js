@@ -8,11 +8,11 @@ import {
   RowSpan,
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
-import {useAtom} from "jotai/index";
+import {useAtom} from "jotai";
 import {useResetAtom} from "jotai/utils";
 import {
   createNewCategory,
-  retrieveCategoryByParentCode,
+  retrieveCategoryByParentCode, retrieveTopLevelAllCategory,
   retrieveTopLevelCategory
 } from "../../services/Platform/CategoryAxios";
 import {categoryListAtom, createCategoryAtom, selectCategoryAtom, topLevelCategoryListAtom} from "./entity/Category";
@@ -27,6 +27,7 @@ import {
   SubCategoryBody,
   SubCategoryItem
 } from "./styles/common";
+import {toast} from "react-toastify";
 
 
 export function CategoryManage() {
@@ -48,9 +49,12 @@ export function CategoryManage() {
    * 카테고리 조회
    */
   useEffect(() => {
-    const fetchData = retrieveTopLevelCategory().then(response => {
+    setSearchKeyword('')
+    retrieveTopLevelAllCategory().then(response => {
       setTopLevelCategoryList(response)
+      if(response.length !== 0) handleSelectCategory(category ? selectCategory :  response[0].code )
     })
+
   }, [refresh]);
   /**
    * 카테고리 선택
@@ -58,7 +62,7 @@ export function CategoryManage() {
    */
   const handleSelectCategory = async (code) => {
     setSelectCategory(code)
-    const fetData = await retrieveCategoryByParentCode(code).then(response => {
+    retrieveCategoryByParentCode(code, searchKeyword).then(response => {
       setCategoryList(response)
     })
   }
@@ -101,21 +105,34 @@ export function CategoryManage() {
    * @returns {Promise<void>}
    */
   const handleCreateCategory = async () => {
-    const fetchData = await createNewCategory(createCategory.category).then(response => {
-      setRefresh(!refresh)
-    }).then(() => resetCategory())
+    if(createCategory.category.name === '') {
+      toast.warning('상위 카테고리명을 입력해주세요')
+    } else if(topLevelCategoryList.find(d=>d.name === createCategory.category.name) !== undefined) {
+      toast.warning('중복된 카테고리명을 입력하셨습니다.')
+    } else {
+      createNewCategory(createCategory.category).then(response => {
+        setRefresh(!refresh)
+      }).then(() => resetCategory())
+    }
+
   }
   /**
    * 카테고리 등록 (서브카테고리)
    * @returns {Promise<void>}
    */
   const handleCreateSubCategory = async () => {
-    const fetchData = await createNewCategory(createCategory.subCategory).then(response => {
-      setRefresh(!refresh)
-    }).then(() => resetCategory())
-    const fetData = await retrieveCategoryByParentCode(selectCategory).then(response => {
-      setCategoryList(response)
-    })
+    if(createCategory.subCategory.name === '') {
+      toast.warning('하위 카테고리 명를 입력해주세요')
+    } else if(categoryList.find(d=>d.name === createCategory.subCategory.name) !== undefined){
+      toast.warning('중복된 카테고리명을 입력하셨습니다')
+    } else {
+      createNewCategory(createCategory.subCategory).then(response => {
+        setRefresh(!refresh)
+      }).then(() => resetCategory())
+      retrieveCategoryByParentCode(selectCategory).then(response => {
+        setCategoryList(response)
+      })
+    }
   }
 
   /**
@@ -123,7 +140,15 @@ export function CategoryManage() {
    * @returns {Promise<void>}
    */
   const handleSearchCategory = async () => {
+    retrieveTopLevelCategory(searchKeyword).then(response => {
+      setTopLevelCategoryList(response)
 
+      if(response.length !== 0) {
+        handleSelectCategory(response[0]?.code)
+      } else {
+        setCategoryList([])
+      }
+    })
   }
 
   return(
@@ -134,7 +159,12 @@ export function CategoryManage() {
           <RowSpan>
             <ColSpan3/>
             <ColSpan1>
-              <Input value={searchKeyword} onChange={handleChangeSearchCategory} placeholder={'검색'}/>
+              <Input
+                  value={searchKeyword}
+                  onChange={handleChangeSearchCategory}
+                  placeholder={'검색'}
+                  onKeyDown={event => (event.code === 'Enter') && handleSearchCategory() }
+              />
               <SearchButton onClick={handleSearchCategory}>검색</SearchButton>
             </ColSpan1>
           </RowSpan>

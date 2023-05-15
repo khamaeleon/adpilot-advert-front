@@ -25,7 +25,7 @@ import {stepCampaignAtom} from "../entity";
 import {modalController} from "../../../store";
 import {Controller, useFormContext} from "react-hook-form";
 import TimeTable from "../../../components/modal/TimeTable";
-import {biddingTypeAll, campaignBasicInfoAtom} from "../entity/Info";
+import {biddingTypeAll, campaignBasicInfoAtom, resetInfo} from "../entity/Info";
 import {selBudgetTimeDetailInfo, selBudgetTimeList} from "../../../services/settings/BudgetTimeAxios";
 import {selBudgetEventList} from "../../../services/settings/BudgetEventAxios";
 import {selPriceEventList} from "../../../services/settings/EventPriceAxios";
@@ -34,6 +34,9 @@ import {selBudgetInfo, updateCampaignBudget} from "../../../services/campaign/Bu
 import {campaignBudgetInfoAtom} from "../entity/Budget";
 import {useAtomValue} from "jotai/index";
 import {useLocation, useNavigate} from "react-router-dom";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import {useResetAtom} from "jotai/utils";
 
 export function CampaignTwo() {
   const setStepCampaign = useSetAtom(stepCampaignAtom)
@@ -46,6 +49,7 @@ export function CampaignTwo() {
   const [timeBudgetDetailDataState, setTimeBudgetDetailDataState] = useAtom(timeBudgetDetailDataAtom)
   const {state} =useLocation()
   const navigate = useNavigate()
+  const resetInfo = useResetAtom(campaignBudgetInfoAtom)
   const {register, handleSubmit,reset,setError,setValue, control, formState: {errors}} = useFormContext()
 
   useEffect(() => {
@@ -193,9 +197,16 @@ export function CampaignTwo() {
       campaignId: campaignId
     }).then(response => {
       if (response) {
-        console.log('2차저장')
-        state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 2})
-      }
+        if (state !== null) {
+          toast.success("수정되었습니다.",{autoClose:100, delay:0})
+          toast.onChange(payload => {
+            if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
+              navigate('/board/dashboard')
+              resetInfo()
+            }
+          })
+        } else setStepCampaign({steps: 2})
+      } else toast.error('수정이 실패하였습니다.')
     })
 
   }
@@ -423,9 +434,21 @@ export function CampaignTwo() {
         </BoardSearchResult>
       </Board>
       <SubmitContainer>
-        <CancelButton type={'button'} onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 0})}>취소</CancelButton>
+        <CancelButton type={'button'} onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 0})}>{state !== null ? '취소' : '이전'}</CancelButton>
         <SubmitButton type={'submit'}>{state !== null ? '수정' : '다음[2/4]'}</SubmitButton>
       </SubmitContainer>
+      <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        style={{zIndex: 9999999}}
+      />
     </form>
   )
 }

@@ -39,7 +39,7 @@ const pixelAtom = atom({
   userId: ''
 })
 export function PixelModal(props) {
-  const {data, title} = props
+  const {data, title, setPixelList} = props
   const [, setModal] = useAtom(modalController)
 
   const handleModalComponent = () => {
@@ -50,7 +50,7 @@ export function PixelModal(props) {
         modalComponent: () => {
           console.log(data)
           return (
-            <PixelAdd data={data} title={title} />
+            <PixelAdd data={data} title={title} setPixelList={setPixelList}/>
           )
         }
       })
@@ -65,7 +65,7 @@ export function PixelModal(props) {
 
 
 function PixelAdd(props){
-  const {data, title} = props
+  const {data, setPixelList} = props
   const [, setModal] = useAtom(modalController)
   const [pixelInfoListState, setPixelInfoListState] = useState({
     userId: data.userId,
@@ -84,7 +84,6 @@ function PixelAdd(props){
     defaultValues: pixelInfoListState
   })
   useEffect(() => {
-    console.log(data)
     retrieveTopLevelCategoryKeyValue().then(response => {
       setTopLevelCategoryList(response)
     })
@@ -153,7 +152,16 @@ function PixelAdd(props){
           isShow: false,
           modalComponent: null
         })
-        navigate(0)
+        /**
+         * 픽셀 리스트 조회
+         */
+        setPixelList !== undefined ? selAdverPixelDetailList(data.userId).then(response => {
+          let clonePixelList = []
+          response.map(data => {
+            clonePixelList = [...clonePixelList, {value: data.pixelId, label: data.pixelName}]
+          })
+          setPixelList(clonePixelList)
+        }): navigate(0)
       }else{
         console.log('실패')
         toast.warning("등록이 실패 하였습니다. 관리자한테 문의하세요")
@@ -258,7 +266,7 @@ function PixelAdd(props){
                   <Select options={topLevelCategoryList}
                           placeholder={'카테고리선택 선택'}
                           {...field}
-                          value={pixelInfoListState.mainCategoryCode !== '' ? topLevelCategoryList.find(value => value.value === pixelInfoListState.mainCategoryCode) : ''}
+                          value={pixelInfoListState.mainCategoryCode !== '' ? topLevelCategoryList?.find(value => value.value === pixelInfoListState.mainCategoryCode) : ''}
                           onChange={handleSelectTopCategory}
                           styles={selectStyle}
                   />
@@ -279,8 +287,9 @@ function PixelAdd(props){
                 render={({field}) => (
                   <Select options={rowLevelCategoryList}
                           placeholder={'서브 카테고리 선택'}
+                          isDisabled={pixelInfoListState.mainCategoryCode === '' && true}
                           {...field}
-                          value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
+                          value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList?.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
                           onChange={handleSelectRowCategory}
                           styles={selectStyle}
                   />
@@ -365,9 +374,10 @@ function PixelList() {
           <RowSpan>
             <ColSpan1>
               <Input style={{width: 300}}
-                     placeholder={'광고주 명 및 아이디 검색'}
+                     placeholder={'광고주명 및 아이디 검색'}
                      value={searchParams.keyword}
                      onChange={handleSearch}
+                     onKeyDown={e => (e.code === 'Enter') && onSearchAdverEventPrice() }
               />
               <DefaultButton onClick={onSearchAdverEventPrice}>검색</DefaultButton>
             </ColSpan1>

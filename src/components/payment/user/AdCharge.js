@@ -8,7 +8,7 @@ import { ColSpan2, ColSpan3, ColSpan4, DefaultButton, RowSpan, RelativeDiv, Vali
 import {SmallButton} from "../../../pages/campaign/styles/common";
 import {decimalFormat, removeStr} from "../../../common/StringUtils";
 import {useForm} from "react-hook-form";
-import {paymentRequest} from "../../../services/payment/user/paymentUserAxios";
+import {paymentRequest} from "../../../services/payment/user/PaymentUserAxios";
 import {tokenResultAtom} from "../../../pages/login/entity/Common";
 
 export function AdChargeButton(props) {

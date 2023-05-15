@@ -34,7 +34,7 @@ function EventTimeList() {
     })
   }, [])
   const resistBudgetTimes = () =>{
-    navigate('/board/budgetTimeDetail',{state: {id:budgetTimeListState.userId }})
+    navigate('/board/budgetTimeDetail',{state: {id:budgetTimeListState.userId, listCount:budgetTimeListState.totalCount }})
   }
   return (
     <>

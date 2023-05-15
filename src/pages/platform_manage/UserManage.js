@@ -212,6 +212,7 @@ export default function UserManage(){
                        value={searchAccountInfoState?.keyword !== null ? searchAccountInfoState?.keyword : ''}
                        onChange={handleSearchKeyword}
                        readOnly={(searchAccountInfoState.searchType === null || searchAccountInfoState.searchType.value === 'select') ? true : false}
+                       onKeyDown={e => (e.code === 'Enter') && searchUserList() }
                 />
               </SearchInput>
               <SearchButton onClick={()=>searchUserList()}>검색</SearchButton>

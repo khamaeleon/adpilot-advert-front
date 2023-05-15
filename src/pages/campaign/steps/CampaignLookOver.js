@@ -89,9 +89,17 @@ export function CampaignLookOver() {
   }
   const onSubmit = () => {
     campaignName !== '' ? UpdateCampaignDefaultInfo(state.campaignId, campaignName).then(response => {
-      response ? toast.success('캠페인명 수정이 완료되었습니다.') : toast.error('캠페인명 수정이 실패하였습니다.')
+      if(response) {
+        toast.success("캠페인명이 수정되었습니다.")
+        toast.onChange(payload => {
+          if(payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
+            navigate('/board/dashboard')
+          }
+        })
+      } else toast.error('캠페인명 수정이 실패하였습니다.')
     }) : toast.warning('캠페인명을 입력해주세요.')
   }
+
   return (
     <>
       <Board>
@@ -269,9 +277,15 @@ export function CampaignLookOver() {
           </BoardSearchResult>
         }
       </Board>
+      <SubmitContainer>
+        <CancelButton type={'button'}
+                      onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 0})}>{(tokenUserInfo.role !== 'NORMAL' && state !== null) ? '취소' : '확인'}</CancelButton>
+        {tokenUserInfo.role !== 'NORMAL' && state !== null &&
+          <SubmitButton type={'button'} onClick={()=> onSubmit()}>저장</SubmitButton>}
+      </SubmitContainer>
       <ToastContainer
         position="top-center"
-        autoClose={1500}
+        autoClose={1000}
         hideProgressBar
         newestOnTop={false}
         closeOnClick
@@ -281,12 +295,6 @@ export function CampaignLookOver() {
         pauseOnHover
         style={{zIndex: 9999999}}
       />
-      <SubmitContainer>
-        <CancelButton type={'button'}
-                      onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 0})}>{(tokenUserInfo.role !== 'NORMAL' && state !== null) ? '취소' : '확인'}</CancelButton>
-        {tokenUserInfo.role !== 'NORMAL' && state !== null &&
-          <SubmitButton type={'button'} onClick={()=> onSubmit()}>저장</SubmitButton>}
-      </SubmitContainer>
     </>
   )
 }
