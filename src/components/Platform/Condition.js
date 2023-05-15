@@ -118,12 +118,12 @@ export function PlatformCondition(props) {
     })
   }
 
-  const handleSearchAdverResult = (username) => {
+  const handleSearchAdverResult = (data) => {
     setSearchCondition({
       ...searchCondition,
-      username:username
+      username: data.username
     })
-    retrieveProduct({...searchCondition,username:username}).then(response =>{
+    retrieveProduct({...searchCondition,username: data.username}).then(response =>{
       setProductData(response)
     })
   }
@@ -132,9 +132,19 @@ export function PlatformCondition(props) {
     <BoardSearchDetail>
       <RowSpan>
         <ColSpan1>
+          <ColTitle><span>광고주 설정</span></ColTitle>
+          <Input type={'text'} value={searchCondition.username} readOnly/>
+        </ColSpan1>
+        <ColSpan1>
+          <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdverResult}/>
+        </ColSpan1>
+        <ColSpan2/>
+      </RowSpan>
+      <RowSpan>
+        <ColSpan1>
           <ColTitle><span>기간</span></ColTitle>
           <div style={{width:'100%'}}>
-            <DateContainer>
+            <DateContainer style={{marginRight: 0}}>
               <CalendarBox>
                 <CalendarIcon/>
               </CalendarBox>
@@ -169,11 +179,7 @@ export function PlatformCondition(props) {
             </RangePicker>
           </div>
         </ColSpan2>
-        <ColSpan0>
-          <Span4>광고주 설정</Span4>
-          <Input type={'text'}/>
-          <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdverResult}/>
-        </ColSpan0>
+        <ColSpan1/>
       </RowSpan>
       <RowSpan>
         <ColSpan2>

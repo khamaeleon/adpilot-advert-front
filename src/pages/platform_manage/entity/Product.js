@@ -82,7 +82,7 @@ export const productListColumn = [
       return (
         <>
           {props.cellProps.data.productImages.length !== 0 &&
-            <img src={props.cellProps.data.productImages[0].imageUrl} style={{height: 50}}/>
+            <img src={props.cellProps.data.productImages[0].imageUrl} style={{height: 30}}/>
           }
         </>
       )
