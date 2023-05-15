@@ -67,11 +67,8 @@ function PaymentManage() {
         // 성공적인 응답 처리
         if (response !== null) {
           const { totalCount, rows: data } = response;
-          console.log(response, data)
           setTotalInfo(totalCount);
           setPaymentDataState(data)
-        }else{
-          console.error("실패 응답 처리");
         }
       })
       .catch(error => {
@@ -192,9 +189,8 @@ function PaymentManage() {
                  data={paymentDataState}
                  idProperty="id"
                  totalCount={[totalInfo, '결제 현황']}
-                 selected={checkboxAllSelect}
-                 checkboxColumn={checkboxColumn} //체크박스 커스텀
-                 onSelectionChange={paymentStatusSelected} // 선택한 체크박스 정보 가져오기
+                 // checkboxColumn={checkboxColumn} //체크박스 커스텀
+                 // onSelectionChange={paymentStatusSelected} // 선택한 체크박스 정보 가져오기
                  emptyText={'결재 현황 내역이 없습니다.'}
                  showHoverRows={false}
                  dataCallback={dataCallback}

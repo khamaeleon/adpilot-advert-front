@@ -35,7 +35,7 @@ export const paymentColumns = [
     width: 150,
     showColumnMenuTool: false,
     render: ({value}) => {
-      return <p>{dateFormat(value, 'YYYY.MM.DD HH:mm')}</p>
+      return <p>{dateFormat(value, 'YYYY.MM.DD')}</p>
     }
   },
   {
@@ -90,16 +90,16 @@ export const paymentColumns = [
     render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
-  //   //해당 항목 없어서 광고비 에서 /1.1(vat 제거) 문제는 이러면 경고창에 오류가;;;
-    name: 'amount',
-    header: '결재 금액(VAT포함)',
+    //광고비, 결제 금액 api 구분이 없음 일단 name값이 겹치면 오류가 생겨서 다른 값으로 설정 함..
+    name: 'remainAmount',
+    header: '결제 금액(VAT포함)',
     width: 160,
     showColumnMenuTool: false,
     render: ({data}) => {
-      console.log(data.amount);
-      let vat = data.amount - (data.amount / 1.1)
+      let vat = data.remainAmount - (data.remainAmount / 1.1)
+      let result = data.remainAmount - Math.floor(vat)
       return (
-        <span className={'won'}>{decimalFormat(vat)}</span>
+        <span className={'won'}>{decimalFormat(result)}</span>
       )
     }
   },
