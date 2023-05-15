@@ -27,7 +27,7 @@ import {
   SubCategoryBody,
   SubCategoryItem
 } from "./styles/common";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 
 
 export function CategoryManage() {
@@ -52,7 +52,7 @@ export function CategoryManage() {
     setSearchKeyword('')
     retrieveTopLevelAllCategory().then(response => {
       setTopLevelCategoryList(response)
-      if(response.length !== 0) handleSelectCategory(response[category ? response.length -1 : 0].code)
+      if(response.length !== 0) handleSelectCategory(category ? selectCategory :  response[0].code )
     })
 
   }, [refresh]);
@@ -105,12 +105,14 @@ export function CategoryManage() {
    * @returns {Promise<void>}
    */
   const handleCreateCategory = async () => {
-    if(createCategory.category.name !== '') {
+    if(createCategory.category.name === '') {
+      toast.warning('상위 카테고리명을 입력해주세요')
+    } else if(topLevelCategoryList.find(d=>d.name === createCategory.category.name) !== undefined) {
+      toast.warning('중복된 카테고리명을 입력하셨습니다.')
+    } else {
       createNewCategory(createCategory.category).then(response => {
         setRefresh(!refresh)
       }).then(() => resetCategory())
-    } else {
-      toast.warning('상위 카테고리 명을 입력해주세요')
     }
 
   }
@@ -119,15 +121,17 @@ export function CategoryManage() {
    * @returns {Promise<void>}
    */
   const handleCreateSubCategory = async () => {
-    if(createCategory.subCategory.name !== '') {
+    if(createCategory.subCategory.name === '') {
+      toast.warning('하위 카테고리 명를 입력해주세요')
+    } else if(categoryList.find(d=>d.name === createCategory.subCategory.name) !== undefined){
+      toast.warning('중복된 카테고리명을 입력하셨습니다')
+    } else {
       createNewCategory(createCategory.subCategory).then(response => {
         setRefresh(!refresh)
       }).then(() => resetCategory())
       retrieveCategoryByParentCode(selectCategory).then(response => {
         setCategoryList(response)
       })
-    } else {
-      toast.warning('하위 카테고리 명를 입력해주세요')
     }
   }
 
