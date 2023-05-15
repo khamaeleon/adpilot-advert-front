@@ -142,8 +142,10 @@ export function CategoryManage() {
     retrieveTopLevelCategory(searchKeyword).then(response => {
       setTopLevelCategoryList(response)
       setCategoryList([])
+      if(response.length !== 0) handleSelectCategory(response[0]?.code)
     })
-    if(response.length !== 0) handleSelectCategory(response[0]?.code)
+
+
   }
 
   return(
