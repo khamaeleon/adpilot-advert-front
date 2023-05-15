@@ -12,7 +12,7 @@ import {useAtom} from "jotai/index";
 import {useResetAtom} from "jotai/utils";
 import {
   createNewCategory,
-  retrieveCategoryByParentCode,
+  retrieveCategoryByParentCode, retrieveTopLevelAllCategory,
   retrieveTopLevelCategory
 } from "../../services/Platform/CategoryAxios";
 import {categoryListAtom, createCategoryAtom, selectCategoryAtom, topLevelCategoryListAtom} from "./entity/Category";
@@ -48,9 +48,15 @@ export function CategoryManage() {
    * 카테고리 조회
    */
   useEffect(() => {
-    const fetchData = retrieveTopLevelCategory(searchKeyword).then(response => {
+    setSearchKeyword('')
+    retrieveTopLevelAllCategory().then(response => {
       setTopLevelCategoryList(response)
     })
+    if(selectCategory != undefined && selectCategory != ''){
+      retrieveCategoryByParentCode(selectCategory, searchKeyword).then(response => {
+        setCategoryList(response)
+      })
+    }
   }, [refresh]);
   /**
    * 카테고리 선택
@@ -58,7 +64,7 @@ export function CategoryManage() {
    */
   const handleSelectCategory = async (code) => {
     setSelectCategory(code)
-    const fetData = await retrieveCategoryByParentCode(code, searchKeyword).then(response => {
+    retrieveCategoryByParentCode(code, searchKeyword).then(response => {
       setCategoryList(response)
     })
   }
@@ -101,7 +107,7 @@ export function CategoryManage() {
    * @returns {Promise<void>}
    */
   const handleCreateCategory = async () => {
-    const fetchData = await createNewCategory(createCategory.category).then(response => {
+    createNewCategory(createCategory.category).then(response => {
       setRefresh(!refresh)
     }).then(() => resetCategory())
   }
@@ -110,10 +116,10 @@ export function CategoryManage() {
    * @returns {Promise<void>}
    */
   const handleCreateSubCategory = async () => {
-    const fetchData = await createNewCategory(createCategory.subCategory).then(response => {
+    createNewCategory(createCategory.subCategory).then(() => {
       setRefresh(!refresh)
     }).then(() => resetCategory())
-    const fetData = await retrieveCategoryByParentCode(selectCategory).then(response => {
+    retrieveCategoryByParentCode(selectCategory, searchKeyword).then(response => {
       setCategoryList(response)
     })
   }
@@ -123,7 +129,11 @@ export function CategoryManage() {
    * @returns {Promise<void>}
    */
   const handleSearchCategory = async () => {
+    retrieveTopLevelCategory(searchKeyword).then(response => {
+      setTopLevelCategoryList(response)
 
+      if(response.length !== 0) handleSelectCategory(response[0]?.code)
+    })
   }
 
   return(
@@ -134,7 +144,13 @@ export function CategoryManage() {
           <RowSpan>
             <ColSpan3/>
             <ColSpan1>
-              <Input value={searchKeyword} onChange={handleChangeSearchCategory} placeholder={'검색'}/>
+              <Input
+                  value={searchKeyword}
+                  onChange={handleChangeSearchCategory}
+                  placeholder={'검색'}
+                  onKeyDown={event => (event.code === 'Enter') && handleSearchCategory() }
+
+              />
               <SearchButton onClick={handleSearchCategory}>검색</SearchButton>
             </ColSpan1>
           </RowSpan>
