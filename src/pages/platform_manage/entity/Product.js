@@ -71,14 +71,17 @@ export const productListColumn = [
   },
   {
     name: 'productImages',
-    header: '상품 이미지1',
+    header: () => {
+      return (
+          <div><p>상품</p><p>이미지1</p></div>
+      )
+    },
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
     showColumnMenuTool: false,
     sortable: false,
     render: (props) => {
-      console.log(props.cellProps.data.productImages[0])
       return (
         <>
           {props.cellProps.data.productImages.length !== 0 &&
@@ -90,7 +93,11 @@ export const productListColumn = [
   },
   {
     name: 'productImages2',
-    header: '상품 이미지2',
+    header: () => {
+      return (
+          <div><p>상품</p><p>이미지2</p></div>
+      )
+    },
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
@@ -108,7 +115,11 @@ export const productListColumn = [
   },
   {
     name: 'productImages3',
-    header: '상품 이미지3',
+    header: () => {
+      return (
+          <div><p>상품</p><p>이미지3</p></div>
+      )
+    },
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
@@ -132,6 +143,8 @@ export const productListColumn = [
       )
     },
     textAlign: 'center',
+    minWidth: 100,
+    maxWidth: 100,
     showColumnMenuTool: false,
     render: (props) => {
       return (
@@ -151,6 +164,8 @@ export const productListColumn = [
       )
     },
     textAlign: 'center',
+    minWidth: 100,
+    maxWidth: 100,
     showColumnMenuTool: false,
     render: (props) => {
       return (
@@ -170,6 +185,8 @@ export const productListColumn = [
       )
     },
     textAlign: 'center',
+    minWidth: 100,
+    maxWidth: 100,
     showColumnMenuTool: false,
     render: (props) => {
       return (
@@ -182,9 +199,19 @@ export const productListColumn = [
     }
   },
   {
+    name: 'productName',
+    header: '상품명',
+    textAlign: 'center',
+    minWidth: 200,
+    showColumnMenuTool: false,
+    render: ({value}) => <p>{value}</p>
+  },
+  {
     name: 'price',
     header: '원가',
     textAlign: 'center',
+    minWidth: 100,
+    maxWidth: 100,
     showColumnMenuTool: false,
     render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>
   },
@@ -192,6 +219,8 @@ export const productListColumn = [
     name: 'discountRate',
     header: '할인가',
     textAlign: 'center',
+    minWidth: 100,
+    maxWidth: 100,
     showColumnMenuTool: false,
     render: (props) => {
       const price = parseFloat(props.cellProps.data.price)
@@ -206,6 +235,8 @@ export const productListColumn = [
     name: 'productUrl',
     header: '사이트',
     textAlign: 'center',
+    minWidth: 100,
+    maxWidth: 100,
     sortable: false,
     showColumnMenuTool: false,
     render: ({value, cellProps}) => {
@@ -220,18 +251,24 @@ export const productListColumn = [
     name: 'ratingPoint',
     header: '평점',
     textAlign: 'center',
+    minWidth: 100,
+    maxWidth: 100,
     showColumnMenuTool: false
   },
   {
     name: 'reviewCount',
     header: '리뷰수',
     textAlign: 'center',
+    minWidth: 100,
+    maxWidth: 100,
     showColumnMenuTool: false
   },
   {
     name: 'keyword',
     header: '키워드',
     textAlign: 'center',
+    minWidth: 100,
+    maxWidth: 100,
     showColumnMenuTool: false
   }
 ]

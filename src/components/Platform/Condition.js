@@ -398,7 +398,7 @@ export function PaymentCondition(props) {
           <Select styles={inputStyle}
                   components={{IndicatorSeparator: () => null}}
                   options={searchType}
-                  value={searchCondition.searchType.value !== '' ? searchType.find(value => value.value === searchCondition.searchType) : ''}
+                  value={searchCondition.searchType.value !== '' ? searchType.find(value => value.value === searchCondition.searchType) : searchType[0]}
                   onChange={handleSearchType}
           />
           <SearchInput>
