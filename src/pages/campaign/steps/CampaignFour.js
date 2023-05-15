@@ -48,8 +48,10 @@ import {
   uploadNativeImages
 } from "../../../services/campaign/CreativeAxios";
 import moment from "moment";
-import {toast} from "react-toastify";
-import {useLocation} from "react-router-dom";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import {useLocation, useNavigate} from "react-router-dom";
+import {useResetAtom} from "jotai/utils";
 
 const RegistryBannerItem = (props) => {
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
@@ -595,6 +597,7 @@ function CampaignFourNative(props) {
 
 export function CampaignFour() {
   const {state} =useLocation()
+  const navigate = useNavigate()
   const [, setStepCampaign] = useAtom(stepCampaignAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
   const [campaignBasicInfo,setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
@@ -603,6 +606,8 @@ export function CampaignFour() {
   const [, setClickInducementType] = useAtom(clickInducementTypeAtom)
   const {register, handleSubmit, reset, formState: {errors}} = useFormContext()
   const [resistBool] =useState(state === null)
+  const resetInfo = useResetAtom(campaignCreativeAtom)
+
   useEffect(() => {
     if(!resistBool){
       if(state.creativeType ==='BANNER' ){
@@ -680,41 +685,50 @@ export function CampaignFour() {
       [e.target.name]: e.target.value
     })
   }
-
+  const onSubmitToast = (response) => {
+    if(response) {
+      if (state !== null) {
+        toast.success("수정되었습니다.",{autoClose:100, delay:0})
+        toast.onChange(payload => {
+          if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
+            navigate('/board/dashboard')
+            resetInfo()
+          }
+        })
+      } else {
+        setStepCampaign({steps: 4})
+      }
+    } else {
+      state !== null ? toast.error('수정이 실패하였습니다.') : toast.error('등록이 실패하였습니다.')
+    }
+  }
   const onSubmit = (data) => {
     console.log(campaignCreativeInfo)
     if(campaignCreativeInfo.creativeType ==='BANNER'){
       updateCampaignBanner({
         ...campaignCreativeInfo,
         campaignId:campaignBasicInfo.campaignId,
-        name:campaignCreativeInfo.name !==undefined ? campaignCreativeInfo.name : creativeType.find(value => value.value === campaignCreativeInfo.creativeType).label+ '_' + campaignBasicInfo.pixelId.label+ '_' +campaignBasicInfo.productType+ '_' +campaignBasicInfo.goal.label+ '_' +moment().format('YYYYMMDDhhmmss')
+        name:campaignCreativeInfo.name !==undefined ? campaignCreativeInfo.name : creativeType.find(value => value.value === campaignCreativeInfo.creativeType)?.label+ '_' + campaignBasicInfo.pixelId.label+ '_' +campaignBasicInfo.productType+ '_' +campaignBasicInfo.goal.label+ '_' +moment().format('YYYYMMDDhhmmss')
       }).then(response => {
-        if(response){
-          alert("등록 완료")
-        }
+        onSubmitToast(response)
       })
     }else if(campaignCreativeInfo.creativeType ==='NATIVE'){
       updateCampaignNative({
         ...campaignCreativeInfo,
         campaignId:campaignBasicInfo.campaignId,
-        name:campaignCreativeInfo.name !==undefined ? campaignCreativeInfo.name :  creativeType.find(value => value.value === campaignCreativeInfo.creativeType).label+ '_' + campaignBasicInfo.pixelId.label+ '_' +campaignBasicInfo.productType+ '_' +campaignBasicInfo.goal.label+ '_' +moment().format('YYYYMMDDhhmmss')
+        name:campaignCreativeInfo.name !==undefined ? campaignCreativeInfo.name :  creativeType.find(value => value.value === campaignCreativeInfo.creativeType)?.label+ '_' + campaignBasicInfo.pixelId.label+ '_' +campaignBasicInfo.productType+ '_' +campaignBasicInfo.goal.label+ '_' +moment().format('YYYYMMDDhhmmss')
       }).then(response => {
-        if(response){
-          alert("등록 완료")
-        }
+        onSubmitToast(response)
       })
     }else if(campaignCreativeInfo.creativeType ==='POP_UNDER'){
       updateCampaignPopUnder({
         ...campaignCreativeInfo,
         campaignId:campaignBasicInfo.campaignId,
-        name:campaignCreativeInfo.name !==undefined ? campaignCreativeInfo.name :  creativeType.find(value => value.value === campaignCreativeInfo.creativeType).label+ '_' + campaignBasicInfo.pixelId.label+ '_' +campaignBasicInfo.productType+ '_' +campaignBasicInfo.goal.label+ '_' +moment().format('YYYYMMDDhhmmss')
+        name:campaignCreativeInfo.name !==undefined ? campaignCreativeInfo.name :  creativeType.find(value => value.value === campaignCreativeInfo.creativeType)?.label+ '_' + campaignBasicInfo.pixelId.label+ '_' +campaignBasicInfo.productType+ '_' +campaignBasicInfo.goal.label+ '_' +moment().format('YYYYMMDDhhmmss')
       }).then(response => {
-        if(response){
-          alert("등록 완료")
-        }
+        onSubmitToast(response)
       })
     }
-    setStepCampaign({steps: 4})
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -730,13 +744,13 @@ export function CampaignFour() {
                                   onClick={() => selCreativeGroup('BANNER')}
                                   className={campaignCreativeInfo.creativeType === 'BANNER' ? 'on' : null}
                   >
-                    {creativeType.find(value => value.value === 'BANNER').label}
+                    {creativeType.find(value => value.value === 'BANNER')?.label}
                   </CampaignButton>
                   <CampaignButton type={'button'}
                                   onClick={() => selCreativeGroup('NATIVE')}
                                   className={campaignCreativeInfo.creativeType === 'NATIVE' ? 'on' : null}
                   >
-                    {creativeType.find(value => value.value === 'NATIVE').label}
+                    {creativeType.find(value => value.value === 'NATIVE')?.label}
                   </CampaignButton>
                 </ColSpan1>
               }
@@ -836,9 +850,21 @@ export function CampaignFour() {
         </Board>
       }
       <SubmitContainer>
-        <CancelButton type={'button'} onClick={() => setStepCampaign({steps: 2})}>취소</CancelButton>
-        <SubmitButton type={'submit'}>저장</SubmitButton>
+        <CancelButton type={'button'} onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 2})}>{state !== null ? '취소' : '이전'}</CancelButton>
+        <SubmitButton type={'submit'}>{state !== null ? '수정' : '저장'}</SubmitButton>
       </SubmitContainer>
+      <ToastContainer
+        position="top-center"
+        autoClose={800}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        style={{zIndex: 9999999}}
+      />
     </form>
   )
 }

@@ -1,6 +1,7 @@
 import {atom} from "jotai";
+import {atomWithReset} from "jotai/utils";
 
-export const campaignBasicInfoAtom =atom({
+export const campaignBasicInfoAtom =atomWithReset({
   productType:'BANNER',
   goalType:'CAMPAIGN_CONVERSION_GOAL',
   pixelId:'',

@@ -8,7 +8,7 @@ import {
   RowSpan,
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
-import {useAtom} from "jotai/index";
+import {useAtom} from "jotai";
 import {useResetAtom} from "jotai/utils";
 import {
   createNewCategory,
@@ -27,6 +27,7 @@ import {
   SubCategoryBody,
   SubCategoryItem
 } from "./styles/common";
+import {toast, ToastContainer} from "react-toastify";
 
 
 export function CategoryManage() {
@@ -104,21 +105,30 @@ export function CategoryManage() {
    * @returns {Promise<void>}
    */
   const handleCreateCategory = async () => {
-    createNewCategory(createCategory.category).then(response => {
-      setRefresh(!refresh)
-    }).then(() => resetCategory())
+    if(createCategory.category.name !== '') {
+      createNewCategory(createCategory.category).then(response => {
+        setRefresh(!refresh)
+      }).then(() => resetCategory())
+    } else {
+      toast.warning('상위 카테고리 명을 입력해주세요')
+    }
+
   }
   /**
    * 카테고리 등록 (서브카테고리)
    * @returns {Promise<void>}
    */
   const handleCreateSubCategory = async () => {
-    createNewCategory(createCategory.subCategory).then(() => {
-      setRefresh(!refresh)
-    }).then(() => resetCategory())
-    retrieveCategoryByParentCode(selectCategory, searchKeyword).then(response => {
-      setCategoryList(response)
-    })
+    if(createCategory.subCategory.name !== '') {
+      createNewCategory(createCategory.subCategory).then(response => {
+        setRefresh(!refresh)
+      }).then(() => resetCategory())
+      retrieveCategoryByParentCode(selectCategory).then(response => {
+        setCategoryList(response)
+      })
+    } else {
+      toast.warning('하위 카테고리 명를 입력해주세요')
+    }
   }
 
   /**
@@ -150,7 +160,6 @@ export function CategoryManage() {
                   onChange={handleChangeSearchCategory}
                   placeholder={'검색'}
                   onKeyDown={event => (event.code === 'Enter') && handleSearchCategory() }
-
               />
               <SearchButton onClick={handleSearchCategory}>검색</SearchButton>
             </ColSpan1>

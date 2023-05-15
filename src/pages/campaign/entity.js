@@ -1,6 +1,6 @@
 import {atom} from "jotai/index";
 
 export const stepCampaignAtom = atom({
-  steps: 0,
+  steps: null,
   validation: false
 })

@@ -4,7 +4,7 @@ import PlatformManage from "../platform_manage";
 import React, {useEffect} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
-import {useAtom,} from "jotai";
+import {useAtom, useSetAtom,} from "jotai";
 import {decimalFormat} from "../../common/StringUtils";
 import {tokenResultAtom} from "../login/entity/Common";
 import {logOutAdmin, logOutUser, refresh, refreshAdmin} from "../../services/auth/AuthAxios";
@@ -23,12 +23,14 @@ import {CampaignTwo} from "../campaign/steps/CampaignTwo";
 import {FormProvider, useForm} from "react-hook-form";
 import {CampaignThree} from "../campaign/steps/CampaignThree";
 import {CampaignFour} from "../campaign/steps/CampaignFour";
+import {stepCampaignAtom} from "../campaign/entity";
 
 function Layout() {
   const params = useParams()
   const navigate = useNavigate()
   const methods = useForm()
   const [tokenUserInfo, setTokenUserInfo] = useAtom(tokenResultAtom)
+  const setStepCampaign = useSetAtom(stepCampaignAtom)
 
   useEffect(() => {
       if (tokenUserInfo.role === '') {
@@ -59,6 +61,12 @@ function Layout() {
         })
       }
     },[])
+
+  useEffect(() => {
+    if(params.id !== 'campaign') {
+      setStepCampaign({steps: null})
+    }
+  }, [params.id])
 
   const myPage = () => {
     if (tokenUserInfo.role === 'NORMAL') {
