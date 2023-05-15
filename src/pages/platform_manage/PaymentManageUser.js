@@ -112,7 +112,7 @@ function PaymentManageUser(props) {
       searchEndDate: moment(endDate).format('YYYY-MM-DD'),
     };
 
-    return paymentListRequest(skip, limit, tokenUserInfo.id, requestData)
+    return paymentListRequest( tokenUserInfo.id, requestData)
       .then((response) => {
         if (response !== null) {
           const { totalCount, rows: data } = response;
