@@ -6,17 +6,18 @@ import {modalController} from "../../store";
 import {campaignTemporaryListAtom} from "../../pages/campaign/entity/Info";
 import {toast} from "react-toastify";
 import {DeleteIcon, SmallButton} from "../../pages/campaign/styles/common";
+import {deleteTemporary, selTemporaryList} from "../../services/campaign/InfoAxios";
 
 export function TemporaryListModal(props) {
-  const {title, onSubmit, btnStyle, historyAdd} = props;
+  const {onSubmit, userId} = props;
   const [, setModal] = useAtom(modalController)
   useEffect( () => {
     setModal({
       isShow: true,
-      width: historyAdd !== undefined ? 700 : 600,
+      width: 600,
       modalComponent: () => {
         return (
-          <TemporaryList onSubmit={onSubmit} historyAdd={historyAdd}/>
+          <TemporaryList onSubmit={onSubmit} userId={userId}/>
         )
       }
     })
@@ -25,7 +26,7 @@ export function TemporaryListModal(props) {
 
 function TemporaryList (props) {
   const [, setModal] = useAtom(modalController)
-  const [campaignTemporaryList] = useAtom(campaignTemporaryListAtom)
+  const [campaignTemporaryList, setCampaignTemporaryList] = useAtom(campaignTemporaryListAtom)
   const [selectedItem, setSelectedItem] = useState({})
 
   const handleSelect = (item) => {
@@ -44,7 +45,13 @@ function TemporaryList (props) {
     }
   }
   const handleDeleteTemporaryItem = (item) => {
-    console.log(item)
+    deleteTemporary(item).then( response => {
+      response ? selTemporaryList(props.userId).then(response =>{
+        if(response !== null) {
+          setCampaignTemporaryList(response)
+        }
+      }) : toast.error('삭제가 실패하였습니다.')
+    })
   }
   return (
     <div>
@@ -77,9 +84,9 @@ function TemporaryList (props) {
             </>
           }
           {campaignTemporaryList !==null && campaignTemporaryList.length === 0 &&
-            <div>임시저장된 정보가 없습니다.</div>
+            <div style={{textAlign: 'center', margin: '10px 0'}}>임시저장된 정보가 없습니다.</div>
           }
-          {props.historyAdd === undefined && <MediaSelectedButton onClick={handleSubmit}>선택 완료</MediaSelectedButton>}
+          {campaignTemporaryList.length !== 0 && <MediaSelectedButton onClick={handleSubmit}>선택 완료</MediaSelectedButton>}
         </MediaSearchResult>
       </ModalBody>
     </div>

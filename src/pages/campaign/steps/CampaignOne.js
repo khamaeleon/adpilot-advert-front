@@ -20,7 +20,6 @@ import Select from "react-select";
 import React, {useEffect, useState} from "react";
 import {SearchAdvertiser} from "../../../components/common/SearchAdvertiser";
 import {useAtom, useSetAtom} from "jotai";
-import {modalController} from "../../../store";
 import {stepCampaignAtom} from "../entity";
 import {Controller, useFormContext} from "react-hook-form";
 import {campaignBasicInfoAtom, campaignTemporaryListAtom} from "../entity/Info";
@@ -29,11 +28,13 @@ import {selAdverPixelDetailList} from "../../../services/header/ManagePixelAxios
 import {resistCampaignBasic, selBasicInfo, selEnumInfo, selTemporaryList} from "../../../services/campaign/InfoAxios";
 import moment from "moment/moment";
 import {TemporaryListModal} from "../../../components/campaign/TemporaryListModal";
+import {useResetAtom} from "jotai/utils";
 
 export function CampaignOne() {
-  const setStepCampaign = useSetAtom(stepCampaignAtom)
+  const [stepCampaign,setStepCampaign] = useAtom(stepCampaignAtom)
   const setCampaignTemporaryList = useSetAtom(campaignTemporaryListAtom)
   const [campaignBasicInfo, setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
+  const resetInfo = useResetAtom(campaignBasicInfoAtom)
   const [adverInfo, setAdverInfo] = useState(null)
   const [temporaryBool, setTemporaryBool] = useState(false)
   const [goalList, setGoalList] = useState(null)
@@ -46,6 +47,15 @@ export function CampaignOne() {
     selEnumInfo('CAMPAIGN_CONVERSION_GOAL').then(response => {
       setGoalList(response.data)
     })
+    if(stepCampaign.steps !== null){
+      selAdverPixelDetailList(campaignBasicInfo.userId).then(response => {
+        let clonePixelList = []
+        response.map(data => {
+          clonePixelList = [...clonePixelList, {value: data.pixelId, label: data.pixelName}]
+        })
+        setPixelList(clonePixelList)
+      })
+    } else resetInfo()
   }, [])
   /**
    * 광고주 설정
@@ -194,7 +204,6 @@ export function CampaignOne() {
       })
     }
   }
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Board>
@@ -221,7 +230,7 @@ export function CampaignOne() {
               <ColSpan2>
                 <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
                 {temporaryBool &&
-                  <TemporaryListModal onSubmit={handleSelectedTemporaryList}/>
+                  <TemporaryListModal onSubmit={handleSelectedTemporaryList} userId={campaignBasicInfo.userId} />
                 }
               </ColSpan2>
             </ColSpan4>
@@ -249,9 +258,10 @@ export function CampaignOne() {
                       }}
                       render={({field}) => (
                         <Select options={pixelList !== null ? pixelList :[]}
-                                placeholder={'최적화 픽셀 선택'}
+                                placeholder={(pixelList === null || pixelList?.length === 0) ? '최적화 픽셀이 없습니다.' : '최적화 픽셀 선택'}
+                                isDisabled={pixelList === null || pixelList?.length === 0 && true}
                                 {...field}
-                                value={campaignBasicInfo !== null && pixelList !== null  ? pixelList.find(item =>item.value ===campaignBasicInfo.pixelId) : ''}
+                                value={campaignBasicInfo !== null && pixelList !== null  ? pixelList.find(item =>item.value === campaignBasicInfo.pixelId) : ''}
                                 onChange={handleChangePixel}
                                 styles={{
                                   input: (baseStyles, state) => (
@@ -263,7 +273,7 @@ export function CampaignOne() {
                         />
                       )}
                     />
-                    <PixelModal title={'추가'} data={adverInfo !== null && adverInfo}/>
+                    <PixelModal title={'추가'} data={adverInfo !== null && adverInfo} setPixelList={setPixelList}/>
                     {errors.pixelId && <ValidationScript style={{bottom: -25}}>{errors.pixelId?.message}</ValidationScript>}
                   </div>
                 </ColSpan2>
