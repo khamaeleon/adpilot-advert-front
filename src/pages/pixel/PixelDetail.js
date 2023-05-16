@@ -307,6 +307,7 @@ function PixelDetail() {
                      data={pixelInfoListState.events}
                      showHoverRows={false}
                      activeCell={[0]}
+                     downloadList={false}
                      emptyText={'이벤트 단가 관리 내역이 없습니다.'}/>
             }
           </BoardTableContainer>

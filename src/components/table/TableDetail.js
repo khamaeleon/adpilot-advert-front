@@ -11,6 +11,7 @@ function TableDetail (props) {
   const {columns, data, settings, groups } = props
   const [activeCell, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
+  const [gridDetailRef, setGridDetailRef] = useState(null);
   const gridStyle = { minHeight: 550 }
   const [accountRowHeights, setAccountRowHeights] = useState({})
 
@@ -64,10 +65,11 @@ function TableDetail (props) {
    * @param data
    * @returns {JSX.Element}
    */
-  const renderContactsGrid = useCallback(({data}) => {
+  const renderContactsGrid = useCallback(({data, dataSource,rowId,remoteRowIndex}) => {
+    console.log(data, dataSource,rowId,remoteRowIndex)
     return (
       <ReactDataGrid
-        handle={setGridRef}
+        handle={setGridDetailRef}
         dataSource={props.detailData(data)}
         columns={props.detailColumn}
         enableColumnAutosize={true}
@@ -76,7 +78,7 @@ function TableDetail (props) {
         rowHeight={null}
       />
     );
-  },[])
+  },[props])
 
   return(
     <>
