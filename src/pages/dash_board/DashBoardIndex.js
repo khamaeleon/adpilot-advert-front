@@ -419,9 +419,13 @@ function DashBoardIndex() {
     //   }
     // })
   }
-  const getDataSource =(userId,search) =>{
-    console.log(search)
-    return retrieveAdvertiserCampaignStatus(userId, search)
+  const getDataSource =async (userId,search) =>{
+    let adverStatusTempDetail = await retrieveAdvertiserCampaignStatus(userId, search)
+    adverStatusTempDetail?.map(item =>{
+      return {...item,userId:userId}
+    })
+    console.log(adverStatusTempDetail)
+    return    adverStatusTempDetail
   }
   const contactsDataSource = useCallback(getDataSource, [searchCondition])
   const renderContactsGrid = ({data}) => {
