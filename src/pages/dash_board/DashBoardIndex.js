@@ -10,10 +10,16 @@ import {
 } from "../../assets/GlobalStyles";
 import {ResponsiveLine} from '@nivo/line'
 import React, {useCallback, useEffect, useState} from "react";
-import {useAtom} from "jotai";
+import {useAtom,useAtomValue} from "jotai";
 import {dataTotalInfo} from "../../components/common/entity";
 import {chartDataAtom, commonProperties, platformStatusType, userPlatformStatusType} from "./entity/Chart";
-import {adverListColumn, adverStatusAtom, adverStatusDetailColumn, userCampaignListColumn,} from "./entity/Campaign";
+import {
+  adverListColumn,
+  adverStatusAtom,
+  adverStatusDetailAtom,
+  adverStatusDetailColumn,
+  userCampaignListColumn,
+} from "./entity/Campaign";
 import {eventType, productType, searchConditionAtom} from "./entity/Common";
 import {retrieveAdverOverview, retrieveOverview,} from "../../services/dash_board/ChartAxios";
 import {tokenResultAtom} from "../login/entity/Common";
@@ -32,7 +38,7 @@ import Table from "../../components/table";
 function ChartComponent(props) {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [chartData, setChartData] = useAtom(chartDataAtom);
-  const {searchCondition} = props
+  const {searchCondition} = useAtom(searchConditionAtom)
   const [dataType, setDataType] = useState('cpc')
   const [dataType2, setDataType2] = useState('costAmount')
   const [chartDataInfo, setChartDataInfo] = useState([])
@@ -118,7 +124,7 @@ function ChartComponent(props) {
         break;
       case 'cpc':
         const caseValueB = costAmountSum;
-        calc = caseValueB !== 0 ? clickCountSum / caseValueB : 0;
+        calc = caseValueB !== 0 ? caseValueB / clickCountSum  : 0;
         break;
       case 'conversionRate':
         const caseValueC = clickCountSum;
@@ -358,14 +364,14 @@ function DashBoardIndex() {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [totalInfo, setTotalInfo] = useState(dataTotalInfo)
   const [adverStatusData, setAdverStatusData] = useAtom(adverStatusAtom)
-  const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
+  const [adverStatusDetailData, setAdverStatusDetailData] = useAtom(adverStatusDetailAtom)
+  const [searchCondition, setSearchCondition] = useAtom(searchConditionAtom)
   const [keyword, setKeyword] = useState('')
 
   useEffect(() => {
     if(tokenUserInfo.role !== 'NORMAL') {
       //광고주 현황 조회
       retrieveAdvertiserStatus(searchCondition).then(response => {
-        console.log(searchCondition)
         if(response !== null) {
           setAdverStatusData(response)
           setTotalInfo({
@@ -387,7 +393,7 @@ function DashBoardIndex() {
         }
       })
     }
-  }, [searchCondition])
+  }, [])
 
   /**
    * 검색 버튼
@@ -397,11 +403,23 @@ function DashBoardIndex() {
       ...searchCondition,
       keyword: keyword
     })
+    console.log(searchCondition)
+    retrieveAdvertiserStatus(searchCondition).then(response => {
+      if(response !== null) {
+        setAdverStatusData(response)
+        setTotalInfo({
+          totalCount: response.length
+        })
+      } else {
+        setAdverStatusData([])
+      }
+    })
   }
 
   const handleFetchDetailData = useCallback(async ({userId}) => {
+
     let adverStatusTempDetail = await retrieveAdvertiserCampaignStatus(userId, searchCondition)
-    adverStatusTempDetail = adverStatusTempDetail?.map(item =>{
+    adverStatusTempDetail?.map(item =>{
       return {...item,userId:userId}
     })
     return adverStatusTempDetail
@@ -424,6 +442,7 @@ function DashBoardIndex() {
                            totalCount={[totalInfo.totalCount, '광고주']}
                            showHoverRows={false}
                            activeCell={[0]}
+                           multiRowExpand={false}
                            data={adverStatusData}
                            detailData={handleFetchDetailData}
                            detailColumn={adverStatusDetailColumn}

@@ -46,7 +46,7 @@ function ConversionManage() {
     <main>
       <Board>
         <BoardHeader>전환 현황</BoardHeader>
-        <BoardSearchDetail>by
+        <BoardSearchDetail>
           <PlatformCondition searchType={searchConversionType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleTableData={handleSearch}/>
         </BoardSearchDetail>
         <BoardTableContainer>

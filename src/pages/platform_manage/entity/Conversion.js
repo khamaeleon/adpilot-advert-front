@@ -6,8 +6,8 @@ import React from "react";
 
 export const searchConversionType = [
   {id: "1", value: "DEFAULT", label: "기본"},
-  {id: "2", value: "ADVER_NAME", label: "광고주명"},
-  {id: "3", value: "ADVER_ID", label: "광고주아이디"}
+  {id: "2", value: "ADVER_NAME", label: "주문 번호"},
+  {id: "3", value: "ADVER_ID", label: "상품 코드"}
 ]
 export const conversionListDataAtom = atom(null)
 
@@ -90,14 +90,17 @@ export const columnConversionDetailData = [
   {
     name: 'campaignId',
     header: '캠페인 코드',
+    width: 100,
+    textAlign: 'center',
     render: ({value, cellProps}) => {
-      console.log(cellProps)
       return <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>
     }
   },
   {
     name: 'inventoryId',
     header: '지면 코드',
+    width: 100,
+    textAlign: 'center',
     render: ({value, cellProps}) => {
       return <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>
     }

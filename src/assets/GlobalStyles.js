@@ -950,7 +950,7 @@ export const CustomDatePicker = styled(DatePicker)`
   color: #a2aab2;
   font-size: 14px;
   width: 100%;
-  padding: 0 20px;
+  padding: 0 15px;
 `
 
 export const RangePicker = styled.div`

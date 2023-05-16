@@ -27,7 +27,7 @@ import {
   SubCategoryBody,
   SubCategoryItem
 } from "./styles/common";
-import {toast} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 
 
 export function CategoryManage() {
@@ -187,7 +187,7 @@ export function CategoryManage() {
                   <CategoryItem
                     key={key}
                     onClick={() => handleSelectCategory(item.code)}
-                    active={item.code === selectCategory? true: false}
+                    active={item.code === selectCategory}
                   >{item.name}</CategoryItem>
                 )
               })}
@@ -203,7 +203,7 @@ export function CategoryManage() {
                 <ColSpan3>
                   <Input placeholder={selectCategory !== '' ? '카테고리 명을 입력해주세요' : '상위 카테고리를 선택해주세요'} value={createCategory.subCategory.name || ""} onChange={handleChangeSubCategory} readOnly={selectCategory !== '' ? false : true}/>
                 </ColSpan3>
-                <ColSpan1><SearchButton onClick={handleCreateSubCategory} disabled={selectCategory !== '' ? false : true}>등록</SearchButton></ColSpan1>
+                <ColSpan1><SearchButton onClick={handleCreateSubCategory} disabled={selectCategory === ''}>등록</SearchButton></ColSpan1>
               </div>
             </CategoryEnroll>
             <SubCategoryBody>
@@ -216,6 +216,7 @@ export function CategoryManage() {
           </SubCategory>
         </CategoryContainer>
       </Board>
+      <ToastContainer/>
     </>
   )
 }

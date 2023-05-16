@@ -81,7 +81,7 @@ function AsideList (props) {
                       <div>
                         <Link to={`/board/reports`} style={id === 'reports' ? {color:'#fff'}:null}>보고서 생성</Link>
                       </div>
-                      {reportLists.length !== 0 && reportLists.map((list, index) => {
+                      {reportLists !== null && reportLists.length !== 0 && reportLists.map((list, index) => {
                         return(
                           <div key={index}>
                             <Link to={`/board/customReports`} onClick={() =>handleChangeReportsInfo(list.id,list.groupByPeriod)} style={list.id === reportsInfo.id ? {color:'#fff'}:null}>{list.adverName} {list.reportName}</Link>
@@ -182,11 +182,9 @@ const Menu = styled.ul`
       color: #ccc;
       margin-left: 0px;
       transition-duration: 0.5s;
-
       &:hover {
         background-color: #f5811f;
       }
-
       & span {
         display: inline-block;
         margin-top: 19px;

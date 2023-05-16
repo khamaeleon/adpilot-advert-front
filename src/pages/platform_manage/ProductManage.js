@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {Board, BoardHeader, BoardSearchDetail, BoardSearchResult} from "../../assets/GlobalStyles";
 import Table from "../../components/table";
-import {useAtom} from "jotai/index";
 import {PlatformCondition} from "../../components/Platform/Condition";
 import {modalController} from "../../store";
-import {useSetAtom} from "jotai";
+import {useAtom, useSetAtom} from "jotai";
 import {ModalBody, ModalHeader} from "../../components/modal/Modal";
 import {retrieveProduct} from "../../services/Platform/PlatformAxios";
 import {searchConditionAtom} from "./entity/Common";
@@ -69,7 +68,9 @@ function ProductManage() {
       }
     })
   }, [])
-
+  /**
+   * 상품 수집 검색
+   */
   const handleSearchResult = () => {
     retrieveProduct(searchCondition).then(response =>{
       if(response){
@@ -83,13 +84,19 @@ function ProductManage() {
       <Board>
         <BoardHeader>상품 수집 현황</BoardHeader>
         <BoardSearchDetail>
-          <PlatformCondition searchType={searchProductType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleTableData={handleSearchResult}/>
+          <PlatformCondition
+            searchType={searchProductType}
+            searchCondition={searchCondition}
+            setSearchCondition={setSearchCondition}
+            handleTableData={handleSearchResult}
+          />
         </BoardSearchDetail>
         <BoardSearchResult>
-          <Table columns={productListColumn}
-                 totalCount={[productData.totalCount !== undefined ? productData.totalCount : 0,'상품수']}
-                 data={productData.rows !== undefined ? productData.rows : []}
-                 idProperty={'id'}
+          <Table
+            columns={productListColumn}
+            totalCount={[productData.totalCount !== undefined ? productData.totalCount : 0,'상품수']}
+            data={productData.rows !== undefined ? productData.rows : []}
+            idProperty={'id'}
           />
         </BoardSearchResult>
       </Board>

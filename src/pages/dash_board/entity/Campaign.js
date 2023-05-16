@@ -179,7 +179,8 @@ export const adverListColumn = [
     showColumnMenuTool: false
   }
 ]
-
+/*광고주 현황 디테일 리스트 데이터*/
+export const adverStatusDetailAtom = atom([])
 /**
  * 광고주 현황 리스트 디테일 컬럼 설정
  */

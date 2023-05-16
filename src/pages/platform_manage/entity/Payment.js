@@ -13,7 +13,7 @@ export const paymentDataAtom = atom([{
 }])
 
 export const searchPaymentType = [
-  {id: "0", value: "All", label: "전체"},
+  {id: "0", value: "ALL", label: "전체"},
   {id: "1", value: "ADVER_NAME", label: "광고주명"},
   {id: "2", value: "USERNAME", label: "광고주 아이디"},
   {id: "3", value: "PRODUCT_NAME", label: "신청 아이디"}
@@ -133,6 +133,6 @@ export const searchPaymentParams = atom({
   startAt: dateFormat(getToDay(), 'YYYY-MM'),
   endAt: dateFormat(getToDay(), 'YYYY-MM'),
   statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE'],
-  searchType: 'DEFAULT',
+  searchType: 'ALL',
   search: ''
 })

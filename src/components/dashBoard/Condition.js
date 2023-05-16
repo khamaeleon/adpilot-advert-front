@@ -28,9 +28,12 @@ import {
 } from "../../common/DateUtils";
 import Checkbox from "../common/Checkbox";
 import Select from "react-select";
+import {useAtom} from "jotai";
+import {searchConditionAtom} from "../../pages/dash_board/entity/Common";
 
 export function DashBoardCondition(props) {
-  const {role, searchCondition, setSearchCondition, keyword, setKeyword, handleData, productType, eventType} = props
+  const {role, keyword, setKeyword, handleData, productType, eventType} = props
+  const [searchCondition, setSearchCondition] = useAtom(searchConditionAtom)
   const [dateRange, setDateRange] = useState([new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
   const [isCheckedAll, setIsCheckedAll] = useState(true)
