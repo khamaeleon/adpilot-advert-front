@@ -609,6 +609,7 @@ export function CampaignFour() {
   const resetInfo = useResetAtom(campaignCreativeAtom)
 
   useEffect(() => {
+    console.log(campaignBasicInfo.productType)
     if(!resistBool){
       if(state.creativeType ==='BANNER' ){
         selCreativeBannerInfo(state.campaignId).then(response =>{
@@ -658,7 +659,7 @@ export function CampaignFour() {
       setClickInducementType(response.data)
     })
 
-    if (resistBool || (state !==null && state.productType==='BANNER')) {
+    if (resistBool && campaignBasicInfo.productType ==='BANNER'|| (state !==null && state.productType==='BANNER')) {
       selEnumInfo('CREATIVE_TYPE_BANNER').then(response => {
         setCreativeType(response.data)
       })
@@ -738,7 +739,7 @@ export function CampaignFour() {
           <BoardSearchResult>
             <Span4>크리에이티브 그룹 선택</Span4>
             <RowSpan box={true} column={false}>
-              {creativeType !== null && (resistBool || (state !==null && state.productType==='BANNER')) &&
+              {creativeType !== null && (resistBool && campaignBasicInfo.productType==='BANNER'|| (state !==null && state.productType==='BANNER')) &&
                 <ColSpan1 padding={'0'}>
                   <CampaignButton type={'button'}
                                   onClick={() => selCreativeGroup('BANNER')}
@@ -840,10 +841,10 @@ export function CampaignFour() {
               <Validation>{errors.pcReferralCode && errors.pcReferralCode.message}</Validation>
               <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
             </ValidationGroup>
-            {campaignCreativeInfo.creativeType === 'BANNER' && (resistBool || (state !== null && state.productType==='BANNER')) &&
+            {campaignCreativeInfo.creativeType === 'BANNER' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
               <CampaignFourBanner register={register} errors={errors}/>
             }
-            {campaignCreativeInfo.creativeType === 'NATIVE' && (resistBool || (state !== null && state.productType==='BANNER')) &&
+            {campaignCreativeInfo.creativeType === 'NATIVE' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
               <CampaignFourNative register={register} errors={errors}/>
             }
           </BoardSearchResult>

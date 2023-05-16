@@ -33,7 +33,7 @@ export async function AxiosImage(type, uri, formData) {
 export async function AxiosFile(type, uri, formData) {
   // const accessToken = store.getState().auth.accessToken
   const accessToken =""
-  return fetch(ADMIN_SERVER + uri, {
+  return fetch(ADVER_SERVER + uri, {
     method: type,
     headers: {
       Authorization: `Bearer  ${accessToken}`,

@@ -548,7 +548,7 @@ export default function Basic(props) {
                   onChange: (e) => handleBusinessNumber(e)
                 })}
                 value={accountInfo.businessNumber || ""}
-                readOnly={true}
+                /*readOnly={true}*/
               />
               {errors.businessNumber && <ValidationScript>{errors.businessNumber?.message}</ValidationScript>}
               <DuplicateButton type={'button'} onClick={() => handleCheckBusinessNumber()}>사업자 조회</DuplicateButton>
