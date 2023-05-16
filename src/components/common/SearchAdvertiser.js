@@ -5,6 +5,7 @@ import styled from "styled-components";
 import {selKeywordUser} from "../../services/Platform/ManageUserAxios";
 import {modalController} from "../../store";
 import {toast} from "react-toastify";
+import {SaveExcelButton} from "../../assets/GlobalStyles";
 export function SearchAdvertiser(props) {
   const {title, onSubmit, btnStyle, historyAdd} = props;
   const [, setModal] = useAtom(modalController)
@@ -19,8 +20,10 @@ export function SearchAdvertiser(props) {
       }
     })
   }
-
-  return <Button type={'button'} onClick={handleModalComponent}>{title}</Button>
+  switch (btnStyle){
+    case 'historyAddButton' : return <SaveExcelButton className={'listUp'} onClick={handleModalComponent}>{title}</SaveExcelButton>;
+    default : return <Button type={'button'} onClick={handleModalComponent}>{title}</Button>;
+  }
 }
 
 function SearchModal (props) {

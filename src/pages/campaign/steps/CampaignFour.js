@@ -16,6 +16,7 @@ import {
   SubmitContainer
 } from "../../../assets/GlobalStyles";
 import {
+  AdverInfo,
   CampaignButton,
   CategoryItem, CreateImage,
   DeleteIcon,
@@ -734,124 +735,127 @@ export function CampaignFour() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {campaignCreativeInfo !== null &&
-        <Board>
-          <BoardHeader>광고 그룹 설정</BoardHeader>
-          <BoardSearchResult>
-            <Span4>크리에이티브 그룹 선택</Span4>
-            <RowSpan box={true} column={false}>
-              {creativeType !== null && (resistBool && campaignBasicInfo.productType==='BANNER'|| (state !==null && state.productType==='BANNER')) &&
-                <ColSpan1 padding={'0'}>
-                  <CampaignButton type={'button'}
-                                  onClick={() => selCreativeGroup('BANNER')}
-                                  className={campaignCreativeInfo.creativeType === 'BANNER' ? 'on' : null}
-                  >
-                    {creativeType.find(value => value.value === 'BANNER')?.label}
-                  </CampaignButton>
-                  <CampaignButton type={'button'}
-                                  onClick={() => selCreativeGroup('NATIVE')}
-                                  className={campaignCreativeInfo.creativeType === 'NATIVE' ? 'on' : null}
-                  >
-                    {creativeType.find(value => value.value === 'NATIVE')?.label}
-                  </CampaignButton>
-                </ColSpan1>
-              }
-              {creativeType !== null && campaignBasicInfo.productType ==='POP_UNDER' &&
-                <ColSpan1 padding={'0'}>
-                  <CampaignButton type={'button'}
-                                  className={'on'}
-                  >
-                    {creativeType.find(value => value.value === 'POP_UNDER')?.label}
-                  </CampaignButton>
-                </ColSpan1>
-              }
-            </RowSpan>
-            <RowSpan column={true}>
-              <Span4>랜딩 url</Span4>
+        <>
+          {state !== null && <AdverInfo><span>광고주 정보</span><p></p><span>{state?.adverInfo}</span></AdverInfo>}
+          <Board>
+            <BoardHeader>광고 그룹 설정</BoardHeader>
+            <BoardSearchResult>
+              <Span4>크리에이티브 그룹 선택</Span4>
               <RowSpan box={true} column={false}>
-                <ColSpan2>
-                  <Span3>PC 랜딩 url</Span3>
-                  <Input
-                    type={'text'}
-                    name={'pcLandingUrl'}
-                    value={campaignCreativeInfo.pcLandingUrl}
-                    {...register('pcLandingUrl', {
-                      required: 'PC 랜딩 URL을 작성해주세요',
-                      pattern:{
-                        value:  /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi,
-                        message: "http(s)://가 포함된 url 주소를 확인해주세요."
-                      },
-                      onChange: (e) => handleChangeInputs(e)
-                    })}
-                  />
-                </ColSpan2>
-                <HorizontalRule style={{height: 42}}/>
-                <ColSpan2>
-                  <Span4>MOBILE 랜딩 url</Span4>
-                  <Input
-                    type={'text'}
-                    name={'mobLandingUrl'}
-                    value={campaignCreativeInfo.mobLandingUrl}
-                    {...register('mobLandingUrl', {
-                      required: '모바일 랜딩 URL을 작성해주세요',
-                      pattern:{
-                        value:  /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi,
-                        message: "http(s)://가 포함된 url 주소를 확인해주세요."
-                      },
-                      onChange: (e) => handleChangeInputs(e)
-                    })}
-                  />
-                </ColSpan2>
+                {creativeType !== null && (resistBool && campaignBasicInfo.productType==='BANNER'|| (state !==null && state.productType==='BANNER')) &&
+                  <ColSpan1 padding={'0'}>
+                    <CampaignButton type={'button'}
+                                    onClick={() => selCreativeGroup('BANNER')}
+                                    className={campaignCreativeInfo.creativeType === 'BANNER' ? 'on' : null}
+                    >
+                      {creativeType.find(value => value.value === 'BANNER')?.label}
+                    </CampaignButton>
+                    <CampaignButton type={'button'}
+                                    onClick={() => selCreativeGroup('NATIVE')}
+                                    className={campaignCreativeInfo.creativeType === 'NATIVE' ? 'on' : null}
+                    >
+                      {creativeType.find(value => value.value === 'NATIVE')?.label}
+                    </CampaignButton>
+                  </ColSpan1>
+                }
+                {creativeType !== null && campaignBasicInfo.productType ==='POP_UNDER' &&
+                  <ColSpan1 padding={'0'}>
+                    <CampaignButton type={'button'}
+                                    className={'on'}
+                    >
+                      {creativeType.find(value => value.value === 'POP_UNDER')?.label}
+                    </CampaignButton>
+                  </ColSpan1>
+                }
               </RowSpan>
-            </RowSpan>
-            <ValidationGroup>
-              <Validation>{errors.pcLandingUrl && errors.pcLandingUrl.message}</Validation>
-              <Validation>{errors.mobLandingUrl && errors.mobLandingUrl.message}</Validation>
-            </ValidationGroup>
-            <RowSpan column={true}>
-              <Span4>인식 코드</Span4>
-              <RowSpan box={true} column={false}>
-                <ColSpan2>
-                  <Span3>PC 인식 코드</Span3>
-                  <Input
-                    type={'text'}
-                    name={'pcReferralCode'}
-                    value={campaignCreativeInfo.pcReferralCode}
-                    {...register('pcReferralCode', {
-                      required: 'PC 인식 코드를 작성해주세요',
-                      onChange: (e) => handleChangeInputs(e)
-                    })}
-                  />
-                </ColSpan2>
-                <HorizontalRule style={{height: 42}}/>
-                <ColSpan2>
-                  <Span4 style={{letterSpacing: -1}}>MOBILE 인식 코드</Span4>
-                  <Input
-                    type={'text'}
-                    name={'mobReferralCode'}
-                    value={campaignCreativeInfo.mobReferralCode}
-                    {...register('mobReferralCode', {
-                      required: '모바일 인식 코드를 작성해주세요',
-                      onChange: (e) => handleChangeInputs(e)
-                    })}
-                  />
-                </ColSpan2>
+              <RowSpan column={true}>
+                <Span4>랜딩 url</Span4>
+                <RowSpan box={true} column={false}>
+                  <ColSpan2>
+                    <Span3>PC 랜딩 url</Span3>
+                    <Input
+                      type={'text'}
+                      name={'pcLandingUrl'}
+                      value={campaignCreativeInfo.pcLandingUrl}
+                      {...register('pcLandingUrl', {
+                        required: 'PC 랜딩 URL을 작성해주세요',
+                        pattern:{
+                          value:  /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi,
+                          message: "http(s)://가 포함된 url 주소를 확인해주세요."
+                        },
+                        onChange: (e) => handleChangeInputs(e)
+                      })}
+                    />
+                  </ColSpan2>
+                  <HorizontalRule style={{height: 42}}/>
+                  <ColSpan2>
+                    <Span4>MOBILE 랜딩 url</Span4>
+                    <Input
+                      type={'text'}
+                      name={'mobLandingUrl'}
+                      value={campaignCreativeInfo.mobLandingUrl}
+                      {...register('mobLandingUrl', {
+                        required: '모바일 랜딩 URL을 작성해주세요',
+                        pattern:{
+                          value:  /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi,
+                          message: "http(s)://가 포함된 url 주소를 확인해주세요."
+                        },
+                        onChange: (e) => handleChangeInputs(e)
+                      })}
+                    />
+                  </ColSpan2>
+                </RowSpan>
               </RowSpan>
-            </RowSpan>
-            <ValidationGroup>
-              <Validation>{errors.pcReferralCode && errors.pcReferralCode.message}</Validation>
-              <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
-            </ValidationGroup>
-            {campaignCreativeInfo.creativeType === 'BANNER' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
-              <CampaignFourBanner register={register} errors={errors}/>
-            }
-            {campaignCreativeInfo.creativeType === 'NATIVE' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
-              <CampaignFourNative register={register} errors={errors}/>
-            }
-          </BoardSearchResult>
-        </Board>
+              <ValidationGroup>
+                <Validation>{errors.pcLandingUrl && errors.pcLandingUrl.message}</Validation>
+                <Validation>{errors.mobLandingUrl && errors.mobLandingUrl.message}</Validation>
+              </ValidationGroup>
+              <RowSpan column={true}>
+                <Span4>인식 코드</Span4>
+                <RowSpan box={true} column={false}>
+                  <ColSpan2>
+                    <Span3>PC 인식 코드</Span3>
+                    <Input
+                      type={'text'}
+                      name={'pcReferralCode'}
+                      value={campaignCreativeInfo.pcReferralCode}
+                      {...register('pcReferralCode', {
+                        required: 'PC 인식 코드를 작성해주세요',
+                        onChange: (e) => handleChangeInputs(e)
+                      })}
+                    />
+                  </ColSpan2>
+                  <HorizontalRule style={{height: 42}}/>
+                  <ColSpan2>
+                    <Span4 style={{letterSpacing: -1}}>MOBILE 인식 코드</Span4>
+                    <Input
+                      type={'text'}
+                      name={'mobReferralCode'}
+                      value={campaignCreativeInfo.mobReferralCode}
+                      {...register('mobReferralCode', {
+                        required: '모바일 인식 코드를 작성해주세요',
+                        onChange: (e) => handleChangeInputs(e)
+                      })}
+                    />
+                  </ColSpan2>
+                </RowSpan>
+              </RowSpan>
+              <ValidationGroup>
+                <Validation>{errors.pcReferralCode && errors.pcReferralCode.message}</Validation>
+                <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
+              </ValidationGroup>
+              {campaignCreativeInfo.creativeType === 'BANNER' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
+                <CampaignFourBanner register={register} errors={errors}/>
+              }
+              {campaignCreativeInfo.creativeType === 'NATIVE' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
+                <CampaignFourNative register={register} errors={errors}/>
+              }
+            </BoardSearchResult>
+          </Board>
+        </>
       }
       <SubmitContainer>
-        <CancelButton type={'button'} onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 2})}>{state !== null ? '취소' : '이전'}</CancelButton>
+        <CancelButton type={'button'} onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 2})}>{state !== null ? '목록' : '이전'}</CancelButton>
         <SubmitButton type={'submit'}>{state !== null ? '수정' : '저장'}</SubmitButton>
       </SubmitContainer>
       <ToastContainer
