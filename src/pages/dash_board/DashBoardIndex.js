@@ -33,12 +33,13 @@ import Select from "react-select";
 import {DashBoardCondition} from "../../components/dashBoard/Condition";
 import {getThisMonth} from "../../common/DateUtils";
 import Table from "../../components/table";
+import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 
 /** 플래폼 현황 차트 **/
 function ChartComponent(props) {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [chartData, setChartData] = useAtom(chartDataAtom);
-  const {searchCondition} = useAtom(searchConditionAtom)
+  const searchCondition = useAtomValue(searchConditionAtom)
   const [dataType, setDataType] = useState('cpc')
   const [dataType2, setDataType2] = useState('costAmount')
   const [chartDataInfo, setChartDataInfo] = useState([])
@@ -393,7 +394,7 @@ function DashBoardIndex() {
         }
       })
     }
-  }, [])
+  }, [searchCondition])
 
   /**
    * 검색 버튼
@@ -403,28 +404,50 @@ function DashBoardIndex() {
       ...searchCondition,
       keyword: keyword
     })
-    console.log(searchCondition)
-    retrieveAdvertiserStatus(searchCondition).then(response => {
-      if(response !== null) {
-        setAdverStatusData(response)
-        setTotalInfo({
-          totalCount: response.length
-        })
-      } else {
-        setAdverStatusData([])
-      }
-    })
+    // console.log(searchCondition)
+    // retrieveAdvertiserStatus(searchCondition).then(response => {
+    //   if(response !== null) {
+    //     setAdverStatusData(response)
+    //     setTotalInfo({
+    //       totalCount: response.length
+    //     })
+    //   } else {
+    //     setAdverStatusData([])
+    //   }
+    // })
   }
+  const handleDetailTableData = ({userId}) => {
+    let adverStatusTempDetail
+    console.log(userId)
+    const condition = {
+      ...searchCondition
+    }
+    console.log(condition)
+    return retrieveAdvertiserCampaignStatus(userId, condition).then(response => {
+      response !== null && adverStatusTempDetail?.map(item =>{
+        return {...item,userId:userId}
+      })
+      return adverStatusTempDetail
+    }).catch(error => {
+      console.error("실패 응답 처리",error);
+    });
 
-  const handleFetchDetailData = useCallback(async ({userId}) => {
+  }
+  const handleFetchDetailData = useCallback( handleDetailTableData,[searchCondition] )
 
-    let adverStatusTempDetail = await retrieveAdvertiserCampaignStatus(userId, searchCondition)
-    adverStatusTempDetail?.map(item =>{
-      return {...item,userId:userId}
-    })
-    return adverStatusTempDetail
+  const renderContactsGrid = useCallback(({data}) => {
+    return (
+      <ReactDataGrid
+        handle={null}
+        dataSource={handleFetchDetailData(data)}
+        columns={adverStatusDetailColumn}
+        enableColumnAutosize={true}
+        groups={false}
+        emptyText={'캠페인 리스트가 없습니다.'}
+        rowHeight={null}
+      />
+    );
   },[])
-
   return (
       <>
         <DashBoardCard>
@@ -438,17 +461,21 @@ function DashBoardIndex() {
           <DashBoardHeader style={{marginTop: 30}}>{tokenUserInfo.role !== 'NORMAL' ? '광고주' : '캠페인'} 현황</DashBoardHeader>
           <DashBoardBody>
             {tokenUserInfo.role !== 'NORMAL' ?
-              <TableDetail columns={adverListColumn}
-                           totalCount={[totalInfo.totalCount, '광고주']}
-                           showHoverRows={false}
-                           activeCell={[0]}
-                           multiRowExpand={false}
-                           data={adverStatusData}
-                           detailData={handleFetchDetailData}
-                           detailColumn={adverStatusDetailColumn}
-                           detailGroups={false}
-                           idProperty={'userId'}
-                           groups={false}/>
+              <ReactDataGrid
+                licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
+                handle={null}
+                style={{minHeight: 550, textAline: 'center'}}
+                rowExpandHeight={400}
+                rowHeights={null}
+                renderDetailsGrid={renderContactsGrid}
+                enableColumnAutosize={true}
+                emptyText={'데이터가 없습니다.'}
+                idProperty={'userId'}
+                dataSource={adverStatusData}
+                columns={adverListColumn}
+                limit={30}
+                multiRowExpand={false}
+              />
               : <Table columns={userCampaignListColumn}
                        totalCount={[totalInfo.totalCount, '캠페인']}
                        rowHeight={null}
@@ -456,6 +483,16 @@ function DashBoardIndex() {
                        activeCell={[0]}
                        data={adverStatusData}/>
             }
+            {/*<TableDetail columns={adverListColumn}*/}
+            {/*             totalCount={[totalInfo.totalCount, '광고주']}*/}
+            {/*             showHoverRows={false}*/}
+            {/*             activeCell={[0]}*/}
+            {/*             multiRowExpand={false}*/}
+            {/*             data={adverStatusData}*/}
+            {/*             detailData={handleFetchDetailData}*/}
+            {/*             detailColumn={adverStatusDetailColumn}*/}
+            {/*             idProperty={'userId'}*/}
+            {/*             groups={false}/>*/}
           </DashBoardBody>
         </DashBoardCard>
       </>
