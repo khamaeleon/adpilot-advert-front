@@ -86,5 +86,17 @@ export function getLastNinetyDay(){
   return rangeDay
 }
 
+/**
+ * 지난 180일
+ * @returns {{startDay: string, endDay: string}}
+ */
+export function getLastOneEightyDay(){
+  const rangeDay ={
+    startDay:moment().subtract(180,'days').format('YYYY-MM-DD'),
+    endDay:moment().subtract(1,'days').format('YYYY-MM-DD')
+  }
+  return rangeDay
+}
+
 
 

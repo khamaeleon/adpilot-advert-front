@@ -11,7 +11,7 @@ import React from "react";
 export const productListDataAtom = atom({})
 
 export const searchProductType = [
-  {id: "1", value: "DEFAULT", label: "기본"},
+  {id: "1", value: "DEFAULT", label: "전체"},
   {id: "2", value: "PRODUCT_CODE", label: "상품코드"},
   {id: "3", value: "PRODUCT_NAME", label: "상품명"}
 ]

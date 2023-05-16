@@ -9,10 +9,10 @@ import {
   ColSpan3,
   ColTitle,
   CustomDatePicker,
-  DateContainer,
+  DateContainer, DefaultButton,
   Input,
   inputStyle,
-  RangePicker,
+  RangePicker, ResetButton,
   RowSpan,
   SearchButton,
   SearchInput,
@@ -24,7 +24,7 @@ import React, {useEffect, useState} from "react";
 import {
   getLastDay,
   getLastMonth,
-  getLastNinetyDay,
+  getLastNinetyDay, getLastOneEightyDay,
   getLastThirtyDay,
   getLastWeekDay,
   getThisMonth,
@@ -38,6 +38,10 @@ import {retrieveProduct} from "../../services/Platform/PlatformAxios";
 import {useAtom} from "jotai";
 import {productListDataAtom} from "../../pages/platform_manage/entity/Product";
 import {useParams} from "react-router-dom";
+import {SmallButton} from "../../pages/campaign/styles/common";
+import * as PropTypes from "prop-types";
+
+ResetButton.propTypes = {onClick: PropTypes.func};
 
 export function PlatformCondition(props) {
   const [dateActive,setDateActive] = useState('')
@@ -102,6 +106,14 @@ export function PlatformCondition(props) {
       })
       setDateRange([new Date(getLastNinetyDay().startDay), new Date(getLastNinetyDay().endDay)])
     }
+    else if (rangeType === 'lastOneEightyDay') {
+      setSearchCondition({
+        ...searchCondition,
+        searchStartDate: getLastOneEightyDay().startDay,
+        searchEndDate: getLastOneEightyDay().endDay
+      })
+      setDateRange([new Date(getLastOneEightyDay().startDay), new Date(getLastOneEightyDay().endDay)])
+    }
     //call 때려
   }
   const handleSearchType = (selectSearchType) => {
@@ -128,18 +140,15 @@ export function PlatformCondition(props) {
     })
   }
 
+  const handleClickReset = () => {
+    setSearchCondition({
+      ...searchCondition,
+      username: ''
+    })
+  }
+
   return (
     <BoardSearchDetail>
-      <RowSpan>
-        <ColSpan1>
-          <ColTitle><span>광고주 설정</span></ColTitle>
-          <Input type={'text'} value={searchCondition.username} readOnly/>
-        </ColSpan1>
-        <ColSpan1>
-          <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdverResult}/>
-        </ColSpan1>
-        <ColSpan2/>
-      </RowSpan>
       <RowSpan>
         <ColSpan1>
           <ColTitle><span>기간</span></ColTitle>
@@ -176,12 +185,22 @@ export function PlatformCondition(props) {
               <div onClick={() => handleRangeDate('lastThirtyDay')} style={dateActive==='lastThirtyDay'?{color:'#f5811f'}:null}>지난30일</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
               <div onClick={() => handleRangeDate('lastNinetyDay')} style={dateActive==='lastNinetyDay'?{color:'#f5811f'}:null}>지난90일</div>
+              <HorizontalRule style={{margin: "0 10px"}}/>
+              <div onClick={() => handleRangeDate('lastOneEightyDay')} style={dateActive==='lastOneEightyDay'?{color:'#f5811f'}:null}>지난180일</div>
             </RangePicker>
           </div>
         </ColSpan2>
         <ColSpan1/>
       </RowSpan>
       <RowSpan>
+        <ColSpan1>
+          <ColTitle><span>광고주 설정</span></ColTitle>
+          <Input type={'text'} value={searchCondition.username} readOnly/>
+        </ColSpan1>
+        <ColSpan1>
+          <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdverResult}/>
+          <ResetButton onClick={handleClickReset}>재설정</ResetButton>
+        </ColSpan1>
         <ColSpan2>
           <Select styles={inputStyle}
                   components={{IndicatorSeparator: () => null}}
@@ -196,8 +215,6 @@ export function PlatformCondition(props) {
                    onChange={handleSearchValue}
             />
           </SearchInput>
-        </ColSpan2>
-        <ColSpan2>
           <SearchButton onClick={handleTableData}>검색</SearchButton>
         </ColSpan2>
       </RowSpan>

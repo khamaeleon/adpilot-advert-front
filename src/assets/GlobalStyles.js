@@ -986,7 +986,13 @@ export const SearchButton = styled.button`
   background-color: #fff;
   border-radius: 5px;
 `
-
+export const ResetButton = styled.button`
+  padding: 0 10px;
+  height: ${buttonHeightSize}px;
+  border: 1px solid ${lightGray};
+  background-color: #fff;
+  border-radius: 5px;
+`
 export const BoardSearchResult = styled.div`
   margin: 20px 0;
 `

@@ -61,13 +61,6 @@ function ProductManage() {
   const [productData, setProductData] = useAtom(productListDataAtom)
   const [count, setCount] = useState(0)
 
-  useEffect(() => {
-    retrieveProduct(searchCondition).then(response =>{
-      if(response){
-        setProductData(response)
-      }
-    })
-  }, [])
   /**
    * 상품 수집 검색
    */

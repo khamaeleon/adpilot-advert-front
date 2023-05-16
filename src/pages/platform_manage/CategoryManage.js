@@ -142,7 +142,6 @@ export function CategoryManage() {
   const handleSearchCategory = async () => {
     retrieveTopLevelCategory(searchKeyword).then(response => {
       setTopLevelCategoryList(response)
-
       if(response.length !== 0) {
         handleSelectCategory(response[0]?.code)
       } else {
@@ -212,6 +211,7 @@ export function CategoryManage() {
                   <SubCategoryItem key={key}>{item.name}</SubCategoryItem>
                 )
               })}
+              {topLevelCategoryList.length === 0 && <div style={{padding: 30}}>검색 정보가 없습니다.</div>}
             </SubCategoryBody>
           </SubCategory>
         </CategoryContainer>

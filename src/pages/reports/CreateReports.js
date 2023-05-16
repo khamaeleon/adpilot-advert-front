@@ -5,7 +5,7 @@ import {
   ColSpan2,
   ColTitle,
   Input,
-  RelativeDiv,
+  RelativeDiv, ResetButton,
   RowSpan,
   Span4,
   SubmitButton,
@@ -231,8 +231,11 @@ export default function CreateReports() {
           })
         })
       }
-
     }
+  }
+
+  const handleClickReset = () => {
+    setCreativeInfo({})
   }
 
   return(
@@ -257,6 +260,7 @@ export default function CreateReports() {
                     readOnly
                   />
                   <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
+                  <ResetButton onClick={handleClickReset}>재설정</ResetButton>
                   <small>* 광고주 설정이 없을 경우 전체 보고서가 생성됩니다.</small>
                 </>
               }
