@@ -86,7 +86,7 @@ export const adverListColumn = [
   },
   {
     name: 'conversionRate',
-    header: '전환률',
+    header: '전환율',
     minWidth: 100,
     render: ({data}) => {
       let value = data.validClickCount !== 0 ? (data.totalConversionCount / data.validClickCount) * 100 : 0;
@@ -219,7 +219,7 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({data, value}) => {
-      return <Link to={'/board/campaignLookOver'} state={{campaignId: data?.campaignId}}>{value}</Link>
+      return <Link to={'/board/campaignLookOver'} state={{campaignId: data?.campaignId, adverInfo: data?.adverInfo}}>{value}</Link>
     }
   },
   {
@@ -245,9 +245,10 @@ export const adverStatusDetailColumn = [
         textDecoration: 'underline'
       }
     },
-    render: ({value, data}) => {
+    render: ({value, data, cellProps}) => {
+      console.log(cellProps)
       let valueFormat = value < 0 ? '무제한': <p>{decimalFormat(value)} 원</p>
-      return  <Link to={'/board/campaignTwo'} state={{campaignId: data?.campaignId, userId: data?.userId }}>{valueFormat}</Link>
+      return  <Link to={'/board/campaignTwo'} state={{campaignId: data?.campaignId, userId: data?.userId, adverInfo: data?.adverInfo}}>{valueFormat}</Link>
     }
   },
   {
@@ -262,7 +263,7 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({value, data}) => {
-      return <Link to={'/board/campaignThree'} state={{campaignId: data?.campaignId}}>{value}</Link>
+      return <Link to={'/board/campaignThree'} state={{campaignId: data?.campaignId, adverInfo: data?.adverInfo}}>{value}</Link>
     }
   },
   {
@@ -277,7 +278,7 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({value, data}) => {
-      return <Link to={'/board/campaignFour'} state={{campaignId: data?.campaignId, creativeType: data?.creativeType, productType: data.productType}}>{value}</Link>
+      return <Link to={'/board/campaignFour'} state={{campaignId: data?.campaignId, creativeType: data?.creativeType, productType: data.productType, adverInfo: data?.adverInfo}}>{value}</Link>
     }
   },
   {
@@ -336,7 +337,7 @@ export const adverStatusDetailColumn = [
   },
   {
     name: 'conversionRate',
-    header: '전환률',
+    header: '전환율',
     minWidth: 100,
     textAlign: 'center',
     render: ({data}) => {
@@ -466,7 +467,7 @@ export const userCampaignListColumn = [
       }
     },
     render: ({data, value}) => {
-      return <Link to={'/board/campaignLookOver'} state={{campaignId: data?.campaignId}}>{value}</Link>
+      return <Link to={'/board/campaignLookOver'} state={{campaignId: data?.campaignId, adverInfo: data?.adverInfo}}>{value}</Link>
     }
   },
   {
@@ -547,7 +548,7 @@ export const userCampaignListColumn = [
   },
   {
     name: 'conversionRate',
-    header: '전환률',
+    header: '전환율',
     minWidth: 100,
     textAlign: 'center',
     render: ({data}) => {

@@ -12,20 +12,18 @@ import {
   RowSpan,
   selectStyle,
   Span1,
-  Span2,
   Span4,
   SubmitButton,
   SubmitContainer,
   ValidationScript
 } from "../../../assets/GlobalStyles";
-import {Won} from "../styles/common";
+import {AdverInfo, Won} from "../styles/common";
 import Select from "react-select";
 import {useAtom, useSetAtom} from "jotai";
 import {stepCampaignAtom} from "../entity";
-import {modalController} from "../../../store";
 import {Controller, useFormContext} from "react-hook-form";
 import TimeTable from "../../../components/modal/TimeTable";
-import {biddingTypeAll, campaignBasicInfoAtom, resetInfo} from "../entity/Info";
+import {biddingTypeAll, campaignBasicInfoAtom} from "../entity/Info";
 import {selBudgetTimeDetailInfo, selBudgetTimeList} from "../../../services/settings/BudgetTimeAxios";
 import {selBudgetEventList} from "../../../services/settings/BudgetEventAxios";
 import {selPriceEventList} from "../../../services/settings/EventPriceAxios";
@@ -212,6 +210,7 @@ export function CampaignTwo() {
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {state !== null && <AdverInfo><span>광고주 정보</span><p></p><span>{state?.adverInfo}</span></AdverInfo>}
       <Board>
         <BoardHeader>예산 및 입찰 설정</BoardHeader>
         <BoardSearchResult>
@@ -434,7 +433,7 @@ export function CampaignTwo() {
         </BoardSearchResult>
       </Board>
       <SubmitContainer>
-        <CancelButton type={'button'} onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 0})}>{state !== null ? '취소' : '이전'}</CancelButton>
+        <CancelButton type={'button'} onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 0})}>{state !== null ? '목록' : '이전'}</CancelButton>
         <SubmitButton type={'submit'}>{state !== null ? '수정' : '다음[2/4]'}</SubmitButton>
       </SubmitContainer>
       <ToastContainer

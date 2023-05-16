@@ -13,7 +13,7 @@ import {
 } from "../../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {HorizontalRule} from "../../../components/common/Common";
-import {Row, ValueText} from "../styles/common";
+import {AdverInfo, Row, ValueText} from "../styles/common";
 import {useAtom, useAtomValue} from "jotai";
 import {stepCampaignAtom} from "../entity";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -102,6 +102,7 @@ export function CampaignLookOver() {
 
   return (
     <>
+      {state !== null && <AdverInfo><span>광고주 정보</span><p></p><span>{state?.adverInfo}</span></AdverInfo>}
       <Board>
         <BoardHeader>캠페인 검토</BoardHeader>
         {campaignData !== null &&
@@ -279,7 +280,7 @@ export function CampaignLookOver() {
       </Board>
       <SubmitContainer>
         <CancelButton type={'button'}
-                      onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 0})}>{(tokenUserInfo.role !== 'NORMAL' && state !== null) ? '취소' : '확인'}</CancelButton>
+                      onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 0})}>{(tokenUserInfo.role !== 'NORMAL' && state !== null) ? '목록' : '확인'}</CancelButton>
         {tokenUserInfo.role !== 'NORMAL' && state !== null &&
           <SubmitButton type={'button'} onClick={()=> onSubmit()}>저장</SubmitButton>}
       </SubmitContainer>

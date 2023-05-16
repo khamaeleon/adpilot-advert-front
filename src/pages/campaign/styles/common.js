@@ -297,3 +297,20 @@ export const Validation = styled.div`
   color: #f55a5a;
   
 `
+export const  AdverInfo = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 17px;
+  font-weight: 600;
+  margin: 10px 0 20px;
+  > p {
+    width: 1px;
+    height: 14px;
+    margin: 0 10px; 
+    background-color: #333;
+  }
+  > span:last-child {
+    font-size: 14px;
+    font-weight: 400;
+  }
+`
