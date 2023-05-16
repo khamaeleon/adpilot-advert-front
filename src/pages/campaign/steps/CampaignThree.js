@@ -24,7 +24,7 @@ import {
   ValidationScript
 } from "../../../assets/GlobalStyles";
 import Checkbox from "../../../components/common/Checkbox";
-import {CategoryItem, RowInBox, SelectCategory} from "../styles/common";
+import {AdverInfo, CategoryItem, RowInBox, SelectCategory} from "../styles/common";
 import ko from "date-fns/locale/ko";
 import Select from "react-select";
 import {InventoryButton} from "../../../components/modal/InventorySettings";
@@ -289,6 +289,7 @@ export function CampaignThree() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)}>
+      {state !== null && <AdverInfo><span>광고주 정보</span><p></p><span>{state?.adverInfo}</span></AdverInfo>}
       <Board>
         <BoardHeader>광고 그룹 설정</BoardHeader>
         <BoardSearchResult>
@@ -430,48 +431,50 @@ export function CampaignThree() {
               </ColSpan4>
             }
             <RowSpan>
-              <Span4>게재 기간</Span4>
-              <ColSpan1>
-                <DateContainer disabled={exposureDayChecked}>
-                  <CalendarBox>
-                    <CalendarIcon/>
-                  </CalendarBox>
-                  <Controller
-                    control={control}
-                    name="endDate"
-                    rules={{required: {value: dateRange[1] === undefined, message:'게제기간을 설정해주세요'}}}
-                    render={({ field: { onChange, onBlur, value, ref } }) => (
-                      <CustomDatePicker
-                        selectsRange={true}
-                        disabled={exposureDayChecked}
-                        startDate={startDate}
-                        endDate={endDate}
-                        minDate={new Date()}
-                        onChange={(date) => handleRangeDate(date)}
-                        dateFormat="yyyy-MM-dd"
-                        locale={ko}
-                        isClearable={false}
-                        onBlur={onBlur}
-                        selected={value}
-                        inputRef={ref}
-                      />
-                    )}
-                  />
-                  {errors.endDate && <ValidationScript>{errors.endDate.message}</ValidationScript>}
-                </DateContainer>
+              <ColSpan4>
+                <Span4>게재 기간</Span4>
+                <ColSpan1>
+                  <DateContainer disabled={exposureDayChecked}>
+                    <CalendarBox>
+                      <CalendarIcon/>
+                    </CalendarBox>
+                    <Controller
+                      control={control}
+                      name="endDate"
+                      rules={{required: {value: dateRange[1] === undefined, message:'게제기간을 설정해주세요'}}}
+                      render={({ field: { onChange, onBlur, value, ref } }) => (
+                        <CustomDatePicker
+                          selectsRange={true}
+                          disabled={exposureDayChecked}
+                          startDate={startDate}
+                          endDate={endDate}
+                          minDate={new Date()}
+                          onChange={(date) => handleRangeDate(date)}
+                          dateFormat="yyyy-MM-dd"
+                          locale={ko}
+                          isClearable={false}
+                          onBlur={onBlur}
+                          selected={value}
+                          inputRef={ref}
+                        />
+                      )}
+                    />
+                    {errors.endDate && <ValidationScript>{errors.endDate.message}</ValidationScript>}
+                  </DateContainer>
 
-              </ColSpan1>
-              <ColSpan3>
-                <label>
-                  <input type={'checkbox'}
-                         className={'checkbox-type-a'}
-                         checked={exposureDayChecked}
-                         onClick={handleCheckExposureDay}
-                  />
-                  <i/>
-                  <span>종료일 미설정</span>
-                </label>
-              </ColSpan3>
+                </ColSpan1>
+                <ColSpan3>
+                  <label>
+                    <input type={'checkbox'}
+                           className={'checkbox-type-a'}
+                           checked={exposureDayChecked}
+                           onClick={handleCheckExposureDay}
+                    />
+                    <i/>
+                    <span>종료일 미설정</span>
+                  </label>
+                </ColSpan3>
+              </ColSpan4>
             </RowSpan>
           </RowSpan>
           <RowSpan>
@@ -784,24 +787,26 @@ export function CampaignThree() {
             }
           </RowSpan>
           <RowSpan>
-            <Span4>광고그룹명</Span4>
-            <RelativeDiv>
-              <Input
-                type={'text'}
-                placeholder={'광고 그룹명'}
-                value={campaignGroupInfo.name}
-                {...register('name', {
-                  required: '광고 그룹명을 입력해주세요',
-                  onChange:onChangeGroupName
-                })}
-              />
-              {errors.name && <ValidationScript>{errors.name.message}</ValidationScript>}
-            </RelativeDiv>
+            <ColSpan4>
+              <Span4>광고그룹명</Span4>
+              <RelativeDiv>
+                <Input
+                  type={'text'}
+                  placeholder={'광고 그룹명'}
+                  value={campaignGroupInfo.name}
+                  {...register('name', {
+                    required: '광고 그룹명을 입력해주세요',
+                    onChange:onChangeGroupName
+                  })}
+                />
+                {errors.name && <ValidationScript>{errors.name.message}</ValidationScript>}
+              </RelativeDiv>
+            </ColSpan4>
           </RowSpan>
         </BoardSearchResult>
       </Board>
       <SubmitContainer>
-        <CancelButton type={'button'} onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 1})}>{state !== null ? '취소' : '이전'}</CancelButton>
+        <CancelButton type={'button'} onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 1})}>{state !== null ? '목록' : '이전'}</CancelButton>
         <SubmitButton type={'submit'}>{state !== null ? '수정' : '다음[3/4]'}</SubmitButton>
       </SubmitContainer>
       <ToastContainer

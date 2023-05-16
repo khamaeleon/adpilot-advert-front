@@ -19,9 +19,13 @@ import {StatusBtn} from "./styles/common";
 import {atom} from "jotai/index";
 import {dateFormat, decimalFormat} from "../../common/StringUtils";
 import {getToDay} from "../../common/DateUtils";
+import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
 
 const costPaymentDataAtom = atom([{
   name: 'id',
+  status: {
+    value:"COST_DECREASE"
+  }
 }])
 export const updateCostPaymentStatus = {
   paymentIdList: [],
@@ -35,7 +39,7 @@ export const searchCostPaymentParams = atom({
   startAt: dateFormat(getToDay(), 'YYYY-MM'),
   endAt: dateFormat(getToDay(), 'YYYY-MM'),
   statusList: ['COST_DECREASE', 'COST_DECREASE','REFUND_APPLIED','REFUND_COMPLETE'],
-  searchType: 'DEFAULT',
+  searchType: 'ALL',
   search: ''
 })
 
@@ -235,7 +239,9 @@ function AdvertisingPayments() {
               />
               <StatusBtn type={'button'} id={'EXAMINED_COMPLETED'} onClick={(event)=> handlePaymentStatus(event.currentTarget.id)}>환불완료</StatusBtn>
             </ColSpan2>
-            <div style={{display: 'flex', justifyContent: 'flex-end'}}><SearchUser title={'이력 추가'} className={'listUp'} onSubmit={handleHistoryAdd} btnStyle={'historyAddButton'} historyAdd={true}/></div>
+            <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+              <SearchAdvertiser title={'이력 추가'} btnStyle={'historyAddButton'} onSubmit={handleHistoryAdd}/>
+            </div>
           </RowSpan>
           <Table columns={costPaymentColumns}
                  data={costPaymentDataAtom}

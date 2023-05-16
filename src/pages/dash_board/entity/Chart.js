@@ -10,7 +10,7 @@ export const platformStatusType = [
   {id: 6, value: "cpc", label: "CPC"},
   {id: 7, value: "conversionRate", label: "전환율"},
   {id: 8, value: "costPerConversion", label: "전환단가"},
-  {id: 9, value: "avgConversionAmount", label: "구매액"},
+  {id: 9, value: "avgConversionAmount", label: "평균 구매액"},
   {id: 11, value: "sessionRoas", label: "세션매출"},
   {id: 12, value: "directRoas", label: "직접매출"},
   {id: 13, value: "exposureRoas", label: "노출매출"},
@@ -27,7 +27,7 @@ export const userPlatformStatusType = [
   {id: 6, value: "cpc", label: "CPC"},
   {id: 7, value: "conversionRate", label: "전환율"},
   {id: 8, value: "costPerConversion", label: "전환단가"},
-  {id: 9, value: "avgConversionAmount", label: "구매액"},
+  {id: 9, value: "avgConversionAmount", label: "평균 구매액"},
   {id: 14, value: "totalRoas", label: "총매출"},
   {id: 15, value: "ecpm", label: "ECPM"},
 ]

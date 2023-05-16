@@ -232,7 +232,7 @@ export function DashBoardCondition(props) {
                         value={'MOBILE_WEB'}
                         isChecked={searchCondition.agentTypes.includes('MOBILE_WEB') ? true : false}
                         onChange={handleChangeCheck}/>
-              <Checkbox label={'모바일 어플리케이션'}
+              <Checkbox label={'모바일 APP'}
                         type={'c'}
                         id={'MOBILE_NATIVE_APP'}
                         value={'MOBILE_NATIVE_APP'}
