@@ -5,6 +5,10 @@ import {PixelModal} from "../PixelList";
 import {Icon, SwitchComponent} from "../../../components/table";
 import {updateEventInterlock, updatePixelInterlock} from "../../../services/header/ManagePixelAxios";
 import {HorizontalRule} from "../../../components/common/Common";
+import {
+  retrieveSubLevelCategoryKeyValue,
+  retrieveTopLevelCategoryKeyValue
+} from "../../../services/Platform/CategoryAxios";
 
 /**
  * 픽셀 관리 리스트 Atom
@@ -74,7 +78,6 @@ export const pixelColumns = [
     showColumnMenuTool: false,
     sortable: false,
     render: ({value, cellProps}) => {
-      console.log(cellProps.data)
       return (
         <PixelModal title={'추가'} data={cellProps.data} />
       )
@@ -106,7 +109,7 @@ export const pixelDetailColumns = [
   },
   {
     name: 'pixelName',
-    header: '이벤트명',
+    header: '픽셀명',
     defaultFlex: 1,
     textAlign: 'center',
     showColumnMenuTool: false,
@@ -115,11 +118,20 @@ export const pixelDetailColumns = [
         textDecoration: 'underline'
       }
     },
+    resizable: false,
     render: (props) => {
       return (
         <Link to={'/board/pixelDetail'} state={{id: props.data.pixelId}}>{props.value}</Link>
       )
     }
+  },
+  {
+    name: 'hostType',
+    header: '호스팅',
+    defaultFlex: 1,
+    textAlign: 'center',
+    showColumnMenuTool: false,
+    resizable: false,
   },
   {
     name: 'linkUrl',

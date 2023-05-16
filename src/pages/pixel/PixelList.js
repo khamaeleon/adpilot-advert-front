@@ -30,7 +30,7 @@ import {
   retrieveSubLevelCategoryKeyValue,
   retrieveTopLevelCategoryKeyValue
 } from "../../services/Platform/CategoryAxios";
-import {atom} from "jotai/index";
+import {atom} from "jotai";
 import {useNavigate} from "react-router-dom";
 import {pixelColumns, pixelDataAtom, pixelDetailColumns} from "./entity/Pixel";
 
@@ -38,6 +38,7 @@ const pixelAtom = atom({
   pixelName: '',
   userId: ''
 })
+
 export function PixelModal(props) {
   const {data, title, setPixelList} = props
   const [, setModal] = useAtom(modalController)
@@ -78,7 +79,7 @@ function PixelAdd(props){
   const [topLevelCategoryList,setTopLevelCategoryList] = useState([])
   const [rowLevelCategoryList,setRowLevelCategoryList] = useState([])
   const setPixel = useSetAtom(pixelAtom)
-  const navigate =useNavigate()
+  const navigate = useNavigate()
   const {register, handleSubmit, reset, control,formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: pixelInfoListState
