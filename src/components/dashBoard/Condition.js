@@ -30,6 +30,9 @@ import Checkbox from "../common/Checkbox";
 import Select from "react-select";
 import {useAtom} from "jotai";
 import {searchConditionAtom} from "../../pages/dash_board/entity/Common";
+import {adverStatusAtom} from "../../pages/dash_board/entity/Campaign";
+import {retrieveAdvertiserStatus} from "../../services/dash_board/ManageCampaignAxios";
+import {dataTotalInfo} from "../common/entity";
 
 export function DashBoardCondition(props) {
   const {role, keyword, setKeyword, handleData, productType, eventType} = props
@@ -37,7 +40,8 @@ export function DashBoardCondition(props) {
   const [dateRange, setDateRange] = useState([new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
   const [isCheckedAll, setIsCheckedAll] = useState(true)
-
+  const [adverStatusData, setAdverStatusData] = useAtom(adverStatusAtom)
+  const [totalInfo, setTotalInfo] = useState(dataTotalInfo)
   useEffect(() => {
     if (searchCondition.agentTypes.length === 4) {
       setIsCheckedAll(true)
@@ -103,6 +107,17 @@ export function DashBoardCondition(props) {
     setSearchCondition({
       ...searchCondition,
       productType: selectProductType.value
+    })
+
+    retrieveAdvertiserStatus({...searchCondition, productType: selectProductType.value}).then(response => {
+      if(response !== null) {
+        setAdverStatusData(response)
+        setTotalInfo({
+          totalCount: response.length
+        })
+      } else {
+        setAdverStatusData([])
+      }
     })
   }
 

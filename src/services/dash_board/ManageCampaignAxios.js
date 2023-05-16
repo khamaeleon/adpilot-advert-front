@@ -27,9 +27,11 @@ export async function retrieveAdvertiserStatus(param) {
  */
 export async function retrieveAdvertiserCampaignStatus(userId, param) {
   let returnVal = null;
+  console.log(param)
   await AdminAxios('POST', ACTION_URL+userId+'/'+ADVERTISER, param)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
+        console.log(response.data)
         returnVal = response.data
       } else {
         returnVal = null

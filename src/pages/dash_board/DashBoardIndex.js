@@ -34,6 +34,8 @@ import {DashBoardCondition} from "../../components/dashBoard/Condition";
 import {getThisMonth} from "../../common/DateUtils";
 import Table from "../../components/table";
 import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
+import {selConversionDetailList} from "../../services/conversion/ConversionAxios";
+import {paymentAllListRequest} from "../../services/payment/admin/PaymentAllListRequestAxios";
 
 /** 플래폼 현황 차트 **/
 function ChartComponent(props) {
@@ -370,6 +372,7 @@ function DashBoardIndex() {
   const [keyword, setKeyword] = useState('')
 
   useEffect(() => {
+    console.log(searchCondition)
     if(tokenUserInfo.role !== 'NORMAL') {
       //광고주 현황 조회
       retrieveAdvertiserStatus(searchCondition).then(response => {
@@ -394,7 +397,7 @@ function DashBoardIndex() {
         }
       })
     }
-  }, [searchCondition])
+  }, [])
 
   /**
    * 검색 버튼
@@ -416,30 +419,16 @@ function DashBoardIndex() {
     //   }
     // })
   }
-  const handleDetailTableData = ({userId}) => {
-    let adverStatusTempDetail
-    console.log(userId)
-    const condition = {
-      ...searchCondition
-    }
-    console.log(condition)
-    return retrieveAdvertiserCampaignStatus(userId, condition).then(response => {
-      response !== null && adverStatusTempDetail?.map(item =>{
-        return {...item,userId:userId}
-      })
-      return adverStatusTempDetail
-    }).catch(error => {
-      console.error("실패 응답 처리",error);
-    });
-
+  const getDataSource =(userId,search) =>{
+    console.log(search)
+    return retrieveAdvertiserCampaignStatus(userId, search)
   }
-  const handleFetchDetailData = useCallback( handleDetailTableData,[searchCondition] )
-
-  const renderContactsGrid = useCallback(({data}) => {
+  const contactsDataSource = useCallback(getDataSource, [searchCondition])
+  const renderContactsGrid = ({data}) => {
     return (
       <ReactDataGrid
         handle={null}
-        dataSource={handleFetchDetailData(data)}
+        dataSource={contactsDataSource(data.userId,searchCondition)}
         columns={adverStatusDetailColumn}
         enableColumnAutosize={true}
         groups={false}
@@ -447,7 +436,7 @@ function DashBoardIndex() {
         rowHeight={null}
       />
     );
-  },[])
+  }
   return (
       <>
         <DashBoardCard>
