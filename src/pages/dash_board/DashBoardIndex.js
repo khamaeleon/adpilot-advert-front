@@ -419,7 +419,7 @@ function DashBoardIndex() {
         enableColumnAutosize={true}
         groups={false}
         emptyText={'캠페인 리스트가 없습니다.'}
-        rowHeight={null}
+        rowHeight={70}
       />
     );
   }
