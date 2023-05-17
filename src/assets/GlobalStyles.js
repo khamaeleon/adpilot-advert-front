@@ -753,6 +753,7 @@ export const RowSpan = styled.div`
   gap: ${(props) => props.box ? "10px" : null};
   justify-content: space-between;
   margin-top: 15px;
+  padding-bottom: ${(props) => props.validation ? "10px" : null};
   padding: ${(props) => props.box ? "15px" : null};
   background-color: ${(props)=>props.box ? "#f9fafb":null};
   border: ${(props) => props.box ? '1px solid #e5e5e5' : null};
