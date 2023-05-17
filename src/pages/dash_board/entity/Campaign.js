@@ -246,7 +246,6 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({value, data, cellProps}) => {
-      console.log(cellProps)
       let valueFormat = value < 0 ? '무제한': <p>{decimalFormat(value)} 원</p>
       return  <Link to={'/board/campaignTwo'} state={{campaignId: data?.campaignId, userId: data?.userId, adverInfo: data?.adverInfo}}>{valueFormat}</Link>
     }

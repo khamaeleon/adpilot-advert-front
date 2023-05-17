@@ -49,7 +49,7 @@ export const adverEventBudgetColumns = [ //이벤트 단가 컬럼
   },
   {
     name: 'count',
-    header: '등록된 이벤트 단가 그룹',
+    header: '등록된 이벤트 예산 그룹',
     defaultFlex: 1,
     resizable: false
   }
