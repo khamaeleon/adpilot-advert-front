@@ -397,7 +397,7 @@ function DashBoardIndex() {
         }
       })
     }
-  }, [])
+  }, [searchCondition])
 
   /**
    * 검색 버튼
@@ -407,17 +407,6 @@ function DashBoardIndex() {
       ...searchCondition,
       keyword: keyword
     })
-    // console.log(searchCondition)
-    // retrieveAdvertiserStatus(searchCondition).then(response => {
-    //   if(response !== null) {
-    //     setAdverStatusData(response)
-    //     setTotalInfo({
-    //       totalCount: response.length
-    //     })
-    //   } else {
-    //     setAdverStatusData([])
-    //   }
-    // })
   }
 
   const renderContactsGrid = () => {
@@ -462,7 +451,7 @@ function DashBoardIndex() {
                 detailsGridCacheKey={'campaignId'}
                 columns={adverListColumn}
                 onDataSourceCacheChange={()=>{gridRef?.current.collapseAllRows()}}
-                onRowExpand={({id})=> retrieveAdvertiserCampaignStatus(id, searchCondition).then(r=> setAdverStatusDetailData(r))}
+                onRowExpand={({id})=>retrieveAdvertiserCampaignStatus(id, searchCondition).then(r=> setAdverStatusDetailData(r))}
                 limit={30}
                 multiRowExpand={false}
               />
