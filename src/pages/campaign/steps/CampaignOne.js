@@ -382,7 +382,6 @@ export function CampaignOne() {
                                min={0}
                                placeholder={"캠페인 상세 목표 금액을 입력해주세요."}
                                style={{width: 300, textAlign: 'right'}}
-                               step={campaignBasicInfo.goal.label != undefined && campaignBasicInfo.goal?.label.indexOf('단가') > 0 ? 100 : 1}
                                value={campaignBasicInfo !== null && campaignBasicInfo.goalValue}
                                onChange={(e)=>handleGoalValue(e)}
                         /> )}
