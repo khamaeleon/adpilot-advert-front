@@ -12,20 +12,32 @@ import {
     RelativeDiv,
     RowSpan, SubmitButton, ValidationScript,
 } from "../../../assets/GlobalStyles";
+import {retrieveUserPoint} from "../../../pages/layout/entity/UserPoint";
 import {RefundRequestTable} from "../../../pages/platform_manage/PaymentManageUser";
 import styled from "styled-components";
 import {decimalFormat, removeStr} from "../../../common/StringUtils";
 import {useForm} from "react-hook-form";
+import {tokenResultAtom} from "../../../pages/login/entity/Common";
+import {refundRequest} from "../../../services/payment/user/RefundUserAxios";
 export function RefundRequestButton(props) {
-    const {onSubmit, modalInfo, onSave, title, refundData, advertisingBalance, setAdvertisingBalance} = props;
+    const {onSubmit, modalInfo, onSave, title, refundData, onPaymentDetailsReceived, totalAmount} = props;
     const [, setModal] = useAtom(modalController)
+
     const handleModalComponent = () => {
         setModal({
             isShow: true,
             width: 650,
             modalComponent: () => {
                 return (
-                    <RefundRequestModal onSave={onSave} modalInfo={modalInfo} onSubmit={onSubmit} title={title} refundData={refundData} advertisingBalance={advertisingBalance} setAdvertisingBalance={setAdvertisingBalance}/>
+                    <RefundRequestModal
+                      onSave={onSave}
+                      modalInfo={modalInfo}
+                      onSubmit={onSubmit}
+                      title={title}
+                      refundData={refundData}
+                      onPaymentDetailsReceived={onPaymentDetailsReceived}
+                      totalAmount={totalAmount}
+                    />
                 )
             }
         })
@@ -34,33 +46,66 @@ export function RefundRequestButton(props) {
 }
 
 function RefundRequestModal (props) {
-    const [, setModal] = useAtom(modalController)
-    const {title, refundData, advertisingBalance, setAdvertisingBalance} = props
-    const [refundType, setRefundType] = useState("전액 환불") // 환불 종류
-    const [refundAmount, setRefundAmount] = useState(0) // 환불 금액
-    const {register, handleSubmit, setError, formState:{errors} } = useForm()
-    const handleChange = (event) => {
-        let num = removeStr(event)
-        let numberNum = Number(num)
-        setRefundAmount(numberNum)
-    }
-    const onSubmit = async () => {
-        if(refundType === "전액 환불"){
-            // 전액 환불 시 광고비 잔액 값 그대로..
-            setRefundAmount(0)
-            setModal({isShow: false});
-        }else{
-            if(refundAmount > 10000) {
-                // 비교 비율을 광고비 잔액 값 들고와서..
-                setError('refundAmount', {type: 'required', message: '환불 금액이 광고비 잔액 보다 큽니다.'})
-            }else if(refundAmount === 0) {
-                setError('refundAmount', {type: 'required', message: '환불 금액을 입력해 주세요.'})
-            }else{
-                setModal({isShow: false});
-            }
+  const [, setModal] = useAtom(modalController)
+  const [tokenUserInfo] = useAtom(tokenResultAtom)
+  const {title, refundData} = props
+  const [refundType, setRefundType] = useState("전액 환불") // 환불 종류
+  const [refundAmount, setRefundAmount] = useState(0) // 환불 금액
+  const [note, setNote] = useState("") // 비고 내용
+  const {register, handleSubmit, setError, formState:{errors} } = useForm()
+  const [userPoint, ] = useAtom(retrieveUserPoint)
+  const handleChange = (event) => {
+      let num = removeStr(event)
+      let numberNum = Number(num)
+      setRefundAmount(numberNum)
+  }
+  const onSubmit = async () => {
+    //[d] 사용자 포인트 지급 내역 내부 전체 환불 요청값은 알 수 없음..
+    // if(props.totalAmount > userPoint) {
+    //   setError('refundAmount', { type: 'required', message: '신청한 환불 금액이 광고비 잔액을 넘어섭니다.' });
+    // } else {
+    //
+    // }
+    if (refundType === "전액 환불") {
+      setRefundAmount(0);
+      const requestData = {
+        userId: tokenUserInfo.id,
+        refundAmount: userPoint,
+        description: note
+      };
+
+      try {
+        await refundRequest(requestData);
+        props.onPaymentDetailsReceived(); // 성공적인 응답 처리
+      } catch (error) {
+        console.error("실패 응답 처리", error); // 실패한 응답 처리
+      }
+
+      setModal({ isShow: false });
+    } else if (refundType === "부분 환불") {
+      if (refundAmount > userPoint) {
+        setError('refundAmount', {type: 'required', message: '환불 금액이 광고비 잔액보다 큽니다.'});
+      } else if (refundAmount === 0) {
+        setError('refundAmount', {type: 'required', message: '환불 금액을 입력해 주세요.'});
+      } else {
+        const requestData = {
+          userId: tokenUserInfo.id,
+          refundAmount: refundAmount,
+          description: note
+        };
+
+        try {
+          await refundRequest(requestData);
+          props.onPaymentDetailsReceived(); // 성공적인 응답 처리
+        } catch (error) {
+          console.error("실패 응답 처리", error); // 실패한 응답 처리
         }
+
+        setModal({isShow: false});
+      }
     }
-    const onError = () => console.log(errors)
+  };
+  const onError = () => console.log(errors)
 
     return (
         <form onSubmit={handleSubmit(onSubmit, onError)}>
@@ -122,6 +167,7 @@ function RefundRequestModal (props) {
                                                         disabled={true}
                                                         value={'0 원'}
                                                     />
+                                                    {errors.refundAmount && <ValidationScript style={{bottom: '-40px', left: '142px',}}>{errors.refundAmount.message}</ValidationScript>}
                                                 </ColSpan3>
                                             ) : (
                                                 <ColSpan3>
@@ -151,7 +197,14 @@ function RefundRequestModal (props) {
                             <RowSpan style={{width:'100%', marginTop:'35px'}}>
                                 <ColSpan0>비고</ColSpan0>
                                 <ColSpan4 style={{paddingLeft:"35px"}}>
-                                    <Input textAlingn={'left'} type={'text'} placeholder='비고 입력' style={{width: "100%"}}/>
+                                    <Input
+                                      textAlingn={'left'}
+                                      type={'text'}
+                                      value={note}
+                                      placeholder='비고 입력'
+                                      style={{width: "100%"}}
+                                      onChange={(e)=> setNote(e.target.value)}
+                                    />
                                 </ColSpan4>
                             </RowSpan>
                             <RowSpan>

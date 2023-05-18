@@ -89,17 +89,21 @@ function PaymentManageUser(props) {
   const [startDate, endDate] = dateRange;
 
   //[d] 광고비 잔액 충전 금액 목 데이터
-  // const [advertisingBalance, setAdvertisingBalance] = useState(10000) // 광고비 잔액
   const [advertisingBalance, setAdvertisingBalance] = useAtom(retrieveUserPoint) // 광고비 잔액
   const [requestAmountValue, setRequestAmountValue] = useState(0) // 충전 금액
 
   //[d] 환불 입력 정보 조회해서 여기다 담기
   const [refundData, setRefundData] = useState({})
 
+  //[d] 현재 시점 기준 전체 지급 금액 값 해당 값이 환불 요청 금액보다 낮으면 환불 거부..
+  const [totalAmount, setTotalAmount] = useState(0)
+
   //[d] 그리드 데이터
   const [pageSize, ] = useState(10); // 한 페이지 보여줄 데이터
   const [currentPage, ] = useState(1); // 현재 페이지
   const gridStyle = {minHeight: 510, textAlign: 'center'}
+
+  //[d] 현재 시점에서
 
   //[d] 결제 내역 데이터
   function fetchPaymentDetails(props = {}) {
@@ -143,6 +147,12 @@ function PaymentManageUser(props) {
         if (response !== null) {
           const { totalCount, rows: data } = response;
           setTotalPointInfo(totalCount);
+          // console.log("지금 데이터는?", data);
+          // const totalPoint = data
+          //   .filter(obj => obj.pointHistoryType === "REFUND_REQUEST_OF_USER")
+          //   .reduce((acc, obj) => acc + obj.point, 0);
+          // console.log("totalPoint : ", totalPoint)
+          // setTotalAmount(totalPoint);
           return { data, count: parseInt(totalCount) };
         } else {
           return { data: [], count: 0 };
@@ -197,6 +207,7 @@ function PaymentManageUser(props) {
     // 그럼 fetchPaymentDetails 내부에서 totalInfo 값을 업데이트 하고
     // 아래 dataSource 의존성 배열 내부 값이 변경 되면서 그리드도 다시 그려줍니다.
     fetchPaymentDetails();
+    fetchPointDetails();
     retrieveUserRefundInfo();
   }
   //[d] 최초 화면 접근시 유저 상태이면 결제내역 데이터 조회 아니면 로그인
@@ -226,7 +237,7 @@ function PaymentManageUser(props) {
   }, [dateRange]);
   //[d] 차트 데이터에서 역으로 변동값 감지해서 다시 던저주기 paging 처리 관련...
   const dataSource = useCallback(fetchPaymentDetails, [totalInfo]);
-  const dataSourcePoint = useCallback(fetchPointDetails, [totalInfo]);
+  const dataSourcePoint = useCallback(fetchPointDetails, [totalPointInfo]);
 
   return (
     <main>
@@ -253,9 +264,22 @@ function PaymentManageUser(props) {
                       onPaymentDetailsReceived={handlePaymentDetailsReceived}
                     />
                     {refundData.refundBankType === null?
-                      <DefaultButton onClick={handleRegisterRefund} style={{background:"#fff", color:"#777"}}>환불 신청</DefaultButton>
+                      <DefaultButton
+                        onClick={handleRegisterRefund}
+                        style={{background:"#fff", color:"#777"}}
+                      >
+                        환불 신청
+                      </DefaultButton>
                       :
-                      <RefundRequestButton title={'환불 신청'} modalInfo={'USER'} onSave={null} onSubmit={null} refundData={refundData}/>
+                      <RefundRequestButton
+                        title={'환불 신청'}
+                        modalInfo={'USER'}
+                        onSave={null}
+                        onSubmit={null}
+                        refundData={refundData}
+                        onPaymentDetailsReceived={handlePaymentDetailsReceived}
+                        totalAmount={totalAmount}
+                      />
                     }
                     {/*환불 신청에 값이 없으면 토스트 띄우기*/}
                   </ColSpan2>

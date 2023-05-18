@@ -191,14 +191,14 @@ export const PointDetailsColumns = [
         }
     },
     {
-        name: 'refundBankAccount',
+        name: 'description',
         header: '환불 정보',
         defaultFlex: 1,
         resizable: false,
         textAlign: 'center',
         render: ({ value })=> {
             return (
-              <p>{value === true ? value : '-'}</p>
+              <p>{value !== "" ? value : '-'}</p>
             )
         }
     },
