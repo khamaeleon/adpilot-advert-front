@@ -6,9 +6,7 @@ const BUDGET_INFO = 'budget'
 
 export async function updateCampaignBudget(campaignInfo) {
   let returnVal = null;
-  let param = {...campaignInfo, infiniteBudgetYn: campaignInfo.infiniteBudgetYn ? 'Y' : 'N'}
-
-  await AdminAxios('PUT', ACTION_URL + '/' + campaignInfo.campaignId + BUDGET_UPDATE, param)
+  await AdminAxios('PUT', ACTION_URL + '/' + campaignInfo.campaignId + BUDGET_UPDATE, campaignInfo)
     .then((response) => {
       const {responseCode} = response
       if (responseCode.statusCode === 200) {

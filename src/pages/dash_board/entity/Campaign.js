@@ -236,7 +236,7 @@ export const adverStatusDetailColumn = [
     }
   },
   {
-    name: 'campaignBudgetDesc',
+    name: 'dailyAvgBudget',
     header: '예산설정',
     minWidth: 150,
     textAlign: 'center',
@@ -246,8 +246,8 @@ export const adverStatusDetailColumn = [
         textDecoration: 'underline'
       }
     },
-    render: ({value, data, cellProps}) => {
-      let valueFormat = value < 0 ? '무제한': <p>{decimalFormat(value)} 원</p>
+    render: ({value, data}) => {
+      let valueFormat = data.infiniteBudgetYn !== 'N' ? '무제한': <p>{decimalFormat(value)} 원</p>
       return  <Link to={'/board/campaignTwo'} state={{campaignId: data?.campaignId, userId: data?.userId, adverInfo: data?.adverInfo}}>{valueFormat}</Link>
     }
   },
@@ -471,12 +471,15 @@ export const userCampaignListColumn = [
     }
   },
   {
-    name: 'campaignBudgetDesc',
+    name: 'dailyAvgBudget',
     header: '예산설정',
     minWidth: 150,
     textAlign: 'center',
     showColumnMenuTool: false,
-    render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>,
+    render: ({value, data}) => {
+      let valueFormat = data.infiniteBudgetYn !== 'N' ? '무제한': <p>{decimalFormat(value)} 원</p>
+      return valueFormat
+    }
   },
   {
     name: 'advertiseGroupName',

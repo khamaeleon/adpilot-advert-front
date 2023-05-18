@@ -141,7 +141,7 @@ export function CampaignOne() {
   const handleChangePixel = (pixelValue) => {
     setCampaignBasicInfo({
       ...campaignBasicInfo,
-      pixelId: pixelValue,
+      pixelId: pixelValue.value,
     })
     clearErrors('pixelId')
   }
@@ -263,7 +263,7 @@ export function CampaignOne() {
                       }}
                       render={({field}) => (
                         <Select options={pixelList !== null ? pixelList :[]}
-                                placeholder={(pixelList === null || pixelList?.length === 0) ? '최적화 픽셀이 없습니다.' : '최적화 픽셀 선택'}
+                                placeholder={campaignBasicInfo.pixelId !== '' && (pixelList === null || pixelList?.length === 0) ? '최적화 픽셀이 없습니다.' : '최적화 픽셀 선택'}
                                 isDisabled={pixelList === null || pixelList?.length === 0 && true}
                                 {...field}
                                 value={campaignBasicInfo !== null && pixelList !== null  ? pixelList.find(item =>item.value === campaignBasicInfo.pixelId) : ''}

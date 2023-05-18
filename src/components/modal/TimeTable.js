@@ -11,7 +11,6 @@ function TimeTableComponent (props) {
     <div>
       <ModalHeader title={"설정된 시간별 예산"}/>
       <ModalBody>
-        {console.log(props)}
         {props.exposureTimeType !== "DIRECT_SETTINGS"  &&
           <>
             <RowSpan>

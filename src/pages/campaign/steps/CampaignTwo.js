@@ -58,15 +58,19 @@ export function CampaignTwo() {
         const data = response
         let budgetRate = {budgetRate : response.pcBudget * 100 / response.dailyAvgBudget}
         Object.assign(data,budgetRate)
+        console.log(data)
+
         setCampaignBudgetInfo(data)
+        selBudgetTimeDetailInfo(userId, data.budgetTimeId).then(response => {
+          setTimeBudgetDetailDataState(response)
+        })
         reset(response)
       })
-    }
+    } else resetInfo()
     let userId = state !== null ? state.userId : campaignBasicInfo?.userId
     selBudgetTimeList(userId).then(response => {
       if (response) {
-        console.log(response)
-        setTimeBudgetDetailDataState(response)
+        //setTimeBudgetDetailDataState(response)
         let budgetTimeList = []
         response.timeGroups.map(data => {
           budgetTimeList = [...budgetTimeList, {value: data.eventId, label: data.groupName}]
@@ -98,14 +102,12 @@ export function CampaignTwo() {
    * @param selectedBudgetTime
    */
   const handleChangeBudgetTimes = (selectedBudgetTime) => {
-    console.log(selectedBudgetTime)
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
       budgetTimeId: selectedBudgetTime.value,
     })
     let userId = state !== null ? state.userId : campaignBasicInfo.userId
     selBudgetTimeDetailInfo(userId, selectedBudgetTime.value).then(response => {
-      console.log(response)
       setTimeBudgetDetailDataState(response)
     })
   }
@@ -210,7 +212,7 @@ export function CampaignTwo() {
             }
           })
         } else setStepCampaign({steps: 2})
-      } else toast.error('수정이 실패하였습니다.')
+      }
     })
 
   }
@@ -239,6 +241,7 @@ export function CampaignTwo() {
                     }}
                     render={({field}) => (
                       <Input type={'number'}
+                             min={100}
                              readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
                              placeholder={'일일 평균 예산을 설정해주세요.'}
                              style={{color:'#f5811f'}}
