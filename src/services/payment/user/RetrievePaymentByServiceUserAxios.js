@@ -16,7 +16,6 @@ export async function paymentListRequest( userId, param ) {
   await AdverAxios('POST', ACTION_URL_PAYMENTS + userId + LIST_PAYMENTS , param)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
-        console.log("결제 내역", response.data)
         returnVal = response.data
       } else {
         returnVal = null

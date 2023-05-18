@@ -11,7 +11,6 @@ export async function retrieveUserPointRequest( userId ) {
   await AdverAxios('GET', ACTION_URL + userId , null)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
-        console.log("포인트 현황 조회", response.data)
         returnVal = response.data
       } else {
         returnVal = null
