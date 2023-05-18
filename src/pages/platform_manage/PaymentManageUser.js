@@ -41,7 +41,7 @@ import {
   PointDetailsColumns,
   PointDetailsDataAtom, refundRequestData
 } from "./entity/PaymentUser";
-import {retrieveUserPoint} from "../layout/entity/UserPoint";
+import {requestAmountPoint, retrieveUserPoint} from "../layout/entity/UserPoint";
 
 export function RefundRequestTable(props) {
   return (
@@ -90,7 +90,7 @@ function PaymentManageUser(props) {
 
   //[d] 광고비 잔액 충전 금액 목 데이터
   const [advertisingBalance, setAdvertisingBalance] = useAtom(retrieveUserPoint) // 광고비 잔액
-  const [requestAmountValue, setRequestAmountValue] = useState(0) // 충전 금액
+  const [requestAmountValue, setRequestAmountValue] = useAtom(requestAmountPoint) // 충전 금액
 
   //[d] 환불 입력 정보 조회해서 여기다 담기
   const [refundData, setRefundData] = useState({})
@@ -287,6 +287,7 @@ function PaymentManageUser(props) {
                 <RowSpan style={{margin:"0"}}>
                   <ColSpan4>
                     <AdvertisingCostStatus>
+                      {/*<span className={'won'}>{decimalFormat(advertisingBalance)}</span>*/}
                       <span className={'won'}>{decimalFormat(advertisingBalance + requestAmountValue)}</span>
                       {/*여긴 광고비 잔액이 들어와야 함*/}
                     </AdvertisingCostStatus>

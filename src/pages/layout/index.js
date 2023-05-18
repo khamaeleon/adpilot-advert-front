@@ -24,7 +24,7 @@ import {FormProvider, useForm} from "react-hook-form";
 import {CampaignThree} from "../campaign/steps/CampaignThree";
 import {CampaignFour} from "../campaign/steps/CampaignFour";
 import {stepCampaignAtom} from "../campaign/entity";
-import {retrieveUserPoint} from "../layout/entity/UserPoint";
+import {retrieveUserPoint, requestAmountPoint} from "../layout/entity/UserPoint";
 import {retrieveUserPointRequest} from "../../services/payment/user/RetrieveUserPointAxios";
 
 function Layout() {
@@ -33,6 +33,7 @@ function Layout() {
   const methods = useForm()
   const [tokenUserInfo, setTokenUserInfo] = useAtom(tokenResultAtom)
   const [userPoint, setUserPoint] = useAtom(retrieveUserPoint)
+  const [requestAmount, setRequestAmount] = useAtom(requestAmountPoint)
   const setStepCampaign = useSetAtom(stepCampaignAtom)
 
   useEffect(() => {
@@ -146,7 +147,7 @@ function Layout() {
                 <AdvertisingBalance>
                   <div/>
                   <small>광고비 잔액</small>
-                  <small className={'won'}>{decimalFormat(userPoint)}</small>
+                  <small className={'won'}>{decimalFormat(userPoint + requestAmount)}</small>
                 </AdvertisingBalance>
               </UserName>
               {/*[d] 20230411 사용자 화면에서 픽셀 관리 노출 보류*/}
