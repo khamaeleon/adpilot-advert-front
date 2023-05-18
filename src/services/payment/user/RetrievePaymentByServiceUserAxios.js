@@ -1,21 +1,43 @@
 import {AdverAxios} from "../../../common/Axios";
 
-const ACTION_URL = '/payments/ADVERTISE/';
-const LIST = '/list'
+const ACTION_URL_PAYMENTS = '/payments/ADVERTISE/';
+const LIST_PAYMENTS = '/list'
+
+const ACTION_URL_POINT = '/payments/point/';
+const LIST_POINT = '/histories'
+
 
 /**
  * 특정 유저 결제 정보 요청
  * @returns {Promise<null>}
  */
 export async function paymentListRequest( userId, param ) {
-    let returnVal = null;
-    await AdverAxios('POST', ACTION_URL + userId + LIST , param)
-        .then((response) => {
-            if (response.responseCode.statusCode === 200) {
-                returnVal = response.data
-            } else {
-                returnVal = null
-            }
-        }).catch((e) => returnVal = null)
-    return returnVal;
+  let returnVal = null;
+  await AdverAxios('POST', ACTION_URL_PAYMENTS + userId + LIST_PAYMENTS , param)
+    .then((response) => {
+      if (response.responseCode.statusCode === 200) {
+        console.log("결제 내역", response.data)
+        returnVal = response.data
+      } else {
+        returnVal = null
+      }
+    }).catch((e) => returnVal = null)
+  return returnVal;
+}
+/**
+ * 특정 유저 포인트 지급 내역
+ * @returns {Promise<null>}
+ */
+export async function pointListRequest( userId, param ) {
+  let returnVal = null;
+  await AdverAxios('POST', ACTION_URL_POINT + userId + LIST_POINT , param)
+    .then((response) => {
+      if (response.responseCode.statusCode === 200) {
+        console.log("포인트 지급 내역", response.data)
+        returnVal = response.data
+      } else {
+        returnVal = null
+      }
+    }).catch((e) => returnVal = null)
+  return returnVal;
 }

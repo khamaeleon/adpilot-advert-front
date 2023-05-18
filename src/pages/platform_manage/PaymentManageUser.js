@@ -25,16 +25,14 @@ import ko from "date-fns/locale/ko";
 import {AdChargeButton} from "../../components/payment/user/AdCharge";
 import {RefundRequestButton} from "../../components/payment/user/RefundRequest";
 import {RegisterRefundInformationButton} from "../../components/payment/user/RegisterRefundInformation";
-import {getLastMonth, getThisMonth, getToDay} from "../../common/DateUtils";
-import {decimalFormat, dateFormat} from "../../common/StringUtils";
+import {getThisMonth, getToDay} from "../../common/DateUtils";
+import {decimalFormat} from "../../common/StringUtils";
 import {toast, ToastContainer} from "react-toastify";
-import Table from "../../components/table";
-import {paymentListRequest} from "../../services/payment/user/RetrievePaymentByServiceUserAxios";
+import {paymentListRequest, pointListRequest} from "../../services/payment/user/RetrievePaymentByServiceUserAxios";
 import {retrieveUserRefundInfoRequestAxios} from "../../services/payment/user/RetrieveUserRefundInfoRequestAxios";
 import {selUserInfo} from "../../services/Platform/ManageUserAxios";
 import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 import {tokenResultAtom} from "../login/entity/Common";
-import {searchConditionAtom} from "./entity/Common";
 import {accountInfoAtom} from "./entity/User";
 import {TotalCount} from "../../components/table/TableDetail";
 import {
@@ -43,30 +41,31 @@ import {
   PointDetailsColumns,
   PointDetailsDataAtom, refundRequestData
 } from "./entity/PaymentUser";
+import {retrieveUserPoint} from "../layout/entity/UserPoint";
 
 export function RefundRequestTable(props) {
   return (
     <RefundInformation>
       <table style={{margin:"0"}}>
         <thead>
-          <tr>
-            <th>은행</th>
-            <th>계좌번호</th>
-            <th>예금주</th>
-          </tr>
+        <tr>
+          <th>은행</th>
+          <th>계좌번호</th>
+          <th>예금주</th>
+        </tr>
         </thead>
         <tbody>
-          <tr>
-            {Object.values(props.refundData).map((item, key) => {
-              return(
-                <td
-                  key={key}
-                >
-                  {item}
-                </td>
-              )
-            })}
-          </tr>
+        <tr>
+          {Object.values(props.refundData).map((item, key) => {
+            return(
+              <td
+                key={key}
+              >
+                {item}
+              </td>
+            )
+          })}
+        </tr>
         </tbody>
       </table>
     </RefundInformation>
@@ -83,14 +82,15 @@ function PaymentManageUser(props) {
 
   //[d] totalInfo 2개 생성 결제내역 하나, 포인트 지급 하나
   const [totalInfo, setTotalInfo] = useState(0)
-  const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
+  const [totalPointInfo, setTotalPointInfo] = useState(0)
 
   //[d] 날짜
   const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
 
   //[d] 광고비 잔액 충전 금액 목 데이터
-  const [advertisingBalance, setAdvertisingBalance] = useState(10000) // 광고비 잔액
+  // const [advertisingBalance, setAdvertisingBalance] = useState(10000) // 광고비 잔액
+  const [advertisingBalance, setAdvertisingBalance] = useAtom(retrieveUserPoint) // 광고비 잔액
   const [requestAmountValue, setRequestAmountValue] = useState(0) // 충전 금액
 
   //[d] 환불 입력 정보 조회해서 여기다 담기
@@ -117,10 +117,40 @@ function PaymentManageUser(props) {
         if (response !== null) {
           const { totalCount, rows: data } = response;
           setTotalInfo(totalCount);
-          return Promise.resolve({ data, count: parseInt(totalCount) });
+          return { data, count: parseInt(totalCount) };
         } else {
-          return Promise.resolve({ data: [], count: 0 });
+          return { data: [], count: 0 };
         }
+      })
+      .catch((error) => {
+        console.error("Failed to fetch payment details:", error);
+        return { data: [], count: 0 };
+      });
+  }
+  //[d] 포인트 내역 데이터
+  function fetchPointDetails(props = {}) {
+    const { skip = (currentPage - 1) * pageSize, limit = pageSize } = props;
+
+    const requestData = {
+      pageSize: limit,
+      currentPage: skip / limit + 1,
+      searchStartDate: moment(startDate).format('YYYY-MM-DD'),
+      searchEndDate: moment(endDate).format('YYYY-MM-DD'),
+    };
+
+    return pointListRequest( tokenUserInfo.id, requestData)
+      .then((response) => {
+        if (response !== null) {
+          const { totalCount, rows: data } = response;
+          setTotalPointInfo(totalCount);
+          return { data, count: parseInt(totalCount) };
+        } else {
+          return { data: [], count: 0 };
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to fetch point details:", error);
+        return { data: [], count: 0 };
       });
   }
   //[d] 새로고침시 정보 유실 로그인 페이지로 날림
@@ -171,19 +201,32 @@ function PaymentManageUser(props) {
   }
   //[d] 최초 화면 접근시 유저 상태이면 결제내역 데이터 조회 아니면 로그인
   useEffect(() => {
-    if (tokenUserInfo.role === "NORMAL") {
-      // 광고주 결제 현황 조회
-      fetchPaymentDetails();
-      // 광고주 포인트 현황 조회
-      // 환불 정보 조회
-      retrieveUserRefundInfo();
-    } else {
-      // 새로고침 시 메인으로..UserDetail.js useEffect 동일하게 NORMAL 아닐 떄 체크하는 부분 사용
-      fetchAccountInfo();
-    }
+    const fetchData = async () => {
+      try {
+        if (tokenUserInfo.role === "NORMAL") {
+          // 광고주 결제 현황 조회
+          const paymentDetails = await fetchPaymentDetails();
+          // 광고주 포인트 현황 조회
+          const pointDetails = await fetchPointDetails();
+          // 환불 정보 조회
+          retrieveUserRefundInfo();
+
+          setTotalInfo(paymentDetails.count);
+          setTotalPointInfo(pointDetails.count);
+        } else {
+          // 새로고침 시 메인으로..UserDetail.js useEffect 동일하게 NORMAL 아닐 때 체크하는 부분 사용
+          fetchAccountInfo();
+        }
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    fetchData();
   }, [dateRange]);
   //[d] 차트 데이터에서 역으로 변동값 감지해서 다시 던저주기 paging 처리 관련...
   const dataSource = useCallback(fetchPaymentDetails, [totalInfo]);
+  const dataSourcePoint = useCallback(fetchPointDetails, [totalInfo]);
 
   return (
     <main>
@@ -313,16 +356,36 @@ function PaymentManageUser(props) {
               sortable={false}
               style={gridStyle}
             />
-            <Table columns={PointDetailsColumns}
-              // totalCount={[totalInfo.totalCount, '포인트 지급 내역']}
-              // totalCount={[totalInfo, '포인트 지급 내역']}
-                   totalCount={[0, '포인트 지급 내역']}
-                   data={pointDetails}
-                   showHoverRows={false}
-                   activeCell={[0]}
-                   pagenations={false}
-                   noDirectives={true}
-                   emptyText={'포인트 지급 내역이 없습니다.'}
+            {/*<Table columns={PointDetailsColumns}*/}
+            {/*       totalCount={[0, '포인트 지급 내역']}*/}
+            {/*       data={pointDetails}*/}
+            {/*       showHoverRows={false}*/}
+            {/*       activeCell={[0]}*/}
+            {/*       pagenations={false}*/}
+            {/*       noDirectives={true}*/}
+            {/*       emptyText={'포인트 지급 내역이 없습니다.'}*/}
+            {/*/>*/}
+            <BoardSearchResultTitle style={{alignItems:"end", paddingTop:"20px", paddingBottom: "10px"}}>
+              <div>
+                <TotalCount><span/>총 <span>{totalPointInfo}</span> 건의 포인트 지급 내역</TotalCount>
+              </div>
+            </BoardSearchResultTitle>
+            <ReactDataGrid
+              licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
+              handle={null}
+              columns={PointDetailsColumns}
+              dataSource={dataSourcePoint}
+              headerHeight={48}
+              showZebraRows={true}
+              showCellBorders={'horizontal'}
+              enableColumnAutosize={true}
+              showColumnMenuLockOptions={false}
+              showColumnMenuGroupOptions={false}
+              emptyText={'결제 내역이 없습니다.'}
+              limit={10}
+              pagination={true}
+              sortable={false}
+              style={gridStyle}
             />
           </ColSpan4>
         </Board>
@@ -388,4 +451,5 @@ const RefundInformation = styled.div`
 
 
 export default PaymentManageUser
+
 

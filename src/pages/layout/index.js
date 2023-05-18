@@ -24,12 +24,15 @@ import {FormProvider, useForm} from "react-hook-form";
 import {CampaignThree} from "../campaign/steps/CampaignThree";
 import {CampaignFour} from "../campaign/steps/CampaignFour";
 import {stepCampaignAtom} from "../campaign/entity";
+import {retrieveUserPoint} from "../layout/entity/UserPoint";
+import {retrieveUserPointRequest} from "../../services/payment/user/RetrieveUserPointAxios";
 
 function Layout() {
   const params = useParams()
   const navigate = useNavigate()
   const methods = useForm()
   const [tokenUserInfo, setTokenUserInfo] = useAtom(tokenResultAtom)
+  const [userPoint, setUserPoint] = useAtom(retrieveUserPoint)
   const setStepCampaign = useSetAtom(stepCampaignAtom)
 
   useEffect(() => {
@@ -67,6 +70,23 @@ function Layout() {
       setStepCampaign({steps: null})
     }
   }, [params.id])
+  //[d] 광고비 잔액
+  useEffect(() => {
+    const pointData = async () => {
+      try {
+        const userId = tokenUserInfo.id;
+        const response = await retrieveUserPointRequest(userId);
+        setUserPoint(response.availablePoint)
+      } catch (error) {
+        console.error("실패 응답 처리", error);
+      }
+    };
+
+    pointData();
+  }, [tokenUserInfo]);
+
+
+
 
   const myPage = () => {
     if (tokenUserInfo.role === 'NORMAL') {
@@ -126,7 +146,7 @@ function Layout() {
                 <AdvertisingBalance>
                   <div/>
                   <small>광고비 잔액</small>
-                  <small className={'won'}>{decimalFormat(10000)}</small>
+                  <small className={'won'}>{decimalFormat(userPoint)}</small>
                 </AdvertisingBalance>
               </UserName>
               {/*[d] 20230411 사용자 화면에서 픽셀 관리 노출 보류*/}

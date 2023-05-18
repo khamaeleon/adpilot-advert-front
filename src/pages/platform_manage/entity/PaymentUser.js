@@ -1,8 +1,7 @@
+import React from "react";
 import {atom} from "jotai/index";
 import {decimalFormat} from "../../../common/StringUtils";
 import moment from "moment";
-import React from "react";
-
 
 export const PaymentDetailsDataAtom = atom([])
 export const PointDetailsDataAtom = atom([])
@@ -95,7 +94,7 @@ export const PaymentDetailsColumns = [
                 ERROR: { label: 'ERROR', color: 'red' }
             }[value] || { label: '', color: '' };
             return (
-                <p style={{ color: valueType.color }}>{valueType.label}</p>
+              <p style={{ color: valueType.color }}>{valueType.label}</p>
             )
         }
     },
@@ -116,7 +115,7 @@ export const PaymentDetailsColumns = [
                 BATCH: 'BATCH',
             }[value] || '';
             return (
-                <p>{valueType}</p>
+              <p>{valueType}</p>
             )
         }
     },
@@ -126,6 +125,11 @@ export const PaymentDetailsColumns = [
         defaultFlex: 1,
         resizable: false,
         textAlign: 'center',
+        render: ({ value })=> {
+            return (
+              <p>{value === true ? value : '-'}</p>
+            )
+        }
     },
     {
         name: 'bankType',
@@ -133,6 +137,11 @@ export const PaymentDetailsColumns = [
         defaultFlex: 1,
         resizable: false,
         textAlign: 'center',
+        render: ({ value })=> {
+            return (
+              <p>{value === true ? value : '-'}</p>
+            )
+        }
     },
     {
         name: 'amount',
@@ -150,29 +159,55 @@ export const PaymentDetailsColumns = [
  */
 export const PointDetailsColumns = [
     {
-        name: '',
+        name: 'createdAt',
         header: '신청 일시',
         defaultFlex: 1,
         resizable: false,
+        textAlign: 'center',
+        render: ({ value })=> {
+            const dateString = moment(value).format('YYYY-MM-DD');
+            return (<p>{dateString}</p>)
+        }
     },
     {
-        name: '',
+        name: 'pointHistoryType',
         header: '신청 상태',
         defaultFlex: 1,
         resizable: false,
-        render: ({ value })=> <p>{decimalFormat(value)}</p>
+        textAlign: 'center',
+        render: ({ value })=> {
+            let valueType = {
+                CHARGE_OF_PAYMENT: { label: '충전 신청', color: 'blue' },
+                REFUND_OF_PAYMENT: { label: '환불 신청', color: 'orange' },
+                GIVEN_BY_ADMIN: { label: '포인트 지급', color: 'green' },
+                TAKEN_BY_ADMIN: { label: '포인트 차감', color: 'pink' },
+                REFUND_REQUEST_OF_USER: { label: '환불 요청', color: 'pink' },
+                REFUNDED_BY_ADMIN: { label: '환불 완료', color: 'pink' },
+                ERROR: { label: 'ERROR', color: 'red' }
+            }[value] || { label: '', color: '' };
+            return (
+              <p style={{ color: valueType.color }}>{valueType.label}</p>
+            )
+        }
     },
     {
-        name: '',
+        name: 'refundBankAccount',
         header: '환불 정보',
         defaultFlex: 1,
         resizable: false,
+        textAlign: 'center',
+        render: ({ value })=> {
+            return (
+              <p>{value === true ? value : '-'}</p>
+            )
+        }
     },
     {
-        name: '',
+        name: 'point',
         header: '지급 금액',
         defaultFlex: 1,
         resizable: false,
+        textAlign: 'center',
         render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
     },
 ]
