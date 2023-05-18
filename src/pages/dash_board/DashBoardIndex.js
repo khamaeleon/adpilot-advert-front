@@ -451,7 +451,16 @@ function DashBoardIndex() {
                 detailsGridCacheKey={'campaignId'}
                 columns={adverListColumn}
                 onDataSourceCacheChange={()=>{gridRef?.current.collapseAllRows()}}
-                onRowExpand={({id})=>retrieveAdvertiserCampaignStatus(id, searchCondition).then(r=> setAdverStatusDetailData(r))}
+                //onRowExpand={({id})=>retrieveAdvertiserCampaignStatus(id, searchCondition).then(r=> setAdverStatusDetailData(r))}
+                onRowExpand={({data})=> {
+                  retrieveAdvertiserCampaignStatus(data?.userId, searchCondition).then(response => {
+                    response !== null && setAdverStatusDetailData(
+                      response?.map(item =>{
+                        return {...item,userId:data?.userId, adverInfo: `${data?.adverName}(${data?.username})`}
+                      })
+                    )
+                  })
+                }}
                 limit={30}
                 multiRowExpand={false}
               />

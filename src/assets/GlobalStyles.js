@@ -128,7 +128,6 @@ export const GlobalStyles = createGlobalStyle`
     background: #ddd;
     cursor: pointer;
     border-radius: 8px; 
-    transition: background 450ms ease-in;
   }
 
   input[type=range]:focus {
@@ -154,6 +153,22 @@ export const GlobalStyles = createGlobalStyle`
     border-radius: 50%;
     cursor: pointer;
   }
+  
+  input[type=range].read-only {
+    background: #ddd !important;
+    cursor: no-drop;
+    &::-webkit-slider-thumb {
+      background: #ccc;
+      border:0;
+      cursor: no-drop;
+    }
+    &::-moz-range-thumb {
+      background: #ccc;
+      border:0;
+      cursor: no-drop;
+    }
+  }
+  
   input[type='text']:read-only {
     background-color: #f9fafb;
     cursor: not-allowed;

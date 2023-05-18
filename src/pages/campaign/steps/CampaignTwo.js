@@ -55,16 +55,17 @@ export function CampaignTwo() {
       //수정
       let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
       selBudgetInfo(campaignId).then(response => {
-        const data = {...response, infiniteBudgetYn: response.infiniteBudgetYn === 'Y'}
+        const data = response
         let budgetRate = {budgetRate : response.pcBudget * 100 / response.dailyAvgBudget}
         Object.assign(data,budgetRate)
         setCampaignBudgetInfo(data)
         reset(response)
       })
     }
-    let userId = state !== null ? state.userId : campaignBasicInfo.userId
+    let userId = state !== null ? state.userId : campaignBasicInfo?.userId
     selBudgetTimeList(userId).then(response => {
       if (response) {
+        console.log(response)
         setTimeBudgetDetailDataState(response)
         let budgetTimeList = []
         response.timeGroups.map(data => {
@@ -101,7 +102,7 @@ export function CampaignTwo() {
       ...campaignBudgetInfo,
       budgetTimeId: selectedBudgetTime.value,
     })
-    selBudgetTimeDetailInfo(campaignBasicInfo.userId, selectedBudgetTime.value).then(response => {
+    selBudgetTimeDetailInfo(campaignBasicInfo?.userId, selectedBudgetTime.value).then(response => {
       console.log(response)
       setTimeBudgetDetailDataState(response)
     })
@@ -136,9 +137,10 @@ export function CampaignTwo() {
 
 
   const handleCheckInfiniteBudget = (e) => {
+    let value = e.target.checked ? 'Y' : 'N'
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
-      infiniteBudgetYn: e.target.checked
+      infiniteBudgetYn: value
     })
   }
 
@@ -174,12 +176,14 @@ export function CampaignTwo() {
     }
   }
   const handleChangeInputRange = (e) => {
-    setCampaignBudgetInfo({
-      ...campaignBudgetInfo,
-      budgetRate: parseInt(e.target.value),
-      pcBudget: campaignBudgetInfo.dailyAvgBudget - ((campaignBudgetInfo.dailyAvgBudget * e.target.value) / 100),
-      mobBudget: (campaignBudgetInfo.dailyAvgBudget * e.target.value) / 100
-    })
+    if(campaignBudgetInfo.infiniteBudgetYn !== 'Y') {
+      setCampaignBudgetInfo({
+        ...campaignBudgetInfo,
+        budgetRate: parseInt(e.target.value),
+        pcBudget: campaignBudgetInfo.dailyAvgBudget - ((campaignBudgetInfo.dailyAvgBudget * e.target.value) / 100),
+        mobBudget: (campaignBudgetInfo.dailyAvgBudget * e.target.value) / 100
+      })
+    }
   }
 
   const handleChangeMaxBid = (e) => {
@@ -233,8 +237,7 @@ export function CampaignTwo() {
                     }}
                     render={({field}) => (
                       <Input type={'number'}
-                             min={100}
-                             readOnly={campaignBudgetInfo.infiniteBudgetYn}
+                             readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
                              placeholder={'일일 평균 예산을 설정해주세요.'}
                              style={{color:'#f5811f'}}
                              value={campaignBudgetInfo.dailyAvgBudget !== 0 ? campaignBudgetInfo.dailyAvgBudget : 0}
@@ -245,7 +248,7 @@ export function CampaignTwo() {
                 </ColSpan1>
                 <ColSpan1>
                   <label>
-                    <input type={'checkbox'} value={campaignBudgetInfo.infiniteBudgetYn || ''} checked={campaignBudgetInfo.infiniteBudgetYn} className={'checkbox-type-a'} onChange={handleCheckInfiniteBudget}/>
+                    <input type={'checkbox'} value={campaignBudgetInfo.infiniteBudgetYn} checked={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true} className={'checkbox-type-a'} onChange={handleCheckInfiniteBudget}/>
                     <i/>
                     {/*배너일때 infiniteBudget 항목 없음*/}
                     <span>일일 예산 무제한</span>
@@ -261,7 +264,7 @@ export function CampaignTwo() {
                 <ColSpan1>
                   <Span1>PC</Span1>
                   <Input type={'number'}
-                         min={100}
+                         readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
                          style={{color:'#f5811f'}}
                          value={campaignBudgetInfo.pcBudget}
                          onChange={(e) => handleChangePcBudget(e)}
@@ -270,6 +273,7 @@ export function CampaignTwo() {
                 </ColSpan1>
                 <ColSpan1>
                   <input
+                    className={campaignBudgetInfo.infiniteBudgetYn !== 'N' ? 'read-only' : ''}
                     type="range"
                     value={campaignBudgetInfo.budgetRate !== undefined ? campaignBudgetInfo.budgetRate : 50}
                     onChange={handleChangeInputRange}
@@ -283,7 +287,7 @@ export function CampaignTwo() {
                 <ColSpan1>
                   <ColTitle><Span1>MOBILE</Span1></ColTitle>
                   <Input type={'number'}
-                         min={100}
+                         readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
                          style={{color:'#f5811f'}}
                          value={campaignBudgetInfo.mobBudget}
                          onChange={(e) => handleChangeMobileBudget(e)}
@@ -316,10 +320,10 @@ export function CampaignTwo() {
                     )}
                   />
                 </ColSpan1>
-                {timeBudgetDetailDataState?.exposureTimeType !== undefined &&
+                {timeBudgetDetailDataState !== null &&
                   <ColSpan1>
                     <TimeTable
-                        exposureTimeType={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType}
+                        exposureTimeType={timeBudgetDetailDataState?.exposureTimeType !== undefined ? timeBudgetDetailDataState.exposureTimeType : timeBudgetDetailDataState?.timeGroups.find(value => value.eventId === campaignBudgetInfo?.budgetTimeId).exposureTimeType}
                       title={'설정된 시간별 예산'} readOnly={true}/>
                   </ColSpan1>
                 }
