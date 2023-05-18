@@ -185,8 +185,8 @@ export function PlatformCondition(props) {
               <div onClick={() => handleRangeDate('lastThirtyDay')} style={dateActive==='lastThirtyDay'?{color:'#f5811f'}:null}>지난30일</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
               <div onClick={() => handleRangeDate('lastNinetyDay')} style={dateActive==='lastNinetyDay'?{color:'#f5811f'}:null}>지난90일</div>
-              <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastOneEightyDay')} style={dateActive==='lastOneEightyDay'?{color:'#f5811f'}:null}>지난180일</div>
+              {/*<HorizontalRule style={{margin: "0 10px"}}/>*/}
+              {/*<div onClick={() => handleRangeDate('lastOneEightyDay')} style={dateActive==='lastOneEightyDay'?{color:'#f5811f'}:null}>지난180일</div>*/}
             </RangePicker>
           </div>
         </ColSpan2>
