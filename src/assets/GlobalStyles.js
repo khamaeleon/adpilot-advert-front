@@ -956,7 +956,8 @@ export const CalendarBox = styled.div`
 
 export const CalendarIcon = styled.div`
   width: 18px;
-  height: 20px;
+  height: 22px;
+  background-repeat: no-repeat;
   background-image: url("/assets/images/common/icon_calendar.png");
   background-image: -webkit-image-set(url('/assets/images/common/icon_calendar.png') 1x,url('/assets/images/common/icon_calendar@2x.png') 2x, url('/assets/images/common/icon_calendar@3x.png') 3x);
 `

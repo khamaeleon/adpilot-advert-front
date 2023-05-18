@@ -35,7 +35,7 @@ export async function selSearchMediaInfo(keyword) {
 
 export async function selSearchMediaList(inventoryIds) {
   let returnVal = null;
-
+  if(inventoryIds.inventoryIds === undefined) return null;
   await AdminAxios('POST', MEDIA_SEARCH_ARRAY, inventoryIds)
     .then((response) => {
       if(response.responseCode.statusCode ===200){

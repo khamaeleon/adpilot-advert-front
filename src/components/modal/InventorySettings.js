@@ -42,17 +42,10 @@ function SearchModal (props) {
   const [campaignGroupInfo, setCampaignGroupInfo] = useAtom(campaignGroupInfoAtom)
 
   useEffect(()=>{
-    if(type==='allow'){
-      let param ={inventoryIds:campaignGroupInfo.allowInventoryIds }
-      selSearchMediaList(param).then(response => {
-        setAllowInventoryIds(response)
-      })
-    }else{
-      let param ={inventoryIds:campaignGroupInfo.disAllowInventoryIds }
-      selSearchMediaList(param).then(response => {
-        setDisAllowInventoryIds(response)
-      })
-    }
+    let param = {inventoryIds: (type==='allow') ? campaignGroupInfo.allowInventoryIds : campaignGroupInfo.disAllowInventoryIds};
+    selSearchMediaList(param).then(response => {
+      setAllowInventoryIds(response)
+    })
     return () => {
       setMediaInventoryInfo([])
     }
@@ -67,7 +60,6 @@ function SearchModal (props) {
     }else{
       selSearchMediaInfo(searchKeyword).then(response => {
         if(response){
-          console.log(response)
           setMediaInventoryInfo(response)
         }
       })
@@ -75,21 +67,15 @@ function SearchModal (props) {
   }
 
   const handleSubmit = () => {
-    console.log(allowInventoryIds)
-    if(allowInventoryIds !== null && allowInventoryIds.length > 0) {
+      toast.success((type==='allow' ? allowInventoryIds.length :disAllowInventoryIds.length) + '개의 지면이 저장되었습니다.',{autoClose:100, delay:0})
       setModal({
         isShow: false,
         modalComponent: null
       })
-      console.log(campaignGroupInfo)
-    } else {
-      toast.warning('광고 그룹을 선택해주세요')
-    }
   }
 
   const handleClickSelectItem = (selectItem) => {
     if(type==='allow'){
-      console.log(allowInventoryIds)
 
       if(allowInventoryIds === null){
         setAllowInventoryIds([selectItem])
@@ -163,12 +149,13 @@ function SearchModal (props) {
           <ColSpan2>
             <div style={{display:'flex',flexDirection:'column',width: '100%'}}>
               <SearchInventoryMain>
-                <Span4>지면검색</Span4>
+                <Span4>지면 검색</Span4>
                 <SearchInventoryInputGroup>
                   <input type = {'text'}
-                         placeholder= {'지면명, 매체명, 지면 코드'}
+                         placeholder= {'매체명, 지면명, 아이디, 지면 코드를 입력해주세요.'}
                          value = {searchKeyword}
                          onChange={handleSearchKeyword}
+                         onKeyDown={e => (e.code === 'Enter') && onSearchMediaInventory() }
                   />
                   <button type={'button'} onClick={onSearchMediaInventory}>검색</button>
                 </SearchInventoryInputGroup>
@@ -250,7 +237,7 @@ function SearchModal (props) {
         </RowSpan>
       </ModalBody>
       <ModalFooter>
-        <DefaultButton onClick={handleSubmit}>불러오기</DefaultButton>
+        <DefaultButton onClick={handleSubmit}>저장</DefaultButton>
       </ModalFooter>
     </div>
   )
