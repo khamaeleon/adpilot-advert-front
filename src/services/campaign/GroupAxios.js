@@ -51,19 +51,8 @@ export async function selSearchMediaList(inventoryIds) {
 
 export async function updateCampaignConfigInventory(campaignGroupInfo) {
   let returnVal = null;
-  let params = {
-    ...campaignGroupInfo,
-    exposureAttentionUserYn: campaignGroupInfo.exposureAttentionUserYn ? 'Y' : 'N',
-    exposureConversionAudienceYn: campaignGroupInfo.exposureConversionAudienceYn ? 'Y' : 'N',
-    exposureConversionUserYn: campaignGroupInfo.exposureConversionUserYn ? 'Y' : 'N',
-    exposureNewAudienceYn: campaignGroupInfo.exposureNewAudienceYn ? 'Y' : 'N',
-    exposurePotentialAudienceYn: campaignGroupInfo.exposurePotentialAudienceYn ? 'Y' : 'N',
-    exposureShoppingAudienceYn: campaignGroupInfo.exposureShoppingAudienceYn ? 'Y' : 'N',
-    exposureShoppingUserYn: campaignGroupInfo.exposureShoppingUserYn ? 'Y' : 'N',
-    exposureVisitUserYn: campaignGroupInfo.exposureVisitUserYn ? 'Y' : 'N'
-  }
 
-  await AdminAxios('PUT', ACTION_URL+'/'+ campaignGroupInfo.campaignId +CONFIG_INVENTORY ,params)
+  await AdminAxios('PUT', ACTION_URL+'/'+ campaignGroupInfo.campaignId +CONFIG_INVENTORY ,campaignGroupInfo)
     .then((response) => {
       const {responseCode} =response
       if(responseCode.statusCode ===200){
