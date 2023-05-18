@@ -7,7 +7,7 @@ import {CancelButton, DefaultButton, Input, inputStyle, RelativeDiv, selectStyle
 import {accountInfoAtom, hostList, nextStepAtom} from "./entity/Common";
 import {ButtonGroup, DuplicateButton, Form, SignUpVerify, ValidationScript, VerticalRule} from "./styles";
 import Select from "react-select";
-import {useSetAtom} from "jotai";
+import {useAtomValue, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import ImageUploading from "react-images-uploading";
@@ -15,6 +15,7 @@ import styled from "styled-components";
 
 function ModalCheckBusinessNumber(props) {
   const {onSubmit} =props
+  const setModalOpen = useSetAtom(modalController)
   return (
     <div>
       <ModalHeader title={"사업자 조회 결과"}/>
@@ -27,7 +28,7 @@ function ModalCheckBusinessNumber(props) {
         <p>조회하신 사업자 정보로 등록하시겠습니까?</p>
       </ModalBody>
       <ModalFooter>
-        <CancelButton>취소</CancelButton>
+        <CancelButton onClick={() => setModalOpen({isShow: false,modalComponent: null})}>취소</CancelButton>
         <DefaultButton onClick={onSubmit}>등록</DefaultButton>
       </ModalFooter>
     </div>
@@ -44,7 +45,6 @@ export default function Basic(props) {
     mode: "onSubmit",
     defaultValues: accountInfo
   })
-
 
   const handleNextStep = () => {
     props.nextStep()
@@ -348,13 +348,13 @@ export default function Basic(props) {
               <input type={'radio'}
                      id={'direct'}
                      name={'direct'}
-                     checked={accountInfo.adverType === 'ADVER' ? true : false}
+                     checked={accountInfo.adverType === 'ADVER'}
                      onChange={() => handleChangeMediaType('ADVER')}/>
               <label htmlFor={'direct'}>광고주</label>
               <input type={'radio'}
                      id={'agent'}
                      name={'agent'}
-                     checked={accountInfo.adverType === 'AGENCY' ? true : false}
+                     checked={accountInfo.adverType === 'AGENCY'}
                      onChange={() => handleChangeMediaType('AGENCY')}/>
               <label htmlFor={'agent'}>대행사</label>
             </div>
@@ -364,9 +364,13 @@ export default function Basic(props) {
             <div>
               <input
                 type={'text'}
-                placeholder={'아이디를 입력해주세요'}
+                placeholder={'아이디를 입력해주세요. (4-20자, 영문)'}
                 {...register("username", {
                   required: "아이디를 입력해주세요",
+                  pattern: {
+                    value: /^[A-Za-z]{1}\w{3,20}$/,
+                    message: '아이디를 확인해주세요.'
+                  },
                   onChange: (e) => handleMemberId(e)
                 })
                 }

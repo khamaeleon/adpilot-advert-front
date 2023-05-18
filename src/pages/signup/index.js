@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Terms from "./Terms";
 import Basic from "./Basic";
 import Done from "./Done";
-import {useAtomValue} from "jotai/index";
+import {useAtomValue} from "jotai";
 import {nextStepAtom} from "./entity/Common";
 import {Arrow, ButtonGroup, Logo, SignUpContents, SignUpHeader, Step, StepContainer, Steps} from "./styles";
 
@@ -97,7 +97,7 @@ function SignUp() {
             <Terms/>
             <article style={{borderTop: '1px solid #dcdcdc'}}>
               <ButtonGroup>
-                <button type={'button'} onClick={() => navigate('/login')}>취소</button>
+                <button type={'button'} onClick={() => navigate('/')}>취소</button>
                 <button type={'button'} onClick={handleNextStep}>다음</button>
               </ButtonGroup>
             </article>
@@ -110,7 +110,7 @@ function SignUp() {
           <>
             <Done/>
             <ButtonGroup>
-              <button onClick={() => navigate('/')}>홈으로</button>
+              <button onClick={() => window.location.replace('/')}>홈으로</button>
             </ButtonGroup>
           </>
         }

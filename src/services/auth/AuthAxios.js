@@ -20,10 +20,13 @@ export async function login(loginInfo) {
   await NonUserAxios('POST', LOGIN_USER, loginInfo)
     .then((response) => {
       const {data,responseCode} =response.data
+      console.log(responseCode)
       returnVal = data
       if (responseCode.statusCode === 200) {
         localStorage.removeItem("refreshToken")
         localStorage.setItem("refreshToken", data.token.refreshToken);
+      } else if(responseCode.code === 'C007') {
+        returnVal = "disabled"
       } else {
         returnVal = false
       }

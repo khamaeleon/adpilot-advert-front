@@ -5,23 +5,6 @@ import {ModalBody, ModalFooter, ModalHeader} from "./Modal";
 import styled from "styled-components";
 import {FindIdResultAtom} from "../../pages/login";
 
-// 문자열 검색해서 중간 글자 *로 만들기
-// 2글자면 마지막 글자만
-const maskingName = (strName) => {
-  if (strName.length > 2) {
-    var originName = strName.split('');
-    originName.forEach(function(name, i) {
-      if (i === 0 || i === originName.length - 1) return;
-      originName[i] = '*';
-    });
-    var joinName = originName.join();
-    return joinName.replace(/,/g, '');
-  } else {
-    var pattern = /.$/; // 정규식
-    return strName.replace(pattern, '*');
-  }
-};
-
 export function ComponentModalFindId(){
   const navigate = useNavigate()
   const [, setModal] = useAtom(modalController)
@@ -42,7 +25,7 @@ export function ComponentModalFindId(){
         <ModalBodyInner>
           {findIdResult.length !== 0 && findIdResult.map((item,index) => {
             return (
-              <p key={index}>{maskingName(item)}</p>
+              <p key={index}>{item}</p>
             )
           })}
         </ModalBodyInner>
@@ -78,7 +61,7 @@ export function ComponentModalFindPassword(props) {
       <ModalHeader title={"비밀번호 찾기 결과"}/>
       <ModalBody>
         <ModalBodyInner>
-          <EmailId>{maskingName(passwordParams.params.email)}</EmailId>으로 임시 비밀번호가 발급되었습니다.
+          <EmailId>{passwordParams.params.email}</EmailId>으로 임시 비밀번호가 발급되었습니다.
           로그인 후 반드시 비밀번호를 변경해주시기 바랍니다.
         </ModalBodyInner>
       </ModalBody>

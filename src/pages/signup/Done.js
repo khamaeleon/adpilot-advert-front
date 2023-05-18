@@ -5,7 +5,6 @@ export default function Done() {
   return (
     <article>
       <AfterSignUpGuild>
-
       </AfterSignUpGuild>
     </article>
   )
