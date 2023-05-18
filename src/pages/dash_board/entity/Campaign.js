@@ -184,6 +184,7 @@ export const adverStatusDetailAtom = atom([])
 /**
  * 광고주 현황 리스트 디테일 컬럼 설정
  */
+
 export const adverStatusDetailColumn = [
   {
     name: 'userId',

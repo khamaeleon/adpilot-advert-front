@@ -3,21 +3,21 @@ import {
   BoardHeader,
   BoardSearchDetail,
   BoardTableContainer,
-  ColSpan1, ColSpan2, ColSpan3,
+  ColSpan1,
   ColSpan4,
   DefaultButton,
-  Input, inputStyle,
+  Input,
   RelativeDiv,
-  RowSpan, selectStyle,
+  RowSpan,
+  selectStyle,
   Span1,
-  Span2,
   Span3,
   SubmitButton,
   TableButton,
   ValidationScript,
 } from "../../assets/GlobalStyles";
 import React, {useCallback, useEffect, useState} from "react";
-import {useAtom, useSetAtom} from "jotai";
+import {atom, useAtom, useSetAtom} from "jotai";
 import {toast, ToastContainer} from "react-toastify";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
@@ -30,9 +30,23 @@ import {
   retrieveSubLevelCategoryKeyValue,
   retrieveTopLevelCategoryKeyValue
 } from "../../services/Platform/CategoryAxios";
-import {atom} from "jotai";
 import {useNavigate} from "react-router-dom";
 import {pixelColumns, pixelDataAtom, pixelDetailColumns} from "./entity/Pixel";
+import {categoryListAtom} from "../platform_manage/entity/Category";
+
+export function SubCategory({topLevelCategory, subs}) {
+  const [subCategory, setSubCategory] = useState('')
+  useEffect(()=>{
+    retrieveSubLevelCategoryKeyValue(topLevelCategory).then(response => {
+      console.log(response);
+      const subsLabel = response.find(subCategory => subCategory.value === subs).label
+      setSubCategory(subsLabel)
+    })
+  },[])
+  return(
+    <span>{subCategory}</span>
+  )
+}
 
 const pixelAtom = atom({
   pixelName: '',
@@ -84,6 +98,7 @@ function PixelAdd(props){
     mode: "onSubmit",
     defaultValues: pixelInfoListState
   })
+
   useEffect(() => {
     retrieveTopLevelCategoryKeyValue().then(response => {
       setTopLevelCategoryList(response)
@@ -337,16 +352,25 @@ function PixelAdd(props){
 function PixelList() {
   const [searchParams, setSearchParams] = useState({ keyword:''})
   const [pixelDataState,setPixelDataState] = useState(pixelDataAtom)
+  const [topLevelCategoryList, setTopLevelCategoryList] = useAtom(categoryListAtom)
 
   useEffect(()=>{
     selAdverPixelList(searchParams).then(response =>{
       setPixelDataState(response)
     })
+    retrieveTopLevelCategoryKeyValue().then(response => {
+      setTopLevelCategoryList(response)
+    })
   },[])
 
-  const handleFetchDetailData = useCallback(async ({userId}) => {
-    return selAdverPixelDetailList(userId)
-  },[])
+  const handleFetchDetailData = useCallback(async (props) => {
+    let detailPixelData = await selAdverPixelDetailList(props.userId)
+    console.log(detailPixelData)
+    detailPixelData.map((item,key) => {
+      detailPixelData[key]['mainCategoryLabel'] = topLevelCategoryList.find(category => category.value === item.mainCategoryCode).label
+    })
+    return detailPixelData
+  },[topLevelCategoryList])
 
 
   const handleSearch = (event) => {
@@ -358,12 +382,10 @@ function PixelList() {
   /**
    * 광고주 명 및 아이디 검색
    */
-  const onSearchAdverEventPrice = async() => {
-    if(searchParams.keyword !== ''){
-      await selAdverPixelList(searchParams).then(response =>{
-        setPixelDataState(response)
-      })
-    }
+  const onSearchAdverUserId = async() => {
+    await selAdverPixelList(searchParams).then(response =>{
+      setPixelDataState(response)
+    })
   }
 
   return (
@@ -378,9 +400,9 @@ function PixelList() {
                      placeholder={'광고주명 및 아이디 검색'}
                      value={searchParams.keyword}
                      onChange={handleSearch}
-                     onKeyDown={e => (e.code === 'Enter') && onSearchAdverEventPrice() }
+                     onKeyDown={e => (e.code === 'Enter') && onSearchAdverUserId() }
               />
-              <DefaultButton onClick={onSearchAdverEventPrice}>검색</DefaultButton>
+              <DefaultButton onClick={onSearchAdverUserId}>검색</DefaultButton>
             </ColSpan1>
           </RowSpan>
         </BoardSearchDetail>

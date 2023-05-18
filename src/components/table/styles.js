@@ -53,7 +53,6 @@ export const BorderBox = styled.div`
   overflow-y: auto;
 `
 export const PreviewSubmit = styled.button`
-  padding: 18px 20px;
   width: 200px;
   background-color: #525252;
   color: #fff;
@@ -68,9 +67,7 @@ export const ScriptSubject = styled.div`
   margin-bottom: 20px;
   padding: 20px;
   background-color: #f9f9f9;
-
   & div:last-child {
-    margin-top: 10px;
     font-size: 14px;
     color: #777;
   }

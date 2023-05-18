@@ -1,7 +1,7 @@
-import {atom} from "jotai/index";
+import {atom, useAtomValue} from "jotai";
 import React from "react";
 import {Link} from "react-router-dom";
-import {PixelModal} from "../PixelList";
+import {PixelModal, SubCategory} from "../PixelList";
 import {Icon, SwitchComponent} from "../../../components/table";
 import {updateEventInterlock, updatePixelInterlock} from "../../../services/header/ManagePixelAxios";
 import {HorizontalRule} from "../../../components/common/Common";
@@ -9,10 +9,11 @@ import {
   retrieveSubLevelCategoryKeyValue,
   retrieveTopLevelCategoryKeyValue
 } from "../../../services/Platform/CategoryAxios";
+import {topLevelCategoryListAtom} from "../../platform_manage/entity/Category";
+import {hostList} from "../../signup/entity/Common";
 
 /**
  * 픽셀 관리 리스트 Atom
- * @type {Atom<unknown>}
  */
 export const pixelDataAtom = atom(null)
 
@@ -126,12 +127,42 @@ export const pixelDetailColumns = [
     }
   },
   {
+    name: 'mainCategoryLabel',
+    header: '카테고리',
+    textAlign: 'center',
+    showColumnMenuTool: false,
+    resizable: false,
+    render: (props) => {
+      console.log(props)
+      return (
+        <span>{props.value}</span>
+      )
+    }
+  },
+  {
+    name: 'subCategoryCode',
+    header: '하위 카테고리',
+    textAlign: 'center',
+    showColumnMenuTool: false,
+    resizable: false,
+    render: ({value, data}) => {
+      return (
+        <SubCategory topLevelCategory={data.mainCategoryCode} subs={value}/>
+      )
+    }
+  },
+  {
     name: 'hostType',
     header: '호스팅',
     defaultFlex: 1,
     textAlign: 'center',
     showColumnMenuTool: false,
     resizable: false,
+    render: ({value}) => {
+      return (
+        <span>{hostList.find(host => host.value === value).label}</span>
+      )
+    }
   },
   {
     name: 'linkUrl',
