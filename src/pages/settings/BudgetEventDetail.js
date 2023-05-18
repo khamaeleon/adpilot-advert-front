@@ -82,11 +82,11 @@ function BudgetEventDetail() {
                    data={eventBudgetDetailDataState?.budgetEventDtos}
                    showHoverRows={false}
                    activeCell={[0]}
-                   emptyText={'이벤트 단가 관리 내역이 없습니다.'}/>
+                   emptyText={'이벤트 얘산 관리 내역이 없습니다.'}/>
           }
         </BoardTableContainer>
         <SubmitContainer>
-          <CancelButton onClick={() => navigate('/board/settings')}>목록</CancelButton>
+          <CancelButton onClick={() => navigate('/board/budgetEvent')}>목록</CancelButton>
         </SubmitContainer>
       </Board>
       <ToastContainer position="top-center"

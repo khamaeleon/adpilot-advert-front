@@ -39,7 +39,7 @@ export function CampaignOne() {
   const [temporaryBool, setTemporaryBool] = useState(false)
   const [goalList, setGoalList] = useState(null)
   const [pixelList, setPixelList] = useState(null)
-  const {register, handleSubmit, setValue, setError, control, formState: {errors}} = useFormContext()
+  const {register, handleSubmit, setValue, control, formState: {errors}, clearErrors} = useFormContext()
   /**
    * 캠페인 목표 설정
    */
@@ -62,7 +62,6 @@ export function CampaignOne() {
    * @param data
    */
   const handleSearchAdvertiser = (data) => {
-    console.log(data)
     setCampaignBasicInfo({
       ...campaignBasicInfo,
       userId: data.id,
@@ -75,6 +74,7 @@ export function CampaignOne() {
       managerName: data.staffName,
       adverName: data.adverName
     })
+    clearErrors('username')
     /**
      * 픽셀 설정
      */
@@ -132,6 +132,7 @@ export function CampaignOne() {
       })
     })
     setTemporaryBool(false)
+    clearErrors();
   }
   /**
    * 픽셀 변경 업데이트
@@ -142,6 +143,7 @@ export function CampaignOne() {
       ...campaignBasicInfo,
       pixelId: pixelValue,
     })
+    clearErrors('pixelId')
   }
   /**
    * 캠페인 선택
@@ -151,7 +153,10 @@ export function CampaignOne() {
     setCampaignBasicInfo({
       ...campaignBasicInfo,
       goal: goalInfo,
+      goalValue: 0
     })
+    console.log(goalInfo)
+    clearErrors('goal')
   }
   /**
    * 캠페인 상품 선택
@@ -180,10 +185,10 @@ export function CampaignOne() {
       ...campaignBasicInfo,
       goalValue: parseInt(event.target.value)
     })
+    clearErrors('goalValue')
   }
 
   const onSubmit = (data) => {
-    console.log(campaignBasicInfo)
     if(campaignBasicInfo.step !==undefined){
       setStepCampaign({steps: 1})
     }else{
@@ -240,10 +245,10 @@ export function CampaignOne() {
       <Board>
         <BoardHeader>캠페인 목표 설정</BoardHeader>
         <BoardSearchResult>
-          <RowSpan>
+          <RowSpan validation={true}>
             <ColSpan4>
               <Span4>픽셀 설정</Span4>
-              <BorderSpan>
+              <BorderSpan className={'relative'}>
                 <Span4>최적화 픽셀 선택</Span4>
                 <ColSpan2>
                   <div className={'relative'}>
@@ -274,9 +279,9 @@ export function CampaignOne() {
                       )}
                     />
                     <PixelModal title={'추가'} data={adverInfo !== null && adverInfo} setPixelList={setPixelList}/>
-                    {errors.pixelId && <ValidationScript style={{bottom: -25}}>{errors.pixelId?.message}</ValidationScript>}
                   </div>
                 </ColSpan2>
+                {errors.pixelId && <ValidationScript>{errors.pixelId?.message}</ValidationScript>}
               </BorderSpan>
             </ColSpan4>
           </RowSpan>
@@ -351,7 +356,7 @@ export function CampaignOne() {
                         styles={selectStyle}
                         placeholder={'목표 선택'}
                         {...field}
-                        value={campaignBasicInfo !== null && goalList !== null ? goalList.find(item =>item.value  === campaignBasicInfo.goal) : ''}
+                        value={campaignBasicInfo.goal}
                         onChange={handleChangeTargetDetail}
                       />
                     )}

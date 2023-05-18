@@ -370,9 +370,9 @@ function DashBoardIndex() {
   const [adverStatusDetailData, setAdverStatusDetailData] = useAtom(adverStatusDetailAtom)
   const [searchCondition, setSearchCondition] = useAtom(searchConditionAtom)
   const [keyword, setKeyword] = useState('')
+  const [gridRef, setGridRef] = useState(null);
 
   useEffect(() => {
-    console.log(searchCondition)
     if(tokenUserInfo.role !== 'NORMAL') {
       //광고주 현황 조회
       retrieveAdvertiserStatus(searchCondition).then(response => {
@@ -397,7 +397,7 @@ function DashBoardIndex() {
         }
       })
     }
-  }, [])
+  }, [searchCondition])
 
   /**
    * 검색 버튼
@@ -407,37 +407,19 @@ function DashBoardIndex() {
       ...searchCondition,
       keyword: keyword
     })
-    // console.log(searchCondition)
-    // retrieveAdvertiserStatus(searchCondition).then(response => {
-    //   if(response !== null) {
-    //     setAdverStatusData(response)
-    //     setTotalInfo({
-    //       totalCount: response.length
-    //     })
-    //   } else {
-    //     setAdverStatusData([])
-    //   }
-    // })
   }
-  const getDataSource =async (userId,search) =>{
-    let adverStatusTempDetail = await retrieveAdvertiserCampaignStatus(userId, search)
-    adverStatusTempDetail?.map(item =>{
-      return {...item,userId:userId}
-    })
-    console.log(adverStatusTempDetail)
-    return    adverStatusTempDetail
-  }
-  const contactsDataSource = useCallback(getDataSource, [searchCondition])
-  const renderContactsGrid = ({data}) => {
+
+  const renderContactsGrid = () => {
     return (
       <ReactDataGrid
         handle={null}
-        dataSource={contactsDataSource(data.userId,searchCondition)}
+        clearNodeCacheOnDataSourceChange={true}
+        dataSource={adverStatusDetailData}
         columns={adverStatusDetailColumn}
         enableColumnAutosize={true}
         groups={false}
         emptyText={'캠페인 리스트가 없습니다.'}
-        rowHeight={null}
+        rowHeight={70}
       />
     );
   }
@@ -457,6 +439,7 @@ function DashBoardIndex() {
               <ReactDataGrid
                 licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
                 handle={null}
+                onReady={setGridRef}
                 style={{minHeight: 550, textAline: 'center'}}
                 rowExpandHeight={400}
                 rowHeights={null}
@@ -465,7 +448,10 @@ function DashBoardIndex() {
                 emptyText={'데이터가 없습니다.'}
                 idProperty={'userId'}
                 dataSource={adverStatusData}
+                detailsGridCacheKey={'campaignId'}
                 columns={adverListColumn}
+                onDataSourceCacheChange={()=>{gridRef?.current.collapseAllRows()}}
+                onRowExpand={({id})=>retrieveAdvertiserCampaignStatus(id, searchCondition).then(r=> setAdverStatusDetailData(r))}
                 limit={30}
                 multiRowExpand={false}
               />

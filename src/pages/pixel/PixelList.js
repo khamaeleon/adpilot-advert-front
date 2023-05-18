@@ -210,7 +210,7 @@ function PixelAdd(props){
             </ColSpan1>
           </ColSpan4>
         </RowSpan>
-        <RowSpan>
+        <RowSpan validation={true}>
           <ColSpan4>
             <Span3>픽셀명</Span3>
             <RelativeDiv>
@@ -228,7 +228,7 @@ function PixelAdd(props){
             </RelativeDiv>
           </ColSpan4>
         </RowSpan>
-        <RowSpan>
+        <RowSpan validation={true}>
           <ColSpan4>
             <Span3>연동 URL</Span3>
             <RelativeDiv>
@@ -250,7 +250,7 @@ function PixelAdd(props){
             </RelativeDiv>
           </ColSpan4>
         </RowSpan>
-        <RowSpan>
+        <RowSpan validation={true}>
           <ColSpan4>
             <Span3>카테고리설정</Span3>
             <RelativeDiv style={{width: '50%',paddingLeft: 0}}>
@@ -300,7 +300,7 @@ function PixelAdd(props){
             </RelativeDiv>
           </ColSpan4>
         </RowSpan>
-        <RowSpan>
+        <RowSpan validation={true}>
           <ColSpan4 style={{marginRight:0}}>
             <Span3>호스팅 설정</Span3>
             <RelativeDiv style={{marginRight:0}}>
