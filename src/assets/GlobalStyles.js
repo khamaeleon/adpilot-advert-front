@@ -513,6 +513,11 @@ export const GlobalStyles = createGlobalStyle`
       opacity: 1;
     }
   }
+  
+  .react-confirm-alert-body > h1 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
 `
 
 export const inputStyle = {

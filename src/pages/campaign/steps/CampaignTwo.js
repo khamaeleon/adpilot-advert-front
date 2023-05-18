@@ -35,6 +35,8 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {useResetAtom} from "jotai/utils";
+import {confirmAlert} from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export function CampaignTwo() {
   const setStepCampaign = useSetAtom(stepCampaignAtom)
@@ -184,8 +186,8 @@ export function CampaignTwo() {
       setCampaignBudgetInfo({
         ...campaignBudgetInfo,
         budgetRate: parseInt(e.target.value),
-        pcBudget: campaignBudgetInfo.dailyAvgBudget - ((campaignBudgetInfo.dailyAvgBudget * e.target.value) / 100),
-        mobBudget: (campaignBudgetInfo.dailyAvgBudget * e.target.value) / 100
+        mobBudget: campaignBudgetInfo.dailyAvgBudget - ((campaignBudgetInfo.dailyAvgBudget * e.target.value) / 100),
+        pcBudget: (campaignBudgetInfo.dailyAvgBudget * e.target.value) / 100
       })
     }
   }
@@ -204,13 +206,29 @@ export function CampaignTwo() {
     }).then(response => {
       if (response) {
         if (state !== null) {
-          toast.success("수정되었습니다.",{autoClose:100, delay:0})
-          toast.onChange(payload => {
-            if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
-              navigate('/board/dashboard')
-              resetInfo()
-            }
-          })
+          if(campaignBudgetInfo.pcBudget === 0 || campaignBudgetInfo.mobBudget === 0) {
+            confirmAlert({
+              title: '수정되었습니다',
+              message: '예산 비율 설정에 따라 광고 그룹 및 크리에이티브 정보를 확인해주세요.',
+              buttons: [
+                {
+                  label: '확인',
+                  onClick: () => {
+                    navigate('/board/dashboard')
+                    resetInfo()
+                  }
+                }
+              ]
+            });
+          } else {
+            toast.success("수정되었습니다.",{autoClose:100, delay:0})
+            toast.onChange(payload => {
+              if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
+                navigate('/board/dashboard')
+                resetInfo()
+              }
+            })
+          }
         } else setStepCampaign({steps: 2})
       }
     })
@@ -241,7 +259,7 @@ export function CampaignTwo() {
                     }}
                     render={({field}) => (
                       <Input type={'number'}
-                             min={100}
+                             min={campaignBudgetInfo.infiniteBudgetYn !== 'N' ? 0 : 100}
                              readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
                              placeholder={'일일 평균 예산을 설정해주세요.'}
                              style={{color:'#f5811f'}}
@@ -397,7 +415,7 @@ export function CampaignTwo() {
                     }}
                     render={({ field }) =>(
                       <Input type={'number'}
-                             min={0}
+                             min={100}
                              placeholder={'최대 입찰가를 설정해주세요'}
                              style={{color:'#f5811f'}}
                              value={campaignBudgetInfo !== null && campaignBudgetInfo.maxBiddingPrice}
