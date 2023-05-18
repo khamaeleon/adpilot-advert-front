@@ -1,4 +1,4 @@
-import {AdminAxios, AdverAxios, AxiosFile, AxiosImage} from "../../common/Axios";
+import {AdminAxios, AdverAxios, AxiosFile} from "../../common/Axios";
 import {responseFormatMessage} from "../../common/StringUtils";
 
 

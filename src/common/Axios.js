@@ -1,4 +1,4 @@
-import {ADMIN_SERVER, ADVER_SERVER} from "../constants/GlobalConst.js";
+import {ADVER_SERVER} from "../constants/GlobalConst.js";
 import {adminAxios} from "./AdminAxios";
 import {nonUserAxios} from "./NonUserAxios";
 import {adverAxios} from "./AdverAxios";

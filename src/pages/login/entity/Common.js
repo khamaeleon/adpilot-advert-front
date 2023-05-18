@@ -46,5 +46,5 @@ export const findIdResult = []
 export const findPasswordParams ={
   phone: '',
   email: '',
-  userId: ''
+  username: ''
 }

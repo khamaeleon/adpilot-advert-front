@@ -87,7 +87,7 @@ function AdminLogin() {
           accessToken: response.token.accessToken,
           refreshToken: response.token.refreshToken
         })
-        navigate('/board/campaign')
+        navigate('/board/dashboard')
       } else {
         toast.info('아이디와 비밀번호를 확인해 주세요.')
       }

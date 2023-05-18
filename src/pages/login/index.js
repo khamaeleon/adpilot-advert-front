@@ -5,8 +5,7 @@ import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
 import {findIdParams, findIdResult, findPasswordParams, loginParams, tokenResultAtom} from "./entity/Common";
 import {login} from "../../services/auth/AuthAxios";
-import {useAtom, useSetAtom} from "jotai";
-import {atom} from "jotai/index";
+import {atom, useAtom, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
 import {RowSpan, ValidationScript} from "../../assets/GlobalStyles";
@@ -24,6 +23,7 @@ function FindPassword(props) {
   const handleFindPassword = () => {
     //axios 로 호출하여 서버쪽에서 이메일쪽으로 전송
     selChangePassword(findPasswordInfo).then(response => {
+      console.log(findPasswordInfo)
       if(response){
         //성공
         props.openModal(findPasswordInfo)
@@ -148,9 +148,13 @@ function FindId(props) {
     if(success){
       selFindUserId(findIdInfo).then(response => {
         console.log(response)
-        setFindIdResult(response)
+        if(response.length !== 0) {
+          setFindIdResult(response)
+          props.openModal()
+        } else {
+          toast.info('등록된 아이디나 이메일이 없습니다.')
+        }
       })
-      props.openModal()
     } else{
       toast.info('등록된 아이디나 이메일이 없습니다.')
     }
