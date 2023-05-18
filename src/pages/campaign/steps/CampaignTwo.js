@@ -98,11 +98,13 @@ export function CampaignTwo() {
    * @param selectedBudgetTime
    */
   const handleChangeBudgetTimes = (selectedBudgetTime) => {
+    console.log(selectedBudgetTime)
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
       budgetTimeId: selectedBudgetTime.value,
     })
-    selBudgetTimeDetailInfo(campaignBasicInfo?.userId, selectedBudgetTime.value).then(response => {
+    let userId = state !== null ? state.userId : campaignBasicInfo.userId
+    selBudgetTimeDetailInfo(userId, selectedBudgetTime.value).then(response => {
       console.log(response)
       setTimeBudgetDetailDataState(response)
     })
@@ -323,7 +325,7 @@ export function CampaignTwo() {
                 {timeBudgetDetailDataState !== null &&
                   <ColSpan1>
                     <TimeTable
-                        exposureTimeType={timeBudgetDetailDataState?.exposureTimeType !== undefined ? timeBudgetDetailDataState.exposureTimeType : timeBudgetDetailDataState?.timeGroups.find(value => value.eventId === campaignBudgetInfo?.budgetTimeId).exposureTimeType}
+                        exposureTimeType={timeBudgetDetailDataState?.exposureTimeType !== undefined ? timeBudgetDetailDataState.exposureTimeType : timeBudgetDetailDataState?.timeGroups.find(value => value.eventId === campaignBudgetInfo?.budgetTimeId)}
                       title={'설정된 시간별 예산'} readOnly={true}/>
                   </ColSpan1>
                 }
