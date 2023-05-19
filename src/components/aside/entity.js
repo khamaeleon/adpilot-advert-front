@@ -100,7 +100,7 @@ export const menuList = [
       },
       {
         name: "paymentManage",
-        header: "결재 관리"
+        header: "결제 관리"
       },
       {
         name: "advertisingPayments", //Advertising cost payment management

@@ -42,7 +42,7 @@ function SearchModal (props) {
   const [campaignGroupInfo, setCampaignGroupInfo] = useAtom(campaignGroupInfoAtom)
 
   useEffect(()=>{
-    let param = {inventoryIds: (type==='allow') ? campaignGroupInfo.allowInventoryIds : campaignGroupInfo.disAllowInventoryIds};
+    let param = {inventoryIds: type==='allow' ? campaignGroupInfo.allowInventoryIds : campaignGroupInfo.disAllowInventoryIds};
     selSearchMediaList(param).then(response => {
       setAllowInventoryIds(response)
     })
@@ -76,7 +76,6 @@ function SearchModal (props) {
 
   const handleClickSelectItem = (selectItem) => {
     if(type==='allow'){
-
       if(allowInventoryIds === null){
         setAllowInventoryIds([selectItem])
         setCampaignGroupInfo({

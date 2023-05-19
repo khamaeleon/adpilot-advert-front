@@ -226,7 +226,7 @@ function AdvertisingPayments() {
   return (
     <>
       <Board>
-        <BoardHeader>결재 현황</BoardHeader>
+        <BoardHeader>결제 현황</BoardHeader>
         <PaymentCondition searchType={searchPaymentType} searchCondition={searchPaymentParamsState} setSearchCondition={setSearchPaymentParamsState} handleTableData={handlePaymentTableData} />
         <BoardTableContainer>
           <RowSpan>
@@ -249,7 +249,7 @@ function AdvertisingPayments() {
                  selected={checkboxAllSelect}
                  checkboxColumn={checkboxColumn} //체크박스 커스텀
                  onSelectionChange={paymentStatusSelected} // 선택한 체크박스 정보 가져오기
-                 emptyText={'결재 현황 내역이 없습니다.'}
+                 emptyText={'결제 현황 내역이 없습니다.'}
                  showHoverRows={false}
                  dataCallback={dataCallback}
           />

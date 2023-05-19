@@ -118,6 +118,7 @@ export function CampaignThree() {
         allowInventoryCategories: campaignGroupInfo.allowInventoryCategories.filter(value => value !== selectedCategory)
       })
     }
+    clearErrors('exposureInventoryType')
   }
   const selectedDisExposureCategory = (selectedCategory) => {
     let boolCategory = campaignGroupInfo.disAllowInventoryCategories.includes(selectedCategory)
@@ -132,6 +133,7 @@ export function CampaignThree() {
         disAllowInventoryCategories: campaignGroupInfo.disAllowInventoryCategories.filter(value => value !== selectedCategory)
       })
     }
+    clearErrors('disExposureInventoryType')
   }
 
   const setExposureInventoryType = (exposureInventoryType) => {
@@ -140,6 +142,7 @@ export function CampaignThree() {
       exposureInventoryType: exposureInventoryType,
       allowInventoryCategories: []
     })
+    clearErrors('exposureInventoryType')
   }
 
   const setDisExposureInventoryType = (exposureInventoryType) => {
@@ -148,6 +151,7 @@ export function CampaignThree() {
       disExposureInventoryType: exposureInventoryType,
       disAllowInventoryCategories: []
     })
+    clearErrors('disExposureInventoryType')
   }
 
   const handleRangeDate = (date) => {
@@ -267,36 +271,26 @@ export function CampaignThree() {
 
   const onSubmit = () => {
     console.log(campaignGroupInfo);
-    if(campaignGroupInfo.exposureAgentType.length === 0) {
-      toast.warning('노출 영역은 최소한 하나는 입력해주세요')
-    } else if(campaignGroupInfo.exposureInventoryType === "CATEGORY" && campaignGroupInfo.allowInventoryCategories.length === 0) {
-      toast.warning('카테고리를 최소한 하나는 입력해주세요')
-    } else if(campaignGroupInfo.disExposureInventoryType === "CATEGORY" && campaignGroupInfo.disAllowInventoryCategories.length === 0) {
-      toast.warning('카테고리를 최소한 하나는 입력해주세요')
-    } else if(campaignGroupInfo.startDate === '') {
-      toast.warning('날짜를 입력해 주세요')
-    } else {
-      let param = {
-        ...campaignGroupInfo,
-        endDate: exposureDayChecked ? dateFormat(new Date('3000-12-31'), 'YYYY-MM-DD') : endDate,
-        campaignId: state !== null ? state.campaignId : campaignBasicInfo.campaignId};
-
-      updateCampaignConfigInventory(param).then(response => {
-        if (response) {
-          if (state !== null) {
-            toast.success("수정되었습니다.",{autoClose:100, delay:0})
-            toast.onChange(payload => {
-              if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
-                navigate('/board/dashboard')
-                resetInfo()
-              }
-            })
-          } else {
-            setStepCampaign({steps: 3})
-          }
+    let param = {
+      ...campaignGroupInfo,
+      endDate: exposureDayChecked ? dateFormat(new Date('3000-12-31'), 'YYYY-MM-DD') : endDate,
+      campaignId: state !== null ? state.campaignId : campaignBasicInfo.campaignId
+    };
+    updateCampaignConfigInventory(param).then(response => {
+      if (response) {
+        if (state !== null) {
+          toast.success("수정되었습니다.",{autoClose:100, delay:0})
+          toast.onChange(payload => {
+            if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
+              navigate('/board/dashboard')
+              resetInfo()
+            }
+          })
+        } else {
+          setStepCampaign({steps: 3})
         }
-      })
-    }
+      }
+    })
   }
 
   const onError = (error) => console.log(error)
@@ -314,14 +308,19 @@ export function CampaignThree() {
                 <AgentType>
                   {
                     agentTypeState != null && agentTypeState.map((data, key)=>{
-                      return <Controller name={'eventChecked'}
+                      return <Controller name={'exposureAgentType'}
                                          control={control}
                                          key={key}
+                                         rules={{required: {value: campaignGroupInfo.exposureAgentType.length === 0, message:'노출 영역은 최소한 하나는 입력해주세요'}}}
                                          render={({field}) =>
                                            <Checkbox label={data.label} type={'c'} id={'event'+key+data.value} value={data.value} isChecked={campaignGroupInfo.exposureAgentType?.some(event => event === data.value)}
-                                                     onChange={handleAgentType} inputRef={field.ref}/>}/>
+                                                     onChange={handleAgentType} inputRef={field.ref}/>
+                                         }
+                              />
                     })
                   }
+                  {errors.exposureAgentType &&
+                    <ValidationScript>{errors.exposureAgentType.message}</ValidationScript>}
                 </AgentType>
               </RelativeDiv>
             </ColSpan4>
@@ -346,12 +345,18 @@ export function CampaignThree() {
                   <span>자동 최적화</span>
                 </label>
                 <label>
-                  <input
-                    type={'radio'}
-                    name={'inventory'}
-                    id={'inventoryCATEGORY'}
-                    onChange={() => setExposureInventoryType('CATEGORY')}
-                    checked={campaignGroupInfo.exposureInventoryType === 'CATEGORY'}
+                  <Controller name={'exposureInventoryType'}
+                              control={control}
+                              rules={{required: {value: campaignGroupInfo.exposureInventoryType === "CATEGORY" && campaignGroupInfo.allowInventoryCategories.length === 0, message:'카테고리를 최소한 하나는 입력해주세요'}}}
+                              render={({field}) =>
+                                <input
+                                  type={'radio'}
+                                  name={'inventory'}
+                                  id={'inventoryCATEGORY'}
+                                  onChange={() => setExposureInventoryType('CATEGORY')}
+                                  checked={campaignGroupInfo.exposureInventoryType === 'CATEGORY'}
+                                />
+                              }
                   />
                   <span>카테고리 설정</span>
                 </label>
@@ -369,6 +374,9 @@ export function CampaignThree() {
                   {campaignGroupInfo.exposureInventoryType === 'MANUAL' &&
                     <InventoryButton title={'지면선택'} type={'allow'}/>
                   }
+                  {campaignGroupInfo.exposureInventoryType === 'MANUAL' && campaignGroupInfo.allowInventoryIds?.length !== 0 &&
+                    <small>{campaignGroupInfo.allowInventoryIds?.length}개 지면 송출 설정</small>
+                  }
                 </ColSpan2>
               </RelativeDiv>
             </ColSpan4>
@@ -385,6 +393,7 @@ export function CampaignThree() {
                       )
                     })}
                   </SelectCategory>
+                  {errors.exposureInventoryType && <ValidationScript>{errors.exposureInventoryType.message}</ValidationScript>}
                 </RelativeDiv>
               </ColSpan4>
             }
@@ -402,12 +411,18 @@ export function CampaignThree() {
                   <span>없음</span>
                 </label>
                 <label>
-                  <input
-                    type={'radio'}
-                    id={'disInventoryCATEGORY'}
-                    name={'disInventory'}
-                    onChange={() => setDisExposureInventoryType('CATEGORY')}
-                    checked={campaignGroupInfo.disExposureInventoryType === 'CATEGORY'}
+                  <Controller name={'disExposureInventoryType'}
+                              control={control}
+                              rules={{required: {value: campaignGroupInfo.disExposureInventoryType === "CATEGORY" && campaignGroupInfo.disAllowInventoryCategories.length === 0, message:'카테고리를 최소한 하나는 입력해주세요'}}}
+                              render={({field}) =>
+                                <input
+                                  type={'radio'}
+                                  id={'disInventoryCATEGORY'}
+                                  name={'disInventory'}
+                                  onChange={() => setDisExposureInventoryType('CATEGORY')}
+                                  checked={campaignGroupInfo.disExposureInventoryType === 'CATEGORY'}
+                                />
+                              }
                   />
                   <span>카테고리 설정</span>
                 </label>
@@ -425,6 +440,9 @@ export function CampaignThree() {
                   {campaignGroupInfo.disExposureInventoryType === 'MANUAL' &&
                     <InventoryButton title={'지면선택'} type={'disExposure'}/>
                   }
+                  {campaignGroupInfo.disExposureInventoryType === 'MANUAL' && campaignGroupInfo.disAllowInventoryIds?.length !== 0 &&
+                    <small>{campaignGroupInfo.disAllowInventoryIds?.length}개 지면 송출 설정</small>
+                  }
                 </ColSpan2>
               </RelativeDiv>
             </ColSpan4>
@@ -441,6 +459,7 @@ export function CampaignThree() {
                       )
                     })}
                   </SelectCategory>
+                  {errors.disExposureInventoryType && <ValidationScript>{errors.disExposureInventoryType.message}</ValidationScript>}
                 </RelativeDiv>
               </ColSpan4>
             }
@@ -455,7 +474,7 @@ export function CampaignThree() {
                     <Controller
                       control={control}
                       name="endDate"
-                      rules={{required: {value: !exposureDayChecked && dateRange[1] === undefined, message:'게제기간을 설정해주세요'}}}
+                      rules={{required: {value: !exposureDayChecked && dateRange[1] === null, message:'게제기간을 설정해주세요'}}}
                       render={({ field: { onChange, onBlur, value, ref } }) => (
                         <CustomDatePicker
                           selectsRange={!exposureDayChecked}

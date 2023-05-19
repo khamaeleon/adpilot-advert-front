@@ -181,7 +181,7 @@ function PaymentManage() {
   return (
     <>
       <Board>
-        <BoardHeader>결재 현황</BoardHeader>
+        <BoardHeader>결제 현황</BoardHeader>
         <PaymentCondition searchType={searchPaymentType} searchCondition={searchPaymentParamsState} setSearchCondition={setSearchPaymentParamsState} handleTableData={handlePaymentTableData} />
         <BoardTableContainer>
           {/*<Table columns={paymentColumns}*/}
