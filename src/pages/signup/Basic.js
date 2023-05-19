@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useAtom} from "jotai/index";
 import {Controller, useForm} from "react-hook-form";
 import {toast} from "react-toastify";
-import {accountFileUpload, selValidUserId, signUp} from "../../services/Platform/ManageUserAxios";
+import {accountFileUpload, retrieveLicence, selValidUserId, signUp} from "../../services/Platform/ManageUserAxios";
 import {CancelButton, DefaultButton, Input, inputStyle, RelativeDiv, selectStyle} from "../../assets/GlobalStyles";
 import {accountInfoAtom, hostList, nextStepAtom} from "./entity/Common";
 import {ButtonGroup, DuplicateButton, Form, SignUpVerify, ValidationScript, VerticalRule} from "./styles";
@@ -285,7 +285,6 @@ export default function Basic(props) {
     })
   }
 
-
   /**
    * 사업자 등록증 조회
    */
@@ -421,7 +420,7 @@ export default function Basic(props) {
                   required: "비밀번호를 입력해주세요",
                   validate: (value) => {
                     if (watch('password') !== value) {
-                      return "입력하신 비밀번호가 맞는지 확인부탁드립니다."
+                      return "입력하신 비밀번호가 일치하지 않습니다."
                     }
                   },
                   onChange: (e) => handleConfirmPassword(e)

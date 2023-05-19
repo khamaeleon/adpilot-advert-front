@@ -28,7 +28,7 @@ function SignUp() {
         })
       }
     } else {
-      toast.warning('전체 약관이 동의가 되지 않았습니다.')
+      toast.warning('회원 가입을 위한 필수 약관에 동의해주세요.')
     }
     if (agreeValidation.terms && !agreeValidation.validation) {
       if (steps.step1 && !steps.step2 && !steps.step3) {

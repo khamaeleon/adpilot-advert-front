@@ -82,7 +82,7 @@ const FindIdResult = styled.div`
 `
 
 const ModalBodyInner = styled.div`
-  padding: 20px 35px; 
+  padding: 20px 35px;
   border-radius: 10px;
   background-color: #f9f9f9;
 `
