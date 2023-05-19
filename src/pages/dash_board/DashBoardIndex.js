@@ -52,15 +52,15 @@ function ChartComponent(props) {
       retrieveOverview(searchCondition).then(response => {
         let data = response
         if(response !== null) {
-          data.map((item,key) => {
+          data?.map((item,key) => {
             Object.assign(data[key],{clickRate: item.validClickCount !== 0 ? (item.validClickCount / item.exposureCount) *100 : 0})
             Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
             Object.assign(data[key],{costPerConversion: item.costAmount !== 0 ? item?.costAmount / item.totalConversionCount : 0})
             Object.assign(data[key],{avgConversionAmount: item.totalConversionCount !== 0 ? item.totalConversionAmount / item.totalConversionCount : 0})
-            Object.assign(data[key],{sessionRoas: item.costAmount !== 0 ? (item.sessionConversionAmount / item.costAmount) *100 : 0})
-            Object.assign(data[key],{directRoas: item.costAmount !== 0 ? (item.directConversionAmount / item.costAmount) *100 : 0})
-            Object.assign(data[key],{exposureRoas: item.costAmount !== 0 ? (item.exposureConversionAmount / item.costAmount) *100 : 0})
-            Object.assign(data[key],{totalRoas: item.costAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
+            // Object.assign(data[key],{sessionRoas: item.costAmount !== 0 ? (item.sessionConversionAmount / item.costAmount) *100 : 0})
+            // Object.assign(data[key],{directRoas: item.costAmount !== 0 ? (item.directConversionAmount / item.costAmount) *100 : 0})
+            // Object.assign(data[key],{exposureRoas: item.costAmount !== 0 ? (item.exposureConversionAmount / item.costAmount) *100 : 0})
+            // Object.assign(data[key],{totalRoas: item.costAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
             Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0},)
             Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.validClickCount) *100 : 0})
           })
@@ -71,12 +71,12 @@ function ChartComponent(props) {
       retrieveAdverOverview(tokenUserInfo.id, searchCondition).then(response => {
         let data = response
         if(response !== null) {
-          data.map((item,key) => {
+          data?.map((item,key) => {
             Object.assign(data[key],{clickRate: item.validClickCount !== 0 ? (item.validClickCount / item.exposureCount) *100 : 0})
             Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
             Object.assign(data[key],{costPerConversion: item.totalConversionCount !== 0 ? item?.costAmount / item.totalConversionCount : 0})
             Object.assign(data[key],{avgConversionAmount: item.totalConversionAmount !== 0 ? item.totalConversionAmount / item.totalConversionCount : 0})
-            Object.assign(data[key],{totalRoas: item.totalConversionAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
+            //Object.assign(data[key],{totalRoas: item.totalConversionAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
             Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0},)
             Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.validClickCount) *100 : 0})
           })
@@ -115,10 +115,10 @@ function ChartComponent(props) {
       case 'totalExposureCount':
       case 'totalClickCount':
       case 'costAmount':
-      case 'sessionRoas':
-      case 'directRoas':
-      case 'exposureRoas':
-      case 'totalRoas':
+      case 'sessionConversionAmount':
+      case 'directConversionAmount':
+      case 'exposureConversionAmount':
+      case 'totalConversionAmount':
         calc = chartDataInfo.reduce((prev, next) => prev + next[property], 0);
         break;
       case 'clickRate':
@@ -138,8 +138,8 @@ function ChartComponent(props) {
         calc = caseValueD !== 0 ? costAmountSum / totalConversionCountSum : 0;
         break;
       case 'avgConversionAmount':
-        const caseValueE = costAmountSum;
-        calc = caseValueE !== 0 ? totalConversionAmountSum / costAmountSum : 0;
+        const caseValueE = totalConversionAmountSum;
+        calc = caseValueE !== 0 ? totalConversionAmountSum / totalConversionCountSum : 0;
         break;
       // case 'sessionRoas':
       //   const caseValueF = costAmountSum;
@@ -171,7 +171,7 @@ function ChartComponent(props) {
     } else if(['validClickCount','exposureCount','totalConversionCount','userCount','totalExposureCount','totalClickCount'].includes(property)) {
       value = decimalFormat(calc)
     } else {
-      value = moneyToFixedFormat(calc)+'원'
+      value = moneyToFixedFormat(calc)+' 원'
     }
     return value
   }
@@ -307,7 +307,13 @@ function ChartComponent(props) {
               decimalFormat={decimalFormat}
           />
           <ChartLabel active={chartData[dataType].status}>
-            <Select styles={defaultStyle}
+            <Select styles={{
+                      input: (defaultStyle, state) => (
+                        {
+                          ...defaultStyle,
+                          minWidth: "300px",
+                        })
+                    }}
                     isDisabled={!chartData[dataType].status}
                     components={{IndicatorSeparator: () => null}}
                     options={tokenUserInfo.role !== 'NORMAL' ? platformStatusType : userPlatformStatusType}
@@ -322,7 +328,13 @@ function ChartComponent(props) {
             </span>
           </ChartLabel>
           <ChartLabel active={chartData[dataType2].status} >
-            <Select styles={defaultStyle}
+            <Select styles={{
+                      input: (defaultStyle, state) => (
+                        {
+                          ...defaultStyle,
+                          minWidth: "300px",
+                        })
+                    }}
                     isDisabled={!chartData[dataType2].status}
                     components={{IndicatorSeparator: () => null}}
                     options={tokenUserInfo.role !== 'NORMAL' ? platformStatusType : userPlatformStatusType}

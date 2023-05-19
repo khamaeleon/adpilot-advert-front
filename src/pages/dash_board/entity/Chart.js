@@ -11,10 +11,10 @@ export const platformStatusType = [
   {id: 7, value: "conversionRate", label: "전환율"},
   {id: 8, value: "costPerConversion", label: "전환단가"},
   {id: 9, value: "avgConversionAmount", label: "평균 구매액"},
-  {id: 11, value: "sessionRoas", label: "세션매출"},
-  {id: 12, value: "directRoas", label: "직접매출"},
-  {id: 13, value: "exposureRoas", label: "노출매출"},
-  {id: 14, value: "totalRoas", label: "총매출"},
+  {id: 11, value: "sessionConversionAmount", label: "세션매출"},
+  {id: 12, value: "directConversionAmount", label: "직접매출"},
+  {id: 13, value: "exposureConversionAmount", label: "노출매출"},
+  {id: 14, value: "totalConversionAmount", label: "총매출"},
   {id: 15, value: "ecpm", label: "ECPM"},
 ]
 
@@ -28,7 +28,7 @@ export const userPlatformStatusType = [
   {id: 7, value: "conversionRate", label: "전환율"},
   {id: 8, value: "costPerConversion", label: "전환단가"},
   {id: 9, value: "avgConversionAmount", label: "평균 구매액"},
-  {id: 14, value: "totalRoas", label: "총매출"},
+  {id: 14, value: "totalConversionAmount", label: "총매출"},
   {id: 15, value: "ecpm", label: "ECPM"},
 ]
 
@@ -45,10 +45,10 @@ export const chartDataAtom = atom({
   conversionRate: {status: false, label: '전환율', totalCount: 0},
   costPerConversion: {status: false, label: '전환 단가', totalCount: 0},
   avgConversionAmount: {status: false, label: '평균 구매액', totalCount: 0},
-  sessionRoas: {status: false, label: '세션매출', totalCount: 0},
-  directRoas: {status: false, label: '직접매출', totalCount: 0},
-  exposureRoas: {status: false, label: '노출매출', totalCount: 0},
-  totalRoas: {status: false, label: '총매출', totalCount: 0},
+  sessionConversionAmount: {status: false, label: '세션매출', totalCount: 0},
+  directConversionAmount: {status: false, label: '직접매출', totalCount: 0},
+  exposureConversionAmount: {status: false, label: '노출매출', totalCount: 0},
+  totalConversionAmount: {status: false, label: '총매출', totalCount: 0},
   ecpm: {status: false, label: 'ECPM', totalCount: 0},
 })
 
