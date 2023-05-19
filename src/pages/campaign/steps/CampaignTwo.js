@@ -37,6 +37,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {useResetAtom} from "jotai/utils";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import {multiAxiosCall} from "../../../common/StringUtils";
 
 export function CampaignTwo() {
   const setStepCampaign = useSetAtom(stepCampaignAtom)
@@ -50,7 +51,7 @@ export function CampaignTwo() {
   const {state} =useLocation()
   const navigate = useNavigate()
   const resetInfo = useResetAtom(campaignBudgetInfoAtom)
-  const {register, handleSubmit,reset,setError,setValue, control, formState: {errors}} = useFormContext()
+  const {register, handleSubmit,reset,setError,setValue, control, formState: {errors}, clearErrors} = useFormContext()
 
   useEffect(() => {
     if (campaignBasicInfo.step !=='INIT' || state !== null ) {
@@ -70,34 +71,15 @@ export function CampaignTwo() {
       })
     } else resetInfo()
     let userId = state !== null ? state.userId : campaignBasicInfo?.userId
-    selBudgetTimeList(userId).then(response => {
-      if (response) {
-        //setTimeBudgetDetailDataState(response)
-        let budgetTimeList = []
-        response.timeGroups.map(data => {
-          budgetTimeList = [...budgetTimeList, {value: data.eventId, label: data.groupName}]
-        })
-        setBudgetTimeListState(budgetTimeList)
-      }
-    })
-    selBudgetEventList(userId).then(response => {
-      if (response) {
-        let budgetEventList = []
-        response.budgetEventDtos.map(data => {
-          budgetEventList = [...budgetEventList, {value: data.eventId, label: data.groupName}]
-        })
-        setBudgetEventListState(budgetEventList)
-      }
-    })
-    selPriceEventList(userId).then(response => {
-      if (response) {
-        let priceEventList = []
-        response.priceEventDtos.map(data => {
-          priceEventList = [...priceEventList, {value: data.eventId, label: data.groupName}]
-        })
-        setPriceEventListState(priceEventList)
-      }
-    })
+
+    const callbackFunc = (response) => {
+      setBudgetTimeListState(response[0].timeGroups.map(data => {return {value: data.eventId, label: data.groupName}}))
+      setBudgetEventListState(response[1].budgetEventDtos.map(data => {return {value: data.eventId, label: data.groupName}}))
+      setPriceEventListState(response[2].priceEventDtos.map(data => {return {value: data.eventId, label: data.groupName}}))
+    }
+    multiAxiosCall([selBudgetTimeList(userId), selBudgetEventList(userId), selPriceEventList(userId)], callbackFunc)
+
+
   }, [])
   /**
    * 시간대별 예산 셀렉트
@@ -112,6 +94,8 @@ export function CampaignTwo() {
     selBudgetTimeDetailInfo(userId, selectedBudgetTime.value).then(response => {
       setTimeBudgetDetailDataState(response)
     })
+
+    clearErrors('budgetTimeId')
   }
   /**
    * 이벤트 단가 셀렉트
@@ -122,6 +106,7 @@ export function CampaignTwo() {
       ...campaignBudgetInfo,
       priceEventId: selectedPriceEvent.value,
     })
+    clearErrors('priceEventId')
   }
   /**
    * 이벤트 예산 셀렉트
@@ -132,6 +117,7 @@ export function CampaignTwo() {
       ...campaignBudgetInfo,
       budgetEventId: selectedBudgetEvents.value,
     })
+    clearErrors('budgetEventId')
   }
 
   const handleBiddingType = (selectedBiddingType) => {
@@ -260,6 +246,7 @@ export function CampaignTwo() {
                     render={({field}) => (
                       <Input type={'number'}
                              min={campaignBudgetInfo.infiniteBudgetYn !== 'N' ? 0 : 100}
+                             step={100}
                              readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
                              placeholder={'일일 평균 예산을 설정해주세요.'}
                              style={{color:'#f5811f'}}
@@ -289,7 +276,7 @@ export function CampaignTwo() {
                   <Input type={'number'}
                          readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
                          style={{color:'#f5811f'}}
-                         value={campaignBudgetInfo.pcBudget}
+                         value={campaignBudgetInfo.pcBudget || ""}
                          onChange={(e) => handleChangePcBudget(e)}
                   />
                   <Won/>
@@ -312,7 +299,7 @@ export function CampaignTwo() {
                   <Input type={'number'}
                          readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
                          style={{color:'#f5811f'}}
-                         value={campaignBudgetInfo.mobBudget}
+                         value={campaignBudgetInfo.mobBudget || ""}
                          onChange={(e) => handleChangeMobileBudget(e)}
                   />
                   <Won/>
@@ -416,6 +403,7 @@ export function CampaignTwo() {
                     render={({ field }) =>(
                       <Input type={'number'}
                              min={100}
+                             step={100}
                              placeholder={'최대 입찰가를 설정해주세요'}
                              style={{color:'#f5811f'}}
                              value={campaignBudgetInfo !== null && campaignBudgetInfo.maxBiddingPrice}
