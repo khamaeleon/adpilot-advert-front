@@ -12,7 +12,7 @@ import {
     RelativeDiv,
     RowSpan, SubmitButton, ValidationScript,
 } from "../../../assets/GlobalStyles";
-import {retrieveUserPoint} from "../../../pages/layout/entity/UserPoint";
+import {requestAmountPoint, retrieveUserPoint} from "../../../pages/layout/entity/UserPoint";
 import {RefundRequestTable} from "../../../pages/platform_manage/PaymentManageUser";
 import styled from "styled-components";
 import {decimalFormat, removeStr} from "../../../common/StringUtils";
@@ -54,46 +54,45 @@ function RefundRequestModal (props) {
   const [note, setNote] = useState("") // 비고 내용
   const {register, handleSubmit, setError, formState:{errors} } = useForm()
   const [userPoint, ] = useAtom(retrieveUserPoint)
+  const [requestAmount, ] = useAtom(requestAmountPoint)
   const handleChange = (event) => {
       let num = removeStr(event)
       let numberNum = Number(num)
       setRefundAmount(numberNum)
   }
   const onSubmit = async () => {
-    //[d] 사용자 포인트 지급 내역 내부 전체 환불 요청값은 알 수 없음..
-    // if(props.totalAmount > userPoint) {
-    //   setError('refundAmount', { type: 'required', message: '신청한 환불 금액이 광고비 잔액을 넘어섭니다.' });
-    // } else {
-    //
-    // }
+
     if (refundType === "전액 환불") {
-      setRefundAmount(0);
       const requestData = {
         userId: tokenUserInfo.id,
-        refundAmount: userPoint,
+        refundAmount: -(userPoint + requestAmount),
         description: note
       };
-
+      console.log("환불금액", requestData.refundAmount);
+      console.log("유저포인트", userPoint+requestAmount);
       try {
         await refundRequest(requestData);
         props.onPaymentDetailsReceived(); // 성공적인 응답 처리
+        setRefundAmount(0);
       } catch (error) {
         console.error("실패 응답 처리", error); // 실패한 응답 처리
       }
 
       setModal({ isShow: false });
     } else if (refundType === "부분 환불") {
-      if (refundAmount > userPoint) {
+      console.log("환불금액", refundAmount);
+      console.log("유저포인트", userPoint+requestAmount);
+      if (refundAmount > (userPoint+requestAmount)) {
         setError('refundAmount', {type: 'required', message: '환불 금액이 광고비 잔액보다 큽니다.'});
       } else if (refundAmount === 0) {
         setError('refundAmount', {type: 'required', message: '환불 금액을 입력해 주세요.'});
       } else {
         const requestData = {
           userId: tokenUserInfo.id,
-          refundAmount: refundAmount,
+          refundAmount: -refundAmount,
           description: note
         };
-
+        console.log(requestData.refundAmount)
         try {
           await refundRequest(requestData);
           props.onPaymentDetailsReceived(); // 성공적인 응답 처리

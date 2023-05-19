@@ -32,7 +32,6 @@ export async function pointListRequest( userId, param ) {
   await AdverAxios('POST', ACTION_URL_POINT + userId + LIST_POINT , param)
     .then((response) => {
       if (response.responseCode.statusCode === 200) {
-        console.log("포인트 지급 내역", response.data)
         returnVal = response.data
       } else {
         returnVal = null

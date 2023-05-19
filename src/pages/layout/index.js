@@ -33,7 +33,7 @@ function Layout() {
   const methods = useForm()
   const [tokenUserInfo, setTokenUserInfo] = useAtom(tokenResultAtom)
   const [userPoint, setUserPoint] = useAtom(retrieveUserPoint)
-  const [requestAmount, setRequestAmount] = useAtom(requestAmountPoint)
+  const [requestAmount, ] = useAtom(requestAmountPoint)
   const setStepCampaign = useSetAtom(stepCampaignAtom)
 
   useEffect(() => {
