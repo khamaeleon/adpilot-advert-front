@@ -248,6 +248,12 @@ export async function updateMyPageUser(userInfo) {
   return returnVal;
 };
 
+/**
+ * 통장 사본 및 사업자 등록증 조회
+ * @param filePath
+ * @returns {Promise<false>}
+ */
+
 
 
 
