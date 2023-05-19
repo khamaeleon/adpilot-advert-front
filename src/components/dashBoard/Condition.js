@@ -33,6 +33,7 @@ import {searchConditionAtom} from "../../pages/dash_board/entity/Common";
 import {adverStatusAtom} from "../../pages/dash_board/entity/Campaign";
 import {retrieveAdvertiserStatus} from "../../services/dash_board/ManageCampaignAxios";
 import {dataTotalInfo} from "../common/entity";
+import moment from "moment";
 
 export function DashBoardCondition(props) {
   const {role, keyword, setKeyword, handleData, productType, eventType} = props
@@ -42,6 +43,7 @@ export function DashBoardCondition(props) {
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [adverStatusData, setAdverStatusData] = useAtom(adverStatusAtom)
   const [totalInfo, setTotalInfo] = useState(dataTotalInfo)
+
   useEffect(() => {
     if (searchCondition.agentTypes.length === 4) {
       setIsCheckedAll(true)
@@ -97,6 +99,15 @@ export function DashBoardCondition(props) {
       })
       setDateRange([new Date(getLastThirtyDay().startDay), new Date(getLastThirtyDay().endDay)])
     }
+  }
+
+  const handelChangeDateRange = (date) => {
+    setSearchCondition({
+      ...searchCondition,
+      searchStartDate: moment(date[0]).format('YYYY-MM-DD'),
+      searchEndDate: moment(date[1]).format('YYYY-MM-DD')
+    })
+    setDateRange(date)
   }
 
   /**
@@ -256,7 +267,7 @@ export function DashBoardCondition(props) {
                 endDate={endDate}
                 minDate={new Date(getLastThirtyDay().startDay)}
                 maxDate={new Date()}
-                onChange={(date) => setDateRange(date)}
+                onChange={(date) => handelChangeDateRange(date)}
                 dateFormat="yyyy-MM-dd"
                 locale={ko}
                 isClearable={false}
