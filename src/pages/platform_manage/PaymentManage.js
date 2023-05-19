@@ -1,3 +1,4 @@
+
 import {Board, BoardHeader, BoardTableContainer} from "../../assets/GlobalStyles";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -17,7 +18,6 @@ import {
 } from "./entity/Payment";
 import moment from "moment/moment";
 import {getThisMonth, getToDay} from "../../common/DateUtils";
-import {PaymentDetailsColumns} from "./entity/PaymentUser";
 import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 
 
@@ -39,7 +39,7 @@ function PaymentManage() {
 
   useEffect(() => {
     handlePaymentTableData()
-  }, [])
+  }, [dateRange])
 
   // useEffect(() => {
   //   updatePaymentStatusParams.paymentStatus !== '' && updatePayment(updatePaymentStatusParams)
@@ -57,8 +57,11 @@ function PaymentManage() {
       currentPage: skip / limit + 1,
       searchStartDate: moment(startDate).format('YYYY-MM-DD'),
       searchEndDate: moment(endDate).format('YYYY-MM-DD'),
+      pointHistoryType: null,
+      paymentStatusType: null,
+      keywordType: null,
+      keyword: null
     };
-
 
     return paymentAllListRequest ( requestData )
       .then(response => {
@@ -75,18 +78,6 @@ function PaymentManage() {
         // 실패한 응답 처리
         console.error("실패 응답 처리",error);
       });
-
-    // await paymentAllListRequest ( requestData )
-    //   .then((response) => {
-    //     if (response !== null) {
-    //       const { totalCount, rows: data } = response;
-    //       console.log(response, data)
-    //       setTotalInfo(totalCount);
-    //       setPaymentDataState(data)
-    //     }else{
-    //       console.error("실패 응답 처리");
-    //     }
-    //   });
   }
 
   /**
@@ -181,7 +172,7 @@ function PaymentManage() {
   return (
     <>
       <Board>
-        <BoardHeader>결제 현황</BoardHeader>
+        <BoardHeader>결재 현황</BoardHeader>
         <PaymentCondition searchType={searchPaymentType} searchCondition={searchPaymentParamsState} setSearchCondition={setSearchPaymentParamsState} handleTableData={handlePaymentTableData} />
         <BoardTableContainer>
           {/*<Table columns={paymentColumns}*/}
@@ -230,5 +221,6 @@ function PaymentManage() {
 }
 
 export default PaymentManage
+
 
 
