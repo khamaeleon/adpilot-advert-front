@@ -239,7 +239,7 @@ export function CampaignTwo() {
                     control={control}
                     rules={{
                       required: {
-                        value: campaignBudgetInfo !== null && campaignBudgetInfo.dailyAvgBudget === 0,
+                        value: campaignBudgetInfo.infiniteBudgetYn !== 'Y' && campaignBudgetInfo.dailyAvgBudget === 0,
                         message: '일일 평균 예산을 설정해주세요.'
                       }
                     }}
@@ -276,7 +276,7 @@ export function CampaignTwo() {
                   <Input type={'number'}
                          readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
                          style={{color:'#f5811f'}}
-                         value={campaignBudgetInfo.pcBudget || ""}
+                         value={campaignBudgetInfo.pcBudget !== 0  ? campaignBudgetInfo.pcBudget : 0}
                          onChange={(e) => handleChangePcBudget(e)}
                   />
                   <Won/>
@@ -299,7 +299,7 @@ export function CampaignTwo() {
                   <Input type={'number'}
                          readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
                          style={{color:'#f5811f'}}
-                         value={campaignBudgetInfo.mobBudget || ""}
+                         value={campaignBudgetInfo.mobBudget !== 0  ? campaignBudgetInfo.mobBudget : 0}
                          onChange={(e) => handleChangeMobileBudget(e)}
                   />
                   <Won/>

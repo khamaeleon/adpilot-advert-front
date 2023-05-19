@@ -8,6 +8,8 @@ export const campaignBudgetInfoAtom =atomWithReset({
   biddingType:'CPC',
   infiniteBudgetYn:'N',
   budgetRate: 50,
+  pcBudget: 0,
+  mobBudget: 0,
   maxBiddingPrice:0,
   dailyAvgBudget:0
 })

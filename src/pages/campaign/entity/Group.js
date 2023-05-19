@@ -3,6 +3,7 @@ import {atomWithReset} from "jotai/utils";
 
 export const campaignGroupInfoAtom = atomWithReset({
     campaignId:'',
+    name:'',
     exposureAgentType: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_NATIVE_APP'],
     exposureInventoryType: 'AUTO',
     disExposureInventoryType: 'NONE',
