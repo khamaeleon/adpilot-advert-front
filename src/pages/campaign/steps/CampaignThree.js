@@ -151,7 +151,7 @@ export function CampaignThree() {
   }
 
   const handleRangeDate = (date) => {
-    if(date.length != undefined) setDateRange(date)
+    if(date?.length != undefined) setDateRange(date)
     else setDateRange([date, null])
 
     clearErrors('endDate')
