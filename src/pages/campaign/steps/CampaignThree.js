@@ -377,7 +377,7 @@ export function CampaignThree() {
                 <Span4></Span4>
                 <RelativeDiv>
                   <SelectCategory>
-                    {mediaCategory.data.map((item, key) => {
+                    {mediaCategory?.data.map((item, key) => {
                       return (
                         <CategoryItem
                           active={campaignGroupInfo !== null && campaignGroupInfo.allowInventoryCategories.includes(item.value)}
