@@ -118,7 +118,7 @@ export function CampaignThree() {
         allowInventoryCategories: campaignGroupInfo.allowInventoryCategories.filter(value => value !== selectedCategory)
       })
     }
-    clearErrors('exposureInventoryType')
+    clearErrors('inventoryCATEGORY')
   }
   const selectedDisExposureCategory = (selectedCategory) => {
     let boolCategory = campaignGroupInfo.disAllowInventoryCategories.includes(selectedCategory)
@@ -133,7 +133,7 @@ export function CampaignThree() {
         disAllowInventoryCategories: campaignGroupInfo.disAllowInventoryCategories.filter(value => value !== selectedCategory)
       })
     }
-    clearErrors('disExposureInventoryType')
+    clearErrors('disInventoryCATEGORY')
   }
 
   const setExposureInventoryType = (exposureInventoryType) => {
@@ -142,7 +142,8 @@ export function CampaignThree() {
       exposureInventoryType: exposureInventoryType,
       allowInventoryCategories: []
     })
-    clearErrors('exposureInventoryType')
+    clearErrors('inventoryCATEGORY')
+    clearErrors('inventoryMANUAL')
   }
 
   const setDisExposureInventoryType = (exposureInventoryType) => {
@@ -151,7 +152,8 @@ export function CampaignThree() {
       disExposureInventoryType: exposureInventoryType,
       disAllowInventoryCategories: []
     })
-    clearErrors('disExposureInventoryType')
+    clearErrors('disInventoryCATEGORY')
+    clearErrors('disInventoryMANUAL')
   }
 
   const handleRangeDate = (date) => {
@@ -186,6 +188,7 @@ export function CampaignThree() {
       ...campaignGroupInfo,
       nonExposureDaysOfConversionUser: noViewType.value
     })
+    clearErrors('nonExposureDaysOfConversionUser')
   }
 
   const setExposureConversion =(boolExposureConversion)=>{
@@ -231,6 +234,7 @@ export function CampaignThree() {
       ...campaignGroupInfo,
       nonExposureDaysOfConversionAudience: noViewTypeAudience.value
     })
+    clearErrors('nonExposureDaysOfConversionAudience')
   }
 
   const setExposureConversionAudience =(boolExposureConversionAudience)=>{
@@ -345,7 +349,7 @@ export function CampaignThree() {
                   <span>자동 최적화</span>
                 </label>
                 <label>
-                  <Controller name={'exposureInventoryType'}
+                  <Controller name={'inventoryCATEGORY'}
                               control={control}
                               rules={{required: {value: campaignGroupInfo.exposureInventoryType === "CATEGORY" && campaignGroupInfo.allowInventoryCategories.length === 0, message:'카테고리를 최소한 하나는 입력해주세요'}}}
                               render={({field}) =>
@@ -362,12 +366,18 @@ export function CampaignThree() {
                 </label>
                 <ColSpan2>
                   <label>
-                    <input
-                      type={'radio'}
-                      name={'inventory'}
-                      id={'inventoryMANUAL'}
-                      onChange={() => setExposureInventoryType('MANUAL')}
-                      checked={campaignGroupInfo.exposureInventoryType === 'MANUAL'}
+                    <Controller name={'inventoryMANUAL'}
+                                control={control}
+                                rules={{required: {value: campaignGroupInfo.exposureInventoryType === "MANUAL" && campaignGroupInfo.allowInventoryIds?.length === 0, message:'지면을 선택해주세요.'}}}
+                                render={({field}) =>
+                                  <input
+                                    type={'radio'}
+                                    name={'inventory'}
+                                    id={'inventoryMANUAL'}
+                                    onChange={() => setExposureInventoryType('MANUAL')}
+                                    checked={campaignGroupInfo.exposureInventoryType === 'MANUAL'}
+                                  />
+                                }
                     />
                     <span>직접 선택</span>
                   </label>
@@ -377,6 +387,7 @@ export function CampaignThree() {
                   {campaignGroupInfo.exposureInventoryType === 'MANUAL' && campaignGroupInfo.allowInventoryIds?.length !== 0 &&
                     <small>{campaignGroupInfo.allowInventoryIds?.length}개 지면 송출 설정</small>
                   }
+                  {errors.inventoryMANUAL && <ValidationScript style={{position: 'unset'}}>{errors.inventoryMANUAL.message}</ValidationScript>}
                 </ColSpan2>
               </RelativeDiv>
             </ColSpan4>
@@ -393,7 +404,7 @@ export function CampaignThree() {
                       )
                     })}
                   </SelectCategory>
-                  {errors.exposureInventoryType && <ValidationScript>{errors.exposureInventoryType.message}</ValidationScript>}
+                  {errors.inventoryCATEGORY && <small><ValidationScript>{errors.inventoryCATEGORY.message}</ValidationScript></small>}
                 </RelativeDiv>
               </ColSpan4>
             }
@@ -411,7 +422,7 @@ export function CampaignThree() {
                   <span>없음</span>
                 </label>
                 <label>
-                  <Controller name={'disExposureInventoryType'}
+                  <Controller name={'disInventoryCATEGORY'}
                               control={control}
                               rules={{required: {value: campaignGroupInfo.disExposureInventoryType === "CATEGORY" && campaignGroupInfo.disAllowInventoryCategories.length === 0, message:'카테고리를 최소한 하나는 입력해주세요'}}}
                               render={({field}) =>
@@ -428,12 +439,18 @@ export function CampaignThree() {
                 </label>
                 <ColSpan2>
                   <label>
-                    <input
-                      type={'radio'}
-                      id={'disInventoryMANUAL'}
-                      name={'disInventory'}
-                      onChange={() => setDisExposureInventoryType('MANUAL')}
-                      checked={campaignGroupInfo.disExposureInventoryType === 'MANUAL'}
+                    <Controller name={'disInventoryMANUAL'}
+                                control={control}
+                                rules={{required: {value: campaignGroupInfo.disExposureInventoryType === "MANUAL" && campaignGroupInfo.disAllowInventoryIds?.length === 0, message:'지면을 선택해주세요.'}}}
+                                render={({field}) =>
+                                  <input
+                                    type={'radio'}
+                                    id={'disInventoryMANUAL'}
+                                    name={'disInventory'}
+                                    onChange={() => setDisExposureInventoryType('MANUAL')}
+                                    checked={campaignGroupInfo.disExposureInventoryType === 'MANUAL'}
+                                  />
+                                }
                     />
                     <span>직접 선택</span>
                   </label>
@@ -443,6 +460,7 @@ export function CampaignThree() {
                   {campaignGroupInfo.disExposureInventoryType === 'MANUAL' && campaignGroupInfo.disAllowInventoryIds?.length !== 0 &&
                     <small>{campaignGroupInfo.disAllowInventoryIds?.length}개 지면 송출 설정</small>
                   }
+                  {errors.disInventoryMANUAL && <small><ValidationScript style={{position: 'unset'}}>{errors.disInventoryMANUAL.message}</ValidationScript></small>}
                 </ColSpan2>
               </RelativeDiv>
             </ColSpan4>
@@ -459,7 +477,7 @@ export function CampaignThree() {
                       )
                     })}
                   </SelectCategory>
-                  {errors.disExposureInventoryType && <ValidationScript>{errors.disExposureInventoryType.message}</ValidationScript>}
+                  {errors.disInventoryCATEGORY && <ValidationScript>{errors.disInventoryCATEGORY.message}</ValidationScript>}
                 </RelativeDiv>
               </ColSpan4>
             }
@@ -474,7 +492,7 @@ export function CampaignThree() {
                     <Controller
                       control={control}
                       name="endDate"
-                      rules={{required: {value: !exposureDayChecked && dateRange[1] === null, message:'게제기간을 설정해주세요'}}}
+                      rules={{required: {value: !exposureDayChecked && dateRange[1] === null, message:'게재 기간을 설정해주세요'}}}
                       render={({ field: { onChange, onBlur, value, ref } }) => (
                         <CustomDatePicker
                           selectsRange={!exposureDayChecked}
@@ -570,15 +588,23 @@ export function CampaignThree() {
                         </label>
                       </div>
                       {
-                        campaignGroupInfo.exposureConversionUserYn ==='N' && <div>
-                          <Select styles={smallStyle}
-                                  placeholder={'미노출기간 선택'}
-                                  options={noViewTypeState}
-                                  value={noViewTypeState.find(item =>item.value === campaignGroupInfo.nonExposureDaysOfConversionUser)}
-                                  onChange={handleNoViewType}
+                        campaignGroupInfo.exposureConversionUserYn ==='N' &&
+                        <div>
+                          <Controller name={'nonExposureDaysOfConversionUser'}
+                                      control={control}
+                                      rules={{required: {value: campaignGroupInfo.exposureConversionUserYn === "N" && campaignGroupInfo.nonExposureDaysOfConversionUser === null, message:'미노출 기간을 선택해주세요.'}}}
+                                      render={({field}) =>
+                                        <Select styles={smallStyle}
+                                                placeholder={'미노출기간 선택'}
+                                                options={noViewTypeState}
+                                                value={noViewTypeState.find(item =>item.value === campaignGroupInfo.nonExposureDaysOfConversionUser)}
+                                                onChange={handleNoViewType}
+                                        />
+                                      }
                           />
                         </div>
                       }
+                      {errors.nonExposureDaysOfConversionUser && <small><ValidationScript style={{position: 'unset'}}>{errors.nonExposureDaysOfConversionUser.message}</ValidationScript></small>}
                       {/*<div>
                         <SmallInput>
                           <input type={'text'}
@@ -726,15 +752,23 @@ export function CampaignThree() {
                         </label>
                       </div>
                       {
-                        campaignGroupInfo.exposureConversionAudienceYn === 'N' && <div>
-                          <Select styles={smallStyle}
-                                  placeholder={'미노출기간 선택'}
-                                  options={noViewTypeState}
-                                  value={noViewTypeState.find(item =>item.value === campaignGroupInfo.nonExposureDaysOfConversionAudience)}
-                                  onChange={handleNoViewTypeAudience}
+                        campaignGroupInfo.exposureConversionAudienceYn === 'N' &&
+                        <div>
+                          <Controller name={'nonExposureDaysOfConversionAudience'}
+                                      control={control}
+                                      rules={{required: {value: campaignGroupInfo.exposureConversionAudienceYn === "N" && campaignGroupInfo.nonExposureDaysOfConversionAudience === null, message:'미노출 기간을 선택해주세요.'}}}
+                                      render={({field}) =>
+                                        <Select styles={smallStyle}
+                                                placeholder={'미노출기간 선택'}
+                                                options={noViewTypeState}
+                                                value={noViewTypeState.find(item =>item.value === campaignGroupInfo.nonExposureDaysOfConversionAudience)}
+                                                onChange={handleNoViewTypeAudience}
+                                        />
+                                      }
                           />
                         </div>
                       }
+                      {errors.nonExposureDaysOfConversionAudience && <small><ValidationScript style={{position: 'unset'}}>{errors.nonExposureDaysOfConversionAudience.message}</ValidationScript></small>}
                     </div>
                   </RowInBox>
                   <RowInBox>
