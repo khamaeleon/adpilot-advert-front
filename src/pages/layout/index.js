@@ -72,19 +72,19 @@ function Layout() {
     }
   }, [params.id])
   //[d] 광고비 잔액
-  useEffect(() => {
-    const pointData = async () => {
-      try {
-        const userId = tokenUserInfo.id;
-        const response = await retrieveUserPointRequest(userId);
-        setUserPoint(response.availablePoint)
-      } catch (error) {
-        console.error("실패 응답 처리", error);
-      }
-    };
-
-    pointData();
-  }, [tokenUserInfo]);
+  // useEffect(() => {
+  //   const pointData = async () => {
+  //     try {
+  //       const userId = tokenUserInfo.id;
+  //       const response = await retrieveUserPointRequest(userId);
+  //       setUserPoint(response.availablePoint)
+  //     } catch (error) {
+  //       console.error("실패 응답 처리", error);
+  //     }
+  //   };
+  //
+  //   pointData();
+  // }, [tokenUserInfo]);
 
 
 
