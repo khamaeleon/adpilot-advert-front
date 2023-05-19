@@ -1,4 +1,4 @@
-import {ADVER_SERVER} from "../constants/GlobalConst.js";
+import {ADMIN_SERVER, ADVER_SERVER} from "../constants/GlobalConst.js";
 import {adminAxios} from "./AdminAxios";
 import {nonUserAxios} from "./NonUserAxios";
 import {adverAxios} from "./AdverAxios";
@@ -18,7 +18,7 @@ export async function AdminAxios(type, uri, param) {
 export async function AxiosImage(type, uri, formData) {
   // const accessToken = store.getState().auth.accessToken
   const tokenAtom =store.get(tokenResultAtom)
-  return fetch(ADVER_SERVER + uri, {
+  return fetch(ADMIN_SERVER + uri, {
     method: type,
     headers: {
       Authorization: `Bearer  ${tokenAtom.accessToken}`,

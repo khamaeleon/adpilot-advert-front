@@ -180,8 +180,8 @@ export const ImageUploadCard = styled.div`
   background-color: #ebebec;
   border-radius: 5px;
   & img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 90%;
+    height: auto;
   }
 `
 

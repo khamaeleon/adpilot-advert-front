@@ -10,6 +10,9 @@ export const campaignCreativeAtom = atomWithReset(
     mobLandingUrl: '',
     mobReferralCode: '',
     pcReferralCode: '',
+    title1: '',
+    title2: '',
+    titleLong: '',
     logoPaths: [],
     nativeMaterials: [],
   }

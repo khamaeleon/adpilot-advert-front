@@ -34,7 +34,7 @@ import {
 import {HorizontalRule} from "../../../components/common/Common";
 import Select from "react-select";
 import React, {useEffect, useState} from "react";
-import {useFormContext} from "react-hook-form";
+import {Controller, useFormContext} from "react-hook-form";
 import {useAtom} from "jotai";
 import {stepCampaignAtom} from "../entity";
 import {campaignBasicInfoAtom} from "../entity/Info";
@@ -53,15 +53,18 @@ import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {useLocation, useNavigate} from "react-router-dom";
 import {useResetAtom} from "jotai/utils";
+import {multiAxiosCall} from "../../../common/StringUtils";
+import {ValidationScript} from "../../signup/styles";
 
 const RegistryBannerItem = (props) => {
+  const {size} = props;
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
 
   const handleDeleteImage = (imagePath) => {
     setCampaignCreative({
       ...campaignCreativeInfo,
       materials: campaignCreativeInfo.materials.map(value => {
-        if (value.bannerSize === props.size.bannerSize) {
+        if (value.bannerSize === size.bannerSize) {
           return {
             ...value,
             images: value.images.filter(item => item.imagePath !== imagePath)
@@ -80,15 +83,15 @@ const RegistryBannerItem = (props) => {
       pictureFiles.map((item ,index)=>{
         data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
       })
-      let boolSaveImages = campaignCreativeInfo.materials.find(value =>value.bannerSize === props.size.bannerSize ).images.length +pictureFiles.length
+      let boolSaveImages = campaignCreativeInfo.materials.find(value =>value.bannerSize === size.bannerSize ).images.length +pictureFiles.length
 
       if(boolSaveImages < 6 ){
-        uploadBannerImages(data, props.size.bannerSize).then(response => {
+        uploadBannerImages(data, size.bannerSize).then(response => {
           if (response) {
             setCampaignCreative({
               ...campaignCreativeInfo,
               materials: campaignCreativeInfo.materials.map(value => {
-                if (value.bannerSize === props.size.bannerSize) {
+                if (value.bannerSize === size.bannerSize) {
                   return {
                     ...value,
                     images: value.images.concat(response.images)
@@ -110,9 +113,9 @@ const RegistryBannerItem = (props) => {
   return (
     <RowSpan style={{width: '50%'}}>
       <ColSpan4>
-        <Span4 style={{textAlign: 'right', whiteSpace: 'nowrap'}}>{props.size.bannerSize}</Span4>
+        <Span4 style={{textAlign: 'right', whiteSpace: 'nowrap'}}>{size.bannerSize}</Span4>
         <RowSpan box={true} style={{justifyContent: 'flex-start'}}>
-          {campaignCreativeInfo.materials.find(value => value.bannerSize === props.size.bannerSize).images.map((item, key) => {
+          {campaignCreativeInfo.materials.find(value => value.bannerSize === size.bannerSize).images.map((item, key) => {
             return (
               <ColSpan100 padding={'0'} key={key}>
                 <DeleteIcon onClick={() => handleDeleteImage(item.imagePath)}/>
@@ -122,20 +125,20 @@ const RegistryBannerItem = (props) => {
               </ColSpan100>
             )
           })}
-          {campaignCreativeInfo.materials.find(value => value.bannerSize === props.size.bannerSize).images.length < 5 &&
-            <ColSpan100 padding={'0'}>
-              <ImageUploading
-                multiple
-                acceptType={["jpg", "gif", "png"]}
-                onChange={onDrop}
-                maxFileSize={10485760}
-                maxNumber={5}
-              >
-                {({onImageUpload}) => (
-                  <CreateImage onClick={onImageUpload}/>
-                )}
-              </ImageUploading>
-            </ColSpan100>
+          {campaignCreativeInfo.materials.find(value => value.bannerSize === size.bannerSize).images.length < 5 &&
+              <ColSpan100 padding={'0'}>
+                <ImageUploading
+                    multiple
+                    acceptType={["jpg", "gif", "png"]}
+                    onChange={onDrop}
+                    maxFileSize={10485760}
+                    maxNumber={5}
+                >
+                  {({onImageUpload}) => (
+                      <CreateImage onClick={onImageUpload}/>
+                  )}
+                </ImageUploading>
+              </ColSpan100>
           }
         </RowSpan>
       </ColSpan4>
@@ -144,11 +147,15 @@ const RegistryBannerItem = (props) => {
 }
 
 function CampaignFourBanner(props) {
-  const [campaignBasicInfo] = useAtom(campaignBasicInfoAtom)
+  const {control, errors, isfold} = props
   const [clickInducementType] = useAtom(clickInducementTypeAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
   const [bannerSize] = useAtom(bannerSizeAtom)
   const [fold, setFold] = useState(true)
+
+  useEffect(()=>{
+    setFold(isfold)
+  },[])
 
   const handleDeleteLogoImage = (imagePath) => {
     setCampaignCreative({
@@ -194,7 +201,6 @@ function CampaignFourBanner(props) {
     if (pictureFiles.length !== 0) {
       const data = new FormData()
       const imagesLastIndex = pictureFiles.length - 1;
-      console.log(pictureFiles)
       pictureFiles.map((item ,index)=>{
         data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
       })
@@ -216,7 +222,7 @@ function CampaignFourBanner(props) {
 
   return (
     <>
-      <RowSpan column={true}>
+      <RowSpan validation column={true}>
         <Span4>광고 소재</Span4>
         <div style={{marginTop: 15}}>
           <SelectCategory style={{padding: 20, borderRadius: '5px 5px 0 0'}}>
@@ -227,16 +233,29 @@ function CampaignFourBanner(props) {
               )
             })}
           </SelectCategory>
-          <ResistBanner>
-            <p style={{color: '#ccc'}}>사이즈별 소재는 최대 5개까지 등록 가능합니다.</p>
-            <div style={{display: 'flex', flexWrap: 'wrap'}}>
-              {campaignCreativeInfo.materials !== undefined && campaignCreativeInfo.materials.map((item, key) => {
-                return (
-                  <RegistryBannerItem key={key} size={item}/>
-                )
-              })}
-            </div>
-          </ResistBanner>
+          <Controller
+              name="materials"
+              control={control}
+              rules={{
+                required: {
+                  value: campaignCreativeInfo.materials !== undefined && campaignCreativeInfo.materials.length === 0,
+                  message: '광고 소재를 등록해 주세요.'
+                }
+              }}
+              render={({field}) => (
+                <ResistBanner {...field}>
+                  <p style={{color: '#ccc'}}>사이즈별 소재는 최대 5개까지 등록 가능합니다.</p>
+                  <div style={{display: 'flex', flexWrap: 'wrap'}}>
+                    {campaignCreativeInfo.materials !== undefined && campaignCreativeInfo.materials.map((item, key) => {
+                      return (
+                        <RegistryBannerItem key={key} size={item}/>
+                      )
+                    })}
+                  </div>
+                </ResistBanner>
+                  )}
+              />
+            {errors.materials && <Validation>{errors.materials?.message}</Validation>}
         </div>
       </RowSpan>
       <RowSpan box={true} column={true} style={{padding: 0, backgroundColor: '#fff'}}>
@@ -254,8 +273,8 @@ function CampaignFourBanner(props) {
               <input
                 type={'text'}
                 name={'title1'}
-                value={campaignCreativeInfo.title1}
-                onChange={handleChangeInputs}한
+                value={campaignCreativeInfo.title1 || ""}
+                onChange={handleChangeInputs}
               />
             </Row>
             <Row>
@@ -264,7 +283,7 @@ function CampaignFourBanner(props) {
                 type={'text'}
                 name={'title2'}
                 maxLength={25}
-                value={campaignCreativeInfo.title2}
+                value={campaignCreativeInfo.title2 || ""}
                 onChange={handleChangeInputs}
               />
             </Row>
@@ -273,7 +292,7 @@ function CampaignFourBanner(props) {
               <input
                 type={'text'}
                 name={'title3'}
-                value={campaignCreativeInfo.title3}
+                value={campaignCreativeInfo.title3 || ""}
                 onChange={handleChangeInputs}
               />
             </Row>
@@ -283,7 +302,7 @@ function CampaignFourBanner(props) {
                 type={'text'}
                 name={'titleLong'}
                 maxLength={90}
-                value={campaignCreativeInfo.titleLong}
+                value={campaignCreativeInfo.titleLong || ""}
                 onChange={handleChangeInputs}
               />
             </Row>
@@ -337,7 +356,7 @@ function CampaignFourBanner(props) {
               <input
                 type={'text'}
                 name={'serviceName'}
-                value={campaignCreativeInfo.serviceName}
+                value={campaignCreativeInfo.serviceName || ""}
                 onChange={handleChangeInputs}
               />
             </Row>
@@ -346,7 +365,7 @@ function CampaignFourBanner(props) {
               <input
                 type={'text'}
                 name={'description'}
-                value={campaignCreativeInfo.description}
+                value={campaignCreativeInfo.description || ""}
                 onChange={handleChangeInputs}
               />
             </Row>
@@ -362,9 +381,6 @@ function CampaignFourNative(props) {
   const [clickInducementType] = useAtom(clickInducementTypeAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
 
-  useEffect(()=>{
-    console.log(campaignCreativeInfo)
-  },[])
   const handleDeleteLogoImage = (imagePath) => {
     setCampaignCreative({
       ...campaignCreativeInfo,
@@ -387,7 +403,6 @@ function CampaignFourNative(props) {
   const onNativeDrop = (pictureFiles) => {
     if (pictureFiles.length !== 0) {
       const data = new FormData()
-      console.log(pictureFiles)
       pictureFiles.map((item ,index)=>{
         data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
       })
@@ -418,7 +433,6 @@ function CampaignFourNative(props) {
     if (pictureFiles.length !== 0) {
       const data = new FormData()
       const imagesLastIndex = pictureFiles.length - 1;
-      console.log(pictureFiles)
       pictureFiles.map((item ,index)=>{
         data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
       })
@@ -438,7 +452,7 @@ function CampaignFourNative(props) {
     }
   }
   return (
-    <form>
+    <>
       <RowSpan>
         <ColSpan3><Span4>광고소재</Span4></ColSpan3>
       </RowSpan>
@@ -451,40 +465,56 @@ function CampaignFourNative(props) {
             </Row>
             <Row>
               <span>이미지<p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p></span>
-              <RowSpan box={true} style={{marginTop: 0, gap: 10, width: '80%', justifyContent: 'flex-start'}}>
-                {campaignCreativeInfo.nativeMaterials.length !== 0 && campaignCreativeInfo.nativeMaterials.map((item, key) => {
-                  return (
-                    <ColSpan100 padding={'0'} key={key}>
-                      <DeleteIcon onClick={() => handleDeleteNativeImage(item.imagePath)}/>
-                      <ImageUploadCard>
-                        <img src={item.imagePath} alt={key}/>
-                      </ImageUploadCard>
-                    </ColSpan100>
-                  )
-                })}
-                {campaignCreativeInfo.nativeMaterials.length < 5 &&
-                  <ColSpan100 padding={'0'}>
-                    <ImageUploading
-                      multiple
-                      acceptType={["jpg", "gif", "png"]}
-                      onChange={onNativeDrop}
-                      maxFileSize={10485760}
-                      maxNumber={5}
-                    >
-                      {({onImageUpload}) => (
-                        <CreateImage onClick={onImageUpload}/>
-                      )}
-                    </ImageUploading>
-                  </ColSpan100>
-                }
-              </RowSpan>
+                <Controller
+                    name="nativeMaterials"
+                    control={control}
+                    rules={{
+                      required: {
+                        value: campaignCreativeInfo.nativeMaterials.length === 0,
+                        message: '광고 소재를 등록해 주세요.'
+                      }
+                    }}
+                    render={({field}) => (
+                        <RowSpan box={true} {...field} style={{marginTop: 0, gap: 10, width: '80%', justifyContent: 'flex-start'}}>
+                          {campaignCreativeInfo.nativeMaterials.length !== 0 && campaignCreativeInfo.nativeMaterials.map((item, key) => {
+                            return (
+                                <ColSpan100 padding={'0'} key={key}>
+                                  <DeleteIcon onClick={() => handleDeleteNativeImage(item.imagePath)}/>
+                                  <ImageUploadCard>
+                                    <img src={item.imagePath} alt={key}/>
+                                  </ImageUploadCard>
+                                </ColSpan100>
+                            )
+                          })}
+
+                          {campaignCreativeInfo.nativeMaterials.length < 5 &&
+                              <ColSpan100 padding={'0'}>
+                                <ImageUploading
+                                    multiple
+                                    acceptType={["jpg", "gif", "png"]}
+                                    onChange={onNativeDrop}
+                                    maxFileSize={10485760}
+                                    maxNumber={5}
+                                >
+                                  {({onImageUpload}) => (
+                                      <CreateImage onClick={onImageUpload}/>
+                                  )}
+                                </ImageUploading>
+                              </ColSpan100>
+                          }
+                          <ValidationGroup>
+                            {errors.nativeMaterials && <Validation>{errors.nativeMaterials?.message}</Validation>}
+                          </ValidationGroup>
+                          </RowSpan>
+                    )}
+                />
             </Row>
             <Row>
               <span>광고 타이틀</span>
               <input
                 type={'text'}
                 name={'title1'}
-                value={campaignCreativeInfo.title1}
+                value={campaignCreativeInfo.title1 || ""}
                 onChange={handleChangeInputs}
               />
             </Row>
@@ -494,7 +524,7 @@ function CampaignFourNative(props) {
                 type={'text'}
                 name={'title2'}
                 maxLength={25}
-                value={campaignCreativeInfo.title2}
+                value={campaignCreativeInfo.title2 || ""}
                 onChange={handleChangeInputs}
               />
             </Row>
@@ -503,7 +533,7 @@ function CampaignFourNative(props) {
               <input
                 type={'text'}
                 name={'title3'}
-                value={campaignCreativeInfo.title3}
+                value={campaignCreativeInfo.title3 || ""}
                 onChange={handleChangeInputs}
               />
             </Row>
@@ -513,7 +543,7 @@ function CampaignFourNative(props) {
                 type={'text'}
                 name={'titleLong'}
                 maxLength={90}
-                value={campaignCreativeInfo.titleLong}
+                value={campaignCreativeInfo.titleLong || ""}
                 onChange={handleChangeInputs}
               />
             </Row>
@@ -536,7 +566,7 @@ function CampaignFourNative(props) {
           <input
             type={'text'}
             name={'serviceName'}
-            value={campaignCreativeInfo.serviceName}
+            value={campaignCreativeInfo.serviceName || ""}
             onChange={handleChangeInputs}
           />
         </Row>
@@ -576,7 +606,7 @@ function CampaignFourNative(props) {
             <input
               type={'text'}
               name={'description'}
-              value={campaignCreativeInfo.description}
+              value={campaignCreativeInfo.description || ""}
               onChange={handleChangeInputs}
             />
           </Row>
@@ -592,7 +622,7 @@ function CampaignFourNative(props) {
           )
         })}
       </RowSpan>
-    </form>
+    </>
   )
 }
 
@@ -605,16 +635,14 @@ export function CampaignFour() {
   const [, setBannerSize] = useAtom(bannerSizeAtom)
   const [creativeType, setCreativeType] = useAtom(creativeTypeAtom)
   const [, setClickInducementType] = useAtom(clickInducementTypeAtom)
-  const {register, handleSubmit, reset, formState: {errors}} = useFormContext()
+  const {control, register, handleSubmit, reset, formState: {errors}} = useFormContext()
   const [resistBool] =useState(state === null)
   const resetInfo = useResetAtom(campaignCreativeAtom)
 
   useEffect(() => {
-    console.log(campaignBasicInfo.productType)
     if(!resistBool){
       if(state.creativeType ==='BANNER' ){
         selCreativeBannerInfo(state.campaignId).then(response =>{
-          console.log(response)
           setCampaignCreative({
             ...response,
             nativeMaterials:[]
@@ -639,7 +667,6 @@ export function CampaignFour() {
         })
       }else if(state.creativeType ==='POP_UNDER') {
         selCreativePopUnderInfo(state.campaignId).then(response => {
-          console.log(response)
           setCampaignCreative({
             ...response,
             materials: [],
@@ -652,6 +679,9 @@ export function CampaignFour() {
           reset(response)
         })
       }
+    }else{
+      setCampaignCreative(campaignCreativeAtom.init)
+      setCampaignBasicInfo(campaignBasicInfoAtom.init)
     }
     selEnumInfo('BANNER_SIZE').then(response => {
       setBannerSize(response.data)
@@ -666,7 +696,6 @@ export function CampaignFour() {
       })
     } else {
       selEnumInfo('CREATIVE_TYPE_POP_UNDER').then(response => {
-        console.log(response.data)
         setCreativeType(response.data)
         setCampaignCreative({
           ...campaignCreativeInfo,
@@ -688,7 +717,7 @@ export function CampaignFour() {
     })
   }
   const onSubmitToast = (response) => {
-    if(response) {
+    if(response[0]) {
       if (state !== null) {
         toast.success("수정되었습니다.",{autoClose:100, delay:0})
         toast.onChange(payload => {
@@ -705,32 +734,24 @@ export function CampaignFour() {
     }
   }
   const onSubmit = (data) => {
-    console.log(campaignCreativeInfo)
-    if(campaignCreativeInfo.creativeType ==='BANNER'){
-      updateCampaignBanner({
-        ...campaignCreativeInfo,
-        campaignId:campaignBasicInfo.campaignId,
-        name:campaignCreativeInfo.name !==undefined ? campaignCreativeInfo.name : creativeType.find(value => value.value === campaignCreativeInfo.creativeType)?.label+ '_' + campaignBasicInfo.pixelId.label+ '_' +campaignBasicInfo.productType+ '_' +campaignBasicInfo.goal.label+ '_' +moment().format('YYYYMMDDhhmmss')
-      }).then(response => {
-        onSubmitToast(response)
-      })
-    }else if(campaignCreativeInfo.creativeType ==='NATIVE'){
-      updateCampaignNative({
-        ...campaignCreativeInfo,
-        campaignId:campaignBasicInfo.campaignId,
-        name:campaignCreativeInfo.name !==undefined ? campaignCreativeInfo.name :  creativeType.find(value => value.value === campaignCreativeInfo.creativeType)?.label+ '_' + campaignBasicInfo.pixelId.label+ '_' +campaignBasicInfo.productType+ '_' +campaignBasicInfo.goal.label+ '_' +moment().format('YYYYMMDDhhmmss')
-      }).then(response => {
-        onSubmitToast(response)
-      })
-    }else if(campaignCreativeInfo.creativeType ==='POP_UNDER'){
-      updateCampaignPopUnder({
-        ...campaignCreativeInfo,
-        campaignId:campaignBasicInfo.campaignId,
-        name:campaignCreativeInfo.name !==undefined ? campaignCreativeInfo.name :  creativeType.find(value => value.value === campaignCreativeInfo.creativeType)?.label+ '_' + campaignBasicInfo.pixelId.label+ '_' +campaignBasicInfo.productType+ '_' +campaignBasicInfo.goal.label+ '_' +moment().format('YYYYMMDDhhmmss')
-      }).then(response => {
-        onSubmitToast(response)
-      })
+    let param = {
+      ...campaignCreativeInfo,
+      campaignId: campaignBasicInfo.campaignId,
+      name: campaignCreativeInfo.name != undefined ? campaignCreativeInfo.name : campaignBasicInfo.username?.toUpperCase() + '_' + campaignCreativeInfo.creativeType + '_' + moment().format('YYYY-MM-DD_HH:mm:ss')
+    };
+
+    console.log(param)
+
+    let updateFunc;
+
+    switch(campaignCreativeInfo.creativeType){
+      case "BANNER": updateFunc = updateCampaignBanner(param); break;
+      case "NATIVE": updateFunc = updateCampaignNative(param); break;
+      case "POP_UNDER": updateFunc = updateCampaignPopUnder(param); break;
+      default : updateFunc = updateCampaignBanner(param);break;
     }
+    multiAxiosCall([updateFunc], onSubmitToast)
+
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -738,7 +759,7 @@ export function CampaignFour() {
         <>
           {state !== null && <AdverInfo><span>광고주 정보</span><p></p><span>{state?.adverInfo}</span></AdverInfo>}
           <Board>
-            <BoardHeader>광고 그룹 설정</BoardHeader>
+            <BoardHeader>크리에이티브 그룹 설정</BoardHeader>
             <BoardSearchResult>
               <Span4>크리에이티브 그룹 선택</Span4>
               <RowSpan box={true} column={false}>
@@ -845,10 +866,10 @@ export function CampaignFour() {
                 <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
               </ValidationGroup>
               {campaignCreativeInfo.creativeType === 'BANNER' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
-                <CampaignFourBanner register={register} errors={errors}/>
+                <CampaignFourBanner control={control} errors={errors} isfold={campaignCreativeInfo.clickInducementType === null}/>
               }
               {campaignCreativeInfo.creativeType === 'NATIVE' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
-                <CampaignFourNative register={register} errors={errors}/>
+                <CampaignFourNative control={control} errors={errors}/>
               }
             </BoardSearchResult>
           </Board>
