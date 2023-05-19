@@ -37,9 +37,9 @@ export function AdChargeButton(props) {
 }
 
 function AdChargeModal (props) {
+  const {title, setRequestAmountValue} = props
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [,setModal] = useAtom(modalController)
-  const {title, setRequestAmountValue} = props
   const {register, handleSubmit, setError, formState:{errors} } = useForm()
   const [chargeAmount, setChargeAmount] = useState(0) // 충전 금액
   const [inputValue, setInputValue] = useState(0) // 인풋 클릭 여부
@@ -70,11 +70,7 @@ function AdChargeModal (props) {
     if (chargeAmount <= 0) {
       setError('chargeAmount', {type: 'required', message:'충전 금액을 입력해 주세요'})
     } else {
-      // 거래타입, 충전금액 데이터 post 값으로 넘기기
-      setRequestAmountValue(requestAmountValue => requestAmountValue + calcAmount());
-
       const userId = tokenUserInfo.id
-
       const requestData = {
         paymentServiceUid: userId,
         amount: (chargeAmount / 10) + chargeAmount,
@@ -84,13 +80,14 @@ function AdChargeModal (props) {
       await paymentRequest ( requestData )
         .then(response => {
           // 성공적인 응답 처리
-          let data = response;
+          console.log("결제 성공!!", response);
           const newWindow = window.open('', '_blank', 'width=500,height=500');
           const iframe = document.createElement('iframe');
           iframe.src = 'https://testapi.co.kr?authenticationId=01023012301';
           iframe.width = '100%';
           iframe.height = '100%';
           newWindow.document.body.appendChild(iframe);
+          setRequestAmountValue(requestAmountValue => requestAmountValue + calcAmount());
           props.onPaymentDetailsReceived();
         })
         .catch(error => {
