@@ -47,7 +47,7 @@ export function CampaignThree() {
   const [exposureDayChecked, setExposureDayChecked] = useState(false)
   const [mediaCategory, setMediaCategory] = useAtom(mediaCategoryAtom)
   const [agentTypeState ,setAgentTypeState] =useState([])
-  const [noViewTypeState] =useState(noViewType)
+  const [noViewTypeState] = useState(noViewType)
   const [dateRange, setDateRange] = useState([]);
   const [startDate, endDate] = dateRange
   const {register, handleSubmit, reset, setValue, control, formState: {errors}, clearErrors} = useFormContext()
@@ -80,6 +80,7 @@ export function CampaignThree() {
       setAgentTypeState(response.data)
     })
   }, [])
+
 
   useEffect(() => {
     setCampaignGroupInfo({
@@ -272,6 +273,8 @@ export function CampaignThree() {
       toast.warning('카테고리를 최소한 하나는 입력해주세요')
     } else if(campaignGroupInfo.disExposureInventoryType === "CATEGORY" && campaignGroupInfo.disAllowInventoryCategories.length === 0) {
       toast.warning('카테고리를 최소한 하나는 입력해주세요')
+    } else if(campaignGroupInfo.startDate === '') {
+      toast.warning('날짜를 입력해 주세요')
     } else {
       let param = {
         ...campaignGroupInfo,
@@ -288,7 +291,9 @@ export function CampaignThree() {
                 resetInfo()
               }
             })
-          } else setStepCampaign({steps: 3})
+          } else {
+            setStepCampaign({steps: 3})
+          }
         }
       })
     }
@@ -439,7 +444,7 @@ export function CampaignThree() {
                 </RelativeDiv>
               </ColSpan4>
             }
-            <RowSpan>
+            <RowSpan validation>
               <ColSpan4>
                 <Span4>게재 기간</Span4>
                 <ColSpan2>
@@ -797,7 +802,7 @@ export function CampaignThree() {
           </RowSpan>
           <RowSpan>
             <ColSpan4>
-              <Span4>광고명 그룹명</Span4>
+              <Span4>광고 그룹명</Span4>
               <RelativeDiv>
                 <Input
                   type={'text'}
@@ -805,7 +810,7 @@ export function CampaignThree() {
                   value={campaignGroupInfo.name}
                   {...register('name', {
                     required: '광고 그룹명을 입력해주세요',
-                    onChange:onChangeGroupName
+                    onChange: (e)=>onChangeGroupName(e)
                   })}
                 />
                 {errors.name && <ValidationScript>{errors.name.message}</ValidationScript>}
