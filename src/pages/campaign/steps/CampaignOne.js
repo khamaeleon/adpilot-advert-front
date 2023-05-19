@@ -105,18 +105,18 @@ export function CampaignOne() {
       let goalTypeTemp=''
       if(response.goal.indexOf('CONVERSION') ===0 ){
         goalTypeTemp = 'CAMPAIGN_CONVERSION_GOAL'
-        selEnumInfo('CAMPAIGN_CONVERSION_GOAL').then(response => {
-          setGoalList(response.data)
+        selEnumInfo('CAMPAIGN_CONVERSION_GOAL').then(r => {
+          setGoalList(r.data)
         })
       }else if(response.goal.indexOf('VISIT') ===0 ){
         goalTypeTemp = 'CAMPAIGN_VISIT_GOAL'
-        selEnumInfo('CAMPAIGN_VISIT_GOAL').then(response => {
-          setGoalList(response.data)
+        selEnumInfo('CAMPAIGN_VISIT_GOAL').then(r => {
+          setGoalList(r.data)
         })
       }else if(response.goal.indexOf('VIEW') ===0 ){
         goalTypeTemp='CAMPAIGN_VIEW_GOAL'
-        selEnumInfo('CAMPAIGN_VIEW_GOAL').then(response => {
-          setGoalList(response.data)
+        selEnumInfo('CAMPAIGN_VIEW_GOAL').then(r => {
+          setGoalList(r.data)
         })
       }
       setCampaignBasicInfo({
@@ -195,7 +195,7 @@ export function CampaignOne() {
       resistCampaignBasic({
         ...campaignBasicInfo,
         goal:campaignBasicInfo.goal.value,
-        pixelId:campaignBasicInfo.pixelId.value,
+        pixelId:campaignBasicInfo.pixelId,
         name:campaignBasicInfo.productType + '_' + campaignBasicInfo.goal.value + '_' + moment().format('YYYY-MM-DD hh:mm:ss').replace(' ' ,'_')
       }).then(response =>{
         if(response){
@@ -356,7 +356,7 @@ export function CampaignOne() {
                         styles={selectStyle}
                         placeholder={'목표 선택'}
                         {...field}
-                        value={campaignBasicInfo.goal}
+                        value={(campaignBasicInfo.goal != undefined && goalList != null) ? goalList.find(d=>d.value === campaignBasicInfo.goal) : campaignBasicInfo.goal}
                         onChange={handleChangeTargetDetail}
                       />
                     )}
