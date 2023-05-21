@@ -147,12 +147,6 @@ function PaymentManageUser(props) {
         if (response !== null) {
           const { totalCount, rows: data } = response;
           setTotalPointInfo(totalCount);
-          // console.log("지금 데이터는?", data);
-          // const totalPoint = data
-          //   .filter(obj => obj.pointHistoryType === "REFUND_REQUEST_OF_USER")
-          //   .reduce((acc, obj) => acc + obj.point, 0);
-          // console.log("totalPoint : ", totalPoint)
-          // setTotalAmount(totalPoint);
           return { data, count: parseInt(totalCount) };
         } else {
           return { data: [], count: 0 };

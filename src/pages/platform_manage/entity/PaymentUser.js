@@ -181,8 +181,8 @@ export const PointDetailsColumns = [
                 REFUND_OF_PAYMENT: { label: '환불 신청', color: 'orange' },
                 GIVEN_BY_ADMIN: { label: '포인트 지급', color: 'green' },
                 TAKEN_BY_ADMIN: { label: '포인트 차감', color: 'pink' },
-                REFUND_REQUEST_OF_USER: { label: '환불 요청', color: 'pink' },
-                REFUNDED_BY_ADMIN: { label: '환불 완료', color: 'pink' },
+                REFUND_REQUEST_OF_USER: { label: '환불 요청', color: 'red' },
+                REFUNDED_BY_ADMIN: { label: '환불 완료', color: 'green' },
                 ERROR: { label: 'ERROR', color: 'red' }
             }[value] || { label: '', color: '' };
             return (

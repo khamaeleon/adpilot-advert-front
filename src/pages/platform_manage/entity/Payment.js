@@ -1,7 +1,8 @@
 import {atom} from "jotai";
 import {dateFormat, decimalFormat} from "../../../common/StringUtils";
-import {getToDay} from "../../../common/DateUtils";
+import {getThisMonth, getToDay} from "../../../common/DateUtils";
 import React from "react";
+import moment from "moment/moment";
 
 /**
  * 결재 관리 리스트 Atom
@@ -17,6 +18,7 @@ export const searchPaymentType = [
   {id: "1", value: "ADVER_NAME", label: "광고주명"},
   {id: "2", value: "USERNAME", label: "광고주 아이디"},
   {id: "3", value: "PRODUCT_NAME", label: "신청 아이디"}
+  // {id: "3", value: "USERNAME", label: "신청 아이디"}
 ]
 
 
@@ -69,17 +71,17 @@ export const paymentColumns = [
     showColumnMenuTool: false,
   },
   {
-    name: 'mallName',
+    name: 'value1',
     header: '광고주명',
     showColumnMenuTool: false,
   },
   {
-    name: 'mallId',
+    name: 'value2',
     header: '광고주 아이디',
     showColumnMenuTool: false,
   },
   {
-    name: 'value1',
+    name: 'mallName',
     header: '신청 아이디',
     showColumnMenuTool: false,
   },
@@ -130,9 +132,10 @@ export const updatePaymentStatus = {
  * 결재 관리 현황 조회
  */
 export const searchPaymentParams = atom({
-  startAt: dateFormat(getToDay(), 'YYYY-MM'),
-  endAt: dateFormat(getToDay(), 'YYYY-MM'),
-  statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE'],
+  startAt: getThisMonth().startDay,
+  endAt: getThisMonth().endDay,
+  // statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE'],
+  statusList: ['PAYMENT_COMPLETED', 'PAYMENT_FAILED'],
   searchType: 'ALL',
   search: ''
 })

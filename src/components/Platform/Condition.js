@@ -40,6 +40,7 @@ import {productListDataAtom} from "../../pages/platform_manage/entity/Product";
 import {useParams} from "react-router-dom";
 import {SmallButton} from "../../pages/campaign/styles/common";
 import * as PropTypes from "prop-types";
+import moment from "moment";
 
 ResetButton.propTypes = {onClick: PropTypes.func};
 
@@ -232,13 +233,22 @@ export function PaymentCondition(props) {
   const [searchSelected, setSearchSelected] = useState(searchTypeSelect[0])
   const params = useParams()
 
-  useEffect(() => {
+  const handelChangeDateRange = (date) => {
     setSearchCondition({
       ...searchCondition,
-      startAt: dateFormat(startDate, 'YYYY-MM-dd'),
-      endAt: dateFormat(endDate, 'YYYY-MM-dd'),
+      startAt: moment(date[0]).format('YYYY-MM-DD'),
+      endAt: moment(date[1]).format('YYYY-MM-DD')
     })
-  },[dateRange])
+    setDateRange(date)
+  }
+
+  // useEffect(() => {
+  //   setSearchCondition({
+  //     ...searchCondition,
+  //     startAt: dateFormat(startDate, 'YYYY-MM-dd'),
+  //     endAt: dateFormat(endDate, 'YYYY-MM-dd'),
+  //   })
+  // },[dateRange])
 
   useEffect(() => {
     if(searchCondition.statusList.length === 2 && params.id !== 'advertisingPayments') {
@@ -275,7 +285,7 @@ export function PaymentCondition(props) {
     if(event.target.checked){
       setSearchCondition({
         ...searchCondition,
-        statusList: ['COST_DECREASE', 'COST_DECREASE','REFUND_APPLIED','REFUND_COMPLETE']
+        statusList: ['GIVEN_BY_ADMIN', 'TAKEN_BY_ADMIN','REFUND_REQUEST_OF_USER','REFUNDED_BY_ADMIN']
       })
     } else{
       setSearchCondition({
@@ -344,7 +354,8 @@ export function PaymentCondition(props) {
                 startDate={startDate}
                 endDate={endDate}
                 maxDate={new Date(getToDay())}
-                onChange={(date) => handleRangeDate(date)}
+                onChange={(date) => handelChangeDateRange(date)}
+                // onChange={(date) => handleRangeDate(date)}
                 dateFormat="yyyy-MM-dd"
                 locale={ko}
                 isClearable={false}
@@ -366,23 +377,23 @@ export function PaymentCondition(props) {
                   />
                   <Checkbox label={'광고비 지급'}
                             type={'c'}
-                            id={'COST_DECREASE'}
-                            isChecked={searchCondition.statusList.includes('COST_DECREASE')}
+                            id={'GIVEN_BY_ADMIN'}
+                            isChecked={searchCondition.statusList.includes('GIVEN_BY_ADMIN')}
                             onChange={handleChangeCostChecked}/>
                   <Checkbox label={'광고비 차감'}
                             type={'c'}
-                            id={'COST_DECREASE'}
-                            isChecked={searchCondition.statusList.includes('COST_DECREASE')}
+                            id={'TAKEN_BY_ADMIN'}
+                            isChecked={searchCondition.statusList.includes('TAKEN_BY_ADMIN')}
                             onChange={handleChangeCostChecked}/>
                   <Checkbox label={'환불 신청'}
                             type={'c'}
-                            id={'REFUND_APPLIED'}
-                            isChecked={searchCondition.statusList.includes('REFUND_APPLIED')}
+                            id={'REFUND_REQUEST_OF_USER'}
+                            isChecked={searchCondition.statusList.includes('REFUND_REQUEST_OF_USER')}
                             onChange={handleChangeCostChecked}/>
                   <Checkbox label={'환불 완료'}
                             type={'c'}
-                            id={'REFUND_COMPLETE'}
-                            isChecked={searchCondition.statusList.includes('REFUND_COMPLETE')}
+                            id={'REFUNDED_BY_ADMIN'}
+                            isChecked={searchCondition.statusList.includes('REFUNDED_BY_ADMIN')}
                             onChange={handleChangeCostChecked}/>
                 </>
               }

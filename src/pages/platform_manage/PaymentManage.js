@@ -1,5 +1,11 @@
 
-import {Board, BoardHeader, BoardTableContainer} from "../../assets/GlobalStyles";
+import {
+  Board,
+  BoardHeader,
+  BoardSearchResultTitle,
+  BoardTableContainer,
+  SaveExcelButton
+} from "../../assets/GlobalStyles";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import React, {useCallback, useEffect, useState} from "react";
@@ -19,6 +25,7 @@ import {
 import moment from "moment/moment";
 import {getThisMonth, getToDay} from "../../common/DateUtils";
 import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
+import {TotalCount} from "../../components/table/TableDetail";
 
 
 function PaymentManage() {
@@ -26,10 +33,6 @@ function PaymentManage() {
   const [paymentDataState, setPaymentDataState] = useAtom(paymentDataAtom)
   const [searchPaymentParamsState, setSearchPaymentParamsState] = useAtom(searchPaymentParams)
   const [updatePaymentStatusParams, setUpdatePaymentStatusParams] = useState(updatePaymentStatus)
-
-  //[d] 날짜
-  const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
-  const [startDate, endDate] = dateRange;
 
   //[d] 그리드 데이터
   const [pageSize, ] = useState(10); // 한 페이지 보여줄 데이터
@@ -39,7 +42,7 @@ function PaymentManage() {
 
   useEffect(() => {
     handlePaymentTableData()
-  }, [dateRange])
+  }, [searchPaymentParamsState])
 
   // useEffect(() => {
   //   updatePaymentStatusParams.paymentStatus !== '' && updatePayment(updatePaymentStatusParams)
@@ -48,25 +51,28 @@ function PaymentManage() {
   const handlePaymentTableData = (props={}) => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
     const { skip = (currentPage - 1) * pageSize, limit = pageSize } = props;
 
-    handlePaymentStatus('')
-    setPaymentStatusSelected([])
-    setCheckboxAllSelect(false)
-
     const requestData = {
       pageSize: limit,
       currentPage: skip / limit + 1,
-      searchStartDate: moment(startDate).format('YYYY-MM-DD'),
-      searchEndDate: moment(endDate).format('YYYY-MM-DD'),
-      pointHistoryType: null,
+      searchStartDate: searchPaymentParamsState.startAt,
+      searchEndDate: searchPaymentParamsState.endAt,
+      // pointHistoryType: null,
       paymentStatusType: null,
-      keywordType: null,
-      keyword: null
+      //[d] 결제 신청만 있어서 null 이 아니면 볼 수 없어요~!
+      // paymentStatusType: searchPaymentParamsState.statusList,
+      keywordType: searchPaymentParamsState.searchType,
+      keyword: searchPaymentParamsState.search
     };
+    // console.log(requestData.keywordType)
+    handlePaymentStatus('')
+    setPaymentStatusSelected([])
+    setCheckboxAllSelect(false)
 
     return paymentAllListRequest ( requestData )
       .then(response => {
         // 성공적인 응답 처리
         if (response !== null) {
+          // console.log(response)
           const { totalCount, rows: data } = response;
           setTotalInfo(totalCount);
           return Promise.resolve({ data, count: parseInt(totalCount) });
@@ -84,7 +90,7 @@ function PaymentManage() {
    * 모달안에 매체 검색 선택시
    */
   const handleHistoryAdd = (params) => {
-    console.log(params)
+    // console.log(params)
     // accountCreateInvoiceRecord(params).then(response => {
     //   response ? handlePaymentTableData() : confirmAlert({
     //     title: '이력 추가',
@@ -98,7 +104,7 @@ function PaymentManage() {
     // })
   }
 
-  const dataCallback = useCallback( handlePaymentTableData , [totalInfo])
+  const dataCallback = useCallback( handlePaymentTableData , [totalInfo, searchPaymentParamsState])
 
   const updatePayment = (params) => {
     confirmAlert({
@@ -187,6 +193,14 @@ function PaymentManage() {
           {/*       dataCallback={dataCallback}*/}
           {/*       limit={10}*/}
           {/*/>*/}
+          <BoardSearchResultTitle style={{alignItems:"end", paddingBottom: "10px"}}>
+            <div>
+              <TotalCount><span/>총 <span>{totalInfo}</span> 건의 결제 내역</TotalCount>
+            </div>
+            <div>
+              <SaveExcelButton>엑셀 저장</SaveExcelButton>
+            </div>
+          </BoardSearchResultTitle>
           <ReactDataGrid
             licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
             handle={null}

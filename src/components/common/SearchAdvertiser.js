@@ -1,11 +1,23 @@
 import {useAtom} from "jotai";
 import React, {useEffect, useState} from "react";
-import {ModalBody, ModalHeader} from "../modal/Modal";
+import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import styled from "styled-components";
 import {selKeywordUser} from "../../services/Platform/ManageUserAxios";
 import {modalController} from "../../store";
 import {toast} from "react-toastify";
-import {SaveExcelButton} from "../../assets/GlobalStyles";
+import {
+  ColSpan0,
+  ColSpan2,
+  ColSpan3, ColSpan4,
+  RelativeDiv,
+  RowSpan,
+  SaveExcelButton, SubmitButton,
+  ValidationScript
+} from "../../assets/GlobalStyles";
+import {addHistory} from "../../services/payment/admin/PointAllListRequestAxios"
+import {decimalFormat, removeStr} from "../../common/StringUtils";
+import {useForm} from "react-hook-form";
+import {refundRequest} from "../../services/payment/user/RefundUserAxios";
 export function SearchAdvertiser(props) {
   const {title, onSubmit, btnStyle, historyAdd} = props;
   const [, setModal] = useAtom(modalController)
@@ -15,7 +27,7 @@ export function SearchAdvertiser(props) {
       width: historyAdd !== undefined ? 700 : 600,
       modalComponent: () => {
         return (
-          <SearchModal onSubmit={onSubmit} historyAdd={historyAdd}/>
+          <SearchModal title={title} onSubmit={onSubmit} historyAdd={historyAdd} />
         )
       }
     })
@@ -31,16 +43,34 @@ function SearchModal (props) {
   const [adverSearchInfo, setAdverSearchInfo] = useState([])
   const [selectedItem, setSelectedItem] = useState({})
   const [searchKeyword, setSearchKeyword] = useState('')
-
+  const [historyState, setHistoryState] = useState(false); // 히스토리 여부 선택
+  const [gtSettingMethod, setGtSettingMethod] = useState('GIVEN_BY_ADMIN'); // 지급/차감 설정
+  const [enterAmount, setEnterAmount] = useState(0) // 이력추가 금액 입력
+  const [note, setNote] = useState("") // 비고 내용
+  const {register, handleSubmit, setError, formState:{errors} } = useForm()
   const handleSelect = (item) => {
     setSelectedItem(item)
   }
 
-  const handleSubmit = () => {
+  const handleChange = (event) => {
+    let num = removeStr(event)
+    let numberNum = Number(num)
+    setEnterAmount(numberNum)
+  }
+
+  const searchSubmit = () => {
     if(searchKeyword === '') {
       toast.warning('검색어를 입력해주세요.')
     } else if (selectedItem.id === undefined) {
       toast.warning('광고주를 선택해주세요')
+    } else if(props.title === "이력 추가") {
+      props.onSubmit(selectedItem)
+      setHistoryState(true);
+      // console.log(selectedItem.id);
+      // [d] 해당 광고주 전체 포인트 조회??
+      // adverPointeRquest(selectedItem.id).then(response => {
+      //   console.log("결과 값 검색", response)
+      // })
     } else {
       setModal({
         isShow: false,
@@ -60,7 +90,6 @@ function SearchModal (props) {
   const handleSearch = (e) => {
     if(searchKeyword!==''){
       selKeywordUser(searchKeyword).then(response => {
-        console.log(response)
         setAdverSearchInfo(response)
       })
     } else {
@@ -68,9 +97,41 @@ function SearchModal (props) {
     }
   }
 
+  const onSubmit = async () => {
+    if(enterAmount === 0) {
+      setError('enterAmount', {type: 'required', message: '요청 금액을 입력해 주세요'});
+    }else{
+      if(gtSettingMethod === "GIVEN_BY_ADMIN" || gtSettingMethod === "TAKEN_BY_ADMIN") {
+        const requestData = {
+          userId: selectedItem.id,
+          pointHistoryType: gtSettingMethod,
+          point: gtSettingMethod === "GIVEN_BY_ADMIN"?enterAmount:-enterAmount,
+          description: note
+        }
+        try {
+          console.log(requestData);
+          await addHistory(requestData);
+          // props.onPaymentDetailsReceived(); // 성공적인 응답 처리 후 부모 새로고침 용
+          setEnterAmount(0)
+          setModal({
+            isShow: false,
+            modalComponent: null
+          })
+        } catch (error) {
+          console.error("실패 응답 처리", error); // 실패한 응답 처리
+        }
+      }
+    }
+
+
+
+  }
+
+  const onError = () => console.log(errors)
+
   return (
     <div>
-      <ModalHeader title={"광고주 검색"}/>
+      <ModalHeader title={props.title === null? "광고주 검색" : props.title}/>
       <ModalBody>
         <MediaSearchColumn>
           <div>광고주명</div>
@@ -79,16 +140,20 @@ function SearchModal (props) {
               <input type={'text'}
                      placeholder={"광고주명을 입력해주세요."}
                      autoFocus={true}
-                     value={searchKeyword}
+                     value={historyState === true?selectedItem.adverName:searchKeyword}
                      onChange={e => handleOnSearchKeyword(e)}
+                     disabled={historyState === true?true:false}
                      onKeyDown={event => (event.code === 'Enter') && handleSearch() }
               />
-              <button type={'button'} onClick={handleSearch}>검색</button>
+              <button
+                type={'button'}
+                onClick={handleSearch}
+                disabled={historyState === true?true:false}>검색</button>
             </InputGroup>
           </div>
         </MediaSearchColumn>
         <MediaSearchResult>
-          {adverSearchInfo.length !== 0 &&
+          {adverSearchInfo.length !== 0 && historyState === false ?
             <>
               <table>
                 <thead>
@@ -116,8 +181,94 @@ function SearchModal (props) {
                 </tbody>
               </table>
             </>
+            : null
           }
-          {props.historyAdd === undefined && <MediaSelectedButton onClick={handleSubmit}>선택 완료</MediaSelectedButton>}
+          {historyState === true ?
+          <form onSubmit={handleSubmit(onSubmit, onError)}>
+            <RowSpan>
+              <ColSpan2>지급/차감 설정</ColSpan2>
+              <ColSpan3>
+                <RelativeDiv>
+                  <label>
+                    <input
+                      type={'radio'}
+                      name={'gtSettingMethod'}
+                      value="GIVEN_BY_ADMIN"
+                      checked={gtSettingMethod === 'GIVEN_BY_ADMIN'}
+                      onChange={(e) => setGtSettingMethod(e.target.value)}
+                    />
+                    <span>광고비 지급</span>
+                  </label>
+                  <label>
+                    <input
+                      type={'radio'}
+                      name={'gtSettingMethod'}
+                      value="TAKEN_BY_ADMIN"
+                      checked={gtSettingMethod === 'TAKEN_BY_ADMIN'}
+                      onChange={(e) => setGtSettingMethod(e.target.value)}
+                    />
+                    <span>광고비 차감</span>
+                  </label>
+                </RelativeDiv>
+              </ColSpan3>
+            </RowSpan>
+            <RowSpan style={{position:"relative"}}>
+              <ColSpan0 style={{alignItems:"start", paddingTop:"11px"}}>금액 입력</ColSpan0>
+              <ColSpan3>
+                <Input
+                  type={'text'}
+                  textAlingn={'right'}
+                  value={decimalFormat( enterAmount +' 원')}
+                  maxLength="19"
+                  {...register("enterAmount", {
+                    required: "금액을 입력해 주세요.",
+                    pattern: {
+                      message: "숫자만 입력 가능합니다.",
+                      value: "^[0-9,]+원?$",
+                    },
+                    onChange:(e)=>handleChange(e.target.value)
+                  })}
+                />
+                {errors.enterAmount && <ValidationScript style={{bottom: '-29px', left: '148px',}}>{errors.enterAmount.message}</ValidationScript>}
+              </ColSpan3>
+            </RowSpan>
+            <RowSpan>
+              <ColSpan0 style={{alignItems:"start", paddingTop:"11px"}}>광고비 잔액</ColSpan0>
+              <ColSpan3>
+                <Input
+                  type={'text'}
+                  textAlingn={'right'}
+                  value={decimalFormat( '광고주광고비잔액.. 원')}
+                  disabled={true}
+                />
+                {errors.enterAmount && <ValidationScript style={{bottom: '-40px', left: '142px',}}>{errors.enterAmount.message}</ValidationScript>}
+              </ColSpan3>
+            </RowSpan>
+            <RowSpan style={{width:'100%', marginTop:'35px'}}>
+              <ColSpan0 style={{width: "14%"}}>비고</ColSpan0>
+              <ColSpan4 style={{paddingLeft:"35px"}}>
+                <Input
+                  textAlingn={'left'}
+                  type={'text'}
+                  value={note}
+                  placeholder='비고 입력'
+                  style={{width: "100%"}}
+                  onChange={(e)=> setNote(e.target.value)}
+                />
+              </ColSpan4>
+            </RowSpan>
+            <RowSpan>
+              <SubmitButton type={"submit"} style={{
+                display: "block",
+                width: "200px",
+                margin: "15px auto 0px",
+                padding: "13px 0px"
+              }}>이력 추가</SubmitButton>
+            </RowSpan>
+          </form>
+            :
+          <MediaSelectedButton onClick={searchSubmit}>선택 완료</MediaSelectedButton>}
+
         </MediaSearchResult>
       </ModalBody>
     </div>
@@ -225,4 +376,18 @@ const SwitchUserButton = styled.button`
   padding: 13px 40px;
   border: 1px solid #ddd;
   border-radius: 5px;
+`
+
+const Input = styled.input `
+  width: 210px;
+  font-size: 18px;
+  font-weight: 600;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: ${props => props.textAlingn};
+  padding: 4px 10px;
+  &:after {
+    font-size: 13px;
+    font-weight: 400;
+  }
 `
