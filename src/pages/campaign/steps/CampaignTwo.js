@@ -59,7 +59,7 @@ export function CampaignTwo() {
       let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
       selBudgetInfo(campaignId).then(response => {
         const data = response
-        let budgetRate = {budgetRate : response.pcBudget * 100 / response.dailyAvgBudget}
+        let budgetRate = {budgetRate : response.dailyAvgBudget != 0 ? (response.pcBudget * 100 / response.dailyAvgBudget): 50}
         Object.assign(data,budgetRate)
         console.log(data)
 
@@ -137,12 +137,14 @@ export function CampaignTwo() {
   }
 
   const handleChangeDailyBudget = (event) => {
+    const prevBudgetRate = campaignBudgetInfo.budgetRate != 0 ? campaignBudgetInfo.budgetRate : 50;
+
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
       dailyAvgBudget: parseInt(event.target.value),
-      pcBudget: parseInt(event.target.value) - ((parseInt(event.target.value) * campaignBudgetInfo.budgetRate) / 100),
-      mobBudget: (parseInt(event.target.value) * campaignBudgetInfo.budgetRate) / 100,
-      budgetRate:  50
+      pcBudget: parseInt(event.target.value) *  prevBudgetRate / 100,
+      mobBudget: parseInt(event.target.value) * (100-prevBudgetRate) / 100,
+      budgetRate: prevBudgetRate
     })
   }
 
@@ -152,7 +154,7 @@ export function CampaignTwo() {
         ...campaignBudgetInfo,
         pcBudget: parseInt(event.target.value),
         mobBudget: campaignBudgetInfo.dailyAvgBudget - parseInt(event.target.value),
-        budgetRate: parseInt(event.target.value) * 100 / campaignBudgetInfo.dailyAvgBudget
+        budgetRate: campaignBudgetInfo.dailyAvgBudget != 0 ? Math.round(parseInt(event.target.value) * 100 / campaignBudgetInfo.dailyAvgBudget) : 50
       })
     }
   }
@@ -276,6 +278,8 @@ export function CampaignTwo() {
                   <Input type={'number'}
                          readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
                          style={{color:'#f5811f'}}
+                         step={10}
+                         min={0}
                          value={campaignBudgetInfo.pcBudget !== 0  ? campaignBudgetInfo.pcBudget : 0}
                          onChange={(e) => handleChangePcBudget(e)}
                   />
@@ -292,13 +296,16 @@ export function CampaignTwo() {
                     }}
                   />
                   <Span1>
-                    {!isNaN(campaignBudgetInfo.dailyAvgBudget) && !isNaN(campaignBudgetInfo.pcBudget) && campaignBudgetInfo.dailyAvgBudget !== 0? Math.round(campaignBudgetInfo.pcBudget/ campaignBudgetInfo.dailyAvgBudget * 100) : 50} : {!isNaN(campaignBudgetInfo.dailyAvgBudget) && !isNaN(campaignBudgetInfo.pcBudget)&& campaignBudgetInfo.dailyAvgBudget !== 0 ? Math.round(campaignBudgetInfo.mobBudget /campaignBudgetInfo.dailyAvgBudget * 100) : 50}</Span1>
+                    {campaignBudgetInfo.budgetRate +':'+ (100-campaignBudgetInfo.budgetRate)}
+                  </Span1>
                 </ColSpan1>
                 <ColSpan1>
                   <ColTitle><Span1>MOBILE</Span1></ColTitle>
                   <Input type={'number'}
                          readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
                          style={{color:'#f5811f'}}
+                         step={10}
+                         min={0}
                          value={campaignBudgetInfo.mobBudget !== 0  ? campaignBudgetInfo.mobBudget : 0}
                          onChange={(e) => handleChangeMobileBudget(e)}
                   />
