@@ -54,7 +54,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import {useLocation, useNavigate} from "react-router-dom";
 import {useResetAtom} from "jotai/utils";
 import {multiAxiosCall} from "../../../common/StringUtils";
-import {ValidationScript} from "../../signup/styles";
 
 const RegistryBannerItem = (props) => {
   const {size} = props;
@@ -681,7 +680,6 @@ export function CampaignFour() {
       }
     }else{
       setCampaignCreative(campaignCreativeAtom.init)
-      setCampaignBasicInfo(campaignBasicInfoAtom.init)
     }
     selEnumInfo('BANNER_SIZE').then(response => {
       setBannerSize(response.data)

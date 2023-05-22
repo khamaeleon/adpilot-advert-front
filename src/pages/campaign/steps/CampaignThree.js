@@ -34,7 +34,7 @@ import {stepCampaignAtom} from "../entity";
 import {campaignBasicInfoAtom} from "../entity/Info";
 import {selGroupInfo, selMediaCategoryInfo, updateCampaignConfigInventory} from "../../../services/campaign/GroupAxios";
 import {campaignGroupInfoAtom, mediaCategoryAtom, noViewType} from "../entity/Group";
-import {dateFormat} from "../../../common/StringUtils";
+import {dateFormat, unlimitedDate} from "../../../common/StringUtils";
 import {selEnumInfo} from "../../../services/campaign/InfoAxios";
 import {toast, ToastContainer} from "react-toastify";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -277,7 +277,7 @@ export function CampaignThree() {
     console.log(campaignGroupInfo);
     let param = {
       ...campaignGroupInfo,
-      endDate: exposureDayChecked ? dateFormat(new Date('3000-12-31'), 'YYYY-MM-DD') : endDate,
+      endDate: exposureDayChecked ? unlimitedDate('YYYY-MM-DD') : endDate,
       campaignId: state !== null ? state.campaignId : campaignBasicInfo.campaignId
     };
     updateCampaignConfigInventory(param).then(response => {

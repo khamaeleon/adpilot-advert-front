@@ -17,7 +17,7 @@ import {AdverInfo, Row, ValueText} from "../styles/common";
 import {useAtom, useAtomValue} from "jotai";
 import {stepCampaignAtom} from "../entity";
 import {useLocation, useNavigate} from "react-router-dom";
-import {decimalFormat} from "../../../common/StringUtils";
+import {decimalFormat, isUnlimited} from "../../../common/StringUtils";
 import {
   retrieveAdverConfirm,
   retrieveConfirm, selAdverEnumInfo,
@@ -156,8 +156,7 @@ export function CampaignLookOver() {
                 <HorizontalRule/>
                 <ColSpan2>
                   <Span4>예산 비율</Span4>
-                  <ValueText>PC {decimalFormat(campaignData.pcBudget)}원 /
-                    MOBILE {decimalFormat(campaignData.mobBudget)}원</ValueText>
+                  <ValueText>{campaignData.infiniteBudgetYn !== 'N' ? '무제한' : ('PC' + decimalFormat(campaignData.pcBudget) + '원 / MOBILE' + decimalFormat(campaignData.mobBudget) + '원')}</ValueText>
                 </ColSpan2>
               </Row>
               <Row>
@@ -210,7 +209,7 @@ export function CampaignLookOver() {
               </Row>
               <Row>
                 <ColSpan2>
-                  <Span4>게제 지면</Span4>
+                  <Span4>게재 지면</Span4>
                   <ValueText>
                     {
                       campaignData.inventoryDetail?.exposureInventoryType !== 'MANUAL' ?
@@ -221,8 +220,8 @@ export function CampaignLookOver() {
                 </ColSpan2>
                 <HorizontalRule/>
                 <ColSpan2>
-                  <Span4>게제 기간</Span4>
-                  <ValueText>{campaignData.inventoryDetail?.startDate} ~ {campaignData.inventoryDetail?.endDate}</ValueText>
+                  <Span4>게재 기간</Span4>
+                  <ValueText>{campaignData.inventoryDetail?.startDate} ~ {isUnlimited(campaignData.inventoryDetail?.endDate)}</ValueText>
                 </ColSpan2>
               </Row>
               <Row>

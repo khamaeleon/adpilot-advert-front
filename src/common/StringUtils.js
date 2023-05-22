@@ -78,9 +78,20 @@ export const dateFormat = (date, dateformat) => {
 }
 
 //date 형식 날짜 포맷
-export const isDateOver = (date) => {
+export const unlimitedDate = (format) => {
+  if(format == null) format = 'YYYY-MM-DD';
+  return dateFormat(new Date('3000-12-31'), format);
+}
+//date 형식 날짜 포맷
+export const isUnlimited = (date) => {
+  let returnVal;
   if(date == null) return '';
-  return arrayDateFormat(date, 'YYYYMMDDHHmmss') > moment(new Date()).format('YYYYMMDDHHmmss');
+  if(moment(new Date(date)).isSame(moment(new Date('3000-12-31')))){
+    returnVal = '종료일 미지정'
+  }else{
+    returnVal = date
+  }
+  return returnVal;
 }
 //D-day return (D-day 표시 나중에 사용예정)
 export const compareDday = (date) => {
@@ -99,6 +110,9 @@ export const compareDday = (date) => {
 
   return returnVal;
 }
+
+
+
 
 //나이 번호 포맷
 export const birthDateFormat = (birthDate) => {
