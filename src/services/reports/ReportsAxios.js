@@ -31,6 +31,7 @@ export async function deleteCustomReportsAxios(deleteInfo) {
 
 /**
  * 보고서 리스트 조회 (id)
+ * @userId
  */
 export async function retrieveCustomReportsList(userId){
   let returnVal = null;

@@ -43,6 +43,7 @@ import {
   deleteCustomReportsAdminAxios,
   retrieveCustomReportsAdminDetail
 } from "../../services/reports/ReportsAdminAxios";
+import {confirmAlert} from "react-confirm-alert";
 
 function weekNumberByMonth(dateFormat) {
   const inputDate = new Date(dateFormat);
@@ -201,15 +202,15 @@ const defaultColumn = {
 
 export default function CustomReports() {
   const [searchCondition, setSearchCondition] = useState({
-    pageSize: 10,
+    pageSize: 31,
     currentPage: 1,
-    searchStartDate: getLastMonth().startDay,
+    searchStartDate: getThisMonth().startDay,
     searchEndDate: getToDay(),
     productType: null,
     deviceType: null
   })
-  const [dateActive,setDateActive] = useState('')
-  const [dateRange, setDateRange] = useState([ new Date(getLastMonth().startDay), new Date(getToDay())]);
+  const [dateActive,setDateActive] = useState('thisMonth')
+  const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
   const tokenResult = useAtomValue(tokenResultAtom)
   const [campaignColumn, setCampaignColumn] = useState([])
@@ -220,9 +221,9 @@ export default function CustomReports() {
 
   useEffect(() => {
     const params = {
-      pageSize: 10,
+      pageSize: 31,
       currentPage: 1,
-      searchStartDate: getLastMonth().startDay,
+      searchStartDate: getThisMonth().startDay,
       searchEndDate: getToDay(),
     }
     if(reportsInfo.id === null) {
@@ -267,49 +268,56 @@ export default function CustomReports() {
       setSearchCondition({
         ...searchCondition,
         searchStartDate: getThisMonth().startDay,
-        searchEndDate: getThisMonth().endDay
+        searchEndDate: getThisMonth().endDay,
+        pageSize: 31
       })
       setDateRange([new Date(getThisMonth().startDay), new Date(getThisMonth().endDay)])
     } else if (rangeType === 'lastMonth') {
       setSearchCondition({
         ...searchCondition,
         searchStartDate: getLastMonth().startDay,
-        searchEndDate: getLastMonth().endDay
+        searchEndDate: getLastMonth().endDay,
+        pageSize: 31,
       })
       setDateRange([new Date(getLastMonth().startDay), new Date(getLastMonth().endDay)])
     } else if (rangeType === 'today') {
       setSearchCondition({
         ...searchCondition,
         searchStartDate: getToDay(),
-        searchEndDate: getToDay()
+        searchEndDate: getToDay(),
+        pageSize: 1
       })
       setDateRange([new Date(), new Date()])
     } else if (rangeType === 'lastDay') {
       setSearchCondition({
         ...searchCondition,
         searchStartDate: getLastDay(),
-        searchEndDate: getLastDay()
+        searchEndDate: getLastDay(),
+        pageSize: 1
       })
       setDateRange([new Date(getLastDay()), new Date(getLastDay())])
     } else if (rangeType === 'lastWeekDay') {
       setSearchCondition({
         ...searchCondition,
         searchStartDate: getLastWeekDay().startDay,
-        searchEndDate: getLastWeekDay().endDay
+        searchEndDate: getLastWeekDay().endDay,
+        pageSize: 7
       })
       setDateRange([new Date(getLastWeekDay().startDay), new Date(getLastWeekDay().endDay)])
     } else if (rangeType === 'lastThirtyDay') {
       setSearchCondition({
         ...searchCondition,
         searchStartDate: getLastThirtyDay().startDay,
-        searchEndDate: getLastThirtyDay().endDay
+        searchEndDate: getLastThirtyDay().endDay,
+        pageSize: 30
       })
       setDateRange([new Date(getLastThirtyDay().startDay), new Date(getLastThirtyDay().endDay)])
     } else if (rangeType === 'lastNinetyDay') {
       setSearchCondition({
         ...searchCondition,
         searchStartDate: getLastNinetyDay().startDay,
-        searchEndDate: getLastNinetyDay().endDay
+        searchEndDate: getLastNinetyDay().endDay,
+        pageSize: 90
       })
       setDateRange([new Date(getLastNinetyDay().startDay), new Date(getLastNinetyDay().endDay)])
     }
@@ -346,7 +354,7 @@ export default function CustomReports() {
 
   }
 
-  const handleDeleteReport = async () => {
+  const deleteReport = async() => {
     if(tokenResult.role === 'NORMAL') {
       await deleteCustomReportsAxios({userId:tokenResult.id, userReportSettingId:reportsInfo.id}).then(()=>{
         setReportsInfo({
@@ -364,6 +372,23 @@ export default function CustomReports() {
         navigate('/board/reports')
       })
     }
+  }
+
+  const handleDeleteReport = async () => {
+    confirmAlert({
+      title: '보고서 삭제',
+      message: '삭제 하시겠습니까?',
+      buttons: [
+        {
+          label: '삭제',
+          onClick: () => deleteReport()
+        },{
+          label: '취소',
+          onClick: () => null
+        }
+      ]
+    });
+
   }
 
   return(
