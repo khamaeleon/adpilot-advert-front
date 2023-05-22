@@ -4,7 +4,8 @@ import DragToSelect from "../common/DragToSelect";
 import {ModalBody, ModalHeader} from "./Modal";
 import React from "react";
 import InsertToSelect from "../common/InsertToSelect";
-import {ColTitle, RowSpan} from "../../assets/GlobalStyles";
+import {ColTitle, RowSpan, Site} from "../../assets/GlobalStyles";
+import styled from "styled-components";
 
 function TimeTableComponent (props) {
   return(
@@ -44,8 +45,26 @@ export default function TimeTable(props){
     })
   }
   return (
-    <>
-      <div onClick={handleOpenTimeTable}>{props.title}</div>
-    </>
+    <ButtonDiv>
+      <div onClick={handleOpenTimeTable}>
+        <Site/>
+      </div>
+    </ButtonDiv>
   )
 }
+
+const ButtonDiv = styled.div`
+& > div {
+  border-radius: 5px;
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  -webkit-box-align: center;
+  align-items: center;
+  justify-content: center;
+  display:flex;
+}
+
+`
