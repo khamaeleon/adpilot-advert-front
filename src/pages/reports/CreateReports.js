@@ -37,7 +37,6 @@ const columnList= {
   BY_CAMPAIGN: "캠페인 명",
   BY_PRODUCT: "광고 상품",
   BY_EVENT: "이벤트 명",
-  COUNT_BY_ADVERTISE: "광고주 수",
   TOTAL_EXPOSURE_COUNT: "총 노출수",
   EXPOSURE_COUNT: "노출수",
   TOTAL_CLICK_COUNT: "총 클릭수",
@@ -291,9 +290,9 @@ export default function CreateReports() {
                   <DefaultItemButton
                     active={includeItem('BY_MONTHLY')}
                     onClick={()=>handleAddPeriodItem('BY_MONTHLY')}>월별</DefaultItemButton>
-                  <DefaultItemButton
-                    active={period === 'NONE'}
-                    onClick={()=>handleAddPeriodItem('NONE')}>설정안함</DefaultItemButton>
+                  {/*<DefaultItemButton*/}
+                  {/*  active={period === 'NONE'}*/}
+                  {/*  onClick={()=>handleAddPeriodItem('NONE')}>설정안함</DefaultItemButton>*/}
                 </DefaultItemContainer>
               </Row>
               <VerticalRule/>
@@ -326,17 +325,8 @@ export default function CreateReports() {
               <Row>
                 <DefaultItemContainer>
                   <DefaultItemButton
-                    active={includeItem('COUNT_BY_ADVERTISE')}
-                    onClick={()=>handleAddReportsItem('COUNT_BY_ADVERTISE')}>광고주수</DefaultItemButton>
-                  <DefaultItemButton
-                    active={includeItem('TOTAL_EXPOSURE_COUNT')}
-                    onClick={()=>handleAddReportsItem('TOTAL_EXPOSURE_COUNT')}>총 노출수</DefaultItemButton>
-                  <DefaultItemButton
                     active={includeItem('EXPOSURE_COUNT')}
                     onClick={()=>handleAddReportsItem('EXPOSURE_COUNT')}>노출수</DefaultItemButton>
-                  <DefaultItemButton
-                    active={includeItem('TOTAL_CLICK_COUNT')}
-                    onClick={()=>handleAddReportsItem('TOTAL_CLICK_COUNT')}>총클릭수</DefaultItemButton>
                   <DefaultItemButton
                     active={includeItem('VALID_CLICK_COUNT')}
                     onClick={()=>handleAddReportsItem('VALID_CLICK_COUNT')}>클릭수</DefaultItemButton>
@@ -351,7 +341,7 @@ export default function CreateReports() {
                     onClick={()=>handleAddReportsItem('CPC')}>CPC</DefaultItemButton>
                   <DefaultItemButton
                     active={includeItem('CONVERSION_PRICE')}
-                    onClick={()=>handleAddReportsItem('CONVERSION_PRICE')}>전환가격</DefaultItemButton>
+                    onClick={()=>handleAddReportsItem('CONVERSION_PRICE')}>전환단가</DefaultItemButton>
                   <DefaultItemButton
                     active={includeItem('AMOUNT_PURCHASED_AVG')}
                     onClick={()=>handleAddReportsItem('AMOUNT_PURCHASED_AVG')}>평균구매액</DefaultItemButton>
@@ -423,7 +413,7 @@ export default function CreateReports() {
                 showCellBorders={'horizontal'}
                 showZebraRows={false}
                 activateRowOnFocus
-                emptyText={'데이터가 없습니다.'}
+                emptyText={columns.length === 0 ? '보고서 항목을 선택해주세요.' : ''}
               />
             </RowSpan>
           </RowSpan>

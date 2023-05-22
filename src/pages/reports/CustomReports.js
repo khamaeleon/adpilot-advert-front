@@ -388,7 +388,6 @@ export default function CustomReports() {
         }
       ]
     });
-
   }
 
   return(
@@ -398,7 +397,7 @@ export default function CustomReports() {
         <RowSpan box={true} column={true}>
           <RowSpan>
             <ColSpan1 style={{borderBottom: '1px solid #ddd', justifyContent: "space-between"}}>
-              <div style={{padding: 10}}>{`${reportInfo.reportName}`}</div>
+              <div style={{padding: 10}}>{`${reportInfo.adverName ? reportInfo.adverName : '어드민'}_${reportInfo.reportName}`}</div>
               <DeleteButton style={{padding: 8}} onClick={handleDeleteReport}/>
             </ColSpan1>
           </RowSpan>
