@@ -102,11 +102,14 @@ export function DashBoardCondition(props) {
   }
 
   const handelChangeDateRange = (date) => {
-    setSearchCondition({
-      ...searchCondition,
-      searchStartDate: moment(date[0]).format('YYYY-MM-DD'),
-      searchEndDate: moment(date[1]).format('YYYY-MM-DD')
-    })
+    if(date[1] !== null){
+      setSearchCondition({
+        ...searchCondition,
+        searchStartDate: moment(date[0]).format('YYYY-MM-DD'),
+        searchEndDate: moment(date[1]).format('YYYY-MM-DD')
+      })
+    }
+
     setDateRange(date)
   }
 
