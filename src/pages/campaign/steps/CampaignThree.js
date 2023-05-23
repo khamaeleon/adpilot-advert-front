@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import {getToDay} from "../../../common/DateUtils";
 import {
   AgentType,
   Board,
@@ -8,7 +7,6 @@ import {
   CalendarBox,
   CalendarIcon,
   CancelButton,
-  ColSpan1,
   ColSpan2,
   ColSpan3,
   ColSpan4,
@@ -55,6 +53,19 @@ export function CampaignThree() {
   const navigate = useNavigate()
   const resetInfo = useResetAtom(campaignGroupInfoAtom)
 
+  useEffect(()=>{
+    resetInfo();
+    selMediaCategoryInfo().then(response => {
+      if (response) {
+        setMediaCategory(response)
+      }
+    });
+
+    selEnumInfo('AGENT_TYPE').then(response => {
+      setAgentTypeState(response.data)
+    });
+  }, [])
+
 
   useEffect(() => {
     if((campaignBasicInfo.step !== undefined && campaignBasicInfo.step.includes('STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED')) || state !== null){
@@ -69,25 +80,20 @@ export function CampaignThree() {
           new Date(response.startDate),
           new Date(response.endDate !== '3000-12-31' ? response.endDate: null)
         ])
-      })
+      });
     }
-    selMediaCategoryInfo().then(response => {
-      if (response) {
-        setMediaCategory(response)
-      }
-    })
-    selEnumInfo('AGENT_TYPE').then(response => {
-      setAgentTypeState(response.data)
-    })
-  }, [])
+
+  }, [state])
 
 
   useEffect(() => {
-    setCampaignGroupInfo({
-      ...campaignGroupInfo,
-      startDate: dateFormat(startDate, 'YYYY-MM-DD'),
-      endDate:dateFormat(endDate, 'YYYY-MM-DD'),
-    })
+    if(dateRange?.length != 0){
+      setCampaignGroupInfo({
+        ...campaignGroupInfo,
+        startDate: dateFormat(startDate, 'YYYY-MM-DD'),
+        endDate: dateFormat(endDate, 'YYYY-MM-DD'),
+      })
+    }
   },[dateRange])
 
   const handleAgentType = (event) => {
@@ -273,6 +279,15 @@ export function CampaignThree() {
     clearErrors('name')
   }
 
+  const onCancel = () => {
+    if(state !== null){
+      navigate('/board/dashboard')
+    } else{
+      setStepCampaign({steps: 1})
+    }
+    resetInfo();
+  }
+
   const onSubmit = () => {
     console.log(campaignGroupInfo);
     let param = {
@@ -315,7 +330,7 @@ export function CampaignThree() {
                       return <Controller name={'exposureAgentType'}
                                          control={control}
                                          key={key}
-                                         rules={{required: {value: campaignGroupInfo.exposureAgentType.length === 0, message:'노출 영역은 최소한 하나는 입력해주세요'}}}
+                                         rules={{required: {value: campaignGroupInfo.exposureAgentType?.length === 0, message:'노출 영역은 최소한 하나는 입력해주세요'}}}
                                          render={({field}) =>
                                            <Checkbox label={data.label} type={'c'} id={'event'+key+data.value} value={data.value} isChecked={campaignGroupInfo.exposureAgentType?.some(event => event === data.value)}
                                                      onChange={handleAgentType} inputRef={field.ref}/>
@@ -351,7 +366,7 @@ export function CampaignThree() {
                 <label>
                   <Controller name={'inventoryCATEGORY'}
                               control={control}
-                              rules={{required: {value: campaignGroupInfo.exposureInventoryType === "CATEGORY" && campaignGroupInfo.allowInventoryCategories.length === 0, message:'카테고리를 최소한 하나는 입력해주세요'}}}
+                              rules={{required: {value: campaignGroupInfo.exposureInventoryType === "CATEGORY" && campaignGroupInfo.allowInventoryCategories?.length === 0, message:'카테고리를 최소한 하나는 입력해주세요'}}}
                               render={({field}) =>
                                 <input
                                   type={'radio'}
@@ -424,7 +439,7 @@ export function CampaignThree() {
                 <label>
                   <Controller name={'disInventoryCATEGORY'}
                               control={control}
-                              rules={{required: {value: campaignGroupInfo.disExposureInventoryType === "CATEGORY" && campaignGroupInfo.disAllowInventoryCategories.length === 0, message:'카테고리를 최소한 하나는 입력해주세요'}}}
+                              rules={{required: {value: campaignGroupInfo.disExposureInventoryType === "CATEGORY" && campaignGroupInfo.disAllowInventoryCategories?.length === 0, message:'카테고리를 최소한 하나는 입력해주세요'}}}
                               render={({field}) =>
                                 <input
                                   type={'radio'}
@@ -492,7 +507,7 @@ export function CampaignThree() {
                     <Controller
                       control={control}
                       name="endDate"
-                      rules={{required: {value: !exposureDayChecked && dateRange[1] === null, message:'게재 기간을 설정해주세요'}}}
+                      rules={{required: {value: (exposureDayChecked ? dateRange[0] === null : dateRange[1] === null), message:'게재 기간을 설정해주세요'}}}
                       render={({ field: { onChange, onBlur, value, ref } }) => (
                         <CustomDatePicker
                           selectsRange={!exposureDayChecked}
@@ -873,7 +888,7 @@ export function CampaignThree() {
         </BoardSearchResult>
       </Board>
       <SubmitContainer>
-        <CancelButton type={'button'} onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 1})}>{state !== null ? '목록' : '이전'}</CancelButton>
+        <CancelButton type={'button'} onClick={()=>onCancel()}>{state !== null ? '목록' : '이전'}</CancelButton>
         <SubmitButton type={'submit'}>{state !== null ? '수정' : '다음[3/4]'}</SubmitButton>
       </SubmitContainer>
       <ToastContainer
