@@ -64,7 +64,7 @@ export function CampaignTwo() {
 
       selBudgetInfo(campaignId).then(response => {
         const data = response;
-        let budgetRate = {budgetRate : response.dailyAvgBudget != 0 ? (response.pcBudget * 100 / response.dailyAvgBudget): 50}
+        let budgetRate = {budgetRate : Math.round(response.dailyAvgBudget != 0 ? (response.pcBudget * 100 / response.dailyAvgBudget): 50)}
         Object.assign(data,budgetRate);
 
         setCampaignBudgetInfo(data);
