@@ -33,7 +33,7 @@ import {useResetAtom} from "jotai/utils";
 export function CampaignLookOver() {
   const {state} = useLocation()
   const navigate = useNavigate()
-  const campaignBasicInfo = useAtom(campaignBasicInfoAtom)
+  const [campaignBasicInfo] = useAtom(campaignBasicInfoAtom)
   const [, setStepCampaign] = useAtom(stepCampaignAtom)
   const [campaignData, setCampaignData] = useState(null)
   const [campaignName, setCampaignName] = useState('')
@@ -42,6 +42,7 @@ export function CampaignLookOver() {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [agentTypeState, setAgentTypeState] = useState([])
   const resetBasicInfo = useResetAtom(campaignBasicInfoAtom)
+
   const inventoryExposure = (inventoryDetail) => {
     setUserTargetConfig(
       [
@@ -62,18 +63,20 @@ export function CampaignLookOver() {
   }
   useEffect(() => {
     if(tokenUserInfo.role !== 'NORMAL'){
+
       selEnumInfo('AGENT_TYPE').then(response => {
         setAgentTypeState(response.data)
       })
-      let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId;
-      (campaignBasicInfo.campaignId !== '' || state !== null) && retrieveConfirm(campaignId).then(response => {
+
+      let campaignId = (state !== null ? state.campaignId : campaignBasicInfo.campaignId);
+      if(campaignId != null) retrieveConfirm(campaignId).then(response => {
         setCampaignData({
           ...response
         })
         setCampaignName(response.name)
         inventoryExposure(response.inventoryDetail)
       })
-      resetBasicInfo()
+
     } else {
       selAdverEnumInfo('AGENT_TYPE').then(response => {
         setAgentTypeState(response.data)
@@ -95,6 +98,7 @@ export function CampaignLookOver() {
     if(state !== null) {
       navigate('/board/dashboard')
     } else {
+      resetBasicInfo();
       setStepCampaign({steps: 0})
     }
   }
@@ -102,13 +106,16 @@ export function CampaignLookOver() {
   const onSubmit = () => {
     campaignName !== '' ? UpdateCampaignDefaultInfo(state.campaignId, campaignName).then(response => {
       if(response) {
-        toast.success("캠페인명이 수정되었습니다.")
+        toast.success("캠페인명이 수정되었습니다.",{autoClose: 100,delay: 0})
         toast.onChange(payload => {
           if(payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
             navigate('/board/dashboard')
           }
         })
-      } else toast.error('캠페인명 수정이 실패하였습니다.')
+        resetBasicInfo();
+      } else {
+        toast.error('캠페인명 수정이 실패하였습니다.')
+      }
     }) : toast.warning('캠페인명을 입력해주세요.')
   }
 
@@ -168,7 +175,7 @@ export function CampaignLookOver() {
                 <HorizontalRule/>
                 <ColSpan2>
                   <Span4>예산 비율</Span4>
-                  <ValueText>{campaignData.infiniteBudgetYn !== 'N' ? '무제한' : ('PC' + decimalFormat(campaignData.pcBudget) + '원 / MOBILE' + decimalFormat(campaignData.mobBudget) + '원')}</ValueText>
+                  <ValueText>{campaignData.infiniteBudgetYn !== 'N' ? '무제한' : ('PC\u0009' + decimalFormat(campaignData.pcBudget) + '원 / MOBILE\u0009' + decimalFormat(campaignData.mobBudget) + '원')}</ValueText>
                 </ColSpan2>
               </Row>
               <Row>
