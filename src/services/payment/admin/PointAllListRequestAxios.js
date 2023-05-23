@@ -1,7 +1,7 @@
 import {AdminAxios} from "../../../common/Axios";
 
 const POINTALL = '/adver/payments/point/histories';
-const ADVERPOINTALL = '/payments/point/';
+const ADVERPOINTALL = '/adver/payments/point/';
 const ADDHISTORY = '/adver/payments/point/add-history';
 /**
  * 전체 광고주 결제 정보 요청
@@ -47,7 +47,6 @@ export async function addHistory( param ) {
   let returnVal = null;
   await AdminAxios('POST', ADDHISTORY, param)
     .then((response) => {
-      console.log("addHistory!!", response);
       const {responseCode, data} = response
       if (responseCode.statusCode === 200) {
         returnVal = data

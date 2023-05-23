@@ -1,5 +1,5 @@
 import {useAtom} from "jotai";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../modal/Modal";
 import {modalController} from "../../../store";
 import {
@@ -17,15 +17,15 @@ import styled from "styled-components";
 import {decimalFormat, removeStr} from "../../../common/StringUtils";
 import {useForm} from "react-hook-form";
 import {tokenResultAtom} from "../../../pages/login/entity/Common";
-import {refundProcess, refundProssce} from "../../../services/payment/admin/RefundProcessAxios";
+import {refundProcess} from "../../../services/payment/admin/RefundProcessAxios";
+import {refundReceivedAtomData} from "../../../pages/platform_manage/entity/Payment";
 export function RefundProcessingButton(props) {
   const {onSubmit, modalInfo, onSave, title, refundData } = props;
   const [, setModal] = useAtom(modalController)
-
   const handleModalComponent = () => {
     setModal({
       isShow: true,
-      width: 800,
+      width: 900,
       modalComponent: () => {
         return (
           <RefundRequestModal
@@ -85,20 +85,19 @@ export function RefundRequestTable(props) {
 function RefundRequestModal (props) {
   const {title, refundData} = props
   const [, setModal] = useAtom(modalController)
-  const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [refundType, setRefundType] = useState("전액 환불") // 환불 종류
   const [refundAmount, setRefundAmount] = useState(0) // 환불 금액
   const [note, setNote] = useState("") // 비고 내용
+  const [refundReceivedData, setRefundReceivedData] = useAtom(refundReceivedAtomData)
   const {register, handleSubmit, setError, formState:{errors} } = useForm()
-  // const [userPoint, ] = useAtom(retrieveUserPoint)
-  // const [requestAmount, ] = useAtom(requestAmountPoint)
+
   const handleChange = (event) => {
     let num = removeStr(event)
     let numberNum = Number(num)
     setRefundAmount(numberNum)
   }
-  const onSubmit = async () => {
 
+  const onSubmit = async () => {
     if (refundType === "전액 환불") {
       const requestData = {
         userPointHistoryId: refundData.data.id,
@@ -108,7 +107,7 @@ function RefundRequestModal (props) {
       try {
         // 성공적인 응답 처리
         await refundProcess(requestData);
-        // props.onPaymentDetailsReceived(); // 요청 내용 실시간 업데이트용..
+        setRefundReceivedData(!refundReceivedData);
       } catch (error) {
         // 실패한 응답 처리
         console.error("실패 응답 처리", error);
@@ -128,7 +127,7 @@ function RefundRequestModal (props) {
         try {
           // 성공적인 응답 처리
           await refundProcess(requestData);
-          // props.onPaymentDetailsReceived();
+          setRefundReceivedData(!refundReceivedData);
           setRefundAmount(0);
         } catch (error) {
           console.error("실패 응답 처리", error); // 실패한 응답 처리

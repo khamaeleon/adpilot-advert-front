@@ -14,10 +14,9 @@ import {
   SaveExcelButton, SubmitButton,
   ValidationScript
 } from "../../assets/GlobalStyles";
-import {addHistory} from "../../services/payment/admin/PointAllListRequestAxios"
+import {addHistory, adverPointeRquest} from "../../services/payment/admin/PointAllListRequestAxios"
 import {decimalFormat, removeStr} from "../../common/StringUtils";
 import {useForm} from "react-hook-form";
-import {refundRequest} from "../../services/payment/user/RefundUserAxios";
 export function SearchAdvertiser(props) {
   const {title, onSubmit, btnStyle, historyAdd} = props;
   const [, setModal] = useAtom(modalController)
@@ -46,6 +45,7 @@ function SearchModal (props) {
   const [historyState, setHistoryState] = useState(false); // 히스토리 여부 선택
   const [gtSettingMethod, setGtSettingMethod] = useState('GIVEN_BY_ADMIN'); // 지급/차감 설정
   const [enterAmount, setEnterAmount] = useState(0) // 이력추가 금액 입력
+  const [adverPoint, setAdverPoint] = useState(0);
   const [note, setNote] = useState("") // 비고 내용
   const {register, handleSubmit, setError, formState:{errors} } = useForm()
   const handleSelect = (item) => {
@@ -64,13 +64,15 @@ function SearchModal (props) {
     } else if (selectedItem.id === undefined) {
       toast.warning('광고주를 선택해주세요')
     } else if(props.title === "이력 추가") {
-      props.onSubmit(selectedItem)
       setHistoryState(true);
-      // console.log(selectedItem.id);
       // [d] 해당 광고주 전체 포인트 조회??
-      // adverPointeRquest(selectedItem.id).then(response => {
-      //   console.log("결과 값 검색", response)
-      // })
+      try {
+        adverPointeRquest(selectedItem.id).then(response => {
+          setAdverPoint(response.availablePoint);
+        })
+      } catch (error) {
+       console.error("실패 응답 처리", error);
+      }
     } else {
       setModal({
         isShow: false,
@@ -100,6 +102,9 @@ function SearchModal (props) {
   const onSubmit = async () => {
     if(enterAmount === 0) {
       setError('enterAmount', {type: 'required', message: '요청 금액을 입력해 주세요'});
+      // 구문 하나 더 나눠서 광고비 잔애보다 지급 혹은 차감 금액이 더 크면 얼럿!!
+    }else if(enterAmount > adverPoint) {
+      setError('enterAmount', {type: 'required', message: '요청 금액이 광고비 잔액을 초과 합니다.'});
     }else{
       if(gtSettingMethod === "GIVEN_BY_ADMIN" || gtSettingMethod === "TAKEN_BY_ADMIN") {
         const requestData = {
@@ -109,9 +114,9 @@ function SearchModal (props) {
           description: note
         }
         try {
-          console.log(requestData);
           await addHistory(requestData);
           // props.onPaymentDetailsReceived(); // 성공적인 응답 처리 후 부모 새로고침 용
+          props.onSubmit()
           setEnterAmount(0)
           setModal({
             isShow: false,
@@ -238,7 +243,7 @@ function SearchModal (props) {
                 <Input
                   type={'text'}
                   textAlingn={'right'}
-                  value={decimalFormat( '광고주광고비잔액.. 원')}
+                  value={decimalFormat( adverPoint + '원')}
                   disabled={true}
                 />
                 {errors.enterAmount && <ValidationScript style={{bottom: '-40px', left: '142px',}}>{errors.enterAmount.message}</ValidationScript>}

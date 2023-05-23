@@ -121,28 +121,36 @@ export const PaymentDetailsColumns = [
     },
     {
         name: 'creditCardType',
-        header: '결제 수단(카드)',
+        header: '결제 수단',
         defaultFlex: 1,
         resizable: false,
         textAlign: 'center',
-        render: ({ value })=> {
+        render: ({value, cellProps}) =>{
             return (
-              <p>{value === true ? value : '-'}</p>
+              cellProps.data.bankType !== null ?
+                (<p>{cellProps.data.bankType}</p>) :
+                cellProps.data.creditCardType !== null ?
+                  (
+                    <>
+                        <p>{cellProps.data.creditCardType}</p>
+                        <p>{cellProps.data.cardNo}</p>
+                    </>
+                  ) : "-"
             )
         }
     },
-    {
-        name: 'bankType',
-        header: '결제 수단(계좌번호)',
-        defaultFlex: 1,
-        resizable: false,
-        textAlign: 'center',
-        render: ({ value })=> {
-            return (
-              <p>{value === true ? value : '-'}</p>
-            )
-        }
-    },
+    // {
+    //     name: 'bankType',
+    //     header: '결제 수단(계좌번호)',
+    //     defaultFlex: 1,
+    //     resizable: false,
+    //     textAlign: 'center',
+    //     render: ({ value })=> {
+    //         return (
+    //           <p>{value === true ? value : '-'}</p>
+    //         )
+    //     }
+    // },
     {
         name: 'amount',
         header: '결제/신청 금액',

@@ -215,7 +215,6 @@ function PaymentManageUser(props) {
           const pointDetails = await fetchPointDetails();
           // 환불 정보 조회
           retrieveUserRefundInfo();
-
           setTotalInfo(paymentDetails.count);
           setTotalPointInfo(pointDetails.count);
         } else {
@@ -226,7 +225,6 @@ function PaymentManageUser(props) {
         console.error("Failed to fetch data:", error);
       }
     };
-
     fetchData();
   }, [dateRange]);
   //[d] 차트 데이터에서 역으로 변동값 감지해서 다시 던저주기 paging 처리 관련...
@@ -281,9 +279,7 @@ function PaymentManageUser(props) {
                 <RowSpan style={{margin:"0"}}>
                   <ColSpan4>
                     <AdvertisingCostStatus>
-                      {/*<span className={'won'}>{decimalFormat(advertisingBalance)}</span>*/}
                       <span className={'won'}>{decimalFormat(advertisingBalance + requestAmountValue)}</span>
-                      {/*여긴 광고비 잔액이 들어와야 함*/}
                     </AdvertisingCostStatus>
                   </ColSpan4>
                 </RowSpan>
@@ -347,17 +343,6 @@ function PaymentManageUser(props) {
                 <SaveExcelButton>엑셀 저장</SaveExcelButton>
               </div>
             </BoardSearchResultTitle>
-            {/*<Table columns={PaymentDetailsColumns}*/}
-            {/*       // totalInfo 내부 totacCount 값이 아직 없으니까 임시로 0값 맹글어 두자~*/}
-            {/*       totalCount={[totalInfo, '결제 내역']}*/}
-            {/*       data={dataSource}*/}
-            {/*       showHoverRows={false}*/}
-            {/*       activeCell={[0]}*/}
-            {/*       noDirectives={true}*/}
-            {/*       pagenations={true}*/}
-            {/*       limit={10}*/}
-            {/*       emptyText={'결제 내역이 없습니다.'}*/}
-            {/*/>*/}
             <ReactDataGrid
               licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
               handle={null}
@@ -375,15 +360,6 @@ function PaymentManageUser(props) {
               sortable={false}
               style={gridStyle}
             />
-            {/*<Table columns={PointDetailsColumns}*/}
-            {/*       totalCount={[0, '포인트 지급 내역']}*/}
-            {/*       data={pointDetails}*/}
-            {/*       showHoverRows={false}*/}
-            {/*       activeCell={[0]}*/}
-            {/*       pagenations={false}*/}
-            {/*       noDirectives={true}*/}
-            {/*       emptyText={'포인트 지급 내역이 없습니다.'}*/}
-            {/*/>*/}
             <BoardSearchResultTitle style={{alignItems:"end", paddingTop:"20px", paddingBottom: "10px"}}>
               <div>
                 <TotalCount><span/>총 <span>{totalPointInfo}</span> 건의 포인트 지급 내역</TotalCount>

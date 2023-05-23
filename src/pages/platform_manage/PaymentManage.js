@@ -56,8 +56,8 @@ function PaymentManage() {
       currentPage: skip / limit + 1,
       searchStartDate: searchPaymentParamsState.startAt,
       searchEndDate: searchPaymentParamsState.endAt,
-      // pointHistoryType: null,
-      paymentStatusType: null,
+      // pointHistoryTypes: null,
+      paymentStatusTypes: null,
       //[d] 결제 신청만 있어서 null 이 아니면 볼 수 없어요~!
       // paymentStatusType: searchPaymentParamsState.statusList,
       keywordType: searchPaymentParamsState.searchType,

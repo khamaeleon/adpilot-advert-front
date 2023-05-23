@@ -230,7 +230,7 @@ export function PaymentCondition(props) {
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [searchTypeSelect] = useState(searchType)
   const [searchCostTypeSelect] = useState()
-  const [searchSelected, setSearchSelected] = useState(searchTypeSelect[0])
+  const [, setSearchSelected] = useState(searchTypeSelect[0])
   const params = useParams()
 
   const handelChangeDateRange = (date) => {
@@ -290,12 +290,12 @@ export function PaymentCondition(props) {
     } else{
       setSearchCondition({
         ...searchCondition,
-        statusList: []
+        statusList: ['REFUND_REQUEST_OF_USER']
       })
     }
     setIsCheckedAll(event.target.checked)
   }
-
+  //[d] 결제관리 체크박스
   const handleChangeChecked = (event) => {
     //체크박스 핸들링
     if(event.currentTarget.checked){
@@ -310,19 +310,28 @@ export function PaymentCondition(props) {
       })
     }
   }
-
+  //[d] 광고비 지급 관리 체크박스
   const handleChangeCostChecked = (event) => {
     //체크박스 핸들링
-    if(event.currentTarget.checked){
+    if(event.currentTarget.checked) {
       setSearchCondition({
         ...searchCondition,
         statusList: searchCondition.statusList.concat(event.currentTarget.id)
       })
     }else{
-      setSearchCondition({
-        ...searchCondition,
-        statusList: searchCondition.statusList.filter(id => id !== event.currentTarget.id)
-      })
+      console.log(event.target.id);
+      //[d] 필수 요청값 환불 신청
+      if(event.target.id === 'REFUND_REQUEST_OF_USER'){
+        setSearchCondition({
+          ...searchCondition,
+          statusList: searchCondition.statusList.concat(event.currentTarget.id)
+        })
+      }else{
+        setSearchCondition({
+          ...searchCondition,
+          statusList: searchCondition.statusList.filter(id => id !== event.currentTarget.id)
+        })
+      }
     }
   }
   const handleSearchType = (selectSearchType) => {

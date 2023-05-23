@@ -9,7 +9,6 @@ import {
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import React, {useCallback, useEffect, useState} from "react";
-import {useAtom} from "jotai";
 import Checkbox from "../../components/common/Checkbox";
 import Table from "../../components/table";
 import {toast, ToastContainer} from "react-toastify";
@@ -20,10 +19,12 @@ import {
   paymentDataAtom,
   searchPaymentParams,
   searchPaymentType,
+  searchPointType,
+  refundReceivedAtomData,
   updatePaymentStatus
 } from "./entity/Payment";
 import {StatusBtn} from "./styles/common";
-import {atom} from "jotai/index";
+import {atom, useAtom} from "jotai/index";
 import {dateFormat, decimalFormat} from "../../common/StringUtils";
 import {getThisMonth, getToDay} from "../../common/DateUtils";
 import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
@@ -33,17 +34,15 @@ import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 import {RefundProcessingButton} from "../../components/payment/admin/RefundProcessing";
 import {refundAllProcess, refundProcess} from "../../services/payment/admin/RefundProcessAxios";
 
-
 const costPaymentDataAtom = atom([{
-  name: 'id',
+  name: 'pointHistoryType',
   status: {
     value:"REFUND_REQUEST_OF_USER"
   }
 }])
-export const updateCostPaymentStatus = {
-  // paymentStatus: "",
-  paymentIdList: [],
-}
+
+
+
 /**
  * 결재 관리 현황 조회
  */
@@ -54,22 +53,6 @@ export const searchCostPaymentParams = atom({
   searchType: 'ALL',
   search: ''
 })
-
-
-// export function logRefundRequests() {
-//   costPaymentColumns.forEach(column => {
-//     if (column.name === 'pointHistoryType') {
-//       column.data.forEach(row => {
-//         if (row.value === 'REFUND_REQUEST_OF_USER') {
-//           console.log(row);
-//         }
-//       });
-//     }
-//   });
-// }
-
-// const cellPropsAtom = atom(null);
-// export const useCellProps = () => useAtom(cellPropsAtom);
 
 /**
  * 결재 관리 리스트 컬럼 설정
@@ -85,6 +68,7 @@ export const costPaymentColumns = [
     header: '신청 일시',
     width: 150,
     showColumnMenuTool: false,
+    textAlign: 'center',
     render: ({value}) => {
       return <p>{dateFormat(value, 'YYYY.MM.DD HH:mm')}</p>
     }
@@ -94,13 +78,16 @@ export const costPaymentColumns = [
     header: '신청 상태',
     width: 120,
     showColumnMenuTool: false,
+    textAlign: 'center',
     render: CellComponent,
   },
   {
+    //[d] 은행명 + 계좌 번호
     name: 'refundBankType',
-    header: '은행명',
+    header: '결제 정보',
     showColumnMenuTool: false,
-    render: ({ value })=> {
+    textAlign: 'center',
+    render: ({ value, cellProps })=> {
       let valueType = {
         //[d] 아래 목록 따로 빼서 관리 사용자, 어드민 모두 사용
         KDB_BANK: { label: 'KDB산업은행' },
@@ -131,35 +118,56 @@ export const costPaymentColumns = [
         TOSS_BANK: { label: '토스뱅크' },
       }[value] || { label: '', color: '' };
       return (
-        <p>{valueType.label}</p>
+        <>
+          {valueType.label === "" ?
+            <p>-</p>
+            :
+            <>
+              <p>{valueType.label}</p>
+              <p>{cellProps.data.refundBankAccount}</p>
+            </>
+          }
+        </>
       )
     }
-  },
-  {
-    name: 'refundBankAccount',
-    header: '계좌번호',
-    showColumnMenuTool: false,
   },
   {
     name: 'adverName',
     header: '광고주명',
     showColumnMenuTool: false,
+    textAlign: 'center',
   },
   {
     name: 'username',
     header: '광고주 아이디',
     showColumnMenuTool: false,
+    textAlign: 'center',
   },
   {
-    //[d] 신청 아이디 적당한 값이 애매함...
-    name: 'refundBankAccountHolder',
+    //[d] 신청 아이디 적당한 값이 애매함...UPDATED_BY 값으로 나와 있음..
+    name: 'modifiedBy',
     header: '신청 아이디',
     showColumnMenuTool: false,
+    textAlign: 'center',
+    render: ({value}) =>{
+    return (
+        <>
+          {value === "" ?
+            <p>-</p>
+            :
+            <>
+              <p>{value}</p>
+            </>
+          }
+        </>
+      )
+    }
   },
   {
     name: 'point',
     header: '광고비',
     showColumnMenuTool: false,
+    textAlign: 'center',
     render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
@@ -167,6 +175,7 @@ export const costPaymentColumns = [
     header: '상태 변경일',
     width: 120,
     showColumnMenuTool: false,
+    textAlign: 'center',
     render: ({value}) => {
       return <p>{dateFormat(value, 'YYYY.MM.DD')}</p>
     }
@@ -174,44 +183,34 @@ export const costPaymentColumns = [
   {
     name: 'description',
     header: '비고',
-    width: 180,
+    width: 400,
     sortable: false,
     showColumnMenuTool: false,
+    textAlign: 'center',
   }
-]
+];
 function CellComponent({ value, cellProps }) {
-
   let valueType = {
-    CHARGE_OF_PAYMENT: { label: '결제 신청', color: 'blue' },
-    REFUND_OF_PAYMENT: { label: 'REFUND_OF_PAYMENT', color: 'orange' },
+    // CHARGE_OF_PAYMENT: { label: '결제 신청', color: 'blue' },
+    // REFUND_OF_PAYMENT: { label: 'REFUND_OF_PAYMENT', color: 'orange' },
     GIVEN_BY_ADMIN: { label: '광고비 지급', color: 'black' },
     TAKEN_BY_ADMIN: { label: '광고비 차감', color: 'red' },
     REFUND_REQUEST_OF_USER: { label: '환불 신청', color: 'orange' },
     REFUNDED_BY_ADMIN: { label: '환불 완료', color: 'green' },
-    ERROR: { label: 'ERROR', color: 'red' },
+    // ERROR: { label: 'ERROR', color: 'red' },
   }[value] || { label: '', color: '' };
 
-  // const [, setCellPropsState] = useCellProps();
-  //
-  // const logRefundRequests = () => {
-  //   if (valueType.label === '환불 신청') {
-  //     setCellPropsState(cellProps);
-  //   }
-  // };
-
   return (
-
     valueType.label === '환불 신청'?
       (
         <RefundProcessingButton
-          title={"환불 처리"}
+          title={"환불 신청"}
           modalInfo={'ADMIN'}
           onSave={null}
           onSubmit={"환불 완료"}
           refundData={cellProps}
-          // onClick={logRefundRequests}
         />
-    ):(
+      ):(
         <p
           style={{
             color: valueType.color,
@@ -225,23 +224,23 @@ function CellComponent({ value, cellProps }) {
 
 function AdvertisingPayments() {
   const [totalInfo, setTotalInfo] = useState(0)
-  const [paymentDataState, setPaymentDataState] = useAtom(costPaymentDataAtom)
+  const [paymentDataState, ] = useAtom(costPaymentDataAtom)
   const [searchPaymentParamsState, setSearchPaymentParamsState] = useAtom(searchCostPaymentParams)
-  const [updatePaymentStatusParams, setUpdatePaymentStatusParams] = useState(updateCostPaymentStatus)
 
   //[d] 그리드 데이터
   const [pageSize, ] = useState(10); // 한 페이지 보여줄 데이터
   const [currentPage, ] = useState(1); // 현재 페이지
-  // const [checkUseRefundData, ] = useAtom(cellPropsAtom); // 개별 환불 신청 클릭 시 해당 데이터
+
+  //[d] 체크박스
+  const [paymentStatusSelected, setPaymentStatusSelected] = useState([]) // 체크박스 id 값
+  const [checkboxAllSelect, setCheckboxAllSelect] = useState(false);
+
+  //[d] 환불처리
+  const [refundReceivedData, setRefundReceivedData] = useAtom(refundReceivedAtomData)
+
   const gridStyle = {minHeight: 510, textAlign: 'center'}
-
-  useEffect(() => {
-    handlePaymentTableData()
-  }, [searchPaymentParamsState])
-
-  // useEffect(() => {
-  //   updatePaymentStatusParams.paymentStatus !== '' && updatePayment(updatePaymentStatusParams)
-  // }, [updatePaymentStatusParams.paymentIdList])
+  const disabledArr = ['REFUND_REQUEST_OF_USER']
+  let checkAllId = []
 
   const handlePaymentTableData = (props={}) => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
     const { skip = (currentPage - 1) * pageSize, limit = pageSize } = props;
@@ -251,14 +250,10 @@ function AdvertisingPayments() {
       currentPage: skip / limit + 1,
       searchStartDate: searchPaymentParamsState.startAt,
       searchEndDate: searchPaymentParamsState.endAt,
-      pointHistoryType: searchPaymentParamsState.statusList,
+      pointHistoryTypes: searchPaymentParamsState.statusList,
       keywordType: searchPaymentParamsState.searchType,
       keyword: searchPaymentParamsState.search
     };
-
-    // console.log(requestData.pointHistoryType)
-    // console.log(requestData.keywordType, requestData.keyword)
-    // 특정 값을 요청하는데 다 뿌려줌.. DB에서 뿌려준느 부분 확인 필요...
 
     // handlePaymentStatus('')
     setPaymentStatusSelected([])
@@ -282,7 +277,7 @@ function AdvertisingPayments() {
   }
 
   /**
-   * 모달안에 매체 검색 선택시
+   * 모달안에 매체 검색 후 이력 추가완료
    */
   const handleHistoryAdd = (params) => {
     // accountCreateInvoiceRecord(params).then(response => {
@@ -296,10 +291,8 @@ function AdvertisingPayments() {
     //     ]
     //   });
     // })
+    handlePaymentTableData();
   }
-
-  // const dataCallback = useCallback( handlePaymentTableData , [paymentDataState])
-  const dataCallback = useCallback( handlePaymentTableData , [totalInfo, searchPaymentParamsState, paymentDataState])
 
   const updatePayment = (params) => {
     confirmAlert({
@@ -318,22 +311,15 @@ function AdvertisingPayments() {
       ]
     });
   }
-
   const handlePaymentStatus = async(event) => {
-    if(updatePaymentStatusParams.paymentIdList.length !== 0){
-      setUpdatePaymentStatusParams({
-        ...updatePaymentStatusParams,
-        // paymentStatus: event,
-        paymentIdList: paymentStatusSelected,
-      })
+    if(paymentStatusSelected.length !== 0){
       const requestData = {
-        userPointHistoryIds: updatePaymentStatusParams.paymentIdList,
+        userPointHistoryIds: paymentStatusSelected,
       };
       try {
         // 성공적인 응답 처리
         await refundAllProcess(requestData);
-        // console.log(requestData.userPointHistoryIds);
-        // props.onPaymentDetailsReceived(); // 요청 내용 실시간 업데이트용..
+        setRefundReceivedData(!refundReceivedData);
       } catch (error) {
         // 실패한 응답 처리
         console.error("실패 응답 처리", error);
@@ -344,20 +330,18 @@ function AdvertisingPayments() {
   }
 
 
-  const [paymentStatusSelected, setPaymentStatusSelected] = useState([]) // 체크박스 id 값
-  const [checkboxAllSelect, setCheckboxAllSelect] = useState(false);
-  const disabledArr = ['REFUND_REQUEST_OF_USER']
   const handlePaymentCheckAll = (event) => {
     if (event.target.checked) {
-      let allArr = paymentDataState
-        .filter(obj => !disabledArr.includes(obj.status.value))
-        .map(data => data.id);
+      // let allArr = paymentDataState
+      //   .filter(obj => !disabledArr.includes(obj.status.value))
+      //   .map(data => data.id);
+      let allArr = checkAllId;
       setPaymentStatusSelected(allArr);
       if (allArr.length !== 0) {
         setCheckboxAllSelect(true);
       } else {
         setCheckboxAllSelect(false);
-        toast.warning('상태 변경 불가.');
+        // toast.warning('상태 변경 불가.');
       }
     } else {
       setPaymentStatusSelected([]);
@@ -383,6 +367,14 @@ function AdvertisingPayments() {
   const checkboxColumn = {
     renderCheckbox: (checkboxProps, cellProps) => {
       const value = cellProps.data.pointHistoryType;
+      const cellData = Array.isArray(cellProps.data) ? cellProps.data : [];
+
+
+      checkAllId = cellData
+        .filter((cell) => cell.pointHistoryType === 'REFUND_REQUEST_OF_USER')
+        .map((cell) => cell.id);
+
+
       if (value === 'REFUND_REQUEST_OF_USER') {
         return (
           <div style={{ minWidth: 100 }}>
@@ -402,22 +394,26 @@ function AdvertisingPayments() {
     },
   };
 
+  useEffect(() => {
+    handlePaymentTableData();
+  }, [searchPaymentParamsState])
 
+  const dataCallback = useCallback( handlePaymentTableData , [totalInfo, searchPaymentParamsState, paymentDataState, refundReceivedData])
 
   return (
     <>
       <Board>
         <BoardHeader>결제 현황</BoardHeader>
-        <PaymentCondition searchType={searchPaymentType} searchCondition={searchPaymentParamsState} setSearchCondition={setSearchPaymentParamsState} handleTableData={handlePaymentTableData} />
+        <PaymentCondition searchType={searchPointType} searchCondition={searchPaymentParamsState} setSearchCondition={setSearchPaymentParamsState} handleTableData={handlePaymentTableData} />
         <BoardTableContainer>
           <RowSpan>
             <ColSpan2 style={{marginTop: 20, paddingLeft: 0}}>
-              {/*<Checkbox label={'전체'}*/}
-              {/*          type={'c'}*/}
-              {/*          id={'AllSelect'}*/}
-              {/*          isChecked={checkboxAllSelect}*/}
-              {/*          onChange={(e)=> handlePaymentCheckAll(e)}*/}
-              {/*/>*/}
+              <Checkbox label={'전체'}
+                        type={'c'}
+                        id={'AllSelect'}
+                        isChecked={checkboxAllSelect}
+                        onChange={(e)=> handlePaymentCheckAll(e)}
+              />
               <StatusBtn type={'button'} id={'REFUND_REQUEST_OF_USER'} onClick={(event)=> handlePaymentStatus(event.currentTarget.id)}>환불완료</StatusBtn>
             </ColSpan2>
             <div style={{display: 'flex', justifyContent: 'flex-end'}}>
@@ -477,4 +473,5 @@ function AdvertisingPayments() {
 }
 
 export default AdvertisingPayments
+
 

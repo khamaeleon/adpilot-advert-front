@@ -1,5 +1,5 @@
 import {useAtom} from "jotai";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../modal/Modal";
 import {modalController} from "../../../store";
 import {
@@ -53,7 +53,7 @@ function RefundRequestModal (props) {
   const [refundAmount, setRefundAmount] = useState(0) // 환불 금액
   const [note, setNote] = useState("") // 비고 내용
   const {register, handleSubmit, setError, formState:{errors} } = useForm()
-  const [userPoint, ] = useAtom(retrieveUserPoint)
+  const [userPoint, setUserPoint] = useAtom(retrieveUserPoint)
   const [requestAmount, ] = useAtom(requestAmountPoint)
   const handleChange = (event) => {
       let num = removeStr(event)
@@ -61,49 +61,48 @@ function RefundRequestModal (props) {
       setRefundAmount(numberNum)
   }
   const onSubmit = async () => {
-
     if (refundType === "전액 환불") {
-      const requestData = {
-        userId: tokenUserInfo.id,
-        refundAmount: -(userPoint + requestAmount),
-        description: note
-      };
-      console.log("환불금액", requestData.refundAmount);
-      console.log("유저포인트", userPoint+requestAmount);
-      try {
-        await refundRequest(requestData);
-        props.onPaymentDetailsReceived(); // 성공적인 응답 처리
-        setRefundAmount(0);
-      } catch (error) {
-        console.error("실패 응답 처리", error); // 실패한 응답 처리
+      if (userPoint === 0) {
+        setError('refundAmount', { type: 'required', message: '환불 가능한 금액이 없습니다.' });
+      } else {
+        const requestData = {
+          userId: tokenUserInfo.id,
+          refundAmount: -userPoint,
+          description: note
+        };
+        try {
+          await refundRequest(requestData);
+          props.onPaymentDetailsReceived(); // 성공적인 응답 처리
+          setUserPoint(0); // userPoint 광고비 잔액 실시간 차감
+          setRefundAmount(0);
+          setModal({ isShow: false });
+        } catch (error) {
+          console.error("실패 응답 처리", error); // 실패한 응답 처리
+        }
       }
-
-      setModal({ isShow: false });
     } else if (refundType === "부분 환불") {
-      console.log("환불금액", refundAmount);
-      console.log("유저포인트", userPoint+requestAmount);
-      if (refundAmount > (userPoint+requestAmount)) {
-        setError('refundAmount', {type: 'required', message: '환불 금액이 광고비 잔액보다 큽니다.'});
+      if (refundAmount > (userPoint + requestAmount)) {
+        setError('refundAmount', { type: 'required', message: '환불 금액이 광고비 잔액보다 큽니다.' });
       } else if (refundAmount === 0) {
-        setError('refundAmount', {type: 'required', message: '환불 금액을 입력해 주세요.'});
+        setError('refundAmount', { type: 'required', message: '환불 금액을 입력해 주세요.' });
       } else {
         const requestData = {
           userId: tokenUserInfo.id,
           refundAmount: -refundAmount,
           description: note
         };
-        console.log(requestData.refundAmount)
         try {
           await refundRequest(requestData);
+          setUserPoint(userPoint - refundAmount);
           props.onPaymentDetailsReceived(); // 성공적인 응답 처리
+          setModal({ isShow: false });
         } catch (error) {
           console.error("실패 응답 처리", error); // 실패한 응답 처리
         }
-
-        setModal({isShow: false});
       }
     }
   };
+
   const onError = () => console.log(errors)
 
     return (
