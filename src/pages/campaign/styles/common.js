@@ -242,10 +242,9 @@ export const Row = styled.div`
     width: 120px;
     margin-right: 0 !important;
   }
-  & > input {
+  & input {
     padding: 10px;
     width: 80%;
-    background-color: #f9fafb;
     border: 1px solid #e5e5e5;
     border-radius: 5px;
     height: 36px;

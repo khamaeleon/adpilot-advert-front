@@ -5,7 +5,8 @@ import {
   ColSpan2,
   ColTitle,
   Input,
-  RelativeDiv, ResetButton,
+  RelativeDiv,
+  ResetButton,
   RowSpan,
   Span4,
   SubmitButton,
@@ -25,20 +26,17 @@ import {tokenResultAtom} from "../login/entity/Common";
 import {useAtom, useAtomValue} from "jotai";
 import {useNavigate} from "react-router-dom";
 import {reportsInfoAtom} from "../../components/aside/entity";
-import {selAdverPixelDetailList} from "../../services/header/ManagePixelAxios";
-import {selTemporaryList} from "../../services/campaign/InfoAxios";
 import {createCustomReportsAdminAxios, retrieveCustomReportsAdminList} from "../../services/reports/ReportsAdminAxios";
 
 
 const columnList= {
-  BY_DAILY: "날짜별",
+  BY_DAILY: "일별",
   BY_WEEKLY: "주별",
   BY_MONTHLY: "월별",
   BY_ADVERTISE: "광고주 명",
   BY_CAMPAIGN: "캠페인 명",
   BY_PRODUCT: "광고 상품",
   BY_EVENT: "이벤트 명",
-  COUNT_BY_ADVERTISE: "광고주 수",
   TOTAL_EXPOSURE_COUNT: "총 노출수",
   EXPOSURE_COUNT: "노출수",
   TOTAL_CLICK_COUNT: "총 클릭수",
@@ -73,7 +71,6 @@ export default function CreateReports() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    console.log(creativeInfo)
     if(tokenResult.role !== 'NORMAL') {
       setCreativeInfo({
         ...creativeInfo,
@@ -91,13 +88,8 @@ export default function CreateReports() {
     })
   }, []);
 
-  useEffect(()=>{
-    console.log(columns)
-  },[columns])
   const handleSearchAdvertiser = (data) => {
-    console.log(data)
     setCreativeInfo(data)
-    console.log(data)
   }
 
   const handleAddPeriodItem = (item) => {
@@ -112,11 +104,13 @@ export default function CreateReports() {
     }
     if(item === 'NONE') {
       setPeriod('NONE')
-      setScopes([])
-      setColumns([])
+      const newPeriod = columns.filter(item => item.name !== 'BY_DAILY' && item.name !== 'BY_WEEKLY' && item.name !== 'BY_MONTHLY')
+      console.log(newPeriod)
+      setColumns(newPeriod !== undefined ? newPeriod : [])
     } else if(scopes.length === 0 && item === 'NONE') {
       toast.warning("기간 광고정보 중 하나는 선택해야합니다.")
     } else {
+      const newPeriod = columns.find(item => item.name !== 'BY_DAILY' && item.name !== 'BY_WEEKLY' && item.name !== 'BY_MONTHLY')
       setPeriod(item)
       setColumns([data])
     }
@@ -132,11 +126,12 @@ export default function CreateReports() {
       showColumnMenuTool: false,
       draggable: false,
     }
-    console.log(item)
     if(item === 'NONE') {
+      const newScopes = columns.filter(item => item.name !== 'BY_PRODUCT' && item.name !== 'BY_ADVERTISE' && item.name !== 'BY_EVENT' && item.name !== 'BY_CAMPAIGN')
       setScopes([])
-      setPeriod('NONE')
-      setColumns([])
+      setColumns(newScopes !== undefined ? newScopes : [])
+    } else if(item === 'NONE' && period === 'NONE') {
+      toast.warning("기간 광고정보 중 하나는 선택해야합니다.")
     } else {
       if(columns.filter(datum => datum.name === item).length === 0){
         setScopes(prev => [...prev, item])
@@ -162,14 +157,15 @@ export default function CreateReports() {
     if(scopes.length === 0 && period === 'NONE') {
       toast.warning("기간항목과 광고정보항목을 선택해야 합니다.")
     } else {
-      console.log(columns)
-      if(columns.filter(datum => datum.name === item).length === 0){
+      console.log(item)
+      if(dataItems.filter(datum => datum === item).length === 0){
         setColumns(prev => [...prev, data])
-        setDataItems(prev => [...prev, data.name])
+        setDataItems(prev => [...prev, item])
       } else {
         const newColumnData = columns.filter(datum => datum.name !== item)
+        const newDataItems = dataItems.filter(datum => datum !== item)
         setColumns(newColumnData)
-        setDataItems(newColumnData)
+        setDataItems(newDataItems !== undefined ? newDataItems : [])
       }
     }
   }
@@ -184,6 +180,7 @@ export default function CreateReports() {
   }
   const handleCreateReports = async () => {
     let params;
+    console.log(dataItems)
     if (period === 'NONE' && scopes.length === 0) {
       toast.warning("기간별 항목과 광고정보항목을 중 하나는 필수로 선택해야 합니다.")
     } else if(columns.length < 2){
@@ -293,9 +290,9 @@ export default function CreateReports() {
                   <DefaultItemButton
                     active={includeItem('BY_MONTHLY')}
                     onClick={()=>handleAddPeriodItem('BY_MONTHLY')}>월별</DefaultItemButton>
-                  <DefaultItemButton
-                    active={period === 'NONE'}
-                    onClick={()=>handleAddPeriodItem('NONE')}>설정안함</DefaultItemButton>
+                  {/*<DefaultItemButton*/}
+                  {/*  active={period === 'NONE'}*/}
+                  {/*  onClick={()=>handleAddPeriodItem('NONE')}>설정안함</DefaultItemButton>*/}
                 </DefaultItemContainer>
               </Row>
               <VerticalRule/>
@@ -328,17 +325,8 @@ export default function CreateReports() {
               <Row>
                 <DefaultItemContainer>
                   <DefaultItemButton
-                    active={includeItem('COUNT_BY_ADVERTISE')}
-                    onClick={()=>handleAddReportsItem('COUNT_BY_ADVERTISE')}>광고주수</DefaultItemButton>
-                  <DefaultItemButton
-                    active={includeItem('TOTAL_EXPOSURE_COUNT')}
-                    onClick={()=>handleAddReportsItem('TOTAL_EXPOSURE_COUNT')}>총 노출수</DefaultItemButton>
-                  <DefaultItemButton
                     active={includeItem('EXPOSURE_COUNT')}
                     onClick={()=>handleAddReportsItem('EXPOSURE_COUNT')}>노출수</DefaultItemButton>
-                  <DefaultItemButton
-                    active={includeItem('TOTAL_CLICK_COUNT')}
-                    onClick={()=>handleAddReportsItem('TOTAL_CLICK_COUNT')}>총클릭수</DefaultItemButton>
                   <DefaultItemButton
                     active={includeItem('VALID_CLICK_COUNT')}
                     onClick={()=>handleAddReportsItem('VALID_CLICK_COUNT')}>클릭수</DefaultItemButton>
@@ -353,7 +341,7 @@ export default function CreateReports() {
                     onClick={()=>handleAddReportsItem('CPC')}>CPC</DefaultItemButton>
                   <DefaultItemButton
                     active={includeItem('CONVERSION_PRICE')}
-                    onClick={()=>handleAddReportsItem('CONVERSION_PRICE')}>전환가격</DefaultItemButton>
+                    onClick={()=>handleAddReportsItem('CONVERSION_PRICE')}>전환단가</DefaultItemButton>
                   <DefaultItemButton
                     active={includeItem('AMOUNT_PURCHASED_AVG')}
                     onClick={()=>handleAddReportsItem('AMOUNT_PURCHASED_AVG')}>평균구매액</DefaultItemButton>
@@ -425,7 +413,7 @@ export default function CreateReports() {
                 showCellBorders={'horizontal'}
                 showZebraRows={false}
                 activateRowOnFocus
-                emptyText={'데이터가 없습니다.'}
+                emptyText={columns.length === 0 ? '보고서 항목을 선택해주세요.' : ''}
               />
             </RowSpan>
           </RowSpan>

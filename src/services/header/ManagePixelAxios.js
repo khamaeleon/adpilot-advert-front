@@ -85,7 +85,6 @@ export async function selAdverPixelDetailList(userId) {
   await AdminAxios('GET', ACTION_URL + ADVER_LIST +'/'+userId ,null)
     .then((response) => {
       const {data, responseCode} =response
-      console.log(data)
       if(responseCode.statusCode ===200){
         returnVal = data
       }else{

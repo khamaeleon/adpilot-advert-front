@@ -6,7 +6,6 @@ export const customReportsColumns = [
   {name: 'BY_CAMPAIGN', header: "캠페인 명", width: 100, textAlign: 'center'},
   {name: 'BY_PRODUCT', header: "광고 상품", width: 100, textAlign: 'center'},
   {name: 'BY_EVENT', header: "이벤트 명", width: 100, textAlign: 'center'},
-  {name: 'COUNT_BY_ADVERTISE', header: "광고주 수", width: 100, textAlign: 'center'},
   {name: 'TOTAL_EXPOSURE_COUNT', header: "총 노출수", width: 100, textAlign: 'center'},
   {name: 'EXPOSURE_COUNT', header: "노출수", width: 100, textAlign: 'center'},
   {name: 'CLICK_COUNT', header: "총 클릭수", width: 100, textAlign: 'center'},

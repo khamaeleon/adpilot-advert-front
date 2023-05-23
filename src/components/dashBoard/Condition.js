@@ -4,7 +4,7 @@ import {
   CalendarBox,
   CalendarIcon,
   ColSpan0,
-  ColSpan1,
+  ColSpan1, ColSpan2,
   ColSpan3,
   ColTitle,
   CustomDatePicker,
@@ -102,11 +102,14 @@ export function DashBoardCondition(props) {
   }
 
   const handelChangeDateRange = (date) => {
-    setSearchCondition({
-      ...searchCondition,
-      searchStartDate: moment(date[0]).format('YYYY-MM-DD'),
-      searchEndDate: moment(date[1]).format('YYYY-MM-DD')
-    })
+    if(date[1] !== null){
+      setSearchCondition({
+        ...searchCondition,
+        searchStartDate: moment(date[0]).format('YYYY-MM-DD'),
+        searchEndDate: moment(date[1]).format('YYYY-MM-DD')
+      })
+    }
+
     setDateRange(date)
   }
 
@@ -291,7 +294,7 @@ export function DashBoardCondition(props) {
           </div>
         </ColSpan0>
         {role !== 'NORMAL' &&
-          <ColSpan1 style={{marginLeft: 20}}>
+          <ColSpan0 style={{marginLeft: 20}}>
             <ColTitle style={{paddingLeft: 0}}>검색어</ColTitle>
             <Input type={'text'}
                    placeholder={'광고주명 및 아이디 검색'}
@@ -301,7 +304,7 @@ export function DashBoardCondition(props) {
 
             />
             <SearchButton onClick={handleData}>검색</SearchButton>
-          </ColSpan1>
+          </ColSpan0>
         }
       </RowSpan>
     </BoardSearchDetail>
