@@ -39,14 +39,15 @@ export function CampaignOne() {
   const [temporaryBool, setTemporaryBool] = useState(false)
   const [goalList, setGoalList] = useState(null)
   const [pixelList, setPixelList] = useState(null)
-  const {register, handleSubmit, setValue, control, formState: {errors}, clearErrors} = useFormContext()
+  const {register, handleSubmit, setValue, reset, control, formState: {errors}, clearErrors} = useFormContext()
   /**
    * 캠페인 목표 설정
    */
   useEffect(() => {
-    selEnumInfo('CAMPAIGN_CONVERSION_GOAL').then(response => {
+    selEnumInfo(campaignBasicInfo.goalType).then(response => {
       setGoalList(response.data)
     })
+
     if(stepCampaign.steps !== null){
       selAdverPixelDetailList(campaignBasicInfo.userId).then(response => {
         let clonePixelList = []
@@ -55,7 +56,10 @@ export function CampaignOne() {
         })
         setPixelList(clonePixelList)
       })
-    } else resetInfo()
+    } else {
+      resetInfo();
+      reset();
+    }
   }, [])
   /**
    * 광고주 설정
@@ -89,7 +93,6 @@ export function CampaignOne() {
      * 임시저장 선택
      */
     selTemporaryList(data.id).then(response =>{
-      console.log(response)
       if(response !== null && response.length !==0) {
         setCampaignTemporaryList(response)
         setTemporaryBool(true)
@@ -155,7 +158,6 @@ export function CampaignOne() {
       goal: goalInfo,
       goalValue: 0
     })
-    console.log(goalInfo)
     clearErrors('goal')
   }
   /**
@@ -189,7 +191,7 @@ export function CampaignOne() {
   }
 
   const onSubmit = (data) => {
-    if(campaignBasicInfo.step !==undefined){
+    if(campaignBasicInfo.step !== ''){
       setStepCampaign({steps: 1})
     }else{
       resistCampaignBasic({

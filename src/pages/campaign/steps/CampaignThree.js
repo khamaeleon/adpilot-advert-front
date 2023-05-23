@@ -40,7 +40,7 @@ import {useResetAtom} from "jotai/utils";
 
 export function CampaignThree() {
   const [, setStepCampaign] = useAtom(stepCampaignAtom)
-  const [campaignBasicInfo] = useAtom(campaignBasicInfoAtom)
+  const [campaignBasicInfo, setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
   const [campaignGroupInfo, setCampaignGroupInfo] = useAtom(campaignGroupInfoAtom)
   const [exposureDayChecked, setExposureDayChecked] = useState(false)
   const [mediaCategory, setMediaCategory] = useAtom(mediaCategoryAtom)
@@ -49,7 +49,7 @@ export function CampaignThree() {
   const [dateRange, setDateRange] = useState([]);
   const [startDate, endDate] = dateRange
   const {register, handleSubmit, reset, setValue, control, formState: {errors}, clearErrors} = useFormContext()
-  const {state} =useLocation()
+  const {state} = useLocation()
   const navigate = useNavigate()
   const resetInfo = useResetAtom(campaignGroupInfoAtom)
 
@@ -64,11 +64,12 @@ export function CampaignThree() {
     selEnumInfo('AGENT_TYPE').then(response => {
       setAgentTypeState(response.data)
     });
+
   }, [])
 
 
   useEffect(() => {
-    if((campaignBasicInfo.step !== undefined && campaignBasicInfo.step.includes('STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED')) || state !== null){
+    if((state !== null || ['STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED'].includes(campaignBasicInfo.step))){
       let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
       selGroupInfo(campaignId).then(response =>{
         setCampaignGroupInfo(response)
@@ -84,7 +85,6 @@ export function CampaignThree() {
     }
 
   }, [state])
-
 
   useEffect(() => {
     if(dateRange?.length != 0){
@@ -289,7 +289,6 @@ export function CampaignThree() {
   }
 
   const onSubmit = () => {
-    console.log(campaignGroupInfo);
     let param = {
       ...campaignGroupInfo,
       endDate: exposureDayChecked ? unlimitedDate('YYYY-MM-DD') : endDate,
@@ -306,6 +305,13 @@ export function CampaignThree() {
             }
           })
         } else {
+          if(!['STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED'].includes(campaignBasicInfo.step)){
+            setCampaignBasicInfo({
+              ...campaignBasicInfo,
+              step: "STEP3_INVENTORY"
+            })
+          }
+
           setStepCampaign({steps: 3})
         }
       }

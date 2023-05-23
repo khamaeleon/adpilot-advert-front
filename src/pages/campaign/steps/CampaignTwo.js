@@ -41,7 +41,7 @@ import {multiAxiosCall} from "../../../common/StringUtils";
 
 export function CampaignTwo() {
   const setStepCampaign = useSetAtom(stepCampaignAtom)
-  const campaignBasicInfo = useAtomValue(campaignBasicInfoAtom)
+  const [campaignBasicInfo, setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
   const [campaignBudgetInfo, setCampaignBudgetInfo] = useAtom(campaignBudgetInfoAtom)
   const [budgetTimeListState, setBudgetTimeListState] = useState(null)
   const [budgetEventListState, setBudgetEventListState] = useState(null)
@@ -53,24 +53,29 @@ export function CampaignTwo() {
   const resetInfo = useResetAtom(campaignBudgetInfoAtom)
   const {register, handleSubmit,reset,setError,setValue, control, formState: {errors}, clearErrors} = useFormContext()
 
-  useEffect(() => {
-    if (campaignBasicInfo.step !=='INIT' || state !== null ) {
-      //수정
-      let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
-      selBudgetInfo(campaignId).then(response => {
-        const data = response
-        let budgetRate = {budgetRate : response.dailyAvgBudget != 0 ? (response.pcBudget * 100 / response.dailyAvgBudget): 50}
-        Object.assign(data,budgetRate)
-        console.log(data)
+  useEffect(()=>{
+      resetInfo()
+  },[])
 
-        setCampaignBudgetInfo(data)
+  useEffect(() => {
+    if (state !== null || ['STEP2_BUDGET','STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED'].includes(campaignBasicInfo.step)) {
+      //수정
+      let campaignId = (state !== null ? state.campaignId : campaignBasicInfo.campaignId);
+
+      selBudgetInfo(campaignId).then(response => {
+        const data = response;
+        let budgetRate = {budgetRate : response.dailyAvgBudget != 0 ? (response.pcBudget * 100 / response.dailyAvgBudget): 50}
+        Object.assign(data,budgetRate);
+
+        setCampaignBudgetInfo(data);
         selBudgetTimeDetailInfo(userId, data.budgetTimeId).then(response => {
-          setTimeBudgetDetailDataState(response)
+          setTimeBudgetDetailDataState(response);
         })
-        reset(response)
+        reset(response);
       })
-    } else resetInfo()
-    let userId = state !== null ? state.userId : campaignBasicInfo?.userId
+    }
+
+    let userId = state !== null ? state.userId : campaignBasicInfo?.userId;
 
     const callbackFunc = (response) => {
       setBudgetTimeListState(response[0].timeGroups.map(data => {return {value: data.eventId, label: data.groupName}}))
@@ -80,7 +85,7 @@ export function CampaignTwo() {
     multiAxiosCall([selBudgetTimeList(userId), selBudgetEventList(userId), selPriceEventList(userId)], callbackFunc)
 
 
-  }, [])
+  }, [state])
   /**
    * 시간대별 예산 셀렉트
    * @param selectedBudgetTime
@@ -217,7 +222,16 @@ export function CampaignTwo() {
               }
             })
           }
-        } else setStepCampaign({steps: 2})
+        } else {
+          if(!['STEP2_BUDGET','STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED'].includes(campaignBasicInfo.step)){
+            setCampaignBasicInfo({
+              ...campaignBasicInfo,
+              step: "STEP2_BUDGET"
+            })
+          }
+
+          setStepCampaign({steps: 2})
+        }
       }
     })
 
