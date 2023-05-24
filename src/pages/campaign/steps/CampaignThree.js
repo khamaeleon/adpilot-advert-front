@@ -403,7 +403,7 @@ export function CampaignThree() {
                     <span>직접 선택</span>
                   </label>
                   {campaignGroupInfo.exposureInventoryType === 'MANUAL' &&
-                    <InventoryButton title={'지면선택'} type={'allow'}/>
+                    <InventoryButton title={'게재 지면 설정'} buttonText={'지면선택'} type={'allow'}/>
                   }
                   {campaignGroupInfo.exposureInventoryType === 'MANUAL' && campaignGroupInfo.allowInventoryIds?.length !== 0 &&
                     <small>{campaignGroupInfo.allowInventoryIds?.length}개 지면 송출 설정</small>
@@ -430,7 +430,7 @@ export function CampaignThree() {
               </ColSpan4>
             }
             <ColSpan4>
-              <Span4>송출 제한 지면 설정</Span4>
+              <Span4>송출 제한 지면</Span4>
               <RelativeDiv>
                 <label>
                   <input
@@ -476,7 +476,7 @@ export function CampaignThree() {
                     <span>직접 선택</span>
                   </label>
                   {campaignGroupInfo.disExposureInventoryType === 'MANUAL' &&
-                    <InventoryButton title={'지면선택'} type={'disExposure'}/>
+                    <InventoryButton title={'송출 제한 지면 설정'} buttonText={'지면선택'} type={'disExposure'}/>
                   }
                   {campaignGroupInfo.disExposureInventoryType === 'MANUAL' && campaignGroupInfo.disAllowInventoryIds?.length !== 0 &&
                     <small>{campaignGroupInfo.disAllowInventoryIds?.length}개 지면 송출 설정</small>

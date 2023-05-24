@@ -15,7 +15,7 @@ import {selSearchMediaInfo, selSearchMediaList} from "../../services/campaign/Gr
 import {toast} from "react-toastify";
 
 export function InventoryButton(props) {
-  const {title, type, historyAdd} = props;
+  const {title, buttonText, type} = props;
   const [, setModal] = useAtom(modalController)
   const handleModalComponent = () => {
     setModal({
@@ -23,17 +23,17 @@ export function InventoryButton(props) {
       width: 1370,
       modalComponent: () => {
         return (
-          <SearchModal historyAdd={historyAdd} type={type} />
+          <SearchModal type={type} title={title} />
         )
       }
     })
   }
 
-  return <SmallButton type={'button'} onClick={handleModalComponent}>{title}</SmallButton>
+  return <SmallButton type={'button'} onClick={handleModalComponent}>{buttonText}</SmallButton>
 }
 
 function SearchModal (props) {
-  const {type} =props
+  const {type, title} =props
   const [, setModal] = useAtom(modalController)
   const [allowInventoryIds, setAllowInventoryIds] = useAtom(allowInventoryIdsAtom)
   const [disAllowInventoryIds, setDisAllowInventoryIds] = useAtom(disAllowInventoryIdsAtom)
@@ -142,7 +142,7 @@ function SearchModal (props) {
 
   return (
     <div>
-      <ModalHeader title={"광고 그룹 선택"}/>
+      <ModalHeader title={title}/>
       <ModalBody>
         <RowSpan>
           <ColSpan2>
