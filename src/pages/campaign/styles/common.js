@@ -171,6 +171,7 @@ export const ResistBanner = styled.div`
 `
 
 export const ImageUploadCard = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -179,6 +180,7 @@ export const ImageUploadCard = styled.div`
   aspect-ratio: 1/1;
   background-color: #ebebec;
   border-radius: 5px;
+  & > div {}
   & img {
     width: 90%;
     height: auto;
@@ -242,13 +244,31 @@ export const Row = styled.div`
     width: 120px;
     margin-right: 0 !important;
   }
-  & input {
+  & > input, & .txtCont {
     padding: 10px;
     width: 80%;
     border: 1px solid #e5e5e5;
     border-radius: 5px;
     height: 36px;
   }
+  & .txtCont {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    > input {
+      border: 0;
+      width: calc(100% - 34px);
+    }
+    > p {
+      font-size: 12px;
+      color: #777;
+      &:after {
+        display: inline-block;
+        padding-left: 3px;
+        content: '자';
+      }
+    }
+  } 
 `
 
 export const PrevImage = styled.div`
