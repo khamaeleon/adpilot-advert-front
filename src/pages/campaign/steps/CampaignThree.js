@@ -200,7 +200,8 @@ export function CampaignThree() {
   const setExposureConversion =(boolExposureConversion)=>{
     setCampaignGroupInfo({
       ...campaignGroupInfo,
-      exposureConversionUserYn: boolExposureConversion
+      exposureConversionUserYn: boolExposureConversion,
+      nonExposureDaysOfConversionUser: 0
     })
   }
 
@@ -246,7 +247,8 @@ export function CampaignThree() {
   const setExposureConversionAudience =(boolExposureConversionAudience)=>{
     setCampaignGroupInfo({
       ...campaignGroupInfo,
-      exposureConversionAudienceYn: boolExposureConversionAudience
+      exposureConversionAudienceYn: boolExposureConversionAudience,
+      nonExposureDaysOfConversionAudience: 0
     })
   }
 
@@ -613,7 +615,7 @@ export function CampaignThree() {
                         <div>
                           <Controller name={'nonExposureDaysOfConversionUser'}
                                       control={control}
-                                      rules={{required: {value: campaignGroupInfo.exposureConversionUserYn === "N" && campaignGroupInfo.nonExposureDaysOfConversionUser === null, message:'미노출 기간을 선택해주세요.'}}}
+                                      rules={{required: {value: campaignGroupInfo.exposureConversionUserYn === "N" && campaignGroupInfo.nonExposureDaysOfConversionUser === 0, message:'미노출 기간을 선택해주세요.'}}}
                                       render={({field}) =>
                                         <Select styles={smallStyle}
                                                 placeholder={'미노출기간 선택'}
@@ -777,7 +779,7 @@ export function CampaignThree() {
                         <div>
                           <Controller name={'nonExposureDaysOfConversionAudience'}
                                       control={control}
-                                      rules={{required: {value: campaignGroupInfo.exposureConversionAudienceYn === "N" && campaignGroupInfo.nonExposureDaysOfConversionAudience === null, message:'미노출 기간을 선택해주세요.'}}}
+                                      rules={{required: {value: campaignGroupInfo.exposureConversionAudienceYn === "N" && campaignGroupInfo.nonExposureDaysOfConversionAudience === 0, message:'미노출 기간을 선택해주세요.'}}}
                                       render={({field}) =>
                                         <Select styles={smallStyle}
                                                 placeholder={'미노출기간 선택'}
