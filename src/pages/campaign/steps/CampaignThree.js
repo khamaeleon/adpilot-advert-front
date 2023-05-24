@@ -667,7 +667,7 @@ export function CampaignThree() {
                   <RowInBox>
                     <div>
                       <span>관심 고객</span>
-                      <span style={{color: '#ccc'}}>쇼핑을 진행한 고객을 대상으로 광고 노출</span>
+                      <span style={{color: '#ccc'}}>광고주에게 관심있는 모든 고객에게 광고 노출</span>
                     </div>
                     <div>
                       <div>
@@ -693,7 +693,7 @@ export function CampaignThree() {
                   <RowInBox>
                     <div>
                       <span>방문 고객</span>
-                      <span style={{color: '#ccc'}}>쇼핑을 진행한 고객을 대상으로 광고 노출</span>
+                      <span style={{color: '#ccc'}}>광고주에게 방문한 고객에게 광고 노출</span>
                     </div>
                     <div>
                       <div>
@@ -751,7 +751,7 @@ export function CampaignThree() {
                   <RowInBox>
                     <div>
                       <span>전환 유저</span>
-                      <span style={{color: '#ccc'}}>광고주 상품을 구매한 고객을 대상으로 정책 설정</span>
+                      <span style={{color: '#ccc'}}>전환이 발생한 유저를 대상으로 광고 노출</span>
                     </div>
                     <div>
                       <div>
@@ -794,8 +794,8 @@ export function CampaignThree() {
                   </RowInBox>
                   <RowInBox>
                     <div>
-                      <span>쇼핑 고객</span>
-                      <span style={{color: '#ccc'}}>쇼핑을 진행한 고객을 대상으로 광고 노출</span>
+                      <span>쇼핑 유저</span>
+                      <span style={{color: '#ccc'}}>쇼핑에 관심있는 유저에게 광고 노출</span>
                     </div>
                     <div>
                       <div>
@@ -820,8 +820,8 @@ export function CampaignThree() {
                   </RowInBox>
                   <RowInBox>
                     <div>
-                      <span>관심 고객</span>
-                      <span style={{color: '#ccc'}}>쇼핑을 진행한 고객을 대상으로 광고 노출</span>
+                      <span>잠재 유저</span>
+                      <span style={{color: '#ccc'}}>유사 서비스에 관심있는 유저에게 광고 노출</span>
                     </div>
                     <div>
                       <div>
@@ -846,8 +846,8 @@ export function CampaignThree() {
                   </RowInBox>
                   <RowInBox>
                     <div>
-                      <span>방문 고객</span>
-                      <span style={{color: '#ccc'}}>쇼핑을 진행한 고객을 대상으로 광고 노출</span>
+                      <span>신규 유저</span>
+                      <span style={{color: '#ccc'}}>방문 이력이 없는 유저 및 신규 유저에게 광고 노출</span>
                     </div>
                     <div>
                       <div>
