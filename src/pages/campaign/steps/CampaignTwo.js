@@ -144,9 +144,7 @@ export function CampaignTwo() {
   const handleChangeDailyBudget = (event) => {
     let dailyBudget = 0;
 
-    if(event.target.value !== ''){
-      dailyBudget = parseInt(event.target.value);
-    }
+    if(event.target.value !== '') dailyBudget = parseInt(event.target.value);
 
     const prevBudgetRate = campaignBudgetInfo.budgetRate != 0 ? campaignBudgetInfo.budgetRate : 50;
 
@@ -163,10 +161,9 @@ export function CampaignTwo() {
   const handleChangePcBudget = (event) => {
     let puBudget = 0;
 
-    if(event.target.value !== ''){
-      puBudget = parseInt(event.target.value);
-    }
-    if(event.target.value !== '' && event.target.value <= campaignBudgetInfo.dailyAvgBudget) {
+    if(event.target.value !== '') puBudget = parseInt(event.target.value);
+
+    if(event.target.value <= campaignBudgetInfo.dailyAvgBudget) {
       setCampaignBudgetInfo({
         ...campaignBudgetInfo,
         pcBudget: puBudget,
@@ -179,10 +176,9 @@ export function CampaignTwo() {
   const handleChangeMobileBudget = (event) => {
     let mobBudget = 0;
 
-    if(event.target.value !== ''){
-      mobBudget = parseInt(event.target.value);
-    }
-    if(event.target.value !== '' && event.target.value <= campaignBudgetInfo.dailyAvgBudget ){
+    if(event.target.value !== '') mobBudget = parseInt(event.target.value);
+
+    if(event.target.value <= campaignBudgetInfo.dailyAvgBudget ){
       setCampaignBudgetInfo({
         ...campaignBudgetInfo,
         mobBudget: mobBudget,
@@ -203,9 +199,13 @@ export function CampaignTwo() {
   }
 
   const handleChangeMaxBid = (e) => {
+    let maxBiddingPrice = 0;
+
+    if(e.target.value !== '') maxBiddingPrice = parseInt(e.target.value);
+
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
-      maxBiddingPrice: parseInt(e.target.value)
+      maxBiddingPrice: maxBiddingPrice
     })
   }
   const onSubmit = (data) => {
