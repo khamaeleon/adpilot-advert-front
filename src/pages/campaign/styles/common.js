@@ -197,6 +197,7 @@ export const DeleteIcon = styled.div`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: top;
+  z-index:10;
   &:hover {
     background-image: url("/assets/images/common/btn_img_close_on.png");
     cursor: pointer;
