@@ -161,14 +161,15 @@ const RegistryBannerItem = (props) => {
 }
 
 function CampaignFourBanner(props) {
-  const {control, isfold, errors, setError, register} = props
+  const {control, isFold, errors, setError, register} = props
   const [clickInducementType] = useAtom(clickInducementTypeAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
   const [bannerSize] = useAtom(bannerSizeAtom)
   const [fold, setFold] = useState(true)
 
   useEffect(()=>{
-    setFold(isfold)
+    console.log(isFold)
+    setFold(isFold)
   },[])
   const handleDeleteLogoImage = (imagePath) => {
     confirmAlert({
@@ -767,7 +768,7 @@ export function CampaignFour() {
   const navigate = useNavigate()
   const [, setStepCampaign] = useAtom(stepCampaignAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
-  const [campaignBasicInfo,setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
+  const [campaignBasicInfo, setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
   const [, setBannerSize] = useAtom(bannerSizeAtom)
   const [creativeType, setCreativeType] = useAtom(creativeTypeAtom)
   const [, setClickInducementType] = useAtom(clickInducementTypeAtom)
@@ -784,6 +785,7 @@ export function CampaignFour() {
             nativeMaterials:[]
           })
           setCampaignBasicInfo({
+            ...campaignBasicInfo,
             campaignId: state.campaignId,
             productType: state.productType
           })
@@ -796,6 +798,7 @@ export function CampaignFour() {
             materials:[]
           })
           setCampaignBasicInfo({
+            ...campaignBasicInfo,
             campaignId: state.campaignId,
             productType: state.productType
           })
@@ -809,6 +812,7 @@ export function CampaignFour() {
             nativeMaterials: []
           })
           setCampaignBasicInfo({
+            ...campaignBasicInfo,
             campaignId: state.campaignId,
             productType: state.productType
           })
@@ -1004,8 +1008,9 @@ export function CampaignFour() {
                 <Validation>{errors.pcReferralCode && errors.pcReferralCode.message}</Validation>
                 <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
               </ValidationGroup>
+              {console.log(campaignCreativeInfo.clickInducementType)}
               {campaignCreativeInfo.creativeType === 'BANNER' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
-                <CampaignFourBanner control={control} errors={errors} setError={setError} register={register} isfold={campaignCreativeInfo.clickInducementType === null}/>
+                <CampaignFourBanner control={control} errors={errors} setError={setError} register={register} isFold={campaignCreativeInfo.clickInducementType === null}/>
               }
               {campaignCreativeInfo.creativeType === 'NATIVE' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
                 <CampaignFourNative control={control} errors={errors} setError={setError} register={register}/>
