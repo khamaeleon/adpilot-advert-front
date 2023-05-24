@@ -137,10 +137,10 @@ function RefundRequestModal (props) {
                                                     </label>
                                                 </RelativeDiv>
                                             </ColSpan2>
-                                            <ColSpan0>
-                                                {/*요기요 atom으로 나중에 광고비 잔액 불러와서 띄워 줍시다.*/}
-                                                <small alt={decimalFormat(10000)}>환불 가능 금액(?)</small>
-                                            </ColSpan0>
+                                            {/*<ColSpan0>*/}
+                                            {/*    /!*요기요 atom으로 나중에 광고비 잔액 불러와서 띄워 줍시다.*!/*/}
+                                            {/*    <small alt={decimalFormat(10000)}>환불 가능 금액(?)</small>*/}
+                                            {/*</ColSpan0>*/}
                                         </RowSpan>
                                         <RowSpan style={{width:'100%',  marginTop:'0'}}>
                                             <ColSpan0>
@@ -192,19 +192,20 @@ function RefundRequestModal (props) {
                                     </RowSpan>
                                 </ColSpan4>
                             </RowSpan>
-                            <RowSpan style={{width:'100%', marginTop:'35px'}}>
-                                <ColSpan0>비고</ColSpan0>
-                                <ColSpan4 style={{paddingLeft:"35px"}}>
-                                    <Input
-                                      textAlingn={'left'}
-                                      type={'text'}
-                                      value={note}
-                                      placeholder='비고 입력'
-                                      style={{width: "100%"}}
-                                      onChange={(e)=> setNote(e.target.value)}
-                                    />
-                                </ColSpan4>
-                            </RowSpan>
+                            {/*[d] 사용자 비고란 삭제 / 비고는 어드민 쪽에서 남기는 형태로 수정*/}
+                            {/*<RowSpan style={{width:'100%', marginTop:'35px'}}>*/}
+                            {/*    <ColSpan0>비고</ColSpan0>*/}
+                            {/*    <ColSpan4 style={{paddingLeft:"35px"}}>*/}
+                            {/*        <Input*/}
+                            {/*          textAlingn={'left'}*/}
+                            {/*          type={'text'}*/}
+                            {/*          value={note}*/}
+                            {/*          placeholder='비고 입력'*/}
+                            {/*          style={{width: "100%"}}*/}
+                            {/*          onChange={(e)=> setNote(e.target.value)}*/}
+                            {/*        />*/}
+                            {/*    </ColSpan4>*/}
+                            {/*</RowSpan>*/}
                             <RowSpan>
                                 <ColSpan1>문의</ColSpan1>
                                 <ColSpan4 style={{paddingLeft:"35px"}}>010-4070-3122</ColSpan4>
@@ -214,7 +215,7 @@ function RefundRequestModal (props) {
                 </RowSpan>
             </ModalBody>
             <ModalFooter>
-                <SubmitButton type={"submit"}>결제</SubmitButton>
+                <SubmitButton type={"submit"}>환불 신청</SubmitButton>
             </ModalFooter>
         </form>
     )

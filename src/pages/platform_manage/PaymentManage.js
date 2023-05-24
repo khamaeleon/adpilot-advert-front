@@ -1,4 +1,4 @@
-
+import React, {useCallback, useEffect, useState} from "react";
 import {
   Board,
   BoardHeader,
@@ -6,33 +6,23 @@ import {
   BoardTableContainer,
   SaveExcelButton
 } from "../../assets/GlobalStyles";
-import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import React, {useCallback, useEffect, useState} from "react";
+
 import {useAtom} from "jotai";
-import Checkbox from "../../components/common/Checkbox";
-import Table from "../../components/table";
-import {toast, ToastContainer} from "react-toastify";
+import {ToastContainer} from "react-toastify";
 import {PaymentCondition} from "../../components/Platform/Condition";
 import {paymentAllListRequest} from "../../services/payment/admin/PaymentAllListRequestAxios"
 import {
   paymentColumns,
-  paymentDataAtom,
   searchPaymentParams,
   searchPaymentType,
-  updatePaymentStatus
 } from "./entity/Payment";
-import moment from "moment/moment";
-import {getThisMonth, getToDay} from "../../common/DateUtils";
 import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 import {TotalCount} from "../../components/table/TableDetail";
 
-
 function PaymentManage() {
   const [totalInfo, setTotalInfo] = useState(0)
-  const [paymentDataState, setPaymentDataState] = useAtom(paymentDataAtom)
   const [searchPaymentParamsState, setSearchPaymentParamsState] = useAtom(searchPaymentParams)
-  const [updatePaymentStatusParams, setUpdatePaymentStatusParams] = useState(updatePaymentStatus)
 
   //[d] 그리드 데이터
   const [pageSize, ] = useState(10); // 한 페이지 보여줄 데이터
@@ -43,10 +33,6 @@ function PaymentManage() {
   useEffect(() => {
     handlePaymentTableData()
   }, [searchPaymentParamsState])
-
-  // useEffect(() => {
-  //   updatePaymentStatusParams.paymentStatus !== '' && updatePayment(updatePaymentStatusParams)
-  // }, [updatePaymentStatusParams.paymentIdList])
 
   const handlePaymentTableData = (props={}) => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
     const { skip = (currentPage - 1) * pageSize, limit = pageSize } = props;
@@ -63,10 +49,6 @@ function PaymentManage() {
       keywordType: searchPaymentParamsState.searchType,
       keyword: searchPaymentParamsState.search
     };
-    // console.log(requestData.keywordType)
-    handlePaymentStatus('')
-    setPaymentStatusSelected([])
-    setCheckboxAllSelect(false)
 
     return paymentAllListRequest ( requestData )
       .then(response => {
@@ -86,94 +68,7 @@ function PaymentManage() {
       });
   }
 
-  /**
-   * 모달안에 매체 검색 선택시
-   */
-  const handleHistoryAdd = (params) => {
-    // console.log(params)
-    // accountCreateInvoiceRecord(params).then(response => {
-    //   response ? handlePaymentTableData() : confirmAlert({
-    //     title: '이력 추가',
-    //     message: '정산 프로필이 없습니다.',
-    //     buttons: [
-    //       {
-    //         label: '확인',
-    //       }
-    //     ]
-    //   });
-    // })
-  }
-
   const dataCallback = useCallback( handlePaymentTableData , [totalInfo, searchPaymentParamsState])
-
-  const updatePayment = (params) => {
-    confirmAlert({
-      title: '알림',
-      message: '변경 하시겠습니까?',
-      buttons: [
-        {
-          label: '확인',
-          onClick: () => {
-            //accountUpdateInvoiceRecord(params).then(response => response && dataCallback)
-          }
-        },{
-          label: '취소',
-          onClick: () => handlePaymentStatus('')
-        }
-      ]
-    });
-  }
-
-  const handlePaymentStatus = (event) => {
-    setUpdatePaymentStatusParams({
-      ...updatePaymentStatusParams,
-      paymentIdList: event,
-      paymentStatus: paymentStatusSelected
-    })
-  }
-
-  const [paymentStatusSelected, setPaymentStatusSelected] = useState([])
-  const [checkboxAllSelect, setCheckboxAllSelect] = useState(false);
-  const disabledArr = ['REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE']
-  const handlePaymentCheckAll = (event) => { // 상태 변경 전체 체크
-    if(event.target.checked){
-      let allArr = paymentDataState.filter(obj => !disabledArr.includes(obj.status.value)).map(data => {return data.id})
-      setPaymentStatusSelected(allArr)
-      if(allArr.length !== 0) {
-        setCheckboxAllSelect(true)
-      } else {
-        setCheckboxAllSelect(false)
-        toast.warning('상태 변경 불가.')
-      }
-    } else{
-      setPaymentStatusSelected([])
-      setCheckboxAllSelect(false)
-    }
-  }
-  const handlePaymentStatusCheckbox = (e,cellProps) => { // 테이블 체크박스 핸들링
-    if(e.currentTarget.checked){
-      setPaymentStatusSelected([...paymentStatusSelected.concat(cellProps.data.id)])
-    } else {
-      setPaymentStatusSelected([...paymentStatusSelected.filter(id => id !== cellProps.data.id)])
-      setCheckboxAllSelect(false)
-    }
-  }
-
-  const checkboxColumn = { // 테이블 체크박스 커스텀
-    renderCheckbox: (checkboxProps, cellProps) => {
-      return (
-        <div style={{minWidth: 100}}>
-          <Checkbox label={''}
-                    type={'a'}
-                    disabled={disabledArr.includes(cellProps.data?.status?.value)}
-                    isChecked={paymentStatusSelected.includes(cellProps.data.id) ? true : false}
-                    onChange={ e => {
-                      handlePaymentStatusCheckbox(e, cellProps)
-                    }}/>
-        </div>
-      );
-    }
-  }
 
   return (
     <>
@@ -181,18 +76,6 @@ function PaymentManage() {
         <BoardHeader>결재 현황</BoardHeader>
         <PaymentCondition searchType={searchPaymentType} searchCondition={searchPaymentParamsState} setSearchCondition={setSearchPaymentParamsState} handleTableData={handlePaymentTableData} />
         <BoardTableContainer>
-          {/*<Table columns={paymentColumns}*/}
-          {/*       // data={paymentDataAtom} 아톰 사용시 호출 못함?? 확인...*/}
-          {/*       data={paymentDataState}*/}
-          {/*       idProperty="id"*/}
-          {/*       totalCount={[totalInfo, '결제 현황']}*/}
-          {/*       // checkboxColumn={checkboxColumn} //체크박스 커스텀*/}
-          {/*       // onSelectionChange={paymentStatusSelected} // 선택한 체크박스 정보 가져오기*/}
-          {/*       emptyText={'결재 현황 내역이 없습니다.'}*/}
-          {/*       showHoverRows={false}*/}
-          {/*       dataCallback={dataCallback}*/}
-          {/*       limit={10}*/}
-          {/*/>*/}
           <BoardSearchResultTitle style={{alignItems:"end", paddingBottom: "10px"}}>
             <div>
               <TotalCount><span/>총 <span>{totalInfo}</span> 건의 결제 내역</TotalCount>

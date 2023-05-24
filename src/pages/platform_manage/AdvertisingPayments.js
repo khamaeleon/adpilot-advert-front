@@ -1,3 +1,4 @@
+import React, {useCallback, useEffect, useState} from "react";
 import {
   Board,
   BoardHeader,
@@ -6,33 +7,24 @@ import {
   ColSpan2,
   RowSpan, SaveExcelButton
 } from "../../assets/GlobalStyles";
-import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import React, {useCallback, useEffect, useState} from "react";
 import Checkbox from "../../components/common/Checkbox";
-import Table from "../../components/table";
-import {toast, ToastContainer} from "react-toastify";
-import {PaymentCondition} from "../../components/Platform/Condition";
-import {SearchUser} from "../../components/common/SearchUser";
 import {
-  paymentColumns,
-  paymentDataAtom,
-  searchPaymentParams,
-  searchPaymentType,
   searchPointType,
   refundReceivedAtomData,
-  updatePaymentStatus
 } from "./entity/Payment";
 import {StatusBtn} from "./styles/common";
+import {TotalCount} from "../../components/table/TableDetail";
+import {toast, ToastContainer} from "react-toastify";
+import {PaymentCondition} from "../../components/Platform/Condition";
 import {atom, useAtom} from "jotai/index";
 import {dateFormat, decimalFormat} from "../../common/StringUtils";
-import {getThisMonth, getToDay} from "../../common/DateUtils";
+import {getThisMonth} from "../../common/DateUtils";
 import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
 import {pointAllListRequest} from "../../services/payment/admin/PointAllListRequestAxios";
-import {TotalCount} from "../../components/table/TableDetail";
 import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 import {RefundProcessingButton} from "../../components/payment/admin/RefundProcessing";
-import {refundAllProcess, refundProcess} from "../../services/payment/admin/RefundProcessAxios";
+import {refundAllProcess} from "../../services/payment/admin/RefundProcessAxios";
 
 const costPaymentDataAtom = atom([{
   name: 'pointHistoryType',
@@ -40,8 +32,6 @@ const costPaymentDataAtom = atom([{
     value:"REFUND_REQUEST_OF_USER"
   }
 }])
-
-
 
 /**
  * 결재 관리 현황 조회
@@ -58,11 +48,6 @@ export const searchCostPaymentParams = atom({
  * 결재 관리 리스트 컬럼 설정
  */
 export const costPaymentColumns = [
-  // {
-  //   name: 'id',
-  //   header: 'id',
-  //   defaultVisible: false,
-  // },
   {
     name: 'createdAt',
     header: '신청 일시',
@@ -193,8 +178,8 @@ function CellComponent({ value, cellProps }) {
   let valueType = {
     // CHARGE_OF_PAYMENT: { label: '결제 신청', color: 'blue' },
     // REFUND_OF_PAYMENT: { label: 'REFUND_OF_PAYMENT', color: 'orange' },
-    GIVEN_BY_ADMIN: { label: '광고비 지급', color: 'black' },
-    TAKEN_BY_ADMIN: { label: '광고비 차감', color: 'red' },
+    GIVEN_BY_ADMIN: { label: '광고비 지급', color: 'blue' },
+    TAKEN_BY_ADMIN: { label: '광고비 차감', color: 'black' },
     REFUND_REQUEST_OF_USER: { label: '환불 신청', color: 'orange' },
     REFUNDED_BY_ADMIN: { label: '환불 완료', color: 'green' },
     // ERROR: { label: 'ERROR', color: 'red' },
@@ -204,7 +189,7 @@ function CellComponent({ value, cellProps }) {
     valueType.label === '환불 신청'?
       (
         <RefundProcessingButton
-          title={"환불 신청"}
+          title={"환불 처리"}
           modalInfo={'ADMIN'}
           onSave={null}
           onSubmit={"환불 완료"}
@@ -241,7 +226,6 @@ function AdvertisingPayments() {
   const gridStyle = {minHeight: 510, textAlign: 'center'}
   const disabledArr = ['REFUND_REQUEST_OF_USER']
   let checkAllId = []
-
   const handlePaymentTableData = (props={}) => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
     const { skip = (currentPage - 1) * pageSize, limit = pageSize } = props;
 
@@ -255,7 +239,6 @@ function AdvertisingPayments() {
       keyword: searchPaymentParamsState.search
     };
 
-    // handlePaymentStatus('')
     setPaymentStatusSelected([])
     setCheckboxAllSelect(false)
 
@@ -280,36 +263,7 @@ function AdvertisingPayments() {
    * 모달안에 매체 검색 후 이력 추가완료
    */
   const handleHistoryAdd = (params) => {
-    // accountCreateInvoiceRecord(params).then(response => {
-    //   response ? handlePaymentTableData() : confirmAlert({
-    //     title: '이력 추가',
-    //     message: '정산 프로필이 없습니다.',
-    //     buttons: [
-    //       {
-    //         label: '확인',
-    //       }
-    //     ]
-    //   });
-    // })
     handlePaymentTableData();
-  }
-
-  const updatePayment = (params) => {
-    confirmAlert({
-      title: '알림',
-      message: '변경 하시겠습니까?',
-      buttons: [
-        {
-          label: '확인',
-          onClick: () => {
-            //accountUpdateInvoiceRecord(params).then(response => response && dataCallback)
-          }
-        },{
-          label: '취소',
-          onClick: () => handlePaymentStatus('')
-        }
-      ]
-    });
   }
   const handlePaymentStatus = async(event) => {
     if(paymentStatusSelected.length !== 0){
@@ -328,8 +282,6 @@ function AdvertisingPayments() {
       toast.warning('체크한 환불 내역이 없습니다.');
     }
   }
-
-
   const handlePaymentCheckAll = (event) => {
     if (event.target.checked) {
       // let allArr = paymentDataState
@@ -358,6 +310,13 @@ function AdvertisingPayments() {
   const handlePaymentStatusCheckbox = (e,cellProps) => { // 테이블 체크박스 핸들링
     if(e.currentTarget.checked){
       setPaymentStatusSelected([...paymentStatusSelected.concat(cellProps.data.id)])
+      console.log(paymentStatusSelected.length)
+      console.log(checkAllId.length)
+      if(paymentStatusSelected.length === checkAllId.length){
+        setCheckboxAllSelect(true);
+      }else{
+        setCheckboxAllSelect(false);
+      }
     } else {
       setPaymentStatusSelected([...paymentStatusSelected.filter(id => id !== cellProps.data.id)])
       setCheckboxAllSelect(false)
@@ -368,13 +327,9 @@ function AdvertisingPayments() {
     renderCheckbox: (checkboxProps, cellProps) => {
       const value = cellProps.data.pointHistoryType;
       const cellData = Array.isArray(cellProps.data) ? cellProps.data : [];
-
-
       checkAllId = cellData
         .filter((cell) => cell.pointHistoryType === 'REFUND_REQUEST_OF_USER')
         .map((cell) => cell.id);
-
-
       if (value === 'REFUND_REQUEST_OF_USER') {
         return (
           <div style={{ minWidth: 100 }}>
@@ -420,16 +375,6 @@ function AdvertisingPayments() {
               <SearchAdvertiser title={'이력 추가'} btnStyle={'historyAddButton'} onSubmit={handleHistoryAdd}/>
             </div>
           </RowSpan>
-          {/*<Table columns={costPaymentColumns}*/}
-          {/*       data={costPaymentDataAtom}*/}
-          {/*       idProperty="id"*/}
-          {/*       selected={checkboxAllSelect}*/}
-          {/*       checkboxColumn={checkboxColumn} //체크박스 커스텀*/}
-          {/*       onSelectionChange={paymentStatusSelected} // 선택한 체크박스 정보 가져오기*/}
-          {/*       emptyText={'결제 현황 내역이 없습니다.'}*/}
-          {/*       showHoverRows={false}*/}
-          {/*       dataCallback={dataCallback}*/}
-          {/*/>*/}
           <BoardSearchResultTitle style={{alignItems:"end", paddingBottom: "10px"}}>
             <div>
               <TotalCount><span/>총 <span>{totalInfo}</span> 건의 결제 내역</TotalCount>

@@ -26,7 +26,6 @@ export async function refundProcess( param ) {
  * @returns {Promise<null>}
  */
 export async function refundAllProcess( param ) {
-  console.log("param", param)
   let returnVal = null;
   await AdminAxios('POST', REFUNDALL, param)
     .then((response) => {

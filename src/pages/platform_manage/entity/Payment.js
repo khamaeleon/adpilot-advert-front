@@ -34,11 +34,6 @@ export const refundReceivedAtomData = atom(false);
  * 결재 관리 리스트 컬럼 설정
  */
 export const paymentColumns = [
-  // {
-  //   name: 'id',
-  //   header: 'id',
-  //   defaultVisible: false,
-  // },
   {
     name: 'createdAt',
     header: '신청 일시',
@@ -70,7 +65,7 @@ export const paymentColumns = [
   },
   {
     name: 'creditCardType',
-    header: '결제 정보(카드)',
+    header: '결제 정보',
     defaultFlex: 1,
     showColumnMenuTool: false,
     textAlign: 'center',
@@ -88,12 +83,6 @@ export const paymentColumns = [
       )
     }
   },
-  // {
-  //   name: 'bankType',
-  //   header: '결제 정보(계좌)',
-  //   defaultFlex: 1,
-  //   showColumnMenuTool: false,
-  // },
   {
     name: 'value1',
     header: '광고주명',
@@ -106,12 +95,6 @@ export const paymentColumns = [
     showColumnMenuTool: false,
     textAlign: 'center',
   },
-  // {
-  //   name: 'modifiedBy',
-  //   header: '신청 아이디',
-  //   showColumnMenuTool: false,
-  //   textAlign: 'center',
-  // },
   {
     name: 'amount',
     header: '광고비',
@@ -134,19 +117,6 @@ export const paymentColumns = [
       )
     }
   },
-  // {
-  //   name: 'updateAt',
-  //   header: '상태 변경일',
-  //   width: 120,
-  //   showColumnMenuTool: false,
-  // },
-  // {
-  //   name: 'etc',
-  //   header: '비고',
-  //   width: 180,
-  //   sortable: false,
-  //   showColumnMenuTool: false,
-  // }
 ]
 
 /**
@@ -163,7 +133,6 @@ export const updatePaymentStatus = {
 export const searchPaymentParams = atom({
   startAt: getThisMonth().startDay,
   endAt: getThisMonth().endDay,
-  // statusList: ['INVOICE_REQUEST', 'EXAMINED_COMPLETED', 'REJECT', 'PAYMENT_COMPLETED', 'WITHHELD_PAYMENT', 'REVENUE_INCREASE', 'REVENUE_DECREASE'],
   statusList: ['PAYMENT_COMPLETED', 'PAYMENT_FAILED'],
   searchType: 'ALL',
   search: ''

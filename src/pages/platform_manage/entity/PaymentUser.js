@@ -199,14 +199,53 @@ export const PointDetailsColumns = [
         }
     },
     {
-        name: 'description',
-        header: '환불 정보',
+        //[d] 은행명 + 계좌 번호
+        name: 'refundBankType',
+        header: '결제 정보',
         defaultFlex: 1,
         resizable: false,
         textAlign: 'center',
-        render: ({ value })=> {
+        render: ({ value, cellProps })=> {
+            let valueType = {
+                //[d] 아래 목록 따로 빼서 관리 사용자, 어드민 모두 사용
+                KDB_BANK: { label: 'KDB산업은행' },
+                IBK_BANK: { label: 'IBK기업은행' },
+                KOOKMIN_BANK: { label: '국민은행' },
+                KEB_BANK: { label: 'KEB하나은행' },
+                SUHYUP_BANK: { label: '수협' },
+                NONGHYUP_BANK: { label: '농협' },
+                REGIONAL_NONGHYUP_BANK: { label: '농협중앙회' },
+                WOORI_BANK: { label: '우리은행' },
+                SC_BANK: { label: 'SC제일은행' },
+                SHINHAN_BANK: { label: '신한은행' },
+                CITY_BANK: { label: '시티은행' },
+                DAEGU_BANK: { label: '대구은행' },
+                BUSAN_BANK: { label: '부산은행' },
+                GWANGJU_BANK: { label: '광주은행' },
+                JEJU_BANK: { label: '제주은행' },
+                JEONBUK_BANK: { label: '전북은행' },
+                GYEONGNAM_BANK: { label: '경남은행' },
+                KFCC_BANK: { label: '새마을금고' },
+                SHINHYUP_BANK: { label: '신협' },
+                FSB_BANK: { label: '저축은행중앙회' },
+                NFCF_BANK: { label: '산립조합중앙회' },
+                EPOST_BANK: { label: '우체국' },
+                HANA_BANK: { label: '하나은행' },
+                K_BANK: { label: '케이뱅크' },
+                KAKAO_BANK: { label: '카카오뱅크' },
+                TOSS_BANK: { label: '토스뱅크' },
+            }[value] || { label: '', color: '' };
             return (
-              <p>{value !== "" ? value : '-'}</p>
+              <>
+                  {valueType.label === "" ?
+                    <p>-</p>
+                    :
+                    <>
+                        <p>은행명 : {valueType.label}</p>
+                        <p>계좌번호 : {cellProps.data.refundBankAccount}</p>
+                    </>
+                  }
+              </>
             )
         }
     },

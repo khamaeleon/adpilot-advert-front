@@ -74,37 +74,24 @@ export function RefundRequestTable(props) {
 
 function PaymentManageUser(props) {
   const [tokenUserInfo] = useAtom(tokenResultAtom) // userId
-
-  const [paymentDetails, setPaymentDetails] = useAtom(PaymentDetailsDataAtom)
-  const [pointDetails, setPointDetails] = useAtom(PointDetailsDataAtom)
-
   const [, setAccountInfoState] = useAtom(accountInfoAtom) // 새로 고침 시
-
   //[d] totalInfo 2개 생성 결제내역 하나, 포인트 지급 하나
   const [totalInfo, setTotalInfo] = useState(0)
   const [totalPointInfo, setTotalPointInfo] = useState(0)
-
   //[d] 날짜
   const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
-
   //[d] 광고비 잔액 충전 금액 목 데이터
   const [advertisingBalance, setAdvertisingBalance] = useAtom(retrieveUserPoint) // 광고비 잔액
   const [requestAmountValue, setRequestAmountValue] = useAtom(requestAmountPoint) // 충전 금액
-
   //[d] 환불 입력 정보 조회해서 여기다 담기
   const [refundData, setRefundData] = useState({})
-
   //[d] 현재 시점 기준 전체 지급 금액 값 해당 값이 환불 요청 금액보다 낮으면 환불 거부..
   const [totalAmount, setTotalAmount] = useState(0)
-
   //[d] 그리드 데이터
   const [pageSize, ] = useState(10); // 한 페이지 보여줄 데이터
   const [currentPage, ] = useState(1); // 현재 페이지
   const gridStyle = {minHeight: 510, textAlign: 'center'}
-
-  //[d] 현재 시점에서
-
   //[d] 결제 내역 데이터
   function fetchPaymentDetails(props = {}) {
     const { skip = (currentPage - 1) * pageSize, limit = pageSize } = props;
@@ -115,7 +102,6 @@ function PaymentManageUser(props) {
       searchStartDate: moment(startDate).format('YYYY-MM-DD'),
       searchEndDate: moment(endDate).format('YYYY-MM-DD'),
     };
-
     return paymentListRequest( tokenUserInfo.id, requestData)
       .then((response) => {
         if (response !== null) {
@@ -141,7 +127,6 @@ function PaymentManageUser(props) {
       searchStartDate: moment(startDate).format('YYYY-MM-DD'),
       searchEndDate: moment(endDate).format('YYYY-MM-DD'),
     };
-
     return pointListRequest( tokenUserInfo.id, requestData)
       .then((response) => {
         if (response !== null) {
@@ -196,15 +181,12 @@ function PaymentManageUser(props) {
   }
   //[d] 광고비 충전 감지
   const handlePaymentDetailsReceived = () => {
-    // AdCharge, 환불 정보 에서 특정 행위를 실행하면
-    // 부모 컴포넌트의 상태를 업데이트 한다!!
-    // 그럼 fetchPaymentDetails 내부에서 totalInfo 값을 업데이트 하고
-    // 아래 dataSource 의존성 배열 내부 값이 변경 되면서 그리드도 다시 그려줍니다.
+    //[d]AdCharge, RefundRequest api 호출 하면 해당 함수 실행하여 상태 업데이트
     fetchPaymentDetails();
     fetchPointDetails();
     retrieveUserRefundInfo();
   }
-  //[d] 최초 화면 접근시 유저 상태이면 결제내역 데이터 조회 아니면 로그인
+  //[d] 최초 화면 접근시 유저 상태이면 결제내역 데이터 조회 아니면 로그인 페이지 이동
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -230,7 +212,6 @@ function PaymentManageUser(props) {
   //[d] 차트 데이터에서 역으로 변동값 감지해서 다시 던저주기 paging 처리 관련...
   const dataSource = useCallback(fetchPaymentDetails, [totalInfo]);
   const dataSourcePoint = useCallback(fetchPointDetails, [totalPointInfo]);
-
   return (
     <main>
       <BoardContainer>
