@@ -132,8 +132,8 @@ const RegistryBannerItem = (props) => {
           {campaignCreativeInfo.materials.find(value => value.bannerSize === size.bannerSize).images.map((item, key) => {
             return (
               <ColSpan100 padding={'0'} key={key}>
-                <DeleteIcon onClick={() => handleDeleteImage(item.imagePath)}/>
                 <ImageUploadCard>
+                  <DeleteIcon onClick={() => handleDeleteImage(item.imagePath)}/>
                   <img src={item.thumbnailPath} alt={'이미지'}/>
                 </ImageUploadCard>
               </ColSpan100>
@@ -369,8 +369,8 @@ function CampaignFourBanner(props) {
                 {campaignCreativeInfo.logoPaths.length !== 0 && campaignCreativeInfo.logoPaths.map((item, key) => {
                   return (
                     <ColSpan100 padding={'0'} key={key}>
-                      <DeleteIcon onClick={() => handleDeleteLogoImage(item.imagePath)}/>
                       <ImageUploadCard>
+                        <DeleteIcon onClick={() => handleDeleteLogoImage(item.imagePath)}/>
                         <img src={item.imagePath} alt={key}/>
                       </ImageUploadCard>
                     </ColSpan100>
