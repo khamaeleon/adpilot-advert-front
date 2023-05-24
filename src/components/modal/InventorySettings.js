@@ -15,7 +15,7 @@ import {selSearchMediaInfo, selSearchMediaList} from "../../services/campaign/Gr
 import {toast} from "react-toastify";
 
 export function InventoryButton(props) {
-  const {title, type,historyAdd} = props;
+  const {title, type, historyAdd} = props;
   const [, setModal] = useAtom(modalController)
   const handleModalComponent = () => {
     setModal({
@@ -68,8 +68,7 @@ function SearchModal (props) {
 
   const handleSubmit = (e) => {
      e.preventDefault();
-      toast.success((type==='allow' ? allowInventoryIds.length :disAllowInventoryIds.length) + '개의 지면이 저장되었습니다.',{autoClose:100, delay:0})
-      setModal({
+     setModal({
         isShow: false,
         modalComponent: null
       })
