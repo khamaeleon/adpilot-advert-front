@@ -205,8 +205,7 @@ export const PointDetailsColumns = [
                     <p>-</p>
                     :
                     <>
-                        <p>은행명 : {valueType.label}</p>
-                        <p>계좌번호 : {cellProps.data.refundBankAccount}</p>
+                        <p>{valueType.label} / {cellProps.data.refundBankAccount} / {cellProps.data.refundBankAccountHolder}</p>
                     </>
                   }
               </>

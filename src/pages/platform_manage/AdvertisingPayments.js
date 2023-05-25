@@ -72,6 +72,7 @@ export const costPaymentColumns = [
     header: '결제 정보',
     showColumnMenuTool: false,
     textAlign: 'center',
+    width: 400,
     render: ({ value, cellProps })=> {
       let valueType = {
         //[d] 아래 목록 따로 빼서 관리 사용자, 어드민 모두 사용
@@ -108,8 +109,7 @@ export const costPaymentColumns = [
             <p>-</p>
             :
             <>
-              <p>{valueType.label}</p>
-              <p>{cellProps.data.refundBankAccount}</p>
+              <p>{valueType.label} / {cellProps.data.refundBankAccount} / {cellProps.data.refundBankAccountHolder}</p>
             </>
           }
         </>
