@@ -142,35 +142,48 @@ export function CampaignTwo() {
   }
 
   const handleChangeDailyBudget = (event) => {
+    let dailyBudget = 0;
+
+    if(event.target.value !== '') dailyBudget = parseInt(event.target.value);
+
     const prevBudgetRate = campaignBudgetInfo.budgetRate != 0 ? campaignBudgetInfo.budgetRate : 50;
 
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
-      dailyAvgBudget: parseInt(event.target.value),
-      pcBudget: parseInt(event.target.value) *  prevBudgetRate / 100,
-      mobBudget: parseInt(event.target.value) * (100-prevBudgetRate) / 100,
+      dailyAvgBudget: dailyBudget,
+      pcBudget: dailyBudget *  prevBudgetRate / 100,
+      mobBudget: dailyBudget * (100-prevBudgetRate) / 100,
       budgetRate: prevBudgetRate
     })
+
   }
 
   const handleChangePcBudget = (event) => {
+    let puBudget = 0;
+
+    if(event.target.value !== '') puBudget = parseInt(event.target.value);
+
     if(event.target.value <= campaignBudgetInfo.dailyAvgBudget) {
       setCampaignBudgetInfo({
         ...campaignBudgetInfo,
-        pcBudget: parseInt(event.target.value),
-        mobBudget: campaignBudgetInfo.dailyAvgBudget - parseInt(event.target.value),
-        budgetRate: campaignBudgetInfo.dailyAvgBudget != 0 ? Math.round(parseInt(event.target.value) * 100 / campaignBudgetInfo.dailyAvgBudget) : 50
+        pcBudget: puBudget,
+        mobBudget: campaignBudgetInfo.dailyAvgBudget - puBudget,
+        budgetRate: campaignBudgetInfo.dailyAvgBudget != 0 ? Math.round(puBudget * 100 / campaignBudgetInfo.dailyAvgBudget) : 50
       })
     }
   }
 
   const handleChangeMobileBudget = (event) => {
-    if(event.target.value <= campaignBudgetInfo.dailyAvgBudget){
+    let mobBudget = 0;
+
+    if(event.target.value !== '') mobBudget = parseInt(event.target.value);
+
+    if(event.target.value <= campaignBudgetInfo.dailyAvgBudget ){
       setCampaignBudgetInfo({
         ...campaignBudgetInfo,
-        mobBudget: parseInt(event.target.value),
-        pcBudget: campaignBudgetInfo.dailyAvgBudget - parseInt(event.target.value),
-        budgetRate: parseInt(event.target.value) * 100 / campaignBudgetInfo.dailyAvgBudget
+        mobBudget: mobBudget,
+        pcBudget: campaignBudgetInfo.dailyAvgBudget - mobBudget,
+        budgetRate: campaignBudgetInfo.dailyAvgBudget != 0 ? Math.round(mobBudget * 100 / campaignBudgetInfo.dailyAvgBudget) : 50
       })
     }
   }
@@ -186,9 +199,13 @@ export function CampaignTwo() {
   }
 
   const handleChangeMaxBid = (e) => {
+    let maxBiddingPrice = 0;
+
+    if(e.target.value !== '') maxBiddingPrice = parseInt(e.target.value);
+
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
-      maxBiddingPrice: parseInt(e.target.value)
+      maxBiddingPrice: maxBiddingPrice
     })
   }
   const onSubmit = (data) => {
@@ -199,7 +216,7 @@ export function CampaignTwo() {
     }).then(response => {
       if (response) {
         if (state !== null) {
-          if(campaignBudgetInfo.pcBudget === 0 || campaignBudgetInfo.mobBudget === 0) {
+          if(!campaignBudgetInfo.infiniteBudgetYn && (campaignBudgetInfo.pcBudget === 0 || campaignBudgetInfo.mobBudget === 0)) {
             confirmAlert({
               title: '수정되었습니다',
               message: '예산 비율 설정에 따라 광고 그룹 및 크리에이티브 정보를 확인해주세요.',

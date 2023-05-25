@@ -47,19 +47,8 @@ export function CampaignOne() {
     selEnumInfo(campaignBasicInfo.goalType).then(response => {
       setGoalList(response.data)
     })
-
-    if(stepCampaign.steps !== null){
-      selAdverPixelDetailList(campaignBasicInfo.userId).then(response => {
-        let clonePixelList = []
-        response.map(data => {
-          clonePixelList = [...clonePixelList, {value: data.pixelId, label: data.pixelName}]
-        })
-        setPixelList(clonePixelList)
-      })
-    } else {
       resetInfo();
       reset();
-    }
   }, [])
   /**
    * 광고주 설정

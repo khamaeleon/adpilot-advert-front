@@ -132,8 +132,8 @@ const RegistryBannerItem = (props) => {
           {campaignCreativeInfo.materials.find(value => value.bannerSize === size.bannerSize).images.map((item, key) => {
             return (
               <ColSpan100 padding={'0'} key={key}>
-                <DeleteIcon onClick={() => handleDeleteImage(item.imagePath)}/>
                 <ImageUploadCard>
+                  <DeleteIcon onClick={() => handleDeleteImage(item.imagePath)}/>
                   <img src={item.thumbnailPath} alt={'이미지'}/>
                 </ImageUploadCard>
               </ColSpan100>
@@ -161,15 +161,16 @@ const RegistryBannerItem = (props) => {
 }
 
 function CampaignFourBanner(props) {
-  const {control, isfold, errors, setError} = props
+  const {control, isFold, errors, setError, register} = props
   const [clickInducementType] = useAtom(clickInducementTypeAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
   const [bannerSize] = useAtom(bannerSizeAtom)
   const [fold, setFold] = useState(true)
 
   useEffect(()=>{
-    setFold(isfold)
-  },[])
+    setFold(isFold)
+  },[isFold])
+
   const handleDeleteLogoImage = (imagePath) => {
     confirmAlert({
       title: '알림',
@@ -212,6 +213,7 @@ function CampaignFourBanner(props) {
   }
 
   const handleChangeInputs = (e) => {
+    console.log(e.target.name)
     setCampaignCreative({
       ...campaignCreativeInfo,
       [e.target.name]: e.target.value
@@ -296,44 +298,56 @@ function CampaignFourBanner(props) {
               <span style={{fontSize: 14}}>소재설정</span>
             </Row>
             <Row>
-              <span>광고 타이틀<small>({campaignCreativeInfo.title1 !== null ? campaignCreativeInfo.title1?.length : 0})</small><p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
-              <input
-                type={'text'}
-                name={'title1'}
-                maxLength={25}
-                value={campaignCreativeInfo.title1 || ""}
-                onChange={handleChangeInputs}
-              />
+              <span>광고 타이틀<p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
+              <div className={'txtCont'}>
+                <input
+                  type={'text'}
+                  name={'title1'}
+                  maxLength={25}
+                  value={campaignCreativeInfo.title1 || ""}
+                  onChange={handleChangeInputs}
+                />
+                <p>{campaignCreativeInfo?.title1 !== null ? campaignCreativeInfo.title1?.length : 0}</p>
+              </div>
             </Row>
             <Row>
-              <span>광고 제목1<small>({campaignCreativeInfo.title2 !== null ? campaignCreativeInfo.title2?.length : 0})</small><p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
-              <input
-                type={'text'}
-                name={'title2'}
-                maxLength={25}
-                value={campaignCreativeInfo.title2 || ""}
-                onChange={handleChangeInputs}
-              />
+              <span>광고 제목1<p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
+              <div className={'txtCont'}>
+                <input
+                  type={'text'}
+                  name={'title2'}
+                  maxLength={25}
+                  value={campaignCreativeInfo.title2 || ""}
+                  onChange={handleChangeInputs}
+                />
+                <p>{campaignCreativeInfo?.title2 !== null ? campaignCreativeInfo.title2?.length : 0}</p>
+              </div>
             </Row>
             <Row>
-              <span>광고 제목2<small>({campaignCreativeInfo.title3 !== null ? campaignCreativeInfo.title3?.length : 0})</small><p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
-              <input
-                type={'text'}
-                name={'title3'}
-                maxLength={25}
-                value={campaignCreativeInfo.title3 || ""}
-                onChange={handleChangeInputs}
-              />
+              <span>광고 제목2<p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
+              <div className={'txtCont'}>
+                <input
+                  type={'text'}
+                  name={'title3'}
+                  maxLength={25}
+                  value={campaignCreativeInfo.title3 || ""}
+                  onChange={handleChangeInputs}
+                />
+                <p>{campaignCreativeInfo.title3 !== null ? campaignCreativeInfo.title3?.length : 0}</p>
+              </div>
             </Row>
             <Row>
-              <span>긴 광고 제목<small>({campaignCreativeInfo.titleLong !== null ? campaignCreativeInfo.titleLong?.length : 0})</small><p><small style={{color: '#ccc'}}>최대 90자까지 등록</small></p></span>
-              <input
-                type={'text'}
-                name={'titleLong'}
-                maxLength={90}
-                value={campaignCreativeInfo.titleLong || ""}
-                onChange={handleChangeInputs}
-              />
+              <span>긴 광고 제목<p><small style={{color: '#ccc'}}>최대 90자까지 등록</small></p></span>
+              <div className={'txtCont'}>
+                <input
+                  type={'text'}
+                  name={'titleLong'}
+                  maxLength={90}
+                  value={campaignCreativeInfo.titleLong || ""}
+                  onChange={handleChangeInputs}
+                />
+                <p>{campaignCreativeInfo.titleLong !== null ? campaignCreativeInfo.titleLong?.length : 0}</p>
+              </div>
             </Row>
             <Row>
               <span>클릭 유도 문안</span>
@@ -356,8 +370,8 @@ function CampaignFourBanner(props) {
                 {campaignCreativeInfo.logoPaths.length !== 0 && campaignCreativeInfo.logoPaths.map((item, key) => {
                   return (
                     <ColSpan100 padding={'0'} key={key}>
-                      <DeleteIcon onClick={() => handleDeleteLogoImage(item.imagePath)}/>
                       <ImageUploadCard>
+                        <DeleteIcon onClick={() => handleDeleteLogoImage(item.imagePath)}/>
                         <img src={item.imagePath} alt={key}/>
                       </ImageUploadCard>
                     </ColSpan100>
@@ -381,27 +395,49 @@ function CampaignFourBanner(props) {
               </RowSpan>
             </Row>
             <Row>
-              <span>서비스 명<small>({campaignCreativeInfo.serviceName !== null ? campaignCreativeInfo.serviceName?.length : 0})</small><p><small style={{color: '#ccc'}}>최대 20자까지 등록</small></p></span>
-              <input
-                type={'text'}
-                name={'serviceName'}
-                maxLength={20}
-                value={campaignCreativeInfo.serviceName || ""}
-                onChange={handleChangeInputs}
-              />
+              <span>서비스 명<p><small style={{color: '#ccc'}}>최대 20자까지 등록</small></p></span>
+              <div className={'txtCont'}>
+                <input
+                  type={'text'}
+                  name={'serviceName'}
+                  maxLength={20}
+                  value={campaignCreativeInfo.serviceName || ""}
+                  onChange={handleChangeInputs}
+                />
+                <p>{campaignCreativeInfo.serviceName !== null ? campaignCreativeInfo.serviceName?.length : 0}</p>
+              </div>
             </Row>
             <Row>
-              <span>광고 설명<small>({campaignCreativeInfo.description !== null ? campaignCreativeInfo.description?.length : 0})</small><p><small style={{color: '#ccc'}}>최대 30자까지 등록</small></p></span>
-              <input
-                type={'text'}
-                name={'description'}
-                maxLength={30}
-                value={campaignCreativeInfo.description || ""}
-                onChange={handleChangeInputs}
-              />
+              <span>광고 설명<p><small style={{color: '#ccc'}}>최대 30자까지 등록</small></p></span>
+              <div className={'txtCont'}>
+                <input
+                  type={'text'}
+                  name={'description'}
+                  maxLength={30}
+                  value={campaignCreativeInfo.description || ""}
+                  onChange={handleChangeInputs}
+                />
+                <p>{campaignCreativeInfo.description !== null ? campaignCreativeInfo.description?.length : 0}</p>
+              </div>
             </Row>
           </ColSpan2>
         </RowBody>
+      </RowSpan>
+      <RowSpan column={true}>
+        <Row>
+          <Span4>크리에이티브명</Span4>
+          <input
+            type={'text'}
+            maxLength={25}
+            name={'name'}
+            value={campaignCreativeInfo?.name || ""}
+            {...register('name', {
+              required: '크리에이티브명을 입력해주세요',
+              onChange: (e)=>handleChangeInputs(e)
+            })}
+          />
+          {errors?.name && <ValidationScript style={{position:'unset', paddingLeft: 10}}>{errors.name.message}</ValidationScript>}
+        </Row>
       </RowSpan>
     </>
   )
@@ -531,8 +567,8 @@ function CampaignFourNative(props) {
                           {campaignCreativeInfo.nativeMaterials.length !== 0 && campaignCreativeInfo.nativeMaterials.map((item, key) => {
                             return (
                                 <ColSpan100 padding={'0'} key={key}>
-                                  <DeleteIcon onClick={() => handleDeleteNativeImage(item.imagePath)}/>
                                   <ImageUploadCard>
+                                    <DeleteIcon onClick={() => handleDeleteNativeImage(item.imagePath)}/>
                                     <img src={item.imagePath} alt={key}/>
                                   </ImageUploadCard>
                                 </ColSpan100>
@@ -554,9 +590,7 @@ function CampaignFourNative(props) {
                                 </ImageUploading>
                               </ColSpan100>
                           }
-                          <ValidationGroup>
-                            {errors.nativeMaterials && <Validation>{errors.nativeMaterials?.message}</Validation>}
-                          </ValidationGroup>
+                          {errors.nativeMaterials && <Validation>{errors.nativeMaterials?.message}</Validation>}
                           </RowSpan>
                     )}
                 />
@@ -568,52 +602,61 @@ function CampaignFourNative(props) {
         <RowSpan box={true} column={true} style={{width: '100%', padding: '20px 30px', backgroundColor: '#fff'}}>
           <Row>
             <span>광고 타이틀<p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
-            <div style={{width: '80%'}}>
+            <div className={'txtCont'}>
               <input
                 type={'text'}
-                style={{width: '100%'}}
                 maxLength={25}
+                name={'title1'}
                 value={campaignCreativeInfo.title1 || ""}
                 {...register('title1', {
                   required: '광고 타이틀을 입력해주세요',
                   onChange: (e)=>handleChangeInputs(e)
                 })}
               />
-              {errors.title1 && <ValidationScript style={{position:'unset'}}>{errors.title1.message}</ValidationScript>}
+              <p>{campaignCreativeInfo.title1 !== null ? campaignCreativeInfo.title1?.length : 0}</p>
             </div>
-            <p>{campaignCreativeInfo.title1 !== null ? campaignCreativeInfo.title1?.length : 0}</p>
+            {errors.title1 && <ValidationScript style={{position:'unset', paddingLeft: 10}}>{errors.title1.message}</ValidationScript>}
           </Row>
           <Row>
-            <span>광고 제목1<small>({campaignCreativeInfo.title2 !== null ? campaignCreativeInfo.title2?.length : 0})</small><p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
-            <input
-              type={'text'}
-              name={'title2'}
-              maxLength={25}
-              value={campaignCreativeInfo.title2 || ""}
-              onChange={handleChangeInputs}
-            />
+            <span>광고 제목1<small>(선택)</small><p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
+            <div className={'txtCont'}>
+              <input
+                type={'text'}
+                name={'title2'}
+                maxLength={25}
+                value={campaignCreativeInfo.title2 || ""}
+                onChange={handleChangeInputs}
+              />
+              <p>{campaignCreativeInfo.title2 !== null ? campaignCreativeInfo.title2?.length : 0}</p>
+            </div>
           </Row>
           <Row>
-            <span>광고 제목2<small>({campaignCreativeInfo.title3 !== null ? campaignCreativeInfo.title3?.length : 0})</small><p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
-            <input
-              type={'text'}
-              name={'title3'}
-              value={campaignCreativeInfo.title3 || ""}
-              onChange={handleChangeInputs}
-            />
+            <span>광고 제목2<small>(선택)</small><p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
+            <div className={'txtCont'}>
+              <input
+                type={'text'}
+                name={'title3'}
+                value={campaignCreativeInfo.title3 || ""}
+                onChange={handleChangeInputs}
+              />
+              <p>{campaignCreativeInfo.title3 !== null ? campaignCreativeInfo.title3?.length : 0}</p>
+            </div>
           </Row>
           <Row>
-            <span>긴 광고 제목<small>({campaignCreativeInfo.titleLong !== null ? campaignCreativeInfo.titleLong?.length : 0})</small><p><small style={{color: '#ccc'}}>최대 90자까지 등록</small></p></span>
-            <input
-              type={'text'}
-              name={'titleLong'}
-              maxLength={90}
-              value={campaignCreativeInfo.titleLong || ""}
-              onChange={handleChangeInputs}
-            />
+            <span>긴 광고 제목<small>(선택)</small><p><small style={{color: '#ccc'}}>최대 90자까지 등록</small></p></span>
+            <div className={'txtCont'}>
+              <input
+                type={'text'}
+                name={'titleLong'}
+                maxLength={90}
+                value={campaignCreativeInfo.titleLong || ""}
+                onChange={handleChangeInputs}
+              />
+              <p>{campaignCreativeInfo.titleLong !== null ? campaignCreativeInfo.titleLong?.length : 0}</p>
+            </div>
           </Row>
           <Row>
-            <span>클릭 유도 문안</span>
+            <span>클릭 유도 문안<small>(선택)</small></span>
             <Select options={clickInducementType}
                     placeholder={'유도 문안 선택'}
                     value={campaignCreativeInfo.clickInducementType !== undefined ?
@@ -628,40 +671,34 @@ function CampaignFourNative(props) {
         <RowSpan box={true} column={true} style={{width: '100%', padding: '20px 30px', backgroundColor: '#fff'}}>
           <Row>
             <span>서비스 명<p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
-            <input
-              type={'text'}
-              name={'serviceName'}
-              value={campaignCreativeInfo.serviceName || ""}
-              onChange={handleChangeInputs}
-            />
+            <div className={'txtCont'}>
+              <input
+                type={'text'}
+                maxLength={25}
+                name={'serviceName'}
+                value={campaignCreativeInfo?.serviceName || ""}
+                {...register('serviceName', {
+                  required: '서비스명을 입력해주세요',
+                  onChange: (e)=>handleChangeInputs(e)
+                })}
+              />
+              <p>{campaignCreativeInfo?.serviceName !== null ? campaignCreativeInfo.serviceName?.length : 0}</p>
+            </div>
+            {errors?.serviceName && <ValidationScript style={{position:'unset', paddingLeft: 10}}>{errors.serviceName.message}</ValidationScript>}
           </Row>
           <Row>
-            <Span4>로고이미지(선택)<p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p></Span4>
+            <Span4>로고이미지<small>(선택)</small><p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p></Span4>
             <RowSpan box={true} style={{marginTop: 0, gap: 10, width: '80%', justifyContent: 'flex-start'}}>
-              <Controller
-                name="logoPaths"
-                control={control}
-                rules={{
-                  required: {
-                    value: campaignCreativeInfo.logoPaths.length === 0,
-                    message: '로고를 등록해 주세요.'
-                  }
-                }}
-                render={({field}) => (
-                  <div {...field}>
-                    {campaignCreativeInfo.logoPaths.length !== 0 && campaignCreativeInfo.logoPaths.map((item, key) => {
-                      return (
-                        <ColSpan100 padding={'0'} key={key}>
-                          <DeleteIcon onClick={() => handleDeleteLogoImage(item.imagePath)}/>
-                          <ImageUploadCard>
-                            <img src={item.imagePath} alt={key}/>
-                          </ImageUploadCard>
-                        </ColSpan100>
-                      )
-                    })}
-                  </div>
-                )}
-              />
+              {campaignCreativeInfo.logoPaths.length !== 0 && campaignCreativeInfo.logoPaths.map((item, key) => {
+                return (
+                  <ColSpan100 padding={'0'} key={key}>
+                    <ImageUploadCard>
+                      <DeleteIcon onClick={() => handleDeleteLogoImage(item.imagePath)}/>
+                      <img src={item.imagePath} alt={key}/>
+                    </ImageUploadCard>
+                  </ColSpan100>
+                )
+              })}
               {campaignCreativeInfo.logoPaths.length < 5 &&
                 <ColSpan100 padding={'0'}>
                   <ImageUploading
@@ -677,18 +714,21 @@ function CampaignFourNative(props) {
                   </ImageUploading>
                 </ColSpan100>
               }
-              {errors.logoPaths && <Validation>{errors.logoPaths?.message}</Validation>}
             </RowSpan>
           </Row>
           <Row>
             <Row>
-              <span>광고 설명(선택)</span>
-              <input
-                type={'text'}
-                name={'description'}
-                value={campaignCreativeInfo.description || ""}
-                onChange={handleChangeInputs}
-              />
+              <span>광고 설명<small>(선택)</small><p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
+              <div className={'txtCont'}>
+                <input
+                  type={'text'}
+                  name={'description'}
+                  maxLength={25}
+                  value={campaignCreativeInfo.description || ""}
+                  onChange={handleChangeInputs}
+                />
+                <p>{campaignCreativeInfo?.description !== null ? campaignCreativeInfo.description?.length : 0}</p>
+              </div>
             </Row>
           </Row>
         </RowSpan>
@@ -703,6 +743,22 @@ function CampaignFourNative(props) {
           })}
         </RowSpan>
       </RowSpan>
+      <RowSpan column={true}>
+        <Row>
+          <Span4>크리에이티브명</Span4>
+          <input
+            type={'text'}
+            maxLength={25}
+            name={'name'}
+            value={campaignCreativeInfo?.name || ""}
+            {...register('name', {
+              required: '크리에이티브명을 입력해주세요',
+              onChange: (e)=>handleChangeInputs(e)
+            })}
+          />
+          {errors?.name && <ValidationScript style={{position:'unset', paddingLeft: 10}}>{errors.name.message}</ValidationScript>}
+        </Row>
+      </RowSpan>
     </>
   )
 }
@@ -712,7 +768,7 @@ export function CampaignFour() {
   const navigate = useNavigate()
   const [, setStepCampaign] = useAtom(stepCampaignAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
-  const [campaignBasicInfo,setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
+  const [campaignBasicInfo, setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
   const [, setBannerSize] = useAtom(bannerSizeAtom)
   const [creativeType, setCreativeType] = useAtom(creativeTypeAtom)
   const [, setClickInducementType] = useAtom(clickInducementTypeAtom)
@@ -729,6 +785,7 @@ export function CampaignFour() {
             nativeMaterials:[]
           })
           setCampaignBasicInfo({
+            ...campaignBasicInfo,
             campaignId: state.campaignId,
             productType: state.productType
           })
@@ -741,6 +798,7 @@ export function CampaignFour() {
             materials:[]
           })
           setCampaignBasicInfo({
+            ...campaignBasicInfo,
             campaignId: state.campaignId,
             productType: state.productType
           })
@@ -754,6 +812,7 @@ export function CampaignFour() {
             nativeMaterials: []
           })
           setCampaignBasicInfo({
+            ...campaignBasicInfo,
             campaignId: state.campaignId,
             productType: state.productType
           })
@@ -950,7 +1009,7 @@ export function CampaignFour() {
                 <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
               </ValidationGroup>
               {campaignCreativeInfo.creativeType === 'BANNER' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
-                <CampaignFourBanner control={control} errors={errors} setError={setError} isfold={campaignCreativeInfo.clickInducementType === null}/>
+                <CampaignFourBanner control={control} errors={errors} setError={setError} register={register} isFold={campaignCreativeInfo.title1 === ''}/>
               }
               {campaignCreativeInfo.creativeType === 'NATIVE' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
                 <CampaignFourNative control={control} errors={errors} setError={setError} register={register}/>

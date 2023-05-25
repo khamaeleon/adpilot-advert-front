@@ -200,7 +200,8 @@ export function CampaignThree() {
   const setExposureConversion =(boolExposureConversion)=>{
     setCampaignGroupInfo({
       ...campaignGroupInfo,
-      exposureConversionUserYn: boolExposureConversion
+      exposureConversionUserYn: boolExposureConversion,
+      nonExposureDaysOfConversionUser: 0
     })
   }
 
@@ -246,7 +247,8 @@ export function CampaignThree() {
   const setExposureConversionAudience =(boolExposureConversionAudience)=>{
     setCampaignGroupInfo({
       ...campaignGroupInfo,
-      exposureConversionAudienceYn: boolExposureConversionAudience
+      exposureConversionAudienceYn: boolExposureConversionAudience,
+      nonExposureDaysOfConversionAudience: 0
     })
   }
 
@@ -403,7 +405,7 @@ export function CampaignThree() {
                     <span>직접 선택</span>
                   </label>
                   {campaignGroupInfo.exposureInventoryType === 'MANUAL' &&
-                    <InventoryButton title={'지면선택'} type={'allow'}/>
+                    <InventoryButton title={'게재 지면 설정'} buttonText={'지면선택'} type={'allow'}/>
                   }
                   {campaignGroupInfo.exposureInventoryType === 'MANUAL' && campaignGroupInfo.allowInventoryIds?.length !== 0 &&
                     <small>{campaignGroupInfo.allowInventoryIds?.length}개 지면 송출 설정</small>
@@ -430,7 +432,7 @@ export function CampaignThree() {
               </ColSpan4>
             }
             <ColSpan4>
-              <Span4>송출 제한 지면 설정</Span4>
+              <Span4>송출 제한 지면</Span4>
               <RelativeDiv>
                 <label>
                   <input
@@ -476,7 +478,7 @@ export function CampaignThree() {
                     <span>직접 선택</span>
                   </label>
                   {campaignGroupInfo.disExposureInventoryType === 'MANUAL' &&
-                    <InventoryButton title={'지면선택'} type={'disExposure'}/>
+                    <InventoryButton title={'송출 제한 지면 설정'} buttonText={'지면선택'} type={'disExposure'}/>
                   }
                   {campaignGroupInfo.disExposureInventoryType === 'MANUAL' && campaignGroupInfo.disAllowInventoryIds?.length !== 0 &&
                     <small>{campaignGroupInfo.disAllowInventoryIds?.length}개 지면 송출 설정</small>
@@ -613,7 +615,7 @@ export function CampaignThree() {
                         <div>
                           <Controller name={'nonExposureDaysOfConversionUser'}
                                       control={control}
-                                      rules={{required: {value: campaignGroupInfo.exposureConversionUserYn === "N" && campaignGroupInfo.nonExposureDaysOfConversionUser === null, message:'미노출 기간을 선택해주세요.'}}}
+                                      rules={{required: {value: campaignGroupInfo.exposureConversionUserYn === "N" && campaignGroupInfo.nonExposureDaysOfConversionUser === 0, message:'미노출 기간을 선택해주세요.'}}}
                                       render={({field}) =>
                                         <Select styles={smallStyle}
                                                 placeholder={'미노출기간 선택'}
@@ -667,7 +669,7 @@ export function CampaignThree() {
                   <RowInBox>
                     <div>
                       <span>관심 고객</span>
-                      <span style={{color: '#ccc'}}>쇼핑을 진행한 고객을 대상으로 광고 노출</span>
+                      <span style={{color: '#ccc'}}>광고주에게 관심있는 모든 고객에게 광고 노출</span>
                     </div>
                     <div>
                       <div>
@@ -693,7 +695,7 @@ export function CampaignThree() {
                   <RowInBox>
                     <div>
                       <span>방문 고객</span>
-                      <span style={{color: '#ccc'}}>쇼핑을 진행한 고객을 대상으로 광고 노출</span>
+                      <span style={{color: '#ccc'}}>광고주에게 방문한 고객에게 광고 노출</span>
                     </div>
                     <div>
                       <div>
@@ -751,7 +753,7 @@ export function CampaignThree() {
                   <RowInBox>
                     <div>
                       <span>전환 유저</span>
-                      <span style={{color: '#ccc'}}>광고주 상품을 구매한 고객을 대상으로 정책 설정</span>
+                      <span style={{color: '#ccc'}}>전환이 발생한 유저를 대상으로 광고 노출</span>
                     </div>
                     <div>
                       <div>
@@ -777,7 +779,7 @@ export function CampaignThree() {
                         <div>
                           <Controller name={'nonExposureDaysOfConversionAudience'}
                                       control={control}
-                                      rules={{required: {value: campaignGroupInfo.exposureConversionAudienceYn === "N" && campaignGroupInfo.nonExposureDaysOfConversionAudience === null, message:'미노출 기간을 선택해주세요.'}}}
+                                      rules={{required: {value: campaignGroupInfo.exposureConversionAudienceYn === "N" && campaignGroupInfo.nonExposureDaysOfConversionAudience === 0, message:'미노출 기간을 선택해주세요.'}}}
                                       render={({field}) =>
                                         <Select styles={smallStyle}
                                                 placeholder={'미노출기간 선택'}
@@ -794,8 +796,8 @@ export function CampaignThree() {
                   </RowInBox>
                   <RowInBox>
                     <div>
-                      <span>쇼핑 고객</span>
-                      <span style={{color: '#ccc'}}>쇼핑을 진행한 고객을 대상으로 광고 노출</span>
+                      <span>쇼핑 유저</span>
+                      <span style={{color: '#ccc'}}>쇼핑에 관심있는 유저에게 광고 노출</span>
                     </div>
                     <div>
                       <div>
@@ -820,8 +822,8 @@ export function CampaignThree() {
                   </RowInBox>
                   <RowInBox>
                     <div>
-                      <span>관심 고객</span>
-                      <span style={{color: '#ccc'}}>쇼핑을 진행한 고객을 대상으로 광고 노출</span>
+                      <span>잠재 유저</span>
+                      <span style={{color: '#ccc'}}>유사 서비스에 관심있는 유저에게 광고 노출</span>
                     </div>
                     <div>
                       <div>
@@ -846,8 +848,8 @@ export function CampaignThree() {
                   </RowInBox>
                   <RowInBox>
                     <div>
-                      <span>방문 고객</span>
-                      <span style={{color: '#ccc'}}>쇼핑을 진행한 고객을 대상으로 광고 노출</span>
+                      <span>신규 유저</span>
+                      <span style={{color: '#ccc'}}>방문 이력이 없는 유저 및 신규 유저에게 광고 노출</span>
                     </div>
                     <div>
                       <div>
