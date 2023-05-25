@@ -35,30 +35,6 @@ export const refundRequestData = {
         {key: "24", value: 'K_BANK', label: '케이뱅크'},
         {key: "25", value: 'KAKAO_BANK', label: '카카오뱅크'},
         {key: "26", value: 'TOSS_BANK', label: '토스뱅크'},
-
-        // 증권사 목록
-        // {key: "28", value: 'KB_SEC', label: '국민은행'},
-        // {key: "29", value: 'KTB_SEC', label: '국민은행'},
-        // {key: "30", value: 'MIRAEASSET_SEC', label: '국민은행'},
-        // {key: "31", value: 'SAMSUNG_SEC', label: '국민은행'},
-        // {key: "32", value: 'KI_SEC', label: '국민은행'},
-        // {key: "33", value: 'NH_SEC', label: '국민은행'},
-        // {key: "34", value: 'KYOBO_SEC', label: '국민은행'},
-        // {key: "35", value: 'HI_SEC', label: '국민은행'},
-        // {key: "36", value: 'HMC_SEC', label: '국민은행'},
-        // {key: "37", value: 'KIWOOM_SEC', label: '국민은행'},
-        // {key: "38", value: 'EBEST_SEC', label: '국민은행'},
-        // {key: "39", value: 'SK_SEC', label: '국민은행'},
-        //
-        // {key: "40", value: 'DAISHIN_SEC', label: '국민은행'},
-        // {key: "41", value: 'HANWHA_SEC', label: '국민은행'},
-        // {key: "42", value: 'HANA_SEC', label: '국민은행'},
-        // {key: "43", value: 'TOSS_SEC', label: '국민은행'},
-        // {key: "44", value: 'SHINHAN_SEC', label: '국민은행'},
-        // {key: "45", value: 'DONGBU_SEC', label: '국민은행'},
-        // {key: "46", value: 'EUGENE_SEC', label: '국민은행'},
-        // {key: "47", value: 'MERITZ_SEC', label: '국민은행'},
-
     ],
     sortType: null
 }
@@ -139,18 +115,6 @@ export const PaymentDetailsColumns = [
             )
         }
     },
-    // {
-    //     name: 'bankType',
-    //     header: '결제 수단(계좌번호)',
-    //     defaultFlex: 1,
-    //     resizable: false,
-    //     textAlign: 'center',
-    //     render: ({ value })=> {
-    //         return (
-    //           <p>{value === true ? value : '-'}</p>
-    //         )
-    //     }
-    // },
     {
         name: 'amount',
         header: '결제/신청 금액',
@@ -185,13 +149,13 @@ export const PointDetailsColumns = [
         textAlign: 'center',
         render: ({ value })=> {
             let valueType = {
-                CHARGE_OF_PAYMENT: { label: '충전 신청', color: 'blue' },
-                REFUND_OF_PAYMENT: { label: '환불 신청', color: 'orange' },
+                CHARGE_OF_PAYMENT: { label: '결제 신청', color: 'blue' },
+                // REFUND_OF_PAYMENT: { label: '환불 신청', color: 'orange' },
                 GIVEN_BY_ADMIN: { label: '포인트 지급', color: 'green' },
-                TAKEN_BY_ADMIN: { label: '포인트 차감', color: 'pink' },
+                TAKEN_BY_ADMIN: { label: '포인트 차감', color: 'orange' },
                 REFUND_REQUEST_OF_USER: { label: '환불 요청', color: 'red' },
-                REFUNDED_BY_ADMIN: { label: '환불 완료', color: 'green' },
-                ERROR: { label: 'ERROR', color: 'red' }
+                REFUNDED_BY_ADMIN: { label: '환불 완료', color: 'SaddleBrown' },
+                // ERROR: { label: 'ERROR', color: 'red' }
             }[value] || { label: '', color: '' };
             return (
               <p style={{ color: valueType.color }}>{valueType.label}</p>
@@ -201,7 +165,7 @@ export const PointDetailsColumns = [
     {
         //[d] 은행명 + 계좌 번호
         name: 'refundBankType',
-        header: '결제 정보',
+        header: '환불 정보',
         defaultFlex: 1,
         resizable: false,
         textAlign: 'center',
