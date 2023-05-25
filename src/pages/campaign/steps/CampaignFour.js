@@ -168,9 +168,9 @@ function CampaignFourBanner(props) {
   const [fold, setFold] = useState(true)
 
   useEffect(()=>{
-    console.log(isFold)
     setFold(isFold)
-  },[])
+  },[isFold])
+
   const handleDeleteLogoImage = (imagePath) => {
     confirmAlert({
       title: '알림',
@@ -1008,9 +1008,8 @@ export function CampaignFour() {
                 <Validation>{errors.pcReferralCode && errors.pcReferralCode.message}</Validation>
                 <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
               </ValidationGroup>
-              {console.log(campaignCreativeInfo.clickInducementType)}
               {campaignCreativeInfo.creativeType === 'BANNER' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
-                <CampaignFourBanner control={control} errors={errors} setError={setError} register={register} isFold={campaignCreativeInfo.clickInducementType === null}/>
+                <CampaignFourBanner control={control} errors={errors} setError={setError} register={register} isFold={campaignCreativeInfo.title1 === ''}/>
               }
               {campaignCreativeInfo.creativeType === 'NATIVE' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
                 <CampaignFourNative control={control} errors={errors} setError={setError} register={register}/>
