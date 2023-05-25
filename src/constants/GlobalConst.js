@@ -18,3 +18,4 @@ export const ADVER_SERVER = adver
 /* 사용자: nate9988 , P@ssw0rd!@#4 */
 
 export const defaultImage = "https://static.trycatch.co.kr/assets/img/new-no-images.png";
+

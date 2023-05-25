@@ -56,9 +56,10 @@ import {useResetAtom} from "jotai/utils";
 import {multiAxiosCall} from "../../../common/StringUtils";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import {isMaxFileSizeValid} from "react-images-uploading/dist/validation";
 
 const RegistryBannerItem = (props) => {
-  const {size} = props;
+  const {size, onImageError} = props;
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
 
   const handleDeleteImage = (imagePath) => {
@@ -97,31 +98,25 @@ const RegistryBannerItem = (props) => {
       pictureFiles.map((item ,index)=>{
         data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
       })
-      let boolSaveImages = campaignCreativeInfo.materials.find(value =>value.bannerSize === size.bannerSize ).images.length +pictureFiles.length
-
-      if(boolSaveImages < 6 ){
-        uploadBannerImages(data, size.bannerSize).then(response => {
-          if (response) {
-            setCampaignCreative({
-              ...campaignCreativeInfo,
-              materials: campaignCreativeInfo.materials.map(value => {
-                if (value.bannerSize === size.bannerSize) {
-                  return {
-                    ...value,
-                    images: value.images.concat(response.images)
-                  }
-                } else {
-                  return {
-                    ...value
-                  }
+      uploadBannerImages(data, size.bannerSize).then(response => {
+        if (response) {
+          setCampaignCreative({
+            ...campaignCreativeInfo,
+            materials: campaignCreativeInfo.materials.map(value => {
+              if (value.bannerSize === size.bannerSize) {
+                return {
+                  ...value,
+                  images: value.images.concat(response.images)
                 }
-              })
+              } else {
+                return {
+                  ...value
+                }
+              }
             })
-          }
-        })
-      }else{
-        alert("5개 이상 등록 못함")
-      }
+          })
+        }
+      })
     }
   }
   return (
@@ -147,6 +142,7 @@ const RegistryBannerItem = (props) => {
                     onChange={onDrop}
                     maxFileSize={10485760}
                     maxNumber={5}
+                    onError={(e) => onImageError(e,'image')}
                 >
                   {({onImageUpload}) => (
                       <CreateImage onClick={onImageUpload}/>
@@ -161,7 +157,7 @@ const RegistryBannerItem = (props) => {
 }
 
 function CampaignFourBanner(props) {
-  const {control, isFold, errors, setError, register} = props
+  const {control, isFold, errors, setError, register, onImageError} = props
   const [clickInducementType] = useAtom(clickInducementTypeAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
   const [bannerSize] = useAtom(bannerSizeAtom)
@@ -277,7 +273,7 @@ function CampaignFourBanner(props) {
                   <div style={{display: 'flex', flexWrap: 'wrap'}}>
                     {campaignCreativeInfo.materials !== undefined && campaignCreativeInfo.materials.map((item, key) => {
                       return (
-                        <RegistryBannerItem key={key} size={item}/>
+                        <RegistryBannerItem key={key} size={item} onImageError={onImageError}/>
                       )
                     })}
                   </div>
@@ -383,8 +379,9 @@ function CampaignFourBanner(props) {
                       multiple
                       acceptType={["jpg", "gif", "png"]}
                       onChange={onLogoDrop}
-                      maxFileSize={10485760}
+                      maxFileSize={1048576}
                       maxNumber={5}
+                      onError={(e) => onImageError(e,'logo')}
                     >
                       {({onImageUpload}) => (
                         <CreateImage onClick={onImageUpload}/>
@@ -444,7 +441,7 @@ function CampaignFourBanner(props) {
 }
 
 function CampaignFourNative(props) {
-  const {control, errors, setError, register} = props
+  const {control, errors, setError, register, onImageError} = props
   const [clickInducementType] = useAtom(clickInducementTypeAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
 
@@ -526,23 +523,17 @@ function CampaignFourNative(props) {
   const onLogoDrop = (pictureFiles) => {
     if (pictureFiles.length !== 0) {
       const data = new FormData()
-      const imagesLastIndex = pictureFiles.length - 1;
       pictureFiles.map((item ,index)=>{
         data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
       })
-      let boolSaveImages = campaignCreativeInfo.logoPaths.length + pictureFiles.length
-      if(boolSaveImages < 6){
-        uploadLogoImages(data).then(response => {
-          if (response) {
-            setCampaignCreative({
-              ...campaignCreativeInfo,
-              logoPaths: campaignCreativeInfo.logoPaths.concat(response)
-            })
-          }
-        })
-      }else{
-        toast.warning('이미지는 5개 까지만 등록 가능합니다.')
-      }
+      uploadLogoImages(data).then(response => {
+        if (response) {
+          setCampaignCreative({
+            ...campaignCreativeInfo,
+            logoPaths: campaignCreativeInfo.logoPaths.concat(response)
+          })
+        }
+      })
     }
     setError("logoPaths",'')
   }
@@ -583,6 +574,7 @@ function CampaignFourNative(props) {
                                     onChange={onNativeDrop}
                                     maxFileSize={10485760}
                                     maxNumber={5}
+                                    onError={(e)=> onImageError(e,'image')}
                                 >
                                   {({onImageUpload}) => (
                                       <CreateImage onClick={onImageUpload}/>
@@ -705,8 +697,9 @@ function CampaignFourNative(props) {
                     multiple
                     acceptType={["jpg", "gif", "png"]}
                     onChange={onLogoDrop}
-                    maxFileSize={10485760}
+                    maxFileSize={1048576}
                     maxNumber={5}
+                    onError={(e) => onImageError(e,'logo')}
                   >
                     {({onImageUpload}) => (
                       <CreateImage onClick={onImageUpload}/>
@@ -855,12 +848,24 @@ export function CampaignFour() {
       [e.target.name]: e.target.value
     })
   }
+
+  const onImageError = (errors, type) => {
+    console.log(type)
+    if (errors.maxFileSize) {
+      toast.warning('저장 가능한 이미지 사이즈는 '+ (type ==='logo'?'1MB':'10MB')+'입니다.')
+    } else if (errors.maxNumber) {
+      toast.warning('이미지는 5개 까지만 등록 가능합니다.')
+    } else if (errors.acceptType) {
+      toast.warning('"jpg", "gif", "png"의 형식만 등록 가능합니다.')
+    }
+  }
+
   const onSubmitToast = (response) => {
     if(response[0]) {
       if (state !== null) {
         toast.success("수정되었습니다.",{autoClose:100, delay:0})
         toast.onChange(payload => {
-          if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
+          if (payload.status === "removed" && payload.type === toast.TYPE.SUCCESS) {
             navigate('/board/dashboard')
             resetInfo()
           }
@@ -1009,10 +1014,10 @@ export function CampaignFour() {
                 <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
               </ValidationGroup>
               {campaignCreativeInfo.creativeType === 'BANNER' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
-                <CampaignFourBanner control={control} errors={errors} setError={setError} register={register} isFold={campaignCreativeInfo.title1 === ''}/>
+                <CampaignFourBanner control={control} errors={errors} setError={setError} register={register} onImageError={onImageError} isFold={campaignCreativeInfo.title1 === ''}/>
               }
               {campaignCreativeInfo.creativeType === 'NATIVE' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
-                <CampaignFourNative control={control} errors={errors} setError={setError} register={register}/>
+                <CampaignFourNative control={control} errors={errors} setError={setError} register={register} onImageError={onImageError}/>
               }
 
             </BoardSearchResult>
