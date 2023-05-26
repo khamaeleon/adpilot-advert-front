@@ -6,10 +6,9 @@ import {
   DashBoardBody,
   DashBoardCard,
   DashBoardHeader,
-  defaultStyle
 } from "../../assets/GlobalStyles";
 import {ResponsiveLine} from '@nivo/line'
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useAtom,useAtomValue} from "jotai";
 import {dataTotalInfo} from "../../components/common/entity";
 import {chartDataAtom, commonProperties, platformStatusType, userPlatformStatusType} from "./entity/Chart";
@@ -23,7 +22,6 @@ import {
 import {eventType, productType, searchConditionAtom} from "./entity/Common";
 import {retrieveAdverOverview, retrieveOverview,} from "../../services/dash_board/ChartAxios";
 import {tokenResultAtom} from "../login/entity/Common";
-import TableDetail from "../../components/table/TableDetail";
 import {
   retrieveAdvertiserCampaignStatus,
   retrieveAdvertiserStatus, retrieveUserAdvertiserCampaignStatus

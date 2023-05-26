@@ -2,7 +2,6 @@ import {atom} from "jotai";
 import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../../common/StringUtils";
 import React from "react";
 import {Icon, SwitchComponent} from "../../../components/table";
-import {updatePixelInterlock} from "../../../services/header/ManagePixelAxios";
 import {Link} from "react-router-dom";
 import {updateCampaignPublish} from "../../../services/campaign/CreativeAxios";
 
@@ -21,18 +20,21 @@ export const adverListColumn = [
     name: 'adverName',
     header: '광고주명',
     minWidth: 150,
+    textAlign: 'center',
     showColumnMenuTool: false,
   },
   {
     name: 'username',
     header: '광고주 아이디',
     minWidth: 150,
+    textAlign: 'center',
     showColumnMenuTool: false,
   },
   {
     name: 'campaignCount',
     header: '캠페인 수',
     minWidth: 100,
+    textAlign: 'center',
     render: ({value}) => <p>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -40,6 +42,7 @@ export const adverListColumn = [
     name: 'exposureCount',
     header: '노출 수',
     minWidth: 100,
+    textAlign: 'center',
     render: ({value}) => <p>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -47,6 +50,7 @@ export const adverListColumn = [
     name: 'validClickCount',
     header: '클릭 수',
     minWidth: 100,
+    textAlign: 'center',
     render: ({value}) => <p>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -54,6 +58,7 @@ export const adverListColumn = [
     name: 'clickRate',
     header: '클릭률',
     minWidth: 100,
+    textAlign: 'center',
     render: ({data}) => {
       let value = data.exposureCount !== 0 ? (data.validClickCount / data.exposureCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
@@ -64,6 +69,7 @@ export const adverListColumn = [
     name: 'costAmount',
     header: '비용',
     minWidth: 180,
+    textAlign: 'center',
     render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -71,6 +77,7 @@ export const adverListColumn = [
     name: 'cpc',
     header: 'CPC',
     minWidth: 100,
+    textAlign: 'center',
     render: ({data}) => {
       let value = data.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -81,6 +88,7 @@ export const adverListColumn = [
     name: 'totalConversionCount',
     header: '전환 수',
     minWidth: 100,
+    textAlign: 'center',
     render: ({value}) => <p>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -88,6 +96,7 @@ export const adverListColumn = [
     name: 'conversionRate',
     header: '전환율',
     minWidth: 100,
+    textAlign: 'center',
     render: ({data}) => {
       let value = data.validClickCount !== 0 ? (data.totalConversionCount / data.validClickCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
@@ -98,6 +107,7 @@ export const adverListColumn = [
     name: 'costPerConversion',
     header: '전환 단가',
     minWidth: 100,
+    textAlign: 'center',
     render: ({data}) => {
       let value = data.totalConversionCount !== 0 ? data?.costAmount / data.totalConversionCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -108,6 +118,7 @@ export const adverListColumn = [
     name: 'avgConversionAmount',
     header: '평균 구매액',
     minWidth: 150,
+    textAlign: 'center',
     render: ({data}) => {
       let value = data.totalConversionCount !== 0 ? data.totalConversionAmount / data.totalConversionCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -117,6 +128,7 @@ export const adverListColumn = [
   {
     name: 'sessionConversionAmount',
     minWidth: 150,
+    textAlign: 'center',
     header: () => {
       return(
         <div><p>세션매출</p><small>(ROAS)</small></div>
@@ -131,6 +143,7 @@ export const adverListColumn = [
   {
     name: 'directConversionAmount',
     minWidth: 150,
+    textAlign: 'center',
     header: () => {
       return(
         <div><p>직접매출</p><small>(ROAS)</small></div>
@@ -145,6 +158,7 @@ export const adverListColumn = [
   {
     name: 'exposureConversionAmount',
     minWidth: 150,
+    textAlign: 'center',
     header: () => {
       return(
         <div><p>노출매출</p><small>(ROAS)</small></div>
@@ -175,6 +189,7 @@ export const adverListColumn = [
     name: 'ecpm',
     header: 'ECPM',
     minWidth: 100,
+    textAlign: 'center',
     render: ({data}) => {
       let value = data.exposureCount !== 0 ? (data.totalConversionAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
