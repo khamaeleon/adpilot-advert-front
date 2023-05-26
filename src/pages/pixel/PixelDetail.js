@@ -29,6 +29,7 @@ import {
 } from "../../services/Platform/CategoryAxios";
 import styled from "styled-components";
 import {pixelDetailInfoColumns, pixelInfoListAtom, statusTypeAll} from "./entity/Pixel";
+import {Validation, ValidationGroup} from "../campaign/styles/common";
 
 function PixelDetail() {
   const [pixelInfoListState, setPixelInfoListState] = useAtom(pixelInfoListAtom)
@@ -40,7 +41,10 @@ function PixelDetail() {
     mode: "onSubmit",
     defaultValues: pixelInfoListState
   })
-  const onError = (error) => console.log(error)
+
+  const onError = (error) => {
+    toast.warning('필수 정보를 입력해주세요')
+  }
   useEffect(() => {
     retrieveTopLevelCategoryKeyValue().then(response => {
       setTopLevelCategoryList(response)
@@ -133,7 +137,7 @@ function PixelDetail() {
                   <RelativeDiv>
                     {pixelInfoListState !== null &&
                       <Input
-                        style={{height:38}}
+                        style={{height:38,border: errors.pixelName && "1px solid red"}}
                         type={'text'}
                         placeholder={'픽셀명을 입력해주세요'}
                         {...register("pixelName", {
@@ -142,7 +146,6 @@ function PixelDetail() {
                         })}
                         value={pixelInfoListState?.pixelName}
                       />}
-                    {errors.pixelName && <ValidationScript>{errors.pixelName?.message}</ValidationScript>}
                   </RelativeDiv>
                 </div>
               </div>
@@ -152,7 +155,7 @@ function PixelDetail() {
                   <RelativeDiv>
                     {pixelInfoListState !== null &&
                       <Input
-                        style={{height:38}}
+                        style={{height:38,border: errors.linkUrl && "1px solid red"}}
                         type={'text'}
                         placeholder={'연동URL을 입력해주세요'}
                         {...register("linkUrl", {
@@ -165,7 +168,6 @@ function PixelDetail() {
                         })}
                         value={pixelInfoListState.linkUrl}
                       />}
-                    {errors.linkUrl && <ValidationScript>{errors.linkUrl?.message}</ValidationScript>}
                   </RelativeDiv>
                 </div>
               </div>

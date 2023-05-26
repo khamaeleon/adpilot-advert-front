@@ -20,7 +20,7 @@ export const FindIdResultAtom = atom(findIdResult)
 function FindPassword(props) {
   const [findPasswordInfo, setFindPasswordInfo] = useState(findPasswordParams)
   const {register, handleSubmit, formState:{errors}} = useForm()
-
+  const navigate = useNavigate()
   const handleFindPassword = () => {
     //axios 로 호출하여 서버쪽에서 이메일쪽으로 전송
     selChangePassword(findPasswordInfo).then(response => {
@@ -130,9 +130,12 @@ function FindPassword(props) {
           {errors.email && <ValidationScript>{errors.email.message}</ValidationScript>}
         </InputGroup>
         <FindGroup/>
-        <InputGroup>
+        <InputGroup style={{display: 'flex', justifyContent: 'space-between', gap: 5}}>
           <Button type={'submit'}>
             비밀번호 찾기
+          </Button>
+          <Button type={'button'} onClick={() => navigate('/')}>
+            로그인
           </Button>
         </InputGroup>
       </form>
@@ -145,6 +148,7 @@ function FindId(props) {
   const [,setFindIdResult] = useAtom(FindIdResultAtom)
   const {register, handleSubmit, formState:{errors}} = useForm()
   const success = true
+  const navigate = useNavigate()
   const handleFindId = () => {
     if(success){
       selFindUserId(findIdInfo).then(response => {
@@ -230,9 +234,12 @@ function FindId(props) {
           {errors.email && <ValidationScript>{errors.email.message}</ValidationScript>}
         </InputGroup>
         <FindGroup/>
-        <InputGroup>
+        <InputGroup style={{display: 'flex', justifyContent: 'space-between', gap: 5}}>
           <Button type={'submit'}>
-            아이디찾기
+            비밀번호 찾기
+          </Button>
+          <Button type={'button'} onClick={() => navigate('/')}>
+            로그인
           </Button>
         </InputGroup>
       </form>

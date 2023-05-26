@@ -1206,7 +1206,7 @@ export const DeleteButton = styled.button`
 `
 export const ValidationScript = styled.div`
   position: absolute;
-  bottom: -16px;
+  bottom: -18px;
   left: 5px;
   color: #f55a5a;
   font-size: 12px !important;
