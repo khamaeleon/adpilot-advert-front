@@ -8,7 +8,7 @@ import {
   ColSpan2,
   ColSpan3,
   ColSpan4,
-  Input,
+  Input, RelativeDiv,
   RowSpan,
   Span3,
   Span4,
@@ -16,13 +16,13 @@ import {
   SubmitContainer, ValidationScript
 } from "../../../assets/GlobalStyles";
 import {
-  AdverInfo,
+  AdverInfo, ArrowButton,
   CampaignButton,
   CategoryItem, CreateImage,
   DeleteIcon,
   FolderButton,
-  ImageUploadCard,
-  PrevImage,
+  ImageUploadCard, PrevButton, PrevFrame,
+  PrevImage, PrevImage250, PrevImage728, PrevTitle250, PrevTitle728,
   ResistBanner,
   Row,
   RowBody,
@@ -445,6 +445,40 @@ function CampaignFourNative(props) {
   const [clickInducementType] = useAtom(clickInducementTypeAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
 
+  const PreviewNativeBanner = () => {
+    const [active250, setActive250] = useState(0);
+    const [active728, setActive728] = useState(0);
+    const max = campaignCreativeInfo.nativeMaterials?.length -1;
+    return campaignCreativeInfo.nativeMaterials?.length != 0 && (
+        <RowSpan column={true}>
+          <Span4>미리보기</Span4>
+          <RowSpan box={true} style={{justifyContent: 'flex-start', flexWrap: 'wrap'}}>
+            <span>250*250 소재</span>
+            <Row style={{justifyContent: 'center'}}>
+              <ColSpan1>{active250 !== 0 && <ArrowButton next={true} onClick={()=>{setActive250(active250-1)}}/>}</ColSpan1>
+              <PrevFrame width={250} height={250}>
+                <PrevImage250 style={{backgroundImage: `url(${campaignCreativeInfo.nativeMaterials[active250]?.imagePath})`}} />
+                <PrevTitle250>{campaignCreativeInfo.title1}</PrevTitle250>
+              </PrevFrame>
+              <ColSpan1>{active250 !== max && <ArrowButton next={false} onClick={()=>{setActive250(active250+1)}}/>}</ColSpan1>
+            </Row>
+          </RowSpan>
+          <RowSpan box={true} style={{justifyContent: 'flex-start', flexWrap: 'wrap'}}>
+            <span>728*90 소재</span>
+            <Row style={{justifyContent: 'center'}}>
+              <ColSpan1>{active728 !== 0 &&  <ArrowButton next={true} onClick={()=>{setActive728(active728-1)}}/>}</ColSpan1>
+              <PrevFrame width={728} height={90}>
+                <PrevImage728 style={{backgroundImage: `url(${campaignCreativeInfo.nativeMaterials[active728]?.imagePath})`}}/>
+                <PrevTitle728>{campaignCreativeInfo.title1}</PrevTitle728>
+                <PrevButton>{clickInducementType.find(d => d.value === campaignCreativeInfo.clickInducementType)?.label}</PrevButton>
+              </PrevFrame>
+              <ColSpan1>{active728 !== max && <ArrowButton next={false} onClick={()=>{setActive728(active728+1)}}/>}</ColSpan1>
+            </Row>
+          </RowSpan>
+        </RowSpan>
+    )
+  }
+
   const handleDeleteLogoImage = (imagePath) => {
     confirmAlert({
       title: '알림',
@@ -543,7 +577,7 @@ function CampaignFourNative(props) {
         <Span4>광고소재</Span4>
         <RowSpan box={true} column={true} style={{width: '100%', padding: '20px 30px', backgroundColor: '#fff'}}>
             <Row>
-              <span>이미지<p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p></span>
+              <span>이미지<p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p><p><small style={{color: '#ccc'}}>(600*300 사이즈 권장)</small></p></span>
                 <Controller
                     name="nativeMaterials"
                     control={control}
@@ -726,16 +760,7 @@ function CampaignFourNative(props) {
           </Row>
         </RowSpan>
       </RowSpan>
-      <RowSpan column={true}>
-        <Span4>미리보기</Span4>
-        <RowSpan box={true} style={{justifyContent: 'flex-start', flexWrap: 'wrap'}}>
-          {campaignCreativeInfo.nativeMaterials.length !== 0 && campaignCreativeInfo.nativeMaterials.map((item, key) => {
-            return (
-              <PrevImage key={key} style={{backgroundImage: `url(${item.imagePath})`}} />
-            )
-          })}
-        </RowSpan>
-      </RowSpan>
+      <PreviewNativeBanner />
       <RowSpan column={true}>
         <Row>
           <Span4>크리에이티브명</Span4>
@@ -850,7 +875,6 @@ export function CampaignFour() {
   }
 
   const onImageError = (errors, type) => {
-    console.log(type)
     if (errors.maxFileSize) {
       toast.warning('저장 가능한 이미지 사이즈는 '+ (type ==='logo'?'1MB':'10MB')+'입니다.')
     } else if (errors.maxNumber) {
