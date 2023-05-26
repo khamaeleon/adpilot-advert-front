@@ -1,12 +1,10 @@
 import styled from "styled-components";
-import {Link, useLocation, useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {menuList, narrowStyle, reportsInfoAtom, selectedIcon, widenStyle} from "./entity";
 import {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity/Common";
-import {
-  retrieveCustomReportsList
-} from "../../services/reports/ReportsAxios";
+import {retrieveCustomReportsList} from "../../services/reports/ReportsAxios";
 import {retrieveCustomReportsAdminList} from "../../services/reports/ReportsAdminAxios";
 
 function AsideList (props) {
@@ -41,7 +39,6 @@ function AsideList (props) {
         setReportLists(response)
       })
     } else {
-      console.log(tokenUserInfo)
       if(tokenUserInfo.id !== '') {
         retrieveCustomReportsAdminList(tokenUserInfo.id).then(response => {
           setReportLists(response)

@@ -453,8 +453,10 @@ function DashBoardIndex() {
                 summaryReducer={summaryReducer}
                 onReady={setGridRef}
                 style={{minHeight: 550, textAline: 'center'}}
+                headerHeight={50}
                 rowExpandHeight={400}
-                rowHeights={null}
+                rowHeight={null}
+                minRowHeight={35}
                 renderDetailsGrid={renderContactsGrid}
                 enableColumnAutosize={true}
                 emptyText={'데이터가 없습니다.'}

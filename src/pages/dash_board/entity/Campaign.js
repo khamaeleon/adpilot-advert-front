@@ -22,6 +22,11 @@ export const adverListColumn = [
     minWidth: 150,
     textAlign: 'center',
     showColumnMenuTool: false,
+    // cellProps: {
+    //   style: {
+    //     minHeight: 100
+    //   }
+    // },
   },
   {
     name: 'username',
@@ -631,9 +636,22 @@ export const userCampaignListColumn = [
 export const lockedRows = [
   {
     position: 'start',
-    cellStyle : {
-      display: 'flex',
-      justifyContent: 'center',
+    cellStyle : ({ column }) => {
+      const style = {
+        display: 'flex',
+        justifyContent: 'center',
+        minHeight: '50px'
+      }
+      if(column.name == 'adverName'){
+        style.fontSize ='15px'
+      }
+      if(column.name == 'campaignCount'){
+        style.borderLeft ='1px solid #E4E3E2'
+      }
+      return style
+    },
+    colspan: {
+      adverName: 2
     },
     render: {
       adverName: 'Total',
@@ -652,7 +670,7 @@ export const lockedRows = [
         return (
           <div style={{display: 'flex', flexDirection : 'column', alignItems: 'center'}}>
             <p className={'won'}>{moneyToFixedFormat(summary.sessionConversionAmount)}</p>
-            <small>({moneyToFixedFormat(pctValue)} %)</small>
+            <small>({numberToFixedFormat(pctValue)} %)</small>
           </div>
         )
       },
@@ -661,7 +679,7 @@ export const lockedRows = [
         return (
           <div style={{display: 'flex', flexDirection : 'column', alignItems: 'center'}}>
             <p className={'won'}>{moneyToFixedFormat(summary.directConversionAmount)}</p>
-            <small>({moneyToFixedFormat(pctValue)} %)</small>
+            <small>({numberToFixedFormat(pctValue)} %)</small>
           </div>
         )
       },
@@ -670,7 +688,7 @@ export const lockedRows = [
         return (
           <div style={{display: 'flex', flexDirection : 'column', alignItems: 'center'}}>
             <p className={'won'}>{moneyToFixedFormat(summary.exposureConversionAmount)}</p>
-            <small>({moneyToFixedFormat(pctValue)} %)</small>
+            <small>({numberToFixedFormat(pctValue)} %)</small>
           </div>
         )
       },
@@ -679,7 +697,7 @@ export const lockedRows = [
         return (
           <div style={{display: 'flex', flexDirection : 'column', alignItems: 'center'}}>
             <p className={'won'}>{moneyToFixedFormat(summary.totalConversionAmount)}</p>
-            <small>({moneyToFixedFormat(pctValue)} %)</small>
+            <small>({numberToFixedFormat(pctValue)} %)</small>
           </div>
         )
       },

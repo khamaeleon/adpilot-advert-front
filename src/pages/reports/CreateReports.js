@@ -1,13 +1,13 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchResult, ColSpan1,
+  BoardSearchResult,
   ColSpan2,
   ColTitle,
   Input,
   RelativeDiv,
   ResetButton,
-  RowSpan, selectStyle,
+  RowSpan,
   Span4,
   SubmitButton,
   SubmitContainer,
@@ -27,8 +27,6 @@ import {useAtom, useAtomValue} from "jotai";
 import {useNavigate} from "react-router-dom";
 import {reportsInfoAtom} from "../../components/aside/entity";
 import {createCustomReportsAdminAxios, retrieveCustomReportsAdminList} from "../../services/reports/ReportsAdminAxios";
-import Select from "react-select";
-import moment from "moment";
 
 
 const columnList= {
@@ -91,13 +89,17 @@ export default function CreateReports() {
       groupBy: null
     })
   }, []);
-
-
-
+  /**
+   * 광고주 검색
+   * @param data
+   */
   const handleSearchAdvertiser = (data) => {
     setCreativeInfo(data)
   }
-
+  /**
+   * 기간 선택
+   * @param item
+   */
   const handleAddPeriodItem = (item) => {
     const data = {
       name: item,
@@ -111,7 +113,10 @@ export default function CreateReports() {
     setPeriod(item)
     setColumns([data])
   }
-
+  /**
+   * 기준항목 선택
+   * @param item
+   */
   const handleAddScopesItem = (item) => {
     const data = {
       name: item,
@@ -132,6 +137,10 @@ export default function CreateReports() {
       setColumns(newColumnData)
     }
   }
+  /**
+   * 보고서 항목 선택
+   * @param item
+   */
   const handleAddReportsItem = (item) => {
     const data = {
       name: item,
@@ -152,17 +161,28 @@ export default function CreateReports() {
       setDataItems(newDataItems !== undefined ? newDataItems : [])
     }
   }
-
+  /**
+   * 컬럼 포함 객체 불러오기
+   * @param name
+   * @returns {boolean}
+   */
   const includeItem = (name) => {
     const i = columns.filter((item) => { return item.name === name });
     return i[0]?.name === name
   }
-
+  /**
+   * 보고서 명 인풋
+   * @param e
+   */
   const handleChangeReportName = (e) => {
     if(reportName.length < 13){
       setReportName(e.target.value)
     }
   }
+  /**
+   * 보고서 생성
+   * @returns {Promise<void>}
+   */
   const handleCreateReports = async () => {
     let params;
     if(defaultType === null){
@@ -218,11 +238,16 @@ export default function CreateReports() {
       }
     }
   }
-
+  /**
+   * 광고주 재설정 (리셋)
+   */
   const handleClickReset = () => {
     setCreativeInfo({})
   }
-
+  /**
+   * 컬럼 초기화
+   * @param type
+   */
   const handleChangeDefaultColumn = (type) => {
     setDefaultType(type.target.value)
     setScopes([])
@@ -304,9 +329,6 @@ export default function CreateReports() {
                       <DefaultItemButton
                         active={includeItem('BY_MONTHLY')}
                         onClick={()=>handleAddPeriodItem('BY_MONTHLY')}>월별</DefaultItemButton>
-                      {/*<DefaultItemButton*/}
-                      {/*  active={period === 'NONE'}*/}
-                      {/*  onClick={()=>handleAddPeriodItem('NONE')}>설정안함</DefaultItemButton>*/}
                     </DefaultItemContainer>
                   </Row>
                   <VerticalRule/>
