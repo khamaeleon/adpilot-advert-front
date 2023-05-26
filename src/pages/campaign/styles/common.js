@@ -271,17 +271,86 @@ export const Row = styled.div`
   } 
 `
 
-export const PrevImage = styled.div`
+export const PrevFrame = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 10px;
+  width: ${(props)=> props.width+"px"};
+  height: ${(props)=> props.height+"px"};
+  aspect-ratio: ${(props)=> props.width/props.height};
+  background-color: #ddd;
+  border-radius: 0.3rem;
+  border: 1px solid #ddd;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+`
+
+export const PrevImage250 = styled.div`
   display: inline-block;
   position: relative;
-  margin: 10px;
-  width: 200px;
-  aspect-ratio: 1/1;
+  border-radius: 0.3rem;
+  width: 100%;
+  height: 70%;
   background-color: #fff;
   border: 1px solid #ddd;
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
+`
+
+export const PrevTitle250 = styled.div`
+  display: flex;
+  align-items: center;
+  max-width: 80%;
+  height: 26%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+`
+
+export const PrevImage728 = styled.div`
+  display: inline-block;
+  position: relative;
+  border-radius: 0.3rem;
+  width: 30%;
+  height: 100%;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+`
+
+export const PrevTitle728 = styled.div`
+  display: flex;
+  align-items: center;
+  margin-Left: 10px;
+  width: 45%;
+  height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: start;
+`
+
+export const PrevButton = styled.button`
+  width: 20%;
+  height: 40px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  white-space: nowrap;
+  text-align: center;
 `
 
 export const ImageTitle = styled.div`
@@ -306,6 +375,15 @@ export const FolderButton = styled.div`
   background-position: center;
   transform: rotate(${(props) => props.fold ? '180deg' : '0deg'});
 `
+export const ArrowButton = styled.div`
+  width: 50px;
+  height: 50px;
+  background-image: url('/assets/images/common/btn_setup_close.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: rotate(${(props) => props.next ? '270deg' : '90deg'});
+`
+
 export const ValidationGroup = styled.div`
   display: flex;
   justify-content: space-around;

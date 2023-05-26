@@ -1,18 +1,23 @@
 import {
   Board,
-  BoardHeader, BoardSearchDetail,
+  BoardHeader,
+  BoardSearchDetail,
   BoardSearchResult,
   ColSpan2,
-  DefaultButton,
-  Input,
-  RowSpan, SearchButton,
+  RowSpan,
+  SearchButton,
   SearchInput
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {findCreativeGroupList, retrieveCreativeByUserId} from "../../services/campaign/CreativeManageAxios";
-import {useAtomValue} from "jotai/index";
+import {useAtomValue} from "jotai";
 import {tokenResultAtom} from "../login/entity/Common";
+import {defaultImage} from "../../constants/GlobalConst";
+import {Link} from "react-router-dom";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export function ManageCreative() {
   const [open, setOpen] = useState({id: 0})
@@ -55,12 +60,15 @@ export function ManageCreative() {
         setOpen({
           id: userId
         })
-      } else {
+      } else if (open.id === userId) {
         setOpen({
           id: 0
         })
+      }else {
+        setOpen({
+          id: userId
+        })
       }
-
     })
   }
   const handleSearchKeyword = () => {
@@ -70,7 +78,17 @@ export function ManageCreative() {
       setCreativeDetailData([])
     })
   }
-  const detailTable = () => {
+  const detailTable = (adverName) => {
+    const settings = {
+      dots: false,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 6,
+      slidesToScroll: 6,
+      variableWidth: true,
+      adaptiveHeight: true
+    };
+
     return(
       <CustomDetailTable>
         <CustomDetailHeader>
@@ -81,19 +99,44 @@ export function ManageCreative() {
         {creativeDetailData.length !== 0 && creativeDetailData.map((item,key) => {
           return(
             <CustomDetailRow key={key}>
-              <CreativeGroup>{item.creativeName}</CreativeGroup>
+              <CreativeGroup>
+                <Link
+                  to={'/board/campaignFour'}
+                  state={{campaignId: item?.campaignId, creativeType: item?.creativeType, productType: item.productType, adverInfo: adverName}}>
+                  {item.creativeName}
+                </Link>
+              </CreativeGroup>
               <CreativeType>{item.creativeType}</CreativeType>
               <CreativeType>{item.productType}</CreativeType>
               <CreativeInfo>
-                <div>
+                {item.images.length > 6 &&
+                <SliderComponent {...settings} style={{marginLeft: 35,width: 660}}>
                   {item.images.map((info,idx) => {
+                    const onErrorImg = (e) => {
+                      e.target.src = defaultImage
+                    }
                     return(
-                      <CreativeImage key={idx}>
-                        <img src={info.imagePath}/>
+                      <CreativeImage key={idx}  style={{ width: 100 }}>
+                        <img src={info.imagePath} alt={item.productType} onError={onErrorImg}/>
                       </CreativeImage>
                     )
                   })}
-                </div>
+                </SliderComponent>
+                  ||
+                  <div>
+                    {item.images.map((info,idx) => {
+                      const onErrorImg = (e) => {
+                        e.target.src = defaultImage
+                      }
+                      return(
+                        <CreativeImage key={idx}>
+                          <img src={info.imagePath} alt={item.productType} onError={onErrorImg}/>
+                        </CreativeImage>
+                      )
+                    })}
+                  </div>
+                }
+
               </CreativeInfo>
             </CustomDetailRow>
           )
@@ -134,7 +177,7 @@ export function ManageCreative() {
                   <div>{item.managerName}</div>
                   <div>{item.creativeCount}</div>
                 </CustomTableRow>
-                {item.userId === open.id && detailTable()}
+                {item.userId === open.id && detailTable(item.adverName)}
               </div>
             )
           })}
@@ -177,7 +220,6 @@ export const CustomDetailTable = styled.div`
 export const CustomDetailRow = styled.div`
   position: relative;
   display: flex;
-  overflow: hidden;
 `
 
 export const ShadowEffect = styled.div`
@@ -203,23 +245,24 @@ export const CreativeGroup = styled.div`
   align-items: center;
   justify-content: center;
   padding: 9px 0;
-  width: 30%;
+  flex-basis: 20%;
   border-bottom: 1px solid #ffe3cb;
+  & a {
+    text-decoration: underline;
+  }
 `
 export const CreativeType = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 9px 0;
-  width: 10%;
+  flex-basis: 10%;
   border-bottom: 1px solid #ffe3cb;
   border-left: 1px solid #ffe3cb
 `
 export const CreativeInfo = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 9px 0;
+  flex-basis: 60%;
   width: 60%;
   border-bottom: 1px solid #ffe3cb;
 `
@@ -240,36 +283,40 @@ export const CreativeImage = styled.div`
     max-width: 100%;
   }
 `
-export const SlideContainer = styled.div`
-  position: relative;
-  width: 550px;
-  height: 100px;
-  overflow: hidden;
-`
-export const Left = styled.div`
-  margin: 10px;
-  width: 24px;
-  height: 24px;
-  background-image: url("/assets/images/common/btn_table_slide_off@3x.png");
-  background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  &:hover {
-    background-image: url("/assets/images/common/btn_table_slide_on@3x.png");
-    cursor: pointer;
+
+const SliderComponent = styled(Slider)`
+  .slick-slide {
+    margin: 0 5px;
   }
-`
-export const Right = styled.div`
-  margin: 10px;
-  width: 24px;
-  height: 24px;
-  background-image: url("/assets/images/common/btn_table_slide_off@3x.png");
-  background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  transform: rotate(180deg);
-  &:hover {
-    background-image: url("/assets/images/common/btn_table_slide_on@3x.png");
-    cursor: pointer;
+  .slick-prev {
+    width: 24px;
+    height: 24px;
+    background-image: url("/assets/images/common/btn_table_slide_off@3x.png");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    &::before {
+      content: '';
+    }
+    &:hover {
+      background-image: url("/assets/images/common/btn_table_slide_on@3x.png");
+      cursor: pointer;
+    }
+  }
+  .slick-next {
+    width: 24px;
+    height: 24px;
+    background-image: url("/assets/images/common/btn_table_slide_off@3x.png");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: rotate(180deg) translate(0, 50%);
+    &::before {
+      content: '';
+    }
+    &:hover {
+      background-image: url("/assets/images/common/btn_table_slide_on@3x.png");
+      cursor: pointer;
+    }
   }
 `

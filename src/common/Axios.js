@@ -17,7 +17,7 @@ export async function AdminAxios(type, uri, param) {
 
 export async function AxiosImage(type, uri, formData) {
   // const accessToken = store.getState().auth.accessToken
-  const tokenAtom =store.get(tokenResultAtom)
+  const tokenAtom = store.get(tokenResultAtom)
   return fetch(ADMIN_SERVER + uri, {
     method: type,
     headers: {

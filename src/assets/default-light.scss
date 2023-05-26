@@ -16,7 +16,8 @@ $INOVUA_DATAGRID_ACCENT_COLOR: #f5811f;
   border: none !important;
 }
 .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__column-header__content {
-  font-weight: 400
+  font-weight: 400;
+  text-align: center !important;
 }
 .InovuaReactDataGrid__column-header__content .checkbox-type-a + i{
   display: none;
@@ -49,4 +50,7 @@ $INOVUA_DATAGRID_ACCENT_COLOR: #f5811f;
 }
 .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__row .InovuaReactDataGrid__row-details.InovuaReactDataGrid__row-details--details-grid {
   padding: 0 0 1px 0;
+}
+.inovua-react-pagination-toolbar__page-size-combo, .inovua-react-pagination-toolbar__per-page-text {
+  display: none;
 }

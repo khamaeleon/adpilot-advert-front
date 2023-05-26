@@ -6,10 +6,9 @@ import {
   DashBoardBody,
   DashBoardCard,
   DashBoardHeader,
-  defaultStyle
 } from "../../assets/GlobalStyles";
 import {ResponsiveLine} from '@nivo/line'
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useAtom,useAtomValue} from "jotai";
 import {dataTotalInfo} from "../../components/common/entity";
 import {chartDataAtom, commonProperties, platformStatusType, userPlatformStatusType} from "./entity/Chart";
@@ -17,13 +16,12 @@ import {
   adverListColumn,
   adverStatusAtom,
   adverStatusDetailAtom,
-  adverStatusDetailColumn,
+  adverStatusDetailColumn, lockedRows, summaryReducer,
   userCampaignListColumn,
 } from "./entity/Campaign";
 import {eventType, productType, searchConditionAtom} from "./entity/Common";
 import {retrieveAdverOverview, retrieveOverview,} from "../../services/dash_board/ChartAxios";
 import {tokenResultAtom} from "../login/entity/Common";
-import TableDetail from "../../components/table/TableDetail";
 import {
   retrieveAdvertiserCampaignStatus,
   retrieveAdvertiserStatus, retrieveUserAdvertiserCampaignStatus
@@ -451,6 +449,8 @@ function DashBoardIndex() {
               <ReactDataGrid
                 licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
                 handle={null}
+                lockedRows={lockedRows}
+                summaryReducer={summaryReducer}
                 onReady={setGridRef}
                 style={{minHeight: 550, textAline: 'center'}}
                 rowExpandHeight={400}
