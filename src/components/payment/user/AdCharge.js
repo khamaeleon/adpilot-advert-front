@@ -45,7 +45,7 @@ function AdChargeModal (props) {
   const [inputValue, setInputValue] = useState(0) // 인풋 클릭 여부
   const [payMethod, setPayMethod] = useState('CARD'); // 결제 방식
 
-  const calcAmount = () => (chargeAmount / 10) + chargeAmount // 부가세 합한 충전 값
+  const calcAmount = () => Math.floor(chargeAmount / 10) + chargeAmount // 부가세 합한 충전 값
 
   const handleClickChargeButton = (plusValue) => {
     if(inputValue === 1){
@@ -175,7 +175,7 @@ function AdChargeModal (props) {
                     {chargeAmount?
                       (<span className={'won'} style={{color:'#f5811f'}}>{decimalFormat(calcAmount())}</span>)
                       :(<span className={'won'}>0</span>)}
-
+총
                   </ColSpan4>
                 </div>
               </RowSpan>

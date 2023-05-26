@@ -185,6 +185,10 @@ export const GlobalStyles = createGlobalStyle`
     background-image: url('/assets/images/common/selectcircle_on.png');
     background-image: -webkit-image-set(url('/assets/images/common/selectcircle_on.png') 1x,url('/assets/images/common/selectcircle_on@2x.png') 2x, url('/assets/images/common/selectcircle_on@3x.png') 3x)
   }
+  input[type='radio'] + span {
+    display: inline-block;
+    margin: -1px 0 0 10px;
+  }
   label {
     display: flex;
     margin-right: 10px;

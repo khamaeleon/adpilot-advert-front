@@ -257,6 +257,9 @@ const SubMenu = styled.div`
       color: #cccccc;
       font-size: 13px;
       padding: 8px 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 `

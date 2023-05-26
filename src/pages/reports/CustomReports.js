@@ -215,7 +215,7 @@ export default function CustomReports() {
   const tokenResult = useAtomValue(tokenResultAtom)
   const [campaignColumn, setCampaignColumn] = useState([])
   const [campaignData, setCampaignData] = useState([])
-  const [reportInfo, setReportInfo] = useState({})
+  const [reportSettingInfo, setReportSettingInfo] = useState({})
   const navigate = useNavigate()
   const [reportsInfo, setReportsInfo] = useAtom(reportsInfoAtom)
 
@@ -239,7 +239,7 @@ export default function CustomReports() {
           })
           setCampaignColumn(newObject)
           setCampaignData(response.pagingCommonResponse.rows)
-          setReportInfo(response.adminSetting)
+          setReportSettingInfo(response.adminSetting)
         }
       })
     } else {
@@ -252,7 +252,7 @@ export default function CustomReports() {
         })
         setCampaignColumn(newObject)
         setCampaignData(response.pagingCommonResponse.rows)
-        setReportInfo(response.userSetting)
+        setReportSettingInfo(response.userSetting)
         console.log(newObject)
       })
     }
@@ -351,7 +351,6 @@ export default function CustomReports() {
         setCampaignData(response.pagingCommonResponse.rows)
       })
     }
-
   }
 
   const deleteReport = async() => {
@@ -392,12 +391,12 @@ export default function CustomReports() {
 
   return(
     <Board>
-      <BoardHeader>{`${tokenResult.role !== 'NORMAL' ? reportInfo.adverName !== null ? reportInfo.adverName: '어드민' : tokenResult.name} 보고서`}</BoardHeader>
+      <BoardHeader>{`${tokenResult.role !== 'NORMAL' ? reportSettingInfo.adverName !== null ? reportSettingInfo.adverName: '어드민' : tokenResult.name} 보고서`}</BoardHeader>
       <BoardSearchDetail>
         <RowSpan box={true} column={true}>
           <RowSpan>
             <ColSpan1 style={{borderBottom: '1px solid #ddd', justifyContent: "space-between"}}>
-              <div style={{padding: 10}}>{`${reportInfo.adverName ? reportInfo.adverName : '어드민'}_${reportInfo.reportName}`}</div>
+              <div style={{padding: 10}}>{`${tokenResult.role !== 'NORMAL' ? reportSettingInfo.adverName !== null ? reportSettingInfo.adverName: '어드민' : tokenResult.name}_${reportSettingInfo.reportName}`}</div>
               <DeleteButton style={{padding: 8}} onClick={handleDeleteReport}/>
             </ColSpan1>
           </RowSpan>

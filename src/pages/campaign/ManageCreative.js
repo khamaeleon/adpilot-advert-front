@@ -11,7 +11,7 @@ import {
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {findCreativeGroupList, retrieveCreativeByUserId} from "../../services/campaign/CreativeManageAxios";
-import {useAtomValue} from "jotai/index";
+import {useAtomValue} from "jotai";
 import {tokenResultAtom} from "../login/entity/Common";
 
 export function ManageCreative() {
@@ -55,12 +55,15 @@ export function ManageCreative() {
         setOpen({
           id: userId
         })
-      } else {
+      } else if (open.id === userId) {
         setOpen({
           id: 0
         })
+      }else {
+        setOpen({
+          id: userId
+        })
       }
-
     })
   }
   const handleSearchKeyword = () => {
