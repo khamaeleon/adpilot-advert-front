@@ -4,24 +4,35 @@ import {selPolicyLatestTerms} from "../../services/Platform/ManageUserAxios";
 import Checkbox from "../../components/common/Checkbox";
 import {accountInfoAtom, nextStepAtom, termsInfoAtom} from "./entity/Common";
 import {AlignRight, TermsBox, VerticalRule} from "./styles";
+import {useResetAtom} from "jotai/utils";
 
 export default function Terms() {
   const [accountInfo, setAccountInfo] = useAtom(accountInfoAtom);
   const [termsInfo, setTermsInfo] = useAtom(termsInfoAtom)
   const [isAgreeAll, setIsAgreeAll] = useState(false)
-  const setValidation = useSetAtom(nextStepAtom)
+  const setValidation= useSetAtom(nextStepAtom)
+  const resetInfo = useResetAtom(accountInfoAtom)
 
-  useEffect(() => {
-    selPolicyLatestTerms().then(response => {
-      setTermsInfo(response)
+  useEffect(()=> {
+    if (termsInfo?.length != 0) {
       setAccountInfo({
         ...accountInfo,
-        serviceTermsId: response.find(value => value.termsType === 'SERVICE').id,
-        privacyTermsId: response.find(value => value.termsType === 'PRIVACY').id,
-        operationTermsId: response.find(value => value.termsType === 'OPERATION').id
+        serviceTermsId: termsInfo.find(value => value.termsType === 'SERVICE').id,
+        privacyTermsId: termsInfo.find(value => value.termsType === 'PRIVACY').id,
+        operationTermsId: termsInfo.find(
+            value => value.termsType === 'OPERATION').id
       })
+    }
+  },[termsInfo])
+
+  useEffect(()=>{
+
+    resetInfo();
+    selPolicyLatestTerms().then(response => {
+      setTermsInfo(response)
     })
-  }, [])
+  },[])
+
   /**
    * 약관 전체 선택 및 동의
    */

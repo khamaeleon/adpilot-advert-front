@@ -1,8 +1,8 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai/index";
 import {Controller, useForm} from "react-hook-form";
 import {toast} from "react-toastify";
-import {accountFileUpload, retrieveLicence, selValidUserId, signUp} from "../../services/Platform/ManageUserAxios";
+import {accountFileUpload, selValidUserId, signUp} from "../../services/Platform/ManageUserAxios";
 import {CancelButton, DefaultButton, Input, inputStyle, RelativeDiv, selectStyle} from "../../assets/GlobalStyles";
 import {accountInfoAtom, hostList, nextStepAtom} from "./entity/Common";
 import {ButtonGroup, DuplicateButton, Form, SignUpVerify, ValidationScript, VerticalRule} from "./styles";
@@ -12,6 +12,7 @@ import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import ImageUploading from "react-images-uploading";
 import styled from "styled-components";
+import {useResetAtom} from "jotai/utils";
 
 function ModalCheckBusinessNumber(props) {
   const {onSubmit} =props
@@ -41,7 +42,8 @@ export default function Basic(props) {
   const [agreeValidation, setAgreeValidation] = useAtom(nextStepAtom)
   const setModal = useSetAtom(modalController)
 
-  const {register, handleSubmit,reset, control, watch, formState: {errors}} = useForm({
+
+  const { register, handleSubmit,reset, control, watch, formState: {errors}, clearErrors} = useForm({
     mode: "onSubmit",
     defaultValues: accountInfo
   })
@@ -181,6 +183,7 @@ export default function Basic(props) {
       ...accountInfo,
       hostType: selectHostType
     })
+    clearErrors("hostType")
   }
 
   /**
@@ -314,6 +317,7 @@ export default function Basic(props) {
         }
       })
     }
+    clearErrors('businessLicenseWebPath')
   }
   /**
    * 회원가입
@@ -560,18 +564,27 @@ export default function Basic(props) {
           <RelativeDiv>
             <div>사업자 등록증</div>
             <div>
-              <input
-                style={{paddingRight: 35}}
-                type={'text'}
-                placeholder={'사업자 등록증'}
-                {...register("businessLicenseWebPath", {
-                  required: "사업자 등록증을 등록해주세요",
-                })}
-                value={accountInfo.businessLicenseWebPath || ""}
-                readOnly={true}
-              />
-              {errors.businessLicenseWebPath &&
-                <ValidationScript>{errors.businessLicenseWebPath?.message}</ValidationScript>}
+              <Controller
+                  name="businessLicenseWebPath"
+                  control={control}
+                  rules={{
+                    required: {
+                      value: accountInfo.businessLicenseWebPath === "",
+                      message: "사업자 등록증을 등록해주세요"
+                    }
+                  }}
+
+                  render={({field}) => (
+                    <input
+                      style={{paddingRight: 35}}
+                      type={'text'}
+                      {...field}
+                      placeholder={'사업자 등록증'}
+                      value={accountInfo.businessLicenseWebPath}
+                      readOnly={true}
+                    />)}
+                  />
+              {errors.businessLicenseWebPath && <ValidationScript>{errors.businessLicenseWebPath?.message}</ValidationScript>}
                 <ImageUploading
                   acceptType={["jpg", "gif", "png"]}
                   onChange={onDrop}
