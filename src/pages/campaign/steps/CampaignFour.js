@@ -574,7 +574,7 @@ function CampaignFourNative(props) {
   return (
     <>
       <RowSpan column={true}>
-        <Span4>광고소재</Span4>
+        <Span4>광고 소재</Span4>
         <RowSpan box={true} column={true} style={{width: '100%', padding: '20px 30px', backgroundColor: '#fff'}}>
             <Row>
               <span>이미지<p><small style={{color: '#ccc'}}>최대 5개 까지 등록</small></p><p><small style={{color: '#ccc'}}>(600*300 사이즈 권장)</small></p></span>
