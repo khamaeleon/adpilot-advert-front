@@ -1,8 +1,8 @@
 
 // eslint-disable-next-line
-const adver = 'http://192.168.0.51:8093'
-const admin = 'http://192.168.0.51:8091'
-const auth = 'http://192.168.0.51:8090'
+const adver = 'http://220.118.210.175:8093'
+const admin = 'http://220.118.210.175:8091'
+const auth = 'http://220.118.210.175:8090'
 
 // const adver = 'http://192.168.0.104:8071/adver'
 // const admin = 'http://192.168.0.104:8071/backoffice'
