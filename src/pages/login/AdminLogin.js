@@ -26,7 +26,7 @@ function AdminLogin() {
    * 쿠키에 아이디 저장 삭제
    */
   useEffect(() => {
-    if(cookies.rememberId !== undefined) {
+    if(cookies.rememberAdminId !== undefined) {
       setLoginParams({
         ...loginParamsValue,
         email:cookies.rememberAdminId

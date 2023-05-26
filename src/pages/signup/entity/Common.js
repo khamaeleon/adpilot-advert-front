@@ -1,4 +1,5 @@
 import {atom} from "jotai/index";
+import {atomWithReset} from "jotai/utils";
 
 export const nextStepAtom = atom({
   terms: false,
@@ -6,7 +7,7 @@ export const nextStepAtom = atom({
 })
 export const termsInfoAtom = atom([])
 
-export const accountInfoAtom = atom({
+export const accountInfoAtom = atomWithReset({
   username: '',
   password: '',
   adverName:'',
