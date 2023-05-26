@@ -518,9 +518,27 @@ export const GlobalStyles = createGlobalStyle`
     }
   }
   
-  .react-confirm-alert-body > h1 {
-    font-size: 18px;
-    margin-bottom: 10px;
+  .react-confirm-alert {
+    &-body {
+      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      padding: 25px;
+      font-size: 15px;
+      > h1 {
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+    }
+    &-overlay {
+      background-color: rgba(0, 0, 0, .7)
+    }
+    &-button-group {
+      justify-content: center;
+      margin-top: 30px
+    }
   }
 `
 

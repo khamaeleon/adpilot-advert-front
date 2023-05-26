@@ -17,7 +17,7 @@ import {
   adverListColumn,
   adverStatusAtom,
   adverStatusDetailAtom,
-  adverStatusDetailColumn,
+  adverStatusDetailColumn, lockedRows, summaryReducer,
   userCampaignListColumn,
 } from "./entity/Campaign";
 import {eventType, productType, searchConditionAtom} from "./entity/Common";
@@ -451,6 +451,8 @@ function DashBoardIndex() {
               <ReactDataGrid
                 licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
                 handle={null}
+                lockedRows={lockedRows}
+                summaryReducer={summaryReducer}
                 onReady={setGridRef}
                 style={{minHeight: 550, textAline: 'center'}}
                 rowExpandHeight={400}
