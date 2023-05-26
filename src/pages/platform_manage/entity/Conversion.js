@@ -10,6 +10,7 @@ export const searchConversionType = [
   {id: "3", value: "ADVER_ID", label: "상품 코드"}
 ]
 export const conversionListDataAtom = atom(null)
+export const conversionDetailDataAtom = atom(null)
 
 export const columnConversionData = [
   {

@@ -8,15 +8,19 @@ import TableDetail from "../../components/table/TableDetail";
 import {searchConditionAtom} from "./entity/Common";
 import {
   columnConversionData,
-  columnConversionDetailData,
+  columnConversionDetailData, conversionDetailDataAtom,
   conversionListDataAtom,
   searchConversionType
 } from "./entity/Conversion";
+import {adverListColumn, adverStatusDetailColumn} from "../dash_board/entity/Campaign";
+import {retrieveAdvertiserCampaignStatus} from "../../services/dash_board/ManageCampaignAxios";
+import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 
 function ConversionManage() {
   const [conversionListDataState, setConversionListDataState] = useAtom(conversionListDataAtom)
+  const [conversionDetailDataState, setConversionDetailDataState] = useAtom(conversionDetailDataAtom)
   const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
-
+  const [gridRef, setGridRef] = useState(null);
   useEffect(() => {
     selConversionList(searchCondition).then(response =>{
       setConversionListDataState(response)
@@ -36,12 +40,26 @@ function ConversionManage() {
     {name: 'defaultData', header: '연동 데이터', headerStyle: groupStyle},
     {name: 'platformData', header: '플랫폼 데이터', headerStyle: groupStyle},
   ]
-  const handleSearch = (event) => {
+  const handleSearch = (data) => {
     selConversionList(searchCondition).then(response =>{
+      console.log(response)
       setConversionListDataState(response)
     })
   }
-
+  const renderContactsGrid = () => {
+    return (
+      <ReactDataGrid
+        handle={null}
+        clearNodeCacheOnDataSourceChange={true}
+        dataSource={conversionDetailDataState!==null && conversionDetailDataState}
+        columns={columnConversionDetailData}
+        enableColumnAutosize={true}
+        groups={false}
+        emptyText={'캠페인 리스트가 없습니다.'}
+        rowHeight={70}
+      />
+    );
+  }
   return (
     <main>
       <Board>
@@ -51,14 +69,31 @@ function ConversionManage() {
         </BoardSearchDetail>
         <BoardTableContainer>
           { conversionListDataState !== null &&
-            <TableDetail columns={columnConversionData}
-                         data={conversionListDataState}
-                         detailData={handleFetchDetailData}
-                         detailColumn={columnConversionDetailData}
-                         detailGroups={false}
-                         idProperty={'conversionId'}
-                         groups={false}
-                         style={{minHeight: 500}}/>
+            <ReactDataGrid
+              licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
+              handle={null}
+              onReady={setGridRef}
+              style={{minHeight: 550, textAline: 'center'}}
+              rowExpandHeight={400}
+              rowHeights={null}
+              renderDetailsGrid={renderContactsGrid}
+              enableColumnAutosize={true}
+              emptyText={'데이터가 없습니다.'}
+              idProperty={'conversionId'}
+              dataSource={conversionListDataState}
+              detailsGridCacheKey={'campaignId'}
+              columns={columnConversionData}
+              onDataSourceCacheChange={()=>{gridRef?.current.collapseAllRows()}}
+              onRowExpand={({data})=> {
+                console.log(data)
+                selConversionDetailList(data.conversionId).then(response => {
+                  console.log(response)
+                response !== null && setConversionDetailDataState(response)
+              })
+             }}
+            limit={30}
+            multiRowExpand={false}
+            />
           }
         </BoardTableContainer>
       </Board>
