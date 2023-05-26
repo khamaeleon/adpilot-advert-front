@@ -134,6 +134,12 @@ const defaultColumn = {
       return <span><p>{dateFormat(cellProps.data.statisticsStartDate, 'yyyy년 MM월')} </p></span>
     }
   },
+  'BY_ADVERTISE': {
+    render: (props) => {
+      console.log(props)
+      return <span>{props.value}</span>
+    }
+  },
   'BY_CAMPAIGN': "캠페인 명",
   'BY_PRODUCT': "광고 상품",
   'BY_EVENT': "이벤트 명",

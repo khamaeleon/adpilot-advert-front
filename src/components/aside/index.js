@@ -11,9 +11,7 @@ import {retrieveCustomReportsAdminList} from "../../services/reports/ReportsAdmi
 
 function AsideList (props) {
   const {id, mode} = props
-  const [userName] = useState('')
   const params = useParams()
-  const location = useLocation()
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [reportLists, setReportLists] = useState([])
   const [reportsInfo, setReportsInfo] = useAtom(reportsInfoAtom)
