@@ -35,15 +35,16 @@ import Table from "../../components/table";
 import {deleteCustomReportsAxios, retrieveCustomReportsDetail} from "../../services/reports/ReportsAxios";
 import {useAtom, useAtomValue} from "jotai";
 import {tokenResultAtom} from "../login/entity/Common";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {dateFormat} from "../../common/StringUtils";
 import {reportsInfoAtom} from "../../components/aside/entity";
-import {deviceType, productType} from "../dash_board/entity/Common";
+import {deviceType, eventType, productType} from "../dash_board/entity/Common";
 import {
   deleteCustomReportsAdminAxios,
   retrieveCustomReportsAdminDetail
 } from "../../services/reports/ReportsAdminAxios";
 import {confirmAlert} from "react-confirm-alert";
+import moment from "moment";
 
 function weekNumberByMonth(dateFormat) {
   const inputDate = new Date(dateFormat);
@@ -112,9 +113,10 @@ function weekNumberByMonth(dateFormat) {
 
 
 const defaultColumn = {
-  'BY_DAILY':{
+  'BY_DAILY': {
     name: 'statisticsDate',
     header: '일별',
+    textAlign: 'center',
     render: ({cellProps}) => {
       return <span><p>{dateFormat(cellProps.data.statisticsDate, 'yyyy년MM월DD일')}</p></span>
     }
@@ -122,87 +124,150 @@ const defaultColumn = {
   'BY_WEEKLY': {
     name: 'statisticsStartDate',
     header: '주별',
+    textAlign: 'center',
     render: ({cellProps}) => {
       const weeks = weekNumberByMonth(cellProps.data.statisticsStartDate)
-      return <span><p>{weeks.month}월 {weeks.weekNo}주차</p></span>
+      return <span><p>{moment(cellProps.data.statisticsStartDate).format('MM월 DD일')}</p><p
+        style={{color: '#999'}}>({weeks.month}월 {weeks.weekNo}주차)</p></span>
     }
   },
   'BY_MONTHLY': {
     name: 'statisticsDate',
     header: '월별',
+    textAlign: 'center',
     render: ({cellProps}) => {
       return <span><p>{dateFormat(cellProps.data.statisticsStartDate, 'yyyy년 MM월')} </p></span>
     }
   },
-  'BY_ADVERTISE': {
+  'adverName': {
+    name: 'adverName',
+    header: '광고주명',
+    textAlign: 'center',
     render: (props) => {
-      console.log(props)
       return <span>{props.value}</span>
     }
   },
-  'BY_CAMPAIGN': "캠페인 명",
-  'BY_PRODUCT': "광고 상품",
-  'BY_EVENT': "이벤트 명",
+  'campaignName': {
+    name: 'campaignName',
+    header: '캠페인명',
+    textAlign: 'center',
+  },
+  'productName': {
+    name: 'productType',
+    header: '상품명',
+    textAlign: 'center',
+    render: ({value}) => {
+      return <span>{productType.find(item => item.value === value)?.label}</span>
+    }
+  },
+  'eventName': {
+    name: 'eventType',
+    header: '이벤트명',
+    textAlign: 'center',
+    render: ({value}) => {
+      return <span>{eventType.find(item => item.value === value)?.label}</span>
+    }
+  },
   'clickRate': {
+    textAlign: 'center',
     render: (props) => {
       const clickRate = (props.data.validClickCount / props.data.exposureCount) * 100
       return <span>{!isNaN(clickRate) ? clickRate.toFixed(2) : 0}%</span>
     }
   },
   'cpc': {
+    textAlign: 'center',
     render: (props) => {
       const cpc = props.data.costAmount / props.data.validClickCount
       return <span>{!isNaN(cpc) ? cpc.toFixed(2) : 0}</span>
     }
   },
   'conversionRate': {
+    textAlign: 'center',
     render: (props) => {
       const conversionRate = (props.data.conversionCount / props.data.totalClickCount) * 100
       return <span>{!isNaN(conversionRate) ? conversionRate.toFixed(2) : 0} %</span>
     }
   },
   'conversionPrice': {
+    textAlign: 'center',
     render: (props) => {
       const costPerConversion = props.data.costAmount / props.data.conversionCount
       return <span>{!isNaN(costPerConversion) ? costPerConversion.toFixed(2) : 0}</span>
     }
   },
-  'amountPurchasedAvg':{
+  'amountPurchasedAvg': {
+    textAlign: 'center',
     render: (props) => {
       const amountPurchased = (props.data.costAmount / props.data.conversionCount)
       return <span>{!isNaN(amountPurchased) ? amountPurchased.toFixed(2) : 0}</span>
     }
   },
   'sessionConversionRoas': {
+    textAlign: 'center',
     render: (props) => {
-      const sessionRoas = (props.data.sessionConversionAmount  / props.data.costAmount) * 100
-      return <span>{!isNaN(sessionRoas) ? sessionRoas.toFixed(2) : 0}</span>
+      const sessionRoas = (props.data.sessionConversionAmount / props.data.costAmount) * 100
+      return <span>{!isNaN(sessionRoas) ? sessionRoas.toFixed(2) : 0}%</span>
     }
   },
   'directConversionRoas': {
+    textAlign: 'center',
     render: (props) => {
-      const directRoas = (props.data.directConversionAmount  / props.data.costAmount) * 100
-      return <span>{!isNaN(directRoas) ? directRoas.toFixed(2) : 0}</span>
+      const directRoas = (props.data.directConversionAmount / props.data.costAmount) * 100
+      return <span>{!isNaN(directRoas) ? directRoas.toFixed(2) : 0}%</span>
     }
   },
   'roas': {
+    textAlign: 'center',
     render: (props) => {
-      const roas = ((props.data.sessionConversionAmount + props.data.exposureConversionAmount + props.data.directConversionAmount)/ props.data.costAmount) * 100
-      return <span>{!isNaN(roas) ? roas.toFixed(2) : 0}</span>
+      const roas = ((props.data.sessionConversionAmount + props.data.exposureConversionAmount + props.data.directConversionAmount) / props.data.costAmount) * 100
+      return <span>{!isNaN(roas) ? roas.toFixed(2) : 0}%</span>
     }
   },
   'exposureConversionRoas': {
+    textAlign: 'center',
     render: (props) => {
-      const exposureRoas = (props.data.exposureConversionAmount  / props.data.costAmount) * 100
-      return <span>{!isNaN(exposureRoas) ? exposureRoas.toFixed(2) : 0}</span>
+      const exposureRoas = (props.data.exposureConversionAmount / props.data.costAmount) * 100
+      return <span>{!isNaN(exposureRoas) ? exposureRoas.toFixed(2) : 0}%</span>
     }
   },
   'eCpm': {
+    textAlign: 'center',
     render: (props) => {
       const ecpm = (props.data.costAmount / props.data.exposureCount) * 1000
       return <span>{!isNaN(ecpm) ? ecpm.toFixed(2) : 0}</span>
     }
   },
+  "exposureCount": {
+    textAlign: 'center',
+  },
+  "countByAdvertise": {
+    textAlign: 'center',
+  },
+  "validClickCount": {
+    textAlign: 'center',
+  },
+  "totalExposureCount": {
+    textAlign: 'center',
+  },
+  "conversionCount": {
+    textAlign: 'center',
+  },
+  "directConversionAmount": {
+    textAlign: 'center',
+  },
+  "sessionConversionAmount": {
+    textAlign: 'center',
+  },
+  "totalClickCount": {
+    textAlign: 'center',
+  },
+  "exposureConversionAmount": {
+    textAlign: 'center',
+  },
+  "costAmount": {
+    textAlign: 'center'
+  }
 }
 
 
@@ -224,19 +289,14 @@ export default function CustomReports() {
   const [reportSettingInfo, setReportSettingInfo] = useState({})
   const navigate = useNavigate()
   const [reportsInfo, setReportsInfo] = useAtom(reportsInfoAtom)
+  const params = useParams()
 
   useEffect(() => {
-    const params = {
-      pageSize: 31,
-      currentPage: 1,
-      searchStartDate: getThisMonth().startDay,
-      searchEndDate: getToDay(),
-    }
     if(reportsInfo.id === null) {
       navigate('/board/reports')
     }
     if(tokenResult.role !== "NORMAL") {
-      retrieveCustomReportsAdminDetail(tokenResult.id, reportsInfo.id, params).then(response => {
+      retrieveCustomReportsAdminDetail(tokenResult.id, reportsInfo.id, searchCondition).then(response => {
         console.log(response)
         if(response){
           let newObject = response.adminSetting.groupByPeriod !== 'NONE' ? [defaultColumn[reportsInfo.groupBy]].concat(response.headers) : [].concat(response.headers)
@@ -249,9 +309,8 @@ export default function CustomReports() {
         }
       })
     } else {
-      retrieveCustomReportsDetail(tokenResult.id, reportsInfo.id, params).then(response => {
+      retrieveCustomReportsDetail(tokenResult.id, reportsInfo.id, searchCondition).then(response => {
         console.log(response)
-
         let newObject =  response.userSetting.groupByPeriod !== 'NONE' ? [defaultColumn[reportsInfo.groupBy]].concat(response.headers) : [].concat(response.headers)
         newObject.map((item, key) => {
           Object.assign(newObject[key], defaultColumn[item.name])
@@ -262,8 +321,32 @@ export default function CustomReports() {
         console.log(newObject)
       })
     }
+    return () => {
+      setDateActive('thisMonth')
+      setDateRange([ new Date(getThisMonth().startDay), new Date(getToDay())])
+      setSearchCondition({
+        pageSize: 31,
+        currentPage: 1,
+        searchStartDate: getThisMonth().startDay,
+        searchEndDate: getToDay(),
+        productType: null,
+        deviceType:  null
+      })
+    }
   }, [tokenResult, reportsInfo.id]);
 
+
+  /**
+   * 날짜 직접 변경
+   */
+  const handleChangeDate = (date) => {
+    setDateRange(date)
+    setSearchCondition({
+      ...searchCondition,
+      searchStartDate: moment(date[0]).format('YYYY-MM-DD'),
+      searchEndDate: moment(date[1]).format('YYYY-MM-DD'),
+    })
+  }
   /**
    * 날짜 레인지 선택
    * @param rangeType
@@ -329,15 +412,20 @@ export default function CustomReports() {
     }
     //call 때려
   }
-
+  /**
+   * 광고상품
+   * @param event
+   */
   const handleChangeProduct = (event) => {
-    console.log(event.value)
     setSearchCondition({
       ...searchCondition,
       productType: event.value
     })
   }
-
+  /**
+   * 디바이스 서치
+   * @param event
+   */
   const handleChangeDevice = (event) => {
     console.log(event.value)
     setSearchCondition({
@@ -345,7 +433,9 @@ export default function CustomReports() {
       deviceType: event.value
     })
   }
-
+  /**
+   * 검색
+   */
   const handleSearchReports = () => {
     console.log(searchCondition)
     if(tokenResult.role !== "NORMAL") {
@@ -358,7 +448,10 @@ export default function CustomReports() {
       })
     }
   }
-
+  /**
+   * 보고서 삭제
+   * @returns {Promise<void>}
+   */
   const deleteReport = async() => {
     if(tokenResult.role === 'NORMAL') {
       await deleteCustomReportsAxios({userId:tokenResult.id, userReportSettingId:reportsInfo.id}).then(()=>{
@@ -378,7 +471,10 @@ export default function CustomReports() {
       })
     }
   }
-
+  /**
+   * 보고서 삭제 컨펌창
+   * @returns {Promise<void>}
+   */
   const handleDeleteReport = async () => {
     confirmAlert({
       title: '보고서 삭제',
@@ -410,13 +506,13 @@ export default function CustomReports() {
             <ColSpan1>
               <ColTitle><Span1>광고 상품</Span1></ColTitle>
               <div>
-                <Select styles={selectStyle} defaultValue={productType[0]} options={productType} onChange={handleChangeProduct}/>
+                <Select styles={selectStyle} defaultValue={productType[0]} options={productType} onChange={handleChangeProduct} value={productType.find(item => item.value === searchCondition.productType)}/>
               </div>
             </ColSpan1>
             <ColSpan1>
               <ColTitle><Span1>디바이스</Span1></ColTitle>
               <div>
-                <Select styles={selectStyle} defaultValue={deviceType[0]} options={deviceType} onChange={handleChangeDevice}/>
+                <Select styles={selectStyle} defaultValue={deviceType[0]} options={deviceType} onChange={handleChangeDevice} value={deviceType.find(item => item.value === searchCondition.deviceType)}/>
               </div>
             </ColSpan1>
             <ColSpan2/>
@@ -433,8 +529,9 @@ export default function CustomReports() {
                     selectsRange={true}
                     startDate={startDate}
                     endDate={endDate}
-                    onChange={(date) => setDateRange(date)}
+                    onChange={(date) => handleChangeDate(date)}
                     dateFormat="yyyy-MM-dd"
+                    maxDate={new Date()}
                     locale={ko}
                     isClearable={false}
                   />

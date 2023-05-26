@@ -19,7 +19,7 @@ export const productType = [
 ]
 
 export const deviceType = [
-  {key:1,value:null,label: '전체'},
+  {key:1,value: null,label: '전체'},
   {key:2,value:'PC',label: 'PC'},
   {key:3,value:'MOBILE',label: '모바일'},
   {key:4,value:'RESPONSIVE_WEB',label: '반응형 웹'}
