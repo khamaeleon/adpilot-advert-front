@@ -455,7 +455,6 @@ function DashBoardIndex() {
                 style={{minHeight: 550, textAline: 'center'}}
                 headerHeight={50}
                 rowExpandHeight={400}
-                rowHeight={null}
                 minRowHeight={35}
                 renderDetailsGrid={renderContactsGrid}
                 enableColumnAutosize={true}
