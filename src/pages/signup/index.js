@@ -97,7 +97,7 @@ function SignUp() {
             <Terms/>
             <article style={{borderTop: '1px solid #dcdcdc'}}>
               <ButtonGroup>
-                <button type={'button'} onClick={() => navigate('/')}>취소</button>
+                <button type={'button'} onClick={() => window.history.back()}>취소</button>
                 <button type={'button'} onClick={handleNextStep}>다음</button>
               </ButtonGroup>
             </article>

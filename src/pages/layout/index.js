@@ -24,7 +24,7 @@ import {FormProvider, useForm} from "react-hook-form";
 import {CampaignThree} from "../campaign/steps/CampaignThree";
 import {CampaignFour} from "../campaign/steps/CampaignFour";
 import {stepCampaignAtom} from "../campaign/entity";
-import {retrieveUserPoint, requestAmountPoint} from "../layout/entity/UserPoint";
+import {retrieveUserPoint, requestAmountPoint} from "./entity/UserPoint";
 import {retrieveUserPointRequest} from "../../services/payment/user/RetrieveUserPointAxios";
 
 function Layout() {

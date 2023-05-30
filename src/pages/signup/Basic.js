@@ -1,18 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useAtom} from "jotai/index";
 import {Controller, useForm} from "react-hook-form";
 import {toast} from "react-toastify";
 import {accountFileUpload, selValidUserId, signUp} from "../../services/Platform/ManageUserAxios";
-import {CancelButton, DefaultButton, Input, inputStyle, RelativeDiv, selectStyle} from "../../assets/GlobalStyles";
+import {CancelButton, DefaultButton, Input, RelativeDiv, selectStyle} from "../../assets/GlobalStyles";
 import {accountInfoAtom, hostList, nextStepAtom} from "./entity/Common";
 import {ButtonGroup, DuplicateButton, Form, SignUpVerify, ValidationScript, VerticalRule} from "./styles";
 import Select from "react-select";
-import {useAtomValue, useSetAtom} from "jotai";
+import {useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import ImageUploading from "react-images-uploading";
 import styled from "styled-components";
-import {useResetAtom} from "jotai/utils";
 
 function ModalCheckBusinessNumber(props) {
   const {onSubmit} =props
@@ -371,7 +370,7 @@ export default function Basic(props) {
                 {...register("username", {
                   required: "아이디를 입력해주세요",
                   pattern: {
-                    value: /^[A-Za-z]{1}\w{3,20}$/,
+                    value: /^[a-z]+[a-z0-9-_]{3,19}$/g,
                     message: '아이디를 확인해주세요.'
                   },
                   onChange: (e) => handleMemberId(e)
@@ -680,6 +679,7 @@ export default function Basic(props) {
         </Form>
       </article>
       <ButtonGroup>
+        <CancelButton type={'button'} onClick={() => window.location.replace('/')}>취소</CancelButton>
         <SignUpVerify type={"submit"}>회원가입</SignUpVerify>
       </ButtonGroup>
     </form>

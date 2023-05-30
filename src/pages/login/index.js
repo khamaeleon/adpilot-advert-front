@@ -358,10 +358,14 @@ function LoginComponent () {
           <div>
             <input
               type={'text'}
-              placeholder={'아이디'}
+              placeholder={'유저 아이디'}
               value={loginParamsValue.username || ''}
               {...register('username',{
-                required: "아이디를 입력해주세요",
+                required: "아이디를 입력해주세요.",
+                pattern: {
+                  value: /^[a-z]+[a-z0-9-_]{3,19}$/g,
+                  message: "아이디는 3자리 이상 영문,숫자,특문(언더바, 대시)"
+                },
                 onChange: (e) => {
                   handleChangeId(e)
                 }

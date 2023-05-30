@@ -132,7 +132,7 @@ function AdminLogin() {
                 <div>
                   <input
                     type={'text'}
-                    placeholder={'아이디'}
+                    placeholder={'이메일 아이디'}
                     value={loginParamsValue.email || ''}
                     {...register('email', {
                       required: "아이디를 입력해주세요",
