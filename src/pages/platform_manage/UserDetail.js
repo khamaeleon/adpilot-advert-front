@@ -8,7 +8,7 @@ import {
   ColSpan3,
   ColSpan4,
   ColTitle,
-  DeleteButton,
+  DownLoadButton,
   Input,
   inputStyle,
   RelativeDiv,
@@ -38,7 +38,7 @@ import {phoneNumFormat} from "../../common/StringUtils";
 import {hostList} from "../signup/entity/Common";
 import {accountInfoAtom} from "./entity/User";
 import {adminInfoAtom} from "./entity/Admin";
-import {DuplicateButton, InputValidationCon} from "./styles/common";
+import {DuplicateButton, Image, InputValidationCon} from "./styles/common";
 import {tokenResultAtom} from "../login/entity/Common";
 
 export function PwChange(props) {
@@ -313,16 +313,29 @@ function PlatformUserDetail() {
     })
   }
 
-  const imageDel = () => {
-      setAccountInfoState({
-        ...accountInfoState,
-        userCompanyProfile: {
-          ...accountInfoState.userCompanyProfile,
-          businessLicenseWebPath: ''
-        }
-      })
-      setValue('businessLicenseWebPath', '')
-  }
+
+  const imageDownload = (fileUrl) => {
+    const url = "http://192.168.0.12:9000/temp" + fileUrl;
+    fetch(url, { method: 'GET' })
+    .then((res) => {
+      return res.blob();
+    })
+    .then((blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = accountInfoState?.userCompanyProfile.companyName + "_사업자등록증";
+      document.body.appendChild(a);
+      a.click();
+      setTimeout((_) => {
+        window.URL.revokeObjectURL(url);
+      }, 60000);
+      a.remove();
+    })
+    .catch((err) => {
+      console.error('err: ', err);
+    });
+  };
 
   const handleBusinessLicense = (pictureFiles) => {
     if(pictureFiles.length !== 0){
@@ -581,18 +594,12 @@ function PlatformUserDetail() {
                       <Input
                         type={'text'}
                         placeholder={'사업자 등록 번호'}
-                        {...register("businessNumber", {
-                          required: "사업자 조회를 해주세요",
-                        })}
                         value={accountInfoState?.userCompanyProfile.businessNumber}
                         readOnly={true}
                       />
                       {errors.businessNumber && <ValidationScript>{errors.businessNumber?.message}</ValidationScript>}
                     </RelativeDiv>
                   </ColSpan2>
-                  <ColSpan1>
-                    <DuplicateButton type={'button'}>사업자 조회</DuplicateButton>
-                  </ColSpan1>
                 </RowSpan>
                 <RowSpan>
                   <ColSpan2>
@@ -691,7 +698,7 @@ function PlatformUserDetail() {
                       <InputValidationCon>
                         <div style={{width: '100%', display: 'flex', alignItems: 'center'}}>
                           <Input
-                            style={{paddingRight: 35}}
+                            style={{paddingRight: 50}}
                             type={'text'}
                             placeholder={'사업자 등록증'}
                             {...register("businessLicenseWebPath", {
@@ -700,7 +707,7 @@ function PlatformUserDetail() {
                             value={accountInfoState?.userCompanyProfile.businessLicenseWebPath}
                             readOnly={true}
                           />
-                          <DeleteButton type={'button'} onClick={()=> imageDel()} />
+                          <DownLoadButton type={'button'} onClick={()=> imageDownload(accountInfoState?.userCompanyProfile.businessLicenseWebPath)} />
                         </div>
                         {errors.businessLicenseWebPath && <ValidationScript>{errors.businessLicenseWebPath?.message}</ValidationScript>}
                       </InputValidationCon>
@@ -745,7 +752,7 @@ function PlatformUserDetail() {
                     </RelativeDiv>
                   </ColSpan2>
                 </RowSpan>
-                {state.id !== 'NEW' &&
+                {tokenUserInfo.role !=='NORMAL' &&
                   <RowSpan>
                     <ColSpan1>
                       <ColTitle><Span4>사용 여부</Span4></ColTitle>

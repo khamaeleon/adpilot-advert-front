@@ -1204,6 +1204,24 @@ export const DeleteButton = styled.button`
     background-image: -webkit-image-set(url("/assets/images/common/btn_delete_on.png") 1x, url("/assets/images/common/btn_delete_on@2x.png") 2x, url("/assets/images/common/btn_delete_on@3x.png") 3x);
   }
 `
+
+export const DownLoadButton = styled.button`
+  width: 45px;
+  height: 45px;
+  background-color: transparent;
+  background-image: url("/assets/images/common/icon_excel_off.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  border-left: 1px solid #e5e5e5;
+  border-radius:0;
+  right: 10px;
+  &:hover {
+    background-image: url("/assets/images/common/icon_excel_on.png");
+    background-image: -webkit-image-set(url("/assets/images/common/icon_excel_on.png") 1x, url("/assets/images/common/icon_excel_on@2x.png") 2x, url("/assets/images/common/icon_excel_on@3x.png") 3x);
+  }
+`
+
 export const ValidationScript = styled.div`
   position: absolute;
   bottom: -18px;
