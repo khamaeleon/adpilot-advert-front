@@ -475,6 +475,7 @@ function DashBoardIndex() {
                 }}
                 limit={30}
                 multiRowExpand={false}
+                showHoverRows={false}
               />
               : <Table columns={userCampaignListColumn}
                        totalCount={[totalInfo.totalCount, '캠페인']}
