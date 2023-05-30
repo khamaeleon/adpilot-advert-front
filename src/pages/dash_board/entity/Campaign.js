@@ -22,11 +22,6 @@ export const adverListColumn = [
     minWidth: 150,
     textAlign: 'center',
     showColumnMenuTool: false,
-    // cellProps: {
-    //   style: {
-    //     minHeight: 100
-    //   }
-    // },
   },
   {
     name: 'username',

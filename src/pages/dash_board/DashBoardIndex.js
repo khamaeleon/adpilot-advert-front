@@ -29,11 +29,8 @@ import {
 import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../common/StringUtils";
 import Select from "react-select";
 import {DashBoardCondition} from "../../components/dashBoard/Condition";
-import {getThisMonth} from "../../common/DateUtils";
 import Table from "../../components/table";
 import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
-import {selConversionDetailList} from "../../services/conversion/ConversionAxios";
-import {paymentAllListRequest} from "../../services/payment/admin/PaymentAllListRequestAxios";
 
 /** 플래폼 현황 차트 **/
 function ChartComponent(props) {
@@ -43,13 +40,13 @@ function ChartComponent(props) {
   const [dataType, setDataType] = useState('cpc')
   const [dataType2, setDataType2] = useState('costAmount')
   const [chartDataInfo, setChartDataInfo] = useState([])
-  const [chartList, setChartList] = useState([{id: 'validClickCount', data:[]}])
+  const [chartList, setChartList] = useState([])
 
   useEffect(()=>{
     if(tokenUserInfo.role !== 'NORMAL') {
       retrieveOverview(searchCondition).then(response => {
         let data = response
-        if(response !== null) {
+        if(data !== null) {
           data?.map((item,key) => {
             Object.assign(data[key],{clickRate: item.validClickCount !== 0 ? (item.validClickCount / item.exposureCount) *100 : 0})
             Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
@@ -348,25 +345,26 @@ function ChartComponent(props) {
           </ChartLabel>
         </ChartLabels>
         <div style={{height: 300}}>
-          <ResponsiveLine
+          {chartList[0]?.data.length !== 0 &&
+            <ResponsiveLine
               {...commonProperties}
               data={chartList}
               colors={(series) => series.color}
-              axisLeft={null}
               sliceTooltip={(props) => {
                 return (
-                    <ChartTooltip>
-                      {props.slice.points?.map((data, key) => {
-                        return (
-                            <p key={key}>
-                              <span style={{color: data.serieColor}}>{chartData[data.serieId].label} : </span><span>{yFormatted(data)}</span>
-                            </p>
-                        )
-                      })}
-                    </ChartTooltip>
+                  <ChartTooltip>
+                    {props.slice.points?.map((data, key) => {
+                      return (
+                        <p key={key}>
+                          <span style={{color: data.serieColor}}>{chartData[data.serieId].label} : </span><span>{yFormatted(data)}</span>
+                        </p>
+                      )
+                    })}
+                  </ChartTooltip>
                 )
               }}
-          />
+            />
+          }
         </div>
       </ChartContainer>
   )
@@ -429,7 +427,8 @@ function DashBoardIndex() {
         enableColumnAutosize={true}
         groups={false}
         emptyText={'캠페인 리스트가 없습니다.'}
-        rowHeight={70}
+        rowHeight={null}
+        headerHeight={50}
       />
     );
   }
@@ -454,8 +453,8 @@ function DashBoardIndex() {
                 onReady={setGridRef}
                 style={{minHeight: 550, textAline: 'center'}}
                 headerHeight={50}
-                rowExpandHeight={400}
-                minRowHeight={35}
+                rowExpandHeight={({ data }) => {return data?.campaignCount !== 0 ? 400 : 300}}
+                rowHeight={60}
                 renderDetailsGrid={renderContactsGrid}
                 enableColumnAutosize={true}
                 emptyText={'데이터가 없습니다.'}
