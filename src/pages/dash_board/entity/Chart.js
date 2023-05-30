@@ -63,6 +63,7 @@ export const commonProperties = {
     stacked: false,
     reverse: false
   },
+  axisLeft: null,
   axisBottom:{
     tickSize: 0,
     tickPadding: 15,
