@@ -43,26 +43,24 @@ export function SwitchComponent(props){
     setModal({isShow:false});
   }
   const showModal = () => {
+    const btnSmall = { width: 100, height: 42 }
     setSelect(!select)
     setModal({
       isShow: true,
-      width: 660,
+      width: 400,
       modalComponent: () => {
         return (
           <div>
-            <ModalHeader title={'연동 상태 변경'}/>
+            {type !== 'publish' && <ModalHeader title={'연동 상태 변경'}/>}
             <ModalBody>
-              <ScriptSubject>
-                {!select ?
-                  type === 'publish' ? <div>게재 하시겠습니까?</div> : <div>연동을 사용 하시겠습니까?</div>
-                  :
-                    type === 'publish' ? <div>중지 하시겠습니까?</div> :<div>연동을 중지 하시겠습니까?</div>
-                }
-              </ScriptSubject>
+              <p style={{fontSize: 16, paddingTop: 10}}>
+                {type !== 'publish' ? (!select ? '연동을 사용 하시겠습니까?'
+                  : '연동을 중지 하시겠습니까?') : '게재 상태를 변경하시겠습니까?'}
+              </p>
             </ModalBody>
-            <ModalFooter>
-              <CancelButton onClick={()=>handleClick(false)}>취소</CancelButton>
-              <PreviewSubmit onClick={()=>handleClick(true)}>확인</PreviewSubmit>
+            <ModalFooter style={{borderTop: 0, paddingTop: 5}}>
+              <CancelButton style={btnSmall} onClick={()=>handleClick(false)}>취소</CancelButton>
+              <PreviewSubmit style={btnSmall} onClick={()=>handleClick(true)}>확인</PreviewSubmit>
             </ModalFooter>
           </div>
         )

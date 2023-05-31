@@ -1,7 +1,8 @@
 import {getThisMonth} from "../../../common/DateUtils";
 import {atom} from "jotai";
+import {atomWithReset} from "jotai/utils";
 
-export const searchConditionAtom = atom({
+export const searchConditionAtom = atomWithReset({
   searchStartDate: getThisMonth().startDay,
   searchEndDate: getThisMonth().endDay,
   productType: null,

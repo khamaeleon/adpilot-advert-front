@@ -5,6 +5,7 @@ import React, {useEffect} from "react";
 import styled from "styled-components";
 import Modal from "../../components/modal/Modal";
 import {useAtom, useSetAtom,} from "jotai";
+import {useResetAtom} from "jotai/utils";
 import {decimalFormat} from "../../common/StringUtils";
 import {tokenResultAtom} from "../login/entity/Common";
 import {logOutAdmin, logOutUser, refresh, refreshAdmin} from "../../services/auth/AuthAxios";
@@ -25,6 +26,7 @@ import {CampaignThree} from "../campaign/steps/CampaignThree";
 import {CampaignFour} from "../campaign/steps/CampaignFour";
 import {stepCampaignAtom} from "../campaign/entity";
 import {retrieveUserPoint, requestAmountPoint} from "./entity/UserPoint";
+import {searchConditionAtom} from "../dash_board/entity/Common";
 import {retrieveUserPointRequest} from "../../services/payment/user/RetrieveUserPointAxios";
 
 function Layout() {
@@ -35,8 +37,9 @@ function Layout() {
   const [userPoint, setUserPoint] = useAtom(retrieveUserPoint)
   const [requestAmount, ] = useAtom(requestAmountPoint)
   const setStepCampaign = useSetAtom(stepCampaignAtom)
+  const resetInfo = useResetAtom(searchConditionAtom)
 
-  useEffect(() => {
+    useEffect(() => {
       if (tokenUserInfo.role === '') {
         refreshAdmin().then(response => {
           if (response) {
@@ -67,6 +70,9 @@ function Layout() {
     },[])
 
   useEffect(() => {
+    if(!['dashboard','campaignLookOver','campaignTwo','campaignThree','campaignFour'].includes(params.id)) {
+      resetInfo();
+    }
     if(params.id !== 'campaign') {
       setStepCampaign({steps: null})
     }

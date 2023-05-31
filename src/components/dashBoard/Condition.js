@@ -4,7 +4,6 @@ import {
   CalendarBox,
   CalendarIcon,
   ColSpan0,
-  ColSpan1, ColSpan2,
   ColSpan3,
   ColTitle,
   CustomDatePicker,

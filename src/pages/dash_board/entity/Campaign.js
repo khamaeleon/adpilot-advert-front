@@ -640,16 +640,17 @@ export const lockedRows = [
       if(column.name == 'adverName'){
         style.fontSize ='15px'
       }
-      if(column.name == 'campaignCount'){
-        style.borderLeft ='1px solid #E4E3E2'
-      }
       return style
     },
-    colspan: {
-      adverName: 2
-    },
+    // colspan: {
+    //   adverName: 2
+    // },
+    // colspan:  ({ column }) => {
+    //   if(column.id === '__row-expand-column') return 2
+    // },
     render: {
       adverName: 'Total',
+      username: ({ summary }) => <p>{decimalFormat(summary.username)}</p>,
       campaignCount: ({ summary }) => <p>{decimalFormat(summary.campaignCount)}</p>,
       exposureCount: ({ summary }) => <p>{decimalFormat(summary.exposureCount)}</p>,
       validClickCount: ({ summary }) => <p>{decimalFormat(summary.validClickCount)}</p>,
@@ -727,6 +728,7 @@ export const summaryReducer = {
     return accumulator
   },
   complete: (accumulator, arr) => {
+    accumulator.username = arr.length
     return accumulator
   }
 };

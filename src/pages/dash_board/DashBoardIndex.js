@@ -405,6 +405,7 @@ function DashBoardIndex() {
         }
       })
     }
+    searchCondition.keyword !== '' ? setKeyword(searchCondition.keyword) : setKeyword('')
   }, [searchCondition])
 
   /**
