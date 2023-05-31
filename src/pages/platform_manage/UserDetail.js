@@ -100,7 +100,7 @@ function PwChangeModal(props) {
         <ModalHeader title={'비밀번호 변경'}/>
         <ModalBody>
           <RowSpan>
-            <ColSpan4>
+            <ColSpan4 style={{marginBottom: 10}}>
               <ColTitle><Span4>비밀번호</Span4></ColTitle>
               <RelativeDiv>
                 <Input

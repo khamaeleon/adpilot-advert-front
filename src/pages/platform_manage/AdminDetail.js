@@ -4,8 +4,6 @@ import {
   BoardContainer,
   BoardHeader,
   BoardSearchDetail,
-  ColSpan1,
-  ColSpan2,
   ColSpan3,
   ColTitle,
   Input,
@@ -41,7 +39,7 @@ function PlatformAdminDetail() {
     defaultValues: adminInfoState
   })
   const onError = (error) => console.log(error)
-  const state =useLocation()
+  const state = useLocation()
 
   const navigate = useNavigate()
 
@@ -74,7 +72,7 @@ function PlatformAdminDetail() {
   const onSubmit = () => {
     updateAdmin(adminInfoState).then((response) => {
       if (response) {
-        navigate('/board/campaign')
+        toast.success("정보 변경이 완료되었습니다.")
       } else {
         toast.warning("어드민 계정이 수정이 실패 하였습니다.")
       }
@@ -94,6 +92,7 @@ function PlatformAdminDetail() {
           isShow: false,
           modalComponent: null
         })
+        toast.success("비밀번호 변경이 완료되었습니다.")
       } else {
         toast.warning("수정이 실패 하였습니다. 관리자한테 문의하세요")
       }
@@ -152,9 +151,13 @@ function PlatformAdminDetail() {
                       placeholder={'연락처를 입력해주세요.'}
                       {...register("phoneNumber", {
                         required: "담당자 연락처를 입력해주세요.",
+                        pattern: {
+                          value: /0([1-9][0-9]?){1,2}?([0-9]{3,4})?([0-9]{4})/g,
+                          message: "숫자만 입력해주세요"
+                        },
+                        onChange: (e) => handleManagerPhone(e),
+                        value: adminInfoState !== null && adminInfoState.phoneNumber
                       })}
-                      value={adminInfoState !== null && adminInfoState.phoneNumber}
-                      onChange={(e) => handleManagerPhone(e)}
                     />
                     {errors.phoneNumber && <ValidationScript>{errors.phoneNumber?.message}</ValidationScript>}
                   </RelativeDiv>
