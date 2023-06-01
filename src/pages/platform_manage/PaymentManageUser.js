@@ -91,7 +91,7 @@ function PaymentManageUser(props) {
   //[d] 그리드 데이터
   const [pageSize, ] = useState(10); // 한 페이지 보여줄 데이터
   const [currentPage, ] = useState(1); // 현재 페이지
-  const gridStyle = {minHeight: 510, textAlign: 'center'}
+  const gridStyle = {minHeight: 300, textAlign: 'center'}
   //[d] 결제 내역 데이터
   function fetchPaymentDetails(props = {}) {
     const { skip = (currentPage - 1) * pageSize, limit = pageSize } = props;
@@ -336,7 +336,7 @@ function PaymentManageUser(props) {
               showColumnMenuLockOptions={false}
               showColumnMenuGroupOptions={false}
               emptyText={'결제 내역이 없습니다.'}
-              limit={10}
+              limit={5}
               pagination={true}
               sortable={false}
               style={gridStyle}
@@ -358,7 +358,7 @@ function PaymentManageUser(props) {
               showColumnMenuLockOptions={false}
               showColumnMenuGroupOptions={false}
               emptyText={'결제 내역이 없습니다.'}
-              limit={10}
+              limit={5}
               pagination={true}
               sortable={false}
               style={gridStyle}

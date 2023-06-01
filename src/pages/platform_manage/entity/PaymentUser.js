@@ -218,6 +218,10 @@ export const PointDetailsColumns = [
         defaultFlex: 1,
         resizable: false,
         textAlign: 'center',
-        render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
+        // [d] 6월1일 -표기 제거
+        // render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
+        render: ({ value }) => (
+          <p className="won">{decimalFormat(String(value).replace(/-/g, ''))}</p>
+        )
     },
 ]

@@ -189,7 +189,7 @@ function CellComponent({ value, cellProps }) {
     valueType.label === '환불 신청'?
       (
         <RefundProcessingButton
-          title={"환불 처리"}
+          title={"환불 신청"}
           modalInfo={'ADMIN'}
           onSave={null}
           onSubmit={"환불 완료"}

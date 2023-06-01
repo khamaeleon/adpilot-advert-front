@@ -103,8 +103,8 @@ function SearchModal (props) {
     if(enterAmount === 0) {
       setError('enterAmount', {type: 'required', message: '요청 금액을 입력해 주세요'});
       // 구문 하나 더 나눠서 광고비 잔애보다 지급 혹은 차감 금액이 더 크면 얼럿!!
-    }else if(enterAmount > adverPoint) {
-      setError('enterAmount', {type: 'required', message: '요청 금액이 광고비 잔액을 초과 합니다.'});
+    }else if(enterAmount > adverPoint && gtSettingMethod === "TAKEN_BY_ADMIN") {
+        setError('enterAmount', {type: 'required', message: '요청 금액이 광고비 잔액을 초과 합니다.'});
     }else{
       if(gtSettingMethod === "GIVEN_BY_ADMIN" || gtSettingMethod === "TAKEN_BY_ADMIN") {
         const requestData = {

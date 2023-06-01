@@ -1,18 +1,17 @@
 import {useAtom} from "jotai";
-import React, {useEffect, useState} from "react";
-import axios from 'axios';
+import React, { useEffect, useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../modal/Modal";
 import Select from "react-select";
 import {Controller, useForm} from "react-hook-form";
 import {modalController} from "../../../store";
 import {
-  ColSpan0, ColSpan1, ColSpan2,
-  ColSpan3, ColSpan4, DefaultButton,
-  inputStyle, RowSpan, Span3, Edit, ValidationScript, SubmitButton,
+  ColSpan1,
+  ColSpan4, DefaultButton,
+  inputStyle, RowSpan, Edit, ValidationScript, SubmitButton,
 } from "../../../assets/GlobalStyles";
 import styled from "styled-components";
 import {refundRequestData} from "../../../pages/platform_manage/entity/PaymentUser";
-import {decimalFormat, removeStr} from "../../../common/StringUtils";
+import { removeStr} from "../../../common/StringUtils";
 import {tokenResultAtom} from "../../../pages/login/entity/Common";
 import {RegisterRefundInformationRequest} from "../../../services/payment/user/RegisterRefundInformationAxios";
 
@@ -40,14 +39,11 @@ export function RegisterRefundInformationButton(props) {
 function RegisterRefundInformationModal (props) {
   const [tokenUserInfo] = useAtom(tokenResultAtom) // userId
   const [,setModal] = useAtom(modalController)
-  const {register, handleSubmit, setValue, setError, control, formState:{errors} } = useForm()
+  const {register, handleSubmit, setError, control, formState:{errors} } = useForm()
   const [selectBank, setSelectBank] = useState(''); // 은행 선택 값
   const [selectBankType, setSelectBankType] = useState('')
-  const [accountNumber, setAccountNumber] = useState(''); // 계좌 번호
-  const [accountHolder, setAccountHolder] = useState(''); // 예금주
-
-  // 위 3개 값이 기존 정보 값이 없을 경우 초기화 값으로 들어가고 고객 정보에 담긴값을 조회했을 떄 있으면
-  // 즉 부모 페이지 접근시 값이 있으면 그 값을 위 3개 값에 포함 시키자.
+  const [accountNumber, setAccountNumber] = useState(props.refundData?props.refundData.refundBankAccount:''); // 계좌 번호
+  const [accountHolder, setAccountHolder] = useState(props.refundData?props.refundData.refundBankAccountHolder:''); // 예금주
 
   const handleChangeIsBank = (value) => { // 은행 선택
     setSelectBank(value.label)
@@ -55,9 +51,9 @@ function RegisterRefundInformationModal (props) {
   }
 
   const handleAccountNumberChange = (value) => {
-    let num = removeStr(value)
-    let numberNum = Number(num)
-    setAccountNumber(numberNum)
+    // let num = Number(value)
+    // let numberNum = Number(num)
+    setAccountNumber(value)
   }
 
   const handleAccountHolderChange = (value) => {
@@ -70,10 +66,7 @@ function RegisterRefundInformationModal (props) {
       if (accountNumber === '') setError('accountNumber', {type: 'required', message: '계좌 번호를 입력해 주세요.'});
       if (accountHolder === '') setError('accountHolder', {type: 'required', message: '예금주 이름을 입력해 주세요.'});
     } else {
-      // 아래 부분 등록된 값을 db에서 조회해서 가져오는 걸로
-      // props.setRefundData([selectBank, accountNumber, accountHolder]);
-      console.log(selectBank)
-      console.log(selectBankType)
+
       const requestData = {
         userId: tokenUserInfo.id,
         refundBankType: selectBankType,
@@ -120,7 +113,7 @@ function RegisterRefundInformationModal (props) {
                   <Select
                     {...field}
                     options={refundRequestData.bankType}
-                    placeholder={'은행'}
+                    placeholder={props.refundData?props.refundData.refundBankType:'은행'}
                     styles={inputStyle}
                     components={{IndicatorSeparator: () => null}}
                     onChange={(e)=>handleChangeIsBank(e)}
@@ -135,12 +128,16 @@ function RegisterRefundInformationModal (props) {
           <ColSpan1>계좌 번호</ColSpan1>
           <ColSpan4>
             <Input
-              type={"text"}
+              type={"number"}
               value={accountNumber}
+              onInput={(e) => {
+                if (e.target.value.length > e.target.maxLength)
+                  e.target.value = e.target.value.slice(0, e.target.maxLength);
+              }}
               {...register("accountNumber", {
                 required: "계좌번호를 입력해 주세요,",
                 pattern:{
-                  value: /^[0-9,]+$/,
+                  value: /^[0-9,]*$/,
                   message: "숫자만 입력 가능합니다."
                 },
                 onChange:(e) => handleAccountNumberChange(e.target.value)
