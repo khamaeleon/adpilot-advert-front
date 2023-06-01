@@ -44,7 +44,7 @@ function RegisterRefundInformationModal (props) {
   const [selectBankType, setSelectBankType] = useState('')
   const [accountNumber, setAccountNumber] = useState(props.refundData?props.refundData.refundBankAccount:''); // 계좌 번호
   const [accountHolder, setAccountHolder] = useState(props.refundData?props.refundData.refundBankAccountHolder:''); // 예금주
-
+  const [value, ] = useState(props.refundData.refundBankType)
   const handleChangeIsBank = (value) => { // 은행 선택
     setSelectBank(value.label)
     setSelectBankType(value.value)
@@ -113,7 +113,7 @@ function RegisterRefundInformationModal (props) {
                   <Select
                     {...field}
                     options={refundRequestData.bankType}
-                    placeholder={props.refundData?props.refundData.refundBankType:'은행'}
+                    placeholder={value?value:'은행'}
                     styles={inputStyle}
                     components={{IndicatorSeparator: () => null}}
                     onChange={(e)=>handleChangeIsBank(e)}
