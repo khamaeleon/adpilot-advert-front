@@ -42,7 +42,7 @@ function BudgetEvent() {
   return (
     <>
       <Board>
-        <BoardHeader>이벤트 예산 현황</BoardHeader>
+        <BoardHeader>타겟팅 예산 현황</BoardHeader>
         <BoardSearchDetail>
           <RowSpan>
             <ColSpan1>
@@ -58,11 +58,11 @@ function BudgetEvent() {
         </BoardSearchDetail>
         <BoardTableContainer>
           { budgetEventDataState !== null &&
-          <Table columns={adverEventBudgetColumns}
-                 data={budgetEventDataState.eventDtos}
-                 showHoverRows={false}
-                 activeCell={[0]}
-                 emptyText={'이벤트 예산 현황 내역이 없습니다.'}/>
+            <Table columns={adverEventBudgetColumns}
+                   data={budgetEventDataState?.userDtos}
+                   showHoverRows={false}
+                   activeCell={[0]}
+                   emptyText={'타겟팅 예산 현황 내역이 없습니다.'}/>
           }
         </BoardTableContainer>
       </Board>

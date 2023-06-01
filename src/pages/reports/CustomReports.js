@@ -38,7 +38,7 @@ import {tokenResultAtom} from "../login/entity/Common";
 import {useNavigate, useParams} from "react-router-dom";
 import {dateFormat} from "../../common/StringUtils";
 import {reportsInfoAtom} from "../../components/aside/entity";
-import {deviceType, eventType, productType} from "../dash_board/entity/Common";
+import {deviceType, targetingType, productType} from "../dash_board/entity/Common";
 import {
   deleteCustomReportsAdminAxios,
   retrieveCustomReportsAdminDetail
@@ -160,12 +160,12 @@ const defaultColumn = {
       return <span>{productType.find(item => item.value === value)?.label}</span>
     }
   },
-  'eventName': {
-    name: 'eventType',
-    header: '이벤트명',
+  'targetingName': {
+    name: 'targetingType',
+    header: '타겟팅',
     textAlign: 'center',
     render: ({value}) => {
-      return <span>{eventType.find(item => item.value === value)?.label}</span>
+      return <span>{targetingType.find(item => item.value === value)?.label}</span>
     }
   },
   'clickRate': {

@@ -5,19 +5,19 @@ import {decimalFormat} from "../../../common/StringUtils";
 import React from "react";
 
 /**
- * 이벤트 단가 광고주 리스트 Atom
+ * 타겟팅 단가 광고주 리스트 Atom
  * @type {Atom<unknown>}
  */
 export const eventUnitPriceDataAtom = atom(null)
 
 /**
- * 이벤트 단가 광고주별 상세 리스트 Atom
+ * 타겟팅 단가 광고주별 상세 리스트 Atom
  * @type {Atom<unknown>}
  */
 export const eventUnitPriceDetailDataAtom = atom(null)
 
 /**
- * 이벤트 단가 광고주 리스트 컬럼세팅
+ * 타겟팅 단가 광고주 리스트 컬럼세팅
  * @type {[{defaultFlex: number, name: string, cellProps: {style: {textDecoration: string}}, header: string, render: (function(*): *)},{defaultFlex: number, resizable: boolean, name: string, header: string},{defaultFlex: number, resizable: boolean, name: string, header: string},{defaultFlex: number, resizable: boolean, name: string, header: string}]}
  */
 export const adverEventPriceColumns = [
@@ -50,24 +50,24 @@ export const adverEventPriceColumns = [
   },
   {
     name: 'count',
-    header: '등록된 이벤트 단가 그룹',
+    header: '등록된 타겟팅 단가 그룹',
     defaultFlex: 1,
     resizable: false
   }
 ]
 
 /**
- * 이벤트 단가 광고주별 상세 리스트 컬럼 세팅
+ * 타겟팅 단가 광고주별 상세 리스트 컬럼 세팅
  * @type {[{defaultFlex: number, name: string, header: string},{defaultFlex: number, resizable: boolean, name: string, header: string, render: (function({value: *}): *)},{defaultFlex: number, resizable: boolean, name: string, header: string, render: (function({value: *}): *)},{defaultFlex: number, resizable: boolean, name: string, header: string, render: (function({value: *}): *)},{defaultFlex: number, resizable: boolean, name: string, header: string, render: (function({value: *}): *)},null,null]}
  */
-export const eventUnitPriceDetailColumns = [ //이벤트 단가 상세 컬럼
+export const eventUnitPriceDetailColumns = [ //타겟팅 단가 상세 컬럼
   {
     name: 'groupName',
-    header: '이벤트 단가 그룹명',
+    header: '타겟팅 단가 그룹명',
     defaultFlex: 1,
     render: (props) => {
       return (
-        <div style={{display: "flex", alignItems: 'center'}}>
+        <div style={{display: "flex", alignItems: 'center', justifyContent : 'center'}}>
           <p>{props.value}</p>
           <Icon saveType={'edit'} cellProps={props.cellProps.data} label={'won'}/>
         </div>

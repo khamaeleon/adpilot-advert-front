@@ -61,12 +61,12 @@ export const menuList = [
     child:[
       {
         name: "settings",
-        header: "이벤트 단가 관리",
+        header: "타겟팅 단가 관리",
         detail: "settingsDetail"
       },
       {
         name: "budgetEvent",
-        header: "이벤트 예산 관리",
+        header: "타겟팅 예산 관리",
         detail: "budgetEventDetail"
       },
       {

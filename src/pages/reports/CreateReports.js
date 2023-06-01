@@ -36,7 +36,7 @@ const columnList= {
   BY_ADVERTISE: "광고주 명",
   BY_CAMPAIGN: "캠페인 명",
   BY_PRODUCT: "광고 상품",
-  BY_EVENT: "이벤트 명",
+  BY_TARGETING: "타겟팅",
   COUNT_BY_ADVERTISE: '광고주 수',
   TOTAL_EXPOSURE_COUNT: "총 노출수",
   EXPOSURE_COUNT: "노출수",
@@ -363,8 +363,8 @@ export default function CreateReports() {
                             active={includeItem('BY_PRODUCT')}
                             onClick={()=>handleAddScopesItem('BY_PRODUCT')}>광고 상품</DefaultItemButton>
                           <DefaultItemButton
-                            active={includeItem('BY_EVENT')}
-                            onClick={()=>handleAddScopesItem('BY_EVENT')}>이벤트 명</DefaultItemButton>
+                            active={includeItem('BY_TARGETING')}
+                            onClick={()=>handleAddScopesItem('BY_TARGETING')}>타겟팅</DefaultItemButton>
                         </>
                       }
                     </DefaultItemContainer>

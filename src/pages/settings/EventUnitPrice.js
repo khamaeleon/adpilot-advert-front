@@ -41,7 +41,7 @@ function EventUnitPrice() {
     <main>
       <>
       <Board>
-        <BoardHeader>이벤트 단가 현황</BoardHeader>
+        <BoardHeader>타겟팅 단가 현황</BoardHeader>
         <BoardSearchDetail>
           <RowSpan>
             <ColSpan1>
@@ -59,10 +59,10 @@ function EventUnitPrice() {
         <BoardTableContainer>
           { eventUnitPriceDataState !== null &&
             <Table columns={adverEventPriceColumns}
-                   data={eventUnitPriceDataState.eventDtos}
+                   data={eventUnitPriceDataState?.userDtos}
                    showHoverRows={false}
                    activeCell={[0]}
-                   emptyText={'이벤트 단가 현황 내역이 없습니다.'}/>
+                   emptyText={'타겟팅 단가 현황 내역이 없습니다.'}/>
           }
         </BoardTableContainer>
       </Board>

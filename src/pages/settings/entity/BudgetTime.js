@@ -110,7 +110,7 @@ export const adverTimeBudgetColumns = [ //시간 단가 컬럼
   },
   {
     name: 'count',
-    header: '이벤트 예산 그룹',
+    header: '등록된 시간별 예산 그룹',
     defaultFlex: 1,
     resizable: false
   }
@@ -143,7 +143,7 @@ export const budgetTimeDetailColumns = [ //시간 예산 상세 컬럼
     defaultFlex: 1,
     render: (props) => {
       return (
-        <Link to={'/board/budgetTimeDetail'} state={{id: props.data.userId,groupId:props.data.eventId}}>{props.value}</Link>
+        <Link to={'/board/budgetTimeDetail'} state={{id: props.data.userId,groupId:props?.data.id}}>{props.value}</Link>
       )
     }
   },

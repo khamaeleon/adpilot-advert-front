@@ -553,10 +553,10 @@ export function CampaignThree() {
           </RowSpan>
           <RowSpan>
             <ColSpan4>
-              <Span4>타게팅 설정</Span4>
+              <Span4>타겟팅 설정</Span4>
             </ColSpan4>
           </RowSpan>
-          <RowSpan box={true} column={true} style={{backgroundColor: '#ffffff'}}>
+          <RowSpan box={true} column={true} style={{backgroundColor: '#fff'}}>
             <ColSpan4>
               <Span4>고객 정보 기반 설정</Span4>
               <RelativeDiv>

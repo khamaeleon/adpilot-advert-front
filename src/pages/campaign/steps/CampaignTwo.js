@@ -78,9 +78,9 @@ export function CampaignTwo() {
     let userId = state !== null ? state.userId : campaignBasicInfo?.userId;
 
     const callbackFunc = (response) => {
-      setBudgetTimeListState(response[0].timeGroups.map(data => {return {value: data.eventId, label: data.groupName}}))
-      setBudgetEventListState(response[1].budgetEventDtos.map(data => {return {value: data.eventId, label: data.groupName}}))
-      setPriceEventListState(response[2].priceEventDtos.map(data => {return {value: data.eventId, label: data.groupName}}))
+      setBudgetTimeListState(response[0].timeGroups.map(data => {return {value: data.id, label: data.groupName}}))
+      setBudgetEventListState(response[1].targetingBudgetDtos.map(data => {return {value: data.id, label: data.groupName}}))
+      setPriceEventListState(response[2].targetingPriceDtos.map(data => {return {value: data.id, label: data.groupName}}))
     }
     multiAxiosCall([selBudgetTimeList(userId), selBudgetEventList(userId), selPriceEventList(userId)], callbackFunc)
 
@@ -371,7 +371,7 @@ export function CampaignTwo() {
                 {timeBudgetDetailDataState !== null &&
                   <ColSpan1>
                     <TimeTable
-                        exposureTimeType={timeBudgetDetailDataState?.exposureTimeType !== undefined ? timeBudgetDetailDataState.exposureTimeType : timeBudgetDetailDataState?.timeGroups.find(value => value.eventId === campaignBudgetInfo?.budgetTimeId)}
+                        exposureTimeType={timeBudgetDetailDataState?.exposureTimeType !== undefined ? timeBudgetDetailDataState.exposureTimeType : timeBudgetDetailDataState?.timeGroups.find(value => value.id === campaignBudgetInfo?.budgetTimeId)}
                       title={'설정된 시간별 예산'} readOnly={true}/>
                   </ColSpan1>
                 }

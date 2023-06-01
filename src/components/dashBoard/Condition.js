@@ -35,7 +35,7 @@ import {dataTotalInfo} from "../common/entity";
 import moment from "moment";
 
 export function DashBoardCondition(props) {
-  const {role, keyword, setKeyword, handleData, productType, eventType} = props
+  const {role, keyword, setKeyword, handleData, productType, targetingType} = props
   const [searchCondition, setSearchCondition] = useAtom(searchConditionAtom)
   const [dateRange, setDateRange] = useState([new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
@@ -135,13 +135,13 @@ export function DashBoardCondition(props) {
   }
 
   /**
-   * 이벤트 타입 선택
-   * @param eventType
+   * 타겟팅 타입 선택
+   * @param targetingType
    */
-  const handleEventType = (selectEventType) => {
+  const handleTargetingType = (selectTargeting) => {
     setSearchCondition({
       ...searchCondition,
-      eventType: selectEventType.value
+      targetingType: selectTargeting.value
     })
   }
 
@@ -204,9 +204,9 @@ export function DashBoardCondition(props) {
         <ColSpan0 style={{marginRight: 20}}>
           <ColTitle style={{paddingLeft: 0}}>타겟팅</ColTitle>
           <Select components={{IndicatorSeparator: () => null}}
-                  options={eventType}
-                  value={eventType.find(value => value.value === searchCondition.eventType)}
-                  onChange={handleEventType}
+                  options={targetingType}
+                  value={targetingType.find(value => value.value === searchCondition.targetingType)}
+                  onChange={handleTargetingType}
                   styles={{
                     input: (baseStyles, state) => (
                       {

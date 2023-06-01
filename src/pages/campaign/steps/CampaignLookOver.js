@@ -185,7 +185,7 @@ export function CampaignLookOver() {
                 </ColSpan2>
                 <HorizontalRule/>
                 <ColSpan2>
-                  <Span4>이벤트 예산 그룹</Span4>
+                  <Span4>타겟팅 예산 그룹</Span4>
                   <ValueText>{campaignData?.budgetEventName}</ValueText>
                 </ColSpan2>
               </Row>
@@ -202,7 +202,7 @@ export function CampaignLookOver() {
               </Row>
               <Row>
                 <ColSpan2>
-                  <Span4>이벤트 단가 그룹</Span4>
+                  <Span4>타겟팅 단가 그룹</Span4>
                   <ValueText>{campaignData?.priceEventName}</ValueText>
                 </ColSpan2>
               </Row>

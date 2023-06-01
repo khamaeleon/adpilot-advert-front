@@ -35,7 +35,7 @@ function EventUnitPriceDetail() {
   return (
     <>
       <Board>
-        <BoardHeader>이벤트 단가 기본 정보</BoardHeader>
+        <BoardHeader>타겟팅 단가 기본 정보</BoardHeader>
         <BoardSearchDetail>
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
             <ColSpan0>
@@ -74,10 +74,10 @@ function EventUnitPriceDetail() {
           </div>
           {eventUnitPriceDetailDataState !==null &&
             <Table columns={eventUnitPriceDetailColumns}
-                   data={eventUnitPriceDetailDataState?.priceEventDtos}
+                   data={eventUnitPriceDetailDataState?.targetingPriceDtos}
                    showHoverRows={false}
                    activeCell={[0]}
-                   emptyText={'이벤트 단가 관리 내역이 없습니다.'}/>
+                   emptyText={'타겟팅 단가 관리 내역이 없습니다.'}/>
           }
         </BoardTableContainer>
         <SubmitContainer>

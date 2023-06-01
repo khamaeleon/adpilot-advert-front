@@ -4,29 +4,29 @@ import {Icon} from "../../../components/table";
 import React from "react";
 
 /**
- * 이벤트 예산 광고주 리스트 Atom
+ * 타겟팅 예산 광고주 리스트 Atom
  * @type {Atom<unknown>}
  */
 export const budgetEventDataAtom = atom(null)
 
 /**
- * 이벤트 예산 광고주 상세 리스트 Atom
+ * 타겟팅 예산 광고주 상세 리스트 Atom
  * @type {Atom<unknown>}
  */
 export const eventBudgetDetailDataAtom = atom(null)
 
 /**
- * 이벤트 예산 광고주 리스트 컬럼세팅
+ * 타겟팅 예산 광고주 리스트 컬럼세팅
  * @type {[{defaultFlex: number, name: string, cellProps: {style: {textDecoration: string}}, header: string, render: (function(*): *)},{defaultFlex: number, resizable: boolean, name: string, header: string},{defaultFlex: number, resizable: boolean, name: string, header: string},{defaultFlex: number, resizable: boolean, name: string, header: string}]}
  */
-export const adverEventBudgetColumns = [ //이벤트 단가 컬럼
+export const adverEventBudgetColumns = [ //타겟팅 단가 컬럼
   {
     name: 'adverName',
     header: '광고주명',
     defaultFlex: 1,
     cellProps: {
       style: {
-        textDecoration: 'underline'
+        textDecoration: 'underline',
       }
     },
     render: (props) => {
@@ -49,24 +49,24 @@ export const adverEventBudgetColumns = [ //이벤트 단가 컬럼
   },
   {
     name: 'count',
-    header: '등록된 이벤트 예산 그룹',
+    header: '등록된 타겟팅 예산 그룹',
     defaultFlex: 1,
     resizable: false
   }
 ]
 
 /**
- * 이벤트 예산 광고주 상세 리스트 컬럼세팅
+ * 타겟팅 예산 광고주 상세 리스트 컬럼세팅
  * @type {[{defaultFlex: number, name: string, header: string},{defaultFlex: number, resizable: boolean, name: string, header: string, render: (function({value: *}): *)},{defaultFlex: number, resizable: boolean, name: string, header: string, render: (function({value: *}): *)},{defaultFlex: number, resizable: boolean, name: string, header: string, render: (function({value: *}): *)},{defaultFlex: number, resizable: boolean, name: string, header: string, render: (function({value: *}): *)},null,null]}
  */
-export const budgetEventDetailColumns = [ //이벤트 예산 상세 컬럼
+export const budgetEventDetailColumns = [ //타겟팅 예산 상세 컬럼
   {
     name: 'groupName',
-    header: '이벤트 예산 그룹명',
+    header: '타겟팅 예산 그룹명',
     defaultFlex: 1,
     render: (props) => {
       return (
-        <div style={{display: "flex", alignItems: 'center'}}>
+        <div style={{display: "flex", alignItems: 'center', justifyContent : 'center'}}>
           <p>{props.value}</p>
           <Icon saveType={'edit'} cellProps={props.cellProps.data} label={'pct'}/>
         </div>

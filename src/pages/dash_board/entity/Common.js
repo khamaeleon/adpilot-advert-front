@@ -1,12 +1,11 @@
 import {getThisMonth} from "../../../common/DateUtils";
-import {atom} from "jotai";
 import {atomWithReset} from "jotai/utils";
 
 export const searchConditionAtom = atomWithReset({
   searchStartDate: getThisMonth().startDay,
   searchEndDate: getThisMonth().endDay,
   productType: null,
-  eventType: null,
+  targetingType: null,
   deviceType : null,
   agentTypes: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_NATIVE_APP'],
   keyword: '',
@@ -26,7 +25,7 @@ export const deviceType = [
   {key:4,value:'RESPONSIVE_WEB',label: '반응형 웹'}
 ]
 
-export const eventType = [
+export const targetingType = [
   {key:1,value:null,label: '전체'},
   {key:2,value:'SAW_THE_PRODUCT',label: '카트 추천'},
   {key:3,value:'CART_THE_PRODUCT',label: '상품 추천'},

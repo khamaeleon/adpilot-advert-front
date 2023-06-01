@@ -32,7 +32,7 @@ function SettingChangeModal(props) {
   const [dataState, setDataState] = useState(saveType !== 'create' ? data : {
     audience: '',
     cartRecommendation: '',
-    eventId: '',
+    id: '',
     groupName: '',
     productRecommendation: '',
     shopperMatching: '',
@@ -129,7 +129,7 @@ function SettingChangeModal(props) {
     })
   }
   /**
-   * 이벤트 단가 수정 추가
+   * 타겟팅 단가 수정 추가
    */
   const handlePriceEventSave = () => {
     if (saveType === 'create') {
@@ -143,7 +143,7 @@ function SettingChangeModal(props) {
             setEventUnitPriceDetailDataState(response)
           })
         } else {
-          toast.warning("이벤트 단가 그룹명이 중복 되었습니다.")
+          toast.warning("타겟팅 단가 그룹명이 중복 되었습니다.")
         }
       })
     } else {
@@ -157,7 +157,7 @@ function SettingChangeModal(props) {
             setEventUnitPriceDetailDataState(response)
           })
         } else {
-          toast.warning("이벤트 단가 그룹명이 중복 되었습니다.")
+          toast.warning("타겟팅 단가 그룹명이 중복 되었습니다.")
         }
       })
     }
@@ -175,7 +175,7 @@ function SettingChangeModal(props) {
             setEventBudgetDetailDataState(response)
           })
         } else {
-          toast.warning("이벤트 단가 그룹명이 중복 되었습니다.")
+          toast.warning("타겟팅 단가 그룹명이 중복 되었습니다.")
         }
       })
     } else {
@@ -189,7 +189,7 @@ function SettingChangeModal(props) {
             setEventBudgetDetailDataState(response)
           })
         } else {
-          toast.warning("이벤트 단가 그룹명이 중복 되었습니다.")
+          toast.warning("타겟팅 단가 그룹명이 중복 되었습니다.")
         }
       })
     }

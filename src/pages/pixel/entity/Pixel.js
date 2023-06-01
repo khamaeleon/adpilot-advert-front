@@ -133,7 +133,6 @@ export const pixelDetailColumns = [
     showColumnMenuTool: false,
     resizable: false,
     render: (props) => {
-      console.log(props)
       return (
         <span>{props.value}</span>
       )

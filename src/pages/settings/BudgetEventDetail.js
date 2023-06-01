@@ -29,7 +29,7 @@ function BudgetEventDetail() {
   useEffect(() => {
     if(state !== null && state.id !== undefined){
       selBudgetEventList(state.id).then(response => {
-        if(response !== null && response.length !==0){
+        if(response !== null && response?.length !==0){
           setEventBudgetDetailDataState(response)
         }
       })
@@ -40,7 +40,7 @@ function BudgetEventDetail() {
   return (
     <>
       <Board>
-        <BoardHeader>이벤트 예산 기본 정보</BoardHeader>
+        <BoardHeader>타겟팅 예산 기본 정보</BoardHeader>
         <BoardSearchDetail>
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
             <ColSpan0>
@@ -79,10 +79,10 @@ function BudgetEventDetail() {
           </div>
           {eventBudgetDetailDataState !== null &&
             <Table columns={budgetEventDetailColumns}
-                   data={eventBudgetDetailDataState?.budgetEventDtos}
+                   data={eventBudgetDetailDataState?.targetingBudgetDtos}
                    showHoverRows={false}
                    activeCell={[0]}
-                   emptyText={'이벤트 얘산 관리 내역이 없습니다.'}/>
+                   emptyText={'타겟팅 예산 관리 내역이 없습니다.'}/>
           }
         </BoardTableContainer>
         <SubmitContainer>

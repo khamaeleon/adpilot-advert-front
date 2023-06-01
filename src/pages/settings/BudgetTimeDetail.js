@@ -220,7 +220,7 @@ function BudgetTimeDetail() {
           }
           <SubmitContainer>
             <CancelButton type={'button'} onClick={() => navigate('/board/budgetTimeList', {state: {id: state.id}})}>목록</CancelButton>
-            <DefaultButton type={'submit'}>저장</DefaultButton>
+            <DefaultButton type={'submit'}>{saveType !== 'resist' ? '수정' : '저장'}</DefaultButton>
           </SubmitContainer>
         </form>
       </Board>

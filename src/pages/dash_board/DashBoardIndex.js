@@ -19,7 +19,7 @@ import {
   adverStatusDetailColumn, lockedRows, summaryReducer,
   userCampaignListColumn,
 } from "./entity/Campaign";
-import {eventType, productType, searchConditionAtom} from "./entity/Common";
+import {targetingType, productType, searchConditionAtom} from "./entity/Common";
 import {retrieveAdverOverview, retrieveOverview,} from "../../services/dash_board/ChartAxios";
 import {tokenResultAtom} from "../login/entity/Common";
 import {
@@ -436,7 +436,7 @@ function DashBoardIndex() {
   return (
       <>
         <DashBoardCard>
-          <DashBoardCondition role={tokenUserInfo.role} productType={productType} eventType={eventType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleData={handleData} keyword={keyword} setKeyword={setKeyword}/>
+          <DashBoardCondition role={tokenUserInfo.role} productType={productType} targetingType={targetingType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleData={handleData} keyword={keyword} setKeyword={setKeyword}/>
         </DashBoardCard>
         <DashBoardCard>
           <DashBoardHeader>{tokenUserInfo.role !== 'NORMAL' ? '플랫폼' : '광고'} 현황</DashBoardHeader>

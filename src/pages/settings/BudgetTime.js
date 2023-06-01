@@ -60,7 +60,7 @@ function BudgetTime() {
         <BoardTableContainer>
           { budgetTimeAdverDataState !== null &&
           <Table columns={adverTimeBudgetColumns}
-                 data={budgetTimeAdverDataState.eventDtos}
+                 data={budgetTimeAdverDataState?.userDtos}
                  showHoverRows={false}
                  activeCell={[0]}
                  emptyText={'시간 예산 현황 내역이 없습니다.'}/>

@@ -39,7 +39,7 @@ function EventTimeList() {
   return (
     <>
       <Board>
-        <BoardHeader>이벤트 단가 기본 정보</BoardHeader>
+        <BoardHeader>타겟팅 단가 기본 정보</BoardHeader>
         <BoardSearchDetail>
           <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
             <ColSpan0>
@@ -78,7 +78,7 @@ function EventTimeList() {
           </div>
           {budgetTimeListState !==null &&
             <Table columns={budgetTimeDetailColumns}
-                   data={budgetTimeListState.timeGroups}
+                   data={budgetTimeListState?.timeGroups}
                    showHoverRows={false}
                    activeCell={[0]}
                    emptyText={'이벤트 단가 관리 내역이 없습니다.'}/>
