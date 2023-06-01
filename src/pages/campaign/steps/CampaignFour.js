@@ -569,7 +569,6 @@ function CampaignFourNative(props) {
         }
       })
     }
-    setError("logoPaths",'')
   }
   return (
     <>
@@ -925,8 +924,9 @@ export function CampaignFour() {
       multiAxiosCall([updateFunc], onSubmitToast)
     }
   }
+  const onError = (e) => {console.log(e)}
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit, onError)}>
       {campaignCreativeInfo !== null &&
         <>
           {state !== null && <AdverInfo><span>광고주 정보</span><p></p><span>{state?.adverInfo}</span></AdverInfo>}
