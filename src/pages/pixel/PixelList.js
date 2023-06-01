@@ -17,12 +17,17 @@ import {
   ValidationScript,
 } from "../../assets/GlobalStyles";
 import React, {useCallback, useEffect, useState} from "react";
-import {atom, useAtom, useSetAtom} from "jotai";
+import {atom, useAtom, useAtomValue, useSetAtom} from "jotai";
 import {toast, ToastContainer} from "react-toastify";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {Controller, useForm} from "react-hook-form";
-import {resistAdverPixelInfo, selAdverPixelDetailList, selAdverPixelList} from "../../services/header/ManagePixelAxios";
+import {
+  resistAdverPixelInfo,
+  selAdminPixelDetailList,
+  selAdminPixelList,
+  selAdverPixelList
+} from "../../services/header/ManagePixelAxios";
 import TableDetail from "../../components/table/TableDetail";
 import Select from "react-select";
 import {hostList} from "../signup/entity/Common";
@@ -31,8 +36,10 @@ import {
   retrieveTopLevelCategoryKeyValue
 } from "../../services/Platform/CategoryAxios";
 import {useNavigate} from "react-router-dom";
-import {pixelColumns, pixelDataAtom, pixelDetailColumns} from "./entity/Pixel";
+import {pixelAdverDetailColumns, pixelColumns, pixelDataAtom, pixelDetailColumns} from "./entity/Pixel";
 import {categoryListAtom} from "../platform_manage/entity/Category";
+import {tokenResultAtom} from "../login/entity/Common";
+import Table from "../../components/table";
 
 export function SubCategory({topLevelCategory, subs}) {
   const [subCategory, setSubCategory] = useState('')
@@ -171,7 +178,7 @@ function PixelAdd(props){
         /**
          * 픽셀 리스트 조회
          */
-        setPixelList !== undefined ? selAdverPixelDetailList(data.userId).then(response => {
+        setPixelList !== undefined ? selAdminPixelDetailList(data.userId).then(response => {
           let clonePixelList = []
           response.map(data => {
             clonePixelList = [...clonePixelList, {value: data.pixelId, label: data.pixelName}]
@@ -353,23 +360,37 @@ function PixelList() {
   const [searchParams, setSearchParams] = useState({ keyword:''})
   const [pixelDataState,setPixelDataState] = useState(pixelDataAtom)
   const [topLevelCategoryList, setTopLevelCategoryList] = useAtom(categoryListAtom)
+  const tokenResult = useAtomValue(tokenResultAtom)
 
   useEffect(()=>{
-    selAdverPixelList(searchParams).then(response =>{
-      setPixelDataState(response)
-    })
-    retrieveTopLevelCategoryKeyValue().then(response => {
-      setTopLevelCategoryList(response)
-    })
+    if(tokenResult.role !== 'NORMAL'){
+      selAdminPixelList(searchParams).then(response =>{
+        setPixelDataState(response)
+      })
+      retrieveTopLevelCategoryKeyValue().then(response => {
+        setTopLevelCategoryList(response)
+      })
+    } else {
+
+    }
   },[])
 
   const handleFetchDetailData = useCallback(async (props) => {
-    let detailPixelData = await selAdverPixelDetailList(props.userId)
-    console.log(detailPixelData)
-    detailPixelData.map((item,key) => {
-      detailPixelData[key]['mainCategoryLabel'] = topLevelCategoryList.find(category => category.value === item.mainCategoryCode).label
-    })
-    return detailPixelData
+    if(tokenResult.role !== 'NORMAL') {
+      let detailPixelData = await selAdminPixelDetailList(props.userId)
+      console.log(detailPixelData)
+      detailPixelData.map((item,key) => {
+        detailPixelData[key]['mainCategoryLabel'] = topLevelCategoryList.find(category => category.value === item.mainCategoryCode).label
+      })
+      return detailPixelData
+    } else {
+      let detailPixelData = await selAdverPixelList(tokenResult.id)
+      console.log(detailPixelData)
+      // detailPixelData.map((item,key) => {
+      //   detailPixelData[key]['mainCategoryLabel'] = topLevelCategoryList.find(category => category.value === item.mainCategoryCode).label
+      // })
+      return detailPixelData
+    }
   },[topLevelCategoryList])
 
 
@@ -383,7 +404,7 @@ function PixelList() {
    * 광고주 명 및 아이디 검색
    */
   const onSearchAdverUserId = async() => {
-    await selAdverPixelList(searchParams).then(response =>{
+    await selAdminPixelList(searchParams).then(response =>{
       setPixelDataState(response)
     })
   }
@@ -393,28 +414,39 @@ function PixelList() {
       <>
       <Board>
         <BoardHeader>픽셀 현황</BoardHeader>
-        <BoardSearchDetail>
-          <RowSpan>
-            <ColSpan1>
-              <Input style={{width: 300}}
-                     placeholder={'광고주명 및 아이디 검색'}
-                     value={searchParams.keyword}
-                     onChange={handleSearch}
-                     onKeyDown={e => (e.code === 'Enter') && onSearchAdverUserId() }
-              />
-              <DefaultButton onClick={onSearchAdverUserId}>검색</DefaultButton>
-            </ColSpan1>
-          </RowSpan>
-        </BoardSearchDetail>
+        {tokenResult.role !== "NORMAL" &&
+          <BoardSearchDetail>
+            <RowSpan>
+              <ColSpan1>
+                <Input style={{width: 300}}
+                       placeholder={'광고주명 및 아이디 검색'}
+                       value={searchParams.keyword}
+                       onChange={handleSearch}
+                       onKeyDown={e => (e.code === 'Enter') && onSearchAdverUserId() }
+                />
+                <DefaultButton onClick={onSearchAdverUserId}>검색</DefaultButton>
+              </ColSpan1>
+            </RowSpan>
+          </BoardSearchDetail>
+        }
         <BoardTableContainer>
-          <TableDetail columns={pixelColumns}
-                       data={pixelDataState}
-                       detailData={handleFetchDetailData}
-                       detailColumn={pixelDetailColumns}
-                       detailGroups={false}
-                       idProperty={'userId'}
-                       groups={false}
-                       style={{minHeight: 500}}/>
+          {tokenResult.role !== 'NORMAL' &&
+            <TableDetail columns={pixelColumns}
+                         data={pixelDataState}
+                         detailData={handleFetchDetailData}
+                         detailColumn={pixelDetailColumns}
+                         detailGroups={false}
+                         idProperty={'userId'}
+                         groups={false}
+                         style={{minHeight: 500}}/>
+          }
+          {tokenResult.role === 'NORMAL' &&
+            <Table
+              columns={pixelAdverDetailColumns}
+              data={handleFetchDetailData}
+              idProperty={'pixelName'}
+            />
+          }
         </BoardTableContainer>
       </Board>
       <ToastContainer position="top-center"

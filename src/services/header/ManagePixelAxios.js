@@ -1,15 +1,16 @@
-import {AdminAxios} from "../../common/Axios";
+import {AdminAxios, AdverAxios} from "../../common/Axios";
 
 const ACTION_URL = '/adver/pixel'
 const ADVER_LIST ='/manage'
 const EVENT ='/event'
+const ADVER_NORMAL = '/pixel'
 
 /**
  * 광고주 리스트 픽셀 관리
  * @param keyword
  * @returns {Promise<null>}
  */
-export async function selAdverPixelList(keyword) {
+export async function selAdminPixelList(keyword) {
   let returnVal = null;
   await AdminAxios('POST', ACTION_URL + ADVER_LIST ,keyword)
     .then((response) => {
@@ -80,7 +81,7 @@ export async function updatePixelInfo(pixelId,pixelInfo) {
   return returnVal;
 }
 
-export async function selAdverPixelDetailList(userId) {
+export async function selAdminPixelDetailList(userId) {
   let returnVal = null;
   await AdminAxios('GET', ACTION_URL + ADVER_LIST +'/'+userId ,null)
     .then((response) => {
@@ -97,6 +98,34 @@ export async function selAdverPixelDetailList(userId) {
 export async function selPixelInfoList(pixelId) {
   let returnVal = null;
   await AdminAxios('GET', ACTION_URL +'/'+pixelId ,null)
+    .then((response) => {
+      const {data, responseCode} =response
+      if(responseCode.statusCode ===200){
+        returnVal = data
+      }else{
+        returnVal = null
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+};
+
+export async function selAdverPixelList(userId) {
+  let returnVal = null;
+  await AdverAxios('GET', ADVER_NORMAL + ADVER_LIST +'/'+userId ,null)
+    .then((response) => {
+      const {data, responseCode} = response
+      if(responseCode.statusCode ===200){
+        returnVal = data
+      }else{
+        returnVal = null
+      }
+    }).catch((e) => returnVal = false)
+  return returnVal;
+}
+
+export async function selPixelAdverInfoList(pixelId) {
+  let returnVal = null;
+  await AdverAxios('GET', ADVER_NORMAL +'/'+pixelId ,null)
     .then((response) => {
       const {data, responseCode} =response
       if(responseCode.statusCode ===200){

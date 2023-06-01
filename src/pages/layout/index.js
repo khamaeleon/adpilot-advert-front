@@ -159,6 +159,7 @@ function Layout() {
               </UserName>
               {/*[d] 20230411 사용자 화면에서 픽셀 관리 노출 보류*/}
               {/*<MyPage onClick={pixel}>픽셀 관리</MyPage>*/}
+              <MyPage onClick={pixel}>픽셀 관리</MyPage>
               <MyPage onClick={payment}>결제</MyPage>
             </>
             :

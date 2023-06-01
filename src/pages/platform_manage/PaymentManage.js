@@ -52,6 +52,7 @@ function PaymentManage() {
 
     return paymentAllListRequest ( requestData )
       .then(response => {
+        console.log(response);
         // 성공적인 응답 처리
         if (response !== null) {
           // console.log(response)

@@ -24,7 +24,7 @@ import {stepCampaignAtom} from "../entity";
 import {Controller, useFormContext} from "react-hook-form";
 import {campaignBasicInfoAtom, campaignTemporaryListAtom} from "../entity/Info";
 import {PixelModal} from "../../pixel/PixelList";
-import {selAdverPixelDetailList} from "../../../services/header/ManagePixelAxios";
+import {selAdminPixelDetailList} from "../../../services/header/ManagePixelAxios";
 import {resistCampaignBasic, selBasicInfo, selEnumInfo, selTemporaryList} from "../../../services/campaign/InfoAxios";
 import moment from "moment/moment";
 import {TemporaryListModal} from "../../../components/campaign/TemporaryListModal";
@@ -71,7 +71,7 @@ export function CampaignOne() {
     /**
      * 픽셀 설정
      */
-    selAdverPixelDetailList(data.id).then(response => {
+    selAdminPixelDetailList(data.id).then(response => {
       let clonePixelList = []
       response.map(data => {
         clonePixelList = [...clonePixelList, {value: data.pixelId, label: data.pixelName}]

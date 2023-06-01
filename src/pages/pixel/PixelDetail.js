@@ -3,7 +3,7 @@ import {
   BoardHeader,
   BoardTableContainer,
   CancelButton,
-  ColSpan0,
+  ColSpan0, ColSpan1,
   ColTitle,
   DefaultButton,
   Input,
@@ -12,13 +12,13 @@ import {
   SubmitContainer
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
-import {useAtom} from "jotai";
+import {useAtom, useAtomValue} from "jotai";
 import {Off, On, SwitchBox} from "../../components/table/styles";
 import Table from "../../components/table";
 import {toast, ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
-import {selPixelInfoList, updatePixelInfo} from "../../services/header/ManagePixelAxios";
+import {selPixelAdverInfoList, selPixelInfoList, updatePixelInfo} from "../../services/header/ManagePixelAxios";
 import {Controller, useForm} from "react-hook-form";
 import Select from "react-select";
 import {hostList} from "../signup/entity/Common";
@@ -28,13 +28,15 @@ import {
   retrieveTopLevelCategoryKeyValue
 } from "../../services/Platform/CategoryAxios";
 import styled from "styled-components";
-import {pixelDetailInfoColumns, pixelInfoListAtom, statusTypeAll} from "./entity/Pixel";
+import {pixelDetailAdverInfoColumns, pixelDetailInfoColumns, pixelInfoListAtom, statusTypeAll} from "./entity/Pixel";
 import {Validation, ValidationGroup} from "../campaign/styles/common";
+import {tokenResultAtom} from "../login/entity/Common";
 
 function PixelDetail() {
   const [pixelInfoListState, setPixelInfoListState] = useAtom(pixelInfoListAtom)
   const [topLevelCategoryList,setTopLevelCategoryList] = useState([])
   const [rowLevelCategoryList,setRowLevelCategoryList] = useState([])
+  const tokenResult = useAtomValue(tokenResultAtom)
   const navigate = useNavigate()
   const {state} = useLocation()
   const {register, handleSubmit, reset, control, formState: {errors}} = useForm({
@@ -46,15 +48,25 @@ function PixelDetail() {
     toast.warning('필수 정보를 입력해주세요')
   }
   useEffect(() => {
-    retrieveTopLevelCategoryKeyValue().then(response => {
-      setTopLevelCategoryList(response)
-    })
-    selPixelInfoList(state.id).then(response => {
-      setPixelInfoListState(response)
-      retrieveSubLevelCategoryKeyValue(response.mainCategoryCode).then(response => {
-        setRowLevelCategoryList(response)
+    if(tokenResult.role !== 'NORMAL') {
+      retrieveTopLevelCategoryKeyValue().then(response => {
+        setTopLevelCategoryList(response)
       })
-    })
+      selPixelInfoList(state.id).then(response => {
+        setPixelInfoListState(response)
+        retrieveSubLevelCategoryKeyValue(response.mainCategoryCode).then(response => {
+          setRowLevelCategoryList(response)
+        })
+      })
+    } else {
+      selPixelAdverInfoList(state.id).then(response => {
+        setPixelInfoListState(response)
+        // retrieveSubLevelCategoryKeyValue(response.mainCategoryCode).then(response => {
+        //   setRowLevelCategoryList(response)
+        // })
+      })
+    }
+
   }, [])
 
   const handleSelectHosting = (selectHostType) => {
@@ -134,109 +146,132 @@ function PixelDetail() {
               <div className={'row'}>
                 <p className={'tit'}>픽셀 정보</p>
                 <div className={'txt'}>
-                  <RelativeDiv>
-                    {pixelInfoListState !== null &&
-                      <Input
-                        style={{height:38,border: errors.pixelName && "1px solid red"}}
-                        type={'text'}
-                        placeholder={'픽셀명을 입력해주세요'}
-                        {...register("pixelName", {
-                          required: "픽셀명을 입력해주세요",
-                          onChange:(e) => handlePixelName(e)
-                        })}
-                        value={pixelInfoListState?.pixelName}
-                      />}
-                  </RelativeDiv>
+                  {tokenResult.role !== 'NORMAL' ?
+                    <RelativeDiv>
+                      {pixelInfoListState !== null &&
+                        <Input
+                          style={{height:38,border: errors.pixelName && "1px solid red"}}
+                          type={'text'}
+                          placeholder={'픽셀명을 입력해주세요'}
+                          {...register("pixelName", {
+                            required: "픽셀명을 입력해주세요",
+                            onChange:(e) => handlePixelName(e)
+                          })}
+                          value={pixelInfoListState?.pixelName}
+                        />}
+                    </RelativeDiv>
+                    :
+                    <RelativeDiv>
+                      {pixelInfoListState?.pixelName}
+                    </RelativeDiv>
+                  }
                 </div>
               </div>
               <div className={'row'}>
                 <p className={'tit'}>연동 URL</p>
                 <div className={'txt'}>
-                  <RelativeDiv>
-                    {pixelInfoListState !== null &&
-                      <Input
-                        style={{height:38,border: errors.linkUrl && "1px solid red"}}
-                        type={'text'}
-                        placeholder={'연동URL을 입력해주세요'}
-                        {...register("linkUrl", {
-                          required: "연동URL을 입력해주세요",
-                          onChange:(e) => handleLinkUrl(e),
-                          pattern:{
-                            value:  /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi,
-                            message: "http(s)://가 포함된 url 주소를 확인해주세요."
-                          }
-                        })}
-                        value={pixelInfoListState.linkUrl}
-                      />}
-                  </RelativeDiv>
+                  {tokenResult.role !== 'NORMAL' ?
+                    <RelativeDiv>
+                      {pixelInfoListState !== null &&
+                        <Input
+                          style={{height:38,border: errors.linkUrl && "1px solid red"}}
+                          type={'text'}
+                          placeholder={'연동URL을 입력해주세요'}
+                          {...register("linkUrl", {
+                            required: "연동URL을 입력해주세요",
+                            onChange:(e) => handleLinkUrl(e),
+                            pattern:{
+                              value:  /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi,
+                              message: "http(s)://가 포함된 url 주소를 확인해주세요."
+                            }
+                          })}
+                          value={pixelInfoListState.linkUrl}
+                        />}
+                    </RelativeDiv>
+                    :
+                    <RelativeDiv>
+                      {pixelInfoListState?.linkUrl}
+                    </RelativeDiv>
+                  }
                 </div>
               </div>
               <div className={'row'}>
-                <p className={'tit'}>카테고리 설정</p>
-                <div className={'txt'} style={{display: 'flex', justifyContent: 'space-between'}}>
-                  <div style={{width: '48%'}}>
-                    {pixelInfoListState !== null &&
-                      <Controller
-                        style={{width: '50%'}}
-                        name="mainCategoryCode"
-                        control={control}
-                        rules={{
-                          required: {
-                            value: pixelInfoListState.mainCategoryCode === "",
-                            message: "카테고리를 선택해주세요"
-                          }
-                        }}
-                        render={({field}) => (
-                          <Select options={topLevelCategoryList}
-                                  placeholder={'카테고리선택 선택'}
-                                  {...field}
-                                  value={pixelInfoListState.mainCategoryCode !== '' ? topLevelCategoryList.find(value => value.value === pixelInfoListState.mainCategoryCode) : ''}
-                                  onChange={handleSelectTopCategory}
-                                  styles={{
-                                    input: (baseStyles, state) => (
-                                      {
-                                        ...baseStyles,
-                                        minWidth: "300px",
-                                      })
-                                  }}
-                          />
-                        )}
-                      />
-                    }
-                    {errors.mainCategoryCode &&
-                      <ValidationScript>{errors.mainCategoryCode?.message}</ValidationScript>}
+                <p className={'tit'}>카테고리</p>
+                {tokenResult.role !== 'NORMAL' ?
+                  <div className={'txt'} style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <div style={{width: '48%'}}>
+                      {pixelInfoListState !== null &&
+                        <Controller
+                          style={{width: '50%'}}
+                          name="mainCategoryCode"
+                          control={control}
+                          rules={{
+                            required: {
+                              value: pixelInfoListState.mainCategoryCode === "",
+                              message: "카테고리를 선택해주세요"
+                            }
+                          }}
+                          render={({field}) => (
+                            <Select options={topLevelCategoryList}
+                                    placeholder={'카테고리선택 선택'}
+                                    {...field}
+                                    value={pixelInfoListState.mainCategoryCode !== '' ? topLevelCategoryList.find(value => value.value === pixelInfoListState.mainCategoryCode) : ''}
+                                    onChange={handleSelectTopCategory}
+                                    styles={{
+                                      input: (baseStyles, state) => (
+                                        {
+                                          ...baseStyles,
+                                          minWidth: "300px",
+                                        })
+                                    }}
+                            />
+                          )}
+                        />
+                      }
+                      {errors.mainCategoryCode &&
+                        <ValidationScript>{errors.mainCategoryCode?.message}</ValidationScript>}
+                    </div>
+                    <div style={{width: '50%'}}>
+                      {pixelInfoListState !== null &&
+                        <Controller
+                          name="subCategoryCode"
+                          control={control}
+                          rules={{
+                            required: {
+                              value: pixelInfoListState.subCategoryCode === "",
+                              message: "카테고리를 선택해주세요"
+                            }
+                          }}
+                          render={({field}) => (
+                            <Select options={rowLevelCategoryList}
+                                    placeholder={'서브 카테고리 선택'}
+                                    {...field}
+                                    value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
+                                    onChange={handleSelectRowCategory}
+                                    styles={{
+                                      input: (baseStyles, state) => (
+                                        {
+                                          ...baseStyles,
+                                          minWidth: "300px",
+                                        })
+                                    }}
+                            />
+                          )}
+                        />
+                      }
+                      {errors.subCategoryCode && <ValidationScript>{errors.subCategoryCode?.message}</ValidationScript>}
+                    </div>
                   </div>
-                  <div style={{width: '50%'}}>
-                    {pixelInfoListState !== null &&
-                      <Controller
-                        name="subCategoryCode"
-                        control={control}
-                        rules={{
-                          required: {
-                            value: pixelInfoListState.subCategoryCode === "",
-                            message: "카테고리를 선택해주세요"
-                          }
-                        }}
-                        render={({field}) => (
-                          <Select options={rowLevelCategoryList}
-                                  placeholder={'서브 카테고리 선택'}
-                                  {...field}
-                                  value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
-                                  onChange={handleSelectRowCategory}
-                                  styles={{
-                                    input: (baseStyles, state) => (
-                                      {
-                                        ...baseStyles,
-                                        minWidth: "300px",
-                                      })
-                                  }}
-                          />
-                        )}
-                      />
-                    }
-                    {errors.subCategoryCode && <ValidationScript>{errors.subCategoryCode?.message}</ValidationScript>}
-                  </div>
-                </div>
+                  :
+                  <>
+                    <ColSpan1>
+                      <div className={'txt'}>{pixelInfoListState?.mainCategoryCode}</div>
+                    </ColSpan1>
+                    <ColSpan1>
+                      <div className={'txt'}>{pixelInfoListState?.subCategoryCode}</div>
+                    </ColSpan1>
+                  </>
+                }
               </div>
             </div>
             <div className={'col2'}>
@@ -247,8 +282,8 @@ function PixelDetail() {
               <div className={'row'}>
                 <p className={'tit'}>연동 상태</p>
                 <div className={'txt'}>
-                  <p className={'tit'}>
-                    {pixelInfoListState?.interlockYn === 'Y' ? 'ON' : 'OFF'}
+                  <p className={'tit'}  style={textColor}>
+                    {pixelInfoListState?.interlockYn === 'Y' ? '연동 중' : '연동 중지'}
                   </p>
                   {/*<SwitchComponent background={pixelInfoListState?.interlock} styles={{cursor: 'default'}}/>*/}
                 </div>
@@ -263,41 +298,50 @@ function PixelDetail() {
               </div>
               <div className={'row'}>
                 <p className={'tit'}>호스팅 설정</p>
-                <div className={'txt'}>
-                  {pixelInfoListState !== null &&
-                    <Controller
-                      name="hostType"
-                      control={control}
-                      rules={{
-                        required: {
-                          value: pixelInfoListState.hostType === "",
-                          message: "호스팅을 선택해주세요"
-                        }
-                      }}
-                      render={({field}) => (
-                        <Select options={hostList}
-                                placeholder={'호스팅 선택'}
-                                {...field}
-                                value={pixelInfoListState.hostType !== '' ? hostList.find(value => value.value === pixelInfoListState.hostType) : ''}
-                                onChange={handleSelectHosting}
-                                styles={{
-                                  input: (baseStyles, state) => (
-                                    {
-                                      ...baseStyles,
-                                      minWidth: "300px",
-                                    })
-                                }}
-                        />
-                      )}
-                    />
-                  }
-                  {errors.hostType && <ValidationScript>{errors.hostType?.message}</ValidationScript>}</div>
+                {tokenResult.role !== 'NORMAL' ?
+                  <div className={'txt'}>
+                    {pixelInfoListState !== null &&
+                      <Controller
+                        name="hostType"
+                        control={control}
+                        rules={{
+                          required: {
+                            value: pixelInfoListState.hostType === "",
+                            message: "호스팅을 선택해주세요"
+                          }
+                        }}
+                        render={({field}) => (
+                          <Select options={hostList}
+                                  placeholder={'호스팅 선택'}
+                                  {...field}
+                                  value={pixelInfoListState.hostType !== '' ? hostList.find(value => value.value === pixelInfoListState.hostType) : ''}
+                                  onChange={handleSelectHosting}
+                                  styles={{
+                                    input: (baseStyles, state) => (
+                                      {
+                                        ...baseStyles,
+                                        minWidth: "300px",
+                                      })
+                                  }}
+                          />
+                        )}
+                      />
+                    }
+                    {errors.hostType && <ValidationScript>{errors.hostType?.message}</ValidationScript>}
+                  </div>
+                  :
+                  <div>
+                    {hostList.find(item => item.value === pixelInfoListState?.hostType)?.label}
+                  </div>
+                }
               </div>
             </div>
           </PixelDetailInfoBox>
           <SubmitContainer>
             <CancelButton onClick={() => navigate('/board/pixel')}>목록</CancelButton>
-            <DefaultButton type={'submit'}>저장</DefaultButton>
+            {tokenResult.role !== 'NORMAL' &&
+              <DefaultButton type={'submit'}>저장</DefaultButton>
+            }
           </SubmitContainer>
         </form>
       </Board>
@@ -305,7 +349,7 @@ function PixelDetail() {
           <BoardHeader>이벤트 현황</BoardHeader>
           <BoardTableContainer>
             {pixelInfoListState !== null &&
-              <Table columns={pixelDetailInfoColumns}
+              <Table columns={tokenResult.role !== 'NORMAL' ? pixelDetailInfoColumns : pixelDetailAdverInfoColumns}
                      data={pixelInfoListState.events}
                      showHoverRows={false}
                      activeCell={[0]}
