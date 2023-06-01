@@ -6,7 +6,7 @@ import {
   ColSpan4,
   ColTitle,
   Edit,
-  Input,
+  Input, InputLabel,
   RelativeDiv,
   RowSpan,
   Span2,
@@ -220,18 +220,19 @@ function SettingChangeModal(props) {
             <ColSpan4>
               <ColTitle><Span2>쇼퍼 맞춤</Span2></ColTitle>
               <RelativeDiv>
-                <Input
-                  type={'number'}
-                  min={0}
-                  placeholder={'금액을 입력해주세요'}
-                  {...register("shopperMatching", {
-                    required: "금액을 입력해주세요",
-                    onChange: (e) => handleShopperMatching(e)
-                  })}
-                  value={dataState?.shopperMatching}
-                />
-                {errors.shopperMatching && <ValidationScript>{errors.shopperMatching?.message}</ValidationScript>}
-                <span className={label}></span>
+                <InputLabel label={label !== 'won' ? '%': '원'}>
+                  <Input
+                    type={'number'}
+                    min={0}
+                    placeholder={'금액을 입력해주세요'}
+                    {...register("shopperMatching", {
+                      required: "금액을 입력해주세요",
+                      onChange: (e) => handleShopperMatching(e)
+                    })}
+                    value={dataState?.shopperMatching}
+                  />
+                  {errors.shopperMatching && <ValidationScript>{errors.shopperMatching?.message}</ValidationScript>}
+                </InputLabel>
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
@@ -239,19 +240,20 @@ function SettingChangeModal(props) {
             <ColSpan4>
               <ColTitle><Span2>카트 추천</Span2></ColTitle>
               <RelativeDiv>
-                <Input
-                  type={'number'}
-                  min={0}
-                  placeholder={'금액을 입력해주세요'}
-                  {...register("cartRecommendation", {
-                    required: "금액을 입력해주세요",
-                    onChange: (e) => handleCartRecommendation(e)
-                  })}
-                  value={dataState?.cartRecommendation}
-                />
-                {errors.cartRecommendation &&
-                  <ValidationScript>{errors.cartRecommendation?.message}</ValidationScript>}
-                <span className={label}></span>
+                <InputLabel label={label !== 'won' ? '%': '원'}>
+                  <Input
+                    type={'number'}
+                    min={0}
+                    placeholder={'금액을 입력해주세요'}
+                    {...register("cartRecommendation", {
+                      required: "금액을 입력해주세요",
+                      onChange: (e) => handleCartRecommendation(e)
+                    })}
+                    value={dataState?.cartRecommendation}
+                  />
+                  {errors.cartRecommendation &&
+                    <ValidationScript>{errors.cartRecommendation?.message}</ValidationScript>}
+                </InputLabel>
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
@@ -259,19 +261,20 @@ function SettingChangeModal(props) {
             <ColSpan4>
               <ColTitle><Span2>상품 추천</Span2></ColTitle>
               <RelativeDiv>
-                <Input
-                  type={'number'}
-                  min={0}
-                  placeholder={'금액을 입력해주세요'}
-                  {...register("productRecommendation", {
-                    required: "금액을 입력해주세요",
-                    onChange: (e) => handleProductRecommendation(e)
-                  })}
-                  value={dataState?.productRecommendation}
-                />
-                {errors.productRecommendation &&
-                  <ValidationScript>{errors.productRecommendation?.message}</ValidationScript>}
-                <span className={label}></span>
+                <InputLabel label={label !== 'won' ? '%': '원'}>
+                  <Input
+                    type={'number'}
+                    min={0}
+                    placeholder={'금액을 입력해주세요'}
+                    {...register("productRecommendation", {
+                      required: "금액을 입력해주세요",
+                      onChange: (e) => handleProductRecommendation(e)
+                    })}
+                    value={dataState?.productRecommendation}
+                  />
+                  {errors.productRecommendation &&
+                    <ValidationScript>{errors.productRecommendation?.message}</ValidationScript>}
+                </InputLabel>
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
@@ -279,18 +282,19 @@ function SettingChangeModal(props) {
             <ColSpan4>
               <ColTitle><Span2>유저 매치</Span2></ColTitle>
               <RelativeDiv>
-                <Input
-                  type={'number'}
-                  min={0}
-                  placeholder={'금액을 입력해주세요'}
-                  {...register("userMatching", {
-                    required: "금액을 입력해주세요",
-                    onChange: (e) => handleUserMatching(e)
-                  })}
-                  value={dataState?.userMatching}
-                />
-                {errors.userMatching && <ValidationScript>{errors.userMatching?.message}</ValidationScript>}
-                <span className={label}></span>
+                <InputLabel label={label !== 'won' ? '%': '원'}>
+                  <Input
+                    type={'number'}
+                    min={0}
+                    placeholder={'금액을 입력해주세요'}
+                    {...register("userMatching", {
+                      required: "금액을 입력해주세요",
+                      onChange: (e) => handleUserMatching(e)
+                    })}
+                    value={dataState?.userMatching}
+                  />
+                  {errors.userMatching && <ValidationScript>{errors.userMatching?.message}</ValidationScript>}
+                </InputLabel>
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
@@ -298,18 +302,19 @@ function SettingChangeModal(props) {
             <ColSpan4>
               <ColTitle><Span2>오디언스</Span2></ColTitle>
               <RelativeDiv>
-                <Input
-                  type={'number'}
-                  min={0}
-                  placeholder={'금액을 입력해주세요'}
-                  {...register("audience", {
-                    required: "금액을 입력해주세요",
-                    onChange: (e) => handleAudience(e)
-                  })}
-                  value={dataState?.audience}
-                />
-                {errors.audience && <ValidationScript>{errors.audience?.message}</ValidationScript>}
-                <span className={label}></span>
+                <InputLabel label={label !== 'won' ? '%': '원'}>
+                  <Input
+                    type={'number'}
+                    min={0}
+                    placeholder={'금액을 입력해주세요'}
+                    {...register("audience", {
+                      required: "금액을 입력해주세요",
+                      onChange: (e) => handleAudience(e)
+                    })}
+                    value={dataState?.audience}
+                  />
+                  {errors.audience && <ValidationScript>{errors.audience?.message}</ValidationScript>}
+                </InputLabel>
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
@@ -317,18 +322,19 @@ function SettingChangeModal(props) {
             <ColSpan4>
               <ColTitle><Span2>유저 최적화</Span2></ColTitle>
               <RelativeDiv>
-                <Input
-                  type={'number'}
-                  min={0}
-                  placeholder={'금액을 입력해주세요'}
-                  {...register("userOptimization", {
-                    required: "금액을 입력해주세요",
-                    onChange: (e) => handleUserOptimization(e)
-                  })}
-                  value={dataState?.userOptimization}
-                />
-                {errors.userOptimization && <ValidationScript>{errors.userOptimization?.message}</ValidationScript>}
-                <span className={label}></span>
+                <InputLabel label={label !== 'won' ? '%': '원'}>
+                  <Input
+                    type={'number'}
+                    min={0}
+                    placeholder={'금액을 입력해주세요'}
+                    {...register("userOptimization", {
+                      required: "금액을 입력해주세요",
+                      onChange: (e) => handleUserOptimization(e)
+                    })}
+                    value={dataState?.userOptimization}
+                  />
+                  {errors.userOptimization && <ValidationScript>{errors.userOptimization?.message}</ValidationScript>}
+                </InputLabel>
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
