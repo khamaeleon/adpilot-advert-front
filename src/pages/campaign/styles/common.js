@@ -44,26 +44,6 @@ export const CampaignTypeItem2 = styled.div`
   }
 `
 
-export const Won = styled.div`
-  position: absolute;
-  left: 90%;
-  &:before {
-    display: inline-block;
-    content: "원";
-  }
-`
-
-export const Day = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 65%;
-  transform: translateY(-50%);
-  &:before {
-    display: inline-block;
-    content: "일";
-  }
-`
-
 export const SmallButton = styled.button`
   padding: 5px 20px;
   border-radius: 5px;
