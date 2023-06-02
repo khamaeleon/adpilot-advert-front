@@ -236,7 +236,7 @@ function FindId(props) {
         <FindGroup/>
         <InputGroup style={{display: 'flex', justifyContent: 'space-between', gap: 5}}>
           <Button type={'submit'}>
-            비밀번호 찾기
+            아이디 찾기
           </Button>
           <Button type={'button'} onClick={() => navigate('/')}>
             로그인
@@ -368,7 +368,7 @@ function LoginComponent() {
                 required: "아이디를 입력해주세요.",
                 pattern: {
                   value: /^[a-z]+[a-z0-9-_]{3,19}$/g,
-                  message: "아이디는 3자리 이상 영문,숫자,특문(언더바, 대시)"
+                  message: "아이디는 3자리 이상 영문,숫자,특문(-, _)"
                 },
                 onChange: (e) => {
                   handleChangeId(e)

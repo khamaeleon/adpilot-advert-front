@@ -13,7 +13,7 @@ import {
   SubmitButton,
   ValidationScript
 } from "../../assets/GlobalStyles";
-import {useAtom} from "jotai";
+import {useAtom, useAtomValue, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
 import {toast} from "react-toastify";
@@ -22,12 +22,13 @@ import {eventUnitPriceDetailDataAtom} from "../../pages/settings/entity/EventPri
 import {eventBudgetDetailDataAtom} from "../../pages/settings/entity/BudgetEvent";
 import {resistPriceEvent, selPriceEventList, updatePriceEvent} from "../../services/settings/EventPriceAxios";
 import {resistBudgetEvent, selBudgetEventList, updateBudgetEvent} from "../../services/settings/BudgetEventAxios";
-
+const maxValue = 1000000000
 function SettingChangeModal(props) {
   const {data, saveType, label} = props
-  const [, setModal] = useAtom(modalController)
-  const [, setEventBudgetDetailDataState] = useAtom(eventBudgetDetailDataAtom)
-  const [, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
+  const setModal = useSetAtom(modalController)
+  const setEventBudgetDetailDataState = useSetAtom(eventBudgetDetailDataAtom)
+  const setEventUnitPriceDetailDataState = useSetAtom(eventUnitPriceDetailDataAtom)
+  const [calculatePercent, setCalculatePercent] = useState(100)
   const {state} = useLocation()
   const [dataState, setDataState] = useState(saveType !== 'create' ? data : {
     audience: '',
@@ -43,6 +44,7 @@ function SettingChangeModal(props) {
     mode: "onSubmit",
     defaultValues: dataState
   })
+
   useEffect(() => {
     if(saveType ==='edit'){
       setDataState(data)
@@ -62,16 +64,77 @@ function SettingChangeModal(props) {
       groupName: event.target.value
     })
   }
-
+  useEffect(()=>{
+    if(label === 'pct'){
+      sumValue()
+    }
+  },[dataState])
+  const sumValue = () => {
+    let calc = parseInt(dataState.shopperMatching !== '' ? dataState.shopperMatching : 0)+
+      parseInt(dataState.cartRecommendation !== '' ? dataState.cartRecommendation : 0)+
+      parseInt(dataState.productRecommendation !== '' ? dataState.productRecommendation : 0)+
+      parseInt(dataState.userMatching !== '' ? dataState.userMatching : 0)+
+      parseInt(dataState.userOptimization !== '' ? dataState.userOptimization : 0)+
+      parseInt(dataState.audience !== '' ? dataState.audience : 0)
+    if(calc < 101) {
+      setCalculatePercent(100 - calc)
+    } else {
+      toast.warning('모든 항목의 합은 100%를 넘을수 없습니다.')
+    }
+    if(dataState.shopperMatching > 100) {
+      setDataState({
+        ...dataState,
+        shopperMatching: 0
+      })
+      toast.warning("100%를 넘을 수 없습니다.")
+    }
+    if(dataState.productRecommendation > 100) {
+      setDataState({
+        ...dataState,
+        productRecommendation: 0
+      })
+      toast.warning("100%를 넘을 수 없습니다.")
+    }
+    if(dataState.cartRecommendation > 100){
+      setDataState({
+        ...dataState,
+        cartRecommendation: 0
+      })
+      toast.warning("100%를 넘을 수 없습니다.")
+    }
+    if(dataState.userMatching > 100) {
+      setDataState({
+        ...dataState,
+        userMatching: 0
+      })
+      toast.warning("100%를 넘을 수 없습니다.")
+    }
+    if(dataState.userOptimization > 100) {
+      setDataState({
+        ...dataState,
+        userOptimization: 0
+      })
+      toast.warning("100%를 넘을 수 없습니다.")
+    }
+    if(dataState.audience > 100) {
+      setDataState({
+        ...dataState,
+        audience: 0
+      })
+      toast.warning("100%를 넘을 수 없습니다.")
+    }
+  }
   /**
    * 쇼퍼 맞춤
    * @param event
    */
   const handleShopperMatching = (event) => {
-    setDataState({
-      ...dataState,
-      shopperMatching: event.target.value
-    })
+    if(event.target.value < maxValue) {
+      setDataState({
+        ...dataState,
+        shopperMatching: event.target.value
+      })
+    }
   }
 
   /**
@@ -79,10 +142,12 @@ function SettingChangeModal(props) {
    * @param event
    */
   const handleCartRecommendation = (event) => {
-    setDataState({
-      ...dataState,
-      cartRecommendation: event.target.value
-    })
+    if(event.target.value < maxValue){
+      setDataState({
+        ...dataState,
+        cartRecommendation: event.target.value
+      })
+    }
   }
 
   /**
@@ -90,10 +155,12 @@ function SettingChangeModal(props) {
    * @param event
    */
   const handleProductRecommendation = (event) => {
-    setDataState({
-      ...dataState,
-      productRecommendation: event.target.value
-    })
+    if(event.target.value < maxValue){
+      setDataState({
+        ...dataState,
+        productRecommendation: event.target.value
+      })
+    }
   }
 
   /**
@@ -101,10 +168,12 @@ function SettingChangeModal(props) {
    * @param event
    */
   const handleUserMatching = (event) => {
-    setDataState({
-      ...dataState,
-      userMatching: event.target.value
-    })
+    if(event.target.value < maxValue){
+      setDataState({
+        ...dataState,
+        userMatching: event.target.value
+      })
+    }
   }
 
   /**
@@ -112,10 +181,12 @@ function SettingChangeModal(props) {
    * @param event
    */
   const handleAudience = (event) => {
-    setDataState({
-      ...dataState,
-      audience: event.target.value
-    })
+    if(event.target.value < maxValue){
+      setDataState({
+        ...dataState,
+        audience: event.target.value
+      })
+    }
   }
 
   /**
@@ -123,10 +194,12 @@ function SettingChangeModal(props) {
    * @param event
    */
   const handleUserOptimization = (event) => {
-    setDataState({
-      ...dataState,
-      userOptimization: event.target.value
-    })
+    if(event.target.value < maxValue){
+      setDataState({
+        ...dataState,
+        userOptimization: event.target.value
+      })
+    }
   }
   /**
    * 타겟팅 단가 수정 추가
@@ -216,17 +289,28 @@ function SettingChangeModal(props) {
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
+          {label === 'pct' &&
+            <RowSpan>
+              <ColSpan4>
+                <ColTitle><Span2>남은비율</Span2></ColTitle>
+                <RelativeDiv>
+                  {calculatePercent}/100
+                </RelativeDiv>
+              </ColSpan4>
+            </RowSpan>
+          }
           <RowSpan>
             <ColSpan4>
               <ColTitle><Span2>쇼퍼 맞춤</Span2></ColTitle>
               <RelativeDiv>
                 <InputLabel label={label !== 'won' ? '%': '원'}>
                   <Input
-                    type={'number'}
+                    type={'text'}
                     min={0}
                     placeholder={'금액을 입력해주세요'}
                     {...register("shopperMatching", {
                       required: "금액을 입력해주세요",
+                      pattern: /[0-9]*/,
                       onChange: (e) => handleShopperMatching(e)
                     })}
                     value={dataState?.shopperMatching}
@@ -242,11 +326,12 @@ function SettingChangeModal(props) {
               <RelativeDiv>
                 <InputLabel label={label !== 'won' ? '%': '원'}>
                   <Input
-                    type={'number'}
+                    type={'text'}
                     min={0}
                     placeholder={'금액을 입력해주세요'}
                     {...register("cartRecommendation", {
                       required: "금액을 입력해주세요",
+                      pattern: /[0-9]*/,
                       onChange: (e) => handleCartRecommendation(e)
                     })}
                     value={dataState?.cartRecommendation}
@@ -263,11 +348,12 @@ function SettingChangeModal(props) {
               <RelativeDiv>
                 <InputLabel label={label !== 'won' ? '%': '원'}>
                   <Input
-                    type={'number'}
+                    type={'text'}
                     min={0}
                     placeholder={'금액을 입력해주세요'}
                     {...register("productRecommendation", {
                       required: "금액을 입력해주세요",
+                      pattern: /[0-9]*/,
                       onChange: (e) => handleProductRecommendation(e)
                     })}
                     value={dataState?.productRecommendation}
@@ -284,11 +370,12 @@ function SettingChangeModal(props) {
               <RelativeDiv>
                 <InputLabel label={label !== 'won' ? '%': '원'}>
                   <Input
-                    type={'number'}
+                    type={'text'}
                     min={0}
                     placeholder={'금액을 입력해주세요'}
                     {...register("userMatching", {
                       required: "금액을 입력해주세요",
+                      pattern: /[0-9]*/,
                       onChange: (e) => handleUserMatching(e)
                     })}
                     value={dataState?.userMatching}
@@ -304,11 +391,12 @@ function SettingChangeModal(props) {
               <RelativeDiv>
                 <InputLabel label={label !== 'won' ? '%': '원'}>
                   <Input
-                    type={'number'}
+                    type={'text'}
                     min={0}
                     placeholder={'금액을 입력해주세요'}
                     {...register("audience", {
                       required: "금액을 입력해주세요",
+                      pattern: /[0-9]*/,
                       onChange: (e) => handleAudience(e)
                     })}
                     value={dataState?.audience}
@@ -324,11 +412,12 @@ function SettingChangeModal(props) {
               <RelativeDiv>
                 <InputLabel label={label !== 'won' ? '%': '원'}>
                   <Input
-                    type={'number'}
+                    type={'text'}
                     min={0}
                     placeholder={'금액을 입력해주세요'}
                     {...register("userOptimization", {
                       required: "금액을 입력해주세요",
+                      pattern: /[0-9]*/,
                       onChange: (e) => handleUserOptimization(e)
                     })}
                     value={dataState?.userOptimization}

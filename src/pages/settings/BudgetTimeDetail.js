@@ -86,7 +86,7 @@ function BudgetTimeDetail() {
       })
       isTimePerZero = (weekSumArr.reduce((a,b)=>{return a+b;}) === 0);
     }
-
+    console.log(isTimePerZero)
     if(isTimePerOver) {
       toast.warning('[해당 요일]의 \n시간별 예산 설정을 확인해주세요.')
     }else if(isTimePerZero){

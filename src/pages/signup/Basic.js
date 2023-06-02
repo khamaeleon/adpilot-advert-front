@@ -366,7 +366,7 @@ export default function Basic(props) {
             <div>
               <input
                 type={'text'}
-                placeholder={'아이디를 입력해주세요. (4-20자, 영문)'}
+                placeholder={'아이디를 입력해주세요. (4-20자, 영문, 일부 특수기호 -, _)'}
                 {...register("username", {
                   required: "아이디를 입력해주세요",
                   pattern: {
@@ -391,7 +391,7 @@ export default function Basic(props) {
                 {...register("password", {
                   required: "비밀번호를 입력해주세요",
                   pattern: {
-                    value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
+                    value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,16}$/,
                     message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
                   },
                   onChange: (e) => handlePassword(e)
