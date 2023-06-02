@@ -33,7 +33,7 @@ import Select from "react-select";
 import {hostList} from "../signup/entity/Common";
 import {
   retrieveSubLevelCategoryKeyValue,
-  retrieveTopLevelCategoryKeyValue
+  retrieveTopLevelCategoryKeyValue, retrieveUserSubLevelCategoryKeyValue, retrieveUserTopLevelCategoryKeyValue
 } from "../../services/Platform/CategoryAxios";
 import {useNavigate} from "react-router-dom";
 import {pixelAdverDetailColumns, pixelColumns, pixelDataAtom, pixelDetailColumns} from "./entity/Pixel";
@@ -43,12 +43,22 @@ import Table from "../../components/table";
 
 export function SubCategory({topLevelCategory, subs}) {
   const [subCategory, setSubCategory] = useState('')
+  const tokenResult = useAtomValue(tokenResultAtom)
   useEffect(()=>{
-    retrieveSubLevelCategoryKeyValue(topLevelCategory).then(response => {
-      console.log(response);
-      const subsLabel = response.find(subCategory => subCategory.value === subs).label
-      setSubCategory(subsLabel)
-    })
+    if(tokenResult.role !== 'NORMAL') {
+      retrieveSubLevelCategoryKeyValue(topLevelCategory).then(response => {
+        console.log(response);
+        const subsLabel = response.find(subCategory => subCategory.value === subs).label
+        setSubCategory(subsLabel)
+      })
+    } else {
+      retrieveUserSubLevelCategoryKeyValue(topLevelCategory).then(response => {
+        console.log(response);
+        const subsLabel = response.find(subCategory => subCategory.value === subs).label
+        setSubCategory(subsLabel)
+      })
+    }
+
   },[])
   return(
     <span>{subCategory}</span>
@@ -371,7 +381,9 @@ function PixelList() {
         setTopLevelCategoryList(response)
       })
     } else {
-
+      retrieveUserTopLevelCategoryKeyValue().then(response => {
+        setTopLevelCategoryList(response)
+      })
     }
   },[])
 
@@ -386,9 +398,9 @@ function PixelList() {
     } else {
       let detailPixelData = await selAdverPixelList(tokenResult.id)
       console.log(detailPixelData)
-      // detailPixelData.map((item,key) => {
-      //   detailPixelData[key]['mainCategoryLabel'] = topLevelCategoryList.find(category => category.value === item.mainCategoryCode).label
-      // })
+      detailPixelData.map((item,key) => {
+        detailPixelData[key]['mainCategoryLabel'] = topLevelCategoryList.find(category => category.value === item.mainCategoryCode).label
+      })
       return detailPixelData
     }
   },[topLevelCategoryList])

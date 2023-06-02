@@ -351,7 +351,11 @@ export const pixelAdverDetailColumns = [
     textAlign: 'center',
     showColumnMenuTool: false,
     resizable: false,
-
+    render: ({value, data}) => {
+      return (
+        <SubCategory topLevelCategory={data.mainCategoryCode} subs={value}/>
+      )
+    }
   },
   {
     name: 'hostType',

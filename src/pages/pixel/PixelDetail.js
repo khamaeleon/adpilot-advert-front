@@ -25,7 +25,7 @@ import {hostList} from "../signup/entity/Common";
 import {ValidationScript} from "../signup/styles";
 import {
   retrieveSubLevelCategoryKeyValue,
-  retrieveTopLevelCategoryKeyValue
+  retrieveTopLevelCategoryKeyValue, retrieveUserSubLevelCategoryKeyValue, retrieveUserTopLevelCategoryKeyValue
 } from "../../services/Platform/CategoryAxios";
 import styled from "styled-components";
 import {pixelDetailAdverInfoColumns, pixelDetailInfoColumns, pixelInfoListAtom, statusTypeAll} from "./entity/Pixel";
@@ -59,11 +59,14 @@ function PixelDetail() {
         })
       })
     } else {
+      retrieveUserTopLevelCategoryKeyValue().then(response => {
+        setTopLevelCategoryList(response)
+      })
       selPixelAdverInfoList(state.id).then(response => {
         setPixelInfoListState(response)
-        // retrieveSubLevelCategoryKeyValue(response.mainCategoryCode).then(response => {
-        //   setRowLevelCategoryList(response)
-        // })
+        retrieveUserSubLevelCategoryKeyValue(response.mainCategoryCode).then(response => {
+          setRowLevelCategoryList(response)
+        })
       })
     }
 
@@ -195,84 +198,86 @@ function PixelDetail() {
                   }
                 </div>
               </div>
-              <div className={'row'}>
-                <p className={'tit'}>카테고리</p>
                 {tokenResult.role !== 'NORMAL' ?
-                  <div className={'txt'} style={{display: 'flex', justifyContent: 'space-between'}}>
-                    <div style={{width: '48%'}}>
-                      {pixelInfoListState !== null &&
-                        <Controller
-                          style={{width: '50%'}}
-                          name="mainCategoryCode"
-                          control={control}
-                          rules={{
-                            required: {
-                              value: pixelInfoListState.mainCategoryCode === "",
-                              message: "카테고리를 선택해주세요"
-                            }
-                          }}
-                          render={({field}) => (
-                            <Select options={topLevelCategoryList}
-                                    placeholder={'카테고리선택 선택'}
-                                    {...field}
-                                    value={pixelInfoListState.mainCategoryCode !== '' ? topLevelCategoryList.find(value => value.value === pixelInfoListState.mainCategoryCode) : ''}
-                                    onChange={handleSelectTopCategory}
-                                    styles={{
-                                      input: (baseStyles, state) => (
-                                        {
-                                          ...baseStyles,
-                                          minWidth: "300px",
-                                        })
-                                    }}
-                            />
-                          )}
-                        />
-                      }
-                      {errors.mainCategoryCode &&
-                        <ValidationScript>{errors.mainCategoryCode?.message}</ValidationScript>}
-                    </div>
-                    <div style={{width: '50%'}}>
-                      {pixelInfoListState !== null &&
-                        <Controller
-                          name="subCategoryCode"
-                          control={control}
-                          rules={{
-                            required: {
-                              value: pixelInfoListState.subCategoryCode === "",
-                              message: "카테고리를 선택해주세요"
-                            }
-                          }}
-                          render={({field}) => (
-                            <Select options={rowLevelCategoryList}
-                                    placeholder={'서브 카테고리 선택'}
-                                    {...field}
-                                    value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
-                                    onChange={handleSelectRowCategory}
-                                    styles={{
-                                      input: (baseStyles, state) => (
-                                        {
-                                          ...baseStyles,
-                                          minWidth: "300px",
-                                        })
-                                    }}
-                            />
-                          )}
-                        />
-                      }
-                      {errors.subCategoryCode && <ValidationScript>{errors.subCategoryCode?.message}</ValidationScript>}
+                  <div className={'row'}>
+                    <p className={'tit'}>카테고리</p>
+                    <div className={'txt'} style={{display: 'flex', justifyContent: 'space-between'}}>
+                      <div style={{width: '48%'}}>
+                        {pixelInfoListState !== null &&
+                          <Controller
+                            style={{width: '50%'}}
+                            name="mainCategoryCode"
+                            control={control}
+                            rules={{
+                              required: {
+                                value: pixelInfoListState.mainCategoryCode === "",
+                                message: "카테고리를 선택해주세요"
+                              }
+                            }}
+                            render={({field}) => (
+                              <Select options={topLevelCategoryList}
+                                      placeholder={'카테고리선택 선택'}
+                                      {...field}
+                                      value={pixelInfoListState.mainCategoryCode !== '' ? topLevelCategoryList.find(value => value.value === pixelInfoListState.mainCategoryCode) : ''}
+                                      onChange={handleSelectTopCategory}
+                                      styles={{
+                                        input: (baseStyles, state) => (
+                                          {
+                                            ...baseStyles,
+                                            minWidth: "300px",
+                                          })
+                                      }}
+                              />
+                            )}
+                          />
+                        }
+                        {errors.mainCategoryCode &&
+                          <ValidationScript>{errors.mainCategoryCode?.message}</ValidationScript>}
+                      </div>
+                      <div style={{width: '50%'}}>
+                        {pixelInfoListState !== null &&
+                          <Controller
+                            name="subCategoryCode"
+                            control={control}
+                            rules={{
+                              required: {
+                                value: pixelInfoListState.subCategoryCode === "",
+                                message: "카테고리를 선택해주세요"
+                              }
+                            }}
+                            render={({field}) => (
+                              <Select options={rowLevelCategoryList}
+                                      placeholder={'서브 카테고리 선택'}
+                                      {...field}
+                                      value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
+                                      onChange={handleSelectRowCategory}
+                                      styles={{
+                                        input: (baseStyles, state) => (
+                                          {
+                                            ...baseStyles,
+                                            minWidth: "300px",
+                                          })
+                                      }}
+                              />
+                            )}
+                          />
+                        }
+                        {errors.subCategoryCode && <ValidationScript>{errors.subCategoryCode?.message}</ValidationScript>}
+                      </div>
                     </div>
                   </div>
                   :
-                  <>
-                    <ColSpan1>
-                      <div className={'txt'}>{pixelInfoListState?.mainCategoryCode}</div>
-                    </ColSpan1>
-                    <ColSpan1>
-                      <div className={'txt'}>{pixelInfoListState?.subCategoryCode}</div>
-                    </ColSpan1>
-                  </>
+                  <div className={'row'}>
+                    <div className={'w-50'}>
+                      <p className={'tit'}>카테고리</p>
+                      <div className={'txt'}>{topLevelCategoryList.find(value => value.value === pixelInfoListState.mainCategoryCode)?.label}</div>
+                    </div>
+                    <div className={'w-50'}>
+                      <p className={'tit'}>하위 카테고리</p>
+                      <div className={'txt'}>{rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode)?.label}</div>
+                    </div>
+                  </div>
                 }
-              </div>
             </div>
             <div className={'col2'}>
               <div className={'row'}>
