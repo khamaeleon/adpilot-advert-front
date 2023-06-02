@@ -57,7 +57,6 @@ adminAxios.interceptors.response.use(
         isTokenRefreshing = true;
         await refreshAdmin().then(response => {
           if (response) {
-            console.log(response)
             store.set(tokenResultAtom, {
               id: response.email,
               role: response.role,

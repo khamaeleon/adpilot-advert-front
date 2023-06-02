@@ -19,16 +19,16 @@ export const FindIdResultAtom = atom(findIdResult)
 
 function FindPassword(props) {
   const [findPasswordInfo, setFindPasswordInfo] = useState(findPasswordParams)
-  const {register, handleSubmit, formState:{errors}} = useForm()
+  const {register, handleSubmit, formState: {errors}} = useForm()
   const navigate = useNavigate()
   const handleFindPassword = () => {
     //axios 로 호출하여 서버쪽에서 이메일쪽으로 전송
     selChangePassword(findPasswordInfo).then(response => {
       console.log(findPasswordInfo)
-      if(response){
+      if (response) {
         //성공
         props.openModal(findPasswordInfo)
-      }else{
+      } else {
         toast.warning('입력하신정보가 회원정보와 일치 하지 않습니다')
       }
     })
@@ -37,7 +37,7 @@ function FindPassword(props) {
    * 담당자 이메일
    * @param event
    */
-  const handleManagerEmail = (event) =>{
+  const handleManagerEmail = (event) => {
     setFindPasswordInfo({
       ...findPasswordInfo,
       email: event.target.value
@@ -47,7 +47,7 @@ function FindPassword(props) {
    * 담당자 연락처
    * @param event
    */
-  const handleManagerPhone = (event) =>{
+  const handleManagerPhone = (event) => {
     setFindPasswordInfo({
       ...findPasswordInfo,
       phone: event.target.value
@@ -57,7 +57,7 @@ function FindPassword(props) {
    * 담당자 아이디
    * @param event
    */
-  const handleMemberId = (event) =>{
+  const handleMemberId = (event) => {
     setFindPasswordInfo({
       ...findPasswordInfo,
       username: event.target.value
@@ -75,7 +75,7 @@ function FindPassword(props) {
       <Title>
         <h1>비밀번호 찾기</h1>
       </Title>
-      <form onSubmit={handleSubmit(onSubmit,onError)}>
+      <form onSubmit={handleSubmit(onSubmit, onError)}>
         <InputGroup>
           <LabelInline>
             <span>아이디</span>
@@ -84,9 +84,9 @@ function FindPassword(props) {
             <input type={'text'}
                    placeholder={'아이디를 입력 해주세요'}
                    value={findPasswordInfo.username || ""}
-                   {...register('username',{
+                   {...register('username', {
                      required: "아이디를 입력 해주세요",
-                     onChange:(e) => handleMemberId(e)
+                     onChange: (e) => handleMemberId(e)
                    })}
             />
           </div>
@@ -100,9 +100,9 @@ function FindPassword(props) {
             <input type={'text'}
                    placeholder={'연락처를 입력해주세요'}
                    value={findPasswordInfo.phone || ""}
-                   {...register('phone',{
+                   {...register('phone', {
                      required: "연락처를 입력해주세요,",
-                     onChange:(e) => handleManagerPhone(e)
+                     onChange: (e) => handleManagerPhone(e)
                    })}
             />
           </FindCorporationNo>
@@ -117,13 +117,13 @@ function FindPassword(props) {
                    placeholder={'담당자 이메일을 입력해주세요.'}
                    value={findPasswordInfo.email || ""}
                    onChange={(e) => handleManagerEmail(e)}
-                   {...register('email',{
+                   {...register('email', {
                      required: "이메일을 입력해주세요,",
                      pattern: {
                        value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
                        message: "이메일 형식을 확인해주세요"
                      },
-                     onChange:(e) => handleManagerEmail(e)
+                     onChange: (e) => handleManagerEmail(e)
                    })}
             />
           </div>
@@ -145,22 +145,22 @@ function FindPassword(props) {
 
 function FindId(props) {
   const [findIdInfo, setFindIdInfo] = useState(findIdParams)
-  const [,setFindIdResult] = useAtom(FindIdResultAtom)
-  const {register, handleSubmit, formState:{errors}} = useForm()
+  const [, setFindIdResult] = useAtom(FindIdResultAtom)
+  const {register, handleSubmit, formState: {errors}} = useForm()
   const success = true
   const navigate = useNavigate()
   const handleFindId = () => {
-    if(success){
+    if (success) {
       selFindUserId(findIdInfo).then(response => {
         console.log(response)
-        if(response.length !== 0) {
+        if (response.length !== 0) {
           setFindIdResult(response)
           props.openModal()
         } else {
           toast.info('등록된 아이디나 이메일이 없습니다.')
         }
       })
-    } else{
+    } else {
       toast.info('등록된 아이디나 이메일이 없습니다.')
     }
   }
@@ -169,7 +169,7 @@ function FindId(props) {
    * 담당자 이메일
    * @param event
    */
-  const handleManagerEmail = (event) =>{
+  const handleManagerEmail = (event) => {
     setFindIdInfo({
       ...findIdInfo,
       email: event.target.value
@@ -179,7 +179,7 @@ function FindId(props) {
    * 담당자 연락처
    * @param event
    */
-  const handleManagerPhone = (event) =>{
+  const handleManagerPhone = (event) => {
     setFindIdInfo({
       ...findIdInfo,
       phone: event.target.value
@@ -196,7 +196,7 @@ function FindId(props) {
       <Title>
         <h1>아이디 찾기</h1>
       </Title>
-      <form onSubmit={handleSubmit(onSubmit,onError)}>
+      <form onSubmit={handleSubmit(onSubmit, onError)}>
         <InputGroup>
           <LabelInline>
             <span>담당자 연락처</span>
@@ -205,9 +205,9 @@ function FindId(props) {
             <input type={'text'}
                    placeholder={'연락처를 입력해주세요'}
                    value={findIdInfo.phone}
-                   {...register('phone',{
+                   {...register('phone', {
                      required: "연락처를 입력해주세요",
-                     onChange:(e) => handleManagerPhone(e)
+                     onChange: (e) => handleManagerPhone(e)
                    })}
             />
           </FindCorporationNo>
@@ -221,13 +221,13 @@ function FindId(props) {
             <input type={'text'}
                    placeholder={'담당자 이메일을 입력해주세요.'}
                    value={findIdInfo.email}
-                   {...register('email',{
+                   {...register('email', {
                      required: "담당자 이메일을 입력해주세요",
                      pattern: {
                        value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
                        message: "이메일 형식을 확인해주세요"
                      },
-                     onChange:(e) => handleManagerEmail(e)
+                     onChange: (e) => handleManagerEmail(e)
                    })}
             />
           </div>
@@ -246,14 +246,15 @@ function FindId(props) {
     </LoginInputComponent>
   )
 }
-function LoginComponent () {
+
+function LoginComponent() {
   const [loginParamsValue, setLoginParams] = useState(loginParams);
   const [isRemember, setIsRemember] = useState(false)
   const [cookies, setCookie, removeCookie] = useCookies(['rememberId'])
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate();
-  const [tokenResult,setTokenResult] = useAtom(tokenResultAtom)
-  const {register,setValue, handleSubmit, formState:{errors}} = useForm()
+  const [tokenResult, setTokenResult] = useAtom(tokenResultAtom)
+  const {register, setValue, handleSubmit, formState: {errors}} = useForm()
 
   /**
    * 사용자 아이디 입력
@@ -262,10 +263,10 @@ function LoginComponent () {
   const handleChangeId = (event) => {
     setLoginParams({
       ...loginParamsValue,
-      username:event.target.value
+      username: event.target.value
     })
-    setValue('username',event.target.value)
-    if(isRemember){
+    setValue('username', event.target.value)
+    if (isRemember) {
       setCookie('rememberId', event.target.value)
     }
   }
@@ -276,7 +277,7 @@ function LoginComponent () {
   const handleChangePassword = (event) => {
     setLoginParams({
       ...loginParamsValue,
-      password:event.target.value
+      password: event.target.value
     })
   }
 
@@ -287,7 +288,7 @@ function LoginComponent () {
   const handleChangeRemember = (event) => {
     console.log(loginParamsValue.username)
     setIsRemember(event.target.checked)
-    if(event.target.checked) {
+    if (event.target.checked) {
       setCookie('rememberId', loginParamsValue.username)
     } else {
       removeCookie('rememberId')
@@ -298,37 +299,40 @@ function LoginComponent () {
    * 쿠키에 아이디 저장 삭제
    */
   useEffect(() => {
-
-    if(cookies.rememberId !== undefined) {
+    if (cookies.rememberId !== undefined) {
       setLoginParams({
         ...loginParamsValue,
-        username:cookies.rememberId
+        username: cookies.rememberId
       })
-      setValue('username',cookies.rememberId)
+      setValue('username', cookies.rememberId)
       setIsRemember(true)
     }
   }, [])
 
   /**
    * 로그인
+   * id: uuid,
+   * name: 회사명
+   * role: 권한며으
+   * token
+   * username: 로그인 아이디
    */
   const onSubmit = () => {
     login(loginParamsValue).then(response => {
-      console.log(response)
-      if(response === 'disabled') {
+      if (response === 'disabled') {
         toast.warning('로그인이 제한된 사용자입니다. 담당자에게 문의해주세요.')
       }
-      if(response){
+      if (response) {
         setTokenResult({
-          id:response.id,
-          username:response.username,
-          role:response.role,
-          name:response.name,
+          id: response.id,
+          username: response.username,
+          role: response.role,
+          name: response.name,
           accessToken: response.token.accessToken,
           refreshToken: response.token.refreshToken
         })
         navigate('/board/dashboard')
-      }else{
+      } else {
         toast.info('아이디와 비밀번호를 확인해 주세요.')
       }
     });
@@ -342,10 +346,10 @@ function LoginComponent () {
       </Title>
       <RowSpan style={{justifyContent: 'flex-end', alignItems: 'center', gap: 10}}>
         <TextMainColor>사용자 로그인</TextMainColor>
-        <HorizontalRule />
+        <HorizontalRule/>
         <Link to={'/adminLogin'}>관리자로그인</Link>
       </RowSpan>
-      <form onSubmit={handleSubmit(onSubmit,onError)}>
+      <form onSubmit={handleSubmit(onSubmit, onError)}>
         <InputGroup>
           <LabelInline>
             <span>아이디</span>
@@ -360,7 +364,7 @@ function LoginComponent () {
               type={'text'}
               placeholder={'유저 아이디'}
               value={loginParamsValue.username || ''}
-              {...register('username',{
+              {...register('username', {
                 required: "아이디를 입력해주세요.",
                 pattern: {
                   value: /^[a-z]+[a-z0-9-_]{3,19}$/g,
@@ -388,7 +392,7 @@ function LoginComponent () {
                   value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
                   message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
                 },
-                onChange:handleChangePassword
+                onChange: handleChangePassword
               })}/>
             <ShowPassword
               style={showPassword ? {backgroundImage: "url('/assets/images/login/hide.png')"} : {backgroundImage: "url('/assets/images/login/show.png')"}}
@@ -413,7 +417,7 @@ function LoginComponent () {
   )
 }
 
-function Login(props){
+function Login(props) {
   const setModal = useSetAtom(modalController)
   const location = useLocation()
   const handleModalFindId = () => {
@@ -436,7 +440,7 @@ function Login(props){
     })
   }
   const LoginText = () => {
-    if(props.match === 'findId' || props.match === 'findPassword'){
+    if (props.match === 'findId' || props.match === 'findPassword') {
       return <>
         <div>{props.match === 'findPassword' ? "비밀번호" : "아이디"} 찾기가 불가한 회원님들께서는</div>
         <div>고객센터(070-1234-1234)로 연락 주시기 바랍니다.</div>
@@ -472,13 +476,13 @@ function Login(props){
         </div>
         <div>
           {props.match === 'findId' &&
-            <FindId openModal={()=>handleModalFindId()}/>
+            <FindId openModal={() => handleModalFindId()}/>
           }
           {props.match === 'findPassword' &&
-            <FindPassword openModal={(e)=>handleModalFindPassword(e)}/>
+            <FindPassword openModal={(e) => handleModalFindPassword(e)}/>
           }
           {props.match === 'login' &&
-            <LoginComponent />
+            <LoginComponent/>
           }
         </div>
       </LoginContainer>
@@ -500,6 +504,7 @@ export default Login
 
 const LoginContainer = styled.div`
   display: flex;
+
   & > div:first-child {
     display: flex;
     justify-content: center;
@@ -509,8 +514,10 @@ const LoginContainer = styled.div`
     background-image: url('/assets/images/login/login_background.png');
     background-size: cover;
     text-align: center;
+
     & div > div:last-child {
       margin-top: 20px;
+
       & div {
         line-height: 5px;
         color: #fff;
@@ -519,6 +526,7 @@ const LoginContainer = styled.div`
     }
 
   }
+
   & > div:last-child {
     display: flex;
     justify-content: center;
@@ -544,6 +552,7 @@ const FindGroup = styled.div`
 
 const Title = styled.div`
   text-align: center;
+
   & h1 {
     font-family: 'Roboto';
     font-size: 2.2rem;
@@ -581,6 +590,7 @@ const LoginInputComponent = styled.div`
 const InputGroup = styled.div`
   position: relative;
   margin: 30px 0 15px 0;
+
   & input[type='text'], input[type='email'], input[type='password'] {
     width: 100%;
     height: 50px;
@@ -590,13 +600,14 @@ const InputGroup = styled.div`
     border-radius: 10px;
     outline: 0;
   }
+
   & input[type='checkbox'] + label {
     font-size: 0.9rem;
     color: #777
   }
 `
 
-const Button = styled.button `
+const Button = styled.button`
   padding: 16px;
   width: 100%;
   color: #fff;
@@ -604,6 +615,7 @@ const Button = styled.button `
   font-size: 1.6rem;
   font-weight: 700;
   cursor: pointer;
+
   &:hover {
     background-color: #db7219;
   }

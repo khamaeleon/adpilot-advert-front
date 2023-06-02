@@ -16,7 +16,6 @@ export async function AdminAxios(type, uri, param) {
 }
 
 export async function AxiosImage(type, uri, formData) {
-  // const accessToken = store.getState().auth.accessToken
   const tokenAtom = store.get(tokenResultAtom)
   return fetch(ADMIN_SERVER + uri, {
     method: type,
@@ -31,7 +30,6 @@ export async function AxiosImage(type, uri, formData) {
 }
 
 export async function AxiosFile(type, uri, formData) {
-  // const accessToken = store.getState().auth.accessToken
   const accessToken =""
   return fetch(ADVER_SERVER + uri, {
     method: type,

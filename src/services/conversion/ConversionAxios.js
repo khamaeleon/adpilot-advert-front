@@ -19,7 +19,7 @@ export async function selConversionList(searchParams) {
 
 export async function selConversionDetailList(conversionId) {
   let returnVal = null;
-  await AdminAxios('GET', ACTION_URL + '/' +conversionId ,null)
+  await AdminAxios('GET', ACTION_URL + '/' +conversionId,null)
     .then((response) => {
       const {data, responseCode} =response
       console.log(data)
