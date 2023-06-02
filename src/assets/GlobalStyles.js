@@ -170,7 +170,7 @@ export const GlobalStyles = createGlobalStyle`
   }
   
   input[type='text']:read-only {
-    background-color: #f9fafb;
+    background-color: #eee;
     cursor: not-allowed;
   }
   input[type="radio"] {

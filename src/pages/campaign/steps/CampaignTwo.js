@@ -3,7 +3,7 @@ import {
   Board,
   BoardHeader,
   BoardSearchResult,
-  CancelButton,
+  CancelButton, ColSpan0,
   ColSpan1,
   ColSpan4,
   ColTitle,
@@ -37,7 +37,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {useResetAtom} from "jotai/utils";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import {multiAxiosCall} from "../../../common/StringUtils";
+import {decimalFormat, multiAxiosCall, removeStr} from "../../../common/StringUtils";
 
 export function CampaignTwo() {
   const setStepCampaign = useSetAtom(stepCampaignAtom)
@@ -135,19 +135,19 @@ export function CampaignTwo() {
 
   const handleCheckInfiniteBudget = (e) => {
     let value = e.target.checked ? 'Y' : 'N'
+    clearErrors('dailyAvgBudget')
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
       infiniteBudgetYn: value
     })
   }
 
-  const handleChangeDailyBudget = (event) => {
-    let dailyBudget = 0;
-
-    if(event.target.value !== '') dailyBudget = parseInt(event.target.value);
+  const handleChangeDailyBudget = (value) => {
+    let num = removeStr(value)
+    let dailyBudget = num !== '' ? parseInt(num) : 0
 
     const prevBudgetRate = campaignBudgetInfo.budgetRate != 0 ? campaignBudgetInfo.budgetRate : 50;
-
+    clearErrors('dailyAvgBudget')
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
       dailyAvgBudget: dailyBudget,
@@ -158,12 +158,13 @@ export function CampaignTwo() {
 
   }
 
-  const handleChangePcBudget = (event) => {
-    let puBudget = 0;
+  const handleChangePcBudget = (value) => {
+    let num = removeStr(value)
+    let puBudget = value !== '' ? parseInt(num) : 0
 
-    if(event.target.value !== '') puBudget = parseInt(event.target.value);
-
-    if(event.target.value <= campaignBudgetInfo.dailyAvgBudget) {
+    if (campaignBudgetInfo.dailyAvgBudget < 100 || campaignBudgetInfo.dailyAvgBudget.toString().slice(-2) !== '00') {
+      setError('dailyAvgBudget', {type: 'required', message: '일일 평균 예산을 최소 100원 단위로 설정해주세요.'})
+    } else if(puBudget <= campaignBudgetInfo.dailyAvgBudget) {
       setCampaignBudgetInfo({
         ...campaignBudgetInfo,
         pcBudget: puBudget,
@@ -173,12 +174,13 @@ export function CampaignTwo() {
     }
   }
 
-  const handleChangeMobileBudget = (event) => {
-    let mobBudget = 0;
+  const handleChangeMobileBudget = (value) => {
+    let num = removeStr(value)
+    let mobBudget = value !== '' ? parseInt(num) : 0
 
-    if(event.target.value !== '') mobBudget = parseInt(event.target.value);
-
-    if(event.target.value <= campaignBudgetInfo.dailyAvgBudget ){
+    if (campaignBudgetInfo.dailyAvgBudget < 100 || campaignBudgetInfo.dailyAvgBudget.toString().slice(-2) !== '00') {
+      setError('dailyAvgBudget', {type: 'required', message: '일일 평균 예산을 최소 100원 단위로 설정해주세요.'})
+    } else if(mobBudget <= campaignBudgetInfo.dailyAvgBudget ){
       setCampaignBudgetInfo({
         ...campaignBudgetInfo,
         mobBudget: mobBudget,
@@ -189,69 +191,77 @@ export function CampaignTwo() {
   }
   const handleChangeInputRange = (e) => {
     if(campaignBudgetInfo.infiniteBudgetYn !== 'Y') {
-      setCampaignBudgetInfo({
-        ...campaignBudgetInfo,
-        budgetRate: parseInt(e.target.value),
-        mobBudget: campaignBudgetInfo.dailyAvgBudget - ((campaignBudgetInfo.dailyAvgBudget * e.target.value) / 100),
-        pcBudget: (campaignBudgetInfo.dailyAvgBudget * e.target.value) / 100
-      })
+      if (campaignBudgetInfo.dailyAvgBudget < 100 || campaignBudgetInfo.dailyAvgBudget.toString().slice(-2) !== '00') {
+        setError('dailyAvgBudget', {type: 'required', message: '일일 평균 예산을 최소 100원 단위로 설정해주세요.'})
+      } else {
+        setCampaignBudgetInfo({
+          ...campaignBudgetInfo,
+          budgetRate: parseInt(e.target.value),
+          mobBudget: campaignBudgetInfo.dailyAvgBudget - ((campaignBudgetInfo.dailyAvgBudget * e.target.value) / 100),
+          pcBudget: (campaignBudgetInfo.dailyAvgBudget * e.target.value) / 100
+        })
+      }
     }
   }
 
-  const handleChangeMaxBid = (e) => {
-    let maxBiddingPrice = 0;
-
-    if(e.target.value !== '') maxBiddingPrice = parseInt(e.target.value);
-
+  const handleChangeMaxBid = (value) => {
+    let num = removeStr(value)
+    let maxBiddingPrice = value !== '' ? parseInt(num) : 0
+    clearErrors('maxBiddingPrice')
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
       maxBiddingPrice: maxBiddingPrice
     })
   }
-  const onSubmit = (data) => {
-    let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
+  const onSubmit = () => {
+    if (campaignBudgetInfo.maxBiddingPrice < 1) {
+      setError('maxBiddingPrice', {type: 'required', message: '최대 입찰가를 입력해주세요'})
+    } else if(campaignBudgetInfo.infiniteBudgetYn !== 'Y' && (campaignBudgetInfo.dailyAvgBudget < 100 || campaignBudgetInfo.dailyAvgBudget.toString().slice(-2) !== '00')) {
+      setError('dailyAvgBudget', {type: 'required', message: '일일 평균 예산을 최소 100원 단위로 설정해주세요.'})
+    } else {
+      let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
       updateCampaignBudget({
-      ...campaignBudgetInfo,
-      campaignId: campaignId
-    }).then(response => {
-      if (response) {
-        if (state !== null) {
-          if(!campaignBudgetInfo.infiniteBudgetYn && (campaignBudgetInfo.pcBudget === 0 || campaignBudgetInfo.mobBudget === 0)) {
-            confirmAlert({
-              title: '수정되었습니다',
-              message: '예산 비율 설정에 따라 광고 그룹 및 크리에이티브 정보를 확인해주세요.',
-              buttons: [
-                {
-                  label: '확인',
-                  onClick: () => {
-                    navigate('/board/dashboard')
-                    resetInfo()
+        ...campaignBudgetInfo,
+        campaignId: campaignId
+      }).then(response => {
+        if (response) {
+          if (state !== null) {
+            if(!campaignBudgetInfo.infiniteBudgetYn && (campaignBudgetInfo.pcBudget === 0 || campaignBudgetInfo.mobBudget === 0)) {
+              confirmAlert({
+                title: '수정되었습니다',
+                message: '예산 비율 설정에 따라 광고 그룹 및 크리에이티브 정보를 확인해주세요.',
+                buttons: [
+                  {
+                    label: '확인',
+                    onClick: () => {
+                      navigate('/board/dashboard')
+                      resetInfo()
+                    }
                   }
+                ]
+              });
+            } else {
+              toast.success("수정되었습니다.",{autoClose:100, delay:0})
+              toast.onChange(payload => {
+                if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
+                  navigate('/board/dashboard')
+                  resetInfo()
                 }
-              ]
-            });
+              })
+            }
           } else {
-            toast.success("수정되었습니다.",{autoClose:100, delay:0})
-            toast.onChange(payload => {
-              if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
-                navigate('/board/dashboard')
-                resetInfo()
-              }
-            })
-          }
-        } else {
-          if(!['STEP2_BUDGET','STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED'].includes(campaignBasicInfo.step)){
-            setCampaignBasicInfo({
-              ...campaignBasicInfo,
-              step: "STEP2_BUDGET"
-            })
-          }
+            if(!['STEP2_BUDGET','STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED'].includes(campaignBasicInfo.step)){
+              setCampaignBasicInfo({
+                ...campaignBasicInfo,
+                step: "STEP2_BUDGET"
+              })
+            }
 
-          setStepCampaign({steps: 2})
+            setStepCampaign({steps: 2})
+          }
         }
-      }
-    })
-
+      })
+    }
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -268,41 +278,33 @@ export function CampaignTwo() {
               <RelativeDiv>
                 <ColSpan1>
                   <InputLabel label={'원'}>
-                    <Controller
-                      name="dailyAvgBudget"
-                      control={control}
-                      rules={{
-                        required: {
-                          value: campaignBudgetInfo.infiniteBudgetYn !== 'Y' && campaignBudgetInfo.dailyAvgBudget === 0,
-                          message: '일일 평균 예산을 설정해주세요.'
-                        },
-                        pattern:{
-                          value: /^[0-9,]+$/,
-                          message: "숫자만 입력 가능합니다."
-                        },
-                      }}
-                      render={({field}) => (
-                        <Input type={'text'}
-                               step={100}
-                               readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
-                               placeholder={'일일 평균 예산을 설정해주세요.'}
-                               style={{color:'#f5811f'}}
-                               value={campaignBudgetInfo.dailyAvgBudget !== 0 ? campaignBudgetInfo.dailyAvgBudget : 0}
-                               onChange={(e) => handleChangeDailyBudget(e)}
-                        />)}
+                    <Input type={'text'}
+                           step={100}
+                           readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
+                           placeholder={campaignBudgetInfo.infiniteBudgetYn !== 'Y' ? '일일 평균 예산을 설정해주세요.' : ''}
+                           style={{color:'#f5811f'}}
+                           {...register("dailyAvgBudget", {
+                             required: campaignBudgetInfo.infiniteBudgetYn !== 'Y' && "일일 평균 예산을 설정해주세요.",
+                             pattern:{
+                               value: /^[0-9,]+$/,
+                               message: "숫자만 입력 가능합니다."
+                             },
+                             onChange:(e) => handleChangeDailyBudget(e.target.value)
+                           })}
+                           value={campaignBudgetInfo.infiniteBudgetYn !== 'Y' ? decimalFormat(campaignBudgetInfo.dailyAvgBudget) : ''}
                     />
                   </InputLabel>
                 </ColSpan1>
-                <ColSpan1>
+                <ColSpan0>
                   <label>
                     <input type={'checkbox'} value={campaignBudgetInfo.infiniteBudgetYn} checked={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true} className={'checkbox-type-a'} onChange={handleCheckInfiniteBudget}/>
                     <i/>
                     {/*배너일때 infiniteBudget 항목 없음*/}
                     <span>일일 예산 무제한</span>
                   </label>
-                </ColSpan1>
+                </ColSpan0>
                 <ColSpan1> {errors.dailyAvgBudget &&
-                  <ValidationScript>{errors.dailyAvgBudget.message}</ValidationScript>}</ColSpan1>
+                  <ValidationScript style={{position: 'unset'}}>{errors.dailyAvgBudget.message}</ValidationScript>}</ColSpan1>
               </RelativeDiv>
             </ColSpan4>
             <ColSpan4>
@@ -311,13 +313,18 @@ export function CampaignTwo() {
                 <ColSpan1>
                   <Span1>PC</Span1>
                   <InputLabel label={'원'}>
-                    <Input type={'number'}
+                    <Input type={'text'}
                            readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
                            style={{color:'#f5811f'}}
                            step={10}
-                           min={0}
-                           value={campaignBudgetInfo.pcBudget !== 0  ? campaignBudgetInfo.pcBudget : 0}
-                           onChange={(e) => handleChangePcBudget(e)}
+                           {...register("pcBudget", {
+                             pattern:{
+                               value: /^[0-9,]+$/,
+                               message: "숫자만 입력 가능합니다."
+                             },
+                             onChange:(e) => handleChangePcBudget(e.target.value)
+                           })}
+                           value={campaignBudgetInfo.infiniteBudgetYn !== 'Y' ? decimalFormat(campaignBudgetInfo.pcBudget) : ''}
                     />
                   </InputLabel>
                 </ColSpan1>
@@ -338,13 +345,18 @@ export function CampaignTwo() {
                 <ColSpan1>
                   <ColTitle><Span1>MOBILE</Span1></ColTitle>
                   <InputLabel label={'원'}>
-                    <Input type={'number'}
+                    <Input type={'text'}
                            readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
                            style={{color:'#f5811f'}}
                            step={10}
-                           min={0}
-                           value={campaignBudgetInfo.mobBudget !== 0  ? campaignBudgetInfo.mobBudget : 0}
-                           onChange={(e) => handleChangeMobileBudget(e)}
+                           {...register("mobBudget", {
+                             pattern:{
+                               value: /^[0-9,]+$/,
+                               message: "숫자만 입력 가능합니다."
+                             },
+                             onChange:(e) => handleChangeMobileBudget(e.target.value)
+                           })}
+                           value={campaignBudgetInfo.infiniteBudgetYn !== 'Y' ? decimalFormat(campaignBudgetInfo.mobBudget) : ''}
                     />
                   </InputLabel>
                 </ColSpan1>
@@ -446,13 +458,12 @@ export function CampaignTwo() {
                         }
                       }}
                       render={({ field }) =>(
-                        <Input type={'number'}
-                               min={100}
+                        <Input type={'text'}
                                step={100}
                                placeholder={'최대 입찰가를 설정해주세요'}
                                style={{color:'#f5811f'}}
-                               value={campaignBudgetInfo !== null && campaignBudgetInfo.maxBiddingPrice}
-                               onChange={(e)=>handleChangeMaxBid(e)}
+                               value={campaignBudgetInfo !== null && decimalFormat(campaignBudgetInfo.maxBiddingPrice)}
+                               onChange={(e)=>handleChangeMaxBid(e.target.value)}
                         /> )}
                     />
                   </InputLabel>
