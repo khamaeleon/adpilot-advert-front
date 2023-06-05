@@ -21,13 +21,13 @@ export const menuList = [
   {
     name: "dashboard",
     header: "대시보드",
-    include: ["dashboard", 'campaignLookOver', 'campaignTwo', 'campaignThree', 'campaignFour'],
+    include: ["dashboard"],
     child: []
   },
   {
     name: "campaign",
     header: "광고관리",
-    include: ["campaign","manageCreative"],
+    include: ["campaign", "manageCreative", 'manageCreativeDetail'],
     child:[
       {
         name: "campaign",
@@ -36,6 +36,7 @@ export const menuList = [
       {
         name: "manageCreative",
         header: "크리에이티브 관리",
+        detail: "manageCreativeDetail"
       },
     ]
   },

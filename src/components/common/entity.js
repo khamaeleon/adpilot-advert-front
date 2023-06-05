@@ -5,6 +5,7 @@ export const navigationName = {
   "/board/campaign": "홈/광고 관리/캠페인생성",
   "/board/createCreative": "홈/광고 관리/크리에이티브 생성",
   "/board/manageCreative": "홈/광고 관리/크리에이티브 관리",
+  "/board/manageCreativeDetail": "홈/광고 관리/크리에이티브 관리 상세",
   "/board/reports": "홈/보고서/보고서 생성",
   "/board/customReports": "홈/보고서/보고서",
   "/board/platform": "홈/플랫폼 관리/사용자 관리",

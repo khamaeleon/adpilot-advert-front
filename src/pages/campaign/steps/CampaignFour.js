@@ -6,9 +6,8 @@ import {
   ColSpan1,
   ColSpan100,
   ColSpan2,
-  ColSpan3,
   ColSpan4,
-  Input, RelativeDiv,
+  Input,
   RowSpan,
   Span3,
   Span4,
@@ -22,7 +21,7 @@ import {
   DeleteIcon,
   FolderButton,
   ImageUploadCard, PrevButton, PrevFrame,
-  PrevImage, PrevImage250, PrevImage728, PrevTitle250, PrevTitle728,
+  PrevImage250, PrevImage728, PrevTitle250, PrevTitle728,
   ResistBanner,
   Row,
   RowBody,
@@ -51,12 +50,11 @@ import {
 import moment from "moment";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useResetAtom} from "jotai/utils";
 import {multiAxiosCall} from "../../../common/StringUtils";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import {isMaxFileSizeValid} from "react-images-uploading/dist/validation";
 
 const RegistryBannerItem = (props) => {
   const {size, onImageError} = props;
@@ -925,11 +923,12 @@ export function CampaignFour() {
     }
   }
   const onError = (e) => {console.log(e)}
+  const params = useParams()
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)}>
       {campaignCreativeInfo !== null &&
         <>
-          {state !== null && <AdverInfo><span>광고주 정보</span><p></p><span>{state?.adverInfo}</span></AdverInfo>}
+          {(params.id !== "manageCreativeDetail" && state !== null) && <AdverInfo><span>광고주 정보</span><p></p><span>{state?.adverInfo}</span></AdverInfo>}
           <Board>
             <BoardHeader>크리에이티브 그룹 설정</BoardHeader>
             <BoardSearchResult>

@@ -4,9 +4,12 @@ import ScrollToTop from "../../components/common/ScrollToTop";
 import {BoardContainer, TitleContainer} from "../../assets/GlobalStyles";
 import Navigator from "../../components/common/Navigator";
 import {ManageCreative} from "./ManageCreative";
+import {CampaignFour} from "./steps/CampaignFour";
+import {FormProvider, useForm} from "react-hook-form";
 
 export default function Campaign(){
   const params = useParams()
+  const methods = useForm()
   return(
     <main>
       <ScrollToTop/>
@@ -17,6 +20,7 @@ export default function Campaign(){
         </TitleContainer>
         {params.id === 'campaign' && <CreateCampaign />}
         {params.id === 'manageCreative' && <ManageCreative />}
+        {params.id === 'manageCreativeDetail' && <FormProvider {...methods}><CampaignFour /></FormProvider>}
       </BoardContainer>
     </main>
   )
