@@ -7,7 +7,7 @@ import {
   ColSpan2,
   ColSpan4,
   ColTitle,
-  Input,
+  Input, InputLabel,
   RowSpan,
   selectStyle,
   Span4,
@@ -29,17 +29,19 @@ import {resistCampaignBasic, selBasicInfo, selEnumInfo, selTemporaryList} from "
 import moment from "moment/moment";
 import {TemporaryListModal} from "../../../components/campaign/TemporaryListModal";
 import {useResetAtom} from "jotai/utils";
+import {decimalFormat, removeStr} from "../../../common/StringUtils";
 
 export function CampaignOne() {
-  const [stepCampaign,setStepCampaign] = useAtom(stepCampaignAtom)
+  const [,setStepCampaign] = useAtom(stepCampaignAtom)
   const setCampaignTemporaryList = useSetAtom(campaignTemporaryListAtom)
   const [campaignBasicInfo, setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
   const resetInfo = useResetAtom(campaignBasicInfoAtom)
   const [adverInfo, setAdverInfo] = useState(null)
   const [temporaryBool, setTemporaryBool] = useState(false)
   const [goalList, setGoalList] = useState(null)
+  const [goalValueLabel, setGoalValueLabel] = useState('')
   const [pixelList, setPixelList] = useState(null)
-  const {register, handleSubmit, setValue, reset, control, formState: {errors}, clearErrors} = useFormContext()
+  const {register, handleSubmit, setValue, setError, reset, control, formState: {errors}, clearErrors} = useFormContext()
   /**
    * 캠페인 목표 설정
    */
@@ -142,6 +144,14 @@ export function CampaignOne() {
    * @param goalInfo
    */
   const handleChangeTargetDetail = (goalInfo) => {
+    if (goalInfo.value.includes('ROAS')) {
+      setGoalValueLabel('%')
+    } else if (goalInfo.value.includes('SALES') || goalInfo.value.includes('COST')) {
+      setGoalValueLabel('원')
+    } else if (goalInfo.value.includes('COUNT') && ![goalInfo.value].includes('VIEW_COUNT')) {
+      setGoalValueLabel('건')
+    } else setGoalValueLabel('회')
+
     setCampaignBasicInfo({
       ...campaignBasicInfo,
       goal: goalInfo,
@@ -161,25 +171,32 @@ export function CampaignOne() {
   }
 
   const handleChangeProductTarget = (type) => {
-    selEnumInfo(type).then(response => {
-      setGoalList(response.data)
-    })
-    setCampaignBasicInfo({
-      ...campaignBasicInfo,
-      goalType: type,
-      goal: '',
-    })
+    if (campaignBasicInfo.goalType !== type) {
+      selEnumInfo(type).then(response => {
+        setGoalList(response.data)
+      })
+      setCampaignBasicInfo({
+        ...campaignBasicInfo,
+        goalType: type,
+        goal: null,
+        goalValue: 0
+      })
+      setGoalValueLabel('')
+    }
   }
 
-  const handleGoalValue = (event) =>{
+  const handleGoalValue = (value) =>{
+    let num = removeStr(value)
+    let goalValue = num !== '' ? Number(num) : 0;
+
     setCampaignBasicInfo({
       ...campaignBasicInfo,
-      goalValue: parseInt(event.target.value)
+      goalValue: goalValue
     })
-    clearErrors('goalValue')
+    goalValue !== 0 ? clearErrors('goalValue') : setError('goalValue', {type: 'required', message: '캠페인 상세 목표를 입력해주세요.'})
   }
 
-  const onSubmit = (data) => {
+  const onSubmit = () => {
     if(campaignBasicInfo.step !== ''){
       setStepCampaign({steps: 1})
     }else{
@@ -311,17 +328,17 @@ export function CampaignOne() {
               <CampaignType>
                 <CampaignTypeItem2 active={campaignBasicInfo !== null && campaignBasicInfo.goalType === 'CAMPAIGN_CONVERSION_GOAL'}
                                    onClick={() => handleChangeProductTarget('CAMPAIGN_CONVERSION_GOAL')}>
-                  <div>전환</div>
+                  <div className={'tit'}>전환</div>
                   <div>전환 가능성과 관심도가 높은 대상에게 구매 또는 참여, 설치 등의 행동을 유도 합니다.</div>
                 </CampaignTypeItem2>
                 <CampaignTypeItem2 active={campaignBasicInfo !== null && campaignBasicInfo.goalType === 'CAMPAIGN_VISIT_GOAL'}
                                    onClick={() => handleChangeProductTarget('CAMPAIGN_VISIT_GOAL')}>
-                  <div>방문</div>
+                  <div className={'tit'}>방문</div>
                   <div>원하는 랜딩으로 사용자들의 방문을 극대화해서 마케팅 목표를 달성합니다.</div>
                 </CampaignTypeItem2>
                 <CampaignTypeItem2 active={campaignBasicInfo !== null && campaignBasicInfo.goalType === 'CAMPAIGN_VIEW_GOAL'}
                                    onClick={() => handleChangeProductTarget('CAMPAIGN_VIEW_GOAL')}>
-                  <div>노출</div>
+                  <div className={'tit'}>노출</div>
                   <div>광고주의 크리에이티브 노출을 극대화해서 홍보 및 브랜딩을 강화합니다.</div>
                 </CampaignTypeItem2>
               </CampaignType>
@@ -338,7 +355,7 @@ export function CampaignOne() {
                     rules={{
                       required: {
                         value: campaignBasicInfo !== null && campaignBasicInfo.goal === "",
-                        message: "캠페인 상세 목표를 설정해주세요"
+                        message: "캠페인 상세 목표를 선택해주세요"
                       }
                     }}
                     render={({field}) => (
@@ -359,25 +376,22 @@ export function CampaignOne() {
               <ColSpan1>
                 <div className={"relative"}>
                   <div className={'relative'}>
-                    <Controller
-                      name="goalValue"
-                      control={control}
-                      rules={{
-                        required: {
-                          value: campaignBasicInfo !== null && campaignBasicInfo.goalValue === 0,
-                          message: "캠페인 상세 목표 금액을 입력해주세요."
-                        }
-                      }}
-                      render={({ field }) =>(
-                        <Input type={'number'}
-                               min={0}
-                               placeholder={"캠페인 상세 목표 금액을 입력해주세요."}
-                               style={{width: 300, textAlign: 'right'}}
-                               value={campaignBasicInfo !== null && campaignBasicInfo.goalValue}
-                               onChange={(e)=>handleGoalValue(e)}
-                        /> )}
-                    />
-                    {errors.goalValue && <ValidationScript>{errors.goalValue?.message}</ValidationScript>}
+                    <InputLabel label={goalValueLabel}>
+                      <Input type={'text'}
+                             style={{width: 300, textAlign: 'right'}}
+                             readOnly={(campaignBasicInfo.goal === '' || campaignBasicInfo.goal === null) && true}
+                             value={campaignBasicInfo.goalValue !== 0 ? decimalFormat(campaignBasicInfo.goalValue) : ''}
+                             {...register("goalValue", {
+                               required: "캠페인 상세 목표를 입력해주세요.",
+                               pattern:{
+                                 value: /^[0-9,]+$/,
+                                 message: "숫자만 입력 가능합니다."
+                               },
+                               onChange:(e) => handleGoalValue(e.target.value)
+                             })}
+                      />
+                      {errors.goalValue && <ValidationScript>{errors.goalValue?.message}</ValidationScript>}
+                    </InputLabel>
                   </div>
                 </div>
               </ColSpan1>

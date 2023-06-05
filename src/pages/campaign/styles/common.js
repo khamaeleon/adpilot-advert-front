@@ -17,7 +17,7 @@ export const BorderSpan = styled.div`
 `
 
 export const CampaignTypeItem = styled.div`
-  padding: 30px 80px;
+  padding: 30px 80px 20px;
   background-color: #fff;
   border-radius: 8px;
   border: 2px solid ${(props) => props.active ? "#f5811f" : "#fff"};
@@ -27,6 +27,13 @@ export const CampaignTypeItem = styled.div`
   &:hover {
     border: 2px solid #f5811f;
     cursor: pointer;
+  }
+  & > p {
+    font-size: 13px;
+    font-weight: 500; 
+    text-align: center;
+    color: ${(props) => props.active ? "#f5811f" : null};
+    margin-top: 10px;
   }
 `
 
@@ -41,6 +48,11 @@ export const CampaignTypeItem2 = styled.div`
   &:hover {
     border: 2px solid #f5811f;
     cursor: pointer;
+  }
+  & .tit {
+    font-size: 13px;
+    color: ${(props) => props.active ? "#f5811f" : null};
+    margin-bottom: 3px;
   }
 `
 
