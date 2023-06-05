@@ -43,6 +43,7 @@ export function CampaignTwo() {
   const setStepCampaign = useSetAtom(stepCampaignAtom)
   const [campaignBasicInfo, setCampaignBasicInfo] = useAtom(campaignBasicInfoAtom)
   const [campaignBudgetInfo, setCampaignBudgetInfo] = useAtom(campaignBudgetInfoAtom)
+  const [budgetRateChk, setBudgetRateChk] = useState(false)
   const [budgetTimeListState, setBudgetTimeListState] = useState(null)
   const [budgetEventListState, setBudgetEventListState] = useState(null)
   const [priceEventListState, setPriceEventListState] = useState(null)
@@ -66,7 +67,8 @@ export function CampaignTwo() {
         const data = response;
         let budgetRate = {budgetRate : Math.round(response.dailyAvgBudget != 0 ? (response.pcBudget * 100 / response.dailyAvgBudget): 50)}
         Object.assign(data,budgetRate);
-
+        // 수정에서 기존 예산비율 한쪽이 0에서 올라갈 경우 true, 수정 버튼 클릭시 알럿창 호출
+        (response.pcBudget === 0 || response.mobBudget === 0) && setBudgetRateChk(true)
         setCampaignBudgetInfo(data);
         selBudgetTimeDetailInfo(userId, data.budgetTimeId).then(response => {
           setTimeBudgetDetailDataState(response);
@@ -226,7 +228,7 @@ export function CampaignTwo() {
       }).then(response => {
         if (response) {
           if (state !== null) {
-            if(!campaignBudgetInfo.infiniteBudgetYn && (campaignBudgetInfo.pcBudget === 0 || campaignBudgetInfo.mobBudget === 0)) {
+            if(campaignBudgetInfo.infiniteBudgetYn !== 'Y' && (campaignBudgetInfo.pcBudget === 0 || campaignBudgetInfo.mobBudget === 0 || budgetRateChk)) {
               confirmAlert({
                 title: '수정되었습니다',
                 message: '예산 비율 설정에 따라 광고 그룹 및 크리에이티브 정보를 확인해주세요.',
