@@ -6,7 +6,7 @@ import {
   RowSpan,
   SearchButton,
 } from "../../assets/GlobalStyles";
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import {ToastContainer} from "react-toastify";
 import {PlatformCondition} from "../../components/Platform/Condition";
@@ -35,21 +35,9 @@ function ConversionManage() {
     selConversionList(searchCondition).then(response =>{
       setConversionListDataState(response)
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleFetchDetailData = useCallback(async ({conversionId}) => {
-    return await selConversionDetailList(conversionId)
-  },[])
-
-  const groupStyle = {
-    textAlign: 'center',
-    backgroundColor: '#fafafa',
-    color: '#b2b2b2'
-  }
-  const groups = [
-    {name: 'defaultData', header: '연동 데이터', headerStyle: groupStyle},
-    {name: 'platformData', header: '플랫폼 데이터', headerStyle: groupStyle},
-  ]
   const handleSearch = (data) => {
     selConversionList(searchCondition).then(response =>{
       console.log(response)

@@ -35,10 +35,10 @@ import Table from "../../components/table";
 import {deleteCustomReportsAxios, retrieveCustomReportsDetail} from "../../services/reports/ReportsAxios";
 import {useAtom, useAtomValue} from "jotai";
 import {tokenResultAtom} from "../login/entity/Common";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {dateFormat} from "../../common/StringUtils";
 import {reportsInfoAtom} from "../../components/aside/entity";
-import {deviceType, targetingType, productType} from "../dash_board/entity/Common";
+import {deviceType, productType, targetingType} from "../dash_board/entity/Common";
 import {
   deleteCustomReportsAdminAxios,
   retrieveCustomReportsAdminDetail
@@ -289,7 +289,6 @@ export default function CustomReports() {
   const [reportSettingInfo, setReportSettingInfo] = useState({})
   const navigate = useNavigate()
   const [reportsInfo, setReportsInfo] = useAtom(reportsInfoAtom)
-  const params = useParams()
 
   useEffect(() => {
     if(reportsInfo.id === null) {
@@ -297,11 +296,11 @@ export default function CustomReports() {
     }
     if(tokenResult.role !== "NORMAL") {
       retrieveCustomReportsAdminDetail(tokenResult.id, reportsInfo.id, searchCondition).then(response => {
-        console.log(response)
         if(response){
           let newObject = response.adminSetting.groupByPeriod !== 'NONE' ? [defaultColumn[reportsInfo.groupBy]].concat(response.headers) : [].concat(response.headers)
           newObject.map((item, key) => {
             Object.assign(newObject[key], defaultColumn[item.name])
+            return null
           })
           setCampaignColumn(newObject)
           setCampaignData(response.pagingCommonResponse.rows)
@@ -310,15 +309,14 @@ export default function CustomReports() {
       })
     } else {
       retrieveCustomReportsDetail(tokenResult.id, reportsInfo.id, searchCondition).then(response => {
-        console.log(response)
         let newObject =  response.userSetting.groupByPeriod !== 'NONE' ? [defaultColumn[reportsInfo.groupBy]].concat(response.headers) : [].concat(response.headers)
         newObject.map((item, key) => {
           Object.assign(newObject[key], defaultColumn[item.name])
+          return null
         })
         setCampaignColumn(newObject)
         setCampaignData(response.pagingCommonResponse.rows)
         setReportSettingInfo(response.userSetting)
-        console.log(newObject)
       })
     }
     return () => {
@@ -333,6 +331,7 @@ export default function CustomReports() {
         deviceType:  null
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenResult, reportsInfo.id]);
 
 

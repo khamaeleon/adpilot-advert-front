@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import {Link, useLocation, useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
 import Checkbox from "../../components/common/Checkbox";
@@ -253,7 +253,7 @@ function LoginComponent() {
   const [cookies, setCookie, removeCookie] = useCookies(['rememberId'])
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate();
-  const [tokenResult, setTokenResult] = useAtom(tokenResultAtom)
+  const setTokenResult = useSetAtom(tokenResultAtom)
   const {register, setValue, handleSubmit, formState: {errors}} = useForm()
 
   /**
@@ -307,6 +307,7 @@ function LoginComponent() {
       setValue('username', cookies.rememberId)
       setIsRemember(true)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   /**
@@ -419,7 +420,6 @@ function LoginComponent() {
 
 function Login(props) {
   const setModal = useSetAtom(modalController)
-  const location = useLocation()
   const handleModalFindId = () => {
     setModal({
       isShow: true,

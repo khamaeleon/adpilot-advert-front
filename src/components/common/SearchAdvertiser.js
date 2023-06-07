@@ -1,6 +1,6 @@
 import {useAtom} from "jotai";
-import React, {useEffect, useState} from "react";
-import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
+import React, {useState} from "react";
+import {ModalBody, ModalHeader} from "../modal/Modal";
 import styled from "styled-components";
 import {selKeywordUser} from "../../services/Platform/ManageUserAxios";
 import {modalController} from "../../store";
@@ -8,15 +8,18 @@ import {toast} from "react-toastify";
 import {
   ColSpan0,
   ColSpan2,
-  ColSpan3, ColSpan4,
+  ColSpan3,
+  ColSpan4,
   RelativeDiv,
   RowSpan,
-  SaveExcelButton, SubmitButton,
+  SaveExcelButton,
+  SubmitButton,
   ValidationScript
 } from "../../assets/GlobalStyles";
 import {addHistory, adverPointeRquest} from "../../services/payment/admin/PointAllListRequestAxios"
 import {decimalFormat, removeStr} from "../../common/StringUtils";
 import {useForm} from "react-hook-form";
+
 export function SearchAdvertiser(props) {
   const {title, onSubmit, btnStyle, historyAdd} = props;
   const [, setModal] = useAtom(modalController)
@@ -83,6 +86,7 @@ function SearchModal (props) {
   }
 
   const handleOnSearchKeyword = (e) => {
+    // eslint-disable-next-line
     const regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
     if(!regExp.test(e.target.value)){
       setSearchKeyword(e.target.value)
@@ -362,25 +366,6 @@ const Button = styled.button`
   &:hover {
     background-color: #535353;
   }
-`
-
-const AccountButton = styled.button`
-  width: 175px; 
-  height: 40px;
-  border-radius: 5px;
-  border: solid 1px #ddd;
-  background-color: #f3f3f3;
-  font-size: 15px;
-  > span {
-    padding-left: 10px;
-  }
-`
-
-const SwitchUserButton = styled.button`
-  background-color: #fff;
-  padding: 13px 40px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
 `
 
 const Input = styled.input `

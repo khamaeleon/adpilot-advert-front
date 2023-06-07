@@ -5,19 +5,20 @@ import {
   ColTitle,
   CopyCode,
   RowSpan,
-  Script, SearchButton,
+  Script,
+  SearchButton,
   Site,
   SubmitButton,
 } from "../../assets/GlobalStyles";
 import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
-import {useAtom} from "jotai";
+import {useAtom, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../modal/Modal";
 import {TotalCount} from "./TableDetail";
 import SettingAdd from "../common/SettingModal";
-import {BorderBox, Off, On, PreviewSubmit, ScriptSubject, Small, SwitchBox, TitColor} from "./styles";
+import {BorderBox, Off, On, PreviewSubmit, Small, SwitchBox, TitColor} from "./styles";
 import {navigationName} from "../common/entity";
 import moment from "moment";
 import {useLocation} from "react-router-dom";
@@ -114,7 +115,7 @@ const handleCopyClipBoard = async (text) => {
 
 function ScriptComponent(props){
   const {title, cellProps} = props
-  const[modal, setModal] = useAtom(modalController)
+  const setModal = useSetAtom(modalController)
 
   const handleClick = () => {
     setModal({
@@ -180,7 +181,7 @@ export function Icon(props) {
         <ScriptComponent cellProps={props.cellProps} title={props.title}/>
       }
       {props.icon === 'url' &&
-        <a href={props.value} target={'_blank'}>
+        <a href={props.value} target={'_blank'} rel="noreferrer">
           <Site/>
         </a>
       }
@@ -196,15 +197,16 @@ function Table(props) {
   const [activeCell, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = {minHeight: 550}
-  const [loading, setLoading] = useState(false)
   const location = useLocation()
   const columnData = () => {
     columns.map(item => {
       Object.assign(item, settings.default)
+      return null
     })
     settings.setColumns.map(item => {
       Object.assign(columns[item.target], item.value)
       Object.assign(columns[item.target], item.function)
+      return null
     })
   }
 
@@ -214,9 +216,11 @@ function Table(props) {
     } else {
       columns.map(item => {
         Object.assign(item, {textAlign: 'center'})
+        return null
       })
     }
     setActiveCell([data.length])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const emptyText = <p style={{

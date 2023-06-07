@@ -95,6 +95,7 @@ const RegistryBannerItem = (props) => {
       const data = new FormData()
       pictureFiles.map((item ,index)=>{
         data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
+        return null
       })
       uploadBannerImages(data, size.bannerSize).then(response => {
         if (response) {
@@ -223,9 +224,9 @@ function CampaignFourBanner(props) {
   const onLogoDrop = (pictureFiles) => {
     if (pictureFiles.length !== 0) {
       const data = new FormData()
-      const imagesLastIndex = pictureFiles.length - 1;
       pictureFiles.map((item ,index)=>{
         data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
+        return null
       })
       let boolSaveImages = campaignCreativeInfo.logoPaths.length + pictureFiles.length
       if(boolSaveImages < 6){
@@ -439,7 +440,7 @@ function CampaignFourBanner(props) {
 }
 
 function CampaignFourNative(props) {
-  const {control, errors, setError, register, onImageError} = props
+  const {control, errors, register, onImageError} = props
   const [clickInducementType] = useAtom(clickInducementTypeAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
 
@@ -447,7 +448,7 @@ function CampaignFourNative(props) {
     const [active250, setActive250] = useState(0);
     const [active728, setActive728] = useState(0);
     const max = campaignCreativeInfo.nativeMaterials?.length -1;
-    return campaignCreativeInfo.nativeMaterials?.length != 0 && (
+    return campaignCreativeInfo.nativeMaterials?.length !== 0 && (
         <RowSpan column={true}>
           <Span4>미리보기</Span4>
           <RowSpan box={true} style={{justifyContent: 'flex-start', flexWrap: 'wrap'}}>
@@ -528,6 +529,7 @@ function CampaignFourNative(props) {
       const data = new FormData()
       pictureFiles.map((item ,index)=>{
         data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
+        return null
       })
       let boolSaveImages = campaignCreativeInfo.nativeMaterials.length + pictureFiles.length
       if(boolSaveImages < 6){
@@ -557,6 +559,7 @@ function CampaignFourNative(props) {
       const data = new FormData()
       pictureFiles.map((item ,index)=>{
         data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
+        return null
       })
       uploadLogoImages(data).then(response => {
         if (response) {
@@ -857,6 +860,7 @@ export function CampaignFour() {
         })
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   const selCreativeGroup = (selectedCreateType) => {
     setCampaignCreative({
@@ -909,7 +913,7 @@ export function CampaignFour() {
       let param = {
         ...campaignCreativeInfo,
         campaignId: campaignBasicInfo.campaignId,
-        name: campaignCreativeInfo.name != undefined ? campaignCreativeInfo.name : campaignBasicInfo.username?.toUpperCase() + '_' + campaignCreativeInfo.creativeType + '_' + moment().format('YYYY-MM-DD_HH:mm:ss')
+        name: campaignCreativeInfo.name !== undefined ? campaignCreativeInfo.name : campaignBasicInfo.username?.toUpperCase() + '_' + campaignCreativeInfo.creativeType + '_' + moment().format('YYYY-MM-DD_HH:mm:ss')
       };
       console.log(param)
       let updateFunc;

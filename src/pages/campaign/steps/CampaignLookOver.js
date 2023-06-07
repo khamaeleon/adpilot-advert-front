@@ -88,6 +88,7 @@ export function CampaignLookOver() {
         inventoryExposure(response.inventoryDetail)
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleChangeName = (e) => {

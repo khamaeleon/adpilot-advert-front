@@ -1,9 +1,6 @@
-import {atom} from "jotai/index";
+import {atom} from "jotai";
 import {Link} from "react-router-dom";
 import React from "react";
-import store from "../../../store";
-import {cellsAtom} from "../../../components/common/DragToSelect";
-
 
 
 /**

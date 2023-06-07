@@ -351,8 +351,10 @@ function AdvertisingPayments() {
 
   useEffect(() => {
     handlePaymentTableData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchPaymentParamsState])
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const dataCallback = useCallback( handlePaymentTableData , [totalInfo, searchPaymentParamsState, paymentDataState, refundReceivedData])
 
   return (

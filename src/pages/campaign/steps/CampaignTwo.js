@@ -3,11 +3,13 @@ import {
   Board,
   BoardHeader,
   BoardSearchResult,
-  CancelButton, ColSpan0,
+  CancelButton,
+  ColSpan0,
   ColSpan1,
   ColSpan4,
   ColTitle,
-  Input, InputLabel,
+  Input,
+  InputLabel,
   RelativeDiv,
   RowSpan,
   selectStyle,
@@ -17,7 +19,7 @@ import {
   SubmitContainer,
   ValidationScript
 } from "../../../assets/GlobalStyles";
-import {AdverInfo, Won} from "../styles/common";
+import {AdverInfo} from "../styles/common";
 import Select from "react-select";
 import {useAtom, useSetAtom} from "jotai";
 import {stepCampaignAtom} from "../entity";
@@ -30,7 +32,6 @@ import {selPriceEventList} from "../../../services/settings/EventPriceAxios";
 import {timeBudgetDetailDataAtom} from "../../settings/entity/BudgetTime";
 import {selBudgetInfo, updateCampaignBudget} from "../../../services/campaign/BudgetAxios";
 import {campaignBudgetInfoAtom} from "../entity/Budget";
-import {useAtomValue} from "jotai/index";
 import {useLocation, useNavigate} from "react-router-dom";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -52,10 +53,11 @@ export function CampaignTwo() {
   const {state} =useLocation()
   const navigate = useNavigate()
   const resetInfo = useResetAtom(campaignBudgetInfoAtom)
-  const {register, handleSubmit,reset,setError,setValue, control, formState: {errors}, clearErrors} = useFormContext()
+  const {register, handleSubmit,reset,setError, control, formState: {errors}, clearErrors} = useFormContext()
 
   useEffect(()=>{
       resetInfo()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   useEffect(() => {
@@ -65,7 +67,7 @@ export function CampaignTwo() {
 
       selBudgetInfo(campaignId).then(response => {
         const data = response;
-        let budgetRate = {budgetRate : Math.round(response.dailyAvgBudget != 0 ? (response.pcBudget * 100 / response.dailyAvgBudget): 50)}
+        let budgetRate = {budgetRate : Math.round(response.dailyAvgBudget !== 0 ? (response.pcBudget * 100 / response.dailyAvgBudget): 50)}
         Object.assign(data,budgetRate);
         // 수정에서 기존 예산비율 한쪽이 0에서 올라갈 경우 true, 수정 버튼 클릭시 알럿창 호출
         (response.pcBudget === 0 || response.mobBudget === 0) && setBudgetRateChk(true)
@@ -85,8 +87,7 @@ export function CampaignTwo() {
       setPriceEventListState(response[2]?.targetingPriceDtos.map(data => {return {value: data.targetingPriceId, label: data.groupName}}))
     }
     multiAxiosCall([selBudgetTimeList(userId), selBudgetEventList(userId), selPriceEventList(userId)], callbackFunc)
-
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
   /**
    * 시간대별 예산 셀렉트
@@ -148,7 +149,7 @@ export function CampaignTwo() {
     let num = removeStr(value)
     let dailyBudget = num !== '' ? parseInt(num) : 0
 
-    const prevBudgetRate = campaignBudgetInfo.budgetRate != 0 ? campaignBudgetInfo.budgetRate : 50;
+    const prevBudgetRate = campaignBudgetInfo.budgetRate !== 0 ? campaignBudgetInfo.budgetRate : 50;
     clearErrors('dailyAvgBudget')
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
@@ -171,7 +172,7 @@ export function CampaignTwo() {
         ...campaignBudgetInfo,
         pcBudget: puBudget,
         mobBudget: campaignBudgetInfo.dailyAvgBudget - puBudget,
-        budgetRate: campaignBudgetInfo.dailyAvgBudget != 0 ? Math.round(puBudget * 100 / campaignBudgetInfo.dailyAvgBudget) : 50
+        budgetRate: campaignBudgetInfo.dailyAvgBudget !== 0 ? Math.round(puBudget * 100 / campaignBudgetInfo.dailyAvgBudget) : 50
       })
     }
   }
@@ -187,7 +188,7 @@ export function CampaignTwo() {
         ...campaignBudgetInfo,
         mobBudget: mobBudget,
         pcBudget: campaignBudgetInfo.dailyAvgBudget - mobBudget,
-        budgetRate: campaignBudgetInfo.dailyAvgBudget != 0 ? Math.round(mobBudget * 100 / campaignBudgetInfo.dailyAvgBudget) : 50
+        budgetRate: campaignBudgetInfo.dailyAvgBudget !== 0 ? Math.round(mobBudget * 100 / campaignBudgetInfo.dailyAvgBudget) : 50
       })
     }
   }

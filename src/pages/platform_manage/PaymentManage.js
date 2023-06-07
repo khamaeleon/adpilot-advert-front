@@ -32,6 +32,7 @@ function PaymentManage() {
 
   useEffect(() => {
     handlePaymentTableData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchPaymentParamsState])
 
   const handlePaymentTableData = (props={}) => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
@@ -68,7 +69,7 @@ function PaymentManage() {
         console.error("실패 응답 처리",error);
       });
   }
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const dataCallback = useCallback( handlePaymentTableData , [totalInfo, searchPaymentParamsState])
 
   return (

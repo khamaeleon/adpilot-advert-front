@@ -2,10 +2,12 @@ import {
   Board,
   BoardHeader,
   BoardSearchDetail,
-  BoardTableContainer, BoardTableCustomContainer,
+  BoardTableContainer,
+  BoardTableCustomContainer,
   CancelButton,
   ColSpan0,
-  ColTitle, DefaultButton,
+  ColTitle,
+  DefaultButton,
   RowSpan,
   SubmitContainer
 } from "../../assets/GlobalStyles";
@@ -15,16 +17,12 @@ import Table from "../../components/table";
 import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
-import SettingAdd from "../../components/common/SettingModal";
-import {modalController} from "../../store";
-import {selPriceEventList} from "../../services/settings/EventPriceAxios";
-import {budgetTimeDetailColumns, budgetTimeListAtom, userIdAtom} from "./entity/BudgetTime";
+import {budgetTimeDetailColumns, budgetTimeListAtom} from "./entity/BudgetTime";
 import {selBudgetTimeList} from "../../services/settings/BudgetTimeAxios";
 
 function EventTimeList() {
   const [budgetTimeListState, setBudgetTimeListState] = useAtom(budgetTimeListAtom)
   const navigate = useNavigate()
-  const [, setModal] = useAtom(modalController)
   const {state} = useLocation()
   useEffect(() => {
     selBudgetTimeList(state.id).then(response => {
@@ -32,6 +30,7 @@ function EventTimeList() {
         setBudgetTimeListState(response)
       }
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   const resistBudgetTimes = () =>{
     navigate('/board/budgetTimeDetail',{state: {id:budgetTimeListState.userId, listCount:budgetTimeListState.totalCount }})

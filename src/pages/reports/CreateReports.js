@@ -23,7 +23,7 @@ import {toast, ToastContainer} from "react-toastify";
 import {useForm} from "react-hook-form";
 import {createCustomReportsAxios, retrieveCustomReportsList} from "../../services/reports/ReportsAxios";
 import {tokenResultAtom} from "../login/entity/Common";
-import {useAtom, useAtomValue} from "jotai";
+import {useAtomValue, useSetAtom} from "jotai";
 import {useNavigate} from "react-router-dom";
 import {reportsInfoAtom} from "../../components/aside/entity";
 import {createCustomReportsAdminAxios, retrieveCustomReportsAdminList} from "../../services/reports/ReportsAdminAxios";
@@ -66,9 +66,9 @@ export default function CreateReports() {
   const [columns, setColumns] = useState([])
   const [creativeInfo, setCreativeInfo] = useState({})
   const [reportName, setReportName] = useState('')
-  const { register, setValue, trigger, formState: { errors } } = useForm();
+  const { register, trigger, formState: { errors } } = useForm();
   const tokenResult = useAtomValue(tokenResultAtom)
-  const [reportsInfo, setReportsInfo] = useAtom(reportsInfoAtom)
+  const setReportsInfo = useSetAtom(reportsInfoAtom)
   const navigate = useNavigate()
   const [defaultType, setDefaultType] = useState(null)
 
@@ -88,6 +88,7 @@ export default function CreateReports() {
       id: null,
       groupBy: null
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   /**
    * 광고주 검색

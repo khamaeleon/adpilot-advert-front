@@ -637,7 +637,7 @@ export const lockedRows = [
         justifyContent: 'center',
         minHeight: '50px'
       }
-      if(column.name == 'adverName'){
+      if(column.name === 'adverName'){
         style.fontSize ='15px'
       }
       return style

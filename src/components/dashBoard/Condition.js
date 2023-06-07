@@ -27,7 +27,7 @@ import {
 } from "../../common/DateUtils";
 import Checkbox from "../common/Checkbox";
 import Select from "react-select";
-import {useAtom} from "jotai";
+import {useAtom, useSetAtom} from "jotai";
 import {searchConditionAtom} from "../../pages/dash_board/entity/Common";
 import {adverStatusAtom} from "../../pages/dash_board/entity/Campaign";
 import {retrieveAdvertiserStatus} from "../../services/dash_board/ManageCampaignAxios";
@@ -40,7 +40,7 @@ export function DashBoardCondition(props) {
   const [dateRange, setDateRange] = useState([new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
   const [isCheckedAll, setIsCheckedAll] = useState(true)
-  const [adverStatusData, setAdverStatusData] = useAtom(adverStatusAtom)
+  const setAdverStatusData = useSetAtom(adverStatusAtom)
   const [totalInfo, setTotalInfo] = useState(dataTotalInfo)
 
   useEffect(() => {

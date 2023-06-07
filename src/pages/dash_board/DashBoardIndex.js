@@ -58,6 +58,7 @@ function ChartComponent(props) {
             // Object.assign(data[key],{totalRoas: item.costAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
             Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0},)
             Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.validClickCount) *100 : 0})
+            return null
           })
           setChartDataInfo(data)
         }
@@ -74,15 +75,18 @@ function ChartComponent(props) {
             //Object.assign(data[key],{totalRoas: item.totalConversionAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
             Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0},)
             Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.validClickCount) *100 : 0})
+            return null
           })
           setChartDataInfo(data)
         }
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[searchCondition])
 
   useEffect(() => {
     makeChartData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chartData,chartDataInfo]);
 
   function calculateSum(property) {
@@ -237,11 +241,12 @@ function ChartComponent(props) {
               month: "2-digit",
               day: "2-digit",
             });
-            return {x: formattedDate, y: item[id] === NaN ? 0 : item[id]}
+            return {x: formattedDate, y: isNaN(item[id]) ? 0 : item[id]}
           }),
           color: fixedColors[colorIndex]
         })
       }
+      return null
     })
     setChartList(list)
   }
@@ -406,6 +411,7 @@ function DashBoardIndex() {
       })
     }
     searchCondition.keyword !== '' ? setKeyword(searchCondition.keyword) : setKeyword('')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchCondition])
 
   /**

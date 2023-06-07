@@ -1,15 +1,10 @@
-import {atom, useAtomValue} from "jotai";
+import {atom} from "jotai";
 import React from "react";
 import {Link} from "react-router-dom";
 import {PixelModal, SubCategory} from "../PixelList";
 import {Icon, SwitchComponent} from "../../../components/table";
 import {updateEventInterlock, updatePixelInterlock} from "../../../services/header/ManagePixelAxios";
 import {HorizontalRule} from "../../../components/common/Common";
-import {
-  retrieveSubLevelCategoryKeyValue,
-  retrieveTopLevelCategoryKeyValue
-} from "../../../services/Platform/CategoryAxios";
-import {topLevelCategoryListAtom} from "../../platform_manage/entity/Category";
 import {hostList} from "../../signup/entity/Common";
 
 /**

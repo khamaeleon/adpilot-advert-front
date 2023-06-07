@@ -64,7 +64,7 @@ export function CampaignThree() {
     selEnumInfo('AGENT_TYPE').then(response => {
       setAgentTypeState(response.data)
     });
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
@@ -83,17 +83,18 @@ export function CampaignThree() {
         ])
       });
     }
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
 
   useEffect(() => {
-    if(dateRange?.length != 0){
+    if(dateRange?.length !== 0){
       setCampaignGroupInfo({
         ...campaignGroupInfo,
         startDate: dateFormat(startDate, 'YYYY-MM-DD'),
         endDate: dateFormat(endDate, 'YYYY-MM-DD'),
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[dateRange])
 
   const handleAgentType = (event) => {
@@ -163,7 +164,7 @@ export function CampaignThree() {
   }
 
   const handleRangeDate = (date) => {
-    if(date?.length != undefined) setDateRange(date)
+    if(date?.length !== undefined) setDateRange(date)
     else setDateRange([date, null])
 
     clearErrors('endDate')

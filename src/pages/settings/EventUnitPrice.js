@@ -22,6 +22,7 @@ function EventUnitPrice() {
     selAdverPriceEventList(searchParams).then(response =>{
       setEventUnitPriceDataState(response)
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   const handleSearch = (event) => {
     setSearchParams({

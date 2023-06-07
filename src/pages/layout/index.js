@@ -67,6 +67,7 @@ function Layout() {
           }
         })
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
   useEffect(() => {
@@ -76,6 +77,7 @@ function Layout() {
     if(params.id !== 'campaign') {
       setStepCampaign({steps: null})
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id])
   //[d] 광고비 잔액
   useEffect(() => {
@@ -91,6 +93,7 @@ function Layout() {
       };
       pointData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenUserInfo]);
 
 

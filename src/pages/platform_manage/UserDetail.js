@@ -38,7 +38,7 @@ import {phoneNumFormat} from "../../common/StringUtils";
 import {hostList} from "../signup/entity/Common";
 import {accountInfoAtom} from "./entity/User";
 import {adminInfoAtom} from "./entity/Admin";
-import {DuplicateButton, Image, InputValidationCon} from "./styles/common";
+import {DuplicateButton, InputValidationCon} from "./styles/common";
 import {tokenResultAtom} from "../login/entity/Common";
 
 export function PwChange(props) {
@@ -191,6 +191,7 @@ function PlatformUserDetail() {
         reset(response)
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   /**

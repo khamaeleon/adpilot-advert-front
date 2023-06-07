@@ -61,6 +61,7 @@ function BudgetTimeDetail() {
       })
       setSaveType('resist')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 

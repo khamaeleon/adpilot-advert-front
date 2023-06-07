@@ -1,5 +1,5 @@
 import {useAtom} from "jotai";
-import React, { useEffect, useState} from "react";
+import React, { useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../modal/Modal";
 import Select from "react-select";
 import {Controller, useForm} from "react-hook-form";
@@ -11,7 +11,6 @@ import {
 } from "../../../assets/GlobalStyles";
 import styled from "styled-components";
 import {refundRequestData} from "../../../pages/platform_manage/entity/PaymentUser";
-import { removeStr} from "../../../common/StringUtils";
 import {tokenResultAtom} from "../../../pages/login/entity/Common";
 import {RegisterRefundInformationRequest} from "../../../services/payment/user/RegisterRefundInformationAxios";
 

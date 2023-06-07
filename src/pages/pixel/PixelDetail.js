@@ -3,7 +3,7 @@ import {
   BoardHeader,
   BoardTableContainer,
   CancelButton,
-  ColSpan0, ColSpan1,
+  ColSpan0,
   ColTitle,
   DefaultButton,
   Input,
@@ -13,7 +13,6 @@ import {
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {useAtom, useAtomValue} from "jotai";
-import {Off, On, SwitchBox} from "../../components/table/styles";
 import Table from "../../components/table";
 import {toast, ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
@@ -25,11 +24,12 @@ import {hostList} from "../signup/entity/Common";
 import {ValidationScript} from "../signup/styles";
 import {
   retrieveSubLevelCategoryKeyValue,
-  retrieveTopLevelCategoryKeyValue, retrieveUserSubLevelCategoryKeyValue, retrieveUserTopLevelCategoryKeyValue
+  retrieveTopLevelCategoryKeyValue,
+  retrieveUserSubLevelCategoryKeyValue,
+  retrieveUserTopLevelCategoryKeyValue
 } from "../../services/Platform/CategoryAxios";
 import styled from "styled-components";
 import {pixelDetailAdverInfoColumns, pixelDetailInfoColumns, pixelInfoListAtom, statusTypeAll} from "./entity/Pixel";
-import {Validation, ValidationGroup} from "../campaign/styles/common";
 import {tokenResultAtom} from "../login/entity/Common";
 
 function PixelDetail() {
@@ -39,7 +39,7 @@ function PixelDetail() {
   const tokenResult = useAtomValue(tokenResultAtom)
   const navigate = useNavigate()
   const {state} = useLocation()
-  const {register, handleSubmit, reset, control, formState: {errors}} = useForm({
+  const {register, handleSubmit, control, formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: pixelInfoListState
   })
@@ -69,7 +69,7 @@ function PixelDetail() {
         })
       })
     }
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleSelectHosting = (selectHostType) => {
@@ -120,8 +120,6 @@ function PixelDetail() {
     })
   }
   let textColor = {color: pixelInfoListState !== null ? statusTypeAll.find(type => type.value === pixelInfoListState.status).color : ''};
-  const background = pixelInfoListState?.interlockYn !== 'Y' ? {background: '#ddd', cursor: 'default'} : {background: '#f5811f', cursor: 'default'};
-  const position = pixelInfoListState?.interlockYn === 'Y' ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null;
 
   return (
     <>

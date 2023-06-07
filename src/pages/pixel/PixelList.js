@@ -17,7 +17,7 @@ import {
   ValidationScript,
 } from "../../assets/GlobalStyles";
 import React, {useCallback, useEffect, useState} from "react";
-import {atom, useAtom, useAtomValue, useSetAtom} from "jotai";
+import {useAtom, useAtomValue} from "jotai";
 import {toast, ToastContainer} from "react-toastify";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
@@ -58,17 +58,12 @@ export function SubCategory({topLevelCategory, subs}) {
         setSubCategory(subsLabel)
       })
     }
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
   return(
     <span>{subCategory}</span>
   )
 }
-
-const pixelAtom = atom({
-  pixelName: '',
-  userId: ''
-})
 
 export function PixelModal(props) {
   const {data, title, setPixelList} = props
@@ -109,9 +104,8 @@ function PixelAdd(props){
   })
   const [topLevelCategoryList,setTopLevelCategoryList] = useState([])
   const [rowLevelCategoryList,setRowLevelCategoryList] = useState([])
-  const setPixel = useSetAtom(pixelAtom)
   const navigate = useNavigate()
-  const {register, handleSubmit, reset, control,formState: {errors}} = useForm({
+  const {register, handleSubmit, control,formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: pixelInfoListState
   })
@@ -192,6 +186,7 @@ function PixelAdd(props){
           let clonePixelList = []
           response.map(data => {
             clonePixelList = [...clonePixelList, {value: data.pixelId, label: data.pixelName}]
+            return null
           })
           setPixelList(clonePixelList)
         }): navigate(0)
@@ -385,6 +380,7 @@ function PixelList() {
         setTopLevelCategoryList(response)
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   const handleFetchDetailData = useCallback(async (props) => {
@@ -393,6 +389,7 @@ function PixelList() {
       console.log(detailPixelData)
       detailPixelData.map((item,key) => {
         detailPixelData[key]['mainCategoryLabel'] = topLevelCategoryList.find(category => category.value === item.mainCategoryCode).label
+        return null
       })
       return detailPixelData
     } else {
@@ -400,9 +397,11 @@ function PixelList() {
       console.log(detailPixelData)
       detailPixelData.map((item,key) => {
         detailPixelData[key]['mainCategoryLabel'] = topLevelCategoryList.find(category => category.value === item.mainCategoryCode).label
+        return null
       })
       return detailPixelData
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[topLevelCategoryList])
 
 

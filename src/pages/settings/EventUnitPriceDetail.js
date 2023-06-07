@@ -2,7 +2,8 @@ import {
   Board,
   BoardHeader,
   BoardSearchDetail,
-  BoardTableContainer, BoardTableCustomContainer,
+  BoardTableContainer,
+  BoardTableCustomContainer,
   CancelButton,
   ColSpan0,
   ColTitle,
@@ -16,20 +17,19 @@ import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
 import SettingAdd from "../../components/common/SettingModal";
-import {modalController} from "../../store";
 import {eventUnitPriceDetailColumns, eventUnitPriceDetailDataAtom} from "./entity/EventPrice";
 import {selPriceEventList} from "../../services/settings/EventPriceAxios";
 
 function EventUnitPriceDetail() {
   const [eventUnitPriceDetailDataState, setEventUnitPriceDetailDataState] = useAtom(eventUnitPriceDetailDataAtom)
   const navigate = useNavigate()
-  const [, setModal] = useAtom(modalController)
   const {state} = useLocation()
 
   useEffect(() => {
     selPriceEventList(state.id).then(response => {
       setEventUnitPriceDetailDataState(response)
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

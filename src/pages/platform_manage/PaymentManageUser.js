@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {
   Board,
   BoardContainer,
@@ -35,12 +35,7 @@ import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 import {tokenResultAtom} from "../login/entity/Common";
 import {accountInfoAtom} from "./entity/User";
 import {TotalCount} from "../../components/table/TableDetail";
-import {
-  PaymentDetailsColumns,
-  PaymentDetailsDataAtom,
-  PointDetailsColumns,
-  PointDetailsDataAtom, refundRequestData
-} from "./entity/PaymentUser";
+import {PaymentDetailsColumns, PointDetailsColumns, refundRequestData} from "./entity/PaymentUser";
 import {requestAmountPoint, retrieveUserPoint} from "../layout/entity/UserPoint";
 
 export function RefundRequestTable(props) {
@@ -208,9 +203,12 @@ function PaymentManageUser(props) {
       }
     };
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dateRange]);
   //[d] 차트 데이터에서 역으로 변동값 감지해서 다시 던저주기 paging 처리 관련...
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const dataSource = useCallback(fetchPaymentDetails, [totalInfo]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const dataSourcePoint = useCallback(fetchPointDetails, [totalPointInfo]);
   return (
     <main>

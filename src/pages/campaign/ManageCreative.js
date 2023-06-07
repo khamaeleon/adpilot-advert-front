@@ -21,7 +21,6 @@ import "slick-carousel/slick/slick-theme.css";
 
 export function ManageCreative() {
   const [open, setOpen] = useState({id: 0})
-  const [slideMove, setSlideMove] = useState(0)
   const tokenResult = useAtomValue(tokenResultAtom)
   const [creativeData, setCreativeData] = useState([])
   const [creativeDetailData, setCreativeDetailData] =  useState([])
@@ -34,24 +33,8 @@ export function ManageCreative() {
         setCreativeData(response.creativeGroupDtos)
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-
-  const handleSlideLeft = (length) => {
-    if(slideMove < (length/5) -1 ){
-      setSlideMove(
-        slideMove+1
-      )
-    }
-  }
-
-  const handleSlideRight = () => {
-    if(slideMove > 0){
-      setSlideMove(
-        slideMove-1
-      )
-    }
-  }
 
   const handleDetailData = (userId) => {
     retrieveCreativeByUserId(userId).then(response => {

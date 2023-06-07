@@ -51,6 +51,7 @@ export function CampaignOne() {
     })
       resetInfo();
       reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   /**
    * 광고주 설정
@@ -77,6 +78,7 @@ export function CampaignOne() {
       let clonePixelList = []
       response.map(data => {
         clonePixelList = [...clonePixelList, {value: data.pixelId, label: data.pixelName}]
+        return null
       })
       setPixelList(clonePixelList)
     })
@@ -231,7 +233,7 @@ export function CampaignOne() {
                     type={'text'}
                     style={{width: '100%'}}
                     readOnly={true}
-                    value={campaignBasicInfo !== null && campaignBasicInfo.username || ''}
+                    value={(campaignBasicInfo !== null && campaignBasicInfo.username) || ''}
                     placeholder={'광고주를 검색해주세요'}
                     {...register("username", {
                       required: "광고주를 검색해주세요",
@@ -272,7 +274,7 @@ export function CampaignOne() {
                       render={({field}) => (
                         <Select options={pixelList !== null ? pixelList :[]}
                                 placeholder={campaignBasicInfo.pixelId !== '' && (pixelList === null || pixelList?.length === 0) ? '최적화 픽셀이 없습니다.' : '최적화 픽셀 선택'}
-                                isDisabled={pixelList === null || pixelList?.length === 0 && true}
+                                isDisabled={pixelList === null || pixelList?.length === 0}
                                 {...field}
                                 value={campaignBasicInfo !== null && pixelList !== null  ? pixelList.find(item =>item.value === campaignBasicInfo.pixelId) : ''}
                                 onChange={handleChangePixel}
@@ -305,6 +307,7 @@ export function CampaignOne() {
                   active={campaignBasicInfo !== null ? campaignBasicInfo.productType === 'BANNER' : false}
                   onClick={() => handleChangeProductType('BANNER')}>
                   <img
+                    alt={'이미지'}
                     src={`../assets/images/campaign/img_banner_${campaignBasicInfo !== null && campaignBasicInfo.productType === 'BANNER' ? "on" : "off"}.png`}/>
                   <p>배너</p>
                 </CampaignTypeItem>
@@ -312,6 +315,7 @@ export function CampaignOne() {
                   active={campaignBasicInfo !== null ? campaignBasicInfo.productType === 'POP_UNDER' : false}
                   onClick={() => handleChangeProductType('POP_UNDER')}>
                   <img
+                    alt={'이미지'}
                     src={`../assets/images/campaign/img_popunder_${campaignBasicInfo !== null && campaignBasicInfo.productType === 'POP_UNDER' ? "on" : "off"}.png`}/>
                   <p>팝언더</p>
                 </CampaignTypeItem>
@@ -364,7 +368,7 @@ export function CampaignOne() {
                         styles={selectStyle}
                         placeholder={'목표 선택'}
                         {...field}
-                        value={(campaignBasicInfo.goal != undefined && goalList != null) ? goalList.find(d=>d.value === campaignBasicInfo.goal) : campaignBasicInfo.goal}
+                        value={(campaignBasicInfo.goal !== undefined && goalList != null) ? goalList.find(d=>d.value === campaignBasicInfo.goal) : campaignBasicInfo.goal}
                         onChange={handleChangeTargetDetail}
                       />
                     )}
