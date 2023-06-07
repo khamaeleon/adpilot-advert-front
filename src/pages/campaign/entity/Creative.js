@@ -12,7 +12,10 @@ export const campaignCreativeAtom = atomWithReset(
     pcReferralCode: '',
     title1: '',
     title2: '',
+    title3: '',
     titleLong: '',
+    serviceName: '',
+    description: '',
     logoPaths: [],
     nativeMaterials: [],
   }

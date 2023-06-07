@@ -4,7 +4,7 @@ import DragToSelect from "../common/DragToSelect";
 import {ModalBody, ModalHeader} from "./Modal";
 import React from "react";
 import InsertToSelect from "../common/InsertToSelect";
-import {ColTitle, RowSpan, Site} from "../../assets/GlobalStyles";
+import {ColTitle, RowSpan, Script} from "../../assets/GlobalStyles";
 import styled from "styled-components";
 
 function TimeTableComponent (props) {
@@ -47,7 +47,7 @@ export default function TimeTable(props){
   return (
     <ButtonDiv>
       <div onClick={handleOpenTimeTable}>
-        <Site/>
+        <Script/>
       </div>
     </ButtonDiv>
   )

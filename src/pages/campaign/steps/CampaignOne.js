@@ -126,6 +126,8 @@ export function CampaignOne() {
         name:response.name,
         step:response.step
       })
+      goalInfoLabel(response.goal)
+      setValue('goalValue',response.goalValue)
     })
     setTemporaryBool(false)
     clearErrors();
@@ -145,18 +147,21 @@ export function CampaignOne() {
    * 캠페인 선택
    * @param goalInfo
    */
-  const handleChangeTargetDetail = (goalInfo) => {
-    if (goalInfo.value.includes('ROAS')) {
+  const goalInfoLabel = (goalInfoValue) => {
+    if (goalInfoValue.includes('ROAS')) {
       setGoalValueLabel('%')
-    } else if (goalInfo.value.includes('SALES') || goalInfo.value.includes('COST')) {
+    } else if (goalInfoValue.includes('SALES') || goalInfoValue.includes('COST')) {
       setGoalValueLabel('원')
-    } else if (goalInfo.value.includes('COUNT') && ![goalInfo.value].includes('VIEW_COUNT')) {
+    } else if (goalInfoValue.includes('COUNT') && ![goalInfoValue].includes('VIEW_COUNT')) {
       setGoalValueLabel('건')
     } else setGoalValueLabel('회')
+  }
 
+  const handleChangeTargetDetail = (goalInfo) => {
+    goalInfoLabel(goalInfo.value)
     setCampaignBasicInfo({
       ...campaignBasicInfo,
-      goal: goalInfo,
+      goal: goalInfo.value,
       goalValue: 0
     })
     clearErrors('goal')
@@ -202,11 +207,12 @@ export function CampaignOne() {
     if(campaignBasicInfo.step !== ''){
       setStepCampaign({steps: 1})
     }else{
+
       resistCampaignBasic({
         ...campaignBasicInfo,
-        goal:campaignBasicInfo.goal.value,
+        goal:campaignBasicInfo.goal,
         pixelId:campaignBasicInfo.pixelId,
-        name:campaignBasicInfo.productType + '_' + campaignBasicInfo.goal.value + '_' + moment().format('YYYY-MM-DD hh:mm:ss').replace(' ' ,'_')
+        name:campaignBasicInfo.productType + '_' + campaignBasicInfo.goal + '_' + moment().format('YYYY-MM-DD hh:mm:ss').replace(' ' ,'_')
       }).then(response =>{
         if(response){
           setCampaignBasicInfo({
@@ -350,7 +356,7 @@ export function CampaignOne() {
           </RowSpan>
           <RowSpan>
             <ColSpan4>
-              <ColTitle><Span4>캠페인 상세 목표 선택</Span4></ColTitle>
+              <ColTitle style={{padding: 0}}><Span4>캠페인 상세 목표 선택</Span4></ColTitle>
               <ColSpan1>
                 <div className={'relative'}>
                   <Controller

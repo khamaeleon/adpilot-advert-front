@@ -119,9 +119,9 @@ const RegistryBannerItem = (props) => {
     }
   }
   return (
-    <RowSpan style={{width: '50%'}}>
+    <RowSpan style={{width: '49%'}}>
       <ColSpan4>
-        <Span4 style={{textAlign: 'right', whiteSpace: 'nowrap'}}>{size.bannerSize}</Span4>
+        <Span4 style={{whiteSpace: 'nowrap'}}>{size.bannerSize}</Span4>
         <RowSpan box={true} style={{justifyContent: 'flex-start'}}>
           {campaignCreativeInfo.materials.find(value => value.bannerSize === size.bannerSize).images.map((item, key) => {
             return (
@@ -156,15 +156,11 @@ const RegistryBannerItem = (props) => {
 }
 
 function CampaignFourBanner(props) {
-  const {control, isFold, errors, setError, register, onImageError} = props
+  const {control, errors, setError, register, onImageError} = props
   const [clickInducementType] = useAtom(clickInducementTypeAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
   const [bannerSize] = useAtom(bannerSizeAtom)
   const [fold, setFold] = useState(true)
-
-  useEffect(()=>{
-    setFold(isFold)
-  },[isFold])
 
   const handleDeleteLogoImage = (imagePath) => {
     confirmAlert({
@@ -208,7 +204,6 @@ function CampaignFourBanner(props) {
   }
 
   const handleChangeInputs = (e) => {
-    console.log(e.target.name)
     setCampaignCreative({
       ...campaignCreativeInfo,
       [e.target.name]: e.target.value
@@ -239,7 +234,7 @@ function CampaignFourBanner(props) {
           }
         })
       }else{
-        alert("5개 이상 등록 못함")
+        alert("최대 5개까지 등록 가능합니다.")
       }
     }
   }
@@ -250,7 +245,7 @@ function CampaignFourBanner(props) {
         <Span4>광고 소재</Span4>
         <div style={{marginTop: 15}}>
           <SelectCategory style={{padding: 20, borderRadius: '5px 5px 0 0'}}>
-            {bannerSize !== null && bannerSize.map((item, key) => {
+            {bannerSize !== null && bannerSize?.map((item, key) => {
               return (
                 <CategoryItem key={key} onClick={(e) => handleAddCreative(e)} id={item.value}
                               active={campaignCreativeInfo.materials.find(value => value.bannerSize === item.value)}>{item.label}</CategoryItem>
@@ -269,7 +264,7 @@ function CampaignFourBanner(props) {
               render={({field}) => (
                 <ResistBanner {...field}>
                   <p style={{color: '#ccc'}}>사이즈별 소재는 최소 1개 이상, 최대 5개까지 등록 가능합니다.</p>
-                  <div style={{display: 'flex', flexWrap: 'wrap'}}>
+                  <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between'}}>
                     {campaignCreativeInfo.materials !== undefined && campaignCreativeInfo.materials.map((item, key) => {
                       return (
                         <RegistryBannerItem key={key} size={item} onImageError={onImageError}/>
@@ -427,13 +422,14 @@ function CampaignFourBanner(props) {
             maxLength={25}
             name={'name'}
             value={campaignCreativeInfo?.name || ""}
+            style={{width: '100%'}}
             {...register('name', {
               required: '크리에이티브명을 입력해주세요',
               onChange: (e)=>handleChangeInputs(e)
             })}
           />
-          {errors?.name && <ValidationScript style={{position:'unset', paddingLeft: 10}}>{errors.name.message}</ValidationScript>}
         </Row>
+        <Row><Span4></Span4>{errors?.name && <ValidationScript style={{position:'unset'}}>{errors.name.message}</ValidationScript>}</Row>
       </RowSpan>
     </>
   )
@@ -769,13 +765,14 @@ function CampaignFourNative(props) {
             maxLength={25}
             name={'name'}
             value={campaignCreativeInfo?.name || ""}
+            style={{width: '100%'}}
             {...register('name', {
               required: '크리에이티브명을 입력해주세요',
               onChange: (e)=>handleChangeInputs(e)
             })}
           />
-          {errors?.name && <ValidationScript style={{position:'unset', paddingLeft: 10}}>{errors.name.message}</ValidationScript>}
         </Row>
+        <Row><Span4></Span4>{errors?.name && <ValidationScript style={{position:'unset'}}>{errors.name.message}</ValidationScript>}</Row>
       </RowSpan>
     </>
   )
@@ -1041,7 +1038,7 @@ export function CampaignFour() {
                 <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
               </ValidationGroup>
               {campaignCreativeInfo.creativeType === 'BANNER' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
-                <CampaignFourBanner control={control} errors={errors} setError={setError} register={register} onImageError={onImageError} isFold={campaignCreativeInfo.title1 === ''}/>
+                <CampaignFourBanner control={control} errors={errors} setError={setError} register={register} onImageError={onImageError} />
               }
               {campaignCreativeInfo.creativeType === 'NATIVE' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
                 <CampaignFourNative control={control} errors={errors} setError={setError} register={register} onImageError={onImageError}/>

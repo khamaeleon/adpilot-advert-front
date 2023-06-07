@@ -135,13 +135,12 @@ export function CampaignTwo() {
     })
   }
 
-
   const handleCheckInfiniteBudget = (e) => {
     let value = e.target.checked ? 'Y' : 'N'
     clearErrors('dailyAvgBudget')
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
-      infiniteBudgetYn: value
+      infiniteBudgetYn: value,
     })
   }
 
@@ -259,7 +258,6 @@ export function CampaignTwo() {
                 step: "STEP2_BUDGET"
               })
             }
-
             setStepCampaign({steps: 2})
           }
         }
@@ -341,9 +339,9 @@ export function CampaignTwo() {
                       background: `linear-gradient(to right, #f5811f 0%, #f5811f ${campaignBudgetInfo.budgetRate !== undefined ? campaignBudgetInfo.budgetRate: 50}%, #ddd ${campaignBudgetInfo.budgetRate !== undefined ? campaignBudgetInfo.budgetRate: 50}%, #ddd 100%)`
                     }}
                   />
-                  <Span1>
-                    {campaignBudgetInfo.budgetRate +':'+ (100-campaignBudgetInfo.budgetRate)}
-                  </Span1>
+                  {/*<Span1>*/}
+                  {/*  {campaignBudgetInfo.budgetRate +':'+ (100-campaignBudgetInfo.budgetRate)}*/}
+                  {/*</Span1>*/}
                 </ColSpan1>
                 <ColSpan1>
                   <ColTitle><Span1>MOBILE</Span1></ColTitle>
@@ -382,7 +380,7 @@ export function CampaignTwo() {
                       <Select options={budgetTimeListState !== null ? budgetTimeListState : []}
                               placeholder={'시간대 예산 선택'}
                               {...field}
-                              value={budgetTimeListState !==null && budgetTimeListState.find(value => value.value === campaignBudgetInfo?.budgetTimeId)}
+                              value={budgetTimeListState !==null && (campaignBudgetInfo?.budgetTimeId !== '' ? budgetTimeListState.find(value => value.value === campaignBudgetInfo?.budgetTimeId) : handleChangeBudgetTimes(budgetTimeListState[0]))}
                               onChange={handleChangeBudgetTimes}
                               styles={selectStyle}
                       />
@@ -417,7 +415,7 @@ export function CampaignTwo() {
                       <Select options={budgetEventListState !== null ? budgetEventListState : []}
                               placeholder={'타겟팅 예산 선택'}
                               {...field}
-                              value={budgetEventListState !==null && budgetEventListState.find(value => value.value === campaignBudgetInfo?.targetingBudgetId)}
+                              value={budgetEventListState !==null && (campaignBudgetInfo?.targetingBudgetId !== undefined ? budgetEventListState.find(value => value.value === campaignBudgetInfo?.targetingBudgetId) : handleChangeBudgetEvents(budgetEventListState[0]))}
                               onChange={handleChangeBudgetEvents}
                               styles={selectStyle}
                       />
@@ -492,7 +490,7 @@ export function CampaignTwo() {
                       <Select options={priceEventListState !== null ? priceEventListState : []}
                               placeholder={'타겟팅 단가 선택'}
                               {...field}
-                              value={priceEventListState !==null && priceEventListState.find(value => value.value === campaignBudgetInfo?.targetingPriceId)}
+                              value={priceEventListState !==null && (campaignBudgetInfo?.targetingPriceId !== undefined ? priceEventListState.find(value => value.value === campaignBudgetInfo?.targetingPriceId) : handleChangePriceEvent(priceEventListState[0]))}
                               onChange={handleChangePriceEvent}
                               styles={selectStyle}
                       />

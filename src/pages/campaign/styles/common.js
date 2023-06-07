@@ -79,6 +79,7 @@ export const CategoryItem = styled.div`
   min-width: 100px;
   text-align: center;
   border: ${props => props.active ? "1px solid #f5811f" : "1px solid #e5e5e5"};
+  color: ${props => props.active ? "#f5811f" : null};
   border-radius: 3px;
   background-color: #fff;
   font-size: 12px;

@@ -48,7 +48,7 @@ export function CampaignThree() {
   const [noViewTypeState] = useState(noViewType)
   const [dateRange, setDateRange] = useState([]);
   const [startDate, endDate] = dateRange
-  const {register, handleSubmit, reset, setValue, control, formState: {errors}, clearErrors} = useFormContext()
+  const {register, handleSubmit, reset, setValue, setError, control, formState: {errors}, clearErrors} = useFormContext()
   const {state} = useLocation()
   const navigate = useNavigate()
   const resetInfo = useResetAtom(campaignGroupInfoAtom)
@@ -297,28 +297,32 @@ export function CampaignThree() {
       endDate: exposureDayChecked ? unlimitedDate('YYYY-MM-DD') : endDate,
       campaignId: state !== null ? state.campaignId : campaignBasicInfo.campaignId
     };
-    updateCampaignConfigInventory(param).then(response => {
-      if (response) {
-        if (state !== null) {
-          toast.success("수정되었습니다.",{autoClose:100, delay:0})
-          toast.onChange(payload => {
-            if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
-              navigate('/board/dashboard')
-              resetInfo()
-            }
-          })
-        } else {
-          if(!['STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED'].includes(campaignBasicInfo.step)){
-            setCampaignBasicInfo({
-              ...campaignBasicInfo,
-              step: "STEP3_INVENTORY"
+    if (param.endDate === undefined) {
+      setError('endDate', {type: 'required', message: '개제 기간을 선택 해주세요.'})
+    } else {
+      updateCampaignConfigInventory(param).then(response => {
+        if (response) {
+          if (state !== null) {
+            toast.success("수정되었습니다.",{autoClose:100, delay:0})
+            toast.onChange(payload => {
+              if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
+                navigate('/board/dashboard')
+                resetInfo()
+              }
             })
-          }
+          } else {
+            if(!['STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED'].includes(campaignBasicInfo.step)){
+              setCampaignBasicInfo({
+                ...campaignBasicInfo,
+                step: "STEP3_INVENTORY"
+              })
+            }
 
-          setStepCampaign({steps: 3})
+            setStepCampaign({steps: 3})
+          }
         }
-      }
-    })
+      })
+    }
   }
 
   const onError = (error) => console.log(error)

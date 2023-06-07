@@ -517,7 +517,6 @@ export const GlobalStyles = createGlobalStyle`
       opacity: 1;
     }
   }
-  
   .react-confirm-alert {
     &-body {
       font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -531,6 +530,9 @@ export const GlobalStyles = createGlobalStyle`
         font-size: 20px;
         margin-bottom: 10px;
       }
+      &-element {
+        overflow: auto !important;
+      }
     }
     &-overlay {
       background-color: rgba(0, 0, 0, .7)
@@ -539,6 +541,7 @@ export const GlobalStyles = createGlobalStyle`
       justify-content: center;
       margin-top: 30px
     }
+    
   }
 `
 
