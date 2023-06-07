@@ -126,7 +126,7 @@ function ScriptComponent(props){
             <ModalHeader title={'스크립트 보기'}/>
             <ModalBody>
               <RowSpan>
-                <ColTitle style={{paddingTop: 10}}>이벤트명</ColTitle>
+                <ColTitle style={{paddingTop: 10}}>픽셀명</ColTitle>
                 <BorderBox>{cellProps.data.eventName}</BorderBox>
               </RowSpan>
               <RowSpan>

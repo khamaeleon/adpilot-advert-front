@@ -159,19 +159,19 @@ function Layout() {
               </UserName>
               {/*[d] 20230411 사용자 화면에서 픽셀 관리 노출 보류*/}
               {/*<MyPage onClick={pixel}>픽셀 관리</MyPage>*/}
-              <MyPage onClick={pixel}>픽셀 관리</MyPage>
-              <MyPage onClick={payment}>결제</MyPage>
+              <MyPage onClick={pixel} active={params.id==='pixel'}>픽셀 관리</MyPage>
+              <MyPage onClick={payment} active={params.id==='paymentManageUser'}>결제</MyPage>
             </>
             :
             <>
-              <MyPage onClick={pixel}>픽셀 관리</MyPage>
+              <MyPage onClick={pixel} active={params.id==='pixel'}>픽셀 관리</MyPage>
               <UserName>
                 <UserIcon/>
                 <span>{tokenUserInfo.name}</span>
               </UserName>
             </>
           }
-          <MyPage onClick={myPage}>
+          <MyPage onClick={myPage} active={params.id==='myPageAdmin' || params.id==='myPageUser'}>
             <span>마이페이지</span>
           </MyPage>
           <Logout>
@@ -259,6 +259,7 @@ const MyPage = styled.div`
   border-left: 1px solid #eee;
   padding-left: 28px;
   margin-right: 28px;
+  color: ${(props) => props.active ? '#f5811f' : null}
 `
 
 const Logout = styled.div`

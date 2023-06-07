@@ -131,12 +131,12 @@ function BudgetTimeDetail() {
                 {
                     <Input style={{height: 38}}
                            type={'text'}
-                           readOnly={saveType !== 'resist'}
+                           // readOnly={saveType !== 'resist'}
                            placeholder={'그룹명을 입력해주세요'}
                            {...register("groupName", {
                              required: "그룹명을 입력해주세요",
                              onChange: (e) => handleGroupName(e),
-                             disabled: saveType !== 'resist'
+                             // disabled: saveType !== 'resist'
                            })}
                            value={timeBudgetDetailDataState?.groupName || ""}
                     />

@@ -369,9 +369,17 @@ export default function Basic(props) {
                 placeholder={'아이디를 입력해주세요. (4-20자, 영문, 일부 특수기호 -, _)'}
                 {...register("username", {
                   required: "아이디를 입력해주세요",
+                  minLength: {
+                    value: 4,
+                    message: "4자~20자 사이 영문, 숫자, 일부 특수기호 (-,_)"
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "20자 내로 입력해주세요"
+                  },
                   pattern: {
                     value: /^[a-z]+[a-z0-9-_]{3,19}$/g,
-                    message: '아이디를 확인해주세요.'
+                    message: '아이디를 확인해주세요. (4-20자, 영문, 일부 특수기호 -, _)'
                   },
                   onChange: (e) => handleMemberId(e)
                 })
@@ -390,9 +398,17 @@ export default function Basic(props) {
                 placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
                 {...register("password", {
                   required: "비밀번호를 입력해주세요",
+                  minLength: {
+                    value: 8,
+                    message: "숫자, 영문, 특수 기호를 포함 (8자 ~ 16자)"
+                  },
+                  maxLength: {
+                    value: 16,
+                    message: "16자 이내로 입력해주세요"
+                  },
                   pattern: {
                     value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,16}$/,
-                    message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
+                    message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (8자 ~ 16자)"
                   },
                   onChange: (e) => handlePassword(e)
                 })}
@@ -444,7 +460,6 @@ export default function Basic(props) {
                   onChange: (e) => handleAdverName(e)
                 })}
                 value={accountInfo.adverName || ""}
-
               />
               {errors.adverName && <ValidationScript>{errors.adverName?.message}</ValidationScript>}
             </div>

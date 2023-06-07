@@ -315,8 +315,7 @@ export default function CreateReports() {
               {defaultType === 'period' &&
                 <>
                   <Row>
-                    <Span4>기간별 항목 (택1)</Span4>
-                    <small>*기간별 항목을 다시 선택할 경우 선택 항목이 초기화 됩니다.</small>
+                    <Span4>기간별 항목</Span4>
                   </Row>
                   <Row>
                     <DefaultItemContainer>
@@ -337,7 +336,7 @@ export default function CreateReports() {
               {defaultType === 'scopes' &&
                 <>
                   <Row>
-                    <ColTitle>광고 정보 항목 (다중선택)</ColTitle>
+                    <ColTitle>광고 정보 항목</ColTitle>
                   </Row>
                   <Row>
                     <DefaultItemContainer>

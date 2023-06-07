@@ -205,7 +205,7 @@ export const pixelDetailInfoColumns = [
   },
   {
     name: 'eventName',
-    header: '이벤트명',
+    header: '픽셀명',
     defaultFlex: 1,
     showColumnMenuTool: false,
   },
@@ -259,7 +259,7 @@ export const pixelDetailAdverInfoColumns = [
   },
   {
     name: 'eventName',
-    header: '이벤트명',
+    header: '픽셀명',
     defaultFlex: 1,
     showColumnMenuTool: false,
   },
