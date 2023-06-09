@@ -6,6 +6,7 @@ import Navigator from "../../components/common/Navigator";
 import {ManageCreative} from "./ManageCreative";
 import {CampaignFour} from "./steps/CampaignFour";
 import {FormProvider, useForm} from "react-hook-form";
+import {BannerCreative} from "./BannerCreative";
 
 export default function Campaign(){
   const params = useParams()
@@ -21,6 +22,7 @@ export default function Campaign(){
         {params.id === 'campaign' && <CreateCampaign />}
         {params.id === 'manageCreative' && <ManageCreative />}
         {params.id === 'manageCreativeDetail' && <FormProvider {...methods}><CampaignFour /></FormProvider>}
+        {params.id === 'bannerCreative' && <BannerCreative/>}
       </BoardContainer>
     </main>
   )

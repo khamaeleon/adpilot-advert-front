@@ -1,5 +1,5 @@
 import React from "react";
-import {atom} from "jotai/index";
+import {atom} from "jotai";
 
 /**
  * 광고비 잔액

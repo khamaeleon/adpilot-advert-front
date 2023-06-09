@@ -27,7 +27,7 @@ export const menuList = [
   {
     name: "campaign",
     header: "광고관리",
-    include: ["campaign", "manageCreative", 'manageCreativeDetail'],
+    include: ["campaign", "manageCreative", 'manageCreativeDetail', 'bannerCreative'],
     child:[
       {
         name: "campaign",
@@ -38,6 +38,10 @@ export const menuList = [
         header: "크리에이티브 관리",
         detail: "manageCreativeDetail"
       },
+      {
+        name: 'bannerCreative',
+        header: '배너 크리에이티브'
+      }
     ]
   },
   {

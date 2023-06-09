@@ -4,6 +4,7 @@ export const navigationName = {
   "/board/myPageAdmin": "홈/마이페이지",
   "/board/campaign": "홈/광고 관리/캠페인생성",
   "/board/createCreative": "홈/광고 관리/크리에이티브 생성",
+  "/board/bannerCreative": "홈/광고 관리/배너 크리에이터",
   "/board/manageCreative": "홈/광고 관리/크리에이티브 관리",
   "/board/manageCreativeDetail": "홈/광고 관리/크리에이티브 관리 상세",
   "/board/reports": "홈/보고서/보고서 생성",
