@@ -43,6 +43,7 @@ export function CampaignLookOver() {
   const [agentTypeState, setAgentTypeState] = useState([])
   const resetBasicInfo = useResetAtom(campaignBasicInfoAtom)
 
+
   const inventoryExposure = (inventoryDetail) => {
     setUserTargetConfig(
       [
@@ -103,6 +104,15 @@ export function CampaignLookOver() {
       setStepCampaign({steps: 0})
     }
   }
+  const goalInfoLabel = (goalInfoValue) => {
+    if (goalInfoValue.includes('ROAS')) {
+      return '%'
+    } else if (goalInfoValue.includes('매출') || goalInfoValue.includes('단가') || goalInfoValue.includes('금액')) {
+      return '원'
+    } else if (goalInfoValue.includes('카운트') && ![goalInfoValue].includes('노출 카운트')) {
+      return '건'
+    } else return '회'
+  }
 
   const onSubmit = () => {
     campaignName !== '' ? UpdateCampaignDefaultInfo(state.campaignId, campaignName).then(response => {
@@ -155,7 +165,7 @@ export function CampaignLookOver() {
               <Row>
                 <ColSpan2>
                   <Span4>캠페인 상세 목표</Span4>
-                  <ValueText>{campaignData.goal} - {campaignData.goalValue}</ValueText>
+                  <ValueText>{campaignData.goal} - {decimalFormat(campaignData.goalValue)} {goalInfoLabel(campaignData.goal)}</ValueText>
                 </ColSpan2>
                 <HorizontalRule/>
                 <ColSpan2>

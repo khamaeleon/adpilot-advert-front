@@ -884,11 +884,12 @@ export function CampaignThree() {
           <RowSpan>
             <ColSpan4>
               <Span4>광고 그룹명</Span4>
-              <RelativeDiv>
+              <RelativeDiv style={{paddingRight: 0}}>
                 <Input
                   type={'text'}
                   placeholder={'광고 그룹명'}
                   value={campaignGroupInfo.name}
+                  style={{marginRight: 0}}
                   {...register('name', {
                     required: '광고 그룹명을 입력해주세요',
                     onChange: (e)=>onChangeGroupName(e)

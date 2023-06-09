@@ -265,7 +265,6 @@ export function CampaignOne() {
             <ColSpan4>
               <Span4>픽셀 설정</Span4>
               <BorderSpan className={'relative'}>
-                <Span4>최적화 픽셀 선택</Span4>
                 <ColSpan2>
                   <div className={'relative'}>
                     <Controller

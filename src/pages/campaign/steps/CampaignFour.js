@@ -465,7 +465,7 @@ function CampaignFourNative(props) {
               <PrevFrame width={728} height={90}>
                 <PrevImage728 style={{backgroundImage: `url(${campaignCreativeInfo.nativeMaterials[active728]?.imagePath})`}}/>
                 <PrevTitle728>{campaignCreativeInfo.title1}</PrevTitle728>
-                <PrevButton>{clickInducementType.find(d => d.value === campaignCreativeInfo.clickInducementType)?.label}</PrevButton>
+                {campaignCreativeInfo.clickInducementType !== undefined && <PrevButton>{clickInducementType.find(d => d.value === campaignCreativeInfo.clickInducementType)?.label}</PrevButton>}
               </PrevFrame>
               <ColSpan1>{active728 !== max && <ArrowButton next={false} onClick={()=>{setActive728(active728+1)}}/>}</ColSpan1>
             </Row>
