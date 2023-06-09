@@ -3,9 +3,10 @@ import {
   BoardHeader,
   BoardSearchResult,
   ColSpan1,
-  ColSpan100, ColSpan3,
+  ColSpan100,
+  ColSpan3,
   ColTitle,
-  Input, inputStyle,
+  Input,
   RelativeDiv,
   RowSpan,
   selectStyle,
@@ -13,13 +14,16 @@ import {
   Span4
 } from "../../assets/GlobalStyles";
 import React, {useState} from "react";
-import {CreateImage, Row} from "./styles/common";
+import {CreateImage, DeleteIcon, ImageUploadCard, Row} from "./styles/common";
 import styled from "styled-components";
 import {VerticalRule} from "../../components/common/Common";
 import ImageUploading from "react-images-uploading";
 import Select from "react-select";
 import {ChromePicker} from 'react-color'
 import {FrameEditor} from "./Frame/FrameEditor";
+import {confirmAlert} from "react-confirm-alert";
+import {uploadBannerImages} from "../../services/campaign/CreativeAxios";
+import {toast} from "react-toastify";
 
 function ColorPicker ({onChange}) {
   const [color, setColor] = useState('#000000')
@@ -77,9 +81,11 @@ function ColorPicker ({onChange}) {
 }
 
 export function BannerCreative() {
+  const imgSize = ['IMG300_150', 'IMG200_200', 'IMG120_600', 'IMG150_150', 'IMG160_600', 'IMG100_200', 'IMG100_300', 'IMG100_400', 'IMG100_500', 'IMG100_600', 'IMG300_300', 'IMG400_400', 'IMG500_500', 'IMG600_600']
   const [frameSetting, setFrameSetting] = useState({
     info: {
       id: 0,
+      size: 'IMG200_200',
       sizeW: 200,
       sizeH: 200,
     },
@@ -142,6 +148,102 @@ export function BannerCreative() {
       ...frameSetting,
       buttonBackgroundColor: color
     })
+  }
+
+  const handelChangeTitleSize = (e) => {
+    setFrameSetting({
+      ...frameSetting,
+      titleSize: e.target.value
+    })
+  }
+
+  const onImageError = (errors, type) => {
+    if (errors.maxFileSize) {
+      toast.warning('저장 가능한 이미지 사이즈는 '+ (type ==='logo'?'1MB':'10MB')+'입니다.')
+    } else if (errors.maxNumber) {
+      toast.warning('이미지는 5개 까지만 등록 가능합니다.')
+    } else if (errors.acceptType) {
+      toast.warning('"jpg", "gif", "png"의 형식만 등록 가능합니다.')
+    }
+  }
+
+  const handleDeleteImage = (imagePath) => {
+    confirmAlert({
+      title: '알림',
+      message: '해당 이미지를 삭제하시겠습니까?',
+      buttons: [
+        {
+          label: '확인',
+          onClick: () => {
+            setFrameSetting({
+              ...frameSetting,
+              backgroundImage: ''
+            })
+          }
+        },{
+          label: '취소',
+        }
+      ]
+    });
+  }
+
+  const onDrop = (pictureFiles) => {
+    if (pictureFiles.length !== 0) {
+      const data = new FormData()
+      pictureFiles.map((item ,index)=>{
+        data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
+        return null
+      })
+      uploadBannerImages(data, frameSetting.info.size).then(response => {
+        console.log(response)
+        if(response) {
+          setFrameSetting({
+            ...frameSetting,
+            backgroundImage: response.images[0].imagePath
+          })
+        }
+      })
+      console.log(data)
+    }
+  }
+  const handleDeleteMainImage = (imagePath) => {
+    confirmAlert({
+      title: '알림',
+      message: '해당 이미지를 삭제하시겠습니까?',
+      buttons: [
+        {
+          label: '확인',
+          onClick: () => {
+            setFrameSetting({
+              ...frameSetting,
+              mainImage: ''
+            })
+          }
+        },{
+          label: '취소',
+        }
+      ]
+    });
+  }
+
+  const onDropMain = (pictureFiles) => {
+    if (pictureFiles.length !== 0) {
+      const data = new FormData()
+      pictureFiles.map((item ,index)=>{
+        data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
+        return null
+      })
+      uploadBannerImages(data, frameSetting.info.size).then(response => {
+        console.log(response)
+        if(response) {
+          setFrameSetting({
+            ...frameSetting,
+            mainImage: response.images[0].imagePath
+          })
+        }
+      })
+      console.log(data)
+    }
   }
 
   return (
@@ -280,7 +382,8 @@ export function BannerCreative() {
                       <Row>
                         <ColSpan1>크기</ColSpan1>
                         <ColSpan3>
-                          <Input/>
+                          <Input value={frameSetting.titleSize} onChange={handelChangeTitleSize}/>
+                          <ColTitle>px</ColTitle>
                         </ColSpan3>
                       </Row>
                       <Row>
@@ -313,33 +416,47 @@ export function BannerCreative() {
                 <Row style={{gap: 10, justifyContent: 'space-between'}}>
                   <Span4 style={{width: 80, whiteSpace: 'nowrap'}}>메인이미지<small></small><p><small style={{color: '#ccc'}}>(600*300 권장)</small></p></Span4>
                   <ColSpan100 padding={'0'} style={{maxWidth: '100px'}}>
-                    <ImageUploading
-                      multiple
-                      acceptType={["jpg", "gif", "png"]}
-                      maxFileSize={1048576}
-                      maxNumber={5}
-                      value={''}
-                      onChange={() => null}
-                    >
-                      {({onImageUpload}) => (
-                        <CreateImage/>
-                      )}
-                    </ImageUploading>
+                    {frameSetting.mainImage === '' ?
+                      <ImageUploading
+                        multiple
+                        acceptType={["jpg", "gif", "png"]}
+                        onChange={onDropMain}
+                        maxFileSize={10485760}
+                        maxNumber={5}
+                        onError={(e) => onImageError(e,'image')}
+                      >
+                        {({onImageUpload}) => (
+                          <CreateImage onClick={onImageUpload}/>
+                        )}
+                      </ImageUploading>
+                      :
+                      <ImageUploadCard>
+                        <DeleteIcon onClick={() => handleDeleteMainImage(frameSetting.mainImage)}/>
+                        <img src={frameSetting.mainImage} alt={'배너이미지'}/>
+                      </ImageUploadCard>
+                    }
                   </ColSpan100>
                   <Span4 style={{width: 80, whiteSpace: 'nowrap'}}>배경이미지<small></small><p><small style={{color: '#ccc'}}>(600*300 권장)</small></p></Span4>
                   <ColSpan100 padding={'0'} style={{maxWidth: '100px'}}>
-                    <ImageUploading
-                      multiple
-                      acceptType={["jpg", "gif", "png"]}
-                      maxFileSize={1048576}
-                      maxNumber={5}
-                      value={''}
-                      onChange={() => null}
-                    >
-                      {({onImageUpload}) => (
-                        <CreateImage/>
-                      )}
-                    </ImageUploading>
+                    {frameSetting.backgroundImage === '' ?
+                      <ImageUploading
+                        multiple
+                        acceptType={["jpg", "gif", "png"]}
+                        onChange={onDrop}
+                        maxFileSize={10485760}
+                        maxNumber={5}
+                        onError={(e) => onImageError(e,'image')}
+                      >
+                        {({onImageUpload}) => (
+                          <CreateImage onClick={onImageUpload}/>
+                        )}
+                      </ImageUploading>
+                      :
+                      <ImageUploadCard>
+                        <DeleteIcon onClick={() => handleDeleteImage(frameSetting.backgroundImage)}/>
+                        <img src={frameSetting.backgroundImage} alt={'배너이미지'}/>
+                      </ImageUploadCard>
+                    }
                   </ColSpan100>
                   <Span4 style={{width: 80, whiteSpace: 'nowrap'}}>배경색</Span4>
                   <ColSpan100 padding={'0'} style={{maxWidth: '100%'}}>
@@ -353,8 +470,9 @@ export function BannerCreative() {
                       <Select styles={selectStyle}
                               options={[
                                 {key:0,value:'', label: '없음'},
-                                {key:1,value:'download', label: '다운로드'},
-                                {key:2,value:'rel', label: '바로가기'}
+                                {key:1,value:'typeA', label: '다운로드'},
+                                {key:2,value:'typeB', label: '바로가기'},
+                                {key:3,value:'typeC', label: '참여하기'}
                               ]}
                               onChange={handleChangeButtonTitle}/>
                     </ColSpan100>
@@ -393,6 +511,11 @@ const BannerItemContainer = styled.div`
   border: 1px solid #ddd;
   border-radius: 5px;
   justify-content: space-around;
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 `
 const DefaultItemContainer = styled.div`
   display: flex;
@@ -472,6 +595,7 @@ const PickerColor = styled.div`
 const FlexWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
+  gap: 15px;
 `
 
 const Effect = styled.div`

@@ -15,9 +15,9 @@ export function FrameEditor({set}){
         <span>{set.info.sizeW}px X {set.info.sizeH}px</span>
         <ReloadButton/>
       </FrameHeader>
-      <FrameBody style={{backgroundColor: set.backgroundColor}}>
-        <MainImage/>
-        <Text style={{color: set.titleColor, fontWeight:set.titleBold && 'bold' , fontStyle: set.titleItalic && 'italic', textDecoration: set.titleUnderline && 'underline'}}>{set.title}</Text>
+      <FrameBody style={{backgroundColor: set.backgroundColor, backgroundImage: `url(${set.backgroundImage})`}}>
+        <MainImage src={set.mainImage}/>
+        <Text style={{color: set.titleColor, fontSize: set.titleSize+'px', fontWeight:set.titleBold && 'bold' , fontStyle: set.titleItalic && 'italic', textDecoration: set.titleUnderline && 'underline'}}>{set.title}</Text>
         {set.buttonTitle !== '' &&
           <Button style={{backgroundColor: set.buttonBackgroundColor, color: set.buttonColor}}>{set.buttonTitle}</Button>
         }
@@ -48,6 +48,9 @@ const FrameBody = styled.div`
   height: 300px;
   text-align: center;
   border: 1px solid #eee;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   -ms-user-select: none;
   -moz-user-select: -moz-none;
   -khtml-user-select: none;
@@ -68,6 +71,7 @@ const ReloadButton = styled.div`
 const MainImage = styled.img`
   width: 100%;
   aspect-ratio: 2/1;
+  object-fit: contain;
   -ms-user-select: none;
   -moz-user-select: -moz-none;
   -khtml-user-select: none;
@@ -79,17 +83,21 @@ const Text = styled.div`
   padding: 10px;
   width: 100%;
   text-align: center;
-  border: 1px dashed #000;
   border-radius: 5px;
   -ms-user-select: none;
   -moz-user-select: -moz-none;
   -khtml-user-select: none;
   -webkit-user-select: none;
   user-select: none;
+  &:hover {
+    border: 1px dashed #000;
+  }
 `
 
 const Button = styled.button`
-  padding: 5px 10px
+  margin: 10px;
+  padding: 8px 16px;
+  font-weight: bold;
 `
 
 const addIcon = <svg width="24" height="24" viewBox="0 0 24 24" style={{cursor: 'pointer', position: 'relative', top: 1}}><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg>

@@ -40,7 +40,7 @@ export const menuList = [
       },
       {
         name: 'bannerCreative',
-        header: '배너 크리에이티브'
+        header: '배너 크리에이터'
       }
     ]
   },
