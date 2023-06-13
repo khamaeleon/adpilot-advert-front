@@ -5,7 +5,7 @@ const mainColor = css`${props => props.theme.color.mainColor}`
 const textColor = css`${props => props.theme.color.textColor}`
 const borderColor = css`${props => props.theme.color.borderColor}`
 const lightGray = css`${props => props.theme.color.lightGray}`
-const buttonHeightSize = 45
+const buttonHeightSize = 40
 
 export const GlobalStyles = createGlobalStyle`
   html {
@@ -257,13 +257,13 @@ export const GlobalStyles = createGlobalStyle`
   .checkbox-type-c + i{
     display: inline-block;
     margin: 0 8px;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     background-image: url('/assets/images/common/checkbox_off_C.png');
     background-image: -webkit-image-set(url('/assets/images/common/checkbox_off_C.png') 1x,url('/assets/images/common/checkbox_off_C@2x.png') 2x, url('/assets/images/common/checkbox_off_C@3x.png') 3x);
     background-repeat: no-repeat;
     background-position: center;
-    vertical-align: top;
+    background-size: contain;
   }
 
   .checkbox-type-c:checked + i{
@@ -708,26 +708,6 @@ export const Board = styled.div`
   border: solid 1px ${borderColor};
 `
 
-export const BoardTap = styled.div`
-  margin: 0 0 34px 0;
-  width: 100%;
-  background-color: #fff;
-  padding: 30px 40px;
-  border-radius: 0 20px 20px 20px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-`
-
-export const BoardTapTitle = styled.div`
-  margin-top: 34px;
-  padding: 12px 0;
-  width: 300px;
-  background-color: #fff;
-  text-align: center;
-  border-radius: 20px 20px 0 0;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  font-size: 17px;
-  font-weight: bold;
-`
 
 export const BoardHeader = styled.div`
   display: flex;
@@ -743,7 +723,9 @@ export const BoardHeader = styled.div`
 `
 
 export const BoardSearchDetail = styled.div`
+  display: flex;
   padding: 10px 0;
+  font-size: 13px;
 `
 
 export const DashBoardCard = styled.div`
@@ -754,11 +736,6 @@ export const DashBoardCard = styled.div`
   border-radius: 20px;
   border: solid 1px ${borderColor};
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-`
-
-export const DashBoardColSpan2 = styled.div`
-  display: flex;
-  width: 50%;
 `
 
 export const DashBoardHeader = styled.div`
@@ -834,7 +811,7 @@ export const ColSpan0 = styled.div`
   display: flex;
   align-items: center;
   width: auto;
-  min-height: 45px;
+  min-height: 40px;
   gap: 10px;
   & > div:first-child {
     white-space: nowrap;
@@ -860,7 +837,7 @@ export const ColSpan1 = styled.div`
   & > div:last-child {
     display: flex;
     width: 100%;
-    min-height: 45px;
+    min-height: 40px;
     align-items: center;
   }
   & > div:last-child > * {
@@ -886,7 +863,7 @@ export const ColSpan2 = styled.div`
   & > div:last-child {
     display: flex;
     width: 100%;
-    min-height: 45px;
+    min-height: 40px;
     align-items: center;
   }
 `
@@ -907,7 +884,7 @@ export const ColSpan3 = styled.div`
   & > div:last-child {
     display: flex;
     width: 100%;
-    min-height: 45px;
+    min-height: 40px;
     padding-right: 5px;
     align-items: center;
   }
@@ -933,7 +910,7 @@ export const ColSpan4 = styled.div`
   & > div:last-child {
     display: flex;
     width: 100%;
-    min-height: 45px;
+    min-height: 40px;
     padding-right: 5px;
     align-items: center;
   }
@@ -952,7 +929,7 @@ export const ColSpan100 = styled.div`
 `
 export const ColTitle = styled.div`
   padding: 0 0 0 10px;
-  min-width: 65px;
+  min-width: 60px;
   text-align: left;
 `
 
@@ -961,7 +938,7 @@ export const AgentType = styled.div`
   display: flex;
   align-items: center;
   background-color: #f9fafb;
-  height: 45px;
+  height: 40px;
   border: 1px solid #e5e5e5;
   border-radius: 5px;
   & label {
@@ -981,10 +958,15 @@ export const CampaignType = styled.div`
 export const DateContainer = styled.div`
   display: flex;
   width: 100%;
+  height: 40px;
   border: 1px solid ${lightGray};
   border-radius: 5px;
   overflow: hidden;
   background-color: ${(props)=> props.disabled ? "#f9fafb" : null};
+  & input[type="text"] {
+    height: 38px;
+    font-size: 13px;
+  }
 `
 
 export const CalendarBox = styled.div`
@@ -1044,6 +1026,13 @@ export const SearchButton = styled.button`
   background-color: #fff;
   border-radius: 5px;
 `
+export const GraySearchButton = styled.button`
+  width: 85px;
+  background-color: #777;
+  border-radius: 5px;
+  color: #fff
+`
+
 export const ResetButton = styled.button`
   padding: 0 10px;
   height: ${buttonHeightSize}px;
@@ -1115,7 +1104,6 @@ export const ChartLabels = styled.div`
 export const ChartLabel = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   min-width: 100px;
   cursor: pointer;
   border: 1px solid #ccc;
@@ -1125,6 +1113,7 @@ export const ChartLabel = styled.div`
     display: flex;
     align-items: center;
     height: 36px;
+    padding-left: 10px;
   }
   > div {
     width: 120px;
@@ -1149,6 +1138,11 @@ export const ChartTooltip = styled.div`
   padding: 3px 10px;
   border: 1px solid #ccc;
   border-radius: 3px;
+  font-size: 13px;
+  & .date {
+    font-size: 15px;
+    margin: 5px 0;
+  }
 `
 
 export const Span1 = styled.span`

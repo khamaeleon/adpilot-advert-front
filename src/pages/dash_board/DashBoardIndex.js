@@ -8,7 +8,7 @@ import {
   DashBoardHeader,
 } from "../../assets/GlobalStyles";
 import {ResponsiveLine} from '@nivo/line'
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useCallback} from "react";
 import {useAtom,useAtomValue} from "jotai";
 import {dataTotalInfo} from "../../components/common/entity";
 import {chartDataAtom, commonProperties, platformStatusType, userPlatformStatusType} from "./entity/Chart";
@@ -26,7 +26,7 @@ import {
   retrieveAdvertiserCampaignStatus,
   retrieveAdvertiserStatus, retrieveUserAdvertiserCampaignStatus
 } from "../../services/dash_board/ManageCampaignAxios";
-import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../common/StringUtils";
+import {dateFormat, decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../common/StringUtils";
 import Select from "react-select";
 import {DashBoardCondition} from "../../components/dashBoard/Condition";
 import Table from "../../components/table";
@@ -56,7 +56,7 @@ function ChartComponent(props) {
             // Object.assign(data[key],{directRoas: item.costAmount !== 0 ? (item.directConversionAmount / item.costAmount) *100 : 0})
             // Object.assign(data[key],{exposureRoas: item.costAmount !== 0 ? (item.exposureConversionAmount / item.costAmount) *100 : 0})
             // Object.assign(data[key],{totalRoas: item.costAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
-            Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0},)
+            Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0})
             Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.validClickCount) *100 : 0})
             return null
           })
@@ -73,7 +73,7 @@ function ChartComponent(props) {
             Object.assign(data[key],{costPerConversion: item.totalConversionCount !== 0 ? item?.costAmount / item.totalConversionCount : 0})
             Object.assign(data[key],{avgConversionAmount: item.totalConversionAmount !== 0 ? item.totalConversionAmount / item.totalConversionCount : 0})
             //Object.assign(data[key],{totalRoas: item.totalConversionAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
-            Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0},)
+            Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0})
             Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.validClickCount) *100 : 0})
             return null
           })
@@ -81,12 +81,10 @@ function ChartComponent(props) {
         }
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[searchCondition])
 
   useEffect(() => {
     makeChartData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chartData,chartDataInfo]);
 
   function calculateSum(property) {
@@ -236,12 +234,10 @@ function ChartComponent(props) {
         list.push({
           id: id,
           data: chartDataInfo.map(item => {
-            const date = new Date(item.historyDate);
-            const formattedDate = date.toLocaleDateString("en-US", {
-              month: "2-digit",
-              day: "2-digit",
-            });
-            return {x: formattedDate, y: isNaN(item[id]) ? 0 : item[id]}
+            const date = new Date(item?.historyDate);
+            const formattedDate = dateFormat(date, 'MM/DD')
+            const dateColor = dateFormat(date, 'ddd').includes('Sun') && 'red'
+            return {color: dateColor, tooltipDate: dateFormat(date, 'YYYY.MM.DD'), x: formattedDate, y: isNaN(item[id]) ? 0 : item[id]}
           }),
           color: fixedColors[colorIndex]
         })
@@ -358,6 +354,7 @@ function ChartComponent(props) {
               sliceTooltip={(props) => {
                 return (
                   <ChartTooltip>
+                    <p className={'date'}>{props.slice.points[0]?.data?.tooltipDate}</p>
                     {props.slice.points?.map((data, key) => {
                       return (
                         <p key={key}>
@@ -382,6 +379,7 @@ function DashBoardIndex() {
   const [adverStatusData, setAdverStatusData] = useAtom(adverStatusAtom)
   const [adverStatusDetailData, setAdverStatusDetailData] = useAtom(adverStatusDetailAtom)
   const [searchCondition, setSearchCondition] = useAtom(searchConditionAtom)
+  const [searchState, setSearchState] = useState(null)
   const [keyword, setKeyword] = useState('')
   const [gridRef, setGridRef] = useState(null);
 
@@ -411,15 +409,16 @@ function DashBoardIndex() {
       })
     }
     searchCondition.keyword !== '' ? setKeyword(searchCondition.keyword) : setKeyword('')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setSearchState({
+      ...searchCondition
+    })
   }, [searchCondition])
-
   /**
    * 검색 버튼
    */
   const handleData = () => {
     setSearchCondition({
-      ...searchCondition,
+      ...searchState,
       keyword: keyword
     })
   }
@@ -442,7 +441,7 @@ function DashBoardIndex() {
   return (
       <>
         <DashBoardCard>
-          <DashBoardCondition role={tokenUserInfo.role} productType={productType} targetingType={targetingType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleData={handleData} keyword={keyword} setKeyword={setKeyword}/>
+          <DashBoardCondition role={tokenUserInfo.role} productType={productType} targetingType={targetingType} handleData={handleData} keyword={keyword} setKeyword={setKeyword} searchState={searchState} setSearchState={setSearchState}/>
         </DashBoardCard>
         <DashBoardCard>
           <DashBoardHeader>{tokenUserInfo.role !== 'NORMAL' ? '플랫폼' : '광고'} 현황</DashBoardHeader>
@@ -458,7 +457,7 @@ function DashBoardIndex() {
                 lockedRows={lockedRows}
                 summaryReducer={summaryReducer}
                 onReady={setGridRef}
-                style={{minHeight: 550, textAline: 'center'}}
+                style={{minHeight: 500}}
                 headerHeight={50}
                 rowExpandHeight={({ data }) => {return data?.campaignCount !== 0 ? 400 : 300}}
                 rowHeight={60}
@@ -491,16 +490,6 @@ function DashBoardIndex() {
                        activeCell={[0]}
                        data={adverStatusData}/>
             }
-            {/*<TableDetail columns={adverListColumn}*/}
-            {/*             totalCount={[totalInfo.totalCount, '광고주']}*/}
-            {/*             showHoverRows={false}*/}
-            {/*             activeCell={[0]}*/}
-            {/*             multiRowExpand={false}*/}
-            {/*             data={adverStatusData}*/}
-            {/*             detailData={handleFetchDetailData}*/}
-            {/*             detailColumn={adverStatusDetailColumn}*/}
-            {/*             idProperty={'userId'}*/}
-            {/*             groups={false}/>*/}
           </DashBoardBody>
         </DashBoardCard>
       </>

@@ -42,7 +42,7 @@ export const adverListColumn = [
     name: 'exposureCount',
     header: '노출 수',
     minWidth: 100,
-    textAlign: 'center',
+    textAlign: 'end',
     render: ({value}) => <p>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -50,7 +50,7 @@ export const adverListColumn = [
     name: 'validClickCount',
     header: '클릭 수',
     minWidth: 100,
-    textAlign: 'center',
+    textAlign: 'end',
     render: ({value}) => <p>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -58,7 +58,8 @@ export const adverListColumn = [
     name: 'clickRate',
     header: '클릭률',
     minWidth: 100,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1E8E3E'} }),
     render: ({data}) => {
       let value = data.exposureCount !== 0 ? (data.validClickCount / data.exposureCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
@@ -69,7 +70,8 @@ export const adverListColumn = [
     name: 'costAmount',
     header: '비용',
     minWidth: 180,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#F9AB00'} }),
     render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -77,7 +79,8 @@ export const adverListColumn = [
     name: 'cpc',
     header: 'CPC',
     minWidth: 100,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#F9AB00'} }),
     render: ({data}) => {
       let value = data.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -88,7 +91,8 @@ export const adverListColumn = [
     name: 'totalConversionCount',
     header: '전환 수',
     minWidth: 100,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#F5811F'} }),
     render: ({value}) => <p>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -96,7 +100,8 @@ export const adverListColumn = [
     name: 'conversionRate',
     header: '전환율',
     minWidth: 100,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1E8E3E'} }),
     render: ({data}) => {
       let value = data.validClickCount !== 0 ? (data.totalConversionCount / data.validClickCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
@@ -107,7 +112,8 @@ export const adverListColumn = [
     name: 'costPerConversion',
     header: '전환 단가',
     minWidth: 100,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8'} }),
     render: ({data}) => {
       let value = data.totalConversionCount !== 0 ? data?.costAmount / data.totalConversionCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -118,7 +124,8 @@ export const adverListColumn = [
     name: 'avgConversionAmount',
     header: '평균 구매액',
     minWidth: 150,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8'} }),
     render: ({data}) => {
       let value = data.totalConversionCount !== 0 ? data.totalConversionAmount / data.totalConversionCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -128,7 +135,8 @@ export const adverListColumn = [
   {
     name: 'sessionConversionAmount',
     minWidth: 150,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8'} }),
     header: () => {
       return(
         <div><p>세션매출</p><small>(ROAS)</small></div>
@@ -136,14 +144,15 @@ export const adverListColumn = [
     },
     render: ({value,data}) => {
       let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
-      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small style={{color: '#1E8E3E'}}>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },
   {
     name: 'directConversionAmount',
     minWidth: 150,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8'} }),
     header: () => {
       return(
         <div><p>직접매출</p><small>(ROAS)</small></div>
@@ -151,14 +160,15 @@ export const adverListColumn = [
     },
     render: ({value,data}) => {
       let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
-      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small style={{color: '#1E8E3E'}}>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },
   {
     name: 'exposureConversionAmount',
     minWidth: 150,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8'} }),
     header: () => {
       return(
         <div><p>노출매출</p><small>(ROAS)</small></div>
@@ -166,14 +176,15 @@ export const adverListColumn = [
     },
     render: ({value,data}) => {
       let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
-      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small style={{color: '#1E8E3E'}}>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },
   {
     name: 'totalConversionAmount',
-    textAlign: 'center',
+    textAlign: 'end',
     minWidth: 150,
+    cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8'} }),
     header: () => {
       return(
         <div><p>총매출</p><small>(ROAS)</small></div>
@@ -181,7 +192,7 @@ export const adverListColumn = [
     },
     render: ({value,data}) => {
       let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
-      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small style={{color: '#1E8E3E'}}>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },
@@ -189,7 +200,8 @@ export const adverListColumn = [
     name: 'ecpm',
     header: 'ECPM',
     minWidth: 100,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#F5811F'} }),
     render: ({data}) => {
       let value = data.exposureCount !== 0 ? (data.totalConversionAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -304,7 +316,7 @@ export const adverStatusDetailColumn = [
     header: '노출수',
     minWidth: 150,
     showColumnMenuTool: false,
-    textAlign: 'center',
+    textAlign: 'end',
     render: ({value}) => <p>{decimalFormat(value)}</p>,
   },
   {
@@ -312,14 +324,15 @@ export const adverStatusDetailColumn = [
     header: '클릭수',
     minWidth: 150,
     showColumnMenuTool: false,
-    textAlign: 'center',
+    textAlign: 'end',
     render: ({value}) => <p>{decimalFormat(value)}</p>,
   },
   {
     name: 'clickRate',
     header: '클릭률',
     minWidth: 150,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1E8E3E'} }),
     render: ({data}) => {
       let value = data.exposureCount !== 0 ? (data.validClickCount / data.exposureCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
@@ -330,7 +343,8 @@ export const adverStatusDetailColumn = [
     name: 'costAmount',
     header: '비용',
     minWidth: 150,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#F9AB00'} }),
     render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -338,7 +352,8 @@ export const adverStatusDetailColumn = [
     name: 'cpc',
     header: 'CPC',
     minWidth: 150,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#F9AB00'} }),
     render: ({data}) => {
       let value = data.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -349,7 +364,8 @@ export const adverStatusDetailColumn = [
     name: 'totalConversionCount',
     header: '전환 수',
     minWidth: 100,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#F5811F'} }),
     render: ({value}) => <p>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -357,7 +373,8 @@ export const adverStatusDetailColumn = [
     name: 'conversionRate',
     header: '전환율',
     minWidth: 100,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1E8E3E'} }),
     render: ({data}) => {
       let value = data.validClickCount !== 0 ? (data.totalConversionCount / data.validClickCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
@@ -368,7 +385,8 @@ export const adverStatusDetailColumn = [
     name: 'costPerConversion',
     header: '전환 단가',
     minWidth: 150,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8'} }),
     render: ({data}) => {
       let value = data.totalConversionCount !== 0 ? data?.costAmount / data.totalConversionCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -379,7 +397,8 @@ export const adverStatusDetailColumn = [
     name: 'avgConversionAmount',
     header: '평균 구매액',
     minWidth: 150,
-    textAlign: 'center',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8'} }),
     render: ({data}) => {
       let value = data.totalConversionCount !== 0 ? data.totalConversionAmount / data.totalConversionCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -388,8 +407,9 @@ export const adverStatusDetailColumn = [
   },
   {
     name: 'sessionConversionAmount',
-    textAlign: 'center',
     minWidth: 150,
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8'} }),
     header: () => {
       return(
         <div><p>세션매출</p><small>(ROAS)</small></div>
@@ -397,14 +417,15 @@ export const adverStatusDetailColumn = [
     },
     render: ({value,data}) => {
       let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
-      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small style={{color: '#1E8E3E'}}>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },
   {
     name: 'directConversionAmount',
-    textAlign: 'center',
     minWidth: 150,
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8'} }),
     header: () => {
       return(
         <div><p>직접매출</p><small>(ROAS)</small></div>
@@ -412,14 +433,15 @@ export const adverStatusDetailColumn = [
     },
     render: ({value,data}) => {
       let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
-      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small style={{color: '#1E8E3E'}}>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },
   {
     name: 'exposureConversionAmount',
-    textAlign: 'center',
     minWidth: 150,
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8'} }),
     header: () => {
       return(
         <div><p>노출매출</p><small>(ROAS)</small></div>
@@ -427,14 +449,15 @@ export const adverStatusDetailColumn = [
     },
     render: ({value,data}) => {
       let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
-      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small style={{color: '#1E8E3E'}}>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },
   {
     name: 'totalConversionAmount',
-    textAlign: 'center',
     minWidth: 150,
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8'} }),
     header: () => {
       return(
         <div><p>총매출</p><small>(ROAS)</small></div>
@@ -442,15 +465,16 @@ export const adverStatusDetailColumn = [
     },
     render: ({value,data}) => {
       let pctValue = data.costAmount !== 0 ? (data.totalConversionAmount / data.costAmount) * 100 : 0;
-      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small style={{color: '#1E8E3E'}}>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },
   {
     name: 'ecpm',
-    textAlign: 'center',
     minWidth: 150,
     header: 'ECPM',
+    textAlign: 'end',
+    cellDOMProps: (cellProps) => ({ style: {color: '#F5811F'} }),
     render: ({data}) => {
       let value = data.exposureCount !== 0 ? (data.totalConversionAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -518,7 +542,7 @@ export const userCampaignListColumn = [
     header: '노출수',
     minWidth: 150,
     showColumnMenuTool: false,
-    textAlign: 'center',
+    cellDOMProps: (cellProps) => ({ style: {textAlign: 'right'} }),
     render: ({value}) => <p>{decimalFormat(value)}</p>,
   },
   {
@@ -526,14 +550,14 @@ export const userCampaignListColumn = [
     header: '클릭수',
     minWidth: 150,
     showColumnMenuTool: false,
-    textAlign: 'center',
+    cellDOMProps: (cellProps) => ({ style: {textAlign: 'right'} }),
     render: ({value}) => <p>{decimalFormat(value)}</p>,
   },
   {
     name: 'clickRate',
     header: '클릭률',
     minWidth: 150,
-    textAlign: 'center',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1E8E3E', textAlign: 'right'} }),
     render: ({data}) => {
       let value = data.exposureCount !== 0 ? (data.validClickCount / data.exposureCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
@@ -544,7 +568,7 @@ export const userCampaignListColumn = [
     name: 'costAmount',
     header: '비용',
     minWidth: 150,
-    textAlign: 'center',
+    cellDOMProps: (cellProps) => ({ style: {color: '#F9AB00', textAlign: 'right'} }),
     render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -552,7 +576,7 @@ export const userCampaignListColumn = [
     name: 'cpc',
     header: 'CPC',
     minWidth: 150,
-    textAlign: 'center',
+    cellDOMProps: (cellProps) => ({ style: {color: '#F9AB00', textAlign: 'right'} }),
     render: ({data}) => {
       let value = data.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -563,7 +587,7 @@ export const userCampaignListColumn = [
     name: 'totalConversionCount',
     header: '전환 수',
     minWidth: 100,
-    textAlign: 'center',
+    cellDOMProps: (cellProps) => ({ style: {color: '#F5811F', textAlign: 'right'} }),
     render: ({value}) => <p>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -571,7 +595,7 @@ export const userCampaignListColumn = [
     name: 'conversionRate',
     header: '전환율',
     minWidth: 100,
-    textAlign: 'center',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1E8E3E', textAlign: 'right'}}),
     render: ({data}) => {
       let value = data.validClickCount !== 0 ? (data.totalConversionCount / data.validClickCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
@@ -582,7 +606,7 @@ export const userCampaignListColumn = [
     name: 'costPerConversion',
     header: '전환 단가',
     minWidth: 150,
-    textAlign: 'center',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8', textAlign: 'right'}}),
     render: ({data}) => {
       let value = data.totalConversionCount !== 0 ? data?.costAmount / data.totalConversionCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -593,7 +617,7 @@ export const userCampaignListColumn = [
     name: 'avgConversionAmount',
     header: '평균 구매액',
     minWidth: 150,
-    textAlign: 'center',
+    cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8', textAlign: 'right'}}),
     render: ({data}) => {
       let value = data.totalConversionCount !== 0 ? data.totalConversionAmount / data.totalConversionCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -602,8 +626,8 @@ export const userCampaignListColumn = [
   },
   {
     name: 'totalConversionAmount',
-    textAlign: 'center',
     minWidth: 150,
+    cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8', textAlign: 'right'}}),
     header: () => {
       return(
         <div><p>총매출</p><small>(ROAS)</small></div>
@@ -611,15 +635,15 @@ export const userCampaignListColumn = [
     },
     render: ({value,data}) => {
       let pctValue = data.costAmount !== 0 ? (data.totalConversionAmount / data.costAmount) * 100 : 0;
-      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small>({numberToFixedFormat(pctValue)} %)</small></>
+      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small style={{color: '#1E8E3E'}}>({numberToFixedFormat(pctValue)} %)</small></>
     },
     showColumnMenuTool: false
   },
   {
     name: 'ecpm',
-    textAlign: 'center',
     minWidth: 150,
     header: 'ECPM',
+    cellDOMProps: (cellProps) => ({ style: {color: '#F5811F', textAlign: 'right'}}),
     render: ({data}) => {
       let value = data.exposureCount !== 0 ? (data.totalConversionAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -633,13 +657,21 @@ export const lockedRows = [
     position: 'start',
     cellStyle : ({ column }) => {
       const style = {
-        display: 'flex',
-        justifyContent: 'center',
-        minHeight: '50px'
+        justifyContent: 'flex-end',
+        minHeight: '50px',
+        fontWeight: 600
       }
       if(column.name === 'adverName'){
-        style.fontSize ='15px'
+        style.fontSize ='15px';
+        style.justifyContent = 'center'
       }
+      if(column.name === 'username' || column.name === 'campaignCount' ) {style.justifyContent = 'center'}
+      if(column.name === 'costAmount' || column.name === 'cpc' ) {style.color = '#F9AB00'}
+      if(column.name === 'clickRate' || column.name === 'conversionRate') {style.color = '#1E8E3E'}
+      if(column.name === 'totalConversionCount' || column.name === 'ecpm') {style.color = '#F5811F'}
+
+      if(column.name === 'costPerConversion' || column.name === 'avgConversionAmount' || column.name === 'sessionConversionAmount' || column.name === 'directConversionAmount' || column.name === 'exposureConversionAmount' || column.name === 'totalConversionAmount' ) {style.color = '#1A73E8'}
+
       return style
     },
     // colspan: {
@@ -664,36 +696,36 @@ export const lockedRows = [
       sessionConversionAmount: ({ summary }) => {
         let pctValue = summary.costAmount !== 0 ? (summary.sessionConversionAmount / summary.costAmount) * 100 : 0;
         return (
-          <div style={{display: 'flex', flexDirection : 'column', alignItems: 'center'}}>
+          <div style={{display: 'flex', flexDirection : 'column', alignItems: 'flex-end'}}>
             <p className={'won'}>{moneyToFixedFormat(summary.sessionConversionAmount)}</p>
-            <small>({numberToFixedFormat(pctValue)} %)</small>
+            <small style={{color: '#1E8E3E'}}>({numberToFixedFormat(pctValue)} %)</small>
           </div>
         )
       },
       directConversionAmount: ({ summary }) => {
         let pctValue = summary.costAmount !== 0 ? (summary.directConversionAmount / summary.costAmount) * 100 : 0;
         return (
-          <div style={{display: 'flex', flexDirection : 'column', alignItems: 'center'}}>
+          <div style={{display: 'flex', flexDirection : 'column', alignItems: 'flex-end'}}>
             <p className={'won'}>{moneyToFixedFormat(summary.directConversionAmount)}</p>
-            <small>({numberToFixedFormat(pctValue)} %)</small>
+            <small style={{color: '#1E8E3E'}}>({numberToFixedFormat(pctValue)} %)</small>
           </div>
         )
       },
       exposureConversionAmount: ({ summary }) => {
         let pctValue = summary.costAmount !== 0 ? (summary.exposureConversionAmount / summary.costAmount) * 100 : 0;
         return (
-          <div style={{display: 'flex', flexDirection : 'column', alignItems: 'center'}}>
+          <div style={{display: 'flex', flexDirection : 'column', alignItems: 'flex-end'}}>
             <p className={'won'}>{moneyToFixedFormat(summary.exposureConversionAmount)}</p>
-            <small>({numberToFixedFormat(pctValue)} %)</small>
+            <small style={{color: '#1E8E3E'}}>({numberToFixedFormat(pctValue)} %)</small>
           </div>
         )
       },
       totalConversionAmount: ({ summary }) => {
         let pctValue = summary.costAmount !== 0 ? (summary.totalConversionAmount / summary.costAmount) * 100 : 0;
         return (
-          <div style={{display: 'flex', flexDirection : 'column', alignItems: 'center'}}>
+          <div style={{display: 'flex', flexDirection : 'column', alignItems: 'flex-end'}}>
             <p className={'won'}>{moneyToFixedFormat(summary.totalConversionAmount)}</p>
-            <small>({numberToFixedFormat(pctValue)} %)</small>
+            <small style={{color: '#1E8E3E'}}>({numberToFixedFormat(pctValue)} %)</small>
           </div>
         )
       },

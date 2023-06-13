@@ -355,7 +355,7 @@ export default function CreateReports() {
                         <>
                           <DefaultItemButton
                             active={includeItem('BY_ADVERTISE')}
-                            onClick={()=>handleAddScopesItem('BY_ADVERTISE')}><p>광고주 명</p><p>광고주 아이디</p></DefaultItemButton>
+                            onClick={()=>handleAddScopesItem('BY_ADVERTISE')}>광고주 명(ID)</DefaultItemButton>
                           <DefaultItemButton
                             active={includeItem('BY_CAMPAIGN')}
                             onClick={()=>handleAddScopesItem('BY_CAMPAIGN')}>캠페인명</DefaultItemButton>
@@ -481,12 +481,14 @@ export default function CreateReports() {
             <RowSpan style={{marginTop: 25}}>
               <ReactDataGrid
                 licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
+                headerHeight={40}
                 columns={columns}
                 dataSource={[]}
                 showCellBorders={'horizontal'}
                 showZebraRows={false}
                 activateRowOnFocus
                 emptyText={columns.length === 0 ? '보고서 항목을 선택해주세요.' : ''}
+                style={{fontSize: '13px'}}
               />
             </RowSpan>
           </RowSpan>
@@ -520,7 +522,7 @@ const DefaultItemContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  font-size: 12px;
+  font-size: 13px;
 `
 const DefaultItemButton = styled.div`
   display: flex;

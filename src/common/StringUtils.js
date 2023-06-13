@@ -158,7 +158,7 @@ export const decimalFormat = (money) => {
 export const numberToFixedFormat = (number) => {
   if(number == null || number === 0) return 0;
   if(number !== 0){
-    return number.toFixed(2);
+    return number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }else{
     return '0';
   }

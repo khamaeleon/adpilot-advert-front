@@ -57,7 +57,7 @@ import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const RegistryBannerItem = (props) => {
-  const {size, onImageError} = props;
+  const {size, onImageError, label} = props;
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
 
   const handleDeleteImage = (imagePath) => {
@@ -119,9 +119,9 @@ const RegistryBannerItem = (props) => {
     }
   }
   return (
-    <RowSpan style={{width: '49%'}}>
+    <RowSpan style={{width: '49%', paddingLeft: 0}}>
       <ColSpan4>
-        <Span4 style={{whiteSpace: 'nowrap'}}>{size.bannerSize}</Span4>
+        <Span4 style={{whiteSpace: 'nowrap'}}>{label}</Span4>
         <RowSpan box={true} style={{justifyContent: 'flex-start'}}>
           {campaignCreativeInfo.materials.find(value => value.bannerSize === size.bannerSize).images.map((item, key) => {
             return (
@@ -266,8 +266,9 @@ function CampaignFourBanner(props) {
                   <p style={{color: '#ccc'}}>사이즈별 소재는 최소 1개 이상, 최대 5개까지 등록 가능합니다.</p>
                   <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between'}}>
                     {campaignCreativeInfo.materials !== undefined && campaignCreativeInfo.materials.map((item, key) => {
+                      let label = bannerSize.find(value => value.value === item.bannerSize).label
                       return (
-                        <RegistryBannerItem key={key} size={item} onImageError={onImageError}/>
+                        <RegistryBannerItem key={key} size={item} label={label} onImageError={onImageError}/>
                       )
                     })}
                   </div>
@@ -288,12 +289,12 @@ function CampaignFourBanner(props) {
               <span style={{fontSize: 14}}>소재설정</span>
             </Row>
             <Row>
-              <span>광고 타이틀<p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
+              <span>광고 타이틀<p><small style={{color: '#ccc'}}>최대 15자까지 등록</small></p></span>
               <div className={'txtCont'}>
                 <input
                   type={'text'}
                   name={'title1'}
-                  maxLength={25}
+                  maxLength={15}
                   value={campaignCreativeInfo.title1 || ""}
                   onChange={handleChangeInputs}
                 />
@@ -301,12 +302,12 @@ function CampaignFourBanner(props) {
               </div>
             </Row>
             <Row>
-              <span>광고 제목1<p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
+              <span>광고 제목1<p><small style={{color: '#ccc'}}>최대 15자까지 등록</small></p></span>
               <div className={'txtCont'}>
                 <input
                   type={'text'}
                   name={'title2'}
-                  maxLength={25}
+                  maxLength={15}
                   value={campaignCreativeInfo.title2 || ""}
                   onChange={handleChangeInputs}
                 />
@@ -314,12 +315,12 @@ function CampaignFourBanner(props) {
               </div>
             </Row>
             <Row>
-              <span>광고 제목2<p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
+              <span>광고 제목2<p><small style={{color: '#ccc'}}>최대 15자까지 등록</small></p></span>
               <div className={'txtCont'}>
                 <input
                   type={'text'}
                   name={'title3'}
-                  maxLength={25}
+                  maxLength={15}
                   value={campaignCreativeInfo.title3 || ""}
                   onChange={handleChangeInputs}
                 />
@@ -327,12 +328,12 @@ function CampaignFourBanner(props) {
               </div>
             </Row>
             <Row>
-              <span>긴 광고 제목<p><small style={{color: '#ccc'}}>최대 90자까지 등록</small></p></span>
+              <span>긴 광고 제목<p><small style={{color: '#ccc'}}>최대 40자까지 등록</small></p></span>
               <div className={'txtCont'}>
                 <input
                   type={'text'}
                   name={'titleLong'}
-                  maxLength={90}
+                  maxLength={40}
                   value={campaignCreativeInfo.titleLong || ""}
                   onChange={handleChangeInputs}
                 />
@@ -453,7 +454,7 @@ function CampaignFourNative(props) {
               <ColSpan1>{active250 !== 0 && <ArrowButton next={true} onClick={()=>{setActive250(active250-1)}}/>}</ColSpan1>
               <PrevFrame width={250} height={250}>
                 <PrevImage250 style={{backgroundImage: `url(${campaignCreativeInfo.nativeMaterials[active250]?.imagePath})`}} />
-                <PrevTitle250>{campaignCreativeInfo.title1}</PrevTitle250>
+                <PrevTitle250><p className={'line-clamp_2'}>{campaignCreativeInfo.title1}</p></PrevTitle250>
               </PrevFrame>
               <ColSpan1>{active250 !== max && <ArrowButton next={false} onClick={()=>{setActive250(active250+1)}}/>}</ColSpan1>
             </Row>
@@ -464,7 +465,7 @@ function CampaignFourNative(props) {
               <ColSpan1>{active728 !== 0 &&  <ArrowButton next={true} onClick={()=>{setActive728(active728-1)}}/>}</ColSpan1>
               <PrevFrame width={728} height={90}>
                 <PrevImage728 style={{backgroundImage: `url(${campaignCreativeInfo.nativeMaterials[active728]?.imagePath})`}}/>
-                <PrevTitle728>{campaignCreativeInfo.title1}</PrevTitle728>
+                <PrevTitle728><p className={'ellipsis'}>{campaignCreativeInfo.title1}</p></PrevTitle728>
                 {campaignCreativeInfo.clickInducementType !== undefined && <PrevButton>{clickInducementType.find(d => d.value === campaignCreativeInfo.clickInducementType)?.label}</PrevButton>}
               </PrevFrame>
               <ColSpan1>{active728 !== max && <ArrowButton next={false} onClick={()=>{setActive728(active728+1)}}/>}</ColSpan1>
@@ -623,11 +624,11 @@ function CampaignFourNative(props) {
         <Span4>소재 상세 설정</Span4>
         <RowSpan box={true} column={true} style={{width: '100%', padding: '20px 30px', backgroundColor: '#fff'}}>
           <Row>
-            <span>광고 타이틀<p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
+            <span>광고 타이틀<p><small style={{color: '#ccc'}}>최대 15자까지 등록</small></p></span>
             <div className={'txtCont'}>
               <input
                 type={'text'}
-                maxLength={25}
+                maxLength={15}
                 name={'title1'}
                 value={campaignCreativeInfo.title1 || ""}
                 {...register('title1', {
@@ -640,12 +641,12 @@ function CampaignFourNative(props) {
             {errors.title1 && <ValidationScript style={{position:'unset', paddingLeft: 10}}>{errors.title1.message}</ValidationScript>}
           </Row>
           <Row>
-            <span>광고 제목1<small>(선택)</small><p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
+            <span>광고 제목1<small>(선택)</small><p><small style={{color: '#ccc'}}>최대 15자까지 등록</small></p></span>
             <div className={'txtCont'}>
               <input
                 type={'text'}
                 name={'title2'}
-                maxLength={25}
+                maxLength={15}
                 value={campaignCreativeInfo.title2 || ""}
                 onChange={handleChangeInputs}
               />
@@ -653,11 +654,12 @@ function CampaignFourNative(props) {
             </div>
           </Row>
           <Row>
-            <span>광고 제목2<small>(선택)</small><p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
+            <span>광고 제목2<small>(선택)</small><p><small style={{color: '#ccc'}}>최대 15자까지 등록</small></p></span>
             <div className={'txtCont'}>
               <input
                 type={'text'}
                 name={'title3'}
+                maxLength={15}
                 value={campaignCreativeInfo.title3 || ""}
                 onChange={handleChangeInputs}
               />
@@ -665,12 +667,12 @@ function CampaignFourNative(props) {
             </div>
           </Row>
           <Row>
-            <span>긴 광고 제목<small>(선택)</small><p><small style={{color: '#ccc'}}>최대 90자까지 등록</small></p></span>
+            <span>긴 광고 제목<small>(선택)</small><p><small style={{color: '#ccc'}}>최대 40자까지 등록</small></p></span>
             <div className={'txtCont'}>
               <input
                 type={'text'}
                 name={'titleLong'}
-                maxLength={90}
+                maxLength={40}
                 value={campaignCreativeInfo.titleLong || ""}
                 onChange={handleChangeInputs}
               />

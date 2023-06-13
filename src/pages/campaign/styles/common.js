@@ -171,8 +171,9 @@ export const ImageUploadCard = styled.div`
   padding: 5px;
   width: 100%;
   aspect-ratio: 1/1;
-  background-color: #ebebec;
+  background-color: #fff;
   border-radius: 5px;
+  border: 1px solid #ddd;
   & > div {}
   & img {
     width: 90%;
@@ -184,8 +185,8 @@ export const DeleteIcon = styled.div`
   position: absolute;
   right: 0;
   top: 0;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   background-image: url("/assets/images/common/btn_img_close.png");
   background-repeat: no-repeat;
   background-size: cover;
@@ -275,12 +276,13 @@ export const PrevFrame = styled.div`
   width: ${(props)=> props.width+"px"};
   height: ${(props)=> props.height+"px"};
   aspect-ratio: ${(props)=> props.width/props.height};
-  background-color: #ddd;
+  background-color: #fff;
   border-radius: 0.3rem;
   border: 1px solid #ddd;
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
+  font-size: 15px;
 `
 
 export const PrevImage250 = styled.div`
@@ -300,10 +302,7 @@ export const PrevTitle250 = styled.div`
   display: flex;
   align-items: center;
   max-width: 80%;
-  height: 26%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  height: 30%;
   text-align: center;
 `
 
@@ -326,10 +325,6 @@ export const PrevTitle728 = styled.div`
   margin-Left: 10px;
   width: 45%;
   height: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  text-align: start;
 `
 
 export const PrevButton = styled.button`
@@ -344,6 +339,7 @@ export const PrevButton = styled.button`
   background-position: center;
   white-space: nowrap;
   text-align: center;
+  font-size: 15px;
 `
 
 export const ImageTitle = styled.div`
