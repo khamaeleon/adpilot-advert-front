@@ -83,7 +83,7 @@ function TableDetail (props) {
   return(
     <>
       <RowSpan>
-        <ColSpan2>
+        <ColSpan2 style={{paddingLeft: 0}}>
           {props.totalCount && <TotalCount><span/>총 <span>{props?.totalCount[0]}</span> 건의 {props?.totalCount[1]}</TotalCount> }
         </ColSpan2>
         <Small>* shift를 누른 상태에서 스크롤시 좌우 스크롤이 가능합니다.</Small>
@@ -120,15 +120,14 @@ const Small = styled.small`
 `
 
 export const TotalCount = styled.div`
-  vertical-align: middle;
   & > span:first-child {
-    display: inline-block;
     width: 3px;
     height: 12px;
     background-color: #222;
+    margin: 2px 8px 0 0;
   }
   & > span:last-child {
-    margin: 0;
+    margin-left: 3px;
     color: #f5811f;
   }
 `

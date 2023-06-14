@@ -44,23 +44,22 @@ function BudgetEvent() {
     <>
       <Board>
         <BoardHeader>타겟팅 예산 현황</BoardHeader>
-        <BoardSearchDetail>
-          <RowSpan>
-            <ColSpan1>
-              <Input style={{width: 300}}
-                     placeholder={'광고주명 및 아이디 검색'}
-                     value={searchParams.keyword}
-                     onChange={handleSearch}
-                     onKeyDown={e => (e.code === 'Enter') && onSearchAdverEventBudget() }
-              />
-              <DefaultButton onClick={onSearchAdverEventBudget}>검색</DefaultButton>
-            </ColSpan1>
-          </RowSpan>
-        </BoardSearchDetail>
+        <RowSpan>
+          <ColSpan1 style={{paddingLeft:0}}>
+            <Input style={{width: 300}}
+                   placeholder={'광고주명 및 아이디 검색'}
+                   value={searchParams.keyword}
+                   onChange={handleSearch}
+                   onKeyDown={e => (e.code === 'Enter') && onSearchAdverEventBudget() }
+            />
+            <DefaultButton onClick={onSearchAdverEventBudget}>검색</DefaultButton>
+          </ColSpan1>
+        </RowSpan>
         <BoardTableContainer>
           { budgetEventDataState !== null &&
             <Table columns={adverEventBudgetColumns}
                    data={budgetEventDataState?.userDtos}
+                   totalCount={[budgetEventDataState.totalCount, '광고주']}
                    showHoverRows={false}
                    activeCell={[0]}
                    emptyText={'타겟팅 예산 현황 내역이 없습니다.'}/>

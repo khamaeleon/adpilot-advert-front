@@ -28,7 +28,7 @@ export const CategoryEnroll = styled.div`
 export const CategoryHeader = styled.div`
   position: relative;
   width: 100%;
-  padding: 15px;
+  padding: 12px 15px;
   text-align: center;
   background-color: #fafafa;
   border-bottom: 1px solid #ddd;
@@ -46,7 +46,7 @@ export const CategoryBody = styled.div`
 `
 
 export const CategoryItem = styled.div`
-  padding: 15px 20px;
+  padding: 12px 18px;
   width: 100%;
   border-bottom: ${(props) => props.active ? "1px solid #ffe3cb" : "1px solid #ddd"};
   border-left: ${(props) => props.active ? "2px solid #f5811f" : null};
@@ -69,7 +69,7 @@ export const SubCategoryBody = styled.div`
 `
 
 export const SubCategoryItem = styled.div`
-  padding: 15px 20px;
+  padding: 12px 18px;
   width: 25%;
   border-bottom: 1px solid #ddd;
   border-right: 1px solid #ddd;
@@ -93,7 +93,7 @@ export const EnrollButton = styled.button`
 
 export const SearchButton = styled.button`
   width: 140px;
-  height: 45px;
+  height: 40px;
   border: 1px solid #dddddd;
   background-color: #fff;
   border-radius: 5px;

@@ -723,6 +723,7 @@ export const BoardHeader = styled.div`
 `
 
 export const BoardSearchDetail = styled.div`
+  flex-direction: ${(props) => props.column ? "column" : "row"};
   display: flex;
   padding: 10px 0;
   font-size: 13px;

@@ -300,7 +300,7 @@ function Table(props) {
         </RowSpan>
       }
       <RowSpan>
-        <ColSpan2>
+        <ColSpan2 style={{paddingLeft: 0}}>
           {props.totalCount &&
             <TotalCount><span/>총 <span>{props?.totalCount[0]}</span> 건의 {props?.totalCount[1]}</TotalCount>}
         </ColSpan2>

@@ -45,23 +45,22 @@ function BudgetTime() {
     <>
       <Board>
         <BoardHeader>시간별 예산 현황</BoardHeader>
-        <BoardSearchDetail>
-          <RowSpan>
-            <ColSpan1>
-              <Input style={{width: 300}}
-                     placeholder={'광고주명 및 아이디 검색'}
-                     value={searchParams.keyword}
-                     onChange={handleSearch}
-                     onKeyDown={e => (e.code === 'Enter') && onSearchAdverBudgetTime() }
-              />
-              <DefaultButton onClick={onSearchAdverBudgetTime}>검색</DefaultButton>
-            </ColSpan1>
-          </RowSpan>
-        </BoardSearchDetail>
+        <RowSpan>
+          <ColSpan1 style={{paddingLeft:0}}>
+            <Input style={{width: 300}}
+                   placeholder={'광고주명 및 아이디 검색'}
+                   value={searchParams.keyword}
+                   onChange={handleSearch}
+                   onKeyDown={e => (e.code === 'Enter') && onSearchAdverBudgetTime() }
+            />
+            <DefaultButton onClick={onSearchAdverBudgetTime}>검색</DefaultButton>
+          </ColSpan1>
+        </RowSpan>
         <BoardTableContainer>
           { budgetTimeAdverDataState !== null &&
           <Table columns={adverTimeBudgetColumns}
                  data={budgetTimeAdverDataState?.userDtos}
+                 totalCount={[budgetTimeAdverDataState.totalCount, '광고주']}
                  showHoverRows={false}
                  activeCell={[0]}
                  emptyText={'시간 예산 현황 내역이 없습니다.'}/>

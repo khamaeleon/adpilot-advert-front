@@ -127,30 +127,24 @@ function BudgetTimeDetail() {
           </RowSpan>
           <BoardSearchDetail>
             <RowSpan box={true}>
-              <ColSpan4>
-                <Span4>시간별 예산 그룹명</Span4>
-                {
-                    <Input style={{height: 38}}
-                           type={'text'}
-                           // readOnly={saveType !== 'resist'}
-                           placeholder={'그룹명을 입력해주세요'}
-                           {...register("groupName", {
-                             required: "그룹명을 입력해주세요",
-                             onChange: (e) => handleGroupName(e),
-                             // disabled: saveType !== 'resist'
-                           })}
-                           value={timeBudgetDetailDataState?.groupName || ""}
-                    />
-                }
-                <Span4>
-                  {errors.groupName && <ValidationScript>{errors.groupName?.message}</ValidationScript>}
-                </Span4>
+              <ColSpan4 style={{padding: 0}}>
+                <ColTitle style={{padding: 0}}>시간별 예산 그룹명</ColTitle>
+                  <Input style={{height: 38, width: 350}}
+                         type={'text'}
+                         // readOnly={saveType !== 'resist'}
+                         placeholder={'그룹명을 입력해주세요'}
+                         {...register("groupName", {
+                           required: "그룹명을 입력해주세요",
+                           onChange: (e) => handleGroupName(e),
+                           // disabled: saveType !== 'resist'
+                         })}
+                         value={timeBudgetDetailDataState?.groupName || ""}
+                  />
+                {errors.groupName && <Span4><ValidationScript>{errors.groupName?.message}</ValidationScript></Span4>}
               </ColSpan4>
             </RowSpan>
-            <RowSpan>
+            <RowSpan style={{alignItems: 'center', marginLeft: 20}}>
               <Span4><strong>예산 소진 설정</strong></Span4>
-            </RowSpan>
-            <RowSpan>
               <RelativeDiv>
                 <label>
                   <input

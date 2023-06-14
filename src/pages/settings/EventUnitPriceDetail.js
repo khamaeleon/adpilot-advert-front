@@ -36,44 +36,46 @@ function EventUnitPriceDetail() {
     <>
       <Board>
         <BoardHeader>타겟팅 단가 기본 정보</BoardHeader>
-        <BoardSearchDetail>
-          <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
-            <ColSpan0>
-              <ColTitle>최근 수정</ColTitle>
-              <div>{dateFormat(eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.lastModifiedAt, 'YYYY.MM.DD HH:mm')}</div>
-            </ColSpan0>
-          </RowSpan>
-          <BoardTableCustomContainer>
-            <table>
-              <thead>
-                <tr>
-                  <th>광고주명</th>
-                  <th>아이디</th>
-                  <th>담당자</th>
-                </tr>
-              </thead>
-              {
-                eventUnitPriceDetailDataState !==null &&
-                <tbody>
-                  <tr>
-                    <td>{eventUnitPriceDetailDataState.adverName}</td>
-                    <td>{eventUnitPriceDetailDataState.username}</td>
-                    <td>{eventUnitPriceDetailDataState.managerName}</td>
-                  </tr>
-                </tbody>
-              }
-            </table>
-          </BoardTableCustomContainer>
-        </BoardSearchDetail>
+        <RowSpan style={{justifyContent: 'flex-end'}}>
+          <ColSpan0>
+            <ColTitle>최근 수정</ColTitle>
+            <div>{dateFormat(eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.lastModifiedAt, 'YYYY.MM.DD HH:mm')}</div>
+          </ColSpan0>
+        </RowSpan>
+        <BoardTableCustomContainer>
+          <table>
+            <colgroup>
+              <col width={'33%'} />
+              <col width={'33%'} />
+              <col width={'33%'} />
+            </colgroup>
+            <thead>
+            <tr>
+              <th>광고주명</th>
+              <th>아이디</th>
+              <th>담당자</th>
+            </tr>
+            </thead>
+            {
+              eventUnitPriceDetailDataState !==null &&
+              <tbody>
+              <tr>
+                <td>{eventUnitPriceDetailDataState.adverName}</td>
+                <td>{eventUnitPriceDetailDataState.username}</td>
+                <td>{eventUnitPriceDetailDataState.managerName}</td>
+              </tr>
+              </tbody>
+            }
+          </table>
+        </BoardTableCustomContainer>
         <BoardTableContainer>
-          <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
+          <RowSpan style={{ justifyContent: 'flex-end'}}>
             <SettingAdd title={'추가'} saveType={'create'} data={null} label={'won'} />
           </RowSpan>
-          <div>
-            총 <span>{eventUnitPriceDetailDataState !==null && eventUnitPriceDetailDataState.totalCount}</span>건
-          </div>
+
           {eventUnitPriceDetailDataState !==null &&
             <Table columns={eventUnitPriceDetailColumns}
+                   totalCount={[eventUnitPriceDetailDataState.totalCount, '타겟팅 단가 그룹']}
                    data={eventUnitPriceDetailDataState?.targetingPriceDtos}
                    showHoverRows={false}
                    activeCell={[0]}

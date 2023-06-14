@@ -43,24 +43,23 @@ function EventUnitPrice() {
       <>
       <Board>
         <BoardHeader>타겟팅 단가 현황</BoardHeader>
-        <BoardSearchDetail>
-          <RowSpan>
-            <ColSpan1>
-              <Input style={{width: 300}}
-                     placeholder={'광고주명 및 아이디 검색'}
-                     value={searchParams.keyword}
-                     onChange={handleSearch}
-                     onKeyDown={e => (e.code === 'Enter') && onSearchAdverEventPrice() }
+        <RowSpan>
+          <ColSpan1 style={{paddingLeft:0}}>
+            <Input style={{width: 300}}
+                   placeholder={'광고주명 및 아이디 검색'}
+                   value={searchParams.keyword}
+                   onChange={handleSearch}
+                   onKeyDown={e => (e.code === 'Enter') && onSearchAdverEventPrice() }
 
-              />
-              <DefaultButton onClick={onSearchAdverEventPrice}>검색</DefaultButton>
-            </ColSpan1>
-          </RowSpan>
-        </BoardSearchDetail>
+            />
+            <DefaultButton onClick={onSearchAdverEventPrice}>검색</DefaultButton>
+          </ColSpan1>
+        </RowSpan>
         <BoardTableContainer>
           { eventUnitPriceDataState !== null &&
             <Table columns={adverEventPriceColumns}
                    data={eventUnitPriceDataState?.userDtos}
+                   totalCount={[eventUnitPriceDataState.totalCount, '광고주']}
                    showHoverRows={false}
                    activeCell={[0]}
                    emptyText={'타겟팅 단가 현황 내역이 없습니다.'}/>

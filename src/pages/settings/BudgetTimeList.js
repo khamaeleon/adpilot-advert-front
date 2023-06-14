@@ -38,45 +38,46 @@ function EventTimeList() {
   return (
     <>
       <Board>
-        <BoardHeader>타겟팅 단가 기본 정보</BoardHeader>
-        <BoardSearchDetail>
-          <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
-            <ColSpan0>
-              <ColTitle>최근 수정</ColTitle>
-              <div>{dateFormat(budgetTimeListState !==null && budgetTimeListState.lastModifiedAt, 'YYYY.MM.DD HH:mm')}</div>
-            </ColSpan0>
-          </RowSpan>
-          <BoardTableCustomContainer>
-            <table>
-              <thead>
-                <tr>
-                  <th>광고주명</th>
-                  <th>아이디</th>
-                  <th>담당자</th>
-                </tr>
-              </thead>
-              {
-                budgetTimeListState !==null &&
-                <tbody>
-                  <tr>
-                    <td>{budgetTimeListState.adverName}</td>
-                    <td>{budgetTimeListState.username}</td>
-                    <td>{budgetTimeListState.managerName}</td>
-                  </tr>
-                </tbody>
-              }
-            </table>
-          </BoardTableCustomContainer>
-        </BoardSearchDetail>
+        <BoardHeader>시간별 예산 기본 정보</BoardHeader>
+        <RowSpan style={{justifyContent: 'flex-end'}}>
+          <ColSpan0>
+            <ColTitle>최근 수정</ColTitle>
+            <div>{dateFormat(budgetTimeListState !==null && budgetTimeListState.lastModifiedAt, 'YYYY.MM.DD HH:mm')}</div>
+          </ColSpan0>
+        </RowSpan>
+        <BoardTableCustomContainer>
+          <table>
+            <colgroup>
+              <col width={'33%'} />
+              <col width={'33%'} />
+              <col width={'33%'} />
+            </colgroup>
+            <thead>
+            <tr>
+              <th>광고주명</th>
+              <th>아이디</th>
+              <th>담당자</th>
+            </tr>
+            </thead>
+            {
+              budgetTimeListState !==null &&
+              <tbody>
+              <tr>
+                <td>{budgetTimeListState.adverName}</td>
+                <td>{budgetTimeListState.username}</td>
+                <td>{budgetTimeListState.managerName}</td>
+              </tr>
+              </tbody>
+            }
+          </table>
+        </BoardTableCustomContainer>
         <BoardTableContainer>
-          <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
+          <RowSpan style={{justifyContent: 'flex-end'}}>
             <DefaultButton type={'button'} onClick={resistBudgetTimes}>추가</DefaultButton>
           </RowSpan>
-          <div>
-            총 <span>{budgetTimeListState !==null && budgetTimeListState.totalCount}</span>건
-          </div>
           {budgetTimeListState !==null &&
             <Table columns={budgetTimeDetailColumns}
+                   totalCount={[budgetTimeListState.totalCount, '시간별 예산 그룹']}
                    data={budgetTimeListState?.timeGroups}
                    showHoverRows={false}
                    activeCell={[0]}

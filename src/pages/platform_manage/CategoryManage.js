@@ -1,7 +1,7 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchDetail,
+  BoardSearchDetail, ColSpan0,
   ColSpan1,
   ColSpan3,
   Input,
@@ -154,20 +154,17 @@ export function CategoryManage() {
     <>
       <Board>
         <BoardHeader>광고주 카테고리 관리</BoardHeader>
-        <BoardSearchDetail>
-          <RowSpan>
-            <ColSpan3/>
-            <ColSpan1>
-              <Input
-                  value={searchKeyword}
-                  onChange={handleChangeSearchCategory}
-                  placeholder={'검색'}
-                  onKeyDown={event => (event.code === 'Enter') && handleSearchCategory() }
-              />
-              <SearchButton onClick={handleSearchCategory}>검색</SearchButton>
-            </ColSpan1>
-          </RowSpan>
-        </BoardSearchDetail>
+        <RowSpan style={{marginBottom: 15, justifyContent: 'flex-start'}}>
+          <ColSpan0 style={{paddingLeft: 0}}>
+            <Input
+              value={searchKeyword}
+              onChange={handleChangeSearchCategory}
+              placeholder={'카테고리 검색'}
+              onKeyDown={event => (event.code === 'Enter') && handleSearchCategory()}
+            />
+            <SearchButton onClick={handleSearchCategory}>검색</SearchButton>
+          </ColSpan0>
+        </RowSpan>
         <CategoryContainer>
           <MainCategory>
             <CategoryHeader>

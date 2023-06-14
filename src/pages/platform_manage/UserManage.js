@@ -160,7 +160,7 @@ export default function UserManage(){
     <>
       <Board>
         <BoardHeader>사용자 관리</BoardHeader>
-        <BoardSearchDetail>
+        <BoardSearchDetail column={true}>
           {/*line1*/}
           <RowSpan style={{justifyContent: 'flex-start', marginBottom: 20}}>
             <ColSpan1>

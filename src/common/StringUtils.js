@@ -148,7 +148,7 @@ export const removeStr = (str) => {
 export const decimalFormat = (money) => {
   if(money == null || money === 0) return 0;
   if(money !== 0){
-    return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return money.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
   }else{
     return '0';
   }
@@ -158,12 +158,13 @@ export const decimalFormat = (money) => {
 export const numberToFixedFormat = (number) => {
   if(number == null || number === 0) return 0;
   if(number !== 0){
-    return number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return decimalFormat(number.toFixed(2));
   }else{
     return '0';
   }
 }
 
+// 소수점 두번째 버림 (원)
 export const moneyToFixedFormat = (money) => {
   if(money == null || money === 0) return 0;
   if(money !== 0){

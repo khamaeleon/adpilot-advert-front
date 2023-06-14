@@ -41,44 +41,45 @@ function BudgetEventDetail() {
     <>
       <Board>
         <BoardHeader>타겟팅 예산 기본 정보</BoardHeader>
-        <BoardSearchDetail>
-          <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
-            <ColSpan0>
-              <ColTitle>최근 수정</ColTitle>
-              <div>{dateFormat(eventBudgetDetailDataState !== null && eventBudgetDetailDataState.lastModifiedAt, 'YYYY.MM.DD HH:mm')}</div>
-            </ColSpan0>
-          </RowSpan>
-          <BoardTableCustomContainer>
-            <table>
-              <thead>
+        <RowSpan style={{justifyContent: 'flex-end'}}>
+          <ColSpan0>
+            <ColTitle>최근 수정</ColTitle>
+            <div>{dateFormat(eventBudgetDetailDataState !== null && eventBudgetDetailDataState.lastModifiedAt, 'YYYY.MM.DD HH:mm')}</div>
+          </ColSpan0>
+        </RowSpan>
+        <BoardTableCustomContainer>
+          <table>
+            <colgroup>
+              <col width={'33%'} />
+              <col width={'33%'} />
+              <col width={'33%'} />
+            </colgroup>
+            <thead>
+            <tr>
+              <th>광고주명</th>
+              <th>아이디</th>
+              <th>담당자</th>
+            </tr>
+            </thead>
+            {
+              eventBudgetDetailDataState !== null &&
+              <tbody>
               <tr>
-                <th>광고주명</th>
-                <th>아이디</th>
-                <th>담당자</th>
+                <td>{eventBudgetDetailDataState.adverName}</td>
+                <td>{eventBudgetDetailDataState.username}</td>
+                <td>{eventBudgetDetailDataState.managerName}</td>
               </tr>
-              </thead>
-              {
-                eventBudgetDetailDataState !== null &&
-                <tbody>
-                <tr>
-                  <td>{eventBudgetDetailDataState.adverName}</td>
-                  <td>{eventBudgetDetailDataState.username}</td>
-                  <td>{eventBudgetDetailDataState.managerName}</td>
-                </tr>
-                </tbody>
-              }
-            </table>
-          </BoardTableCustomContainer>
-        </BoardSearchDetail>
+              </tbody>
+            }
+          </table>
+        </BoardTableCustomContainer>
         <BoardTableContainer>
-          <RowSpan style={{marginTop: 0, justifyContent: 'flex-end'}}>
+          <RowSpan style={{justifyContent: 'flex-end'}}>
             <SettingAdd title={'추가'} saveType={saveTypeState} data={null} label={'pct'}/>
           </RowSpan>
-          <div>
-            총 <span>{eventBudgetDetailDataState !== null && eventBudgetDetailDataState.totalCount}</span>건
-          </div>
           {eventBudgetDetailDataState !== null &&
             <Table columns={budgetEventDetailColumns}
+                   totalCount={[eventBudgetDetailDataState.totalCount, '타겟팅 예산 그룹']}
                    data={eventBudgetDetailDataState?.targetingBudgetDtos}
                    showHoverRows={false}
                    activeCell={[0]}

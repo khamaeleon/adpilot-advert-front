@@ -36,7 +36,7 @@ import {deleteCustomReportsAxios, retrieveCustomReportsDetail} from "../../servi
 import {useAtom, useAtomValue} from "jotai";
 import {tokenResultAtom} from "../login/entity/Common";
 import {useNavigate} from "react-router-dom";
-import {dateFormat} from "../../common/StringUtils";
+import {dateFormat, decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../common/StringUtils";
 import {reportsInfoAtom} from "../../components/aside/entity";
 import {deviceType, productType, targetingType} from "../dash_board/entity/Common";
 import {
@@ -172,101 +172,131 @@ const defaultColumn = {
     textAlign: 'center',
     render: (props) => {
       const clickRate = (props.data.validClickCount / props.data.exposureCount) * 100
-      return <span>{!isNaN(clickRate) ? clickRate.toFixed(2) : 0}%</span>
+      return <span className={'pct'}>{!isNaN(clickRate) ? numberToFixedFormat(clickRate) : 0}</span>
     }
   },
   'cpc': {
     textAlign: 'center',
     render: (props) => {
       const cpc = props.data.costAmount / props.data.validClickCount
-      return <span>{!isNaN(cpc) ? cpc.toFixed(2) : 0}</span>
+      return <span className={'won'}>{!isNaN(cpc) ? moneyToFixedFormat(cpc) : 0}</span>
     }
   },
   'conversionRate': {
     textAlign: 'center',
     render: (props) => {
       const conversionRate = (props.data.conversionCount / props.data.totalClickCount) * 100
-      return <span>{!isNaN(conversionRate) ? conversionRate.toFixed(2) : 0} %</span>
+      return <span className={'pct'}>{!isNaN(conversionRate) ? numberToFixedFormat(conversionRate) : 0}</span>
     }
   },
   'conversionPrice': {
     textAlign: 'center',
     render: (props) => {
       const costPerConversion = props.data.costAmount / props.data.conversionCount
-      return <span>{!isNaN(costPerConversion) ? costPerConversion.toFixed(2) : 0}</span>
+      return <span className={'won'}>{!isNaN(costPerConversion) ? moneyToFixedFormat(costPerConversion) : 0}</span>
     }
   },
   'amountPurchasedAvg': {
     textAlign: 'center',
     render: (props) => {
       const amountPurchased = (props.data.costAmount / props.data.conversionCount)
-      return <span>{!isNaN(amountPurchased) ? amountPurchased.toFixed(2) : 0}</span>
+      return <span className={'won'}>{!isNaN(amountPurchased) ? moneyToFixedFormat(amountPurchased) : 0}</span>
     }
   },
   'sessionConversionRoas': {
     textAlign: 'center',
     render: (props) => {
       const sessionRoas = (props.data.sessionConversionAmount / props.data.costAmount) * 100
-      return <span>{!isNaN(sessionRoas) ? sessionRoas.toFixed(2) : 0}%</span>
+      return <span className={'pct'}>{!isNaN(sessionRoas) ? numberToFixedFormat(sessionRoas) : 0}</span>
     }
   },
   'directConversionRoas': {
     textAlign: 'center',
     render: (props) => {
       const directRoas = (props.data.directConversionAmount / props.data.costAmount) * 100
-      return <span>{!isNaN(directRoas) ? directRoas.toFixed(2) : 0}%</span>
+      return <span className={'pct'}>{!isNaN(directRoas) ? numberToFixedFormat(directRoas) : 0}</span>
     }
   },
   'roas': {
     textAlign: 'center',
     render: (props) => {
       const roas = ((props.data.sessionConversionAmount + props.data.exposureConversionAmount + props.data.directConversionAmount) / props.data.costAmount) * 100
-      return <span>{!isNaN(roas) ? roas.toFixed(2) : 0}%</span>
+      return <span className={'pct'}>{!isNaN(roas) ? numberToFixedFormat(roas) : 0}</span>
     }
   },
   'exposureConversionRoas': {
     textAlign: 'center',
     render: (props) => {
       const exposureRoas = (props.data.exposureConversionAmount / props.data.costAmount) * 100
-      return <span>{!isNaN(exposureRoas) ? exposureRoas.toFixed(2) : 0}%</span>
+      return <span className={'pct'}>{!isNaN(exposureRoas) ? numberToFixedFormat(exposureRoas) : 0}</span>
     }
   },
   'eCpm': {
     textAlign: 'center',
     render: (props) => {
       const ecpm = (props.data.costAmount / props.data.exposureCount) * 1000
-      return <span>{!isNaN(ecpm) ? ecpm.toFixed(2) : 0}</span>
+      return <span className={'won'}>{!isNaN(ecpm) ? moneyToFixedFormat(ecpm) : 0}</span>
     }
   },
   "exposureCount": {
     textAlign: 'center',
+    render: ({value}) => {
+      return <span>{decimalFormat(value)}</span>
+    }
   },
   "countByAdvertise": {
     textAlign: 'center',
+    render: ({value}) => {
+      return <span>{decimalFormat(value)}</span>
+    }
   },
   "validClickCount": {
     textAlign: 'center',
+    render: ({value}) => {
+      return <span>{decimalFormat(value)}</span>
+    }
   },
   "totalExposureCount": {
     textAlign: 'center',
+    render: ({value}) => {
+      return <span>{decimalFormat(value)}</span>
+    }
   },
   "conversionCount": {
     textAlign: 'center',
+    render: ({value}) => {
+      return <span>{decimalFormat(value)}</span>
+    }
   },
   "directConversionAmount": {
     textAlign: 'center',
+    render: ({value}) => {
+      return <span className={'won'}>{moneyToFixedFormat(value)}</span>
+    }
   },
   "sessionConversionAmount": {
     textAlign: 'center',
+    render: ({value}) => {
+      return <span className={'won'}>{moneyToFixedFormat(value)}</span>
+    }
   },
   "totalClickCount": {
     textAlign: 'center',
+    render: ({value}) => {
+      return <span>{decimalFormat(value)}</span>
+    }
   },
   "exposureConversionAmount": {
     textAlign: 'center',
+    render: ({value}) => {
+      return <span className={'won'}>{moneyToFixedFormat(value)}</span>
+    }
   },
   "costAmount": {
-    textAlign: 'center'
+    textAlign: 'center',
+    render: ({value}) => {
+      return <span className={'won'}>{decimalFormat(value)}</span>
+    }
   }
 }
 

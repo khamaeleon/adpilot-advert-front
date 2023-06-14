@@ -456,7 +456,7 @@ function PlatformUserDetail() {
           <>
             <Board>
               <BoardHeader>기본 정보</BoardHeader>
-              <BoardSearchDetail>
+              <BoardSearchDetail column={true}>
                 <RowSpan>
                   <ColSpan2>
                     <ColTitle><Span4>광고주 구분</Span4></ColTitle>
@@ -574,7 +574,7 @@ function PlatformUserDetail() {
             </Board>
             <Board>
               <BoardHeader>사업자 정보</BoardHeader>
-              <BoardSearchDetail>
+              <BoardSearchDetail column={true}>
                 <RowSpan>
                   <ColSpan2>
                     <ColTitle><Span4>상호명</Span4></ColTitle>
