@@ -5,7 +5,7 @@ import moment from "moment";
 import React from "react";
 
 export const accountInfoAtom = atom(null)
-export const userInfoAtom = atom([])
+export const userInfoAtom = atom(null)
 
 /**
  * 광고주 타입
@@ -77,8 +77,8 @@ export const columnUserData = [
   },
   {
     name: 'hostType',
-    header: '솔루션 타입',
-    render: ({value,cellProps}) => {
+    header: '호스팅',
+    render: ({value}) => {
       return (
         <>{hostList.find(obj => obj.value === value).label}</>
       )

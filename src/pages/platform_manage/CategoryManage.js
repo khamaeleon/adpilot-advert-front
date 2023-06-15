@@ -178,7 +178,7 @@ export function CategoryManage() {
               <ColSpan1><SearchButton onClick={handleCreateCategory}>등록</SearchButton></ColSpan1>
             </CategoryEnroll>
             <CategoryBody>
-              {topLevelCategoryList.length !== 0 && topLevelCategoryList.map((item, key) => {
+              {topLevelCategoryList?.length !== 0 && topLevelCategoryList?.map((item, key) => {
                 return (
                   <CategoryItem
                     key={key}
@@ -203,12 +203,12 @@ export function CategoryManage() {
               </div>
             </CategoryEnroll>
             <SubCategoryBody>
-              {categoryList.length !== 0 && categoryList.map((item, key) => {
+              {categoryList?.length !== 0 && categoryList.map((item, key) => {
                 return(
                   <SubCategoryItem key={key}>{item.name}</SubCategoryItem>
                 )
               })}
-              {topLevelCategoryList.length === 0 && <div style={{padding: 30}}>검색 정보가 없습니다.</div>}
+              {topLevelCategoryList?.length === 0 && <div style={{padding: 30}}>검색 정보가 없습니다.</div>}
             </SubCategoryBody>
           </SubCategory>
         </CategoryContainer>
