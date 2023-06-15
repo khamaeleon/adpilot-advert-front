@@ -21,9 +21,8 @@ import Select from "react-select";
 import {ChromePicker} from 'react-color'
 import {FrameEditor} from "./Frame/FrameEditor";
 import {confirmAlert} from "react-confirm-alert";
-import {uploadBannerImages} from "../../services/campaign/CreativeAxios";
-import {toast} from "react-toastify";
-import {database} from "./entity/bannerCreator";
+import {toast, ToastContainer} from "react-toastify";
+import {database, fontTypes} from "./entity/bannerCreator";
 import {
   BannerItemContainer,
   DefaultItemButton,
@@ -37,20 +36,19 @@ import {
   PopButton,
   TextButton
 } from "./styles/bannerCreator";
-import {de} from "date-fns/locale";
 
-function ColorPicker ({onChange}) {
-  const [color, setColor] = useState('#ffffff')
+function ColorPicker ({onChange, defaultColor}) {
+  const [color, setColor] = useState(defaultColor)
   const [colorChange, setColorChange] = useState(null)
   const [displayPicker, setDisplayPicker] = useState(false)
 
-
-  const handleClickColor = (e) => {
-    console.log(e.target)
+  const handleClickColor = () => {
     setDisplayPicker(!displayPicker)
   }
-
-  const handleChangeComplete = (color) => {
+  const handleChangeColor = (color) => {
+    setColorChange(color.hex)
+  }
+  const handleChangeColorComplete = (color) => {
     setColorChange(color.hex)
   }
   const handleChoiceColor = () => {
@@ -81,8 +79,9 @@ function ColorPicker ({onChange}) {
       {displayPicker ?
         <div style={ popover }>
           <ChromePicker
-            color={colorChange !== null ? colorChange : '#ffffff'}
-            onChangeComplete={handleChangeComplete}
+            color={colorChange !== null ? colorChange : defaultColor}
+            onChange={handleChangeColor}
+            onChangeComplete={handleChangeColorComplete}
           />
           <div style={{display: 'flex'}}>
             <button style={popButton} onClick={() => setDisplayPicker(!displayPicker)}>취소</button>
@@ -104,27 +103,21 @@ const imgSizeHeight = [ 'IMG300_150',]
 const square = ['IMG200_200','IMG150_150','IMG300_300', 'IMG400_400', 'IMG500_500','IMG600_600']
 
 export function BannerCreative() {
-  const [data, setData] = useState([])
   const [defaultSetting, setDefaultSetting] = useState({
     title: '',
     titleSize: 12,
-    titleColor: '',
+    titleColor: '#222222',
     titleBold: false,
     titleItalic: false,
     titleUnderline: false,
     titleFamily: '',
     mainImage: '',
     backgroundImage: '',
-    backgroundColor: '',
+    backgroundColor: '#ffffff',
     buttonTitle: '',
-    buttonColor: '',
-    buttonBackgroundColor: '',
+    buttonColor: '#222222',
+    buttonBackgroundColor: '#ffffff',
   })
-
-  useEffect(() => {
-    //
-    setData(database)
-  },[])
 
   const [bannerTypes, setBannerTypes] = useState([])
   const [selectedBanner, setSelectedBanner] = useState([])
@@ -180,6 +173,14 @@ export function BannerCreative() {
     setDefaultSetting({
       ...defaultSetting,
       titleSize: e.target.value
+    })
+  }
+
+  const handleChangeFontFamily = (fontFamily) =>{
+    console.log(fontFamily.value);
+    setDefaultSetting({
+      ...defaultSetting,
+      titleFamily: fontFamily.value
     })
   }
 
@@ -248,6 +249,8 @@ export function BannerCreative() {
       ]
     });
   }
+
+
   const onDropMain = (pictureFiles) => {
     console.log(pictureFiles)
     if (pictureFiles.length !== 0) {
@@ -260,12 +263,14 @@ export function BannerCreative() {
           image.src = pictureFiles[0].dataURL
           image.onload = function () {
             console.log(this.width, this.height)
+            const obj = {
+              url: pictureFiles[0].dataURL,
+              width:this.width,
+              height: this.height,
+            }
             setDefaultSetting({
               ...defaultSetting,
-              mainImage: {
-                url: pictureFiles[0].dataURL,
-                ratio: this.width/this.height,
-              }
+              mainImage: obj
             });
           }
           resolve();
@@ -449,26 +454,28 @@ export function BannerCreative() {
                 <ColSpan1>소재 상세 설정</ColSpan1>
                 <BannerItemContainer style={{height: '100%', justifyContent: 'space-around'}}>
                   <Row style={{position: 'relative'}}>
-                    <span style={{width: 80, whiteSpace: 'nowrap'}}>광고 타이틀<p><small style={{color: '#ccc'}}>(최대 12글자)</small></p></span>
-                    <div className={'txtCont'}>
-                      <input
+                    <Span4 style={{width: 80, whiteSpace: 'nowrap'}}>광고 타이틀<p><small style={{color: '#ccc'}}>(최대 12글자)</small></p></Span4>
+                    <ColSpan3>
+                      <Input
                         type={'text'}
                         maxLength={25}
                         name={'serviceName'}
-                        value={defaultSetting.title || ''}
+                        value={defaultSetting?.title || ''}
                         onChange={handleChangeTitle}
                         placeholder={'광고 제목을 입력해주세요 (12자)'}
                       />
-                    </div>
+                    </ColSpan3>
                     <TextButton onClick={handleFontSelect}>A</TextButton>
                     {isFontSetting &&
                       <PopButton>
                         <Row>
                           <ColSpan1>글꼴</ColSpan1>
                           <ColSpan3>
-                            <Select styles={selectStyle} ontions={[
-                              {key: 0, value: 'normal', label: '돋움'}
-                            ]}/>
+                            <Select styles={selectStyle}
+                                    options={fontTypes}
+                                    onChange={handleChangeFontFamily}
+                                    value={fontTypes.find(font => font.value === defaultSetting.titleFamily) || ''}
+                            />
                           </ColSpan3>
                         </Row>
                         <Row>
@@ -496,7 +503,7 @@ export function BannerCreative() {
                         <Row>
                           <ColSpan1>색상</ColSpan1>
                           <ColSpan3>
-                            <ColorPicker onChange={handleChangeTitleColor}/>
+                            <ColorPicker onChange={handleChangeTitleColor} defaultColor={'#222222'}/>
                           </ColSpan3>
                         </Row>
                         <RowSpan>
@@ -508,7 +515,7 @@ export function BannerCreative() {
                   <Row style={{gap: 10, justifyContent: 'space-between'}}>
                     <Span4 style={{width: 80, whiteSpace: 'nowrap'}}>메인이미지<small></small><p><small style={{color: '#ccc'}}>(600*300 권장)</small></p></Span4>
                     <ColSpan100 padding={'0'} style={{maxWidth: '100px'}}>
-                      {defaultSetting.mainImage === '' ?
+                      {defaultSetting.mainImage.length === 0 ?
                         <ImageUploading
                           multiple
                           acceptType={["jpg", "gif", "png"]}
@@ -552,7 +559,7 @@ export function BannerCreative() {
                     </ColSpan100>
                     <Span4 style={{width: 80, whiteSpace: 'nowrap'}}>배경색</Span4>
                     <ColSpan100 padding={'0'} style={{maxWidth: '100%'}}>
-                      <ColorPicker onChange={handleChangeImageBackground}/>
+                      <ColorPicker onChange={handleChangeImageBackground} defaultColor={'#ffffff'}/>
                     </ColSpan100>
                   </Row>
                   <Row>
@@ -570,11 +577,11 @@ export function BannerCreative() {
                       </ColSpan100>
                       <Span4 style={{width: 80, whiteSpace: 'nowrap'}}>글자색</Span4>
                       <ColSpan100 padding={'0'} style={{maxWidth: '100%'}}>
-                        <ColorPicker onChange={handleChangeButtonTitleColor}/>
+                        <ColorPicker onChange={handleChangeButtonTitleColor}  defaultColor={'#222222'}/>
                       </ColSpan100>
                       <Span4 style={{width: 80, whiteSpace: 'nowrap'}}>배경색</Span4>
                       <ColSpan100 padding={'0'} style={{maxWidth: '100%'}}>
-                        <ColorPicker onChange={handleChangeButtonBackgroundColor}/>
+                        <ColorPicker onChange={handleChangeButtonBackgroundColor}  defaultColor={'#ffffff'}/>
                       </ColSpan100>
                     </Row>
                   </Row>
@@ -588,7 +595,7 @@ export function BannerCreative() {
               <FlexWrap>
                 {selectedBanner.map((item, key) => {
                   return (
-                    <FrameEditor set={defaultSetting} size={item} key={key} focused={handleFocusSelected}/>
+                    <FrameEditor set={defaultSetting} setSetting={setDefaultSetting} size={item} key={key} focused={handleFocusSelected}/>
                   )
                 })}
               </FlexWrap>
@@ -596,6 +603,10 @@ export function BannerCreative() {
           </>
           }
         </BoardSearchResult>
+        <div>
+          <iframe src={'../../frame.html'} width={200} height={200} style={{border: '1px solid #ddd'}}/>
+        </div>
+        <ToastContainer/>
       </Board>
     </>
   )

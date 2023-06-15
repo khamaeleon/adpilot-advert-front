@@ -42,15 +42,16 @@ export const HalfDiv = styled.div`
 
 export const TextButton = styled.div`
   margin-left: 10px;
-  width: 40px;
-  height: 36px;
+  width: 80px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #777777;
   font-weight: 900;
   color: #fff;
-  border-radius: 3px;
+  border-radius: 5px;
+  cursor: pointer;
 `
 
 export const PopButton = styled.div`
@@ -87,7 +88,8 @@ export const PickerColor = styled.div`
   background-color: ${(props) => props.color ? props.color : '#000000'};
   width: 30px;
   height: 30px;
-  border: 1px solid #ddd
+  border: 1px solid #ddd;
+  cursor: pointer;
 `
 
 export const FlexWrap = styled.div`

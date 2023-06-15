@@ -1,53 +1,124 @@
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
+import {confirmAlert} from "react-confirm-alert";
+import {CreateImage} from "../styles/common";
+import ImageUploading from "react-images-uploading";
+import {toast} from "react-toastify";
 
 export function FrameEditor(props){
-  const {size, set} = props
+  const {size, set, setSetting} = props
   const [sized, setSized] = useState([0,0])
-  const [frameId, setFrameId] = useState()
-  const [resize, setResize] = useState(0)
-  const [{ imgX, imgY }, setImagePosition] = useState({
-    imgX: 0,
-    imgY: 0,
-  });
-  const [{ titleX, titleY }, setTitlePosition] = useState({
-    titleX: 0,
-    titleY: 0,
-  });
-  const [{ btnX, btnY }, setButtonPosition] = useState({
-    btnX: 0,
-    btnY: 0,
+  const [addElement, setAddElement] = useState(false)
+  const [isEditable, setIsEditable] = useState([false, false]);
+  const [element, setElement] = useState({
+    image: [],
+    text: []
+  })
+  const [elementPosition, setElementPosition] = useState({
+    image: {
+      x: 0,
+      y: 0,
+      w: 0,
+      h: 0,
+    },
+    image0: {
+      x: 0,
+      y: 0,
+      w: 0,
+      h: 0
+    },
+    image1: {
+      x: 0,
+      y: 0,
+      w: 0,
+      h: 0
+    },
+    title: {
+      x: 0,
+      y: 0
+    },
+    text0: {
+      x: 0,
+      y: 0
+    },
+    text1: {
+      x: 0,
+      y: 0
+    },
+    button: {
+      x: 0,
+      y: 0
+    }
   });
 
   useEffect(() => {
     const stringToSize = size.replace('IMG','').split('_')
     setSized([parseInt(stringToSize[0]),parseInt(stringToSize[1])])
+    if(set.mainImage === '') {
+      setElementPosition({
+        ...elementPosition,
+        image: {
+          ...elementPosition.image,
+          w: set.mainImage.width,
+          h: set.mainImage.height
+        }
+      })
+    }
   }, [set,size]);
 
   const handleSelectFrame = () => {
 
   }
+
+  const handleDoubleClick = (e, index) => {
+    e.stopPropagation()
+    isEditable[index] = true
+    setIsEditable([...isEditable]);
+  };
+
+  const handleChange = (e, index) => {
+    e.stopPropagation()
+    element.text[index] = e.target.value
+    setElement({
+      ...element,
+      text: [...element.text]
+    })
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      setIsEditable([false, false]);
+    }
+  };
   const handleOpenAddElement = (e) => {
     e.stopPropagation()
+    setAddElement(true)
   }
 
   const boundaryRef = useRef()
-  const boxRef = useRef()
-  const titleRef = useRef()
-  const buttonRef = useRef()
+
   const inRange = (v, max) => {
     if (v < 0) return 0;
     if (v > max) return max;
     return v;
   };
 
-  const handleImageResize = (clickEvent) => {
+
+  const handleImageResize = (clickEvent, target) => {
     clickEvent.stopPropagation()
     const mouseMoveHandler = (moveEvent) => {
       const deltaX = moveEvent.screenX - clickEvent.screenX;
+      const deltaY = moveEvent.screenY - clickEvent.screenY;
       const boundary = boundaryRef.current.getBoundingClientRect();
-      console.log(deltaX)
-      setResize(inRange(resize + deltaX, Math.floor(boundary.width)))
+
+      setElementPosition({
+        ...elementPosition,
+        [target]: {
+          ...elementPosition[target],
+          w: inRange((!isNaN(elementPosition[target].w) ? elementPosition[target].w : 0)  + deltaX, Math.floor(boundary.width)),
+          h: inRange((!isNaN(elementPosition[target].h) ? elementPosition[target].h : 0) + deltaY, Math.floor(boundary.height - 2))
+        }
+      })
     }
     const mouseUpHandler = () => {
       document.removeEventListener('mousemove', mouseMoveHandler);
@@ -58,92 +129,137 @@ export function FrameEditor(props){
   }
 
 
+  const handleMouseMoveDrag = (clickEvent, target) => {
 
-  const handleImageMove = (clickEvent) => {
     const mouseMoveHandler = (moveEvent) => {
       const deltaX = moveEvent.screenX - clickEvent.screenX;
       const deltaY = moveEvent.screenY - clickEvent.screenY;
       const boundary = boundaryRef.current.getBoundingClientRect();
-      const box = boxRef.current.getBoundingClientRect();
-
-      setImagePosition({
-        imgX: inRange(
-          imgX + deltaX,
-          Math.floor(boundary.width - box.width -2),
-        ),
-        imgY: inRange(
-          imgY + deltaY,
-          Math.floor(boundary.height - box.height -1),
-        ),
-      });
-    };
-
-    const mouseUpHandler = () => {
-      document.removeEventListener('mousemove', mouseMoveHandler);
-    };
-
-    document.addEventListener('mousemove', mouseMoveHandler);
-    document.addEventListener('mouseup', mouseUpHandler, { once: true });
-  }
-
-  const handleTitleMove = (clickEvent) => {
-    const mouseMoveHandler = (moveEvent) => {
-      const deltaX = moveEvent.screenX - clickEvent.screenX;
-      const deltaY = moveEvent.screenY - clickEvent.screenY;
-      const boundary = boundaryRef.current.getBoundingClientRect();
-      const title = titleRef.current.getBoundingClientRect();
-      console.log(`parent_width:${boundary.width}, parent_height:${boundary.height}, box_width: ${title.width}, box_height: ${title.height},`);
-      setTitlePosition({
-        titleX: inRange(
-          titleX + deltaX,
-          Math.floor( boundary.width - title.width - 2),
-        ),
-        titleY: inRange(
-          titleY + deltaY,
-          Math.floor(boundary.height - title.height - 1),
-        ),
-      });
-    };
-
-    const mouseUpHandler = () => {
-      document.removeEventListener('mousemove', mouseMoveHandler);
-    };
-
-    document.addEventListener('mousemove', mouseMoveHandler);
-    document.addEventListener('mouseup', mouseUpHandler, { once: true });
-  }
-
-  const handleButtonMove = (clickEvent) => {
-    const boundary = boundaryRef.current.getBoundingClientRect();
-    const button = buttonRef.current.getBoundingClientRect();
-    const mouseMoveHandler = (moveEvent) => {
-      const deltaX = moveEvent.screenX - clickEvent.screenX;
-      const deltaY = moveEvent.screenY - clickEvent.screenY;
-      setButtonPosition({
-        btnX: inRange(
-          btnX + deltaX,
-          Math.floor(boundary.width - button.width - 2),
-        ),
-        btnY: inRange(
-          btnY + deltaY,
-          Math.floor(boundary.height - button.height -1),
-        ),
-      });
+      console.log(elementPosition[target])
+      setElementPosition({
+        ...elementPosition,
+        [target]: {
+          ...elementPosition[target],
+          x: inRange(
+            elementPosition[target].x + deltaX,
+            Math.floor(boundary.width - clickEvent.target.clientWidth -2),
+          ),
+          y: inRange(
+            elementPosition[target].y + deltaY,
+            Math.floor(boundary.height - clickEvent.target.clientHeight -2),
+          ),
+        }
+      })
     };
     const mouseUpHandler = () => {
       document.removeEventListener('mousemove', mouseMoveHandler);
     };
-
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler, { once: true });
   }
 
+  const onImageError = (errors, type) => {
+    if (errors.maxFileSize) {
+      toast.warning('저장 가능한 이미지 사이즈는 '+ (type ==='logo'?'1MB':'10MB')+'입니다.')
+    } else if (errors.maxNumber) {
+      toast.warning('이미지는 5개 까지만 등록 가능합니다.')
+    } else if (errors.acceptType) {
+      toast.warning('"jpg", "gif", "png"의 형식만 등록 가능합니다.')
+    }
+  }
+
+  const handleDeleteImage = (imagePath) => {
+    confirmAlert({
+      title: '알림',
+      message: '해당 이미지를 삭제하시겠습니까?',
+      buttons: [
+        {
+          label: '확인',
+          onClick: () => {
+            // setDefaultSetting({
+            //   ...defaultSetting,
+            //   backgroundImage: ''
+            // })
+          }
+        },{
+          label: '취소',
+        }
+      ]
+    });
+  }
+  const onDrop = (pictureFiles, e) => {
+    console.log(pictureFiles)
+    if (pictureFiles.length !== 0) {
+      if(element.image.length < 2){
+        const reader = new FileReader();
+        reader.readAsDataURL(pictureFiles[0].file);
+        return new Promise((resolve) => {
+          reader.onload = () => {
+            const image = new Image()
+            image.src = pictureFiles[0].dataURL
+            image.onload = function () {
+              console.log(this.width, this.height)
+              const obj = {
+                url: pictureFiles[0].dataURL,
+                width:this.width,
+                height: this.height,
+              }
+              setElement({
+                ...element,
+                image: element.image.concat(obj)
+              });
+            }
+            setAddElement(false)
+            resolve();
+          };
+        })
+      } else {
+        toast.warning('이미지는 최대 3개까지만 추가가 가능합니다.')
+        setAddElement(false)
+      }
+    }
+  }
+
+  const handleAddText = (e) => {
+    e.stopPropagation()
+    console.log('add text')
+    if(element.text.length < 2){
+      setElement({
+        ...element,
+        text: element.text.concat('text')
+      });
+    }
+    setAddElement(false)
+  }
+
+  const handleClickEnd = (e) => {
+    e.stopPropagation()
+    setIsEditable([false, false]);
+    setAddElement(false)
+  }
 
   return(
-    <FrameContainer onClick={handleSelectFrame} active={frameId}>
+    <FrameContainer onClick={handleSelectFrame}>
       <FrameHeader>
         <AddButton onClick={handleOpenAddElement}>
           {addIcon}
+          {addElement &&
+            <AddElement>
+              <div onClick={handleAddText}>텍스트 추가</div>
+              <ImageUploading
+                multiple
+                acceptType={["jpg", "gif", "png"]}
+                onChange={onDrop}
+                maxFileSize={10485760}
+                maxNumber={5}
+                onError={(e) => onImageError(e,'image')}
+              >
+                {({onImageUpload}) => (
+                  <div onClick={onImageUpload}>이미지 추가</div>
+                )}
+              </ImageUploading>
+            </AddElement>
+          }
         </AddButton>
         <span>{sized[0]}px X {sized[1]}px</span>
         <ReloadButton>
@@ -154,17 +270,31 @@ export function FrameEditor(props){
         ref={boundaryRef}
         width={sized[0]}
         height={sized[1]}
-        style={{backgroundColor: set.backgroundColor, backgroundImage: `url(${set.backgroundImage})`}} onClick={(e) => e.stopPropagation()}>
-        {set.mainImage !== ''&&
+        style={{backgroundColor: set.backgroundColor, backgroundImage: `url(${set.backgroundImage})`}} onClick={handleClickEnd}>
+        {set.mainImage &&
           <MainImage
             source={set.mainImage.url}
-            ratio={set.mainImage.ratio}
-            ref={boxRef}
-            style={{ width: resize, left:`${imgX}px`, top:`${imgY}px`}}
-            onMouseDown={(clickEvent) => {handleImageMove(clickEvent)}}
+            ratio={set.mainImage.width / set.mainImage.height}
+            style={{ width: elementPosition[`image`].w, height: elementPosition[`image`].h, left:`${elementPosition[`image`].x}px`, top:`${elementPosition[`image`].y}px`}}
+            onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,`image`)}}
           >
-            <Resizer onMouseDown={(clickEvent) => {handleImageResize(clickEvent)}}/>
+            <Resizer onMouseDown={(clickEvent) => {handleImageResize(clickEvent, `image`)}}/>
           </MainImage>
+        }
+        {element.image.length !== 0 && element.image.map((image, key) => {
+          const index = key
+          return (
+            <MainImage
+              key={key}
+              source={image.url}
+              ratio={image.width / image.height}
+              style={{ width: elementPosition[`image${index}`].w, height: elementPosition[`image${index}`].h, left:`${elementPosition[`image${index}`].x}px`, top:`${elementPosition[`image${index}`].y}px`}}
+              onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,`image${index}`)}}
+            >
+              <Resizer onMouseDown={(clickEvent) => {handleImageResize(clickEvent, `image${index}`)}}/>
+            </MainImage>
+          )
+          })
         }
         {set.title !== '' &&
           <Text
@@ -174,17 +304,51 @@ export function FrameEditor(props){
               fontWeight:set.titleBold && 'bold' ,
               fontStyle: set.titleItalic && 'italic',
               textDecoration: set.titleUnderline && 'underline',
-              left:`${titleX}px`, top:`${titleY}px`
+              left:`${elementPosition.title.x}px`,
+              top:`${elementPosition.title.y}px`,
+              fontFamily: set.titleFamily
             }}
-            ref={titleRef}
-            onMouseDown={(clickEvent) => {handleTitleMove(clickEvent)}}
+            onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent, 'title')}}
           >{set.title}</Text>
+        }
+        {element.text.length > 0 && element.text.map((text, key) => {
+          const index = key
+          return (
+            <Text
+              key={key}
+              style={{
+                left: `${elementPosition[`text${index}`].x}px`,
+                top: `${elementPosition[`text${index}`].y}px`,
+                fontFamily: set.titleFamily,
+                color: set.titleColor,
+              }}
+              onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent, `text${index}`)}}
+            >
+              {isEditable[index] ? (
+                <input
+                  type="text"
+                  value={element.text[index] || ''}
+                  onChange={(e) => handleChange(e, index)}
+                  onClick={(e) => e.stopPropagation()}
+                  onKeyDown={handleKeyDown}
+                />
+              ) : (
+                <p onDoubleClick={(e) => handleDoubleClick(e, index)}>{text}</p>
+              )}
+            </Text>
+          )
+          })
         }
         {set.buttonTitle !== '' &&
           <Button
-            ref={buttonRef}
-            style={{backgroundColor: set.buttonBackgroundColor, color: set.buttonColor,left:`${btnX}px`, top:`${btnY}px`}}
-            onMouseDown={(clickEvent) => {handleButtonMove(clickEvent)}}>{set.buttonTitle}</Button>
+            style={{
+              backgroundColor: set.buttonBackgroundColor,
+              color: set.buttonColor,
+              left:`${elementPosition.button.x}px`,
+              top:`${elementPosition.button.y}px`,
+              border: `${set.buttonBackgroundColor === set.backgroundColor ? `1px solid ${set.buttonColor}` : 'none'}`
+          }}
+            onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,'button')}}>{set.buttonTitle}</Button>
         }
       </FrameBody>
     </FrameContainer>
@@ -217,7 +381,7 @@ const FrameBody = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  //overflow: hidden;
+  overflow: hidden;
   border: 1px solid #ddd;
   -ms-user-select: none;
   -moz-user-select: -moz-none;
@@ -226,6 +390,7 @@ const FrameBody = styled.div`
   user-select: none;
 `
 const AddButton = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -249,7 +414,10 @@ const ReloadButton = styled.div`
 const MainImage = styled.div`
   position: absolute;
   aspect-ratio: ${({ratio}) => ratio};
-  min-width: 30px;
+  min-width: 25%;
+  min-height: 30px;
+  max-width: 100%;
+  max-height: 100%;
   background-image: url(${({source}) => source});
   background-position: center;
   background-repeat: no-repeat;
@@ -274,7 +442,7 @@ const Resizer = styled.div`
   height: 10px;
   cursor: nwse-resize;
   &:hover {
-    background-color: #000;
+    background-color: rgba(0,0,0,0.5);
   }
 `
 
@@ -282,6 +450,7 @@ const Text = styled.div`
   position: absolute;
   text-align: center;
   display: inline-block;
+  word-break: keep-all;
   -ms-user-select: none;
   -moz-user-select: -moz-none;
   -khtml-user-select: none;
@@ -299,7 +468,27 @@ const Button = styled.button`
   padding: 8px 16px;
   font-weight: bold;
   cursor: move;
+  white-space: nowrap;
+`
+
+const AddElement = styled.div`
+  position: absolute;
+  left: 35px;
+  bottom: -75px;
+  z-index: 9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  & div {
+    padding: 5px 10px;
+    width: 100px;
+    background-color: #fff;
+    cursor: pointer;
+    &:hover {
+      background-color: #eee
+    }
+  }  
 `
 
 const addIcon = <svg width="24" height="24" viewBox="0 0 24 24" style={{cursor: 'pointer', position: 'relative', top: 1}}><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg>
-const resetIcon = <svg width="21" height="21" viewBox="0 0 21 21"><g fill="none" fill-rule="evenodd" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" transform="matrix(0 1 1 0 2.5 2.5)"><path d="m3.98652376 1.07807068c-2.38377179 1.38514556-3.98652376 3.96636605-3.98652376 6.92192932 0 4.418278 3.581722 8 8 8s8-3.581722 8-8-3.581722-8-8-8"/><path d="m4 1v4h-4" transform="matrix(1 0 0 -1 0 6)"/></g></svg>
+const resetIcon = <svg width="21" height="21" viewBox="0 0 21 21"><g fill="none" fillRule="evenodd" stroke="#000000" strokeLinecap="round" strokeLinejoin="round" transform="matrix(0 1 1 0 2.5 2.5)"><path d="m3.98652376 1.07807068c-2.38377179 1.38514556-3.98652376 3.96636605-3.98652376 6.92192932 0 4.418278 3.581722 8 8 8s8-3.581722 8-8-3.581722-8-8-8"/><path d="m4 1v4h-4" transform="matrix(1 0 0 -1 0 6)"/></g></svg>
