@@ -1,7 +1,7 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchDetail, ColSpan0,
+  ColSpan0,
   ColSpan1,
   ColSpan3,
   Input,

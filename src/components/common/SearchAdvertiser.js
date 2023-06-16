@@ -9,7 +9,7 @@ import {
   ColSpan0,
   ColSpan2,
   ColSpan3,
-  ColSpan4,
+  ColSpan4, GraySearchButton,
   RelativeDiv,
   RowSpan,
   SaveExcelButton,
@@ -36,7 +36,7 @@ export function SearchAdvertiser(props) {
   }
   switch (btnStyle){
     case 'historyAddButton' : return <SaveExcelButton className={'listUp'} onClick={handleModalComponent}>{title}</SaveExcelButton>;
-    default : return <Button type={'button'} onClick={handleModalComponent}>{title}</Button>;
+    default : return <GraySearchButton style={{height: 40}} type={'button'} onClick={handleModalComponent}>{title}</GraySearchButton>;
   }
 }
 

@@ -59,7 +59,6 @@ const ImageViewButton = styled.div`
 function ProductManage() {
   const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
   const [productData, setProductData] = useAtom(productListDataAtom)
-  const [count, setCount] = useState(0)
 
   /**
    * 상품 수집 검색
@@ -76,18 +75,16 @@ function ProductManage() {
     <>
       <Board>
         <BoardHeader>상품 수집 현황</BoardHeader>
-        <BoardSearchDetail>
-          <PlatformCondition
-            searchType={searchProductType}
-            searchCondition={searchCondition}
-            setSearchCondition={setSearchCondition}
-            handleTableData={handleSearchResult}
-          />
-        </BoardSearchDetail>
+        <PlatformCondition
+          searchType={searchProductType}
+          searchCondition={searchCondition}
+          setSearchCondition={setSearchCondition}
+          handleTableData={handleSearchResult}
+        />
         <BoardSearchResult>
           <Table
             columns={productListColumn}
-            totalCount={[productData.totalCount !== undefined ? productData.totalCount : 0,'상품수']}
+            totalCount={[productData.totalCount !== undefined ? productData.totalCount : 0,'상품 수집 현황']}
             data={productData.rows !== undefined ? productData.rows : []}
             idProperty={'id'}
           />

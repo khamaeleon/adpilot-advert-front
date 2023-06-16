@@ -132,7 +132,7 @@ export default function UserManage(){
     <>
       <Board>
         <BoardHeader>사용자 관리</BoardHeader>
-        <BoardSearchDetail style={{marginTop: 20}}>
+        <BoardSearchDetail style={{marginTop: 10}}>
           <div style={{marginRight: 10}}>
             <RowSpan style={{marginTop: 0, justifyContent: 'flex-start'}}>
               <ColSpan0>

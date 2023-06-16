@@ -1028,7 +1028,7 @@ export const SearchButton = styled.button`
   border-radius: 5px;
 `
 export const GraySearchButton = styled.button`
-  width: 85px;
+  min-width: 85px;
   background-color: #777;
   border-radius: 5px;
   color: #fff

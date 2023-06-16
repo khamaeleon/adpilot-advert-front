@@ -35,12 +35,10 @@ function ConversionManage() {
     selConversionList(searchCondition).then(response =>{
       setConversionListDataState(response)
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleSearch = (data) => {
+  const handleSearch = () => {
     selConversionList(searchCondition).then(response =>{
-      console.log(response)
       setConversionListDataState(response)
     })
   }
@@ -101,9 +99,7 @@ function ConversionManage() {
     <main>
       <Board>
         <BoardHeader>전환 현황</BoardHeader>
-        <BoardSearchDetail>
-          <PlatformCondition searchType={searchConversionType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleTableData={handleSearch}/>
-        </BoardSearchDetail>
+        <PlatformCondition searchType={searchConversionType} searchCondition={searchCondition} setSearchCondition={setSearchCondition} handleTableData={handleSearch}/>
         <BoardTableContainer>
           { conversionListDataState !== null &&
             <>

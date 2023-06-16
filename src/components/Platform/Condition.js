@@ -9,13 +9,13 @@ import {
   ColSpan3,
   ColTitle,
   CustomDatePicker,
-  DateContainer, DefaultButton,
+  DateContainer, DefaultButton, GraySearchButton,
   Input,
   inputStyle,
   RangePicker, ResetButton,
   RowSpan,
   SearchButton,
-  SearchInput,
+  SearchInput, Span2,
   Span4
 } from "../../assets/GlobalStyles";
 import ko from "date-fns/locale/ko";
@@ -136,9 +136,9 @@ export function PlatformCondition(props) {
       ...searchCondition,
       username: data.username
     })
-    retrieveProduct({...searchCondition,username: data.username}).then(response =>{
-      setProductData(response)
-    })
+    // retrieveProduct({...searchCondition,username: data.username}).then(response =>{
+    //   setProductData(response)
+    // })
   }
 
   const handleClickReset = () => {
@@ -149,76 +149,79 @@ export function PlatformCondition(props) {
   }
 
   return (
-    <BoardSearchDetail>
-      <RowSpan>
-        <ColSpan1>
-          <ColTitle><span>기간</span></ColTitle>
-          <div style={{width:'100%'}}>
-            <DateContainer style={{marginRight: 0}}>
-              <CalendarBox>
-                <CalendarIcon/>
-              </CalendarBox>
-              <CustomDatePicker
-                selectsRange={true}
-                startDate={startDate}
-                endDate={endDate}
-                onChange={(date) => setDateRange(date)}
-                dateFormat="yyyy-MM-dd"
-                locale={ko}
-                isClearable={false}
-              />
-            </DateContainer>
-          </div>
-        </ColSpan1>
-        <ColSpan2>
-          <div>
-            <RangePicker>
-              <div onClick={() => handleRangeDate('thisMonth')} style={dateActive==='thisMonth'?{color:'#f5811f'}:null}>이번달</div>
-              <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastMonth')} style={dateActive==='lastMonth'?{color:'#f5811f'}:null}>지난달</div>
-              <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('today')} style={dateActive==='today'?{color:'#f5811f'}:null}>오늘</div>
-              <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastDay')} style={dateActive==='lastDay'?{color:'#f5811f'}:null}>어제</div>
-              <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastWeekDay')} style={dateActive==='lastWeekDay'?{color:'#f5811f'}:null}>지난7일</div>
-              <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastThirtyDay')} style={dateActive==='lastThirtyDay'?{color:'#f5811f'}:null}>지난30일</div>
-              <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastNinetyDay')} style={dateActive==='lastNinetyDay'?{color:'#f5811f'}:null}>지난90일</div>
-              {/*<HorizontalRule style={{margin: "0 10px"}}/>*/}
-              {/*<div onClick={() => handleRangeDate('lastOneEightyDay')} style={dateActive==='lastOneEightyDay'?{color:'#f5811f'}:null}>지난180일</div>*/}
-            </RangePicker>
-          </div>
-        </ColSpan2>
-        <ColSpan1/>
-      </RowSpan>
-      <RowSpan>
-        <ColSpan1>
-          <ColTitle><span>광고주 설정</span></ColTitle>
-          <Input type={'text'} value={searchCondition.username} readOnly/>
-        </ColSpan1>
-        <ColSpan1>
-          <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdverResult}/>
-          <ResetButton onClick={handleClickReset}>재설정</ResetButton>
-        </ColSpan1>
-        <ColSpan2>
-          <Select styles={inputStyle}
-                  components={{IndicatorSeparator: () => null}}
-                  options={searchType}
-                  value={searchCondition.searchType.value !== '' ? searchType.find(value => value.value === searchCondition.searchType) : ''}
-                  onChange={handleSearchType}
-          />
-          <SearchInput>
-            <input type={'text'}
-                   placeholder={'검색어를 입력해주세요.'}
-                   value={searchCondition.keyword}
-                   onChange={handleSearchValue}
+    <BoardSearchDetail style={{marginTop:10}}>
+      <div style={{marginRight: 10}}>
+        <RowSpan style={{marginTop:0}}>
+          <ColSpan0>
+            <Span2>광고주 설정</Span2>
+            <Input style={{width: 300}} type={'text'} value={searchCondition.username} readOnly/>
+            <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdverResult}/>
+            <ResetButton onClick={handleClickReset}>재설정</ResetButton>
+          </ColSpan0>
+        </RowSpan>
+        <RowSpan style={{justifyContent: 'flex-start'}}>
+          <ColSpan0>
+            <Span2>기간</Span2>
+            <div>
+              <DateContainer style={{marginRight: 0}}>
+                <CalendarBox>
+                  <CalendarIcon/>
+                </CalendarBox>
+                <CustomDatePicker
+                  selectsRange={true}
+                  startDate={startDate}
+                  endDate={endDate}
+                  onChange={(date) => setDateRange(date)}
+                  dateFormat="yyyy-MM-dd"
+                  locale={ko}
+                  isClearable={false}
+                />
+              </DateContainer>
+            </div>
+          </ColSpan0>
+          <ColSpan0>
+            <div>
+              <RangePicker>
+                <div onClick={() => handleRangeDate('thisMonth')} style={dateActive==='thisMonth'?{color:'#f5811f'}:null}>이번달</div>
+                <HorizontalRule style={{margin: "0 10px"}}/>
+                <div onClick={() => handleRangeDate('lastMonth')} style={dateActive==='lastMonth'?{color:'#f5811f'}:null}>지난달</div>
+                <HorizontalRule style={{margin: "0 10px"}}/>
+                <div onClick={() => handleRangeDate('today')} style={dateActive==='today'?{color:'#f5811f'}:null}>오늘</div>
+                <HorizontalRule style={{margin: "0 10px"}}/>
+                <div onClick={() => handleRangeDate('lastDay')} style={dateActive==='lastDay'?{color:'#f5811f'}:null}>어제</div>
+                <HorizontalRule style={{margin: "0 10px"}}/>
+                <div onClick={() => handleRangeDate('lastWeekDay')} style={dateActive==='lastWeekDay'?{color:'#f5811f'}:null}>지난7일</div>
+                <HorizontalRule style={{margin: "0 10px"}}/>
+                <div onClick={() => handleRangeDate('lastThirtyDay')} style={dateActive==='lastThirtyDay'?{color:'#f5811f'}:null}>지난30일</div>
+                <HorizontalRule style={{margin: "0 10px"}}/>
+                <div onClick={() => handleRangeDate('lastNinetyDay')} style={dateActive==='lastNinetyDay'?{color:'#f5811f'}:null}>지난90일</div>
+                {/*<HorizontalRule style={{margin: "0 10px"}}/>*/}
+                {/*<div onClick={() => handleRangeDate('lastOneEightyDay')} style={dateActive==='lastOneEightyDay'?{color:'#f5811f'}:null}>지난180일</div>*/}
+              </RangePicker>
+            </div>
+            <Select components={{IndicatorSeparator: () => null}}
+                    options={searchType}
+                    value={searchCondition.searchType.value !== '' ? searchType.find(value => value.value === searchCondition.searchType) : ''}
+                    onChange={handleSearchType}
+                    styles={{
+                      input: (baseStyles, state) => (
+                        {
+                          ...baseStyles,
+                          width: "50px",
+                        })
+                    }}
             />
-          </SearchInput>
-          <SearchButton onClick={handleTableData}>검색</SearchButton>
-        </ColSpan2>
-      </RowSpan>
+            <SearchInput style={{width: 250}}>
+              <input type={'text'}
+                     placeholder={'검색어를 입력해주세요.'}
+                     value={searchCondition.keyword}
+                     onChange={handleSearchValue}
+              />
+            </SearchInput>
+          </ColSpan0>
+        </RowSpan>
+      </div>
+      <GraySearchButton onClick={handleTableData}>적용</GraySearchButton>
     </BoardSearchDetail>
   )
 }
@@ -349,7 +352,7 @@ export function PaymentCondition(props) {
     })
   }
   return (
-    <BoardSearchDetail>
+    <BoardSearchDetail column={true}>
       {/*line1*/}
       <RowSpan>
         <ColSpan1>

@@ -204,7 +204,7 @@ export const productListColumn = [
     textAlign: 'center',
     minWidth: 200,
     showColumnMenuTool: false,
-    render: ({value}) => <p>{value}</p>
+    render: ({value}) => <p className={'ellipsis'}>{value}</p>
   },
   {
     name: 'price',
