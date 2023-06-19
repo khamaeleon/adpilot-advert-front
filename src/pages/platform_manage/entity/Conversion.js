@@ -5,7 +5,7 @@ import moment from "moment/moment";
 import React from "react";
 
 export const searchConversionType = [
-  {id: "1", value: "DEFAULT", label: "기본"},
+  {id: "1", value: "DEFAULT", label: "전체"},
   {id: "2", value: "ADVER_NAME", label: "광고주명"},
   {id: "3", value: "ADVER_ID", label: "광고주 아이디"},
   {id: "4", value: "ORDER_CODE", label: "주문 번호"},

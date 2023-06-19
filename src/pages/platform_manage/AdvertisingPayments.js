@@ -211,6 +211,7 @@ function AdvertisingPayments() {
   const [totalInfo, setTotalInfo] = useState(0)
   const [paymentDataState, ] = useAtom(costPaymentDataAtom)
   const [searchPaymentParamsState, setSearchPaymentParamsState] = useAtom(searchCostPaymentParams)
+  const [searchState, setSearchState] = useState(searchPaymentParamsState)
 
   //[d] 그리드 데이터
   const [pageSize, ] = useState(10); // 한 페이지 보여줄 데이터
@@ -262,7 +263,7 @@ function AdvertisingPayments() {
   /**
    * 모달안에 매체 검색 후 이력 추가완료
    */
-  const handleHistoryAdd = (params) => {
+  const handleHistoryAdd = () => {
     handlePaymentTableData();
   }
   const handlePaymentStatus = async(event) => {
@@ -351,17 +352,20 @@ function AdvertisingPayments() {
 
   useEffect(() => {
     handlePaymentTableData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchPaymentParamsState])
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleData = () => {
+    setSearchPaymentParamsState({
+      ...searchState,
+    })
+  }
   const dataCallback = useCallback( handlePaymentTableData , [totalInfo, searchPaymentParamsState, paymentDataState, refundReceivedData])
 
   return (
     <>
       <Board>
         <BoardHeader>결제 현황</BoardHeader>
-        <PaymentCondition searchType={searchPointType} searchCondition={searchPaymentParamsState} setSearchCondition={setSearchPaymentParamsState} handleTableData={handlePaymentTableData} />
+        <PaymentCondition searchType={searchPointType} searchCondition={searchState} setSearchCondition={setSearchState} handleTableData={handleData} />
         <BoardTableContainer>
           <RowSpan>
             <ColSpan2 style={{marginTop: 20, paddingLeft: 0}}>

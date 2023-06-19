@@ -23,6 +23,7 @@ import {TotalCount} from "../../components/table/TableDetail";
 function PaymentManage() {
   const [totalInfo, setTotalInfo] = useState(0)
   const [searchPaymentParamsState, setSearchPaymentParamsState] = useAtom(searchPaymentParams)
+  const [searchState, setSearchState] = useState(searchPaymentParamsState)
 
   //[d] 그리드 데이터
   const [pageSize, ] = useState(10); // 한 페이지 보여줄 데이터
@@ -32,9 +33,15 @@ function PaymentManage() {
 
   useEffect(() => {
     handlePaymentTableData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchPaymentParamsState])
-
+  /**
+   * 검색 버튼
+   */
+  const handleData = () => {
+    setSearchPaymentParamsState({
+      ...searchState,
+    })
+  }
   const handlePaymentTableData = (props={}) => { //테이블 데이터 호출 (어드민 권한은 username 없이 조회)
     const { skip = (currentPage - 1) * pageSize, limit = pageSize } = props;
 
@@ -76,7 +83,7 @@ function PaymentManage() {
     <>
       <Board>
         <BoardHeader>결재 현황</BoardHeader>
-        <PaymentCondition searchType={searchPaymentType} searchCondition={searchPaymentParamsState} setSearchCondition={setSearchPaymentParamsState} handleTableData={handlePaymentTableData} />
+        <PaymentCondition searchType={searchPaymentType} searchCondition={searchState} setSearchCondition={setSearchState} handleTableData={handleData} />
         <BoardTableContainer>
           <BoardSearchResultTitle style={{alignItems:"end", paddingBottom: "10px"}}>
             <div>

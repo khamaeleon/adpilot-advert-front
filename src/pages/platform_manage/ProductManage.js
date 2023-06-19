@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Board, BoardHeader, BoardSearchDetail, BoardSearchResult} from "../../assets/GlobalStyles";
+import React, {useState} from "react";
+import {Board, BoardHeader, BoardSearchResult} from "../../assets/GlobalStyles";
 import Table from "../../components/table";
 import {PlatformCondition} from "../../components/Platform/Condition";
 import {modalController} from "../../store";

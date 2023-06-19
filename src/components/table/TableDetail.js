@@ -120,11 +120,14 @@ const Small = styled.small`
 `
 
 export const TotalCount = styled.div`
+  display: flex;
+  align-items: center;
   & > span:first-child {
     width: 3px;
     height: 12px;
     background-color: #222;
     margin: 2px 8px 0 0;
+    display: inline-block;
   }
   & > span:last-child {
     margin-left: 3px;
