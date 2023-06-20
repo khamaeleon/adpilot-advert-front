@@ -60,8 +60,6 @@ function BudgetEvent() {
             <Table columns={adverEventBudgetColumns}
                    data={budgetEventDataState?.userDtos}
                    totalCount={[budgetEventDataState.totalCount, '광고주']}
-                   showHoverRows={false}
-                   activeCell={[0]}
                    emptyText={'타겟팅 예산 현황 내역이 없습니다.'}/>
           }
         </BoardTableContainer>

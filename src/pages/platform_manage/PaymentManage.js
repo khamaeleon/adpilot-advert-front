@@ -109,6 +109,7 @@ function PaymentManage() {
             pagination={true}
             sortable={false}
             style={gridStyle}
+            activeCell={null}
           />
         </BoardTableContainer>
       </Board>

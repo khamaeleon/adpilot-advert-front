@@ -246,7 +246,7 @@ export const adverStatusDetailColumn = [
     showColumnMenuTool: false,
     cellProps: {
       style: {
-        textDecoration: 'underline'
+        textDecoration: 'underline',
       }
     },
     render: ({data, value}) => {
@@ -332,7 +332,7 @@ export const adverStatusDetailColumn = [
     header: '클릭률',
     minWidth: 150,
     textAlign: 'end',
-    cellDOMProps: (cellProps) => ({ style: {color: '#1E8E3E'} }),
+    style: { color: '#1E8E3E' },
     render: ({data}) => {
       let value = data.exposureCount !== 0 ? (data.validClickCount / data.exposureCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>

@@ -354,8 +354,6 @@ function PixelDetail() {
             {pixelInfoListState !== null &&
               <Table columns={tokenResult.role !== 'NORMAL' ? pixelDetailInfoColumns : pixelDetailAdverInfoColumns}
                      data={pixelInfoListState.events}
-                     showHoverRows={false}
-                     activeCell={[0]}
                      downloadList={false}
                      emptyText={'이벤트 단가 관리 내역이 없습니다.'}/>
             }

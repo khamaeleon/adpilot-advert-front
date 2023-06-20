@@ -75,7 +75,6 @@ export function ManageCreative() {
     return(
       <CustomDetailTable>
         <CustomDetailHeader>
-          <ShadowEffect/>
           <CreativeGroup>크리에이티브 그룹명</CreativeGroup>
           <CreativeInfo>크리에이티브 정보</CreativeInfo>
         </CustomDetailHeader>
@@ -175,8 +174,8 @@ export const CustomTableHeader = styled.div`
   display: flex;
   justify-content: space-between;
   background-color: #fafafa;
-  border-top: 1px solid #bbbbbb;
-  border-bottom: 1px solid #bbbbbb;
+  border-top: 1px solid #e4e3e2;
+  border-bottom: 1px solid #e4e3e2;
   & > div{
     padding: 9px;
     width: 100%;
@@ -188,7 +187,7 @@ export const CustomTableRow = styled.div`
   display: flex;
   justify-content: space-between;
   background-color: #fff;
-  border-bottom: 1px solid #bbbbbb;
+  border-bottom: 1px solid #e4e3e2;
   cursor: pointer;
   & > div{
     padding: 9px;
@@ -205,22 +204,15 @@ export const CustomDetailRow = styled.div`
   display: flex;
 `
 
-export const ShadowEffect = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 10px;
-  padding: 0 0 9px;
-  opacity: 0.15;
-  background-image: linear-gradient(to bottom, hsl(27, 60%, 33%), hsla(27, 60%, 33%, 0));
-  z-index: 999;
-`
-
 export const CustomDetailHeader = styled.div`
   position: relative;
   display: flex;
   justify-content: space-between;
   background-color: #fffaf1;
   border-bottom: 1px solid #ffe3cb;
+  & > div {
+    border-bottom:0
+  }
 `
 
 export const CreativeGroup = styled.div`

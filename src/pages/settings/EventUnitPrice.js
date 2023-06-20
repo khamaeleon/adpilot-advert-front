@@ -60,8 +60,6 @@ function EventUnitPrice() {
             <Table columns={adverEventPriceColumns}
                    data={eventUnitPriceDataState?.userDtos}
                    totalCount={[eventUnitPriceDataState.totalCount, '광고주']}
-                   showHoverRows={false}
-                   activeCell={[0]}
                    emptyText={'타겟팅 단가 현황 내역이 없습니다.'}/>
           }
         </BoardTableContainer>

@@ -43,10 +43,16 @@ $INOVUA_DATAGRID_ACCENT_COLOR: #f5811f;
 }
 .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__row .InovuaReactDataGrid__row-details > .InovuaReactDataGrid .InovuaReactDataGrid__header {
   background-color: #fffaf1;
+  border-color: #ffe3cb;
+}
+.InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__row .InovuaReactDataGrid__row-details .InovuaReactDataGrid__column-header__resize-wrapper--show-border-left,.InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__row .InovuaReactDataGrid__row-details .InovuaReactDataGrid__cell--show-border-bottom {
+  border-color: #ffe3cb;
 }
 .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__row .InovuaReactDataGrid__row-details > .InovuaReactDataGrid {
   margin: 0;
-  border: 1px solid #f5811f
+  border: 1px solid #f5811f;
+  border-right-width: 0;
+  border-left-width: 0;
 }
 .InovuaReactDataGrid--theme-default-light .InovuaReactDataGrid__row .InovuaReactDataGrid__row-details.InovuaReactDataGrid__row-details--details-grid {
   padding: 0 0 1px 0;

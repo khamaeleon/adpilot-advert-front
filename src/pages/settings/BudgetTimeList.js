@@ -79,8 +79,6 @@ function EventTimeList() {
             <Table columns={budgetTimeDetailColumns}
                    totalCount={[budgetTimeListState.totalCount, '시간별 예산 그룹']}
                    data={budgetTimeListState?.timeGroups}
-                   showHoverRows={false}
-                   activeCell={[0]}
                    emptyText={'이벤트 단가 관리 내역이 없습니다.'}/>
           }
         </BoardTableContainer>

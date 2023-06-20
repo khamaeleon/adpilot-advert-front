@@ -61,8 +61,6 @@ function BudgetTime() {
           <Table columns={adverTimeBudgetColumns}
                  data={budgetTimeAdverDataState?.userDtos}
                  totalCount={[budgetTimeAdverDataState.totalCount, '광고주']}
-                 showHoverRows={false}
-                 activeCell={[0]}
                  emptyText={'시간 예산 현황 내역이 없습니다.'}/>
           }
         </BoardTableContainer>

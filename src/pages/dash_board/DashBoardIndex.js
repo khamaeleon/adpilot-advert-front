@@ -433,10 +433,21 @@ function DashBoardIndex() {
         enableColumnAutosize={true}
         groups={false}
         emptyText={'캠페인 리스트가 없습니다.'}
-        rowHeight={null}
+        rowHeight={60}
         headerHeight={50}
+        style={{minHeight: 45}}
+        showHoverRows={false}
+        activeCell={null}
       />
     );
+  }
+  const rowExpandHeight = ({ data }) => {
+    if(data.campaignCount < 6) {
+      return 114+(data.campaignCount*60)
+    } else if(data?.campaignCount === 0) {
+      return 300
+    }
+    return 500;
   }
   return (
       <>
@@ -454,12 +465,13 @@ function DashBoardIndex() {
               <ReactDataGrid
                 licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
                 handle={null}
+                activeCell={null}
                 lockedRows={lockedRows}
                 summaryReducer={summaryReducer}
                 onReady={setGridRef}
                 style={{minHeight: 500}}
                 headerHeight={50}
-                rowExpandHeight={({ data }) => {return data?.campaignCount !== 0 ? 400 : 300}}
+                rowExpandHeight={rowExpandHeight}
                 rowHeight={60}
                 renderDetailsGrid={renderContactsGrid}
                 enableColumnAutosize={true}
@@ -486,8 +498,6 @@ function DashBoardIndex() {
               : <Table columns={userCampaignListColumn}
                        totalCount={[totalInfo.totalCount, '캠페인']}
                        rowHeight={null}
-                       showHoverRows={false}
-                       activeCell={[0]}
                        data={adverStatusData}/>
             }
           </DashBoardBody>

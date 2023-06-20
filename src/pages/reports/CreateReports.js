@@ -489,6 +489,7 @@ export default function CreateReports() {
                 activateRowOnFocus
                 emptyText={columns.length === 0 ? '보고서 항목을 선택해주세요.' : ''}
                 style={{fontSize: '13px'}}
+                activeCell={null}
               />
             </RowSpan>
           </RowSpan>

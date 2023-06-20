@@ -214,7 +214,6 @@ export default function UserManage(){
           <BoardTableContainer>
             <RowSpan style={{justifyContent: 'flex-end'}}><SaveExcelButton>엑셀 저장</SaveExcelButton></RowSpan>
             <Table columns={columnUserData}
-                   showHoverRows={false}
                    totalCount={[totalInfo.totalCount, '사용자']}
                    data={userInfoList}/>
           </BoardTableContainer>

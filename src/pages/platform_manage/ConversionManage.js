@@ -1,7 +1,6 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchDetail,
   BoardTableContainer,
   RowSpan,
   SearchButton,
@@ -45,6 +44,7 @@ function ConversionManage() {
   const renderContactsGrid = () => {
     return (
       <ReactDataGrid
+        style={{minHeight: 45}}
         handle={null}
         clearNodeCacheOnDataSourceChange={true}
         dataSource={conversionDetailDataState!==null && conversionDetailDataState}
@@ -52,7 +52,9 @@ function ConversionManage() {
         enableColumnAutosize={true}
         groups={false}
         emptyText={'캠페인 리스트가 없습니다.'}
-        rowHeight={70}
+        rowHeight={45}
+        showHoverRows={false}
+        activeCell={null}
       />
     );
   }
@@ -94,7 +96,14 @@ function ConversionManage() {
 
     downloadBlob(blob);
   };
-
+  const rowExpandHeight = ({ data }) => {
+    if(data?.totalProductCount < 6) {
+      return 85+(data?.totalProductCount*45)
+    } else if(data?.totalProductCount === 0) {
+      return 300
+    }
+    return 500;
+  }
   return (
     <main>
       <Board>
@@ -111,25 +120,25 @@ function ConversionManage() {
                 handle={null}
                 onReady={setGridRef}
                 style={{minHeight: 550, textAline: 'center'}}
-                rowExpandHeight={400}
+                rowExpandHeight={rowExpandHeight}
                 rowHeights={null}
                 renderDetailsGrid={renderContactsGrid}
                 enableColumnAutosize={true}
-                emptyText={'데이터가 없습니다.'}
+                emptyText={'전환 현황이 없습니다.'}
                 idProperty={'conversionId'}
                 dataSource={conversionListDataState}
                 detailsGridCacheKey={'campaignId'}
                 columns={columnConversionData}
                 onDataSourceCacheChange={()=>{gridRef?.current.collapseAllRows()}}
                 onRowExpand={({data})=> {
-                  console.log(data)
                   selConversionDetailList(data.conversionId).then(response => {
-                    console.log(response)
                     response !== null && setConversionDetailDataState(response)
                   })
                 }}
                 limit={30}
                 multiRowExpand={false}
+                showHoverRows={false}
+                activeCell={null}
               />
             </>
           }

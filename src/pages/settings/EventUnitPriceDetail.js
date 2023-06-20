@@ -77,8 +77,6 @@ function EventUnitPriceDetail() {
             <Table columns={eventUnitPriceDetailColumns}
                    totalCount={[eventUnitPriceDetailDataState.totalCount, '타겟팅 단가 그룹']}
                    data={eventUnitPriceDetailDataState?.targetingPriceDtos}
-                   showHoverRows={false}
-                   activeCell={[0]}
                    emptyText={'타겟팅 단가 관리 내역이 없습니다.'}/>
           }
         </BoardTableContainer>

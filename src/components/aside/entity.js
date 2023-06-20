@@ -1,13 +1,5 @@
 import {atom} from "jotai/index";
 
-export const defaultIcon = {
-  dashboard: "/assets/images/aside/gmd_menu_01_off@3x.png",
-  campaign:'/assets/images/aside/gmd_menu_02_off@3x.png',
-  reports:'/assets/images/aside/gmd_menu_04_off@3x.png',
-  settings:'/assets/images/aside/gmd_menu_05_off@3x.png',
-  platform:'/assets/images/aside/gmd_menu_06_off@3x.png'
-}
-
 export const selectedIcon = {
   dashboard: "/assets/images/aside/gmd_menu_01_on@3x.png",
   campaign:'/assets/images/aside/gmd_menu_02_on@3x.png',

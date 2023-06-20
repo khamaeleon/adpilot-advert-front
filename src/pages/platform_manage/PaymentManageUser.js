@@ -338,6 +338,7 @@ function PaymentManageUser(props) {
               pagination={true}
               sortable={false}
               style={gridStyle}
+              activeCell={null}
             />
             <BoardSearchResultTitle style={{alignItems:"end", paddingTop:"20px", paddingBottom: "10px"}}>
               <div>
@@ -360,6 +361,7 @@ function PaymentManageUser(props) {
               pagination={true}
               sortable={false}
               style={gridStyle}
+              activeCell={null}
             />
           </ColSpan4>
         </Board>

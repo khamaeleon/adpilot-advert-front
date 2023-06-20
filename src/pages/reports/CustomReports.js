@@ -624,7 +624,6 @@ export default function CustomReports() {
         <Table
           style={{fontSize: 13, minHeight: campaignData.length !== 0 ? 550 : 300}}
           headerHeight={40}
-          showHoverRows={false}
           columns={campaignColumn}
           data={campaignData}
           idProperty={reportsInfo.groupBy !== 'BY_WEEKLY' ? 'statisticsDate' : 'statisticsStartDate'}

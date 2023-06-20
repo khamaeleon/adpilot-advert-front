@@ -419,7 +419,14 @@ function PixelList() {
       setPixelDataState(response)
     })
   }
-
+  const rowExpandHeight = ({ data }) => {
+    if(data?.pixelCnt < 6) {
+      return 85+(data.pixelCnt*45)
+    } else if(data?.pixelCnt === 0) {
+      return 300
+    }
+    return 500;
+  }
   return (
     <main>
       <>
@@ -447,6 +454,7 @@ function PixelList() {
                          detailGroups={false}
                          idProperty={'userId'}
                          groups={false}
+                         rowExpandHeight={rowExpandHeight}
                          style={{minHeight: 500}}/>
           }
           {tokenResult.role === 'NORMAL' &&

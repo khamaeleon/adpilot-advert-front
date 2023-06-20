@@ -8,12 +8,10 @@ const accountExpandHeight = 400
 
 
 function TableDetail (props) {
-  const {columns, data, settings, groups } = props
-  const [activeCell, setActiveCell] = useState([0]);
+  const {columns, data, settings, groups, rowExpandHeight } = props
   const [gridRef, setGridRef] = useState(null);
   const [gridDetailRef, setGridDetailRef] = useState(null);
   const gridStyle = { minHeight: 550 }
-  const [accountRowHeights, setAccountRowHeights] = useState({})
 
   /**
    * ...빈 데이터 텍스트
@@ -47,7 +45,6 @@ function TableDetail (props) {
         Object.assign(item, {textAlign: 'center'})
       })
     }
-    setActiveCell([data.length])
   }, []);
 
   /**
@@ -75,7 +72,10 @@ function TableDetail (props) {
         enableColumnAutosize={true}
         groups={props.detailGroups}
         emptyText={emptyText}
-        rowHeight={null}
+        rowHeight={45}
+        activeCell={null}
+        showHoverRows={false}
+        style={{minHeight: 45}}
       />
     );
   },[props])
@@ -92,8 +92,8 @@ function TableDetail (props) {
         licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
         handle={setGridRef}
         style={gridStyle}
-        rowExpandHeight={accountExpandHeight}
-        rowHeights={accountRowHeights}
+        rowExpandHeight={rowExpandHeight}
+        rowHeights={null}
         renderDetailsGrid={renderContactsGrid}
         enableColumnAutosize={true}
         emptyText={emptyText}
@@ -105,6 +105,9 @@ function TableDetail (props) {
         livePagination={props.livePagination}
         scrollThreshold={props.scrollThreshold}
         limit={30}
+        showHoverRows={false}
+        multiRowExpand={false}
+        activeCell={null}
       />
     </>
   )
