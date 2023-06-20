@@ -238,6 +238,14 @@ export function FrameEditor(props){
     setAddElement(false)
   }
 
+  const handleDeleteText = (index) => {
+    element.text.splice(index, 1)
+  }
+
+  const handleDeleteElementImage = (index) => {
+    element.image.splice(index, 1)
+  }
+
   return(
     <FrameContainer onClick={handleSelectFrame}>
       <FrameHeader>
@@ -291,6 +299,7 @@ export function FrameEditor(props){
               style={{ width: elementPosition[`image${index}`].w, height: elementPosition[`image${index}`].h, left:`${elementPosition[`image${index}`].x}px`, top:`${elementPosition[`image${index}`].y}px`}}
               onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,`image${index}`)}}
             >
+              <CloseButton onClick={() => handleDeleteElementImage(index)}/>
               <Resizer onMouseDown={(clickEvent) => {handleImageResize(clickEvent, `image${index}`)}}/>
             </MainImage>
           )
@@ -333,7 +342,7 @@ export function FrameEditor(props){
                   onKeyDown={handleKeyDown}
                 />
               ) : (
-                <p onDoubleClick={(e) => handleDoubleClick(e, index)}>{text}</p>
+                <p onDoubleClick={(e) => handleDoubleClick(e, index)}>{text}<CloseButton onClick={() => handleDeleteText(index)}/></p>
               )}
             </Text>
           )
@@ -488,6 +497,23 @@ const AddElement = styled.div`
       background-color: #eee
     }
   }  
+`
+
+const CloseButton = styled.div`
+  position: absolute;
+  right:-9px;
+  top: -9px;
+  width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  background-image: url("/assets/images/common/btn_img_close.png");
+  background-size: cover;
+  background-color: #fff;
+  opacity: 0.1;
+  cursor: pointer;
+  &:hover {
+    opacity: 1
+  }
 `
 
 const addIcon = <svg width="24" height="24" viewBox="0 0 24 24" style={{cursor: 'pointer', position: 'relative', top: 1}}><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg>
