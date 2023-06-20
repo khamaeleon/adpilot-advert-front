@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Board, BoardHeader, BoardSearchResult} from "../../assets/GlobalStyles";
 import Table from "../../components/table";
 import {PlatformCondition} from "../../components/Platform/Condition";
@@ -60,6 +60,13 @@ function ProductManage() {
   const [searchCondition, setSearchCondition] = useState(searchConditionAtom)
   const [productData, setProductData] = useAtom(productListDataAtom)
 
+  useEffect(() => {
+    retrieveProduct(searchCondition).then(response =>{
+      if(response){
+        setProductData(response)
+      }
+    })
+  },[])
   /**
    * 상품 수집 검색
    */
