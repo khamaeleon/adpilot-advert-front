@@ -24,5 +24,5 @@ COPY conf /etc/nginx
 COPY --from=builder /usr/src/app/build /usr/share/nginx/html
 
 # 80포트 오픈하고 nginx 실행
-EXPOSE 3003
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
