@@ -1,5 +1,5 @@
 # 1. node 이미지 사용
-FROM node:16-alpine
+FROM node:16-alpine as builder
 
 # 작업 폴더를 만들고 npm 설치
 RUN mkdir -p /usr/src/app
