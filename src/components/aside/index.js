@@ -19,7 +19,7 @@ function AsideList (props) {
    * @returns {boolean}
    */
   const checkPermissions = (item) => {
-    if(tokenUserInfo.role === 'NORMAL' && ['reports','dashboard'].includes(item.name)) {
+    if(tokenUserInfo.role === 'NORMAL' && ['reports', 'dashboard', 'notice'].includes(item.name)) {
       return true
     }
     if(['ADMIN','SUPER_ADMIN'].includes(tokenUserInfo.role)) {

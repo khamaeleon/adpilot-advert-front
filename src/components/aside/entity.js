@@ -3,6 +3,7 @@ import {atom} from "jotai/index";
 export const selectedIcon = {
   dashboard: "/assets/images/aside/gmd_menu_01_on@3x.png",
   campaign:'/assets/images/aside/gmd_menu_02_on@3x.png',
+  notice:'/assets/images/aside/gmd_menu_03_on@3x.png',
   reports:'/assets/images/aside/gmd_menu_04_on@3x.png',
   settings:'/assets/images/aside/gmd_menu_05_on@3x.png',
   platform:'/assets/images/aside/gmd_menu_06_on@3x.png'
@@ -48,6 +49,21 @@ export const menuList = [
       {
         name: "customReports",
         header: `${advertiser} 일별 보고서`
+      }
+    ]
+  },
+  {
+    name: "notice",
+    header: "고객센터",
+    include: ['notice','inquiry'],
+    child: [
+      {
+        name: "notice",
+        header: "공지사항"
+      },
+      {
+        name: "inquiry",
+        header: "1:1문의"
       }
     ]
   },

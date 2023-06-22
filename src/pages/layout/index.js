@@ -28,6 +28,7 @@ import {stepCampaignAtom} from "../campaign/entity";
 import {retrieveUserPoint, requestAmountPoint} from "./entity/UserPoint";
 import {searchConditionAtom} from "../dash_board/entity/Common";
 import {retrieveUserPointRequest} from "../../services/payment/user/RetrieveUserPointAxios";
+import Customer from "../customer";
 
 function Layout() {
   const params = useParams()
@@ -198,6 +199,8 @@ function Layout() {
         {['campaign', 'manageCreative', 'manageCreativeDetail', 'bannerCreative'].includes(params.id) && <Campaign/>}
         {/* 보고서 */}
         {['reports', 'customReports'].includes(params.id) && <Reports/>}
+        {/* 고객 센터 */}
+        {['notice', 'inquiry'].includes(params.id) && <Customer/>}
         {/* 설정 */}
         {['settings', 'settingsDetail', 'budgetEvent', 'budgetEventDetail', 'budgetTime', 'budgetTimeDetail','budgetTimeList'].includes(params.id) &&
           <Settings/>}

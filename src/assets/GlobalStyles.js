@@ -1389,3 +1389,16 @@ export const ReportsDetail = styled.div`
     background-color: #f9fafb;
   }
 `
+
+export const TextArea = styled.textarea`
+  width: 100%;
+  padding-top: 10px;
+  padding-left: 20px;
+  border: 1px solid rgb(229, 229, 229);
+  border-radius: 5px;
+  resize: none;
+
+  ::placeholder {
+    color: #bbb;
+  }
+`

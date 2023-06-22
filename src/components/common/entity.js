@@ -9,6 +9,8 @@ export const navigationName = {
   "/board/manageCreativeDetail": "홈/광고 관리/크리에이티브 관리 상세",
   "/board/reports": "홈/보고서/보고서 생성",
   "/board/customReports": "홈/보고서/보고서",
+  "/board/notice": "홈/고객센터/공지사항",
+  "/board/inquiry": "홈/고객센터/1:1문의",
   "/board/platform": "홈/플랫폼 관리/사용자 관리",
   "/board/platformDetail": "홈/플랫폼 관리/사용자 관리",
   "/board/categoryManage": "홈/플랫폼 관리/광고주 카테고리 관리",
