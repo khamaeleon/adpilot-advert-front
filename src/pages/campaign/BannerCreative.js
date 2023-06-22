@@ -36,6 +36,7 @@ import {
   PopButton,
   TextButton
 } from "./styles/bannerCreator";
+import styled from "styled-components";
 
 function ColorPicker ({onChange, defaultColor}) {
   const [color, setColor] = useState(defaultColor)
@@ -118,9 +119,10 @@ export function BannerCreative() {
     buttonColor: '#222222',
     buttonBackgroundColor: '#ffffff',
   })
-
+  const [publicSetting, setPublicSetting] = useState([])
   const [bannerTypes, setBannerTypes] = useState([])
   const [selectedBanner, setSelectedBanner] = useState([])
+
 
   const [isFontSetting, setIsFontSetting] = useState(false)
   const handleFontSelect = () => {
@@ -310,19 +312,29 @@ export function BannerCreative() {
     }
   }
   const handleSelectBannerType = (type) => {
-    console.log(type)
     if(selectedBanner.filter(datum => datum === type).length === 0){
       setSelectedBanner(prev => [...prev, type])
     } else {
       const newItemType = selectedBanner.filter(datum => datum !== type)
       setSelectedBanner(newItemType)
+
+      const newPublicSet = publicSetting.filter(datum => datum.size !== type)
+      setPublicSetting(newPublicSet)
     }
+  }
+
+  const handleClickSentData = (e) => {
+    e.target.form.action = process.env.PUBLIC_URL + '/frame.html'
+    e.target.form.submit()
   }
 
   const handleFocusSelected = (frameId) => {
     console.log(frameId)
   }
 
+  const handleChangePcUrl = () => {
+
+  }
   return (
     <>
       <Board>
@@ -426,6 +438,7 @@ export function BannerCreative() {
                     <Span4>PC 랜딩 URL</Span4>
                     <div style={{width: '100%'}}>
                       <Input
+                        onChange={handleChangePcUrl}
                         placeholder={'http:// 또는 https://를 포함한 URL 입력'}/>
                     </div>
                   </RowSpan>
@@ -503,7 +516,7 @@ export function BannerCreative() {
                         <Row>
                           <ColSpan1>색상</ColSpan1>
                           <ColSpan3>
-                            <ColorPicker onChange={handleChangeTitleColor} defaultColor={'#222222'}/>
+                            <ColorPicker onChange={handleChangeTitleColor} defaultColor={defaultSetting.titleColor}/>
                           </ColSpan3>
                         </Row>
                         <RowSpan>
@@ -595,7 +608,7 @@ export function BannerCreative() {
               <FlexWrap>
                 {selectedBanner.map((item, key) => {
                   return (
-                    <FrameEditor set={defaultSetting} setSetting={setDefaultSetting} size={item} key={key} focused={handleFocusSelected}/>
+                    <FrameEditor set={defaultSetting} setSetting={setDefaultSetting} publicSetting={publicSetting} setPublicSetting={setPublicSetting} size={item} key={key} focused={handleFocusSelected}/>
                   )
                 })}
               </FlexWrap>
@@ -604,10 +617,30 @@ export function BannerCreative() {
           }
         </BoardSearchResult>
         <div>
-          <iframe src={'../../frame.html'} width={200} height={200} style={{border: '1px solid #ddd'}}/>
+          <div>데이터 바인딩 예시</div>
+          <div style={{display:'flex'}}>
+            <iframe name={'frame'} src={'../frame.html'} width={300} height={300} style={{border: '1px solid #ddd'}}/>
+            <JsonData>
+              <div>전송될 데이터</div>
+              <div><p>//기본 소재</p>const baseData = {JSON.stringify(defaultSetting)}</div>
+              {publicSetting.map((item, key) => {
+                return (
+                  <div key={key}><p>//{item.size}사이즈와 기본소재의 크기 위치값</p>const subData = {JSON.stringify(item)}</div>
+                )
+              })}
+            </JsonData>
+          </div>
         </div>
         <ToastContainer/>
       </Board>
     </>
   )
 }
+
+const JsonData = styled.div`
+  padding: 10px;
+  flex: 1;
+  & div {
+    padding: 10px;
+  }
+`

@@ -1,12 +1,11 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import {confirmAlert} from "react-confirm-alert";
-import {CreateImage} from "../styles/common";
 import ImageUploading from "react-images-uploading";
 import {toast} from "react-toastify";
 
 export function FrameEditor(props){
-  const {size, set, setSetting} = props
+  const {size, set, publicSetting, setPublicSetting} = props
   const [sized, setSized] = useState([0,0])
   const [addElement, setAddElement] = useState(false)
   const [isEditable, setIsEditable] = useState([false, false]);
@@ -15,7 +14,7 @@ export function FrameEditor(props){
     text: []
   })
   const [elementPosition, setElementPosition] = useState({
-    image: {
+    mainImage: {
       x: 0,
       y: 0,
       w: 0,
@@ -57,14 +56,41 @@ export function FrameEditor(props){
     if(set.mainImage === '') {
       setElementPosition({
         ...elementPosition,
-        image: {
-          ...elementPosition.image,
+        mainImage: {
+          ...elementPosition.mainImage,
           w: set.mainImage.width,
           h: set.mainImage.height
         }
       })
     }
-  }, [set,size]);
+  }, []);
+
+  useEffect(() => {
+    const elementsData = {
+      size: size,
+      ...element,
+      ...elementPosition
+    }
+    if(publicSetting.length === 0) {
+      setPublicSetting([elementsData])
+    } else {
+      // 추가된 배열의 사이즈가 있고 같은경우
+      if(publicSetting.some(item => item.size === size)){
+        //데이터 없데이트
+        const updateData = publicSetting.map((item) =>
+          item.size === size ? {...item, ...elementsData} : item
+        )
+        // 셋스테이트 일으켜서 리랜더링
+        setPublicSetting(updateData)
+      } else {
+        // 기존 배열에 사이즈가 없는경우
+        // 새로추가된 사이즈만 추가
+        console.log(size)
+        setPublicSetting(publicSetting.concat(elementsData))
+      }
+    }
+  }, [elementPosition, element]);
+
 
   const handleSelectFrame = () => {
 
@@ -168,25 +194,6 @@ export function FrameEditor(props){
     }
   }
 
-  const handleDeleteImage = (imagePath) => {
-    confirmAlert({
-      title: '알림',
-      message: '해당 이미지를 삭제하시겠습니까?',
-      buttons: [
-        {
-          label: '확인',
-          onClick: () => {
-            // setDefaultSetting({
-            //   ...defaultSetting,
-            //   backgroundImage: ''
-            // })
-          }
-        },{
-          label: '취소',
-        }
-      ]
-    });
-  }
   const onDrop = (pictureFiles, e) => {
     console.log(pictureFiles)
     if (pictureFiles.length !== 0) {
@@ -240,10 +247,59 @@ export function FrameEditor(props){
 
   const handleDeleteText = (index) => {
     element.text.splice(index, 1)
+    setElement({
+      ...element
+    })
   }
 
   const handleDeleteElementImage = (index) => {
     element.image.splice(index, 1)
+    setElement({
+      ...element
+    })
+  }
+
+  const handleResetFrame = () => {
+    setElement({
+      image: [],
+      text: []
+    })
+    setElementPosition({
+      mainImage: {
+        x: 0,
+        y: 0,
+        w: 0,
+        h: 0,
+      },
+      image0: {
+        x: 0,
+        y: 0,
+        w: 0,
+        h: 0
+      },
+      image1: {
+        x: 0,
+        y: 0,
+        w: 0,
+        h: 0
+      },
+      title: {
+        x: 0,
+        y: 0
+      },
+      text0: {
+        x: 0,
+        y: 0
+      },
+      text1: {
+        x: 0,
+        y: 0
+      },
+      button: {
+        x: 0,
+        y: 0
+      }
+    })
   }
 
   return(
@@ -270,7 +326,7 @@ export function FrameEditor(props){
           }
         </AddButton>
         <span>{sized[0]}px X {sized[1]}px</span>
-        <ReloadButton>
+        <ReloadButton onClick={handleResetFrame}>
           {resetIcon}
         </ReloadButton>
       </FrameHeader>
@@ -283,10 +339,10 @@ export function FrameEditor(props){
           <MainImage
             source={set.mainImage.url}
             ratio={set.mainImage.width / set.mainImage.height}
-            style={{ width: elementPosition[`image`].w, height: elementPosition[`image`].h, left:`${elementPosition[`image`].x}px`, top:`${elementPosition[`image`].y}px`}}
-            onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,`image`)}}
+            style={{ width: elementPosition[`mainImage`].w, height: elementPosition[`mainImage`].h, left: elementPosition[`mainImage`].x, top: elementPosition[`mainImage`].y}}
+            onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,`mainImage`)}}
           >
-            <Resizer onMouseDown={(clickEvent) => {handleImageResize(clickEvent, `image`)}}/>
+            <Resizer onMouseDown={(clickEvent) => {handleImageResize(clickEvent, `mainImage`)}}/>
           </MainImage>
         }
         {element.image.length !== 0 && element.image.map((image, key) => {
@@ -342,7 +398,7 @@ export function FrameEditor(props){
                   onKeyDown={handleKeyDown}
                 />
               ) : (
-                <p onDoubleClick={(e) => handleDoubleClick(e, index)}>{text}<CloseButton onClick={() => handleDeleteText(index)}/></p>
+                <div onDoubleClick={(e) => handleDoubleClick(e, index)}>{text}<CloseButton onClick={() => handleDeleteText(index)}/></div>
               )}
             </Text>
           )
@@ -457,6 +513,7 @@ const Resizer = styled.div`
 
 const Text = styled.div`
   position: absolute;
+  letter-spacing: -1px;
   text-align: center;
   display: inline-block;
   word-break: keep-all;
@@ -501,16 +558,16 @@ const AddElement = styled.div`
 
 const CloseButton = styled.div`
   position: absolute;
-  right:-9px;
-  top: -9px;
+  right:-14px;
+  top: -14px;
   width: 18px;
   height: 18px;
   border-radius: 9px;
   background-image: url("/assets/images/common/btn_img_close.png");
   background-size: cover;
   background-color: #fff;
-  opacity: 0.1;
   cursor: pointer;
+  opacity: 0;
   &:hover {
     opacity: 1
   }
