@@ -107,7 +107,7 @@ export function BannerCreative() {
   const [defaultSetting, setDefaultSetting] = useState({
     title: {
       text: '',
-      fontSize: 12,
+      fontSize: 16,
       color: '#222222',
       fontFamily: '',
       fontWeight: 'normal',

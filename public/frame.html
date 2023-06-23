@@ -109,13 +109,12 @@
         const div = document.createElement('div')
         div.className = name
         div.innerText = typeof datum === 'string' ? datum : null
-        div.style.left = subData[name+i].left + 'px'
-        div.style.top = subData[name+i].top + 'px'
-        div.style.width = subData[name+i].width + 'px'
-        div.style.height = subData[name+i].height + 'px'
+        Object.entries(subData[name+i]).map(function (css) {
+          div.style[css[0]] = isNaN(css[1]) ? css[1] : css[1]+'px'
+        })
         div.style.backgroundImage = `url(${datum.url})`
         div.style.color = baseData.title.color
-        div.style.fontSize = '12px'
+        div.style.fontSize = '14px'
         root.appendChild(div)
       })
     }
