@@ -616,6 +616,7 @@ export function BannerCreative() {
           </>
           }
         </BoardSearchResult>
+        {/*추후 삭제*/}
         <div>
           <div>데이터 바인딩 예시</div>
           <div style={{display:'flex'}}>
