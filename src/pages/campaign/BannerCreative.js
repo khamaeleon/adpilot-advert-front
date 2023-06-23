@@ -14,7 +14,7 @@ import {
   Span3,
   Span4
 } from "../../assets/GlobalStyles";
-import React, {useEffect, useState} from "react";
+import React, {useRef, useState} from "react";
 import {CreateImage, DeleteIcon, ImageUploadCard, Row} from "./styles/common";
 import ImageUploading from "react-images-uploading";
 import Select from "react-select";
@@ -22,7 +22,7 @@ import {ChromePicker} from 'react-color'
 import {FrameEditor} from "./Frame/FrameEditor";
 import {confirmAlert} from "react-confirm-alert";
 import {toast, ToastContainer} from "react-toastify";
-import {database, fontTypes} from "./entity/bannerCreator";
+import {fontTypes} from "./entity/bannerCreator";
 import {
   BannerItemContainer,
   DefaultItemButton,
@@ -105,24 +105,29 @@ const square = ['IMG200_200','IMG150_150','IMG300_300', 'IMG400_400', 'IMG500_50
 
 export function BannerCreative() {
   const [defaultSetting, setDefaultSetting] = useState({
-    title: '',
-    titleSize: 12,
-    titleColor: '#222222',
-    titleBold: false,
-    titleItalic: false,
-    titleUnderline: false,
-    titleFamily: '',
+    title: {
+      text: '',
+      fontSize: 12,
+      color: '#222222',
+      fontFamily: '',
+      fontWeight: 'normal',
+      fontStyle: 'normal',
+      textDecoration: 'none',
+    },
     mainImage: '',
-    backgroundImage: '',
-    backgroundColor: '#ffffff',
-    buttonTitle: '',
-    buttonColor: '#222222',
-    buttonBackgroundColor: '#ffffff',
+    background: {
+      backgroundImage: '',
+      backgroundColor: '#ffffff',
+    },
+    button: {
+      text: '',
+      color: '#222222',
+      backgroundColor: '#ffffff',
+    }
   })
   const [publicSetting, setPublicSetting] = useState([])
   const [bannerTypes, setBannerTypes] = useState([])
   const [selectedBanner, setSelectedBanner] = useState([])
-
 
   const [isFontSetting, setIsFontSetting] = useState(false)
   const handleFontSelect = () => {
@@ -132,59 +137,82 @@ export function BannerCreative() {
   const handleChangeTitle = (e) => {
     setDefaultSetting({
       ...defaultSetting,
-      title: e.target.value
+      title: {
+        ...defaultSetting.title,
+        text: e.target.value
+      }
+    })
+  }
+  const handleChangeTitleColor = (color) => {
+    setDefaultSetting({
+      ...defaultSetting,
+      title: {
+        ...defaultSetting.title,
+        color: color
+      }
+    })
+  }
+  const handelChangeTitleSize = (e) => {
+    setDefaultSetting({
+      ...defaultSetting,
+      title: {
+        ...defaultSetting.title,
+        fontSize: e.target.value
+      }
+    })
+  }
+
+  const handleChangeFontFamily = (fontFamily) =>{
+    setDefaultSetting({
+      ...defaultSetting,
+      title: {
+        ...defaultSetting.title,
+        fontFamily: fontFamily.value
+      }
     })
   }
 
   const handleChangeImageBackground = (color) => {
     setDefaultSetting({
       ...defaultSetting,
-      backgroundColor: color
-    })
-  }
-
-  const handleChangeTitleColor = (color) => {
-    setDefaultSetting({
-      ...defaultSetting,
-      titleColor: color
+      background: {
+        ...defaultSetting.background,
+        backgroundColor: color
+      }
     })
   }
 
   const handleChangeButtonTitle = (e) => {
     setDefaultSetting({
       ...defaultSetting,
-      buttonTitle: e.value !== '' ? e.label : ''
+      button: {
+        ...defaultSetting.button,
+        text: e.value !== '' ? e.label : ''
+      }
     })
   }
 
   const handleChangeButtonTitleColor = (color) => {
     setDefaultSetting({
       ...defaultSetting,
-      buttonColor: color
+      button: {
+        ...defaultSetting.button,
+        color: color
+      }
     })
   }
 
   const handleChangeButtonBackgroundColor = (color) => {
     setDefaultSetting({
       ...defaultSetting,
-      buttonBackgroundColor: color
+      button: {
+        ...defaultSetting.button,
+        backgroundColor: color
+      }
     })
   }
 
-  const handelChangeTitleSize = (e) => {
-    setDefaultSetting({
-      ...defaultSetting,
-      titleSize: e.target.value
-    })
-  }
 
-  const handleChangeFontFamily = (fontFamily) =>{
-    console.log(fontFamily.value);
-    setDefaultSetting({
-      ...defaultSetting,
-      titleFamily: fontFamily.value
-    })
-  }
 
   const onImageError = (errors, type) => {
     if (errors.maxFileSize) {
@@ -258,7 +286,6 @@ export function BannerCreative() {
     if (pictureFiles.length !== 0) {
       const reader = new FileReader();
       reader.readAsDataURL(pictureFiles[0].file);
-
       return new Promise((resolve) => {
         reader.onload = () => {
           const image = new Image()
@@ -321,11 +348,6 @@ export function BannerCreative() {
       const newPublicSet = publicSetting.filter(datum => datum.size !== type)
       setPublicSetting(newPublicSet)
     }
-  }
-
-  const handleClickSentData = (e) => {
-    e.target.form.action = process.env.PUBLIC_URL + '/frame.html'
-    e.target.form.submit()
   }
 
   const handleFocusSelected = (frameId) => {
@@ -473,7 +495,7 @@ export function BannerCreative() {
                         type={'text'}
                         maxLength={25}
                         name={'serviceName'}
-                        value={defaultSetting?.title || ''}
+                        value={defaultSetting?.title.text || ''}
                         onChange={handleChangeTitle}
                         placeholder={'광고 제목을 입력해주세요 (12자)'}
                       />
@@ -487,14 +509,14 @@ export function BannerCreative() {
                             <Select styles={selectStyle}
                                     options={fontTypes}
                                     onChange={handleChangeFontFamily}
-                                    value={fontTypes.find(font => font.value === defaultSetting.titleFamily) || ''}
+                                    value={fontTypes.find(font => font.value === defaultSetting.title.fontFamily) || ''}
                             />
                           </ColSpan3>
                         </Row>
                         <Row>
                           <ColSpan1>크기</ColSpan1>
                           <ColSpan3>
-                            <Input value={defaultSetting.titleSize} onChange={handelChangeTitleSize}/>
+                            <Input value={defaultSetting.title.fontSize} onChange={handelChangeTitleSize}/>
                             <ColTitle>px</ColTitle>
                           </ColSpan3>
                         </Row>
@@ -502,21 +524,30 @@ export function BannerCreative() {
                           <ColSpan1>효과</ColSpan1>
                           <ColSpan1 onClick={() => setDefaultSetting({
                             ...defaultSetting,
-                            titleBold: !defaultSetting.titleBold
-                          })}><Effect active={defaultSetting.titleBold}><strong>A</strong></Effect></ColSpan1>
+                            title: {
+                              ...defaultSetting.title,
+                              fontWeight: defaultSetting.title.fontWeight === 'normal' ? 'bold' : 'normal'
+                            }
+                          })}><Effect active={defaultSetting.title.fontWeight === 'bold'}><strong>A</strong></Effect></ColSpan1>
                           <ColSpan1 onClick={() => setDefaultSetting({
                             ...defaultSetting,
-                            titleItalic: !defaultSetting.titleItalic
-                          })}><Effect active={defaultSetting.titleItalic}><i>A</i></Effect></ColSpan1>
+                            title: {
+                              ...defaultSetting.title,
+                              fontStyle: defaultSetting.title.fontStyle === 'normal' ? 'italic' : 'normal'
+                            }
+                          })}><Effect active={defaultSetting.title.fontStyle === 'italic'}><i>A</i></Effect></ColSpan1>
                           <ColSpan1 onClick={() => setDefaultSetting({
                             ...defaultSetting,
-                            titleUnderline: !defaultSetting.titleUnderline
-                          })}><Effect active={defaultSetting.titleUnderline}><u>A</u></Effect></ColSpan1>
+                            title: {
+                              ...defaultSetting.title,
+                              textDecoration: defaultSetting.title.textDecoration === 'none' ? 'underline' : 'none'
+                            }
+                          })}><Effect active={defaultSetting.title.textDecoration === 'underline'}><u style={{margin:0}}>A</u></Effect></ColSpan1>
                         </Row>
                         <Row>
                           <ColSpan1>색상</ColSpan1>
                           <ColSpan3>
-                            <ColorPicker onChange={handleChangeTitleColor} defaultColor={defaultSetting.titleColor}/>
+                            <ColorPicker onChange={handleChangeTitleColor} defaultColor={defaultSetting.title.color}/>
                           </ColSpan3>
                         </Row>
                         <RowSpan>
@@ -550,7 +581,7 @@ export function BannerCreative() {
                     </ColSpan100>
                     <Span4 style={{width: 80, whiteSpace: 'nowrap'}}>배경이미지<small></small><p><small style={{color: '#ccc'}}>(600*300 권장)</small></p></Span4>
                     <ColSpan100 padding={'0'} style={{maxWidth: '100px'}}>
-                      {defaultSetting.backgroundImage === '' ?
+                      {defaultSetting.background.backgroundImage === '' ?
                         <ImageUploading
                           multiple
                           acceptType={["jpg", "gif", "png"]}
@@ -565,8 +596,8 @@ export function BannerCreative() {
                         </ImageUploading>
                         :
                         <ImageUploadCard>
-                          <DeleteIcon onClick={() => handleDeleteImage(defaultSetting.backgroundImage)}/>
-                          <img src={defaultSetting.backgroundImage} alt={'배너이미지'}/>
+                          <DeleteIcon onClick={() => handleDeleteImage(defaultSetting.background.backgroundImage)}/>
+                          <img src={defaultSetting.background.backgroundImage} alt={'배너이미지'}/>
                         </ImageUploadCard>
                       }
                     </ColSpan100>

@@ -15,55 +15,53 @@ export function FrameEditor(props){
   })
   const [elementPosition, setElementPosition] = useState({
     mainImage: {
-      x: 0,
-      y: 0,
-      w: 0,
-      h: 0,
+      left: 0,
+      top: 0,
+      width: 0,
+      height: 0,
     },
     image0: {
-      x: 0,
-      y: 0,
-      w: 0,
-      h: 0
+      left: 0,
+      top: 0,
+      width: 0,
+      height: 0,
     },
     image1: {
-      x: 0,
-      y: 0,
-      w: 0,
-      h: 0
+      left: 0,
+      top: 0,
+      width: 0,
+      height: 0,
     },
     title: {
-      x: 0,
-      y: 0
+      left: 0,
+      top: 0,
     },
     text0: {
-      x: 0,
-      y: 0
+      left: 0,
+      top: 0,
     },
     text1: {
-      x: 0,
-      y: 0
+      left: 0,
+      top: 0,
     },
     button: {
-      x: 0,
-      y: 0
+      left: 0,
+      top: 0,
     }
   });
 
   useEffect(() => {
     const stringToSize = size.replace('IMG','').split('_')
     setSized([parseInt(stringToSize[0]),parseInt(stringToSize[1])])
-    if(set.mainImage === '') {
-      setElementPosition({
-        ...elementPosition,
-        mainImage: {
-          ...elementPosition.mainImage,
-          w: set.mainImage.width,
-          h: set.mainImage.height
-        }
-      })
-    }
-  }, []);
+    setElementPosition({
+      ...elementPosition,
+      mainImage: {
+        ...elementPosition.mainImage,
+        width: set.mainImage.width > parseInt(stringToSize[0]) ? parseInt(stringToSize[0]) : set.mainImage.width,
+        height: set.mainImage.height > parseInt(stringToSize[1]) ? parseInt(stringToSize[1]) : set.mainImage.height
+      }
+    })
+  }, [set]);
 
   useEffect(() => {
     const elementsData = {
@@ -85,7 +83,6 @@ export function FrameEditor(props){
       } else {
         // 기존 배열에 사이즈가 없는경우
         // 새로추가된 사이즈만 추가
-        console.log(size)
         setPublicSetting(publicSetting.concat(elementsData))
       }
     }
@@ -141,8 +138,8 @@ export function FrameEditor(props){
         ...elementPosition,
         [target]: {
           ...elementPosition[target],
-          w: inRange((!isNaN(elementPosition[target].w) ? elementPosition[target].w : 0)  + deltaX, Math.floor(boundary.width)),
-          h: inRange((!isNaN(elementPosition[target].h) ? elementPosition[target].h : 0) + deltaY, Math.floor(boundary.height - 2))
+          width: inRange((!isNaN(elementPosition[target].width) ? elementPosition[target].width : 0)  + deltaX, Math.floor(boundary.width)),
+          height: inRange((!isNaN(elementPosition[target].height) ? elementPosition[target].height : 0) + deltaY, Math.floor(boundary.height - 2))
         }
       })
     }
@@ -166,12 +163,12 @@ export function FrameEditor(props){
         ...elementPosition,
         [target]: {
           ...elementPosition[target],
-          x: inRange(
-            elementPosition[target].x + deltaX,
+          left: inRange(
+            elementPosition[target].left + deltaX,
             Math.floor(boundary.width - clickEvent.target.clientWidth -2),
           ),
-          y: inRange(
-            elementPosition[target].y + deltaY,
+          top: inRange(
+            elementPosition[target].top + deltaY,
             Math.floor(boundary.height - clickEvent.target.clientHeight -2),
           ),
         }
@@ -266,38 +263,38 @@ export function FrameEditor(props){
     })
     setElementPosition({
       mainImage: {
-        x: 0,
-        y: 0,
-        w: 0,
-        h: 0,
+        left: 0,
+        top: 0,
+        width: 0,
+        height: 0,
       },
       image0: {
-        x: 0,
-        y: 0,
-        w: 0,
-        h: 0
+        left: 0,
+        top: 0,
+        width: 0,
+        height: 0,
       },
       image1: {
-        x: 0,
-        y: 0,
-        w: 0,
-        h: 0
+        left: 0,
+        top: 0,
+        width: 0,
+        height: 0,
       },
       title: {
-        x: 0,
-        y: 0
+        left: 0,
+        top: 0
       },
       text0: {
-        x: 0,
-        y: 0
+        left: 0,
+        top: 0
       },
       text1: {
-        x: 0,
-        y: 0
+        left: 0,
+        top: 0
       },
       button: {
-        x: 0,
-        y: 0
+        left: 0,
+        top: 0
       }
     })
   }
@@ -334,12 +331,12 @@ export function FrameEditor(props){
         ref={boundaryRef}
         width={sized[0]}
         height={sized[1]}
-        style={{backgroundColor: set.backgroundColor, backgroundImage: `url(${set.backgroundImage})`}} onClick={handleClickEnd}>
+        style={{backgroundColor: set.background.backgroundColor, backgroundImage: `url(${set.background.backgroundImage})`}} onClick={handleClickEnd}>
         {set.mainImage &&
           <MainImage
             source={set.mainImage.url}
             ratio={set.mainImage.width / set.mainImage.height}
-            style={{ width: elementPosition[`mainImage`].w, height: elementPosition[`mainImage`].h, left: elementPosition[`mainImage`].x, top: elementPosition[`mainImage`].y}}
+            style={{ width: elementPosition[`mainImage`].width, height: elementPosition[`mainImage`].height, left: elementPosition[`mainImage`].left, top: elementPosition[`mainImage`].top}}
             onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,`mainImage`)}}
           >
             <Resizer onMouseDown={(clickEvent) => {handleImageResize(clickEvent, `mainImage`)}}/>
@@ -352,7 +349,7 @@ export function FrameEditor(props){
               key={key}
               source={image.url}
               ratio={image.width / image.height}
-              style={{ width: elementPosition[`image${index}`].w, height: elementPosition[`image${index}`].h, left:`${elementPosition[`image${index}`].x}px`, top:`${elementPosition[`image${index}`].y}px`}}
+              style={{ width: elementPosition[`image${index}`].width, height: elementPosition[`image${index}`].height, left:`${elementPosition[`image${index}`].left}px`, top:`${elementPosition[`image${index}`].top}px`}}
               onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,`image${index}`)}}
             >
               <CloseButton onClick={() => handleDeleteElementImage(index)}/>
@@ -364,17 +361,17 @@ export function FrameEditor(props){
         {set.title !== '' &&
           <Text
             style={{
-              color: set.titleColor,
-              fontSize: set.titleSize+'px',
-              fontWeight:set.titleBold && 'bold' ,
-              fontStyle: set.titleItalic && 'italic',
-              textDecoration: set.titleUnderline && 'underline',
-              left:`${elementPosition.title.x}px`,
-              top:`${elementPosition.title.y}px`,
-              fontFamily: set.titleFamily
+              color: set.title.color,
+              fontSize: set.title.fontSize+'px',
+              fontWeight:set.title.fontWeight,
+              fontStyle: set.title.fontStyle,
+              textDecoration: set.title.textDecoration,
+              left:`${elementPosition.title.left}px`,
+              top:`${elementPosition.title.top}px`,
+              fontFamily: set.title.fontFamily
             }}
             onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent, 'title')}}
-          >{set.title}</Text>
+          >{set.title.text}</Text>
         }
         {element.text.length > 0 && element.text.map((text, key) => {
           const index = key
@@ -382,10 +379,10 @@ export function FrameEditor(props){
             <Text
               key={key}
               style={{
-                left: `${elementPosition[`text${index}`].x}px`,
-                top: `${elementPosition[`text${index}`].y}px`,
-                fontFamily: set.titleFamily,
-                color: set.titleColor,
+                left: `${elementPosition[`text${index}`].left}px`,
+                top: `${elementPosition[`text${index}`].top}px`,
+                fontFamily: set.title.fontFamily,
+                color: set.title.color,
               }}
               onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent, `text${index}`)}}
             >
@@ -404,16 +401,16 @@ export function FrameEditor(props){
           )
           })
         }
-        {set.buttonTitle !== '' &&
+        {set.button.text !== '' &&
           <Button
             style={{
-              backgroundColor: set.buttonBackgroundColor,
-              color: set.buttonColor,
-              left:`${elementPosition.button.x}px`,
-              top:`${elementPosition.button.y}px`,
-              border: `${set.buttonBackgroundColor === set.backgroundColor ? `1px solid ${set.buttonColor}` : 'none'}`
+              backgroundColor: set.button.backgroundColor,
+              color: set.button.color,
+              left:`${elementPosition.button.left}px`,
+              top:`${elementPosition.button.top}px`,
+              border: `${set.button.backgroundColor === set.background.backgroundColor ? `1px solid ${set.button.color}` : 'none'}`
           }}
-            onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,'button')}}>{set.buttonTitle}</Button>
+            onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,'button')}}>{set.button.text}</Button>
         }
       </FrameBody>
     </FrameContainer>
