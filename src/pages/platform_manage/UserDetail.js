@@ -316,7 +316,7 @@ function PlatformUserDetail() {
 
 
   const imageDownload = (fileUrl) => {
-    const url = "http://192.168.0.12:9000/temp" + fileUrl;
+    const url = "http://192.168.0.104:9000/temp" + fileUrl;
     fetch(url, { method: 'GET' })
     .then((res) => {
       return res.blob();

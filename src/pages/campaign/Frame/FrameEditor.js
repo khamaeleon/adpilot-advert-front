@@ -1,12 +1,11 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import {confirmAlert} from "react-confirm-alert";
-import {CreateImage} from "../styles/common";
 import ImageUploading from "react-images-uploading";
 import {toast} from "react-toastify";
 
 export function FrameEditor(props){
-  const {size, set, setSetting} = props
+  const {size, set, publicSetting, setPublicSetting} = props
   const [sized, setSized] = useState([0,0])
   const [addElement, setAddElement] = useState(false)
   const [isEditable, setIsEditable] = useState([false, false]);
@@ -15,56 +14,80 @@ export function FrameEditor(props){
     text: []
   })
   const [elementPosition, setElementPosition] = useState({
-    image: {
-      x: 0,
-      y: 0,
-      w: 0,
-      h: 0,
+    mainImage: {
+      left: 0,
+      top: 0,
+      width: 0,
+      height: 0,
     },
     image0: {
-      x: 0,
-      y: 0,
-      w: 0,
-      h: 0
+      left: 0,
+      top: 0,
+      width: 0,
+      height: 0,
     },
     image1: {
-      x: 0,
-      y: 0,
-      w: 0,
-      h: 0
+      left: 0,
+      top: 0,
+      width: 0,
+      height: 0,
     },
     title: {
-      x: 0,
-      y: 0
+      left: 0,
+      top: 0,
     },
     text0: {
-      x: 0,
-      y: 0
+      left: 0,
+      top: 0,
     },
     text1: {
-      x: 0,
-      y: 0
+      left: 0,
+      top: 0,
     },
     button: {
-      x: 0,
-      y: 0
+      left: 0,
+      top: 0,
     }
   });
 
   useEffect(() => {
     const stringToSize = size.replace('IMG','').split('_')
     setSized([parseInt(stringToSize[0]),parseInt(stringToSize[1])])
-    if(set.mainImage === '') {
-      setElementPosition({
-        ...elementPosition,
-        image: {
-          ...elementPosition.image,
-          w: set.mainImage.width,
-          h: set.mainImage.height
-        }
-      })
+    setElementPosition({
+      ...elementPosition,
+      mainImage: {
+        ...elementPosition.mainImage,
+        width: set.mainImage.width > parseInt(stringToSize[0]) ? parseInt(stringToSize[0]) : set.mainImage.width,
+        height: set.mainImage.height > parseInt(stringToSize[1]) ? parseInt(stringToSize[1]) : set.mainImage.height
+      }
+    })
+  }, [set]);
+
+  useEffect(() => {
+    const elementsData = {
+      size: size,
+      ...element,
+      ...elementPosition
     }
-  }, [set,size]);
+    if(publicSetting.length === 0) {
+      setPublicSetting([elementsData])
+    } else {
+      // 추가된 배열의 사이즈가 있고 같은경우
+      if(publicSetting.some(item => item.size === size)){
+        //데이터 없데이트
+        const updateData = publicSetting.map((item) =>
+          item.size === size ? {...item, ...elementsData} : item
+        )
+        // 셋스테이트 일으켜서 리랜더링
+        setPublicSetting(updateData)
+      } else {
+        // 기존 배열에 사이즈가 없는경우
+        // 새로추가된 사이즈만 추가
+        setPublicSetting(publicSetting.concat(elementsData))
+      }
+    }
+  }, [elementPosition, element]);
+
 
   const handleSelectFrame = () => {
 
@@ -115,8 +138,8 @@ export function FrameEditor(props){
         ...elementPosition,
         [target]: {
           ...elementPosition[target],
-          w: inRange((!isNaN(elementPosition[target].w) ? elementPosition[target].w : 0)  + deltaX, Math.floor(boundary.width)),
-          h: inRange((!isNaN(elementPosition[target].h) ? elementPosition[target].h : 0) + deltaY, Math.floor(boundary.height - 2))
+          width: inRange((!isNaN(elementPosition[target].width) ? elementPosition[target].width : 0)  + deltaX, Math.floor(boundary.width)),
+          height: inRange((!isNaN(elementPosition[target].height) ? elementPosition[target].height : 0) + deltaY, Math.floor(boundary.height - 2))
         }
       })
     }
@@ -140,12 +163,12 @@ export function FrameEditor(props){
         ...elementPosition,
         [target]: {
           ...elementPosition[target],
-          x: inRange(
-            elementPosition[target].x + deltaX,
+          left: inRange(
+            elementPosition[target].left + deltaX,
             Math.floor(boundary.width - clickEvent.target.clientWidth -2),
           ),
-          y: inRange(
-            elementPosition[target].y + deltaY,
+          top: inRange(
+            elementPosition[target].top + deltaY,
             Math.floor(boundary.height - clickEvent.target.clientHeight -2),
           ),
         }
@@ -168,25 +191,6 @@ export function FrameEditor(props){
     }
   }
 
-  const handleDeleteImage = (imagePath) => {
-    confirmAlert({
-      title: '알림',
-      message: '해당 이미지를 삭제하시겠습니까?',
-      buttons: [
-        {
-          label: '확인',
-          onClick: () => {
-            // setDefaultSetting({
-            //   ...defaultSetting,
-            //   backgroundImage: ''
-            // })
-          }
-        },{
-          label: '취소',
-        }
-      ]
-    });
-  }
   const onDrop = (pictureFiles, e) => {
     console.log(pictureFiles)
     if (pictureFiles.length !== 0) {
@@ -240,10 +244,59 @@ export function FrameEditor(props){
 
   const handleDeleteText = (index) => {
     element.text.splice(index, 1)
+    setElement({
+      ...element
+    })
   }
 
   const handleDeleteElementImage = (index) => {
     element.image.splice(index, 1)
+    setElement({
+      ...element
+    })
+  }
+
+  const handleResetFrame = () => {
+    setElement({
+      image: [],
+      text: []
+    })
+    setElementPosition({
+      mainImage: {
+        left: 0,
+        top: 0,
+        width: 0,
+        height: 0,
+      },
+      image0: {
+        left: 0,
+        top: 0,
+        width: 0,
+        height: 0,
+      },
+      image1: {
+        left: 0,
+        top: 0,
+        width: 0,
+        height: 0,
+      },
+      title: {
+        left: 0,
+        top: 0
+      },
+      text0: {
+        left: 0,
+        top: 0
+      },
+      text1: {
+        left: 0,
+        top: 0
+      },
+      button: {
+        left: 0,
+        top: 0
+      }
+    })
   }
 
   return(
@@ -270,7 +323,7 @@ export function FrameEditor(props){
           }
         </AddButton>
         <span>{sized[0]}px X {sized[1]}px</span>
-        <ReloadButton>
+        <ReloadButton onClick={handleResetFrame}>
           {resetIcon}
         </ReloadButton>
       </FrameHeader>
@@ -278,15 +331,15 @@ export function FrameEditor(props){
         ref={boundaryRef}
         width={sized[0]}
         height={sized[1]}
-        style={{backgroundColor: set.backgroundColor, backgroundImage: `url(${set.backgroundImage})`}} onClick={handleClickEnd}>
+        style={{backgroundColor: set.background.backgroundColor, backgroundImage: `url(${set.background.backgroundImage})`}} onClick={handleClickEnd}>
         {set.mainImage &&
           <MainImage
             source={set.mainImage.url}
             ratio={set.mainImage.width / set.mainImage.height}
-            style={{ width: elementPosition[`image`].w, height: elementPosition[`image`].h, left:`${elementPosition[`image`].x}px`, top:`${elementPosition[`image`].y}px`}}
-            onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,`image`)}}
+            style={{ width: elementPosition[`mainImage`].width, height: elementPosition[`mainImage`].height, left: elementPosition[`mainImage`].left, top: elementPosition[`mainImage`].top}}
+            onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,`mainImage`)}}
           >
-            <Resizer onMouseDown={(clickEvent) => {handleImageResize(clickEvent, `image`)}}/>
+            <Resizer onMouseDown={(clickEvent) => {handleImageResize(clickEvent, `mainImage`)}}/>
           </MainImage>
         }
         {element.image.length !== 0 && element.image.map((image, key) => {
@@ -296,7 +349,7 @@ export function FrameEditor(props){
               key={key}
               source={image.url}
               ratio={image.width / image.height}
-              style={{ width: elementPosition[`image${index}`].w, height: elementPosition[`image${index}`].h, left:`${elementPosition[`image${index}`].x}px`, top:`${elementPosition[`image${index}`].y}px`}}
+              style={{ width: elementPosition[`image${index}`].width, height: elementPosition[`image${index}`].height, left:`${elementPosition[`image${index}`].left}px`, top:`${elementPosition[`image${index}`].top}px`}}
               onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,`image${index}`)}}
             >
               <CloseButton onClick={() => handleDeleteElementImage(index)}/>
@@ -308,17 +361,17 @@ export function FrameEditor(props){
         {set.title !== '' &&
           <Text
             style={{
-              color: set.titleColor,
-              fontSize: set.titleSize+'px',
-              fontWeight:set.titleBold && 'bold' ,
-              fontStyle: set.titleItalic && 'italic',
-              textDecoration: set.titleUnderline && 'underline',
-              left:`${elementPosition.title.x}px`,
-              top:`${elementPosition.title.y}px`,
-              fontFamily: set.titleFamily
+              color: set.title.color,
+              fontSize: set.title.fontSize+'px',
+              fontWeight:set.title.fontWeight,
+              fontStyle: set.title.fontStyle,
+              textDecoration: set.title.textDecoration,
+              left:`${elementPosition.title.left}px`,
+              top:`${elementPosition.title.top}px`,
+              fontFamily: set.title.fontFamily
             }}
             onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent, 'title')}}
-          >{set.title}</Text>
+          >{set.title.text}</Text>
         }
         {element.text.length > 0 && element.text.map((text, key) => {
           const index = key
@@ -326,10 +379,10 @@ export function FrameEditor(props){
             <Text
               key={key}
               style={{
-                left: `${elementPosition[`text${index}`].x}px`,
-                top: `${elementPosition[`text${index}`].y}px`,
-                fontFamily: set.titleFamily,
-                color: set.titleColor,
+                left: `${elementPosition[`text${index}`].left}px`,
+                top: `${elementPosition[`text${index}`].top}px`,
+                fontFamily: set.title.fontFamily,
+                color: set.title.color,
               }}
               onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent, `text${index}`)}}
             >
@@ -342,22 +395,22 @@ export function FrameEditor(props){
                   onKeyDown={handleKeyDown}
                 />
               ) : (
-                <p onDoubleClick={(e) => handleDoubleClick(e, index)}>{text}<CloseButton onClick={() => handleDeleteText(index)}/></p>
+                <div onDoubleClick={(e) => handleDoubleClick(e, index)}>{text}<CloseButton onClick={() => handleDeleteText(index)}/></div>
               )}
             </Text>
           )
           })
         }
-        {set.buttonTitle !== '' &&
+        {set.button.text !== '' &&
           <Button
             style={{
-              backgroundColor: set.buttonBackgroundColor,
-              color: set.buttonColor,
-              left:`${elementPosition.button.x}px`,
-              top:`${elementPosition.button.y}px`,
-              border: `${set.buttonBackgroundColor === set.backgroundColor ? `1px solid ${set.buttonColor}` : 'none'}`
+              backgroundColor: set.button.backgroundColor,
+              color: set.button.color,
+              left:`${elementPosition.button.left}px`,
+              top:`${elementPosition.button.top}px`,
+              border: `${set.button.backgroundColor === set.background.backgroundColor ? `1px solid ${set.button.color}` : 'none'}`
           }}
-            onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,'button')}}>{set.buttonTitle}</Button>
+            onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,'button')}}>{set.button.text}</Button>
         }
       </FrameBody>
     </FrameContainer>
@@ -457,6 +510,7 @@ const Resizer = styled.div`
 
 const Text = styled.div`
   position: absolute;
+  letter-spacing: -1px;
   text-align: center;
   display: inline-block;
   word-break: keep-all;
@@ -501,16 +555,16 @@ const AddElement = styled.div`
 
 const CloseButton = styled.div`
   position: absolute;
-  right:-9px;
-  top: -9px;
+  right:-14px;
+  top: -14px;
   width: 18px;
   height: 18px;
   border-radius: 9px;
   background-image: url("/assets/images/common/btn_img_close.png");
   background-size: cover;
   background-color: #fff;
-  opacity: 0.1;
   cursor: pointer;
+  opacity: 0;
   &:hover {
     opacity: 1
   }
