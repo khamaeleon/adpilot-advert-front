@@ -141,6 +141,10 @@
       div.style.backgroundColor = '#fff'
       root.appendChild(div)
     }
+    root.addEventListener('click', function () {
+      console.log('클릭이벤트')
+      window.open('about:blank').location.href = baseData.pcUrl
+    })
   </script>
 </body>
 </html>
