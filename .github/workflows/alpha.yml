@@ -61,7 +61,7 @@ jobs:
         git commit -m "config image update tag number : ${{ github.run_number }}"
 
     - name: Push changes
-      uses: ad-m/.github-push-action@master
+      uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GIT_OPS_PAT }}
         repository: mcorporation-dev/git-ops
