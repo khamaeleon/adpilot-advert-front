@@ -3,6 +3,7 @@ FROM node:16-alpine as builder
 
 # 작업 폴더를 만들고 npm 설치
 RUN mkdir -p /usr/src/app
+RUN chmod -R 777 /usr/src/app
 WORKDIR /usr/src/app
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 COPY package.json /usr/src/app/package.json
@@ -24,5 +25,5 @@ COPY conf /etc/nginx
 COPY --from=builder /usr/src/app/build /usr/share/nginx/html
 
 # 80포트 오픈하고 nginx 실행
-EXPOSE 80
+EXPOSE 8088
 CMD ["nginx", "-g", "daemon off;"]
