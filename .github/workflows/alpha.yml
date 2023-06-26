@@ -52,7 +52,7 @@ jobs:
 
     - name: Check my source and commit
       run: |
-        cd 90-app/backend/map-adver-payments/base && ls -al
+        cd 90-app/frontend/map-adver/base && ls -al
         sed -i 's/hjs4827\/map.front.adver.*/hjs4827\/map.front.adver:${{ github.run_number }}/' base.yaml
         cat base.yaml
         git config user.email "github.actions@mcorpor.com"
