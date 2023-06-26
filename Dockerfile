@@ -2,16 +2,15 @@
 FROM node:16-alpine as builder
 
 # 작업 폴더를 만들고 npm 설치
-RUN mkdir -p /usr/src/app
-RUN chmod -R 777 /usr/src/app
-WORKDIR /usr/src/app
-ENV PATH /usr/src/app/node_modules/.bin:$PATH
-COPY package.json /usr/src/app/package.json
+RUN mkdir -p /home/app
+WORKDIR /home/app
+ENV PATH /home/app/node_modules/.bin:$PATH
+COPY package.json /home/app/package.json
 RUN yarn install
 RUN npm install -g react-scripts
 
 # 소스를 작업폴더로 복사하고 빌드
-COPY . /usr/src/app
+COPY . /home/app
 ENV GENERATE_SOURCEMAP=false
 ENV NODE_OPTIONS=--max-old-space-size=2048
 RUN yarn run build
@@ -22,7 +21,7 @@ RUN rm -rf /etc/nginx/conf.d
 COPY conf /etc/nginx
 
 # 위에서 생성한 앱의 빌드산출물을 nginx의 샘플 앱이 사용하던 폴더로 이동
-COPY --from=builder /usr/src/app/build /usr/share/nginx/html
+COPY --from=builder /home/app/build /usr/share/nginx/html
 
 # 80포트 오픈하고 nginx 실행
 EXPOSE 8088
