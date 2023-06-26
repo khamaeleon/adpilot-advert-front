@@ -12,16 +12,16 @@ RUN npm install -g react-scripts
 ENV GENERATE_SOURCEMAP=false
 ENV NODE_OPTIONS=--max-old-space-size=2048
 COPY . /home/app
-RUN yarn run build
+CMD ["yarn", "run", "start"]
 
-FROM nginx:latest
+#FROM nginx:latest
 # nginx의 기본 설정을 삭제하고 앱에서 설정한 파일을 복사
-RUN rm -rf /etc/nginx/conf.d
-COPY conf /etc/nginx
+#RUN rm -rf /etc/nginx/conf.d
+#COPY conf /etc/nginx
 
 # 위에서 생성한 앱의 빌드산출물을 nginx의 샘플 앱이 사용하던 폴더로 이동
-COPY --from=builder /home/app/build /usr/share/nginx/html
+#COPY --from=builder /home/app/build /usr/share/nginx/html
 
 # 80포트 오픈하고 nginx 실행
-EXPOSE 8088
-CMD ["nginx", "-g", "daemon off;"]
+#EXPOSE 8088
+#CMD ["nginx", "-g", "daemon off;"]
