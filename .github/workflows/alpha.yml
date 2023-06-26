@@ -38,7 +38,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/map.front.adver:${{ github.run_number }}
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/map.front.adver:${{ .github.run_number }}
 
     - name: Checkout private tools
       uses: actions/checkout@v3
@@ -58,7 +58,7 @@ jobs:
         git commit -m "config image update tag number : ${{ github.run_number }}"
 
     - name: Push changes
-      uses: ad-m/github-push-action@master
+      uses: ad-m/.github-push-action@master
       with:
         github_token: ${{ secrets.GIT_OPS_PAT }}
         repository: mcorporation-dev/git-ops
