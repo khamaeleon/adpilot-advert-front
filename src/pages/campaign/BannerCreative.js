@@ -14,7 +14,7 @@ import {
   Span3,
   Span4
 } from "../../assets/GlobalStyles";
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {CreateImage, DeleteIcon, ImageUploadCard, Row} from "./styles/common";
 import ImageUploading from "react-images-uploading";
 import Select from "react-select";
@@ -37,6 +37,7 @@ import {
   TextButton
 } from "./styles/bannerCreator";
 import styled from "styled-components";
+import {ButtonGroup, SignUpVerify} from "../signup/styles";
 
 function ColorPicker ({onChange, defaultColor}) {
   const [color, setColor] = useState(defaultColor)
@@ -101,10 +102,15 @@ function stringToSize(size){
 
 const imgSizeWidth = [ 'IMG120_600',  'IMG160_600', 'IMG100_200', 'IMG100_300', 'IMG100_400', 'IMG100_500', 'IMG100_600']
 const imgSizeHeight = [ 'IMG300_150',]
-const square = ['IMG200_200','IMG150_150','IMG300_300', 'IMG400_400', 'IMG500_500','IMG600_600']
+const square = ['IMG150_150','IMG200_200','IMG300_300', 'IMG400_400', 'IMG500_500','IMG600_600']
 
 export function BannerCreative() {
   const [defaultSetting, setDefaultSetting] = useState({
+    id: 'uuid01',
+    pcUrl: 'https://www.example.com',
+    pcCode: 'pc01',
+    mobileUrl: 'https://m.example.com',
+    mobileCode: 'mobile01',
     title: {
       text: '',
       fontSize: 16,
@@ -128,8 +134,8 @@ export function BannerCreative() {
   const [publicSetting, setPublicSetting] = useState([])
   const [bannerTypes, setBannerTypes] = useState([])
   const [selectedBanner, setSelectedBanner] = useState([])
-
   const [isFontSetting, setIsFontSetting] = useState(false)
+  const [isIframe, setIsIframe] = useState(0)
   const handleFontSelect = () => {
     setIsFontSetting(!isFontSetting)
   }
@@ -354,9 +360,44 @@ export function BannerCreative() {
     console.log(frameId)
   }
 
-  const handleChangePcUrl = () => {
-
+  const handleChangePcUrl = (e) => {
+    setDefaultSetting({
+      ...defaultSetting,
+      pcUrl: e.target.value
+    })
   }
+
+  const handleChangePcCode = (e) => {
+    setDefaultSetting({
+      ...defaultSetting,
+      pcCode: e.target.value
+    })
+  }
+
+  const handleChangeMobileUrl = (e) => {
+    setDefaultSetting({
+      ...defaultSetting,
+      mobileUrl: e.target.value
+    })
+  }
+
+  const handleChangeMobileCode = (e) => {
+    setDefaultSetting({
+      ...defaultSetting,
+      mobileCode: e.target.value
+    })
+  }
+
+  const [isLoading, setIsLoading] = useState(true)
+  const handleSaveFrameData = () => {
+    const newData = Object.assign(defaultSetting, {row: publicSetting})
+    window.localStorage.setItem('frameData', JSON.stringify(newData))
+    setIsLoading(false)
+    setTimeout(()=>{
+      setIsLoading(true)
+    },500)
+  }
+
   return (
     <>
       <Board>
@@ -460,6 +501,7 @@ export function BannerCreative() {
                     <Span4>PC 랜딩 URL</Span4>
                     <div style={{width: '100%'}}>
                       <Input
+                        value={defaultSetting.pcUrl || ''}
                         onChange={handleChangePcUrl}
                         placeholder={'http:// 또는 https://를 포함한 URL 입력'}/>
                     </div>
@@ -467,20 +509,26 @@ export function BannerCreative() {
                   <RowSpan>
                     <Span4>PC 인식코드</Span4>
                     <div style={{width: '100%'}}>
-                      <Input/>
+                      <Input
+                        value={defaultSetting.pcCode || ''}
+                        onChange={handleChangePcCode}/>
                     </div>
                   </RowSpan>
                   <RowSpan>
                     <Span4>Mobile 랜딩 URl</Span4>
                     <div style={{width: '100%'}}>
                       <Input
+                        value={defaultSetting.mobileUrl || ''}
+                        onChange={handleChangeMobileUrl}
                         placeholder={'http:// 또는 https://를 포함한 URL 입력'}/>
                     </div>
                   </RowSpan>
                   <RowSpan>
                     <Span4>Mobile 인식코드</Span4>
                     <div style={{width: '100%'}}>
-                      <Input/>
+                      <Input
+                        value={defaultSetting.mobileCode || ''}
+                        onChange={handleChangeMobileCode}/>
                     </div>
                   </RowSpan>
                 </BannerItemContainer>
@@ -647,32 +695,69 @@ export function BannerCreative() {
           </>
           }
         </BoardSearchResult>
-        {/*추후 삭제*/}
-        <div>
-          <div>데이터 바인딩 예시</div>
-          <div style={{display:'flex'}}>
-            <iframe name={'frame'} src={'../frame.html'} width={300} height={300} style={{border: '1px solid #ddd'}}/>
-            <JsonData>
-              <div>전송될 데이터</div>
-              <div><p>//기본 소재</p>const baseData = {JSON.stringify(defaultSetting)}</div>
-              {publicSetting.map((item, key) => {
-                return (
-                  <div key={key}><p>//{item.size}사이즈와 기본소재의 크기 위치값</p>const subData = {JSON.stringify(item)}</div>
-                )
-              })}
-            </JsonData>
-          </div>
-        </div>
         <ToastContainer/>
       </Board>
+      <ButtonGroup>
+        <SignUpVerify type={"button"} onClick={handleSaveFrameData}>저장</SignUpVerify>
+      </ButtonGroup>
+      <BoardSearchResult>
+        {/*추후 삭제*/}
+        <Preview>
+          <div>
+            {square.map((item, key) => {
+              const size = item.replace('IMG','').split('_')
+              return (
+                <div key={key}>
+                  <div>{item}</div>
+                  {isLoading &&
+                    <iframe name={item} src={'../frame.html'} width={size[0]} height={size[1]}
+                            style={{border: '1px solid #ddd'}}/>
+                  }
+                </div>
+              )
+            })}
+          </div>
+        </Preview>
+        <Preview>
+          <div>
+            {imgSizeWidth.map((item, key) => {
+              const size = item.replace('IMG','').split('_')
+              return (
+                <div key={key}>
+                  <div>{item}</div>
+                  <iframe name={item} src={'../frame.html'} width={size[0]} height={size[1]}
+                          style={{border: '1px solid #ddd'}}/>
+                </div>
+              )
+            })}
+          </div>
+        </Preview>
+        <Preview>
+          <div>
+            {imgSizeHeight.map((item, key) => {
+              const size = item.replace('IMG','').split('_')
+              return (
+                <div key={key}>
+                  <div>{item}</div>
+                  <iframe name={item} src={'../frame.html'} width={size[0]} height={size[1]}
+                          style={{border: '1px solid #ddd'}}/>
+                </div>
+              )
+            })}
+          </div>
+        </Preview>
+      </BoardSearchResult>
     </>
   )
 }
 
-const JsonData = styled.div`
-  padding: 10px;
-  flex: 1;
-  & div {
-    padding: 10px;
+const Preview = styled.div`
+  overflow: auto;
+  & > div {
+    white-space: nowrap;
+    & > div {
+      display: inline-block;
+      margin: 10px
+    }
   }
 `
