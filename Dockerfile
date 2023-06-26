@@ -2,7 +2,6 @@
 FROM node:16-alpine as builder
 
 # 작업 폴더를 만들고 npm 설치
-RUN mkdir -p /home/app
 WORKDIR /home/app
 ENV PATH /home/app/node_modules/.bin:$PATH
 COPY package.json /home/app/package.json
@@ -10,9 +9,9 @@ RUN yarn install
 RUN npm install -g react-scripts
 
 # 소스를 작업폴더로 복사하고 빌드
-COPY . /home/app
 ENV GENERATE_SOURCEMAP=false
 ENV NODE_OPTIONS=--max-old-space-size=2048
+COPY . /home/app
 RUN yarn run build
 
 FROM nginx:latest
