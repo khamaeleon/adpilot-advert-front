@@ -1,0 +1,75 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Alpha payments build.
+
+on:
+  push:
+    branches: [ "alpha" ]
+  pull_request:
+    branches: [ "alpha" ]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build and push
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/map.front.adver:${{ github.run_number }}
+
+    - name: Checkout private tools
+      uses: actions/checkout@v3
+      with:
+        repository: mcorporation-dev/git-ops.git
+        token: ${{ secrets.GIT_OPS_PAT }} # `GH_PAT` is a secret that contains your PAT
+        ref: main
+
+    - name: Check my source and commit
+      run: |
+        cd 90-app/backend/map-adver-payments/base && ls -al
+        sed -i 's/hjs4827\/map.front.adver.*/hjs4827\/map.front.adver:${{ github.run_number }}/' base.yaml
+        cat base.yaml
+        git config user.email "github.actions@mcorpor.com"
+        git config user.name "Github actions"
+        git add .
+        git commit -m "config image update tag number : ${{ github.run_number }}"
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GIT_OPS_PAT }}
+        repository: mcorporation-dev/git-ops
+        branch: main
+        directory: .
+
+    - name: Notify slack
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest # selectable (default: repo,message)
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_ALPHA_URL }} # required
+      if: always() # Pick up events even if the job fails or is canceled.
