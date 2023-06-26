@@ -408,7 +408,7 @@ export function FrameEditor(props){
               color: set.button.color,
               left:`${elementPosition.button.left}px`,
               top:`${elementPosition.button.top}px`,
-              border: `${set.button.backgroundColor === set.background.backgroundColor ? `1px solid ${set.button.color}` : 'none'}`
+              border: `${set.button.backgroundColor === set.background.backgroundColor ? `1px solid #aaa` : 'none'}`
           }}
             onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,'button')}}>{set.button.text}</Button>
         }
