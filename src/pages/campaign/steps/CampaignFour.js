@@ -52,7 +52,7 @@ import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useResetAtom} from "jotai/utils";
-import {multiAxiosCall} from "../../../common/StringUtils";
+import {dateFormat, multiAxiosCall, toDay} from "../../../common/StringUtils";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
@@ -128,7 +128,7 @@ const RegistryBannerItem = (props) => {
               <ColSpan100 padding={'0'} key={key}>
                 <ImageUploadCard>
                   <DeleteIcon onClick={() => handleDeleteImage(item.imagePath)}/>
-                  <img src={item.thumbnailPath} alt={'이미지'}/>
+                  <div className={'img'} style={{backgroundImage: `url(${item.thumbnailPath})`}}></div>
                 </ImageUploadCard>
               </ColSpan100>
             )
@@ -363,7 +363,7 @@ function CampaignFourBanner(props) {
                     <ColSpan100 padding={'0'} key={key}>
                       <ImageUploadCard>
                         <DeleteIcon onClick={() => handleDeleteLogoImage(item.imagePath)}/>
-                        <img src={item.imagePath} alt={key}/>
+                        <div className={'img'} style={{backgroundImage: `url(${item.imagePath})`}}></div>
                       </ImageUploadCard>
                     </ColSpan100>
                   )
@@ -422,7 +422,7 @@ function CampaignFourBanner(props) {
             type={'text'}
             maxLength={25}
             name={'name'}
-            value={campaignCreativeInfo?.name || ""}
+            value={campaignCreativeInfo?.name}
             style={{width: '100%'}}
             {...register('name', {
               required: '크리에이티브명을 입력해주세요',
@@ -591,7 +591,7 @@ function CampaignFourNative(props) {
                                 <ColSpan100 padding={'0'} key={key}>
                                   <ImageUploadCard>
                                     <DeleteIcon onClick={() => handleDeleteNativeImage(item.imagePath)}/>
-                                    <img src={item.imagePath} alt={key}/>
+                                    <div className={'img'} style={{backgroundImage: `url(${item.imagePath})`}}></div>
                                   </ImageUploadCard>
                                 </ColSpan100>
                             )
@@ -694,11 +694,11 @@ function CampaignFourNative(props) {
         <Span4>서비스 (회사) 정보</Span4>
         <RowSpan box={true} column={true} style={{width: '100%', padding: '20px 30px', backgroundColor: '#fff'}}>
           <Row>
-            <span>서비스 명<p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
+            <span>서비스 명<p><small style={{color: '#ccc'}}>최대 20자까지 등록</small></p></span>
             <div className={'txtCont'}>
               <input
                 type={'text'}
-                maxLength={25}
+                maxLength={20}
                 name={'serviceName'}
                 value={campaignCreativeInfo?.serviceName || ""}
                 {...register('serviceName', {
@@ -718,7 +718,7 @@ function CampaignFourNative(props) {
                   <ColSpan100 padding={'0'} key={key}>
                     <ImageUploadCard>
                       <DeleteIcon onClick={() => handleDeleteLogoImage(item.imagePath)}/>
-                      <img src={item.imagePath} alt={key}/>
+                      <div className={'img'} style={{backgroundImage: `url(${item.imagePath})`}}></div>
                     </ImageUploadCard>
                   </ColSpan100>
                 )
@@ -743,12 +743,12 @@ function CampaignFourNative(props) {
           </Row>
           <Row>
             <Row>
-              <span>광고 설명<small>(선택)</small><p><small style={{color: '#ccc'}}>최대 25자까지 등록</small></p></span>
+              <span>광고 설명<small>(선택)</small><p><small style={{color: '#ccc'}}>최대 30자까지 등록</small></p></span>
               <div className={'txtCont'}>
                 <input
                   type={'text'}
                   name={'description'}
-                  maxLength={25}
+                  maxLength={30}
                   value={campaignCreativeInfo.description || ""}
                   onChange={handleChangeInputs}
                 />
@@ -766,7 +766,7 @@ function CampaignFourNative(props) {
             type={'text'}
             maxLength={25}
             name={'name'}
-            value={campaignCreativeInfo?.name || ""}
+            value={campaignCreativeInfo?.name}
             style={{width: '100%'}}
             {...register('name', {
               required: '크리에이티브명을 입력해주세요',
@@ -789,7 +789,7 @@ export function CampaignFour() {
   const [, setBannerSize] = useAtom(bannerSizeAtom)
   const [creativeType, setCreativeType] = useAtom(creativeTypeAtom)
   const [, setClickInducementType] = useAtom(clickInducementTypeAtom)
-  const {control, register, handleSubmit, reset, setError, formState: {errors}} = useFormContext()
+  const {control, register, handleSubmit, reset, setError, setValue, formState: {errors}} = useFormContext()
   const [resistBool] =useState(state === null)
   const resetInfo = useResetAtom(campaignCreativeAtom)
 
@@ -837,7 +837,14 @@ export function CampaignFour() {
         })
       }
     }else{
-      setCampaignCreative(campaignCreativeAtom.init)
+      let time = dateFormat(toDay(), 'YYMMDDHHmm');
+      let creativeType = campaignCreativeAtom.init.creativeType !== "POP_UNDER" ? (campaignCreativeAtom.init.creativeType !== 'BANNER' ? 'NATIVE' : 'FIX') : 'POP_UNDER'
+      let name = campaignBasicInfo.productType !== 'BANNER' ? '_PU_' : '_BA_'
+      setCampaignCreative({
+        ...campaignCreativeAtom.init,
+        name: creativeType+name+time
+      })
+      setValue('name', creativeType+name+time)
     }
     selEnumInfo('BANNER_SIZE').then(response => {
       setBannerSize(response.data)
@@ -859,13 +866,17 @@ export function CampaignFour() {
         })
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   const selCreativeGroup = (selectedCreateType) => {
+    let time = dateFormat(toDay(), 'YYMMDDHHmm');
+    let creativeType = selectedCreateType !== "POP_UNDER" ? (selectedCreateType !== 'BANNER' ? 'NATIVE' : 'FIX') : 'POP_UNDER'
+    let name = campaignBasicInfo.productType !== 'BANNER' ? '_PU_' : '_BA_'
     setCampaignCreative({
       ...campaignCreativeInfo,
-      creativeType: selectedCreateType
+      creativeType: selectedCreateType,
+      name: creativeType+name+time
     })
+    setValue('name', creativeType+name+time)
   }
   const handleChangeInputs = (e) => {
     setCampaignCreative({
@@ -912,7 +923,7 @@ export function CampaignFour() {
       let param = {
         ...campaignCreativeInfo,
         campaignId: campaignBasicInfo.campaignId,
-        name: campaignCreativeInfo.name !== undefined ? campaignCreativeInfo.name : campaignBasicInfo.username?.toUpperCase() + '_' + campaignCreativeInfo.creativeType + '_' + moment().format('YYYY-MM-DD_HH:mm:ss')
+        name: campaignCreativeInfo.name
       };
       console.log(param)
       let updateFunc;

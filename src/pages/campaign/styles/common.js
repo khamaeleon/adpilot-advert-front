@@ -174,10 +174,12 @@ export const ImageUploadCard = styled.div`
   background-color: #fff;
   border-radius: 5px;
   border: 1px solid #ddd;
-  & > div {}
-  & img {
+  & > div.img {
     width: 90%;
-    height: auto;
+    height: 90%;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
   }
 `
 
