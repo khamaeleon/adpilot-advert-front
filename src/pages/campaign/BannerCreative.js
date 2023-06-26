@@ -395,7 +395,7 @@ export function BannerCreative() {
     setIsLoading(false)
     setTimeout(()=>{
       setIsLoading(true)
-    },500)
+    },100)
   }
 
   return (
