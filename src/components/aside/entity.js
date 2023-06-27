@@ -112,6 +112,10 @@ export const menuList = [
         header: "전환 관리"
       },
       {
+        name: "historyManage",
+        header: "이력 관리"
+      },
+      {
         name: "paymentManage",
         header: "결제 관리"
       },

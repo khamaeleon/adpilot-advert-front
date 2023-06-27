@@ -9,6 +9,7 @@ import ConversionManage from "./ConversionManage";
 import PaymentManage from "./PaymentManage";
 import PlatformUserDetail from "./UserDetail";
 import AdvertisingPayments from "./AdvertisingPayments";
+import {HistoryManage} from "./HistoryManage";
 
 function PlatformUser(){
   const params = useParams()
@@ -26,6 +27,7 @@ function PlatformUser(){
         {params.id === 'conversionManage' && <ConversionManage/>}
         {params.id === 'paymentManage' && <PaymentManage/>}
         {params.id === 'advertisingPayments' && <AdvertisingPayments/>}
+        {params.id === 'historyManage' && <HistoryManage/>}
       </BoardContainer>
     </main>
   )
