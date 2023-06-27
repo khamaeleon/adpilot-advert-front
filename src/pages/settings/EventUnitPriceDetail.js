@@ -1,7 +1,6 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchDetail,
   BoardTableContainer,
   BoardTableCustomContainer,
   CancelButton,
@@ -29,7 +28,6 @@ function EventUnitPriceDetail() {
     selPriceEventList(state.id).then(response => {
       setEventUnitPriceDetailDataState(response)
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -75,6 +73,7 @@ function EventUnitPriceDetail() {
 
           {eventUnitPriceDetailDataState !==null &&
             <Table columns={eventUnitPriceDetailColumns}
+                   style={{minHeight: 300}}
                    totalCount={[eventUnitPriceDetailDataState.totalCount, '타겟팅 단가 그룹']}
                    data={eventUnitPriceDetailDataState?.targetingPriceDtos}
                    emptyText={'타겟팅 단가 관리 내역이 없습니다.'}/>

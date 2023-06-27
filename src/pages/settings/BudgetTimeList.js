@@ -77,13 +77,14 @@ function EventTimeList() {
           </RowSpan>
           {budgetTimeListState !==null &&
             <Table columns={budgetTimeDetailColumns}
+                   style={{minHeight: 300}}
                    totalCount={[budgetTimeListState.totalCount, '시간별 예산 그룹']}
                    data={budgetTimeListState?.timeGroups}
                    emptyText={'이벤트 단가 관리 내역이 없습니다.'}/>
           }
         </BoardTableContainer>
         <SubmitContainer>
-          <CancelButton onClick={()=>navigate('/board/settings')}>목록</CancelButton>
+          <CancelButton onClick={()=>navigate('/board/budgetTime')}>목록</CancelButton>
         </SubmitContainer>
       </Board>
       <ToastContainer position="top-center"

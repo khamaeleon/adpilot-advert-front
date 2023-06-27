@@ -61,7 +61,6 @@ function BudgetTimeDetail() {
       })
       setSaveType('resist')
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
@@ -79,7 +78,7 @@ function BudgetTimeDetail() {
     if(timeBudgetDetailDataState.exposureTimeType === 'DIRECT_SETTINGS'){
       let weekSumArr = timeBudgetDetailDataState.allowTimes.map((rowData,i)=>{
         let rowSum = rowData.map(d=>parseInt(d)).reduce((a,b)=>{return a+b;});
-        if(rowSum > 100){
+        if(0 < rowSum && 100 !== rowSum){
           isTimePerOver = true;
           setCheckIndex(i);
         }
@@ -87,7 +86,7 @@ function BudgetTimeDetail() {
       })
       isTimePerZero = (weekSumArr.reduce((a,b)=>{return a+b;}) === 0);
     }
-    console.log(isTimePerZero)
+
     if(isTimePerOver) {
       toast.warning('[해당 요일]의 \n시간별 예산 설정을 확인해주세요.')
     }else if(isTimePerZero){
@@ -122,7 +121,7 @@ function BudgetTimeDetail() {
                           'YYYY.MM.DD HH:mm')}</span>
                     </>
                 }
-                </ColTitle>
+              </ColTitle>
             </div>
           </RowSpan>
           <BoardSearchDetail>
