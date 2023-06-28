@@ -5,7 +5,7 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
-name: Alpha payments build.
+name: Alpha front adver build.
 
 on:
   push:
@@ -39,9 +39,9 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: .
-        file: ./Dockerfile
+        file: ./Dockerfile.alpha
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/map.front.adver:${{ github.run_number }}
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/alpha.map.front.adver:${{ github.run_number }}
 
     - name: Checkout private tools
       uses: actions/checkout@v3
@@ -53,7 +53,7 @@ jobs:
     - name: Check my source and commit
       run: |
         cd 90-app/frontend/map-adver/base && ls -al
-        sed -i 's/hjs4827\/map.front.adver.*/hjs4827\/map.front.adver:${{ github.run_number }}/' base.yaml
+        sed -i 's/hjs4827\/alpha.map.front.adver.*/hjs4827\/alpha.map.front.adver:${{ github.run_number }}/' base.yaml
         cat base.yaml
         git config user.email "github.actions@mcorpor.com"
         git config user.name "Github actions"
