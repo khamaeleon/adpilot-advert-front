@@ -93,6 +93,9 @@
         Object.entries(baseData[name]).map(function (item) {
           if(name === 'button') {
             div.style.border = baseData[name].backgroundColor === baseData['background'].backgroundColor ? '1px solid #aaa' : null
+            if(baseData[name].text === '') {
+              div.style.display = 'none'
+            }
           }
           if(name !== 'mainImage'){
             if(item[0] !== 'text'){
@@ -123,7 +126,8 @@
     }
     // 일반 함수
     function init() {
-      root.style.background = baseData.background.backgroundImage !== '' ? `url(${baseData.background.backgroundImage})`: baseData.background.backgroundColor
+      root.style.backgroundImage = baseData.background.backgroundImage !== '' ? `url(${baseData.background.backgroundImage})`: null
+      root.style.backgroundColor = baseData.background.backgroundColor
       const elementArray = ['mainImage','title','text','button','image'].map(function (item) {
         factory(item)
       })

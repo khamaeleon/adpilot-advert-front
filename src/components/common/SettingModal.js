@@ -52,7 +52,6 @@ function SettingChangeModal(props) {
         dataState
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reset])
   const onError = (error) => console.log(error)
   /**
@@ -69,7 +68,6 @@ function SettingChangeModal(props) {
     if(label === 'pct'){
       sumValue()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[dataState])
   const sumValue = () => {
     let calc = parseInt(dataState.shopperMatching !== '' ? dataState.shopperMatching : 0)+
@@ -78,53 +76,7 @@ function SettingChangeModal(props) {
       parseInt(dataState.userMatching !== '' ? dataState.userMatching : 0)+
       parseInt(dataState.userOptimization !== '' ? dataState.userOptimization : 0)+
       parseInt(dataState.audience !== '' ? dataState.audience : 0)
-    if(calc < 101) {
       setCalculatePercent(100 - calc)
-    } else {
-      toast.warning('모든 항목의 합은 100%를 넘을수 없습니다.')
-    }
-    if(dataState.shopperMatching > 100) {
-      setDataState({
-        ...dataState,
-        shopperMatching: 0
-      })
-      toast.warning("100%를 넘을 수 없습니다.")
-    }
-    if(dataState.productRecommendation > 100) {
-      setDataState({
-        ...dataState,
-        productRecommendation: 0
-      })
-      toast.warning("100%를 넘을 수 없습니다.")
-    }
-    if(dataState.cartRecommendation > 100){
-      setDataState({
-        ...dataState,
-        cartRecommendation: 0
-      })
-      toast.warning("100%를 넘을 수 없습니다.")
-    }
-    if(dataState.userMatching > 100) {
-      setDataState({
-        ...dataState,
-        userMatching: 0
-      })
-      toast.warning("100%를 넘을 수 없습니다.")
-    }
-    if(dataState.userOptimization > 100) {
-      setDataState({
-        ...dataState,
-        userOptimization: 0
-      })
-      toast.warning("100%를 넘을 수 없습니다.")
-    }
-    if(dataState.audience > 100) {
-      setDataState({
-        ...dataState,
-        audience: 0
-      })
-      toast.warning("100%를 넘을 수 없습니다.")
-    }
   }
   /**
    * 쇼퍼 맞춤
@@ -239,34 +191,36 @@ function SettingChangeModal(props) {
   }
 
   const handleBudgetEventSave = () => {
-    if (saveType === 'create') {
-      resistBudgetEvent({...dataState, userId: state.id}).then(response => {
-        if (response) {
-          setModal({
-            isShow: false,
-            modalComponent: null
-          })
-          selBudgetEventList(state.id).then(response => {
-            setEventBudgetDetailDataState(response)
-          })
-        } else {
-          toast.warning("타겟팅 단가 그룹명이 중복 되었습니다.")
-        }
-      })
-    } else {
-      updateBudgetEvent({...dataState, userId: state.id}).then(response => {
-        if (response) {
-          setModal({
-            isShow: false,
-            modalComponent: null
-          })
-          selBudgetEventList(state.id).then(response => {
-            setEventBudgetDetailDataState(response)
-          })
-        } else {
-          toast.warning("타겟팅 단가 그룹명이 중복 되었습니다.")
-        }
-      })
+    if(calculatePercent >= 0){
+      if (saveType === 'create') {
+        resistBudgetEvent({...dataState, userId: state.id}).then(response => {
+          if (response) {
+            setModal({
+              isShow: false,
+              modalComponent: null
+            })
+            selBudgetEventList(state.id).then(response => {
+              setEventBudgetDetailDataState(response)
+            })
+          } else {
+            toast.warning("타겟팅 예산 그룹명이 중복 되었습니다.")
+          }
+        })
+      } else {
+        updateBudgetEvent({...dataState, userId: state.id}).then(response => {
+          if (response) {
+            setModal({
+              isShow: false,
+              modalComponent: null
+            })
+            selBudgetEventList(state.id).then(response => {
+              setEventBudgetDetailDataState(response)
+            })
+          } else {
+            toast.warning("타겟팅 예산 그룹명이 중복 되었습니다.")
+          }
+        })
+      }
     }
   }
 
@@ -291,144 +245,141 @@ function SettingChangeModal(props) {
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
-          {label === 'pct' &&
-            <RowSpan>
-              <ColSpan4>
-                <ColTitle><Span2>남은비율</Span2></ColTitle>
-                <RelativeDiv>
-                  {calculatePercent}/100
-                </RelativeDiv>
-              </ColSpan4>
-            </RowSpan>
-          }
           <RowSpan>
             <ColSpan4>
               <ColTitle><Span2>쇼퍼 맞춤</Span2></ColTitle>
-              <RelativeDiv>
+              <RelativeDiv style={{flexDirection: 'column', alignItems: 'flex-start'}}>
                 <InputLabel label={label !== 'won' ? '%': '원'}>
                   <Input
                     type={'text'}
                     min={0}
-                    placeholder={'금액을 입력해주세요'}
+                    placeholder={label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요'}
                     {...register("shopperMatching", {
-                      required: "금액을 입력해주세요",
+                      required: label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요',
                       pattern: /[0-9]*/,
                       onChange: (e) => handleShopperMatching(e)
                     })}
                     value={dataState?.shopperMatching}
                   />
-                  {errors.shopperMatching && <ValidationScript>{errors.shopperMatching?.message}</ValidationScript>}
                 </InputLabel>
+                {errors.shopperMatching && <ValidationScript>{errors.shopperMatching?.message}</ValidationScript>}
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
           <RowSpan>
             <ColSpan4>
               <ColTitle><Span2>카트 추천</Span2></ColTitle>
-              <RelativeDiv>
+              <RelativeDiv style={{flexDirection: 'column', alignItems: 'flex-start'}}>
                 <InputLabel label={label !== 'won' ? '%': '원'}>
                   <Input
                     type={'text'}
                     min={0}
-                    placeholder={'금액을 입력해주세요'}
+                    placeholder={label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요'}
                     {...register("cartRecommendation", {
-                      required: "금액을 입력해주세요",
+                      required: label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요',
                       pattern: /[0-9]*/,
                       onChange: (e) => handleCartRecommendation(e)
                     })}
                     value={dataState?.cartRecommendation}
                   />
-                  {errors.cartRecommendation &&
-                    <ValidationScript>{errors.cartRecommendation?.message}</ValidationScript>}
                 </InputLabel>
+                {errors.cartRecommendation && <ValidationScript>{errors.cartRecommendation?.message}</ValidationScript>}
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
           <RowSpan>
             <ColSpan4>
               <ColTitle><Span2>상품 추천</Span2></ColTitle>
-              <RelativeDiv>
+              <RelativeDiv style={{flexDirection: 'column', alignItems: 'flex-start'}}>
                 <InputLabel label={label !== 'won' ? '%': '원'}>
                   <Input
                     type={'text'}
                     min={0}
-                    placeholder={'금액을 입력해주세요'}
+                    placeholder={label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요'}
                     {...register("productRecommendation", {
-                      required: "금액을 입력해주세요",
+                      required: label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요',
                       pattern: /[0-9]*/,
                       onChange: (e) => handleProductRecommendation(e)
                     })}
                     value={dataState?.productRecommendation}
                   />
-                  {errors.productRecommendation &&
-                    <ValidationScript>{errors.productRecommendation?.message}</ValidationScript>}
                 </InputLabel>
+                {errors.productRecommendation && <ValidationScript>{errors.productRecommendation?.message}</ValidationScript>}
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
           <RowSpan>
             <ColSpan4>
               <ColTitle><Span2>유저 매치</Span2></ColTitle>
-              <RelativeDiv>
+              <RelativeDiv style={{flexDirection: 'column', alignItems: 'flex-start'}}>
                 <InputLabel label={label !== 'won' ? '%': '원'}>
                   <Input
                     type={'text'}
                     min={0}
-                    placeholder={'금액을 입력해주세요'}
+                    placeholder={label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요'}
                     {...register("userMatching", {
-                      required: "금액을 입력해주세요",
+                      required: label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요',
                       pattern: /[0-9]*/,
                       onChange: (e) => handleUserMatching(e)
                     })}
                     value={dataState?.userMatching}
                   />
-                  {errors.userMatching && <ValidationScript>{errors.userMatching?.message}</ValidationScript>}
                 </InputLabel>
+                {errors.userMatching && <ValidationScript>{errors.userMatching?.message}</ValidationScript>}
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
           <RowSpan>
             <ColSpan4>
               <ColTitle><Span2>오디언스</Span2></ColTitle>
-              <RelativeDiv>
+              <RelativeDiv style={{flexDirection: 'column', alignItems: 'flex-start'}}>
                 <InputLabel label={label !== 'won' ? '%': '원'}>
                   <Input
                     type={'text'}
                     min={0}
-                    placeholder={'금액을 입력해주세요'}
+                    placeholder={label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요'}
                     {...register("audience", {
-                      required: "금액을 입력해주세요",
+                      required: label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요',
                       pattern: /[0-9]*/,
                       onChange: (e) => handleAudience(e)
                     })}
                     value={dataState?.audience}
                   />
-                  {errors.audience && <ValidationScript>{errors.audience?.message}</ValidationScript>}
                 </InputLabel>
+                {errors.audience && <ValidationScript>{errors.audience?.message}</ValidationScript>}
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
           <RowSpan>
             <ColSpan4>
               <ColTitle><Span2>유저 최적화</Span2></ColTitle>
-              <RelativeDiv>
+              <RelativeDiv style={{flexDirection: 'column', alignItems: 'flex-start'}}>
                 <InputLabel label={label !== 'won' ? '%': '원'}>
                   <Input
                     type={'text'}
                     min={0}
-                    placeholder={'금액을 입력해주세요'}
+                    placeholder={label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요'}
                     {...register("userOptimization", {
-                      required: "금액을 입력해주세요",
+                      required: label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요',
                       pattern: /[0-9]*/,
                       onChange: (e) => handleUserOptimization(e)
                     })}
                     value={dataState?.userOptimization}
                   />
-                  {errors.userOptimization && <ValidationScript>{errors.userOptimization?.message}</ValidationScript>}
                 </InputLabel>
+                {errors.userOptimization && <ValidationScript>{errors.userOptimization?.message}</ValidationScript>}
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
+          {label === 'pct' &&
+            <RowSpan>
+              <ColSpan4>
+                <ColTitle><Span2>설정 비율</Span2></ColTitle>
+                <Span2>{calculatePercent}/100</Span2>
+                {calculatePercent < 0 && <ValidationScript>모든 항목의 합은 100%를 넘을수 없습니다.</ValidationScript>}
+              </ColSpan4>
+            </RowSpan>
+          }
         </ModalBody>
         <ModalFooter>
           <CancelButton type={"button"} onClick={() => setModal({

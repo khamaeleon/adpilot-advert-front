@@ -1215,8 +1215,8 @@ export const DeleteButton = styled.button`
 `
 
 export const DownLoadButton = styled.button`
-  width: 45px;
-  height: 45px;
+  width: ${buttonHeightSize}px;
+  height: ${buttonHeightSize}px;
   background-color: transparent;
   background-image: url("/assets/images/common/icon_excel_off.png");
   background-repeat: no-repeat;

@@ -85,7 +85,8 @@ export const menuList = [
       {
         name: "budgetTime",
         header: "시간별 예산 관리",
-        detail: "budgetTimeList"
+        detail: "budgetTimeList",
+        detail2: "budgetTimeDetail"
       }
     ]
   },
@@ -110,6 +111,10 @@ export const menuList = [
       {
         name: "conversionManage",
         header: "전환 관리"
+      },
+      {
+        name: "historyManage",
+        header: "이력 관리"
       },
       {
         name: "paymentManage",

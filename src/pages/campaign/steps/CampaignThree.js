@@ -32,7 +32,7 @@ import {stepCampaignAtom} from "../entity";
 import {campaignBasicInfoAtom} from "../entity/Info";
 import {selGroupInfo, selMediaCategoryInfo, updateCampaignConfigInventory} from "../../../services/campaign/GroupAxios";
 import {campaignGroupInfoAtom, mediaCategoryAtom, noViewType} from "../entity/Group";
-import {dateFormat, unlimitedDate} from "../../../common/StringUtils";
+import {dateFormat, toDay, unlimitedDate} from "../../../common/StringUtils";
 import {selEnumInfo} from "../../../services/campaign/InfoAxios";
 import {toast, ToastContainer} from "react-toastify";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -52,6 +52,7 @@ export function CampaignThree() {
   const {state} = useLocation()
   const navigate = useNavigate()
   const resetInfo = useResetAtom(campaignGroupInfoAtom)
+  const [showPrevious, setShowPrevious] = useState(true)
 
   useEffect(()=>{
     resetInfo();
@@ -64,7 +65,6 @@ export function CampaignThree() {
     selEnumInfo('AGENT_TYPE').then(response => {
       setAgentTypeState(response.data)
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
@@ -82,8 +82,15 @@ export function CampaignThree() {
           new Date(response.endDate !== '3000-12-31' ? response.endDate: null)
         ])
       });
+    } else {
+      let time = dateFormat(toDay(), 'YYMMDDHHmm');
+      let name = campaignBasicInfo.productType !== 'BANNER' ? 'GR_PU_'+time : 'GR_BA_'+time
+      setCampaignGroupInfo({
+        ...campaignGroupInfo,
+        name: name
+      })
+      setValue('name', name)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
 
   useEffect(() => {
@@ -93,8 +100,7 @@ export function CampaignThree() {
         startDate: dateFormat(startDate, 'YYYY-MM-DD'),
         endDate: dateFormat(endDate, 'YYYY-MM-DD'),
       })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    } else setShowPrevious(false)
   },[dateRange])
 
   const handleAgentType = (event) => {
@@ -172,7 +178,7 @@ export function CampaignThree() {
 
   const handleCheckExposureDay = (event) =>{
     setExposureDayChecked(event.target.checked)
-    if(event.target.checked){
+    if(event.target.checked && startDate !== null){
       setDateRange([startDate, null])
     } else {
       setDateRange([null, null])
@@ -338,8 +344,7 @@ export function CampaignThree() {
               <Span4>노출 영역</Span4>
               <RelativeDiv>
                 <AgentType>
-                  {
-                    agentTypeState != null && agentTypeState.map((data, key)=>{
+                  {agentTypeState != null && agentTypeState.map((data, key)=>{
                       return <Controller name={'exposureAgentType'}
                                          control={control}
                                          key={key}
@@ -512,7 +517,7 @@ export function CampaignThree() {
             <RowSpan validation>
               <ColSpan4>
                 <Span4>게재 기간</Span4>
-                <ColSpan2>
+                <div style={{width: 300}}>
                   <DateContainer>
                     <CalendarBox>
                       <CalendarIcon/>
@@ -529,19 +534,21 @@ export function CampaignThree() {
                           placeholderText={'날짜를 입력해 주세요.'}
                           minDate={new Date()}
                           onChange={(date) => handleRangeDate(date)}
-                          dateFormat="yyyy.MM.dd"
+                          dateFormat="yyyy-MM-dd"
                           locale={ko}
                           isClearable={false}
                           onBlur={onBlur}
                           selected={startDate}
                           inputRef={ref}
+                          monthsShown={2}
+                          showPreviousMonths={showPrevious}
+                          openToDate={startDate}
                         />
                       )}
                     />
                     {errors.endDate && <ValidationScript>{errors.endDate.message}</ValidationScript>}
                   </DateContainer>
-
-                </ColSpan2>
+                </div>
                 <ColSpan3>
                   <label>
                     <input type={'checkbox'}

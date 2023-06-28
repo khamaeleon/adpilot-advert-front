@@ -57,7 +57,6 @@ export function CampaignTwo() {
 
   useEffect(()=>{
       resetInfo()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   useEffect(() => {
@@ -87,7 +86,6 @@ export function CampaignTwo() {
       setPriceEventListState(response[2]?.targetingPriceDtos.map(data => {return {value: data.targetingPriceId, label: data.groupName}}))
     }
     multiAxiosCall([selBudgetTimeList(userId), selBudgetEventList(userId), selPriceEventList(userId)], callbackFunc)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
   /**
    * 시간대별 예산 셀렉트
@@ -367,25 +365,27 @@ export function CampaignTwo() {
               <Span4>시간별 예산 그룹</Span4>
               <RelativeDiv>
                 <ColSpan1>
-                  <Controller
-                    name="budgetTimeId"
-                    control={control}
-                    rules={{
-                      required: {
-                        value: campaignBudgetInfo?.budgetTimeId === '',
-                        message: "시간대 예산을 선택해주세요"
-                      }
-                    }}
-                    render={({field}) => (
-                      <Select options={budgetTimeListState !== null ? budgetTimeListState : []}
-                              placeholder={'시간대 예산 선택'}
-                              {...field}
-                              value={budgetTimeListState !==null && (campaignBudgetInfo?.budgetTimeId !== '' ? budgetTimeListState.find(value => value.value === campaignBudgetInfo?.budgetTimeId) : handleChangeBudgetTimes(budgetTimeListState[0]))}
-                              onChange={handleChangeBudgetTimes}
-                              styles={selectStyle}
-                      />
-                    )}
-                  />
+                  {budgetTimeListState !== null &&
+                    <Controller
+                      name="budgetTimeId"
+                      control={control}
+                      rules={{
+                        required: {
+                          value: campaignBudgetInfo?.budgetTimeId === '',
+                          message: "시간대 예산을 선택해주세요"
+                        }
+                      }}
+                      render={({field}) => (
+                        <Select options={budgetTimeListState}
+                                placeholder={'시간대 예산 선택'}
+                                {...field}
+                                value={campaignBudgetInfo?.budgetTimeId !== '' ? budgetTimeListState.find(value => value.value === campaignBudgetInfo?.budgetTimeId) : handleChangeBudgetTimes(budgetTimeListState[0])}
+                                onChange={handleChangeBudgetTimes}
+                                styles={selectStyle}
+                        />
+                      )}
+                    />
+                  }
                 </ColSpan1>
                 {timeBudgetDetailDataState !== null &&
                   <ColSpan1>
@@ -402,25 +402,27 @@ export function CampaignTwo() {
               <Span4>타겟팅 예산 그룹</Span4>
               <RelativeDiv>
                 <ColSpan1>
-                  <Controller
-                    name="targetingBudgetId"
-                    control={control}
-                    rules={{
-                      required: {
-                        value: campaignBudgetInfo?.targetingBudgetId === '',
-                        message: "타겟팅 예산을 선택해주세요"
-                      }
-                    }}
-                    render={({field}) => (
-                      <Select options={budgetEventListState !== null ? budgetEventListState : []}
-                              placeholder={'타겟팅 예산 선택'}
-                              {...field}
-                              value={budgetEventListState !==null && (campaignBudgetInfo?.targetingBudgetId !== undefined ? budgetEventListState.find(value => value.value === campaignBudgetInfo?.targetingBudgetId) : handleChangeBudgetEvents(budgetEventListState[0]))}
-                              onChange={handleChangeBudgetEvents}
-                              styles={selectStyle}
-                      />
-                    )}
-                  />
+                  {budgetEventListState !== null &&
+                    <Controller
+                      name="targetingBudgetId"
+                      control={control}
+                      rules={{
+                        required: {
+                          value: campaignBudgetInfo?.targetingBudgetId === '',
+                          message: "타겟팅 예산을 선택해주세요"
+                        }
+                      }}
+                      render={({field}) => (
+                        <Select options={budgetEventListState}
+                                placeholder={'타겟팅 예산 선택'}
+                                {...field}
+                                value={campaignBudgetInfo?.targetingBudgetId !== undefined ? budgetEventListState.find(value => value.value === campaignBudgetInfo?.targetingBudgetId) : handleChangeBudgetEvents(budgetEventListState[0])}
+                                onChange={handleChangeBudgetEvents}
+                                styles={selectStyle}
+                        />
+                      )}
+                    />
+                  }
                 </ColSpan1>
                 {errors.targetingBudgetId &&
                   <ColSpan1><ValidationScript>{errors.targetingBudgetId.message}</ValidationScript></ColSpan1>}
@@ -449,24 +451,26 @@ export function CampaignTwo() {
               <RelativeDiv>
                 <ColSpan1>
                   <InputLabel label={'원'}>
-                    <Controller
-                      name="maxBiddingPrice"
-                      control={control}
-                      rules={{
-                        required: {
-                          value:campaignBudgetInfo !== null && campaignBudgetInfo.maxBiddingPrice === 0,
-                          message: '최대 입찰가를 설정해주세요'
-                        }
-                      }}
-                      render={({ field }) =>(
-                        <Input type={'text'}
-                               step={100}
-                               placeholder={'최대 입찰가를 설정해주세요'}
-                               style={{color:'#f5811f'}}
-                               value={campaignBudgetInfo !== null && decimalFormat(campaignBudgetInfo.maxBiddingPrice)}
-                               onChange={(e)=>handleChangeMaxBid(e.target.value)}
-                        /> )}
-                    />
+                    {campaignBudgetInfo !== null &&
+                      <Controller
+                        name="maxBiddingPrice"
+                        control={control}
+                        rules={{
+                          required: {
+                            value:campaignBudgetInfo !== null && campaignBudgetInfo.maxBiddingPrice === 0,
+                            message: '최대 입찰가를 설정해주세요'
+                          }
+                        }}
+                        render={({ field }) =>(
+                          <Input type={'text'}
+                                 step={100}
+                                 placeholder={'최대 입찰가를 설정해주세요'}
+                                 style={{color:'#f5811f'}}
+                                 value={campaignBudgetInfo !== null && decimalFormat(campaignBudgetInfo.maxBiddingPrice)}
+                                 onChange={(e)=>handleChangeMaxBid(e.target.value)}
+                          /> )}
+                      />
+                    }
                   </InputLabel>
                 </ColSpan1>
                 {errors.maxBiddingPrice &&
@@ -477,25 +481,27 @@ export function CampaignTwo() {
               <Span4>타겟팅 단가 그룹</Span4>
               <RelativeDiv>
                 <ColSpan1>
-                  <Controller
-                    name="targetingPriceId"
-                    control={control}
-                    rules={{
-                      required: {
-                        value: campaignBudgetInfo?.targetingPriceId === '',
-                        message: "타겟팅 단가를 선택해주세요"
-                      }
-                    }}
-                    render={({field}) => (
-                      <Select options={priceEventListState !== null ? priceEventListState : []}
-                              placeholder={'타겟팅 단가 선택'}
-                              {...field}
-                              value={priceEventListState !==null && (campaignBudgetInfo?.targetingPriceId !== undefined ? priceEventListState.find(value => value.value === campaignBudgetInfo?.targetingPriceId) : handleChangePriceEvent(priceEventListState[0]))}
-                              onChange={handleChangePriceEvent}
-                              styles={selectStyle}
-                      />
-                    )}
-                  />
+                  {priceEventListState !== null &&
+                    <Controller
+                      name="targetingPriceId"
+                      control={control}
+                      rules={{
+                        required: {
+                          value: campaignBudgetInfo?.targetingPriceId === '',
+                          message: "타겟팅 단가를 선택해주세요"
+                        }
+                      }}
+                      render={({field}) => (
+                        <Select options={priceEventListState}
+                                placeholder={'타겟팅 단가 선택'}
+                                {...field}
+                                value={campaignBudgetInfo?.targetingPriceId !== undefined ? priceEventListState.find(value => value.value === campaignBudgetInfo?.targetingPriceId) : handleChangePriceEvent(priceEventListState[0])}
+                                onChange={handleChangePriceEvent}
+                                styles={selectStyle}
+                        />
+                      )}
+                    />
+                  }
                 </ColSpan1>
                 {errors.targetingPriceId &&
                   <ColSpan1><ValidationScript>{errors.targetingPriceId.message}</ValidationScript></ColSpan1>}

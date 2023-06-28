@@ -71,7 +71,7 @@ function AsideList (props) {
               {item.child.length > 0 &&
                 <>
                 {item.name === 'reports' ?
-                  <SubMenu active={item.include.includes(id)}>
+                  <SubMenu active={item.include.includes(id)} length={reportLists?.length}>
                     <div>
                       <div>
                         <Link to={`/board/reports`} style={id === 'reports' ? {color:'#fff'}:null}>보고서 생성</Link>
@@ -92,7 +92,7 @@ function AsideList (props) {
                           <div key={key}>
                             <div>
                               <Link to={`/board/${child.name}`}
-                                    style={id === child.name || id === child.detail ? {color: '#fff'} : null}>{child.header}</Link>
+                                    style={id === child.name || id === child.detail || id === child.detail2 ? {color: '#fff'} : null}>{child.header}</Link>
                             </div>
                           </div>
                         )
@@ -237,16 +237,16 @@ const BtnNarrow = styled.div`
 
 const SubMenu = styled.div`
   background-color: #212020;
-  transition-duration: 1s;
-  overflow: auto;
+  transition-duration: .7s;
+  overflow-y: ${props => props?.length > 6 ? 'auto' : 'hidden'};
   white-space: nowrap;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding-left:52px;
-  padding-top: ${props => props.active ?'10px':0};
+  padding-top: ${props => props.active ? '10px':0};
   padding-bottom: ${props => props.active ?'10px':0};
-  max-height: ${props => props.active ? '250px' : '0px'};
+  max-height: ${props => props.active ? '300px' : 0};
   & > div {
     & > div {
       color: #cccccc;
