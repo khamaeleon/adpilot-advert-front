@@ -196,9 +196,6 @@ export default function CreateReports() {
       toast.warning("보고서 항목을 선택해주세요")
     } else if(dataItems.length === 0){
       toast.warning('데이터 항목을 선택해주세요.')
-    } else if(reportName === ""){
-      await trigger("reportName")
-      toast.warning("보고서 명을 작성해주세요")
     } else {
       if(tokenResult.role !== "NORMAL") {
         params = {

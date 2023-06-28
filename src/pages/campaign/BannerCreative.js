@@ -12,10 +12,10 @@ import {
   SearchButton,
   selectStyle,
   Span3,
-  Span4
+  Span4, ValidationScript
 } from "../../assets/GlobalStyles";
-import React, {useEffect, useRef, useState} from "react";
-import {CreateImage, DeleteIcon, ImageUploadCard, Row} from "./styles/common";
+import React, {useState} from "react";
+import {CreateImage, DeleteIcon, ImageUploadCard, Row, Validation} from "./styles/common";
 import ImageUploading from "react-images-uploading";
 import Select from "react-select";
 import {ChromePicker} from 'react-color'
@@ -38,6 +38,7 @@ import {
 } from "./styles/bannerCreator";
 import styled from "styled-components";
 import {ButtonGroup, SignUpVerify} from "../signup/styles";
+import {useForm} from "react-hook-form";
 
 function ColorPicker ({onChange, defaultColor}) {
   const [color, setColor] = useState(defaultColor)
@@ -107,10 +108,10 @@ const square = ['IMG150_150','IMG200_200','IMG300_300', 'IMG400_400', 'IMG500_50
 export function BannerCreative() {
   const [defaultSetting, setDefaultSetting] = useState({
     id: 'uuid01',
-    pcUrl: 'https://www.example.com',
-    pcCode: 'pc01',
-    mobileUrl: 'https://m.example.com',
-    mobileCode: 'mobile01',
+    pcUrl: '',
+    pcCode: '',
+    mobileUrl: '',
+    mobileCode: '',
     title: {
       text: '',
       fontSize: 16,
@@ -136,6 +137,7 @@ export function BannerCreative() {
   const [selectedBanner, setSelectedBanner] = useState([])
   const [isFontSetting, setIsFontSetting] = useState(false)
   const [isIframe, setIsIframe] = useState(0)
+  const {register, handleSubmit, formState: {errors}} = useForm()
   const handleFontSelect = () => {
     setIsFontSetting(!isFontSetting)
   }
@@ -254,7 +256,10 @@ export function BannerCreative() {
     if (pictureFiles.length !== 0) {
       setDefaultSetting({
         ...defaultSetting,
-        backgroundImage: pictureFiles[0].dataURL
+        background: {
+          ...defaultSetting.background,
+          backgroundImage: pictureFiles[0].dataURL
+        }
       });
       // pictureFiles.map((item ,index)=>{
       //   data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
@@ -393,13 +398,78 @@ export function BannerCreative() {
     const newData = Object.assign(defaultSetting, {row: publicSetting})
     window.localStorage.setItem('frameData', JSON.stringify(newData))
     setIsLoading(false)
-    setTimeout(()=>{
-      setIsLoading(true)
-    },100)
+    if(selectedBanner.length !== 0) {
+      setTimeout(()=>{
+        setIsLoading(true)
+      },100)
+    }
+  }
+
+  const onSubmit = (data) => {
+    console.log(data)
+    if(selectedBanner.length <= 0) {
+      toast.warning('배너를 선택해주세요')
+    }
+    else if(defaultSetting.mainImage === '') {
+      toast.warning('메인 이미지를 업로드해주세요')
+    }
+    else {
+      handleSaveFrameData()
+    }
+  }
+  const onError = (error) => console.log(error)
+
+  const handleResetFrameBanner = () => {
+    setSelectedBanner([])
+    setPublicSetting([])
+    setDefaultSetting({
+      id: 'uuid01',
+      pcUrl: '',
+      pcCode: '',
+      mobileUrl: '',
+      mobileCode: '',
+      title: {
+      text: '',
+        fontSize: 16,
+        color: '#222222',
+        fontFamily: '',
+        fontWeight: 'normal',
+        fontStyle: 'normal',
+        textDecoration: 'none',
+      },
+      mainImage: '',
+        background: {
+        backgroundImage: '',
+          backgroundColor: '#ffffff',
+      },
+      button: {
+        text: '',
+        color: '#222222',
+        backgroundColor: '#ffffff',
+      }
+    })
+  }
+
+  const handleLoadFrameBanner = () => {
+    const data = JSON.parse(localStorage.getItem('frameData'))
+    console.log(data.row)
+    setSelectedBanner(data.row.map(item => item.size))
+    setDefaultSetting({
+      id: data.id,
+      pcUrl: data.pcUrl,
+      pcCode: data.pcCode,
+      mobileUrl: data.mobileUrl,
+      mobileCode: data.mobileCode,
+      title: data.title,
+      background: data.background,
+      button: data.button,
+      mainImage: data.mainImage,
+    })
+    setPublicSetting(data.row)
   }
 
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit, onError)}>
       <Board>
         <BoardHeader>배너 크리에이터</BoardHeader>
         <BoardSearchResult>
@@ -424,11 +494,11 @@ export function BannerCreative() {
                   <DefaultItemButton
                     active={false}
                     style={{backgroundColor: '#777', color: '#fff'}}
-                    onClick={()=> null}>신규</DefaultItemButton>
+                    onClick={handleResetFrameBanner}>신규</DefaultItemButton>
                   <DefaultItemButton
                     active={false}
                     style={{backgroundColor: '#777', color: '#fff'}}
-                    onClick={()=> null}>불러오기</DefaultItemButton>
+                    onClick={handleLoadFrameBanner}>불러오기</DefaultItemButton>
                 </DefaultItemContainer>
               </Row>
             </RowSpan>
@@ -501,10 +571,19 @@ export function BannerCreative() {
                     <Span4>PC 랜딩 URL</Span4>
                     <div style={{width: '100%'}}>
                       <Input
-                        value={defaultSetting.pcUrl || ''}
-                        onChange={handleChangePcUrl}
+                        {...register('pcUrl',{
+                          required: "PC URL 랜딩 정보를 입력해주세요",
+                          pattern:{
+                            value:  /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi,
+                            message: "http(s)://가 포함된 url 주소를 확인해주세요."
+                          },
+                          value:defaultSetting.pcUrl || '',
+                          onChange:handleChangePcUrl
+                        })}
                         placeholder={'http:// 또는 https://를 포함한 URL 입력'}/>
+                      {errors.pcUrl && <Validation>{errors.pcUrl.message}</Validation>}
                     </div>
+
                   </RowSpan>
                   <RowSpan>
                     <Span4>PC 인식코드</Span4>
@@ -515,12 +594,20 @@ export function BannerCreative() {
                     </div>
                   </RowSpan>
                   <RowSpan>
-                    <Span4>Mobile 랜딩 URl</Span4>
+                    <Span4>Mobile 랜딩 URL</Span4>
                     <div style={{width: '100%'}}>
                       <Input
-                        value={defaultSetting.mobileUrl || ''}
-                        onChange={handleChangeMobileUrl}
+                        {...register('mobileUrl',{
+                          required:  "MOBILE 랜딩 URL을 입력해주세요",
+                          pattern:{
+                            value:  /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi,
+                            message: "http(s)://가 포함된 url 주소를 확인해주세요."
+                          },
+                          value:defaultSetting.mobileUrl || '',
+                          onChange:handleChangeMobileUrl
+                        })}
                         placeholder={'http:// 또는 https://를 포함한 URL 입력'}/>
+                      {errors.mobileUrl && <Validation>{errors.mobileUrl.message}</Validation>}
                     </div>
                   </RowSpan>
                   <RowSpan>
@@ -542,9 +629,14 @@ export function BannerCreative() {
                       <Input
                         type={'text'}
                         maxLength={25}
-                        name={'serviceName'}
-                        value={defaultSetting?.title.text || ''}
-                        onChange={handleChangeTitle}
+                        {...register('title',{
+                          required: {
+                            value: defaultSetting.title.text === '',
+                            message: '광고 제목을 입력해주세요'
+                          },
+                          value: defaultSetting.title.text || '',
+                          onChange:handleChangeTitle
+                        })}
                         placeholder={'광고 제목을 입력해주세요 (12자)'}
                       />
                     </ColSpan3>
@@ -604,6 +696,7 @@ export function BannerCreative() {
                       </PopButton>
                     }
                   </Row>
+                  {errors.title && <Validation>{errors.title.message}</Validation>}
                   <Row style={{gap: 10, justifyContent: 'space-between'}}>
                     <Span4 style={{width: 80, whiteSpace: 'nowrap'}}>메인이미지<small></small><p><small style={{color: '#ccc'}}>(600*300 권장)</small></p></Span4>
                     <ColSpan100 padding={'0'} style={{maxWidth: '100px'}}>
@@ -623,7 +716,7 @@ export function BannerCreative() {
                         :
                         <ImageUploadCard>
                           <DeleteIcon onClick={() => handleDeleteMainImage(defaultSetting.mainImage)}/>
-                          <img src={defaultSetting.mainImage.url} alt={'배너이미지'}/>
+                          <img src={defaultSetting.mainImage.url} style={{width: '100%',height:'100%', objectFit: 'contain'}} alt={'메인 배너 이미지'}/>
                         </ImageUploadCard>
                       }
                     </ColSpan100>
@@ -645,7 +738,7 @@ export function BannerCreative() {
                         :
                         <ImageUploadCard>
                           <DeleteIcon onClick={() => handleDeleteImage(defaultSetting.background.backgroundImage)}/>
-                          <img src={defaultSetting.background.backgroundImage} alt={'배너이미지'}/>
+                          <img src={defaultSetting.background.backgroundImage} style={{width: '100%',height:'100%', objectFit: 'contain'}} alt={'배너 배경 이미지'}/>
                         </ImageUploadCard>
                       }
                     </ColSpan100>
@@ -698,7 +791,7 @@ export function BannerCreative() {
         <ToastContainer/>
       </Board>
       <ButtonGroup>
-        <SignUpVerify type={"button"} onClick={handleSaveFrameData}>저장</SignUpVerify>
+        <SignUpVerify type={"submit"}>저장</SignUpVerify>
       </ButtonGroup>
       <BoardSearchResult>
         {/*추후 삭제*/}
@@ -747,7 +840,7 @@ export function BannerCreative() {
           </div>
         </Preview>
       </BoardSearchResult>
-    </>
+    </form>
   )
 }
 

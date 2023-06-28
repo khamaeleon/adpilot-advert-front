@@ -79,6 +79,7 @@ function BudgetEventDetail() {
           </RowSpan>
           {eventBudgetDetailDataState !== null &&
             <Table columns={budgetEventDetailColumns}
+                   style={{minHeight: 300}}
                    totalCount={[eventBudgetDetailDataState.totalCount, '타겟팅 예산 그룹']}
                    data={eventBudgetDetailDataState?.targetingBudgetDtos}
                    emptyText={'타겟팅 예산 관리 내역이 없습니다.'}/>
