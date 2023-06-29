@@ -13,6 +13,22 @@ import AdminLogin from "./pages/login/AdminLogin";
 import {NotFound} from "./pages/404";
 import "react-datepicker/dist/react-datepicker.css";
 import "../src/assets/DatePicker.css"
+import {initDB} from "react-indexed-db";
+export const DBConfig = {
+  name: 'FrameDB',
+  version: 1,
+  objectStoresMeta: [
+    {
+      store: 'frameTable',
+      storeConfig: { keyPath: 'key', autoIncrement: true },
+      storeSchema: [
+        { name: 'row', keypath: 'name', options: { unique: false } },
+      ]
+    }
+  ]
+};
+
+initDB(DBConfig)
 
 const AtomsDevtools = ({ children }) => {
   useAtomsDevtools('demo')
@@ -34,8 +50,9 @@ function App() {
             <Route path={'/findId'} element={<Login match={'findId'}/>}/>
             <Route path={'/findPassword'} element={<Login match={'findPassword'}/>}/>
             <Route path={'/signup'} element={<SignUp/>}/>
-            <Route path={'/board/'} element={<Layout />}>
+            <Route path={'/board'} element={<Layout />}>
               <Route path={':id'} element={<Layout />}/>
+              <Route path={':/*'} element={<NotFound />}/>
             </Route>
             <Route path={"*"} element={<NotFound/>}/>
           </Routes>
