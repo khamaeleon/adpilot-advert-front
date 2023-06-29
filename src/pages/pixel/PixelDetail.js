@@ -268,11 +268,11 @@ function PixelDetail() {
                   <div className={'row'}>
                     <div className={'w-50'}>
                       <p className={'tit'}>카테고리</p>
-                      <div className={'txt'}>{topLevelCategoryList.find(value => value.value === pixelInfoListState.mainCategoryCode)?.label}</div>
+                      <div className={'txt'}>{topLevelCategoryList.find(value => value.value === pixelInfoListState?.mainCategoryCode)?.label}</div>
                     </div>
                     <div className={'w-50'}>
                       <p className={'tit'}>하위 카테고리</p>
-                      <div className={'txt'}>{rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode)?.label}</div>
+                      <div className={'txt'}>{rowLevelCategoryList.find(value => value.value === pixelInfoListState?.subCategoryCode)?.label}</div>
                     </div>
                   </div>
                 }

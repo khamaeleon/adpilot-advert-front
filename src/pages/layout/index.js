@@ -72,6 +72,7 @@ function Layout() {
     },[])
 
   useEffect(() => {
+    console.log()
     if(!['dashboard','campaignLookOver','campaignTwo','campaignThree','campaignFour'].includes(params.id)) {
       resetInfo();
     }
