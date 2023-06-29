@@ -4,16 +4,17 @@ import {confirmAlert} from "react-confirm-alert";
 import ImageUploading from "react-images-uploading";
 import {toast} from "react-toastify";
 
+
+
 export function FrameEditor(props){
-  const {size, set, publicSetting, setPublicSetting} = props
+  const {size, guide, set, publicSetting, setPublicSetting} = props
   const [sized, setSized] = useState([0,0])
   const [addElement, setAddElement] = useState(false)
   const [isEditable, setIsEditable] = useState([false, false]);
-  const [element, setElement] = useState({
-    image: [],
-    text: []
-  })
   const [elementPosition, setElementPosition] = useState({
+    size: size,
+    image: [],
+    text: [],
     mainImage: {
       left: 0,
       top: 0,
@@ -49,49 +50,41 @@ export function FrameEditor(props){
       top: 0,
     }
   });
-
+  const defaultBody = {
+    backgroundColor: set.background.backgroundColor,
+    backgroundImage: `url(${set.background.backgroundImage})`
+  }
+  const gridBody = {
+    backgroundColor: set.background.backgroundColor,
+    backgroundImage:`linear-gradient(90deg, #aaaaaa30 1px, transparent 1px), linear-gradient(0deg, #aaaaaa30 1px, transparent 1px),linear-gradient(90deg, #aaaaaa30 1px, transparent 1px), linear-gradient(0deg, #aaaaaa30 1px, transparent 1px)`,
+    backgroundSize: '10px 10px, 10px 10px, 50px 50px, 50px 50px',
+    backgroundPosition: '-1px -1px, -1px -1px, -1px -1px, -1px -1px'
+  }
   useEffect(() => {
     const stringToSize = size.replace('IMG','').split('_')
     setSized([parseInt(stringToSize[0]),parseInt(stringToSize[1])])
-    setElementPosition({
-      ...elementPosition,
-      mainImage: {
-        ...elementPosition.mainImage,
-        width: set.mainImage.width > parseInt(stringToSize[0]) ? parseInt(stringToSize[0]) : set.mainImage.width,
-        height: set.mainImage.height > parseInt(stringToSize[1]) ? parseInt(stringToSize[1]) : set.mainImage.height
-      }
-    })
+
+    if(publicSetting !== undefined){
+      console.log(publicSetting)
+      setElementPosition(publicSetting)
+    } else {
+      console.log(elementPosition)
+    }
+    //
+    // setElementPosition({
+    //   ...elementPosition,
+    //   mainImage: {
+    //     ...elementPosition.mainImage,
+    //     width: set.mainImage.width > parseInt(stringToSize[0]) ? parseInt(stringToSize[0]) : set.mainImage.width,
+    //     height: set.mainImage.height > parseInt(stringToSize[1]) ? parseInt(stringToSize[1]) : set.mainImage.height,
+    //   }
+    // })
   }, [set]);
 
   useEffect(() => {
-    const elementsData = {
-      size: size,
-      ...element,
-      ...elementPosition
-    }
-    if(publicSetting.length === 0) {
-      setPublicSetting([elementsData])
-    } else {
-      // 추가된 배열의 사이즈가 있고 같은경우
-      if(publicSetting.some(item => item.size === size)){
-        //데이터 없데이트
-        const updateData = publicSetting.map((item) =>
-          item.size === size ? {...item, ...elementsData} : item
-        )
-        // 셋스테이트 일으켜서 리랜더링
-        setPublicSetting(updateData)
-      } else {
-        // 기존 배열에 사이즈가 없는경우
-        // 새로추가된 사이즈만 추가
-        setPublicSetting(publicSetting.concat(elementsData))
-      }
-    }
-  }, [elementPosition, element]);
+    setPublicSetting(elementPosition)
+  }, [elementPosition]);
 
-
-  const handleSelectFrame = () => {
-
-  }
 
   const handleDoubleClick = (e, index) => {
     e.stopPropagation()
@@ -101,10 +94,10 @@ export function FrameEditor(props){
 
   const handleChange = (e, index) => {
     e.stopPropagation()
-    element.text[index] = e.target.value
-    setElement({
-      ...element,
-      text: [...element.text]
+    elementPosition.text[index] = e.target.value
+    setElementPosition({
+      ...elementPosition,
+      text: [...elementPosition.text]
     })
   };
 
@@ -123,7 +116,8 @@ export function FrameEditor(props){
   const inRange = (v, max) => {
     if (v < 0) return 0;
     if (v > max) return max;
-    return v;
+    console.log()
+    return guide ? Math.floor(v/10)*10 : v;
   };
 
 
@@ -146,19 +140,16 @@ export function FrameEditor(props){
     const mouseUpHandler = () => {
       document.removeEventListener('mousemove', mouseMoveHandler);
     };
-
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler, { once: true });
   }
 
 
   const handleMouseMoveDrag = (clickEvent, target) => {
-
     const mouseMoveHandler = (moveEvent) => {
       const deltaX = moveEvent.screenX - clickEvent.screenX;
       const deltaY = moveEvent.screenY - clickEvent.screenY;
       const boundary = boundaryRef.current.getBoundingClientRect();
-      console.log(elementPosition[target])
       setElementPosition({
         ...elementPosition,
         [target]: {
@@ -192,9 +183,8 @@ export function FrameEditor(props){
   }
 
   const onDrop = (pictureFiles, e) => {
-    console.log(pictureFiles)
     if (pictureFiles.length !== 0) {
-      if(element.image.length < 2){
+      if(elementPosition.image.length < 2){
         const reader = new FileReader();
         reader.readAsDataURL(pictureFiles[0].file);
         return new Promise((resolve) => {
@@ -208,9 +198,9 @@ export function FrameEditor(props){
                 width:this.width,
                 height: this.height,
               }
-              setElement({
-                ...element,
-                image: element.image.concat(obj)
+              setElementPosition({
+                ...elementPosition,
+                image: elementPosition.image.concat(obj)
               });
             }
             setAddElement(false)
@@ -227,10 +217,10 @@ export function FrameEditor(props){
   const handleAddText = (e) => {
     e.stopPropagation()
     console.log('add text')
-    if(element.text.length < 2){
-      setElement({
-        ...element,
-        text: element.text.concat('text')
+    if(elementPosition.text.length < 2){
+      setElementPosition({
+        ...elementPosition,
+        text: elementPosition.text.concat('text')
       });
     }
     setAddElement(false)
@@ -243,25 +233,23 @@ export function FrameEditor(props){
   }
 
   const handleDeleteText = (index) => {
-    element.text.splice(index, 1)
-    setElement({
-      ...element
+    elementPosition.text.splice(index, 1)
+    setElementPosition({
+      ...elementPosition
     })
   }
 
   const handleDeleteElementImage = (index) => {
-    element.image.splice(index, 1)
-    setElement({
-      ...element
+    elementPosition.image.splice(index, 1)
+    setElementPosition({
+      ...elementPosition
     })
   }
 
   const handleResetFrame = () => {
-    setElement({
-      image: [],
-      text: []
-    })
     setElementPosition({
+      image: [],
+      text: [],
       mainImage: {
         left: 0,
         top: 0,
@@ -300,9 +288,9 @@ export function FrameEditor(props){
   }
 
   return(
-    <FrameContainer onClick={handleSelectFrame}>
+    <FrameContainer>
       <FrameHeader>
-        <AddButton onClick={handleOpenAddElement}>
+        <AddButton type={"button"} onClick={handleOpenAddElement}>
           {addIcon}
           {addElement &&
             <AddElement>
@@ -331,7 +319,7 @@ export function FrameEditor(props){
         ref={boundaryRef}
         width={sized[0]}
         height={sized[1]}
-        style={{backgroundColor: set.background.backgroundColor, backgroundImage: `url(${set.background.backgroundImage})`}} onClick={handleClickEnd}>
+        style={!guide ? defaultBody : gridBody} onClick={handleClickEnd}>
         {set.mainImage &&
           <MainImage
             source={set.mainImage.url}
@@ -342,7 +330,7 @@ export function FrameEditor(props){
             <Resizer onMouseDown={(clickEvent) => {handleImageResize(clickEvent, `mainImage`)}}/>
           </MainImage>
         }
-        {element.image.length !== 0 && element.image.map((image, key) => {
+        {elementPosition.image.length !== 0 && elementPosition.image.map((image, key) => {
           const index = key
           return (
             <MainImage
@@ -373,7 +361,7 @@ export function FrameEditor(props){
             onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent, 'title')}}
           >{set.title.text}</Text>
         }
-        {element.text.length > 0 && element.text.map((text, key) => {
+        {elementPosition.text.length > 0 && elementPosition.text.map((text, key) => {
           const index = key
           return (
             <Text
@@ -389,13 +377,13 @@ export function FrameEditor(props){
               {isEditable[index] ? (
                 <input
                   type="text"
-                  value={element.text[index] || ''}
+                  value={elementPosition.text[index] || ''}
                   onChange={(e) => handleChange(e, index)}
                   onClick={(e) => e.stopPropagation()}
                   onKeyDown={handleKeyDown}
                 />
               ) : (
-                <div onDoubleClick={(e) => handleDoubleClick(e, index)}>{text}<CloseButton onClick={() => handleDeleteText(index)}/></div>
+                <div onDoubleClick={(e) => handleDoubleClick(e, index)}>{text}<CloseButton type={"button"} onClick={() => handleDeleteText(index)}/></div>
               )}
             </Text>
           )
@@ -403,6 +391,7 @@ export function FrameEditor(props){
         }
         {set.button.text !== '' &&
           <Button
+            type={"button"}
             style={{
               backgroundColor: set.button.backgroundColor,
               color: set.button.color,
@@ -441,7 +430,6 @@ const FrameBody = styled.div`
   height: ${({height}) => height}px;
   text-align: center;
   background-position: center;
-  background-repeat: no-repeat;
   background-size: cover;
   overflow: hidden;
   border: 1px solid #ddd;
