@@ -66,6 +66,7 @@ function ProductManage() {
         setProductData(response)
       }
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
   /**
    * 상품 수집 검색

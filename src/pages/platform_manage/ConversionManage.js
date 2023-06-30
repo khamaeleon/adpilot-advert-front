@@ -34,6 +34,7 @@ function ConversionManage() {
     selConversionList(searchCondition).then(response =>{
       setConversionListDataState(response)
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleSearch = () => {
