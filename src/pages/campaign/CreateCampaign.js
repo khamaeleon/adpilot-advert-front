@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {stepCampaignAtom} from "./entity";
 import {CampaignThree} from "./steps/CampaignThree";
 import {ToastContainer} from "react-toastify";

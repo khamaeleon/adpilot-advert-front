@@ -66,7 +66,7 @@ export default function CreateReports() {
   const [columns, setColumns] = useState([])
   const [creativeInfo, setCreativeInfo] = useState({})
   const [reportName, setReportName] = useState('')
-  const { register, trigger, formState: { errors } } = useForm();
+  const { register,  formState: { errors } } = useForm();
   const tokenResult = useAtomValue(tokenResultAtom)
   const setReportsInfo = useSetAtom(reportsInfoAtom)
   const navigate = useNavigate()

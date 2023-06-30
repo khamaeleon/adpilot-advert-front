@@ -10,7 +10,6 @@ import styled from 'styled-components'
 import {useCookies} from "react-cookie";
 import Checkbox from "../../components/common/Checkbox";
 import {useAtom} from "jotai";
-import {ADMIN_SERVER} from "../../constants/GlobalConst";
 import {HorizontalRule} from "../../components/common/Common";
 
 
@@ -21,7 +20,7 @@ function AdminLogin() {
   const [isRemember, setIsRemember] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const {register,setValue, handleSubmit, formState: {errors}} = useForm()
-  const [tokenResult,setTokenResult] = useAtom(tokenResultAtom)
+  const [,setTokenResult] = useAtom(tokenResultAtom)
   /**
    * 쿠키에 아이디 저장 삭제
    */

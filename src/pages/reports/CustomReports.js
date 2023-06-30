@@ -4,23 +4,21 @@ import {
   BoardSearchDetail,
   BoardSearchResult,
   CalendarBox,
-  CalendarIcon, ColSpan0,
+  CalendarIcon,
+  ColSpan0,
   ColSpan1,
-  ColSpan2,
   ColTitle,
   CustomDatePicker,
   DateContainer,
-  DefaultButton,
-  DeleteButton, GraySearchButton,
+  DeleteButton,
+  GraySearchButton,
   RangePicker,
   RowSpan,
-  selectStyle,
   Span1
 } from "../../assets/GlobalStyles";
-import {ValidationGroup} from "../campaign/styles/common";
 import Select from "react-select";
 import ko from "date-fns/locale/ko";
-import {HorizontalRule, VerticalRule} from "../../components/common/Common";
+import {HorizontalRule} from "../../components/common/Common";
 import React, {useEffect, useState} from "react";
 import {
   getLastDay,

@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
-import {confirmAlert} from "react-confirm-alert";
 import ImageUploading from "react-images-uploading";
 import {toast} from "react-toastify";
 

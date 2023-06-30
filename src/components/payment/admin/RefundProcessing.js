@@ -1,24 +1,23 @@
 import {useAtom} from "jotai";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../modal/Modal";
 import {modalController} from "../../../store";
 import {
   ColSpan0,
-  ColSpan1,
   ColSpan2,
   ColSpan3,
   ColSpan4,
-  DefaultButton,
   RelativeDiv,
-  RowSpan, SubmitButton, ValidationScript,
+  RowSpan,
+  SubmitButton,
+  ValidationScript,
 } from "../../../assets/GlobalStyles";
-import {requestAmountPoint, retrieveUserPoint} from "../../../pages/layout/entity/UserPoint";
 import styled from "styled-components";
 import {decimalFormat, removeStr} from "../../../common/StringUtils";
 import {useForm} from "react-hook-form";
-import {tokenResultAtom} from "../../../pages/login/entity/Common";
 import {refundProcess} from "../../../services/payment/admin/RefundProcessAxios";
 import {refundReceivedAtomData} from "../../../pages/platform_manage/entity/Payment";
+
 export function RefundProcessingButton(props) {
   const {onSubmit, modalInfo, onSave, title, refundData } = props;
   const [, setModal] = useAtom(modalController)

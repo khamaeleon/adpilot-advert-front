@@ -8,7 +8,7 @@ import {
   DashBoardHeader,
 } from "../../assets/GlobalStyles";
 import {ResponsiveLine} from '@nivo/line'
-import React, {useEffect, useState, useCallback} from "react";
+import React, {useEffect, useState} from "react";
 import {useAtom,useAtomValue} from "jotai";
 import {dataTotalInfo} from "../../components/common/entity";
 import {chartDataAtom, commonProperties, platformStatusType, userPlatformStatusType} from "./entity/Chart";
@@ -33,7 +33,7 @@ import Table from "../../components/table";
 import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 
 /** 플래폼 현황 차트 **/
-function ChartComponent(props) {
+function ChartComponent() {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [chartData, setChartData] = useAtom(chartDataAtom);
   const searchCondition = useAtomValue(searchConditionAtom)

@@ -1,16 +1,14 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import ReactDataGrid from '@inovua/reactdatagrid-enterprise';
 import '@inovua/reactdatagrid-enterprise/base.css';
 import '../../assets/default-light.scss'
 import styled from "styled-components";
 import {ColSpan2, RowSpan} from "../../assets/GlobalStyles";
-const accountExpandHeight = 400
-
 
 function TableDetail (props) {
   const {columns, data, settings, groups, rowExpandHeight } = props
   const [gridRef, setGridRef] = useState(null);
-  const [gridDetailRef, setGridDetailRef] = useState(null);
+  const [, setGridDetailRef] = useState(null);
   const gridStyle = { minHeight: 550 }
 
   /**

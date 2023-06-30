@@ -354,20 +354,6 @@ const InputGroup = styled.div`
   }
 `
 
-const Button = styled.button`
-  width: 150px;
-  height: 45px;
-  border-radius: 5px;
-  background-color: #777777;
-  color: #fff;
-  font-size: 15px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #535353;
-  }
-`
-
 const Input = styled.input `
   width: 210px;
   font-size: 18px;

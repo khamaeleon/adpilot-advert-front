@@ -1,6 +1,5 @@
 import {useAtom} from "jotai";
-import axios from 'axios';
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../modal/Modal";
 import styled from "styled-components";
 import {modalController} from "../../../store";
@@ -39,7 +38,6 @@ export function AdChargeButton(props) {
 function AdChargeModal (props) {
   const {title, setRequestAmountValue} = props
   const [tokenUserInfo] = useAtom(tokenResultAtom)
-  const [,setModal] = useAtom(modalController)
   const {register, handleSubmit, setError, formState:{errors} } = useForm()
   const [chargeAmount, setChargeAmount] = useState(0) // 충전 금액
   const [inputValue, setInputValue] = useState(0) // 인풋 클릭 여부

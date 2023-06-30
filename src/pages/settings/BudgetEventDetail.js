@@ -1,7 +1,6 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchDetail,
   BoardTableContainer,
   BoardTableCustomContainer,
   CancelButton,

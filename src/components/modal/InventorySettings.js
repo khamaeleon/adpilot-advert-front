@@ -182,7 +182,7 @@ function SearchModal (props) {
                     </InventoryItem>
                   )
                 })}
-                {mediaInventoryInfo === null || mediaInventoryInfo.length === 0 &&
+                { (mediaInventoryInfo === null || mediaInventoryInfo.length === 0) &&
                   <Centered>데이터가 없습니다. 지면을 검색해주세요.</Centered>
                 }
               </SearchInventoryItemResult>

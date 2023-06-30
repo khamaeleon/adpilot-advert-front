@@ -1,7 +1,6 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchDetail,
   BoardTableContainer,
   ColSpan1,
   ColSpan4,
@@ -33,7 +32,9 @@ import Select from "react-select";
 import {hostList} from "../signup/entity/Common";
 import {
   retrieveSubLevelCategoryKeyValue,
-  retrieveTopLevelCategoryKeyValue, retrieveUserSubLevelCategoryKeyValue, retrieveUserTopLevelCategoryKeyValue
+  retrieveTopLevelCategoryKeyValue,
+  retrieveUserSubLevelCategoryKeyValue,
+  retrieveUserTopLevelCategoryKeyValue
 } from "../../services/Platform/CategoryAxios";
 import {useNavigate} from "react-router-dom";
 import {pixelAdverDetailColumns, pixelColumns, pixelDataAtom, pixelDetailColumns} from "./entity/Pixel";

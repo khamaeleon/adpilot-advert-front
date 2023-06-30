@@ -2,13 +2,14 @@ import {
   Board,
   BoardHeader,
   BoardSearchDetail,
-  BoardSearchResultTitle,
-  BoardTableContainer, ColSpan0,
-  ColTitle, GraySearchButton,
+  BoardTableContainer,
+  ColSpan0,
+  ColTitle,
+  GraySearchButton,
   RowSpan,
   SaveExcelButton,
-  SearchButton,
-  SearchInput, Span1, Span2
+  SearchInput,
+  Span2
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
 import Table from "../../components/table";
@@ -26,8 +27,6 @@ import {
   userInfoAtom
 } from "./entity/User";
 import {hostType} from "./entity/Common";
-import {VerticalRule} from "../signup/styles";
-import {HorizontalRule} from "../../components/common/Common";
 
 export default function UserManage(){
   const [searchAccountInfoState ,setSearchAccountInfoState] = useState(searchAccountInfo)

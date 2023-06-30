@@ -47,7 +47,6 @@ import {
   uploadLogoImages,
   uploadNativeImages
 } from "../../../services/campaign/CreativeAxios";
-import moment from "moment";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {useLocation, useNavigate, useParams} from "react-router-dom";

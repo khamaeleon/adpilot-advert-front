@@ -82,7 +82,7 @@ function PaymentManageUser(props) {
   //[d] 환불 입력 정보 조회해서 여기다 담기
   const [refundData, setRefundData] = useState({})
   //[d] 현재 시점 기준 전체 지급 금액 값 해당 값이 환불 요청 금액보다 낮으면 환불 거부..
-  const [totalAmount, setTotalAmount] = useState(0)
+  const [totalAmount] = useState(0)
   //[d] 그리드 데이터
   const [pageSize, ] = useState(10); // 한 페이지 보여줄 데이터
   const [currentPage, ] = useState(1); // 현재 페이지
