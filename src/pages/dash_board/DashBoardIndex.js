@@ -5,7 +5,7 @@ import {
   ChartTooltip,
   DashBoardBody,
   DashBoardCard,
-  DashBoardHeader,
+  DashBoardHeader, selectStyle,
 } from "../../assets/GlobalStyles";
 import {ResponsiveLine} from '@nivo/line'
 import React, {useEffect, useState} from "react";
@@ -81,10 +81,12 @@ function ChartComponent() {
         }
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[searchCondition])
 
   useEffect(() => {
     makeChartData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chartData,chartDataInfo]);
 
   function calculateSum(property) {
@@ -303,20 +305,14 @@ function ChartComponent() {
               decimalFormat={decimalFormat}
           />
           <ChartLabel active={chartData[dataType].status}>
-            <Select styles={{
-                      input: (defaultStyle, state) => (
-                        {
-                          ...defaultStyle,
-                          minWidth: "300px",
-                        })
-                    }}
+            <Select styles={selectStyle}
+                    isSearchable={false}
                     isDisabled={!chartData[dataType].status}
                     components={{IndicatorSeparator: () => null}}
                     options={tokenUserInfo.role !== 'NORMAL' ? platformStatusType : userPlatformStatusType}
                     value={platformStatusType.filter(options => options.value === dataType)}
                     isOptionDisabled={option => option.value === dataType2}
                     onChange={handleChangeDataType}
-                    isSearchable={false}
             />
             <span
                 onClick={() => handleOnChangeChartStatus(dataType)}
@@ -325,20 +321,13 @@ function ChartComponent() {
             </span>
           </ChartLabel>
           <ChartLabel active={chartData[dataType2].status} >
-            <Select styles={{
-                      input: (defaultStyle, state) => (
-                        {
-                          ...defaultStyle,
-                          minWidth: "300px",
-                        })
-                    }}
+            <Select styles={selectStyle}
+                    isSearchable={false}
                     isDisabled={!chartData[dataType2].status}
-                    components={{IndicatorSeparator: () => null}}
                     options={tokenUserInfo.role !== 'NORMAL' ? platformStatusType : userPlatformStatusType}
                     value={platformStatusType.filter(options => options.value === dataType2)}
                     isOptionDisabled={option => option.value === dataType}
                     onChange={handleChangeDataType2}
-                    isSearchable={false}
             />
             <span
                 onClick={() => handleOnChangeChartStatus(dataType2)}
@@ -414,6 +403,7 @@ function DashBoardIndex() {
     setSearchState({
       ...searchCondition
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchCondition])
   /**
    * 검색 버튼

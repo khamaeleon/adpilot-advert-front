@@ -229,12 +229,14 @@ export default Layout
 
 const BoardBody = styled.div`
   width: 100%;
+  background-color: #f8f8f8;
 `
 const BoardHeader = styled.div`
   display: flex;
   justify-content: flex-end;
   width: 100%;
   height: 45px;
+  background-color: #fff;
   border-bottom: 1px solid #eee;
 `
 

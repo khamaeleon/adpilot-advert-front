@@ -65,6 +65,7 @@ export function CampaignThree() {
     selEnumInfo('AGENT_TYPE').then(response => {
       setAgentTypeState(response.data)
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
@@ -91,6 +92,7 @@ export function CampaignThree() {
       })
       setValue('name', name)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
 
   useEffect(() => {
@@ -101,6 +103,7 @@ export function CampaignThree() {
         endDate: dateFormat(endDate, 'YYYY-MM-DD'),
       })
     } else setShowPrevious(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[dateRange])
 
   const handleAgentType = (event) => {

@@ -219,6 +219,7 @@ function Table(props) {
       })
     }
     setActiveCell([data.length])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const emptyText = <p style={{

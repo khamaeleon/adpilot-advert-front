@@ -52,6 +52,7 @@ export function CampaignOne() {
     })
       resetInfo();
       reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   /**
    * 광고주 설정

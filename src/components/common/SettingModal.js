@@ -68,6 +68,7 @@ function SettingChangeModal(props) {
     if(label === 'pct'){
       sumValue()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[dataState])
   const sumValue = () => {
     let calc = parseInt(dataState.shopperMatching !== '' ? dataState.shopperMatching : 0)+

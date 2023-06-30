@@ -716,7 +716,6 @@ export const TextMainColor = styled.span`
 `
 export const BoardContainer = styled.div`
   padding: 10px 30px 30px;
-  background-color: #f8f8f8;
 `
 
 export const TitleContainer = styled.div`
@@ -1146,7 +1145,7 @@ export const ChartLabel = styled.div`
     padding-left: 10px;
   }
   > div {
-    width: 120px;
+    width: 125px;
     > div {
       cursor: pointer;
       border-width: 0;

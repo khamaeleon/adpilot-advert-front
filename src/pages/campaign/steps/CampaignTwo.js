@@ -57,6 +57,7 @@ export function CampaignTwo() {
 
   useEffect(()=>{
       resetInfo()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   useEffect(() => {
@@ -86,6 +87,7 @@ export function CampaignTwo() {
       setPriceEventListState(response[2]?.targetingPriceDtos.map(data => {return {value: data.targetingPriceId, label: data.groupName}}))
     }
     multiAxiosCall([selBudgetTimeList(userId), selBudgetEventList(userId), selPriceEventList(userId)], callbackFunc)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
   /**
    * 시간대별 예산 셀렉트
