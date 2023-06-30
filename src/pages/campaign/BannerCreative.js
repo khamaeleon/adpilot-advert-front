@@ -47,6 +47,7 @@ import {PreviewSubmit} from "../../components/table/styles";
 import {useIndexedDB} from "react-indexed-db";
 import {atomWithReset, useResetAtom} from "jotai/utils";
 
+//사이즈 정의
 const imgSizeWidth = [ 'IMG120_600',  'IMG160_600', 'IMG100_200', 'IMG100_300', 'IMG100_400', 'IMG100_500', 'IMG100_600']
 const imgSizeHeight = [ 'IMG300_150',]
 const square = ['IMG150_150','IMG200_200','IMG300_300', 'IMG400_400', 'IMG500_500','IMG600_600']
@@ -55,16 +56,19 @@ function ColorPicker ({onChange, defaultColor}) {
   const [color, setColor] = useState(defaultColor)
   const [colorChange, setColorChange] = useState(null)
   const [displayPicker, setDisplayPicker] = useState(false)
-
+  // 컬러피커 클릭
   const handleClickColor = () => {
     setDisplayPicker(!displayPicker)
   }
+  // 컬러 변환
   const handleChangeColor = (color) => {
     setColorChange(color.hex)
   }
+  // 변환 완료
   const handleChangeColorComplete = (color) => {
     setColorChange(color.hex)
   }
+  // 컬러 선택 완료
   const handleChoiceColor = () => {
     setDisplayPicker(!displayPicker)
     setColor(colorChange)
@@ -140,7 +144,7 @@ function BannerList ({list, frameKey, setFrameKey}) {
              return (
                <BannerListItem style={{backgroundColor: key === banner.key ? '#ddd' : '#fff'}} key={index} onClick={() => setKey(banner.key)}>
                  <div style={{width: 70}}>{banner.key}</div>
-                 <div>{banner.title.text}</div>
+                 <div style={{textAlign: 'left'}}>{banner.title.text}</div>
                  <div style={{width: 120}}>{banner.date}</div>
                </BannerListItem>
              )
@@ -197,13 +201,15 @@ export function BannerCreative() {
   const setModalOpen = useSetAtom(modalController)
   const { getByID, getAll, update, add } = useIndexedDB('frameTable')
   const [guide, setGuide] = useState(false)
+  /** 스냅 가이드 모드 **/
   const handleChangeMode = () =>{
     setGuide(!guide)
   }
-
+  /** 글꼴 정의 팝업 **/
   const handleFontSelect = () => {
     setIsFontSetting(!isFontSetting)
   }
+  /** 광고 제목 입력 **/
   const handleChangeTitle = (e) => {
     setDefaultSetting({
       ...defaultSetting,
@@ -213,6 +219,7 @@ export function BannerCreative() {
       }
     })
   }
+  /** 광고 제목 글꼴 색 **/
   const handleChangeTitleColor = (color) => {
     setDefaultSetting({
       ...defaultSetting,
@@ -222,6 +229,7 @@ export function BannerCreative() {
       }
     })
   }
+  /** 광고 제목 글꼴 크기 **/
   const handelChangeTitleSize = (e) => {
     setDefaultSetting({
       ...defaultSetting,
@@ -231,6 +239,7 @@ export function BannerCreative() {
       }
     })
   }
+  /** 광고 제목 글꼴 선택 **/
   const handleChangeFontFamily = (fontFamily) =>{
     setDefaultSetting({
       ...defaultSetting,
@@ -240,6 +249,7 @@ export function BannerCreative() {
       }
     })
   }
+  /**  배경색 **/
   const handleChangeImageBackground = (color) => {
     setDefaultSetting({
       ...defaultSetting,
@@ -249,6 +259,7 @@ export function BannerCreative() {
       }
     })
   }
+  /** 버튼 글자 선택 **/
   const handleChangeButtonTitle = (e) => {
     setDefaultSetting({
       ...defaultSetting,
@@ -258,6 +269,7 @@ export function BannerCreative() {
       }
     })
   }
+  /** 버튼 글자 색**/
   const handleChangeButtonTitleColor = (color) => {
     setDefaultSetting({
       ...defaultSetting,
@@ -267,6 +279,7 @@ export function BannerCreative() {
       }
     })
   }
+  /** 버튼 배경 색 **/
   const handleChangeButtonBackgroundColor = (color) => {
     setDefaultSetting({
       ...defaultSetting,
@@ -276,6 +289,7 @@ export function BannerCreative() {
       }
     })
   }
+  /** 업로드 에러 **/
   const onImageError = (errors, type) => {
     if (errors.maxFileSize) {
       toast.warning('저장 가능한 이미지 사이즈는 '+ (type ==='logo'?'1MB':'10MB')+'입니다.')
@@ -285,6 +299,7 @@ export function BannerCreative() {
       toast.warning('"jpg", "gif", "png"의 형식만 등록 가능합니다.')
     }
   }
+  /** 배경 이미지 삭제 **/
   const handleDeleteImage = (imagePath) => {
     confirmAlert({
       title: '알림',
@@ -295,7 +310,10 @@ export function BannerCreative() {
           onClick: () => {
             setDefaultSetting({
               ...defaultSetting,
-              backgroundImage: ''
+              background: {
+                ...defaultSetting.background,
+                backgroundImage: ''
+              }
             })
           }
         },{
@@ -304,6 +322,7 @@ export function BannerCreative() {
       ]
     });
   }
+  /** 배경 이미지 업로드 **/
   const onDrop = (pictureFiles) => {
     console.log(pictureFiles)
     if (pictureFiles.length !== 0) {
@@ -324,6 +343,7 @@ export function BannerCreative() {
       // })
     }
   }
+  /** 메인 이미지 업로드 삭제 **/
   const handleDeleteMainImage = (imagePath) => {
     confirmAlert({
       title: '알림',
@@ -343,6 +363,7 @@ export function BannerCreative() {
       ]
     });
   }
+  /** 메인 이미지 업로드 **/
   const onDropMain = (pictureFiles) => {
     console.log(pictureFiles)
     if (pictureFiles.length !== 0) {
@@ -382,12 +403,15 @@ export function BannerCreative() {
       // })
     }
   }
+  /** 배너 형태 확인하는 함수 **/
   const includeItem = (type) => {
     return bannerTypes.includes(type)
   }
+  /** 배너 사이즈 확인하는 함수 **/
   const includeBanner = (type) => {
     return selectedBanner.includes(type)
   }
+  /** 배너 형태 선택 **/
   const handleClickStep = (type) => {
     if(bannerTypes.filter(datum => datum === type).length === 0){
       setBannerTypes(prev => [...prev, type])
@@ -396,6 +420,7 @@ export function BannerCreative() {
       setBannerTypes(newItemType)
     }
   }
+  /** 배너 사이즈 선택 **/
   const handleSelectBannerType = (type) => {
     if(selectedBanner.filter(datum => datum === type).length === 0){
       setSelectedBanner(prev => [...prev, type])
@@ -407,31 +432,35 @@ export function BannerCreative() {
       setPublicSetting(newPublicSet)
     }
   }
+  /** PC랜딩 URL **/
   const handleChangePcUrl = (e) => {
     setDefaultSetting({
       ...defaultSetting,
       pcUrl: e.target.value
     })
   }
+  /** PC코드 **/
   const handleChangePcCode = (e) => {
     setDefaultSetting({
       ...defaultSetting,
       pcCode: e.target.value
     })
   }
+  /** 모바일 랜딩 url **/
   const handleChangeMobileUrl = (e) => {
     setDefaultSetting({
       ...defaultSetting,
       mobileUrl: e.target.value
     })
   }
+  /** 모바일코드 **/
   const handleChangeMobileCode = (e) => {
     setDefaultSetting({
       ...defaultSetting,
       mobileCode: e.target.value
     })
   }
-
+  /** 사이즈별 위치정보 저장 **/
   const handleSetPublicPosition = (value) => {
     if(publicSetting.length === 0) {
       setPublicSetting([value])
@@ -452,6 +481,7 @@ export function BannerCreative() {
     }
   }
 
+  /** 리드 **/
   const readIndexedDBValue = (key) => {
     const data = getByID(key).then(response =>{
       setSelectedBanner(response.row.map(item => item.size))
@@ -468,28 +498,33 @@ export function BannerCreative() {
       })
       setPublicSetting(response.row)
       setBannerTypes(['square','width','height'])
+      // 여기서부터
       window.localStorage.setItem('frameData', JSON.stringify(response))
       setIsLoading(false)
       if(selectedBanner.length !== 0) {
         setTimeout(()=>{
           setIsLoading(true)
-        },500)
+        },1000)
       }
+      // 여기까지는 서비스 전에 삭제 할것
     })
   }
+  /** 크리에이트 **/
   const createIndexedDB = async (data) => {
     const create = await add(data).then(response => {
       console.log(response)
     })
   }
-
+  /** 업데이트 **/
   const putIndexedDB = async (data) => {
     const put = await update(data).then(response => {
       console.log(response)
     })
   }
+  /** 저장 **/
   const handleSaveFrameData = async () => {
     const newData = Object.assign(defaultSetting, {date: new Date().toLocaleDateString(), row: publicSetting})
+    window.localStorage.setItem('frameData', JSON.stringify(newData))
     if(isIframeKey !== null) {
       await putIndexedDB(newData)
     } else {
@@ -502,6 +537,7 @@ export function BannerCreative() {
       },100)
     }
   }
+  /** 배너선택 **/
   const handleSelectedBanner = (select) => {
     setIsIframeKey(select)
     readIndexedDBValue(select)
@@ -519,13 +555,16 @@ export function BannerCreative() {
       }
     })
   }
+  /** 재설정(신규) **/
   const handleResetFrameBanner = () => {
     setIsIframeKey(null)
     reset()
     resetSettings()
     setSelectedBanner([])
     setPublicSetting([])
+    setBannerTypes([])
   }
+  /** 벨리데이션 및 전송 **/
   const onSubmit = async (data) => {
     console.log(data)
     if(selectedBanner.length <= 0) {
@@ -538,10 +577,12 @@ export function BannerCreative() {
       await handleSaveFrameData()
     }
   }
+  /** 벨리데이션 에러 **/
   const onError = (error) => {
     toast.error('필수 입력을 확인해주세요')
     console.log(error)
   }
+
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)}>
       <Board>
@@ -848,7 +889,12 @@ export function BannerCreative() {
               </HalfDiv>
             </RowSpan>
             <RowSpan style={{marginTop: 50}}>
-              <ColSpan1>미리보기 & 편집<label><input type={"checkbox"} onChange={handleChangeMode} checked={guide}/> 가이드</label></ColSpan1>
+              <ColSpan1>미리보기 & 편집
+                <label>
+                  <input type={"checkbox"} onChange={handleChangeMode} checked={guide}/>
+                  <span>스냅 모드</span>
+                </label>
+              </ColSpan1>
             </RowSpan>
             <RowSpan box={true}>
               <FlexWrap>

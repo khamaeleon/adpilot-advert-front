@@ -270,7 +270,6 @@ export const GlobalStyles = createGlobalStyle`
     background-image: url('/assets/images/common/checkbox_on_C.png');
     background-image: -webkit-image-set(url('/assets/images/common/checkbox_on_C.png') 1x,url('/assets/images/common/checkbox_on_C@2x.png') 2x, url('/assets/images/common/checkbox_on_C@3x.png') 3x);
   }
-  
   .border-r {
     border-right: 1px solid ${lightGray}
   }

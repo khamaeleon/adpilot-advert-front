@@ -1,8 +1,8 @@
 
 // eslint-disable-next-line
-const adver = process.env.REACT_APP_API_ADVER_URL
-const admin = process.env.REACT_APP_API_ADMIN_URL
-const auth = process.env.REACT_APP_API_AUTH_URL
+const adver = 'http://192.168.0.23:8093'
+const admin = 'http://192.168.0.23:8091'
+const auth = 'http://192.168.0.23:8090'
 
 // const adver = 'http://192.168.0.104:8071/adver'
 // const admin = 'http://192.168.0.104:8071/backoffice'
