@@ -17,7 +17,7 @@ import PlatformUserDetail from "../platform_manage/UserDetail";
 import PlatformAdminDetail from "../platform_manage/AdminDetail";
 import PaymentManageUser from "../platform_manage/PaymentManageUser"
 import DashBoard from "../dash_board";
-import {BoardContainer, TitleContainer} from "../../assets/GlobalStyles";
+import {bgColor, BoardContainer, TitleContainer} from "../../assets/GlobalStyles";
 import Navigator from "../../components/common/Navigator";
 import {CampaignLookOver} from "../campaign/steps/CampaignLookOver";
 import {CampaignTwo} from "../campaign/steps/CampaignTwo";
@@ -229,7 +229,7 @@ export default Layout
 
 const BoardBody = styled.div`
   width: 100%;
-  background-color: #f8f8f8;
+  background-color: ${bgColor};
 `
 const BoardHeader = styled.div`
   display: flex;

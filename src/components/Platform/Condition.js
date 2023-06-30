@@ -36,6 +36,7 @@ import {SearchAdvertiser} from "../common/SearchAdvertiser";
 import {useParams} from "react-router-dom";
 import * as PropTypes from "prop-types";
 import moment from "moment";
+import {light} from "../../assets/theme";
 
 ResetButton.propTypes = {onClick: PropTypes.func};
 
@@ -46,6 +47,7 @@ export function PlatformCondition(props) {
   const [startDate, endDate] = dateRange;
   const [showPrevious, setShowPrevious] = useState(true)
   const params = useParams()
+  const mainColor = light.color.mainColor
   /**
    * 날짜 레인지 선택
    * @param rangeType
@@ -185,21 +187,21 @@ export function PlatformCondition(props) {
         <ColSpan0>
           <div>
             <RangePicker>
-              <div onClick={() => handleRangeDate('thisMonth')} style={dateActive==='thisMonth'?{color:'#f5811f'}:null}>이번달</div>
+              <div onClick={() => handleRangeDate('thisMonth')} style={dateActive==='thisMonth'?{color: mainColor}:null}>이번달</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastMonth')} style={dateActive==='lastMonth'?{color:'#f5811f'}:null}>지난달</div>
+              <div onClick={() => handleRangeDate('lastMonth')} style={dateActive==='lastMonth'?{color: mainColor}:null}>지난달</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('today')} style={dateActive==='today'?{color:'#f5811f'}:null}>오늘</div>
+              <div onClick={() => handleRangeDate('today')} style={dateActive==='today'?{color: mainColor}:null}>오늘</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastDay')} style={dateActive==='lastDay'?{color:'#f5811f'}:null}>어제</div>
+              <div onClick={() => handleRangeDate('lastDay')} style={dateActive==='lastDay'?{color: mainColor}:null}>어제</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastWeekDay')} style={dateActive==='lastWeekDay'?{color:'#f5811f'}:null}>지난7일</div>
+              <div onClick={() => handleRangeDate('lastWeekDay')} style={dateActive==='lastWeekDay'?{color: mainColor}:null}>지난7일</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastThirtyDay')} style={dateActive==='lastThirtyDay'?{color:'#f5811f'}:null}>지난30일</div>
+              <div onClick={() => handleRangeDate('lastThirtyDay')} style={dateActive==='lastThirtyDay'?{color: mainColor}:null}>지난30일</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastNinetyDay')} style={dateActive==='lastNinetyDay'?{color:'#f5811f'}:null}>지난90일</div>
+              <div onClick={() => handleRangeDate('lastNinetyDay')} style={dateActive==='lastNinetyDay'?{color: mainColor}:null}>지난90일</div>
               {/*<HorizontalRule style={{margin: "0 10px"}}/>*/}
-              {/*<div onClick={() => handleRangeDate('lastOneEightyDay')} style={dateActive==='lastOneEightyDay'?{color:'#f5811f'}:null}>지난180일</div>*/}
+              {/*<div onClick={() => handleRangeDate('lastOneEightyDay')} style={dateActive==='lastOneEightyDay'?{color: mainColor}:null}>지난180일</div>*/}
             </RangePicker>
           </div>
           <Select options={searchType}

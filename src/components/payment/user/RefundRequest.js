@@ -3,14 +3,14 @@ import React, {useEffect, useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../modal/Modal";
 import {modalController} from "../../../store";
 import {
-    ColSpan0,
-    ColSpan1,
-    ColSpan2,
-    ColSpan3,
-    ColSpan4,
-    DefaultButton,
-    RelativeDiv,
-    RowSpan, SubmitButton, ValidationScript,
+  ColSpan0,
+  ColSpan1,
+  ColSpan2,
+  ColSpan3,
+  ColSpan4,
+  DefaultButton, lightGray,
+  RelativeDiv,
+  RowSpan, SubmitButton, ValidationScript,
 } from "../../../assets/GlobalStyles";
 import {requestAmountPoint, retrieveUserPoint} from "../../../pages/layout/entity/UserPoint";
 import {RefundRequestTable} from "../../../pages/platform_manage/PaymentManageUser";
@@ -225,7 +225,7 @@ const Input = styled.input `
   width: 210px;
   font-size: 18px;
   font-weight: 600;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   border-radius: 5px;
   text-align: ${props => props.textAlingn};
   padding: 4px 10px;

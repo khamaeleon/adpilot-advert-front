@@ -7,6 +7,7 @@ import {campaignTemporaryListAtom} from "../../pages/campaign/entity/Info";
 import {toast} from "react-toastify";
 import {SmallButton} from "../../pages/campaign/styles/common";
 import {deleteTemporary, selTemporaryList} from "../../services/campaign/InfoAxios";
+import {light} from "../../assets/theme";
 
 export function TemporaryListModal(props) {
   const {onSubmit, userId} = props;
@@ -71,7 +72,7 @@ function TemporaryList (props) {
                   return (
                     <tr key={key}
                         style={selectedItem.name === item.name ? {
-                          backgroundColor: "#f5811f",
+                          backgroundColor: light.color.mainColor,
                           color: '#fff'
                         } : null}>
                       <td onClick={() => handleSelect(item)}>{item.name}</td>

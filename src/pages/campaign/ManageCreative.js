@@ -3,7 +3,7 @@ import {
   BoardHeader,
   BoardSearchDetail,
   BoardSearchResult,
-  ColSpan2,
+  ColSpan2, lightGray, mainColor, mainColorOpacity20, mainColorOpacity5,
   RowSpan,
   SearchButton,
   SearchInput
@@ -18,6 +18,7 @@ import {Link} from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import {light} from "../../assets/theme";
 
 export function ManageCreative() {
   const [open, setOpen] = useState({id: 0})
@@ -153,7 +154,7 @@ export function ManageCreative() {
           {creativeData.length !== 0 && creativeData.map((item,key) => {
             return(
               <div key={key}>
-                <CustomTableRow onClick={() => handleDetailData(item.userId)} style={{color: item.userId === open.id ? '#f5811f':null}}>
+                <CustomTableRow onClick={() => handleDetailData(item.userId)} style={{color: item.userId === open.id ? light.color.mainColor :null}}>
                   <div>{item.adverName}</div>
                   <div>{item.username}</div>
                   <div>{item.managerName}</div>
@@ -196,8 +197,8 @@ export const CustomTableRow = styled.div`
   }
 `
 export const CustomDetailTable = styled.div`
-  border-top: 1px solid #f5811f;
-  border-bottom: 1px solid #f5811f;
+  border-top: 1px solid ${mainColor};
+  border-bottom: 1px solid ${mainColor};
 `
 export const CustomDetailRow = styled.div`
   position: relative;
@@ -208,8 +209,8 @@ export const CustomDetailHeader = styled.div`
   position: relative;
   display: flex;
   justify-content: space-between;
-  background-color: #fffaf1;
-  border-bottom: 1px solid #ffe3cb;
+  background-color: ${mainColorOpacity5};
+  border-bottom: 1px solid ${mainColorOpacity20};
   & > div {
     border-bottom:0
   }
@@ -221,7 +222,7 @@ export const CreativeGroup = styled.div`
   justify-content: center;
   padding: 9px 0;
   flex-basis: 20%;
-  border-bottom: 1px solid #ffe3cb;
+  border-bottom: 1px solid ${mainColorOpacity20};
   & a {
     text-decoration: underline;
   }
@@ -232,14 +233,14 @@ export const CreativeType = styled.div`
   justify-content: center;
   padding: 9px 0;
   flex-basis: 10%;
-  border-bottom: 1px solid #ffe3cb;
-  border-left: 1px solid #ffe3cb
+  border-bottom: 1px solid ${mainColorOpacity20};
+  border-left: 1px solid ${mainColorOpacity20}
 `
 export const CreativeInfo = styled.div`
   padding: 9px 0;
   flex-basis: 60%;
   width: 60%;
-  border-bottom: 1px solid #ffe3cb;
+  border-bottom: 1px solid ${mainColorOpacity20};
 `
 
 export const CreativeImage = styled.div`
@@ -248,7 +249,7 @@ export const CreativeImage = styled.div`
   padding:5px;
   width: 100px;
   height: 100px;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   border-radius: 5px;
   vertical-align: middle;
   text-align: center;

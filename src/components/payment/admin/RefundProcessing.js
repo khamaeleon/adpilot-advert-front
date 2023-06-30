@@ -3,10 +3,11 @@ import React, {useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../modal/Modal";
 import {modalController} from "../../../store";
 import {
+  borderColor,
   ColSpan0,
   ColSpan2,
   ColSpan3,
-  ColSpan4,
+  ColSpan4, lightGray,
   RelativeDiv,
   RowSpan,
   SubmitButton,
@@ -281,7 +282,7 @@ const Input = styled.input `
   width: 210px;
   font-size: 18px;
   font-weight: 600;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   border-radius: 5px;
   text-align: ${props => props.textAlingn};
   padding: 4px 10px;
@@ -300,14 +301,14 @@ const RefundInformation = styled.div`
       width: ${(props) => props.multiTable ? "20%" : "33.33%"};
       padding: 12px;
       background-color: #f3f3f3;
-      border-top: 1px solid #e9ebee;
-      border-bottom: 1px solid #e9ebee;
+      border-top: 1px solid ${borderColor};
+      border-bottom: 1px solid ${borderColor};
     }
 
     & td {
       text-align: center;
       padding: 12px;
-      border-bottom: 1px solid #e5e5e5;
+      border-bottom: 1px solid ${borderColor};
       cursor: pointer;
       background-color: #fff;
     }

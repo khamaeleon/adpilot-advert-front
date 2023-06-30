@@ -21,12 +21,13 @@ import {BorderBox, Off, On, PreviewSubmit, Small, SwitchBox, TitColor} from "./s
 import {navigationName} from "../common/entity";
 import moment from "moment";
 import {useLocation} from "react-router-dom";
+import {light} from "../../assets/theme";
 
 export function SwitchComponent(props){
   const {value, cellProps, type, eventClick} = props
   const [select, setSelect] = useState(value)
   const [, setModal] = useAtom(modalController)
-  const background = !select ? {background: '#ddd'} : {background: '#f5811f'};
+  const background = !select ? {background: light.color.lightGray} : {background: light.color.mainColor};
   const position = select ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null
 
   const handleClick = (confirm) => {
@@ -193,7 +194,7 @@ export function Icon(props) {
 
 function Table(props) {
   const {columns, data, settings, groups, noDirectives } = props
-  const [activeCell, setActiveCell] = useState([0]);
+  const [, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = {minHeight: 550}
   const location = useLocation()

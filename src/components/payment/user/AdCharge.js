@@ -3,7 +3,17 @@ import React, {useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../modal/Modal";
 import styled from "styled-components";
 import {modalController} from "../../../store";
-import { ColSpan2, ColSpan3, ColSpan4, DefaultButton, RowSpan, RelativeDiv, ValidationScript, SubmitButton} from "../../../assets/GlobalStyles";
+import {
+  ColSpan2,
+  ColSpan3,
+  ColSpan4,
+  DefaultButton,
+  RowSpan,
+  RelativeDiv,
+  ValidationScript,
+  SubmitButton,
+  lightGray
+} from "../../../assets/GlobalStyles";
 import {SmallButton} from "../../../pages/campaign/styles/common";
 import {decimalFormat, removeStr} from "../../../common/StringUtils";
 import {useForm} from "react-hook-form";
@@ -196,7 +206,7 @@ const Input = styled.input `
   width: 200px;
   font-size: 18px;
   font-weight: 600;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   border-radius: 5px;
   text-align: right;
   padding: 3px 8px;

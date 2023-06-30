@@ -52,6 +52,7 @@ function SettingChangeModal(props) {
         dataState
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reset])
   const onError = (error) => console.log(error)
   /**

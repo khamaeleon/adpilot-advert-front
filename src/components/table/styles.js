@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {borderColor, lightGray, mainColor} from "../../assets/GlobalStyles";
 
 export const SwitchBox = styled.div`
   display: flex;
@@ -7,7 +8,7 @@ export const SwitchBox = styled.div`
   cursor: pointer;
   width: 68px;
   height: 30px;
-  background: #ddd;
+  background: ${lightGray};
   border-radius: 68px;
   position: relative;
   transition: background-color .2s;
@@ -44,7 +45,7 @@ export const Off = styled.span`
   color: #999
 `
 export const BorderBox = styled.div`
-  border: 1px solid #e5e5e5;
+  border: 1px solid ${borderColor};
   margin-left: 15px;
   width: 100%;
   min-height: 45px;
@@ -78,7 +79,7 @@ export const TitColor = styled.div`{
   display: flex;
   align-items: center;
   &:hover {
-    color: #f5811f;
+    color: ${mainColor};
     > div {
       background-image: url("/assets/images/table/icon_pop_on@2x.png");
       background-image: -webkit-image-set(url("/assets/images/table/icon_pop_on.png") 1x, url("/assets/images/table/icon_pop_on@2x.png") 2x, url("/assets/images/table/icon_pop_on@3x.png") 3x);

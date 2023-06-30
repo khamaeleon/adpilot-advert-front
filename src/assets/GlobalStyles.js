@@ -2,13 +2,16 @@ import styled, {createGlobalStyle, css} from "styled-components";
 import DatePicker from "react-datepicker";
 import {light} from "./theme";
 
-export const mainColor = css`${props => props.theme.color.mainColor}`
-export const lightMainColor = css`${props => props.theme.color.lightMainColor}`
 const textColor = css`${props => props.theme.color.textColor}`
 const subColor = css`${props => props.theme.color.subColor}`
-const borderColor = css`${props => props.theme.color.borderColor}`
-const lightGray = css`${props => props.theme.color.lightGray}`
 const buttonHeightSize = 40
+
+export const mainColor = css`${props => props.theme.color.mainColor}`
+export const mainColorOpacity5 = css`${props => props.theme.color.mainColorOpacity5}`
+export const mainColorOpacity20 = css`${props => props.theme.color.mainColorOpacity20}`
+export const bgColor = css`${props => props.theme.color.bgColor}`
+export const borderColor = css`${props => props.theme.color.borderColor}`
+export const lightGray = css`${props => props.theme.color.lightGray}`
 
 export const GlobalStyles = createGlobalStyle`
   html {
@@ -584,7 +587,7 @@ export const selectStyle = {
       backgroundColor:
         isDisabled ? undefined :
           isSelected ?  light.color.mainColor:
-            isFocused ? light.color.lightMainColor
+            isFocused ? light.color.mainColorOpacity20
               :undefined,
       color:
         isDisabled ? light.color.textColor :
