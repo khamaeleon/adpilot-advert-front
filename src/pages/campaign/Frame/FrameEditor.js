@@ -2,9 +2,6 @@ import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import ImageUploading from "react-images-uploading";
 import {toast} from "react-toastify";
-
-
-
 export function FrameEditor(props){
   const {size, guide, set, publicSetting, setPublicSetting} = props
   const boundaryRef = useRef()
@@ -73,7 +70,6 @@ export function FrameEditor(props){
   useEffect(() => {
     setPublicSetting(elementPosition)
   }, [elementPosition]);
-
 
   const handleDoubleClick = (e, index) => {
     e.stopPropagation()

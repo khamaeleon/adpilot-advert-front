@@ -692,7 +692,7 @@ export function BannerCreative() {
                             value:  /(http(s)?:\/\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi,
                             message: "http(s)://가 포함된 url 주소를 확인해주세요."
                           },
-                          value:defaultSetting.pcUrl || '',
+                          value: defaultSetting.pcUrl || '',
                           onChange:handleChangePcUrl
                         })}
                         placeholder={'http:// 또는 https://를 포함한 URL 입력'}/>
@@ -924,8 +924,7 @@ export function BannerCreative() {
                 <div key={key}>
                   <div>{item}</div>
                   {isLoading &&
-                    <iframe name={item} src={'../frame.html'} width={size[0]} height={size[1]}
-                            style={{border: '1px solid #ddd'}}/>
+                    <iframe name={item} src={'../frame.html'} width={size[0]} height={size[1]} style={{border: '1px solid #ddd'}}/>
                   }
                 </div>
               )
@@ -939,8 +938,7 @@ export function BannerCreative() {
               return (
                 <div key={key}>
                   <div>{item}</div>
-                  <iframe name={item} src={'../frame.html'} width={size[0]} height={size[1]}
-                          style={{border: '1px solid #ddd'}}/>
+                  <iframe name={item} src={'../frame.html'} width={size[0]} height={size[1]} style={{border: '1px solid #ddd'}}/>
                 </div>
               )
             })}
@@ -953,8 +951,7 @@ export function BannerCreative() {
               return (
                 <div key={key}>
                   <div>{item}</div>
-                  <iframe name={item} src={'../frame.html'} width={size[0]} height={size[1]}
-                          style={{border: '1px solid #ddd'}}/>
+                  <iframe name={item} src={'../frame.html'} width={size[0]} height={size[1]} style={{border: '1px solid #ddd'}}/>
                 </div>
               )
             })}
