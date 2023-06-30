@@ -9,6 +9,7 @@ import {
   ColSpan4,
   Input,
   RowSpan,
+  selectStyle,
   Span3,
   Span4,
   SubmitButton,
@@ -346,6 +347,9 @@ function CampaignFourBanner(props) {
                       value={campaignCreativeInfo.clickInducementType !== undefined ?
                         clickInducementType?.find(value => value.value === campaignCreativeInfo.clickInducementType) : ''}
                       onChange={handleClickInducementType}
+                      width={145}
+                      styles={selectStyle}
+                      isSearchable={false}
               />
             </Row>
           </ColSpan2>
@@ -685,6 +689,9 @@ function CampaignFourNative(props) {
                     value={campaignCreativeInfo.clickInducementType !== undefined ?
                       clickInducementType.find(value => value.value === campaignCreativeInfo.clickInducementType) : ''}
                     onChange={handleClickInducementType}
+                    width={145}
+                    styles={selectStyle}
+                    isSearchable={false}
             />
           </Row>
         </RowSpan>

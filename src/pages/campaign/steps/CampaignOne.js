@@ -3,6 +3,7 @@ import {
   BoardHeader,
   BoardSearchResult,
   CampaignType,
+  ColSpan0,
   ColSpan1,
   ColSpan2,
   ColSpan4,
@@ -51,7 +52,6 @@ export function CampaignOne() {
     })
       resetInfo();
       reset();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   /**
    * 광고주 설정
@@ -283,13 +283,9 @@ export function CampaignOne() {
                                 {...field}
                                 value={campaignBasicInfo !== null && pixelList !== null  ? pixelList.find(item =>item.value === campaignBasicInfo.pixelId) : ''}
                                 onChange={handleChangePixel}
-                                styles={{
-                                  input: (baseStyles, state) => (
-                                    {
-                                      ...baseStyles,
-                                      minWidth: "300px",
-                                    })
-                                }}
+                                width={300}
+                                styles={selectStyle}
+                                isSearchable={false}
                         />
                       )}
                     />
@@ -356,7 +352,7 @@ export function CampaignOne() {
           <RowSpan>
             <ColSpan4>
               <ColTitle style={{padding: 0}}><Span4>캠페인 상세 목표 선택</Span4></ColTitle>
-              <ColSpan1>
+              <ColSpan0>
                 <div className={'relative'}>
                   <Controller
                     name="goal"
@@ -371,6 +367,8 @@ export function CampaignOne() {
                       <Select
                         options={goalList !== null ? goalList : []}
                         styles={selectStyle}
+                        width={158}
+                        isSearchable={false}
                         placeholder={'목표 선택'}
                         {...field}
                         value={(campaignBasicInfo.goal !== undefined && goalList != null) ? goalList.find(d=>d.value === campaignBasicInfo.goal) : campaignBasicInfo.goal}
@@ -381,7 +379,7 @@ export function CampaignOne() {
                   {errors.goal && <ValidationScript>{errors.goal?.message}</ValidationScript>}
                 </div>
 
-              </ColSpan1>
+              </ColSpan0>
               <ColSpan1>
                 <div className={"relative"}>
                   <div className={'relative'}>

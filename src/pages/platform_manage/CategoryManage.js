@@ -208,7 +208,7 @@ export function CategoryManage() {
                   <SubCategoryItem key={key}>{item.name}</SubCategoryItem>
                 )
               })}
-              {topLevelCategoryList?.length === 0 && <div style={{padding: 30}}>검색 정보가 없습니다.</div>}
+              {topLevelCategoryList?.length === 0 && <div style={{padding: 30}}>검색 결과가 없습니다.</div>}
             </SubCategoryBody>
           </SubCategory>
         </CategoryContainer>

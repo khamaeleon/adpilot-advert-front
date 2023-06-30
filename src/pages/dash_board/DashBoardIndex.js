@@ -316,6 +316,7 @@ function ChartComponent() {
                     value={platformStatusType.filter(options => options.value === dataType)}
                     isOptionDisabled={option => option.value === dataType2}
                     onChange={handleChangeDataType}
+                    isSearchable={false}
             />
             <span
                 onClick={() => handleOnChangeChartStatus(dataType)}
@@ -337,6 +338,7 @@ function ChartComponent() {
                     value={platformStatusType.filter(options => options.value === dataType2)}
                     isOptionDisabled={option => option.value === dataType}
                     onChange={handleChangeDataType2}
+                    isSearchable={false}
             />
             <span
                 onClick={() => handleOnChangeChartStatus(dataType2)}
@@ -443,7 +445,7 @@ function DashBoardIndex() {
   }
   const rowExpandHeight = ({ data }) => {
     if(data.campaignCount < 6) {
-      return 114+(data.campaignCount*60)
+      return 112+(data.campaignCount*60)
     } else if(data?.campaignCount === 0) {
       return 300
     }

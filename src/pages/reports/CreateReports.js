@@ -297,7 +297,7 @@ export default function CreateReports() {
               <Row>
                 <Span4>보고서 속성 선택</Span4>
               </Row>
-              <ColSpan2>
+              <RelativeDiv>
                 <label>
                   <input type="radio" name={'defaultType'} value={'period'} onChange={handleChangeDefaultColumn}/>
                   <span>기간별 보고서</span>
@@ -306,7 +306,7 @@ export default function CreateReports() {
                   <input type="radio" name={'defaultType'} value={'scopes'} onChange={handleChangeDefaultColumn}/>
                   <span>광고 정보별 보고서</span>
                 </label>
-              </ColSpan2>
+              </RelativeDiv>
             </RowSpan>
             {defaultType !== null &&
             <RowSpan box={true} column={true}>

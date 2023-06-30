@@ -3,7 +3,7 @@ import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail,
+  BoardSearchDetail, ColSpan1, ColSpan2,
   ColSpan3,
   ColTitle,
   Input,
@@ -102,9 +102,9 @@ function PlatformAdminDetail() {
           </TitleContainer>
           <Board>
             <BoardHeader>기본 정보</BoardHeader>
-            <BoardSearchDetail>
-              <RowSpan>
-                <ColSpan3>
+            <BoardSearchDetail column={true}>
+              <RowSpan style={{justifyContent: 'flex-start'}}>
+                <ColSpan2>
                   <ColTitle><Span4>아이디</Span4></ColTitle>
                   <RelativeDiv>
                     <Input
@@ -114,17 +114,19 @@ function PlatformAdminDetail() {
                       readOnly={true}
                     />
                   </RelativeDiv>
+                </ColSpan2>
+                <ColSpan1>
                   <PwChange title={'비밀번호 변경'} modalInfo={'ADMIN'} onSave={handleSavePassword} onSubmit={onModalPw}/>
-                </ColSpan3>
+                </ColSpan1>
               </RowSpan>
             </BoardSearchDetail>
             <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
           </Board>
           <Board>
             <BoardHeader>담당자 정보</BoardHeader>
-            <BoardSearchDetail>
+            <BoardSearchDetail column={true}>
               <RowSpan>
-                <ColSpan3>
+                <ColSpan2>
                   <ColTitle><Span4>담당자명</Span4></ColTitle>
                   <RelativeDiv>
                     <Input
@@ -134,10 +136,10 @@ function PlatformAdminDetail() {
                       readOnly={true}
                     />
                   </RelativeDiv>
-                </ColSpan3>
+                </ColSpan2>
               </RowSpan>
               <RowSpan>
-                <ColSpan3>
+                <ColSpan2>
                   <ColTitle><Span4>담당자 연락처</Span4></ColTitle>
                   <RelativeDiv>
                     <Input
@@ -155,7 +157,7 @@ function PlatformAdminDetail() {
                     />
                     {errors.phoneNumber && <ValidationScript>{errors.phoneNumber?.message}</ValidationScript>}
                   </RelativeDiv>
-                </ColSpan3>
+                </ColSpan2>
               </RowSpan>
             </BoardSearchDetail>
             <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>

@@ -3,7 +3,7 @@ import {
   BoardHeader,
   BoardTableContainer,
   RowSpan,
-  SearchButton,
+  SaveExcelButton,
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
@@ -97,12 +97,12 @@ function ConversionManage() {
     downloadBlob(blob);
   };
   const rowExpandHeight = ({ data }) => {
-    if(data?.totalProductCount < 6) {
-      return 85+(data?.totalProductCount*45)
+    if(data?.totalProductCount < 8) {
+      return 82+(data?.totalProductCount*45)
     } else if(data?.totalProductCount === 0) {
       return 300
     }
-    return 500;
+    return 420;
   }
   return (
     <main>
@@ -113,7 +113,7 @@ function ConversionManage() {
           { conversionListDataState !== null &&
             <>
               <RowSpan style={{display: 'flex', justifyContent: 'flex-end'}}>
-                <SearchButton style={{ margin: '0 10px 20px' }} onClick={exportCSV}>CSV 다운로드</SearchButton>
+                <SaveExcelButton style={{ margin: '0 10px 20px' }} onClick={exportCSV}>엑셀 저장</SaveExcelButton>
               </RowSpan>
               <ReactDataGrid
                 licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}

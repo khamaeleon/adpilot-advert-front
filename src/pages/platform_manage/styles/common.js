@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {mainColor} from "../../../assets/GlobalStyles";
 
 export const CategoryContainer = styled.div`
   display: flex;
@@ -49,10 +50,11 @@ export const CategoryItem = styled.div`
   padding: 12px 18px;
   width: 100%;
   border-bottom: ${(props) => props.active ? "1px solid #ffe3cb" : "1px solid #ddd"};
-  border-left: ${(props) => props.active ? "2px solid #f5811f" : null};
+  border-left: ${(props) => props.active ? '2px solid' : null};
+  border-left-color: ${(props) => props.active ? mainColor : null};
   cursor: pointer;
   background-color: ${(props) => props.active ? "#fffaf1" : null};
-  color: ${(props) => props.active ? "#f5811f" : null};
+  color: ${(props) => props.active ? mainColor : null};
 `
 
 export const SubCategoryBody = styled.div`
@@ -62,7 +64,6 @@ export const SubCategoryBody = styled.div`
   width: 100%;
   max-height: 500px;
   overflow-y: auto;
-  
   & div:nth-child(4n) {
     border-right: 0;
   }
@@ -118,8 +119,8 @@ export const Image = styled.img`
 `
 
 export const DuplicateButton = styled.button`
-  width: 150px;
-  height: 45px;
+  width: 120px;
+  height: 40px;
   background-color: #777;
   border-radius: 5px;
   color: #fff;

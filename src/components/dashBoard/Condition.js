@@ -10,7 +10,7 @@ import {
   Input,
   RangePicker,
   RelativeDiv,
-  RowSpan
+  RowSpan, selectStyle
 } from "../../assets/GlobalStyles";
 import ko from "date-fns/locale/ko";
 import {HorizontalRule} from "../common/Common";
@@ -169,32 +169,22 @@ export function DashBoardCondition(props) {
         <RowSpan style={{marginTop: 0, justifyContent: 'flex-start'}}>
           <ColSpan0 style={{marginRight: 10}}>
             <ColTitle style={{paddingLeft: 0}}>광고 상품</ColTitle>
-            <Select components={{IndicatorSeparator: () => null}}
-                    options={productType}
+            <Select options={productType}
                     value={productType.find(value => value.value === searchState?.productType)}
                     onChange={handleProductType}
-                    styles={{
-                      input: (baseStyles, state) => (
-                        {
-                          ...baseStyles,
-                          width: "100px",
-                        })
-                    }}
+                    width={160}
+                    styles={selectStyle}
+                    isSearchable={false}
             />
           </ColSpan0>
           <ColSpan0 style={{marginRight: 10}}>
             <ColTitle style={{paddingLeft: 0}}>타겟팅</ColTitle>
-            <Select components={{IndicatorSeparator: () => null}}
-                    options={targetingType}
+            <Select options={targetingType}
                     value={targetingType.find(value => value.value === searchState?.targetingType)}
                     onChange={handleTargetingType}
-                    styles={{
-                      input: (baseStyles, state) => (
-                        {
-                          ...baseStyles,
-                          width: "100px",
-                        })
-                    }}
+                    width={160}
+                    styles={selectStyle}
+                    isSearchable={false}
             />
           </ColSpan0>
           <ColSpan0>
@@ -284,7 +274,7 @@ export function DashBoardCondition(props) {
                      value={keyword}
                      onChange={handleSearchValue}
                      onKeyDown={e => (e.code === 'Enter') && handleData()}
-                     style={{width: 266}}
+                     style={{width: 220}}
               />
             </ColSpan0>
           }

@@ -4,9 +4,9 @@ import {
   CancelButton,
   ColSpan4,
   Input,
-  inputStyle,
   RelativeDiv,
   RowSpan,
+  selectStyle,
   Span4,
   SubmitButton,
   TextArea,
@@ -161,8 +161,9 @@ function WriteForm(props) {
                   <ColSpan4>
                     <Span4>문의 형식</Span4>
                     <RelativeDiv>
-                      <Select styles={inputStyle}
-                              components={{IndicatorSeparator: () => null}}
+                      <Select styles={selectStyle}
+                              width={150}
+                              isSearchable={false}
                               options={inquiryTypes}
                               value={inquiryType.value !== '' ? inquiryTypes.find(
                                       type => type.value === inquiryType.value)

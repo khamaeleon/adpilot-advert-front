@@ -4,9 +4,8 @@ import {
   ColSpan2,
   ColTitle,
   CopyCode,
-  RowSpan,
+  RowSpan, SaveExcelButton,
   Script,
-  SearchButton,
   Site,
   SubmitButton,
 } from "../../assets/GlobalStyles";
@@ -296,8 +295,8 @@ function Table(props) {
   return (
     <>
       {props.downloadList &&
-        <RowSpan>
-          <SearchButton style={{ marginTop: 20 }} onClick={exportCSV}>CSV 다운로드</SearchButton>
+        <RowSpan style={{justifyContent: 'flex-end'}}>
+          <SaveExcelButton onClick={exportCSV}>엑셀 저장</SaveExcelButton>
         </RowSpan>
       }
       <RowSpan>

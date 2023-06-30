@@ -14,7 +14,8 @@ import {
   GraySearchButton,
   RangePicker,
   RowSpan,
-  Span1
+  Span1,
+  selectStyle
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
 import ko from "date-fns/locale/ko";
@@ -535,36 +536,26 @@ export default function CustomReports() {
             </RowSpan>
             <RowSpan>
               <ColSpan0>
-                <ColTitle><Span1>광고 상품</Span1></ColTitle>
-                <Select components={{IndicatorSeparator: () => null}}
-                        options={productType}
+                <Span1>광고 상품</Span1>
+                <Select options={productType}
                         defaultValue={productType[0]}
                         value={productType.find(item => item.value === searchCondition.productType)}
                         onChange={handleChangeProduct}
-                        styles={{
-                          input: (baseStyles, state) => (
-                            {
-                              ...baseStyles,
-                              width: "100px",
-                            })
-                        }}
+                        width={130}
+                        styles={selectStyle}
+                        isSearchable={false}
                 />
                 {/*<Select styles={selectStyle} defaultValue={productType[0]} options={productType} onChange={handleChangeProduct} value={productType.find(item => item.value === searchCondition.productType)}/>*/}
               </ColSpan0>
               <ColSpan0>
                 <ColTitle><Span1>디바이스</Span1></ColTitle>
-                <Select components={{IndicatorSeparator: () => null}}
-                        options={deviceType}
+                <Select options={deviceType}
                         defaultValue={deviceType[0]}
                         value={deviceType.find(item => item.value === searchCondition.deviceType)}
                         onChange={handleChangeDevice}
-                        styles={{
-                          input: (baseStyles, state) => (
-                            {
-                              ...baseStyles,
-                              width: "100px",
-                            })
-                        }}
+                        width={130}
+                        styles={selectStyle}
+                        isSearchable={false}
                 />
                 {/*<div style={{width: '100px'}}>*/}
                 {/*  <Select styles={selectStyle} defaultValue={deviceType[0]} options={deviceType} onChange={handleChangeDevice} value={deviceType.find(item => item.value === searchCondition.deviceType)}/>*/}

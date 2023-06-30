@@ -57,7 +57,6 @@ function PaymentManage() {
       keywordType: searchPaymentParamsState.searchType,
       keyword: searchPaymentParamsState.search
     };
-
     return paymentAllListRequest ( requestData )
       .then(response => {
         console.log(response);
