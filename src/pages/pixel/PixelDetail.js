@@ -8,7 +8,7 @@ import {
   DefaultButton,
   Input,
   RelativeDiv,
-  RowSpan,
+  RowSpan, selectStyle,
   SubmitContainer
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
@@ -109,8 +109,7 @@ function PixelDetail() {
     })
   }
 
-  const onSubmit = (data) => {
-    console.log(pixelInfoListState)
+  const onSubmit = () => {
     updatePixelInfo(state.id,pixelInfoListState).then(response =>{
       if(response){
         navigate('/board/pixel')
@@ -218,13 +217,8 @@ function PixelDetail() {
                                       {...field}
                                       value={pixelInfoListState.mainCategoryCode !== '' ? topLevelCategoryList.find(value => value.value === pixelInfoListState.mainCategoryCode) : ''}
                                       onChange={handleSelectTopCategory}
-                                      styles={{
-                                        input: (baseStyles, state) => (
-                                          {
-                                            ...baseStyles,
-                                            minWidth: "300px",
-                                          })
-                                      }}
+                                      styles={selectStyle}
+                                      isSearchable={false}
                               />
                             )}
                           />
@@ -249,13 +243,8 @@ function PixelDetail() {
                                       {...field}
                                       value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
                                       onChange={handleSelectRowCategory}
-                                      styles={{
-                                        input: (baseStyles, state) => (
-                                          {
-                                            ...baseStyles,
-                                            minWidth: "300px",
-                                          })
-                                      }}
+                                      styles={selectStyle}
+                                      isSearchable={false}
                               />
                             )}
                           />
@@ -319,13 +308,8 @@ function PixelDetail() {
                                   {...field}
                                   value={pixelInfoListState.hostType !== '' ? hostList.find(value => value.value === pixelInfoListState.hostType) : ''}
                                   onChange={handleSelectHosting}
-                                  styles={{
-                                    input: (baseStyles, state) => (
-                                      {
-                                        ...baseStyles,
-                                        minWidth: "300px",
-                                      })
-                                  }}
+                                  styles={selectStyle}
+                                  isSearchable={false}
                           />
                         )}
                       />

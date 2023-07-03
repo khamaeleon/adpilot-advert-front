@@ -1316,6 +1316,7 @@ export const ValidationScript = styled.div`
 export const Input = styled('input')`
   padding:0 20px;
   width: 100%;
+  text-align : ${(props)=>props?.textAlign !== 'right' ? 'left' : 'right'};
   border: 1px solid ${lightGray};
   height: ${buttonHeightSize}px;
   border-radius: 5px;
