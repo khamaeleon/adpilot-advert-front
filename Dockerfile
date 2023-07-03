@@ -14,7 +14,7 @@ ENV GENERATE_SOURCEMAP=false
 ENV NODE_OPTIONS=--max-old-space-size=2048
 COPY . /home/app
 
-CMD ["sh", "-c", "run.sh"]
+CMD ["sh", "-c", "/home/app/run.sh"]
 
 #FROM nginx:latest
 # nginx의 기본 설정을 삭제하고 앱에서 설정한 파일을 복사
