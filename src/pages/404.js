@@ -4,9 +4,6 @@ import {DefaultButton} from "../assets/GlobalStyles";
 import styled from "styled-components";
 
 export class NotFound extends Component {
-  constructor() {
-    super();
-  }
   render() {
     return (
       <div id='container'>

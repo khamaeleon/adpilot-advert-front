@@ -16,6 +16,7 @@ export default function DragToSelect({readOnly}) {
     if (readOnly) {
       setCellEnabled(true)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const onChangeCells = (cells) => {

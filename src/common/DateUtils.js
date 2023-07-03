@@ -7,7 +7,7 @@ import moment from "moment";
 export function getThisMonth(){
   const date = new Date();
   const year = date.getFullYear();
-  let month =  new String(date.getMonth() + 1)
+  let month =  String(date.getMonth() + 1)
   month = month >= 10 ? month : '0' + month
   const rangeDay ={
     startDay:moment(year+month+'01').format('YYYY-MM-DD'),
