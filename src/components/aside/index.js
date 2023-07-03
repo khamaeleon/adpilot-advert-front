@@ -72,7 +72,7 @@ function AsideList (props) {
               {item.child.length > 0 &&
                 <>
                 {item.name === 'reports' ?
-                  <SubMenu active={item.include.includes(id)} length={reportLists?.length}>
+                  <SubMenu active={item.include.includes(id)} length={reportLists?.length + 1}>
                     <div>
                       <div>
                         <Link to={`/board/reports`} style={id === 'reports' ? {color:'#fff'}:null}>보고서 생성</Link>
@@ -87,7 +87,7 @@ function AsideList (props) {
                     </div>
                   </SubMenu>
                   :
-                  <SubMenu active={item.include.includes(id)}>
+                  <SubMenu active={item.include.includes(id)} length={item.child.length}>
                       {item.child.map((child, key) => {
                         return (
                           <div key={key}>
@@ -220,7 +220,6 @@ const Narrow = styled.div`
   justify-content: flex-end;
   padding: 14px;
   border-top: 1px solid #7e7e7e;
-
   & button {
     background-color: rgba(0, 0, 0, 0);
   }
@@ -247,7 +246,7 @@ const SubMenu = styled.div`
   padding-left:52px;
   padding-top: ${props => props.active ? '10px':0};
   padding-bottom: ${props => props.active ?'10px':0};
-  max-height: ${props => props.active ? '300px' : 0};
+  max-height: ${({active,length}) => active ? `${(length*34.5)+20}px` : 0};
   & > div {
     & > div {
       color: #cccccc;

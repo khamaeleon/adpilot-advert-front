@@ -55,7 +55,7 @@ function RefundRequestModal (props) {
   const {title, refundData} = props
   const [refundType, setRefundType] = useState("전액 환불") // 환불 종류
   const [refundAmount, setRefundAmount] = useState(0) // 환불 금액
-  const [note] = useState("") // 비고 내용
+  const note = useState("") // 비고 내용
   const {register, handleSubmit, setError, formState:{errors} } = useForm()
   const [userPoint, setUserPoint] = useAtom(retrieveUserPoint)
   const [requestAmount, ] = useAtom(requestAmountPoint)
