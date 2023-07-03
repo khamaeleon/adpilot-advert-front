@@ -28,6 +28,7 @@ function EventUnitPriceDetail() {
     selPriceEventList(state.id).then(response => {
       setEventUnitPriceDetailDataState(response)
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

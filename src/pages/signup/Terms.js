@@ -14,7 +14,7 @@ export default function Terms() {
   const resetInfo = useResetAtom(accountInfoAtom)
 
   useEffect(()=> {
-    if (termsInfo?.length != 0) {
+    if (termsInfo?.length !== 0) {
       setAccountInfo({
         ...accountInfo,
         serviceTermsId: termsInfo.find(value => value.termsType === 'SERVICE').id,
@@ -23,14 +23,15 @@ export default function Terms() {
             value => value.termsType === 'OPERATION').id
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[termsInfo])
 
   useEffect(()=>{
-
     resetInfo();
     selPolicyLatestTerms().then(response => {
       setTermsInfo(response)
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   /**
@@ -50,6 +51,7 @@ export default function Terms() {
         validation: false
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountInfo, isAgreeAll]);
 
   /**
@@ -106,9 +108,11 @@ export default function Terms() {
         <TermsBox>
           {termsInfo !== null &&
             termsInfo.map((value) => {
+              let val;
               if (value.termsType === 'SERVICE') {
-                return value.content
+                val = value.content
               }
+              return val
             })
           }
         </TermsBox>
@@ -130,9 +134,11 @@ export default function Terms() {
         <TermsBox>
           {termsInfo !== null &&
             termsInfo.map((value) => {
+              let val
               if (value.termsType === 'PRIVACY') {
-                return value.content
+                 val = value.content
               }
+              return val
             })
           }
         </TermsBox>
@@ -151,9 +157,11 @@ export default function Terms() {
         <TermsBox>
           {termsInfo !== null &&
             termsInfo.map((value) => {
+              let val;
               if (value.termsType === 'OPERATION') {
-                return value.content
+                val = value.content
               }
+              return val
             })
           }
         </TermsBox>

@@ -9,6 +9,7 @@ import {
   ColSpan4,
   Input,
   RowSpan,
+  selectStyle,
   Span3,
   Span4,
   SubmitButton,
@@ -47,7 +48,6 @@ import {
   uploadLogoImages,
   uploadNativeImages
 } from "../../../services/campaign/CreativeAxios";
-import moment from "moment";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {useLocation, useNavigate, useParams} from "react-router-dom";
@@ -347,6 +347,9 @@ function CampaignFourBanner(props) {
                       value={campaignCreativeInfo.clickInducementType !== undefined ?
                         clickInducementType?.find(value => value.value === campaignCreativeInfo.clickInducementType) : ''}
                       onChange={handleClickInducementType}
+                      width={145}
+                      styles={selectStyle}
+                      isSearchable={false}
               />
             </Row>
           </ColSpan2>
@@ -686,6 +689,9 @@ function CampaignFourNative(props) {
                     value={campaignCreativeInfo.clickInducementType !== undefined ?
                       clickInducementType.find(value => value.value === campaignCreativeInfo.clickInducementType) : ''}
                     onChange={handleClickInducementType}
+                    width={145}
+                    styles={selectStyle}
+                    isSearchable={false}
             />
           </Row>
         </RowSpan>

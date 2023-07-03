@@ -3,7 +3,14 @@ import React, {useEffect, useState} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "./Modal";
 import styled from "styled-components";
 import {modalController} from "../../store";
-import {ColSpan2, DefaultButton, RowSpan, Span4} from "../../assets/GlobalStyles";
+import {
+  borderColor,
+  ColSpan2,
+  DefaultButton,
+  mainColor, mainColorOpacity20, mainColorOpacity5,
+  RowSpan,
+  Span4
+} from "../../assets/GlobalStyles";
 import {SmallButton} from "../../pages/campaign/styles/common";
 import {
   allowInventoryIdsAtom,
@@ -182,7 +189,7 @@ function SearchModal (props) {
                     </InventoryItem>
                   )
                 })}
-                {mediaInventoryInfo === null || mediaInventoryInfo.length === 0 &&
+                { (mediaInventoryInfo === null || mediaInventoryInfo.length === 0) &&
                   <Centered>데이터가 없습니다. 지면을 검색해주세요.</Centered>
                 }
               </SearchInventoryItemResult>
@@ -243,7 +250,7 @@ function SearchModal (props) {
 }
 
 const SearchInventoryMain = styled.div`
-  border: 1px solid #e5e5e5;
+  border: 1px solid ${borderColor};
   padding: 20px 15px;
   width: 100%;
 `
@@ -255,7 +262,7 @@ const SearchInventoryInputGroup = styled.div`
   & input[type='text'] {
     padding: 10px;
     width: 100%;
-    border: 1px solid #e5e5e5;
+    border: 1px solid ${borderColor};
     border-radius: 5px;
   }
   & button {
@@ -271,25 +278,24 @@ const SearchInventoryInputGroup = styled.div`
 
 const SearchInventoryItemResult = styled.div`
   position: relative;
-  border: 1px solid #e5e5e5;
+  border: 1px solid ${borderColor};
   height: 350px;
   overflow: auto;
   width: 100%;
   font-size: 12px;
 `
-
 const InventoryItem = styled.div`
   display: flex;
-  border-left: 2px solid ${(props) => props.active ? '#f5811f': '#fff'};
-  border-bottom: 1px solid #e5e5e5;
-  color: ${(props) => props.active ? '#f5811f': null};
-  background-color: ${(props) => props.active ? '#fffaf1': null};;
+  border-left: 2px solid ${(props) => props.active ? mainColor: '#fff'};
+  border-bottom: 1px solid ${borderColor};
+  color: ${(props) => props.active ? mainColor: null};
+  background-color: ${(props) => props.active ? mainColorOpacity5: null};;
   &:hover {
-    background-color: #ffe3cb;
-    border-left: 2px solid #ffe3cb;
-    border-bottom: 1px solid #ffe3cb;
+    background-color: ${mainColorOpacity20};
+    border-left: 2px solid ${mainColorOpacity20};
+    border-bottom: 1px solid ${mainColorOpacity20};
     cursor: pointer;
-    color: #f5811f;
+    color: ${mainColor};
   }
 `
 
@@ -297,7 +303,7 @@ const SearchInventoryHeader = styled.div`
   display: flex;
   width: 100%;
   margin-top: 15px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid ${borderColor};
   background-color: #f3f3f3;
   font-size: 12px;
 `
@@ -308,10 +314,10 @@ const SelectedInventoryMain = styled.div`
   width: 100%;
   line-height: 30px;
   background-color: #f9fafb;
-  border: 1px solid #e5e5e5;
+  border: 1px solid ${borderColor};
   & > div:last-child {
     & > span {
-      color: #f5811f;
+      color: ${mainColor};
     }
     &:before{
       content:'';
@@ -328,7 +334,7 @@ const SelectedInventoryHeader = styled.div`
   display: flex;
   width: 100%;
   background-color: #f3f3f3;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid ${borderColor};
   text-align: center;
   font-size: 12px;
 `
@@ -341,15 +347,13 @@ const SelectedInventoryResult = styled.div`
 
 const SelectedInventoryResultItem = styled.div`
   display: flex;
-  border-left: ${(props) => props.active ? '2px solid #f5811f': '2px solid #fff'};
-  border-bottom: 1px solid #e5e5e5;
-  color: ${(props) => props.active ? '#f5811f': null};
+  border-bottom: 1px solid ${borderColor};
   &:hover {
-    background-color: #fffaf1;
-    border-left: 2px solid #ffe3cb;
-    border-bottom: 1px solid #ffe3cb;
+    background-color: ${mainColorOpacity5};
+    border-left: 2px solid ${mainColorOpacity20};
+    border-bottom: 1px solid ${mainColorOpacity20};
     cursor: pointer;
-    color: #f5811f;
+    color: ${mainColor};
   }
   & > div {
     text-overflow: ellipsis;
@@ -372,14 +376,14 @@ const Code = styled.div`
   & a {
     display: inline-block;
     border: 1px solid #777777;
-    background-color: #ffff;
+    background-color: #fff;
     padding: 4px;
     border-radius: 4px;
     font-size: 12px;
     &:hover {
-      border: 1px solid #f5811f;
+      border: 1px solid ${mainColor};
       cursor: pointer;
-      color: #f5811f;
+      color: ${mainColor};
     }
   }
 `

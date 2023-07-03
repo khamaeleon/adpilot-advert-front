@@ -1,12 +1,15 @@
+const mainColor = '#f5811f'
 export const light = {
   // ... 사용자 정의 theme code
   color: {
-    mainColor: "#f5811f",
-    subColor: '#cccccc',
-    textColor: '#222222',
-    borderColor: '#e9ebee',
+    mainColor: mainColor,
+    mainColorOpacity20: mainColor+'3d',
+    mainColorOpacity5: mainColor+'12',
+    bgColor: '#f8f8f8',
+    subColor: '#ccc',
+    textColor: '#222',
+    borderColor: '#e5e5e5',
     lightGray: '#ddd',
-    whiteColor: '#ffffff',
     linkColor: '#0088ff'
   }
 }

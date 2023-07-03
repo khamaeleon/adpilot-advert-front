@@ -1,18 +1,12 @@
 import {atom} from "jotai";
 import {dateFormat, decimalFormat} from "../../../common/StringUtils";
-import {getThisMonth, getToDay} from "../../../common/DateUtils";
+import {getThisMonth} from "../../../common/DateUtils";
 import React from "react";
-import moment from "moment/moment";
 
 /**
  * 결재 관리 리스트 Atom
  * @type {Atom<unknown>}
  */
-//export const paymentDataAtom = atom(null)
-export const paymentDataAtom = atom([{
-  name: 'id',
-}])
-
 export const searchPaymentType = [
   {id: "0", value: "ALL", label: "전체"},
   {id: "1", value: "ADVER_NAME", label: "광고주명"},
@@ -69,7 +63,7 @@ export const paymentColumns = [
     defaultFlex: 1,
     showColumnMenuTool: false,
     textAlign: 'center',
-    render: ({value, cellProps}) =>{
+    render: ({cellProps}) =>{
       return (
         cellProps.data.bankType !== null ?
           (<p>{cellProps.data.bankType}</p>) :

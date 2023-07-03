@@ -117,7 +117,7 @@ export const pixelDetailColumns = [
     resizable: false,
     render: (props) => {
       return (
-        <Link to={'/board/pixelDetail'} state={{id: props.data.pixelId}}>{props.value}</Link>
+        <Link to={'/board/pixelDetail'} state={{id: props.data.pixelId}} className={'ellipsis'}>{props.value}</Link>
       )
     }
   },

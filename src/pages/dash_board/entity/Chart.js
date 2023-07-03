@@ -1,5 +1,4 @@
 import {atom} from "jotai";
-import React from "react";
 
 /* 플랫폼 현황 차트 셀렉트 */
 export const platformStatusType = [

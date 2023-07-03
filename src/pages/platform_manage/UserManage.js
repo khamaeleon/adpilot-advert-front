@@ -2,13 +2,14 @@ import {
   Board,
   BoardHeader,
   BoardSearchDetail,
-  BoardSearchResultTitle,
-  BoardTableContainer, ColSpan0,
-  ColTitle, GraySearchButton,
+  BoardTableContainer,
+  ColSpan0,
+  ColTitle,
+  GraySearchButton,
   RowSpan,
-  SaveExcelButton,
-  SearchButton,
-  SearchInput, Span1, Span2
+  SearchInput,
+  selectStyle,
+  Span2
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
 import Table from "../../components/table";
@@ -26,8 +27,6 @@ import {
   userInfoAtom
 } from "./entity/User";
 import {hostType} from "./entity/Common";
-import {VerticalRule} from "../signup/styles";
-import {HorizontalRule} from "../../components/common/Common";
 
 export default function UserManage(){
   const [searchAccountInfoState ,setSearchAccountInfoState] = useState(searchAccountInfo)
@@ -49,6 +48,7 @@ export default function UserManage(){
         })
       }
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   /**
@@ -137,66 +137,46 @@ export default function UserManage(){
             <RowSpan style={{marginTop: 0, justifyContent: 'flex-start'}}>
               <ColSpan0>
                 <Span2>광고주 구분</Span2>
-                <Select components={{IndicatorSeparator: () => null}}
-                        options={adverTypeState}
+                <Select options={adverTypeState}
                         value={(searchAccountInfoState.adverType !== null && searchAccountInfoState.adverType.value !== '') ? searchAccountInfoState.adverType : adverTypeState[0]}
                         onChange={handleAdverType}
-                        styles={{
-                          input: (baseStyles, state) => (
-                            {
-                              ...baseStyles,
-                              width: "65px",
-                            })
-                        }}
+                        width={140}
+                        styles={selectStyle}
+                        isSearchable={false}
                 />
               </ColSpan0>
               <ColSpan0>
                 <ColTitle><Span2>호스팅 타입</Span2></ColTitle>
-                <Select components={{IndicatorSeparator: () => null}}
-                        options={hostTypeState}
+                <Select options={hostTypeState}
                         value={searchAccountInfoState?.hostType !== null ? hostList.find(value => value.value === searchAccountInfoState?.hostType) : hostTypeState[0]  }
                         onChange={handleSelectHosting}
-                        styles={{
-                          input: (baseStyles, state) => (
-                            {
-                              ...baseStyles,
-                              width: "65px",
-                            })
-                        }}
+                        width={140}
+                        styles={selectStyle}
+                        isSearchable={false}
                 />
               </ColSpan0>
               <ColSpan0>
                 <ColTitle><Span2>사용 여부</Span2></ColTitle>
-                <Select components={{IndicatorSeparator: () => null}}
-                        options={accountUseYnState}
+                <Select options={accountUseYnState}
                         value={(searchAccountInfoState.accountStateType !== null && searchAccountInfoState.accountStateType.value !== '') ? searchAccountInfoState.accountStateType : accountUseYnState[0]}
                         onChange={handleSelectAccountStateType}
-                        styles={{
-                          input: (baseStyles, state) => (
-                            {
-                              ...baseStyles,
-                              width: "65px",
-                            })
-                        }}
+                        width={140}
+                        styles={selectStyle}
+                        isSearchable={false}
                 />
               </ColSpan0>
             </RowSpan>
             <RowSpan style={{justifyContent: 'flex-start'}}>
               <ColSpan0>
                 <Span2>검색어</Span2>
-                <Select components={{IndicatorSeparator: () => null}}
-                        options={searchType}
+                <Select options={searchType}
                         value={(searchAccountInfoState.searchType !== null && searchAccountInfoState.searchType.value !== '') ? searchAccountInfoState.searchType : {key: "0", value: "select", label: "선택"}}
                         onChange={handleSearchType}
-                        styles={{
-                          input: (baseStyles, state) => (
-                            {
-                              ...baseStyles,
-                              width: "65px",
-                            })
-                        }}
+                        width={140}
+                        styles={selectStyle}
+                        isSearchable={false}
                 />
-                <SearchInput style={{width: 456}}>
+                <SearchInput style={{width: 490}}>
                   <input type={'text'}
                          placeholder={'아이디 및 담당자명 검색'}
                          value={searchAccountInfoState?.keyword !== null ? searchAccountInfoState?.keyword : ''}
@@ -212,9 +192,9 @@ export default function UserManage(){
         </BoardSearchDetail>
         {userInfoList !== null &&
           <BoardTableContainer>
-            <RowSpan style={{justifyContent: 'flex-end'}}><SaveExcelButton>엑셀 저장</SaveExcelButton></RowSpan>
             <Table columns={columnUserData}
                    totalCount={[totalInfo.totalCount, '사용자']}
+                   downloadList={true}
                    data={userInfoList}/>
           </BoardTableContainer>
         }

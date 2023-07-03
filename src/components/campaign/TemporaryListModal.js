@@ -5,8 +5,9 @@ import styled from "styled-components";
 import {modalController} from "../../store";
 import {campaignTemporaryListAtom} from "../../pages/campaign/entity/Info";
 import {toast} from "react-toastify";
-import {DeleteIcon, SmallButton} from "../../pages/campaign/styles/common";
+import {SmallButton} from "../../pages/campaign/styles/common";
 import {deleteTemporary, selTemporaryList} from "../../services/campaign/InfoAxios";
+import {light} from "../../assets/theme";
 
 export function TemporaryListModal(props) {
   const {onSubmit, userId} = props;
@@ -71,7 +72,7 @@ function TemporaryList (props) {
                   return (
                     <tr key={key}
                         style={selectedItem.name === item.name ? {
-                          backgroundColor: "#f5811f",
+                          backgroundColor: light.color.mainColor,
                           color: '#fff'
                         } : null}>
                       <td onClick={() => handleSelect(item)}>{item.name}</td>
@@ -93,23 +94,6 @@ function TemporaryList (props) {
   )
 }
 
-const MediaSearchColumn = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 20px;
-  width: 100%;
-  background-color: #f9f9f9;
-
-  & > div:first-child {
-    min-width: 70px;
-  }
-
-  & > div:last-child {
-    width: 100%;
-  }
-`
-
 const MediaSelectedButton = styled.button`
   display: block;
   margin: 15px auto 0;
@@ -118,7 +102,6 @@ const MediaSelectedButton = styled.button`
   background-color: #535353;
   color: #fff;
 `
-
 
 const MediaSearchResult = styled.div`
   font-size: 13px;
@@ -142,56 +125,4 @@ const MediaSearchResult = styled.div`
       cursor: pointer;
     }
   }
-`
-
-const InputGroup = styled.div`
-  display: flex;
-
-  & input[type='text'] {
-    padding: 0 20px;
-    width: 80%;
-    border: 1px solid #e5e5e5;
-    height: 36px;
-    border-radius: 10px 0 0 10px;
-  }
-
-  & button {
-    width: 20%;
-    border-radius: 0 10px 10px 0;
-    background-color: #777;
-    color: #fff;
-  }
-`
-
-const Button = styled.button`
-  width: 150px;
-  height: 45px;
-  border-radius: 5px;
-  background-color: #777777;
-  color: #fff;
-  font-size: 15px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #535353;
-  }
-`
-
-const AccountButton = styled.button`
-  width: 175px; 
-  height: 40px;
-  border-radius: 5px;
-  border: solid 1px #ddd;
-  background-color: #f3f3f3;
-  font-size: 15px;
-  > span {
-    padding-left: 10px;
-  }
-`
-
-const SwitchUserButton = styled.button`
-  background-color: #fff;
-  padding: 13px 40px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
 `

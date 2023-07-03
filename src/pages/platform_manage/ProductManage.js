@@ -66,6 +66,7 @@ function ProductManage() {
         setProductData(response)
       }
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
   /**
    * 상품 수집 검색
@@ -94,6 +95,7 @@ function ProductManage() {
             totalCount={[productData.totalCount !== undefined ? productData.totalCount : 0,'상품 수집 현황']}
             data={productData.rows !== undefined ? productData.rows : []}
             idProperty={'id'}
+            downloadList={true}
           />
         </BoardSearchResult>
       </Board>

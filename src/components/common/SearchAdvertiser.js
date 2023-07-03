@@ -6,10 +6,12 @@ import {selKeywordUser} from "../../services/Platform/ManageUserAxios";
 import {modalController} from "../../store";
 import {toast} from "react-toastify";
 import {
-  ColSpan0,
-  ColSpan2,
+  borderColor,
+  ColSpan1,
   ColSpan3,
-  ColSpan4, GraySearchButton,
+  ColSpan4,
+  GraySearchButton,
+  InputLabel, lightGray,
   RelativeDiv,
   RowSpan,
   SaveExcelButton,
@@ -19,6 +21,7 @@ import {
 import {addHistory, adverPointeRquest} from "../../services/payment/admin/PointAllListRequestAxios"
 import {decimalFormat, removeStr} from "../../common/StringUtils";
 import {useForm} from "react-hook-form";
+import {light} from "../../assets/theme";
 
 export function SearchAdvertiser(props) {
   const {title, onSubmit, btnStyle, historyAdd} = props;
@@ -178,7 +181,7 @@ function SearchModal (props) {
                     <tr key={key}
                         onClick={() => handleSelect(item)}
                         style={selectedItem.adverName === item.adverName ? {
-                          backgroundColor: "#f5811f",
+                          backgroundColor: light.color.mainColor,
                           color: '#fff'
                         } : null}>
                       <td>{item.adverName}</td>
@@ -195,76 +198,83 @@ function SearchModal (props) {
           {historyState === true ?
           <form onSubmit={handleSubmit(onSubmit, onError)}>
             <RowSpan>
-              <ColSpan2>지급/차감 설정</ColSpan2>
-              <ColSpan3>
+              <ColSpan1>지급/차감 설정</ColSpan1>
                 <RelativeDiv>
-                  <label>
-                    <input
-                      type={'radio'}
-                      name={'gtSettingMethod'}
-                      value="GIVEN_BY_ADMIN"
-                      checked={gtSettingMethod === 'GIVEN_BY_ADMIN'}
-                      onChange={(e) => setGtSettingMethod(e.target.value)}
-                    />
-                    <span>광고비 지급</span>
-                  </label>
-                  <label>
-                    <input
-                      type={'radio'}
-                      name={'gtSettingMethod'}
-                      value="TAKEN_BY_ADMIN"
-                      checked={gtSettingMethod === 'TAKEN_BY_ADMIN'}
-                      onChange={(e) => setGtSettingMethod(e.target.value)}
-                    />
-                    <span>광고비 차감</span>
-                  </label>
+                  <ColSpan4>
+                    <label>
+                      <input
+                        type={'radio'}
+                        name={'gtSettingMethod'}
+                        value="GIVEN_BY_ADMIN"
+                        checked={gtSettingMethod === 'GIVEN_BY_ADMIN'}
+                        onChange={(e) => setGtSettingMethod(e.target.value)}
+                      />
+                      <span>광고비 지급</span>
+                    </label>
+                    <label>
+                      <input
+                        type={'radio'}
+                        name={'gtSettingMethod'}
+                        value="TAKEN_BY_ADMIN"
+                        checked={gtSettingMethod === 'TAKEN_BY_ADMIN'}
+                        onChange={(e) => setGtSettingMethod(e.target.value)}
+                      />
+                      <span>광고비 차감</span>
+                    </label>
+                  </ColSpan4>
                 </RelativeDiv>
-              </ColSpan3>
-            </RowSpan>
-            <RowSpan style={{position:"relative"}}>
-              <ColSpan0 style={{alignItems:"start", paddingTop:"11px"}}>금액 입력</ColSpan0>
-              <ColSpan3>
-                <Input
-                  type={'text'}
-                  textAlingn={'right'}
-                  value={decimalFormat( enterAmount +' 원')}
-                  maxLength="19"
-                  {...register("enterAmount", {
-                    required: "금액을 입력해 주세요.",
-                    pattern: {
-                      message: "숫자만 입력 가능합니다.",
-                      value: "^[0-9,]+원?$",
-                    },
-                    onChange:(e)=>handleChange(e.target.value)
-                  })}
-                />
-                {errors.enterAmount && <ValidationScript style={{bottom: '-29px', left: '148px',}}>{errors.enterAmount.message}</ValidationScript>}
-              </ColSpan3>
             </RowSpan>
             <RowSpan>
-              <ColSpan0 style={{alignItems:"start", paddingTop:"11px"}}>광고비 잔액</ColSpan0>
-              <ColSpan3>
-                <Input
-                  type={'text'}
-                  textAlingn={'right'}
-                  value={decimalFormat( adverPoint + '원')}
-                  disabled={true}
-                />
-                {errors.enterAmount && <ValidationScript style={{bottom: '-40px', left: '142px',}}>{errors.enterAmount.message}</ValidationScript>}
-              </ColSpan3>
+              <ColSpan1>금액 입력</ColSpan1>
+              <RelativeDiv>
+                <ColSpan3>
+                  <InputLabel label={'원'}>
+                    <Input
+                      type={'text'}
+                      textAlingn={'right'}
+                      value={decimalFormat(enterAmount)}
+                      maxLength={19}
+                      {...register("enterAmount", {
+                        required: "금액을 입력해 주세요.",
+                        pattern: {
+                          message: "숫자만 입력 가능합니다.",
+                          value: /^[0-9,]+$/,
+                        },
+                        onChange:(e)=>handleChange(e.target.value)
+                      })}
+                    />
+
+                  </InputLabel>
+                </ColSpan3>
+              </RelativeDiv>
             </RowSpan>
-            <RowSpan style={{width:'100%', marginTop:'35px'}}>
-              <ColSpan0 style={{width: "14%"}}>비고</ColSpan0>
-              <ColSpan4 style={{paddingLeft:"35px"}}>
-                <Input
-                  textAlingn={'left'}
-                  type={'text'}
-                  value={note}
-                  placeholder='비고 입력'
-                  style={{width: "100%"}}
-                  onChange={(e)=> setNote(e.target.value)}
-                />
-              </ColSpan4>
+            <RowSpan>
+              <ColSpan1>광고비 잔액</ColSpan1>
+              <RelativeDiv>
+                <ColSpan3>
+                  <Input
+                    type={'text'}
+                    textAlingn={'right'}
+                    value={decimalFormat( adverPoint + '원')}
+                    disabled={true}
+                  />
+                </ColSpan3>
+                {errors.enterAmount && <ValidationScript style={{left:10}}>{errors.enterAmount.message}</ValidationScript>}
+              </RelativeDiv>
+            </RowSpan>
+            <RowSpan style={{marginTop:'35px'}}>
+              <ColSpan1>비고</ColSpan1>
+              <RelativeDiv>
+                <ColSpan4>
+                  <Input
+                    className={'note'}
+                    type={'text'}
+                    value={note}
+                    placeholder='비고 입력'
+                    onChange={(e)=> setNote(e.target.value)}
+                  />
+                </ColSpan4>
+              </RelativeDiv>
             </RowSpan>
             <RowSpan>
               <SubmitButton type={"submit"} style={{
@@ -322,14 +332,14 @@ const MediaSearchResult = styled.div`
       padding: 12px;
       background-color: #fafafa;
       color: #b2b2b2;
-      border-top: 1px solid #e5e5e5;
-      border-bottom: 1px solid #e5e5e5;
+      border-top: 1px solid ${borderColor};
+      border-bottom: 1px solid ${borderColor};
     }
 
     & td {
       text-align: center;
       padding: 12px;
-      border-bottom: 1px solid #e5e5e5;
+      border-bottom: 1px solid ${borderColor};
       cursor: pointer;
     }
   }
@@ -341,7 +351,7 @@ const InputGroup = styled.div`
   & input[type='text'] {
     padding: 0 20px;
     width: 80%;
-    border: 1px solid #e5e5e5;
+    border: 1px solid ${borderColor};
     height: 36px;
     border-radius: 10px 0 0 10px;
   }
@@ -354,30 +364,22 @@ const InputGroup = styled.div`
   }
 `
 
-const Button = styled.button`
-  width: 150px;
-  height: 45px;
-  border-radius: 5px;
-  background-color: #777777;
-  color: #fff;
-  font-size: 15px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #535353;
-  }
-`
-
 const Input = styled.input `
-  width: 210px;
+  width: 300px;
   font-size: 18px;
   font-weight: 600;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   border-radius: 5px;
   text-align: ${props => props.textAlingn};
   padding: 4px 10px;
+  height: 40px;
   &:after {
     font-size: 13px;
     font-weight: 400;
+  }
+  &.note {
+    width: 100%;
+    font-size: 14px;
+    font-weight:400;
   }
 `

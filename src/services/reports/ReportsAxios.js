@@ -1,4 +1,4 @@
-import {AdverAxios, AdminAxios} from "../../common/Axios";
+import {AdverAxios} from "../../common/Axios";
 
 const ACTION_URL = '/statistics';
 const CREATE_STATISTICS = ACTION_URL+'/custom-report'
@@ -11,7 +11,7 @@ export async function createCustomReportsAxios(params) {
   await AdverAxios('POST', CREATE_STATISTICS, params)
     .then((response) => {
       returnVal = response.responseCode.statusCode === 200 ? response.data : null;
-    }).catch((e) => returnVal = false)
+    }).catch(() => returnVal = false)
   return returnVal;
 }
 
@@ -25,7 +25,7 @@ export async function deleteCustomReportsAxios(deleteInfo) {
   await AdverAxios('DELETE', CREATE_STATISTICS, deleteInfo)
     .then((response) => {
       returnVal = response.responseCode.statusCode === 200 ? response.data : null;
-    }).catch((e) => returnVal = false)
+    }).catch(() => returnVal = false)
   return returnVal;
 }
 
@@ -38,7 +38,7 @@ export async function retrieveCustomReportsList(userId){
   await AdverAxios('GET', `/statistics/${userId}/custom-report`,null)
     .then((response) => {
       returnVal = response.responseCode.statusCode === 200 ? response.data : null
-    }).catch((e) => returnVal = false)
+    }).catch(() => returnVal = false)
   return returnVal;
 }
 /**
@@ -50,6 +50,6 @@ export async function retrieveCustomReportsDetail(userId, reportUserSettingId, p
   await AdverAxios('POST', `/statistics/${userId}/custom-report/${reportUserSettingId}`,params)
     .then((response) => {
       returnVal = response.responseCode.statusCode === 200 ? response.data : null
-    }).catch((e) => returnVal = false)
+    }).catch(() => returnVal = false)
   return returnVal;
 }

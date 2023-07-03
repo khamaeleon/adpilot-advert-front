@@ -1,11 +1,12 @@
 import styled from "styled-components";
+import {borderColor, lightGray, mainColor} from "../../../assets/GlobalStyles";
 
 export const BannerItemContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 10px;
   padding: 0 15px 15px;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   border-radius: 5px;
   justify-content: space-around;
   -ms-user-select: none;
@@ -28,8 +29,8 @@ export const DefaultItemButton = styled.div`
   width: 137px;
   height: 36px;
   background-color: #ffffff;
-  border: 1px solid ${(props) => props.active ? '#f5811f' : '#e5e5e5'};
-  color: ${(props) => props.active ? '#f5811f' : null};
+  border: 1px solid ${(props) => props.active ? mainColor : borderColor};
+  color: ${(props) => props.active ? mainColor : null};
   cursor: pointer;
   & p {
     padding: 0 20px
@@ -74,7 +75,7 @@ export const PickerContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   padding: 5px;
   width: 100%;
 `
@@ -88,7 +89,7 @@ export const PickerColor = styled.div`
   background-color: ${(props) => props.color ? props.color : '#000000'};
   width: 30px;
   height: 30px;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   cursor: pointer;
 `
 

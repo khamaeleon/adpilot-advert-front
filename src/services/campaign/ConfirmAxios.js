@@ -43,7 +43,7 @@ export async function retrieveAdverConfirm(campaignId) { //광고주 캠페인 �
 
 export async function selAdverEnumInfo(enumInfo) {
   let returnVal = null;
-  await AdverAxios('GET', '/campaign/'+enumInfo+'/'+'list')
+  await AdverAxios('GET', `/campaign/${enumInfo}/list`)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
         returnVal = response.data

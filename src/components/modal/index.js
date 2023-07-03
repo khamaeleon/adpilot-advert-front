@@ -46,7 +46,7 @@ export function ComponentModalFindId(){
 
 export function ComponentModalFindPassword(props) {
   const navigate = useNavigate()
-  const [modal, setModal] = useAtom(modalController)
+  const [, setModal] = useAtom(modalController)
   const passwordParams = props
   const handleNavigate = () => {
     setModal({

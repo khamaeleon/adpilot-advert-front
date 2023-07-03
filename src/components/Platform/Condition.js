@@ -4,20 +4,17 @@ import {
   CalendarBox,
   CalendarIcon,
   ColSpan0,
-  ColSpan1,
-  ColSpan2,
-  ColSpan3, ColSpan4,
+  ColSpan4,
   ColTitle,
   CustomDatePicker,
   DateContainer,
   GraySearchButton,
   Input,
-  inputStyle,
   RangePicker,
   ResetButton,
   RowSpan,
-  SearchButton,
   SearchInput,
+  selectStyle,
   Span2,
 } from "../../assets/GlobalStyles";
 import ko from "date-fns/locale/ko";
@@ -39,6 +36,7 @@ import {SearchAdvertiser} from "../common/SearchAdvertiser";
 import {useParams} from "react-router-dom";
 import * as PropTypes from "prop-types";
 import moment from "moment";
+import {light} from "../../assets/theme";
 
 ResetButton.propTypes = {onClick: PropTypes.func};
 
@@ -49,6 +47,7 @@ export function PlatformCondition(props) {
   const [startDate, endDate] = dateRange;
   const [showPrevious, setShowPrevious] = useState(true)
   const params = useParams()
+  const mainColor = light.color.mainColor
   /**
    * 날짜 레인지 선택
    * @param rangeType
@@ -150,13 +149,6 @@ export function PlatformCondition(props) {
     // })
   }
 
-  const handleClickReset = () => {
-    setSearchCondition({
-      ...searchCondition,
-      username: ''
-    })
-  }
-
   return (
     <BoardSearchDetail column={true}>
       {params.id !== 'conversionManage' &&
@@ -165,7 +157,6 @@ export function PlatformCondition(props) {
             <Span2>광고주 설정</Span2>
             <Input style={{width: 300}} type={'text'} value={searchCondition.username} readOnly/>
             <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdverResult}/>
-            <ResetButton onClick={handleClickReset}>재설정</ResetButton>
           </ColSpan0>
         </RowSpan>
       }
@@ -196,34 +187,29 @@ export function PlatformCondition(props) {
         <ColSpan0>
           <div>
             <RangePicker>
-              <div onClick={() => handleRangeDate('thisMonth')} style={dateActive==='thisMonth'?{color:'#f5811f'}:null}>이번달</div>
+              <div onClick={() => handleRangeDate('thisMonth')} style={dateActive==='thisMonth'?{color: mainColor}:null}>이번달</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastMonth')} style={dateActive==='lastMonth'?{color:'#f5811f'}:null}>지난달</div>
+              <div onClick={() => handleRangeDate('lastMonth')} style={dateActive==='lastMonth'?{color: mainColor}:null}>지난달</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('today')} style={dateActive==='today'?{color:'#f5811f'}:null}>오늘</div>
+              <div onClick={() => handleRangeDate('today')} style={dateActive==='today'?{color: mainColor}:null}>오늘</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastDay')} style={dateActive==='lastDay'?{color:'#f5811f'}:null}>어제</div>
+              <div onClick={() => handleRangeDate('lastDay')} style={dateActive==='lastDay'?{color: mainColor}:null}>어제</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastWeekDay')} style={dateActive==='lastWeekDay'?{color:'#f5811f'}:null}>지난7일</div>
+              <div onClick={() => handleRangeDate('lastWeekDay')} style={dateActive==='lastWeekDay'?{color: mainColor}:null}>지난7일</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastThirtyDay')} style={dateActive==='lastThirtyDay'?{color:'#f5811f'}:null}>지난30일</div>
+              <div onClick={() => handleRangeDate('lastThirtyDay')} style={dateActive==='lastThirtyDay'?{color: mainColor}:null}>지난30일</div>
               <HorizontalRule style={{margin: "0 10px"}}/>
-              <div onClick={() => handleRangeDate('lastNinetyDay')} style={dateActive==='lastNinetyDay'?{color:'#f5811f'}:null}>지난90일</div>
+              <div onClick={() => handleRangeDate('lastNinetyDay')} style={dateActive==='lastNinetyDay'?{color: mainColor}:null}>지난90일</div>
               {/*<HorizontalRule style={{margin: "0 10px"}}/>*/}
-              {/*<div onClick={() => handleRangeDate('lastOneEightyDay')} style={dateActive==='lastOneEightyDay'?{color:'#f5811f'}:null}>지난180일</div>*/}
+              {/*<div onClick={() => handleRangeDate('lastOneEightyDay')} style={dateActive==='lastOneEightyDay'?{color: mainColor}:null}>지난180일</div>*/}
             </RangePicker>
           </div>
-          <Select components={{IndicatorSeparator: () => null}}
-                  options={searchType}
+          <Select options={searchType}
                   value={searchCondition.searchType !== '' ? searchType.find(value => value.value === searchCondition.searchType) : ''}
                   onChange={handleSearchType}
-                  styles={{
-                    input: (baseStyles, state) => (
-                      {
-                        ...baseStyles,
-                        width: "50px",
-                      })
-                  }}
+                  isSearchable={false}
+                  width={133}
+                  styles={selectStyle}
           />
           <SearchInput style={{width: 250}}>
             <input type={'text'}
@@ -299,14 +285,13 @@ export function PaymentCondition(props) {
     } else{
       setSearchCondition({
         ...searchCondition,
-        statusList: ['REFUND_REQUEST_OF_USER']
+        statusList: []
       })
     }
     setIsCheckedAll(event.target.checked)
   }
-  //[d] 결제관리 체크박스
+  //체크박스 핸들링
   const handleChangeChecked = (event) => {
-    //체크박스 핸들링
     if(event.currentTarget.checked){
       setSearchCondition({
         ...searchCondition,
@@ -317,30 +302,6 @@ export function PaymentCondition(props) {
         ...searchCondition,
         statusList: searchCondition.statusList.filter(id => id !== event.currentTarget.id)
       })
-    }
-  }
-  //[d] 광고비 지급 관리 체크박스
-  const handleChangeCostChecked = (event) => {
-    //체크박스 핸들링
-    if(event.currentTarget.checked) {
-      setSearchCondition({
-        ...searchCondition,
-        statusList: searchCondition.statusList.concat(event.currentTarget.id)
-      })
-    }else{
-      console.log(event.target.id);
-      //[d] 필수 요청값 환불 신청
-      if(event.target.id === 'REFUND_REQUEST_OF_USER'){
-        setSearchCondition({
-          ...searchCondition,
-          statusList: searchCondition.statusList.concat(event.currentTarget.id)
-        })
-      }else{
-        setSearchCondition({
-          ...searchCondition,
-          statusList: searchCondition.statusList.filter(id => id !== event.currentTarget.id)
-        })
-      }
     }
   }
   const handleSearchType = (selectSearchType) => {
@@ -399,22 +360,22 @@ export function PaymentCondition(props) {
                               type={'c'}
                               id={'GIVEN_BY_ADMIN'}
                               isChecked={searchCondition.statusList.includes('GIVEN_BY_ADMIN')}
-                              onChange={handleChangeCostChecked}/>
+                              onChange={handleChangeChecked}/>
                     <Checkbox label={'광고비 차감'}
                               type={'c'}
                               id={'TAKEN_BY_ADMIN'}
                               isChecked={searchCondition.statusList.includes('TAKEN_BY_ADMIN')}
-                              onChange={handleChangeCostChecked}/>
+                              onChange={handleChangeChecked}/>
                     <Checkbox label={'환불 신청'}
                               type={'c'}
                               id={'REFUND_REQUEST_OF_USER'}
                               isChecked={searchCondition.statusList.includes('REFUND_REQUEST_OF_USER')}
-                              onChange={handleChangeCostChecked}/>
+                              onChange={handleChangeChecked}/>
                     <Checkbox label={'환불 완료'}
                               type={'c'}
                               id={'REFUNDED_BY_ADMIN'}
                               isChecked={searchCondition.statusList.includes('REFUNDED_BY_ADMIN')}
-                              onChange={handleChangeCostChecked}/>
+                              onChange={handleChangeChecked}/>
                   </>
                 }
                 {params.id === 'paymentManage' &&
@@ -443,17 +404,12 @@ export function PaymentCondition(props) {
         </RowSpan>
         <RowSpan>
           <ColSpan4>
-            <Select components={{IndicatorSeparator: () => null}}
-                    options={searchType}
+            <Select options={searchType}
                     value={searchCondition.searchType.value !== '' ? searchType.find(value => value.value === searchCondition.searchType) : searchType[0]}
                     onChange={handleSearchType}
-                    styles={{
-                      input: (baseStyles, state) => (
-                        {
-                          ...baseStyles,
-                          width: "60px",
-                        })
-                    }}
+                    isSearchable={false}
+                    width={133}
+                    styles={selectStyle}
             />
             <SearchInput style={{paddingRight: 0}}>
               <input type={'text'}

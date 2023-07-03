@@ -9,9 +9,8 @@ import {
   ColSpan4,
   DefaultButton,
   Input,
-  inputStyle,
   RelativeDiv,
-  RowSpan, Span4, SubmitButton, SubmitContainer, TextArea
+  RowSpan, selectStyle, Span4, SubmitButton, SubmitContainer, TextArea
 } from "../../assets/GlobalStyles";
 import {Row} from "../campaign/styles/common";
 import WriteNoticeModal from "../../components/common/WriteNoticeModal";
@@ -122,9 +121,10 @@ function InquiryList(props) {
           <BoardHeader>1:1문의 현황</BoardHeader>
           <BoardSearchDetail>
             <Row>
-              <Select styles={inputStyle}
-                      components={{IndicatorSeparator: () => null}}
-                      options={inquiryTypes}
+              <Select styles={selectStyle}
+                      isSearchable={false}
+                      width={150}
+s                      options={inquiryTypes}
                       value={searchCondition.searchType !== '' ? inquiryTypes.find(type => type.value === searchCondition.inquiryType) : inquiryTypes[0]}
                       onChange={handleSearchType}
               />

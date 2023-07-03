@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {borderColor, lightGray} from "../../../assets/GlobalStyles";
 
 export const BorderSpan = styled.div`
   display: flex;
@@ -6,7 +7,7 @@ export const BorderSpan = styled.div`
   align-items: center;
   padding: 5px;
   background-color: #f9fafb;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   border-radius: 8px;
   & span {
     margin-left: 20px;
@@ -114,7 +115,7 @@ export const RowInBox = styled.div`
       height: 14px;
       background-color: #fff;
       background-image: none;
-      border: 1px solid #ddd;
+      border: 1px solid ${lightGray};
       border-radius: 14px;
     }
     & > div > label > input[type='radio']:checked {
@@ -173,7 +174,7 @@ export const ImageUploadCard = styled.div`
   aspect-ratio: 1/1;
   background-color: #fff;
   border-radius: 5px;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   & > div.img {
     width: 90%;
     height: 90%;
@@ -209,7 +210,7 @@ export const CreateImage = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   &:hover {
-    background-color: #dddddd;
+    background-color: ${lightGray};
     cursor: pointer;
     background-image: url("/assets/images/common/btn_img_upload_on.png");
   }
@@ -243,7 +244,7 @@ export const Row = styled.div`
   & > input, & .txtCont {
     padding: 10px;
     width: 80%;
-    border: 1px solid #e5e5e5;
+    border: 1px solid ${borderColor};
     border-radius: 5px;
     height: 36px;
   }
@@ -280,7 +281,7 @@ export const PrevFrame = styled.div`
   aspect-ratio: ${(props)=> props.width/props.height};
   background-color: #fff;
   border-radius: 0.3rem;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -294,7 +295,7 @@ export const PrevImage250 = styled.div`
   width: 100%;
   height: 70%;
   background-color: #fff;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -315,7 +316,7 @@ export const PrevImage728 = styled.div`
   width: 30%;
   height: 100%;
   background-color: #fff;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -335,7 +336,7 @@ export const PrevButton = styled.button`
   overflow: hidden;
   text-overflow: ellipsis;
   background-color: #fff;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;

@@ -7,7 +7,7 @@ import {modalController} from "../../../store";
 import {
   ColSpan1,
   ColSpan4, DefaultButton,
-  inputStyle, RowSpan, Edit, ValidationScript, SubmitButton,
+  inputStyle, RowSpan, Edit, ValidationScript, SubmitButton, lightGray,
 } from "../../../assets/GlobalStyles";
 import styled from "styled-components";
 import {refundRequestData} from "../../../pages/platform_manage/entity/PaymentUser";
@@ -174,7 +174,7 @@ const Input = styled.input `
   width: 210px;
   font-size: 18px;
   font-weight: 600;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   border-radius: 5px;
   text-align: left;
   padding: 4px 10px;

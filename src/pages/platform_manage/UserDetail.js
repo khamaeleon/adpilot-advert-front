@@ -10,9 +10,9 @@ import {
   ColTitle,
   DownLoadButton,
   Input,
-  inputStyle,
   RelativeDiv,
   RowSpan,
+  selectStyle,
   Span4,
   SubmitButton,
   SubmitContainer,
@@ -317,15 +317,17 @@ function PlatformUserDetail() {
 
   const imageDownload = (fileUrl) => {
     const url = "http://192.168.0.104:9000/temp" + fileUrl;
+    let type;
     fetch(url, { method: 'GET' })
     .then((res) => {
+      type = res.url.substring(res.url.lastIndexOf('.') + 1)
       return res.blob();
     })
     .then((blob) => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = accountInfoState?.userCompanyProfile.companyName + "_사업자등록증";
+      a.download = accountInfoState?.userCompanyProfile.companyName + "_사업자등록증."+type;
       document.body.appendChild(a);
       a.click();
       setTimeout((_) => {
@@ -561,8 +563,9 @@ function PlatformUserDetail() {
                   <ColSpan2>
                     <ColTitle><Span4>호스팅</Span4></ColTitle>
                     <RelativeDiv>
-                      <Select styles={inputStyle}
-                              components={{IndicatorSeparator: () => null}}
+                      <Select styles={selectStyle}
+                              width={200}
+                              isSearchable={false}
                               options={hostList}
                               value={accountInfoState.hostType !== '' ? hostList.find(value => value.value === accountInfoState.hostType) : ''}
                               onChange={handleSelectHosting}

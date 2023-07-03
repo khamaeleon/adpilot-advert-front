@@ -5,10 +5,10 @@ import {
   ChartTooltip,
   DashBoardBody,
   DashBoardCard,
-  DashBoardHeader,
+  DashBoardHeader, selectStyle,
 } from "../../assets/GlobalStyles";
 import {ResponsiveLine} from '@nivo/line'
-import React, {useEffect, useState, useCallback} from "react";
+import React, {useEffect, useState} from "react";
 import {useAtom,useAtomValue} from "jotai";
 import {dataTotalInfo} from "../../components/common/entity";
 import {chartDataAtom, commonProperties, platformStatusType, userPlatformStatusType} from "./entity/Chart";
@@ -33,7 +33,7 @@ import Table from "../../components/table";
 import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 
 /** 플래폼 현황 차트 **/
-function ChartComponent(props) {
+function ChartComponent() {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [chartData, setChartData] = useAtom(chartDataAtom);
   const searchCondition = useAtomValue(searchConditionAtom)
@@ -81,10 +81,12 @@ function ChartComponent(props) {
         }
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[searchCondition])
 
   useEffect(() => {
     makeChartData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chartData,chartDataInfo]);
 
   function calculateSum(property) {
@@ -303,13 +305,8 @@ function ChartComponent(props) {
               decimalFormat={decimalFormat}
           />
           <ChartLabel active={chartData[dataType].status}>
-            <Select styles={{
-                      input: (defaultStyle, state) => (
-                        {
-                          ...defaultStyle,
-                          minWidth: "300px",
-                        })
-                    }}
+            <Select styles={selectStyle}
+                    isSearchable={false}
                     isDisabled={!chartData[dataType].status}
                     components={{IndicatorSeparator: () => null}}
                     options={tokenUserInfo.role !== 'NORMAL' ? platformStatusType : userPlatformStatusType}
@@ -324,15 +321,9 @@ function ChartComponent(props) {
             </span>
           </ChartLabel>
           <ChartLabel active={chartData[dataType2].status} >
-            <Select styles={{
-                      input: (defaultStyle, state) => (
-                        {
-                          ...defaultStyle,
-                          minWidth: "300px",
-                        })
-                    }}
+            <Select styles={selectStyle}
+                    isSearchable={false}
                     isDisabled={!chartData[dataType2].status}
-                    components={{IndicatorSeparator: () => null}}
                     options={tokenUserInfo.role !== 'NORMAL' ? platformStatusType : userPlatformStatusType}
                     value={platformStatusType.filter(options => options.value === dataType2)}
                     isOptionDisabled={option => option.value === dataType}
@@ -412,6 +403,7 @@ function DashBoardIndex() {
     setSearchState({
       ...searchCondition
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchCondition])
   /**
    * 검색 버튼
@@ -443,7 +435,7 @@ function DashBoardIndex() {
   }
   const rowExpandHeight = ({ data }) => {
     if(data.campaignCount < 6) {
-      return 114+(data.campaignCount*60)
+      return 112+(data.campaignCount*60)
     } else if(data?.campaignCount === 0) {
       return 300
     }

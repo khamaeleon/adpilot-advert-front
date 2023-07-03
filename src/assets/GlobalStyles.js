@@ -1,11 +1,17 @@
 import styled, {createGlobalStyle, css} from "styled-components";
 import DatePicker from "react-datepicker";
+import {light} from "./theme";
 
-const mainColor = css`${props => props.theme.color.mainColor}`
 const textColor = css`${props => props.theme.color.textColor}`
-const borderColor = css`${props => props.theme.color.borderColor}`
-const lightGray = css`${props => props.theme.color.lightGray}`
+const subColor = css`${props => props.theme.color.subColor}`
 const buttonHeightSize = 40
+
+export const mainColor = css`${props => props.theme.color.mainColor}`
+export const mainColorOpacity5 = css`${props => props.theme.color.mainColorOpacity5}`
+export const mainColorOpacity20 = css`${props => props.theme.color.mainColorOpacity20}`
+export const bgColor = css`${props => props.theme.color.bgColor}`
+export const borderColor = css`${props => props.theme.color.borderColor}`
+export const lightGray = css`${props => props.theme.color.lightGray}`
 
 export const GlobalStyles = createGlobalStyle`
   html {
@@ -125,7 +131,7 @@ export const GlobalStyles = createGlobalStyle`
     -webkit-appearance: none;
     width: 100%;
     height: 8px;
-    background: #ddd;
+    background: ${lightGray};
     cursor: pointer;
     border-radius: 8px; 
   }
@@ -139,7 +145,7 @@ export const GlobalStyles = createGlobalStyle`
     width: 18px;
     height: 18px;
     background: #fff;
-    border: 2px solid #f5811f;
+    border: 2px solid ${mainColor};
     border-radius: 50%;
     cursor: pointer;
   }
@@ -155,15 +161,15 @@ export const GlobalStyles = createGlobalStyle`
   }
   
   input[type=range].read-only {
-    background: #ddd !important;
+    background: ${lightGray} !important;
     cursor: no-drop;
     &::-webkit-slider-thumb {
-      background: #ccc;
+      background: ${subColor};
       border:0;
       cursor: no-drop;
     }
     &::-moz-range-thumb {
-      background: #ccc;
+      background: ${subColor};
       border:0;
       cursor: no-drop;
     }
@@ -187,7 +193,7 @@ export const GlobalStyles = createGlobalStyle`
   }
   input[type='radio'] + span {
     display: inline-block;
-    margin: -1px 0 0 10px;
+    margin: -1px 0 0 0;
   }
   label {
     display: flex;
@@ -270,7 +276,6 @@ export const GlobalStyles = createGlobalStyle`
     background-image: url('/assets/images/common/checkbox_on_C.png');
     background-image: -webkit-image-set(url('/assets/images/common/checkbox_on_C.png') 1x,url('/assets/images/common/checkbox_on_C@2x.png') 2x, url('/assets/images/common/checkbox_on_C@3x.png') 3x);
   }
-  
   .border-r {
     border-right: 1px solid ${lightGray}
   }
@@ -413,7 +418,7 @@ export const GlobalStyles = createGlobalStyle`
   
   .ellipsis {
     text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: nowrap !important;
     overflow: hidden;
   }
   
@@ -560,29 +565,54 @@ export const selectStyle = {
   indicatorsContainer: (baseStyles,state) => (
     {
       ...baseStyles,
-      height: buttonHeightSize,
+      height: '100%',
     }
   ),
-  container:(baseStyles,state) => (
+  container:(baseStyles,{selectProps}) => (
     {
       ...baseStyles,
-      width: '100%',
-      height: buttonHeightSize,
+      width: selectProps.width !== undefined ? selectProps.width : '100%',
+      height: '100%',
     }
   ),
   valueContainer: (baseStyles,state) => (
     {
       ...baseStyles,
-      height: buttonHeightSize,
+      height: '100%',
     }
   ),
-  control: (baseStyles,state) => (
+  option: (baseStyles,{isDisabled,isSelected,isFocused}) => (
     {
       ...baseStyles,
-      width: '100%',
+      backgroundColor:
+        isDisabled ? undefined :
+          isSelected ?  light.color.mainColor:
+            isFocused ? light.color.mainColorOpacity20
+              :undefined,
+      color:
+        isDisabled ? light.color.textColor :
+          isSelected ? '#fff' : light.color.textColor,
+      ':active': {
+        ...baseStyles[':active'],
+        backgroundColor: !isDisabled ?
+          isSelected ? light.color.mainColor
+            : undefined
+          :undefined
+
+      }
+    }),
+  control: (baseStyles,{selectProps,isFocused}) => (
+    {
+      ...baseStyles,
+      width: selectProps.width !== undefined ? selectProps.width : '100%',
       minHeight: buttonHeightSize,
       marginRight: '0 !important',
-      border: '1px solid #e5e5e5'
+      borderColor: light.color.lightGray,
+      boxShadow: isFocused && `0 0 0 1px ${light.color.mainColor}`,
+      ':hover': {
+        ...baseStyles[':hover'],
+        borderColor: isFocused && light.color.mainColor
+      }
     }
   ),
   input: (baseStyles,state) => (
@@ -621,7 +651,7 @@ export const smallStyle = {
       width: '100%',
       minHeight: 24,
       marginRight: '0 !important',
-      border: '1px solid #e5e5e5'
+      border: `1px solid ${light.color.lightGray}`
     }
   ),
   input: (baseStyles,state) => (
@@ -661,7 +691,7 @@ export const defaultStyle = {
       width: '100%',
       minHeight: 36,
       marginRight: '0 !important',
-      border: '1px solid #e5e5e5'
+      border: `1px solid ${light.color.lightGray}`
     }
   ),
   input: (baseStyles,state) => (
@@ -689,7 +719,6 @@ export const TextMainColor = styled.span`
 `
 export const BoardContainer = styled.div`
   padding: 10px 30px 30px;
-  background-color: #f8f8f8;
 `
 
 export const TitleContainer = styled.div`
@@ -790,7 +819,8 @@ export const RowSpan = styled.div`
   padding-bottom: ${(props) => props.validation ? "10px" : null};
   padding: ${(props) => props.box ? "15px" : null};
   background-color: ${(props)=>props.box ? "#f9fafb":null};
-  border: ${(props) => props.box ? '1px solid #e5e5e5' : null};
+  border: ${(props) => props.box ? `1px solid` : null};
+  border-color: ${(props) => props.box ? lightGray : null};
   border-radius: 5px;
 `
 
@@ -802,7 +832,8 @@ export const FoldSpan = styled.div`
   margin-top: 15px;
   padding: ${(props) => props.box ? "15px" : null};
   background-color: ${(props)=>props.box ? "#f9fafb":null};
-  border: ${(props) => props.box ? '1px solid #e5e5e5' : null};
+  border: ${(props) => props.box ? '1px solid' : null};
+  border-color: ${(props) => props.box ? lightGray : null};
   border-radius: 5px;
   height: 0;
   overflow: hidden;
@@ -940,7 +971,7 @@ export const AgentType = styled.div`
   align-items: center;
   background-color: #f9fafb;
   height: 40px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid ${lightGray};
   border-radius: 5px;
   & label {
     white-space: nowrap;
@@ -953,7 +984,7 @@ export const CampaignType = styled.div`
   width: 100%;
   gap: 30px;
   background-color: #f9fafb;
-  border: 1px solid #e5e5e5;
+  border: 1px solid ${lightGray};
   border-radius: 5px;
 `
 export const DateContainer = styled.div`
@@ -1000,7 +1031,7 @@ export const RangePicker = styled.div`
   align-items: center;
   background-color: #f9fafb;
   height: ${buttonHeightSize}px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid ${lightGray};
   border-radius: 5px;
   color: #777;
   & div {
@@ -1015,7 +1046,7 @@ export const SearchInput = styled.div`
     padding: 0 20px;
     width: 100%;
     height: ${buttonHeightSize}px;
-    border: 1px solid #e5e5e5;
+    border: 1px solid ${lightGray};
     border-radius: 5px;
   }
 `
@@ -1093,7 +1124,7 @@ export const SaveExcelButton = styled.button`
 export const ChartContainer = styled.div`
   margin: 20px 0 0 0;
   padding: 10px 30px 20px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid ${lightGray};
   border-radius: 5px;
 `
 export const ChartLabels = styled.div`
@@ -1107,9 +1138,9 @@ export const ChartLabel = styled.div`
   flex-direction: column;
   min-width: 100px;
   cursor: pointer;
-  border: 1px solid #ccc;
+  border: 1px solid ${subColor};
   border-radius: 5px;
-  color: ${(props) => props.active ?'#222':'#ccc' };
+  color: ${(props) => props.active ? `${textColor}`:`${subColor}` };
   > p {
     display: flex;
     align-items: center;
@@ -1117,7 +1148,7 @@ export const ChartLabel = styled.div`
     padding-left: 10px;
   }
   > div {
-    width: 120px;
+    width: 125px;
     > div {
       cursor: pointer;
       border-width: 0;
@@ -1130,14 +1161,14 @@ export const ChartLabel = styled.div`
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid ${subColor};
   }
 `
 
 export const ChartTooltip = styled.div`
   background: #fff;
   padding: 3px 10px;
-  border: 1px solid #ccc;
+  border: 1px solid ${subColor};
   border-radius: 3px;
   font-size: 13px;
   & .date {
@@ -1222,7 +1253,7 @@ export const DownLoadButton = styled.button`
   background-repeat: no-repeat;
   background-position: center;
   position: absolute;
-  border-left: 1px solid #e5e5e5;
+  border-left: 1px solid ${lightGray};
   border-radius:0;
   right: 10px;
   &:hover {
@@ -1241,7 +1272,7 @@ export const ValidationScript = styled.div`
 export const Input = styled('input')`
   padding:0 20px;
   width: 100%;
-  border: 1px solid #e5e5e5;
+  border: 1px solid ${lightGray};
   height: ${buttonHeightSize}px;
   border-radius: 5px;
   background-color: ${(props)=>props.readOnly? '#eee': '#fff'};
@@ -1268,12 +1299,16 @@ export const RelativeDiv = styled.div`
   padding: ${(props) => props.box ? "15px": null};
   background-color: ${(props) => props.box ? "#f9fafb": null};
   border-radius: ${(props) => props.box ? "5px": null};
-  border: ${(props) => props.box ? "1px solid #e5e5e5": null};
+  border: ${(props) => props.box ? '1px solid': null};
+  border-color: ${(props) => props.box ? lightGray: null};
   & > * {
     margin-right: 10px;
   }
   & label {
-    margin-right: 10px;
+      margin-right: 20px;
+    &:last-child {
+      margin-right: 0;
+    }
   }
   & label > input {
     margin-right: 10px;

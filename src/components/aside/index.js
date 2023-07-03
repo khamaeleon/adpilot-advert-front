@@ -6,6 +6,7 @@ import {useAtom} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity/Common";
 import {retrieveCustomReportsList} from "../../services/reports/ReportsAxios";
 import {retrieveCustomReportsAdminList} from "../../services/reports/ReportsAdminAxios";
+import {mainColor} from "../../assets/GlobalStyles";
 
 function AsideList (props) {
   const {id, mode} = props
@@ -178,7 +179,7 @@ const Menu = styled.ul`
       margin-left: 0px;
       transition-duration: 0.5s;
       &:hover {
-        background-color: #f5811f;
+        background-color: ${mainColor};
       }
       & span {
         display: inline-block;

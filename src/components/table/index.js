@@ -4,9 +4,8 @@ import {
   ColSpan2,
   ColTitle,
   CopyCode,
-  RowSpan,
+  RowSpan, SaveExcelButton,
   Script,
-  SearchButton,
   Site,
   SubmitButton,
 } from "../../assets/GlobalStyles";
@@ -22,12 +21,13 @@ import {BorderBox, Off, On, PreviewSubmit, Small, SwitchBox, TitColor} from "./s
 import {navigationName} from "../common/entity";
 import moment from "moment";
 import {useLocation} from "react-router-dom";
+import {light} from "../../assets/theme";
 
 export function SwitchComponent(props){
   const {value, cellProps, type, eventClick} = props
   const [select, setSelect] = useState(value)
   const [, setModal] = useAtom(modalController)
-  const background = !select ? {background: '#ddd'} : {background: '#f5811f'};
+  const background = !select ? {background: light.color.lightGray} : {background: light.color.mainColor};
   const position = select ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null
 
   const handleClick = (confirm) => {
@@ -194,7 +194,7 @@ export function Icon(props) {
 
 function Table(props) {
   const {columns, data, settings, groups, noDirectives } = props
-  const [activeCell, setActiveCell] = useState([0]);
+  const [, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = {minHeight: 550}
   const location = useLocation()
@@ -220,6 +220,7 @@ function Table(props) {
       })
     }
     setActiveCell([data.length])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const emptyText = <p style={{
@@ -296,8 +297,8 @@ function Table(props) {
   return (
     <>
       {props.downloadList &&
-        <RowSpan>
-          <SearchButton style={{ marginTop: 20 }} onClick={exportCSV}>CSV 다운로드</SearchButton>
+        <RowSpan style={{justifyContent: 'flex-end'}}>
+          <SaveExcelButton onClick={exportCSV}>엑셀 저장</SaveExcelButton>
         </RowSpan>
       }
       <RowSpan>

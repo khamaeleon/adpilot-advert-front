@@ -1,7 +1,6 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchDetail,
   BoardTableContainer,
   ColSpan1,
   ColSpan4,
@@ -33,7 +32,9 @@ import Select from "react-select";
 import {hostList} from "../signup/entity/Common";
 import {
   retrieveSubLevelCategoryKeyValue,
-  retrieveTopLevelCategoryKeyValue, retrieveUserSubLevelCategoryKeyValue, retrieveUserTopLevelCategoryKeyValue
+  retrieveTopLevelCategoryKeyValue,
+  retrieveUserSubLevelCategoryKeyValue,
+  retrieveUserTopLevelCategoryKeyValue
 } from "../../services/Platform/CategoryAxios";
 import {useNavigate} from "react-router-dom";
 import {pixelAdverDetailColumns, pixelColumns, pixelDataAtom, pixelDetailColumns} from "./entity/Pixel";
@@ -420,12 +421,12 @@ function PixelList() {
     })
   }
   const rowExpandHeight = ({ data }) => {
-    if(data?.pixelCnt < 6) {
-      return 85+(data.pixelCnt*45)
+    if(data?.pixelCnt < 8) {
+      return 82+(data.pixelCnt*45)
     } else if(data?.pixelCnt === 0) {
       return 300
     }
-    return 500;
+    return 420;
   }
   return (
     <main>
@@ -446,7 +447,7 @@ function PixelList() {
           </RowSpan>
         }
         <BoardTableContainer>
-          {tokenResult.role !== 'NORMAL' &&
+          {tokenResult.role !== 'NORMAL' ?
             <TableDetail columns={pixelColumns}
                          data={pixelDataState}
                          detailData={handleFetchDetailData}
@@ -456,8 +457,7 @@ function PixelList() {
                          groups={false}
                          rowExpandHeight={rowExpandHeight}
                          style={{minHeight: 500}}/>
-          }
-          {tokenResult.role === 'NORMAL' &&
+          :
             <Table
               columns={pixelAdverDetailColumns}
               data={handleFetchDetailData}

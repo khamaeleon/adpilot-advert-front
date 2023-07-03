@@ -59,7 +59,11 @@
     }
     .button {
       position: absolute;
-      padding: 8px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-width: 80px;
+      min-height: 30px;
       font-weight: bold;
       white-space: nowrap;
       border: 0;
@@ -132,9 +136,9 @@
         factory(item)
       })
     }
-    console.log(subData)
     //방어로직
     if(subData !== undefined){
+      root.style.cursor = 'pointer'
       init()
     } else {
       const div = document.createElement('div')
@@ -148,7 +152,9 @@
     }
     root.addEventListener('click', function () {
       console.log('클릭이벤트')
-      window.open('about:blank').location.href = baseData.pcUrl
+      if(subData !== undefined){
+        window.open('about:blank').location.href = baseData.pcUrl
+      }
     })
   </script>
 </body>

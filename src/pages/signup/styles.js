@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {bgColor, borderColor, mainColor} from "../../assets/GlobalStyles";
 
 export const SignUpHeader = styled.div`
   display: flex;
@@ -42,7 +43,7 @@ export const Step = styled.div`
   padding: 12px;
   width: 320px;
   border-radius: 50px;
-  background-color: #f8f8f8;
+  background-color: ${bgColor};
 
   & > div:first-child {
     width: 50px;
@@ -79,7 +80,7 @@ export const Arrow = styled.div`
 `
 export const SignUpContents = styled.div`
   padding: 50px 0 70px 0;
-  background-color: #f8f8f8;
+  background-color: ${bgColor};
 
   & article {
     & h2 {
@@ -96,7 +97,7 @@ export const TermsBox = styled.div`
   width: 100%;
   height: 143px;
   border-radius: 5px;
-  border: 1px solid #e9ebee;
+  border: 1px solid ${borderColor};
   background-color: #fff;
   overflow: auto;
 `
@@ -129,8 +130,8 @@ export const ButtonGroup = styled.div`
     border: 1px solid #535353;
 
     &:hover {
-      border: 1px solid #f5811f;
-      color: #f5811f;
+      border: 1px solid ${mainColor};
+      color: ${mainColor};
     }
   }
 
@@ -154,7 +155,7 @@ export const Form = styled.div`
   padding: 60px 40px;
   width: 100%;
   background-color: #fff;
-  border: 1px solid #e9ebee;
+  border: 1px solid ${borderColor};
 
   & h2 {
     margin-top: 20px;
@@ -197,14 +198,14 @@ export const Form = styled.div`
       min-width: 600px;
       height: 45px;
       border-radius: 5px;
-      border: 1px solid #e5e5e5;
+      border: 1px solid ${borderColor};
       padding: 20px;
     }
 
     & select {
       height: 45px;
       border-radius: 5px;
-      border: 1px solid #e5e5e5;
+      border: 1px solid ${borderColor};
       padding: 0 20px;
     }
   }
@@ -226,7 +227,7 @@ export const Round = styled.div`
   width: 240px;
   height: 240px;
   border-radius: 100%;
-  border: 1px solid #e9ebee;
+  border: 1px solid ${borderColor};
   background-color: #fff;
   background-repeat: no-repeat;
   background-position: center;

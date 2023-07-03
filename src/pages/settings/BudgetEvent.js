@@ -1,7 +1,6 @@
 import {
   Board,
   BoardHeader,
-  BoardSearchDetail,
   BoardTableContainer,
   ColSpan1,
   DefaultButton,

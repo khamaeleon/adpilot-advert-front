@@ -1,13 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
-import {confirmAlert} from "react-confirm-alert";
 import ImageUploading from "react-images-uploading";
 import {toast} from "react-toastify";
-
-
-
 export function FrameEditor(props){
   const {size, guide, set, publicSetting, setPublicSetting} = props
+  const boundaryRef = useRef()
   const [sized, setSized] = useState([0,0])
   const [addElement, setAddElement] = useState(false)
   const [isEditable, setIsEditable] = useState([false, false]);
@@ -48,6 +45,8 @@ export function FrameEditor(props){
     button: {
       left: 0,
       top: 0,
+      width: 0,
+      height: 0,
     }
   });
   const defaultBody = {
@@ -56,35 +55,21 @@ export function FrameEditor(props){
   }
   const gridBody = {
     backgroundColor: set.background.backgroundColor,
-    backgroundImage:`linear-gradient(90deg, #aaaaaa30 1px, transparent 1px), linear-gradient(0deg, #aaaaaa30 1px, transparent 1px),linear-gradient(90deg, #aaaaaa30 1px, transparent 1px), linear-gradient(0deg, #aaaaaa30 1px, transparent 1px)`,
-    backgroundSize: '10px 10px, 10px 10px, 50px 50px, 50px 50px',
-    backgroundPosition: '-1px -1px, -1px -1px, -1px -1px, -1px -1px'
+    backgroundImage:`linear-gradient(90deg, #aaaaaa30 1px, transparent 1px), linear-gradient(0deg, #aaaaaa30 1px, transparent 1px),linear-gradient(90deg, #aaaaaa30 1px, transparent 1px), linear-gradient(0deg, #aaaaaa30 1px, transparent 1px), url(${set.background.backgroundImage})`,
+    backgroundSize: '10px 10px, 10px 10px, 50px 50px, 50px 50px,cover',
+    backgroundPosition: '-1px -1px, -1px -1px, -1px -1px, -1px -1px, center'
   }
   useEffect(() => {
     const stringToSize = size.replace('IMG','').split('_')
     setSized([parseInt(stringToSize[0]),parseInt(stringToSize[1])])
-
     if(publicSetting !== undefined){
-      console.log(publicSetting)
       setElementPosition(publicSetting)
-    } else {
-      console.log(elementPosition)
     }
-    //
-    // setElementPosition({
-    //   ...elementPosition,
-    //   mainImage: {
-    //     ...elementPosition.mainImage,
-    //     width: set.mainImage.width > parseInt(stringToSize[0]) ? parseInt(stringToSize[0]) : set.mainImage.width,
-    //     height: set.mainImage.height > parseInt(stringToSize[1]) ? parseInt(stringToSize[1]) : set.mainImage.height,
-    //   }
-    // })
   }, [set]);
 
   useEffect(() => {
     setPublicSetting(elementPosition)
   }, [elementPosition]);
-
 
   const handleDoubleClick = (e, index) => {
     e.stopPropagation()
@@ -110,8 +95,6 @@ export function FrameEditor(props){
     e.stopPropagation()
     setAddElement(true)
   }
-
-  const boundaryRef = useRef()
 
   const inRange = (v, max) => {
     if (v < 0) return 0;
@@ -144,6 +127,28 @@ export function FrameEditor(props){
     document.addEventListener('mouseup', mouseUpHandler, { once: true });
   }
 
+  const handleButtonResize = (clickEvent, target) => {
+    clickEvent.stopPropagation()
+    const mouseMoveHandler = (moveEvent) => {
+      const deltaX = moveEvent.screenX - clickEvent.screenX;
+      const deltaY = moveEvent.screenY - clickEvent.screenY;
+      const boundary = boundaryRef.current.getBoundingClientRect();
+
+      setElementPosition({
+        ...elementPosition,
+        [target]: {
+          ...elementPosition[target],
+          width: inRange((!isNaN(elementPosition[target].width) ? elementPosition[target].width : 0)  + deltaX, Math.floor(boundary.width)),
+          height: inRange((!isNaN(elementPosition[target].height) ? elementPosition[target].height : 0) + deltaY, Math.floor(boundary.height - 2))
+        }
+      })
+    }
+    const mouseUpHandler = () => {
+      document.removeEventListener('mousemove', mouseMoveHandler);
+    };
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler, { once: true });
+  }
 
   const handleMouseMoveDrag = (clickEvent, target) => {
     const mouseMoveHandler = (moveEvent) => {
@@ -302,7 +307,7 @@ export function FrameEditor(props){
                 maxFileSize={10485760}
                 maxNumber={5}
                 onError={(e) => onImageError(e,'image')}
-              >
+                value={''}>
                 {({onImageUpload}) => (
                   <div onClick={onImageUpload}>이미지 추가</div>
                 )}
@@ -313,6 +318,7 @@ export function FrameEditor(props){
         <span>{sized[0]}px X {sized[1]}px</span>
         <ReloadButton onClick={handleResetFrame}>
           {resetIcon}
+          {/** 리셋에 대한 정의 필요 **/}
         </ReloadButton>
       </FrameHeader>
       <FrameBody
@@ -397,9 +403,13 @@ export function FrameEditor(props){
               color: set.button.color,
               left:`${elementPosition.button.left}px`,
               top:`${elementPosition.button.top}px`,
+              width: `${elementPosition.button.width}px`,
+              height: `${elementPosition.button.height}px`,
               border: `${set.button.backgroundColor === set.background.backgroundColor ? `1px solid #aaa` : 'none'}`
           }}
-            onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,'button')}}>{set.button.text}</Button>
+            onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,'button')}}>{set.button.text}
+            <Resizer onMouseDown={(clickEvent) => {handleButtonResize(clickEvent, `button`)}}/>
+          </Button>
         }
       </FrameBody>
     </FrameContainer>
@@ -516,7 +526,8 @@ const Text = styled.div`
 
 const Button = styled.button`
   position: absolute;
-  padding: 8px 16px;
+  min-width: 80px;
+  min-height: 30px;
   font-weight: bold;
   cursor: move;
   white-space: nowrap;

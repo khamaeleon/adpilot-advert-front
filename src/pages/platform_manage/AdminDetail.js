@@ -3,7 +3,7 @@ import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail,
+  BoardSearchDetail, ColSpan1, ColSpan2,
   ColSpan3,
   ColTitle,
   Input,
@@ -19,29 +19,23 @@ import {VerticalRule} from "../../components/common/Common";
 import React, {useEffect} from "react";
 import {useForm} from "react-hook-form";
 import {useAtom} from "jotai";
-import {useLocation, useNavigate} from "react-router-dom";
 import {selAdminInfo, updateAdmin} from "../../services/Platform/ManageAdminAxios";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 import {PwChange} from "./UserDetail";
 import {modalController} from "../../store";
-import {tokenResultAtom} from "../login/entity/Common";
 import {adminInfoAtom} from "./entity/Admin";
 
 
 function PlatformAdminDetail() {
   const [, setModal] = useAtom(modalController)
-  const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [adminInfoState, setAdminInfoState] = useAtom(adminInfoAtom)
-  const {register, handleSubmit, watch, reset, formState: {errors}} = useForm({
+  const {register, handleSubmit, reset, formState: {errors}} = useForm({
     mode: "onSubmit",
     defaultValues: adminInfoState
   })
   const onError = (error) => console.log(error)
-  const state = useLocation()
-
-  const navigate = useNavigate()
 
   useEffect(() => {
     selAdminInfo().then(response => {
@@ -108,9 +102,9 @@ function PlatformAdminDetail() {
           </TitleContainer>
           <Board>
             <BoardHeader>기본 정보</BoardHeader>
-            <BoardSearchDetail>
-              <RowSpan>
-                <ColSpan3>
+            <BoardSearchDetail column={true}>
+              <RowSpan style={{justifyContent: 'flex-start'}}>
+                <ColSpan2>
                   <ColTitle><Span4>아이디</Span4></ColTitle>
                   <RelativeDiv>
                     <Input
@@ -120,17 +114,19 @@ function PlatformAdminDetail() {
                       readOnly={true}
                     />
                   </RelativeDiv>
+                </ColSpan2>
+                <ColSpan1>
                   <PwChange title={'비밀번호 변경'} modalInfo={'ADMIN'} onSave={handleSavePassword} onSubmit={onModalPw}/>
-                </ColSpan3>
+                </ColSpan1>
               </RowSpan>
             </BoardSearchDetail>
             <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>
           </Board>
           <Board>
             <BoardHeader>담당자 정보</BoardHeader>
-            <BoardSearchDetail>
+            <BoardSearchDetail column={true}>
               <RowSpan>
-                <ColSpan3>
+                <ColSpan2>
                   <ColTitle><Span4>담당자명</Span4></ColTitle>
                   <RelativeDiv>
                     <Input
@@ -140,10 +136,10 @@ function PlatformAdminDetail() {
                       readOnly={true}
                     />
                   </RelativeDiv>
-                </ColSpan3>
+                </ColSpan2>
               </RowSpan>
               <RowSpan>
-                <ColSpan3>
+                <ColSpan2>
                   <ColTitle><Span4>담당자 연락처</Span4></ColTitle>
                   <RelativeDiv>
                     <Input
@@ -161,7 +157,7 @@ function PlatformAdminDetail() {
                     />
                     {errors.phoneNumber && <ValidationScript>{errors.phoneNumber?.message}</ValidationScript>}
                   </RelativeDiv>
-                </ColSpan3>
+                </ColSpan2>
               </RowSpan>
             </BoardSearchDetail>
             <VerticalRule style={{marginTop: 20, backgroundColor: "#eeeeee"}}/>

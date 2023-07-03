@@ -4,10 +4,11 @@ import {ModalBody, ModalHeader} from "../modal/Modal";
 import styled from "styled-components";
 import {selKeywordUser} from "../../services/Platform/ManageUserAxios";
 import {modalController} from "../../store";
-import {ColSpan4, RelativeDiv, RowSpan, SaveExcelButton} from "../../assets/GlobalStyles";
+import {borderColor, ColSpan4, lightGray, RelativeDiv, RowSpan, SaveExcelButton} from "../../assets/GlobalStyles";
 
 import {decimalFormat, removeStr} from "../../common/StringUtils";
 import {useForm} from "react-hook-form";
+import {light} from "../../assets/theme";
 
 // function ModalHistoryAdd(props) {
 //   const id = localStorage.getItem("id")
@@ -221,7 +222,7 @@ function SearchModal (props) {
                           <tr key={key}
                               onClick={() => handleSelect(item)}
                               style={selectedItem.siteName === item.siteName ? {
-                                backgroundColor: "#f5811f",
+                                backgroundColor: light.color.mainColor,
                                 color: '#fff'
                               } : null}>
                             <td>{item.siteName}</td>
@@ -280,14 +281,14 @@ const MediaSearchResult = styled.div`
       padding: 12px;
       background-color: #fafafa;
       color: #b2b2b2;
-      border-top: 1px solid #e5e5e5;
-      border-bottom: 1px solid #e5e5e5;
+      border-top: 1px solid ${borderColor};
+      border-bottom: 1px solid ${borderColor};
     }
 
     & td {
       text-align: center;
       padding: 12px;
-      border-bottom: 1px solid #e5e5e5;
+      border-bottom: 1px solid ${borderColor};
       cursor: pointer;
     }
   }
@@ -299,7 +300,7 @@ const InputGroup = styled.div`
   & input[type='text'] {
     padding: 0 20px;
     width: 80%;
-    border: 1px solid #e5e5e5;
+    border: 1px solid ${borderColor};
     height: 45px;
     border-radius: 10px 0 0 10px;
   }
@@ -330,7 +331,7 @@ const AccountButton = styled.button`
   width: 175px; 
   height: 40px;
   border-radius: 5px;
-  border: solid 1px #ddd;
+  border: solid 1px ${lightGray};
   background-color: #f3f3f3;
   font-size: 15px;
   > span {
@@ -341,7 +342,7 @@ const AccountButton = styled.button`
 const SwitchUserButton = styled.button`
   background-color: #fff;
   padding: 13px 40px;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   border-radius: 5px;
 `
 
@@ -351,7 +352,7 @@ const HistoryAdd = styled.div`
   }
   .border-box {
     padding: 15px 20px;
-    border: solid 1px #e5e5e5;
+    border: solid 1px ${borderColor};
     span {
       width: 92px; 
       color: #777;
@@ -380,7 +381,7 @@ const HistoryAdd = styled.div`
       align-items: center;
       padding: 8px 15px;
       border-radius: 10px;
-      border: solid 1px #e5e5e5;
+      border: solid 1px ${lightGray};
       &.gary-bg input {
         font-size: 18px;
         &::placeholder {

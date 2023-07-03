@@ -33,6 +33,7 @@ function PaymentManage() {
 
   useEffect(() => {
     handlePaymentTableData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchPaymentParamsState])
   /**
    * 검색 버튼
@@ -57,7 +58,6 @@ function PaymentManage() {
       keywordType: searchPaymentParamsState.searchType,
       keyword: searchPaymentParamsState.search
     };
-
     return paymentAllListRequest ( requestData )
       .then(response => {
         console.log(response);

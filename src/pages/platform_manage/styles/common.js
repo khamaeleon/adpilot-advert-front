@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {borderColor, lightGray, mainColor} from "../../../assets/GlobalStyles";
 
 export const CategoryContainer = styled.div`
   display: flex;
@@ -7,17 +8,17 @@ export const CategoryContainer = styled.div`
 export const MainCategory = styled.div`
   margin-right: 15px;
   width: 400px;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
 `
 
 export const SubCategory = styled.div`
   width: 100%;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
 `
 
 export const CategoryEnroll = styled.div`
   display: flex;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid ${lightGray};
   overflow: hidden;
   padding: 0 10px 0 0;
   height: 0;
@@ -31,7 +32,7 @@ export const CategoryHeader = styled.div`
   padding: 12px 15px;
   text-align: center;
   background-color: #fafafa;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid ${lightGray};
 `
 
 export const CategoryBody = styled.div`
@@ -48,11 +49,13 @@ export const CategoryBody = styled.div`
 export const CategoryItem = styled.div`
   padding: 12px 18px;
   width: 100%;
-  border-bottom: ${(props) => props.active ? "1px solid #ffe3cb" : "1px solid #ddd"};
-  border-left: ${(props) => props.active ? "2px solid #f5811f" : null};
+  border-bottom: 1px solid;
+  border-bottom-color: ${(props) => props.active ? "#ffe3cb" : lightGray};
+  border-left: ${(props) => props.active ? '2px solid' : null};
+  border-left-color: ${(props) => props.active ? mainColor : null};
   cursor: pointer;
   background-color: ${(props) => props.active ? "#fffaf1" : null};
-  color: ${(props) => props.active ? "#f5811f" : null};
+  color: ${(props) => props.active ? mainColor : null};
 `
 
 export const SubCategoryBody = styled.div`
@@ -62,7 +65,6 @@ export const SubCategoryBody = styled.div`
   width: 100%;
   max-height: 500px;
   overflow-y: auto;
-  
   & div:nth-child(4n) {
     border-right: 0;
   }
@@ -71,8 +73,8 @@ export const SubCategoryBody = styled.div`
 export const SubCategoryItem = styled.div`
   padding: 12px 18px;
   width: 25%;
-  border-bottom: 1px solid #ddd;
-  border-right: 1px solid #ddd;
+  border-bottom: 1px solid ${lightGray};
+  border-right: 1px solid ${lightGray};
 `
 
 export const EnrollButton = styled.button`
@@ -83,22 +85,22 @@ export const EnrollButton = styled.button`
   height: 30px;
   margin-top: -15px;
   background-color: #fff;
-  border: 1px solid #ddd;
+  border: 1px solid ${lightGray};
   color: #777777;
   font-weight: bold;
   &:hover {
-    color: #f5811f;
+    color: ${mainColor};
   }
 `
 
 export const SearchButton = styled.button`
   width: 140px;
   height: 40px;
-  border: 1px solid #dddddd;
+  border: 1px solid ${lightGray};
   background-color: #fff;
   border-radius: 5px;
   &:hover {
-    color: #f5811f;
+    color: ${mainColor};
   }
 `
 export const StatusBtn = styled.button`
@@ -107,10 +109,10 @@ export const StatusBtn = styled.button`
   align-items: center;
   background-color: #f9fafb;
   height: 35px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid ${borderColor};
   border-radius: 5px;
   &:hover {
-    border-color: #f5811f;
+    border-color: ${mainColor};
   }
 `
 export const Image = styled.img`
@@ -118,8 +120,8 @@ export const Image = styled.img`
 `
 
 export const DuplicateButton = styled.button`
-  width: 150px;
-  height: 45px;
+  width: 120px;
+  height: 40px;
   background-color: #777;
   border-radius: 5px;
   color: #fff;

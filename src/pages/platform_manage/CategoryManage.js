@@ -44,6 +44,7 @@ export function CategoryManage() {
    */
   useEffect(() => {
     resetCategory()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
   /**
    * 카테고리 조회
@@ -54,7 +55,7 @@ export function CategoryManage() {
       setTopLevelCategoryList(response)
       if(response.length !== 0) handleSelectCategory(category ? selectCategory :  response[0].code )
     })
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
   /**
    * 카테고리 선택
@@ -208,7 +209,7 @@ export function CategoryManage() {
                   <SubCategoryItem key={key}>{item.name}</SubCategoryItem>
                 )
               })}
-              {topLevelCategoryList?.length === 0 && <div style={{padding: 30}}>검색 정보가 없습니다.</div>}
+              {topLevelCategoryList?.length === 0 && <div style={{padding: 30}}>검색 결과가 없습니다.</div>}
             </SubCategoryBody>
           </SubCategory>
         </CategoryContainer>
