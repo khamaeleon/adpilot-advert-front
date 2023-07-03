@@ -47,12 +47,11 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "start": "env-cmd -f .env.local react-scripts start",
-    "dev": "env-cmd -f .env.alpha react-scripts start",
+    "local": "env-cmd -f .env.local react-scripts start",
+    "alpha": "env-cmd -f .env.alpha react-scripts start",
     "prod": "env-cmd -f .env.prod react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [
