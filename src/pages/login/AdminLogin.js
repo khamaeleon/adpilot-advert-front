@@ -33,6 +33,7 @@ function AdminLogin() {
       setValue('email',cookies.rememberAdminId)
       setIsRemember(true)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   /**

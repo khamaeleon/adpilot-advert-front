@@ -12,7 +12,7 @@ function TimeTableComponent (props) {
     <div>
       <ModalHeader title={"설정된 시간별 예산"}/>
       <ModalBody>
-        {props.exposureTimeType !== "DIRECT_SETTINGS"  &&
+        {props.exposureTimeType !== "DIRECT_SETTINGS" ?
           <>
             <RowSpan>
               <ColTitle><strong>예산 소진 설정 | 균등소진/빠른소진</strong></ColTitle>
@@ -21,7 +21,7 @@ function TimeTableComponent (props) {
               <DragToSelect readOnly={props.readOnly}/>
             </RowSpan>
           </>
-          ||
+          :
           <>
             <RowSpan>
               <ColTitle><strong>예산 소진 설정 | 직접 설정</strong></ColTitle>

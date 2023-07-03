@@ -255,6 +255,7 @@ export function PaymentCondition(props) {
     } else {
       setIsCheckedAll(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[searchCondition.statusList.length])
   /**
    * 이벤트 유형 선택

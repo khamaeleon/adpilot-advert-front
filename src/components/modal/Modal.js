@@ -36,6 +36,7 @@ export function ModalHeader (props) {
     }
     window.addEventListener('keydown', escKeyModalClose)
     return () => window.removeEventListener('keydown', escKeyModalClose)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   return(

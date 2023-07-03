@@ -56,6 +56,7 @@ function SearchModal (props) {
     return () => {
       setMediaInventoryInfo([])
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   const handleSearchKeyword = (event)=>{
@@ -183,7 +184,7 @@ function SearchModal (props) {
                       <InventoryName>{item.inventoryName}</InventoryName>
                       <UserId>{item.username}</UserId>
                       <Category>{item.category1}</Category>
-                      <Code><a href={item.siteUrl} target={'_blank'}>사이트보기</a></Code>
+                      <Code><a href={item.siteUrl} target={'_blank'} rel="noreferrer">사이트보기</a></Code>
                       <Device>{item.deviceType}</Device>
                       <BannerSize>{item.bannerSize.replace('IMG','')}</BannerSize>
                     </InventoryItem>
@@ -218,7 +219,7 @@ function SearchModal (props) {
                       <InventoryName>{item.inventoryName}</InventoryName>
                       <UserId>{item.username}</UserId>
                       <Category>{item.category1}</Category>
-                      <Code><a href={item.siteUrl} target={'_blank'}>사이트보기</a></Code>
+                      <Code><a href={item.siteUrl} target={'_blank'} rel="noreferrer">사이트보기</a></Code>
                       <Device>{item.deviceType}</Device>
                       <BannerSize>{item.bannerSize.replace('IMG','')}</BannerSize>
                     </SelectedInventoryResultItem>
@@ -231,7 +232,7 @@ function SearchModal (props) {
                       <InventoryName>{item.inventoryName}</InventoryName>
                       <UserId>{item.username}</UserId>
                       <Category>{item.category1}</Category>
-                      <Code><a href={item.siteUrl} target={'_blank'}>사이트보기</a></Code>
+                      <Code><a href={item.siteUrl} target={'_blank'} rel="noreferrer">사이트보기</a></Code>
                       <Device>{item.deviceType}</Device>
                       <BannerSize>{item.bannerSize.replace('IMG','')}</BannerSize>
                     </SelectedInventoryResultItem>

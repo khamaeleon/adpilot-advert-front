@@ -23,9 +23,9 @@ function TableDetail (props) {
    * 컬럼 기본 세팅
    */
   const columnData = () => {
-    columns.map(item => {
+    columns.map(item =>
       Object.assign(item, settings.default)
-    })
+    )
     settings.setColumns.map(item => {
       Object.assign(columns[item.target],item.value)
       Object.assign(columns[item.target],item.function)
@@ -39,10 +39,11 @@ function TableDetail (props) {
     if(settings !== undefined) {
       columnData()
     } else {
-      columns.map(item => {
+      columns.map(item =>
         Object.assign(item, {textAlign: 'center'})
-      })
+      )
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
@@ -76,6 +77,7 @@ function TableDetail (props) {
         style={{minHeight: 45}}
       />
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[props])
 
   return(
