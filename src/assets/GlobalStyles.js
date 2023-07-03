@@ -778,7 +778,51 @@ export const DashBoardHeader = styled.div`
 export const DashBoardBody = styled.div`
   display: block;
 `
-export const BoardTableContainer = styled.div``
+export const BoardTap = styled.div`
+  margin: 0 0 34px 0;
+  width: 100%;
+  background-color: #fff;
+  padding: 30px 40px;
+  border-radius: 0 20px 20px 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+`
+
+export const BoardTapTitle = styled.div`
+  margin-top: 34px;
+  padding: 12px 0;
+  width: 300px;
+  background-color: #fff;
+  text-align: center;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  font-size: 17px;
+  font-weight: bold;
+`
+export const BoardTableContainer = styled.div`
+  & table {
+    width: 100%;
+    border-top: 1px solid ${lightGray};
+    border-bottom: 1px solid ${lightGray};
+    & tr {
+      & th {
+        padding: 14px 0;
+        background-color: #fafafa;
+        font-size: 15px;
+        color: #b2b2b2;
+        font-weight: normal;
+        white-space: nowrap;
+      }
+      & td {
+        padding: 14px 0;
+        word-break: break-word;
+        text-align: center;
+        & a {
+          border-bottom: 1px solid #777;
+        }
+      }
+    }
+  }
+`
 
 export const BoardTableCustomContainer = styled.div`
   & table {
@@ -1272,6 +1316,7 @@ export const ValidationScript = styled.div`
 export const Input = styled('input')`
   padding:0 20px;
   width: 100%;
+  text-align : ${(props)=>props?.textAlign !== 'right' ? 'left' : 'right'};
   border: 1px solid ${lightGray};
   height: ${buttonHeightSize}px;
   border-radius: 5px;

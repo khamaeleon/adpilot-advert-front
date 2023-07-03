@@ -7,9 +7,8 @@ import {modalController} from "../../../store";
 import {
   ColSpan1,
   ColSpan4, DefaultButton,
-  inputStyle, RowSpan, Edit, ValidationScript, SubmitButton, lightGray,
+  RowSpan, Edit, ValidationScript, SubmitButton, selectStyle, Input,
 } from "../../../assets/GlobalStyles";
-import styled from "styled-components";
 import {refundRequestData} from "../../../pages/platform_manage/entity/PaymentUser";
 import {tokenResultAtom} from "../../../pages/login/entity/Common";
 import {RegisterRefundInformationRequest} from "../../../services/payment/user/RegisterRefundInformationAxios";
@@ -20,7 +19,7 @@ export function RegisterRefundInformationButton(props) {
   const handleModalComponent = () => {
     setModal({
       isShow: true,
-      width: 700,
+      width: 500,
       modalComponent: () => {
         return (
           <RegisterRefundInformationModal onSave={onSave} modalInfo={modalInfo} onSubmit={onSubmit} refundData={refundData} setRefundData={setRefundData} onPaymentDetailsReceived={onPaymentDetailsReceived}/>
@@ -109,14 +108,14 @@ function RegisterRefundInformationModal (props) {
               }}
               render={({ field}) => (
                 <>
-                  <Select
-                    {...field}
-                    options={refundRequestData.bankType}
-                    placeholder={value?value:'은행'}
-                    styles={inputStyle}
-                    components={{IndicatorSeparator: () => null}}
-                    onChange={(e)=>handleChangeIsBank(e)}
-                  />
+                    <Select
+                      {...field}
+                      options={refundRequestData.bankType}
+                      placeholder={value?value:'은행'}
+                      styles={selectStyle}
+                      isSearchable={false}
+                      onChange={(e)=>handleChangeIsBank(e)}
+                    />
                   {errors.bankList && <ValidationScript style={{minHeight:"15px", left:"14px"}}>{errors.bankList?.message}</ValidationScript>}
                 </>
               )}
@@ -168,18 +167,3 @@ function RegisterRefundInformationModal (props) {
     </form>
   )
 }
-
-/**스타일 시트**/
-const Input = styled.input `
-  width: 210px;
-  font-size: 18px;
-  font-weight: 600;
-  border: 1px solid ${lightGray};
-  border-radius: 5px;
-  text-align: left;
-  padding: 4px 10px;
-  &:after {
-    font-size: 13px;
-    font-weight: 400;
-  }
-`

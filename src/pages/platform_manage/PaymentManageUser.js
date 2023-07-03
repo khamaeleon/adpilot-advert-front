@@ -43,11 +43,11 @@ export function RefundRequestTable(props) {
     <RefundInformation>
       <table style={{margin:"0"}}>
         <thead>
-        <tr>
-          <th>은행</th>
-          <th>계좌번호</th>
-          <th>예금주</th>
-        </tr>
+          <tr>
+            <th>은행</th>
+            <th>계좌번호</th>
+            <th>예금주</th>
+          </tr>
         </thead>
         <tbody>
         <tr>
@@ -67,7 +67,7 @@ export function RefundRequestTable(props) {
   )
 }
 
-function PaymentManageUser(props) {
+function PaymentManageUser() {
   const [tokenUserInfo] = useAtom(tokenResultAtom) // userId
   const [, setAccountInfoState] = useAtom(accountInfoAtom) // 새로 고침 시
   //[d] totalInfo 2개 생성 결제내역 하나, 포인트 지급 하나
@@ -220,75 +220,77 @@ function PaymentManageUser(props) {
         <Board>
           <BoardHeader>결제 정보</BoardHeader>
           <BoardSearchDetail>
-            <RowSpan box={true} row={true}>
-              <ColSpan2 column={true} style={{borderRight:"1px solid #ddd", padding:"0 20px 0 0", gap:"0"}}>
-                <RowSpan style={{width:"100%", margin:"0 0 30px 0"}}>
-                  <ColSpan2 style={{alignItems:"baseline"}}>광고비 현황</ColSpan2>
-                  <ColSpan2 style={{justifyContent:"right"}}>
-                    <AdChargeButton
-                      title={'광고비 충전'}
-                      modalInfo={'USER'}
-                      onSave={null}
-                      onSubmit={null}
-                      requestAmountValue={requestAmountValue}
-                      setRequestAmountValue={setRequestAmountValue}
-                      onPaymentDetailsReceived={handlePaymentDetailsReceived}
-                    />
-                    {refundData.refundBankType === null?
-                      <DefaultButton
-                        onClick={handleRegisterRefund}
-                        style={{background:"#fff", color:"#777"}}
-                      >
-                        환불 신청
-                      </DefaultButton>
-                      :
-                      <RefundRequestButton
-                        title={'환불 신청'}
+            <ColSpan4>
+              <RowSpan box={true}>
+                <ColSpan2 column={true} style={{borderRight:"1px solid #ddd", padding:"0 20px 0 0", gap:"0"}}>
+                  <RowSpan style={{width:"100%", margin:"0 0 30px 0"}}>
+                    <ColSpan2 style={{alignItems:"baseline"}}>광고비 현황</ColSpan2>
+                    <ColSpan2 style={{justifyContent:"right"}}>
+                      <AdChargeButton
+                        title={'광고비 충전'}
                         modalInfo={'USER'}
                         onSave={null}
                         onSubmit={null}
-                        refundData={refundData}
+                        requestAmountValue={requestAmountValue}
+                        setRequestAmountValue={setRequestAmountValue}
                         onPaymentDetailsReceived={handlePaymentDetailsReceived}
-                        totalAmount={totalAmount}
                       />
-                    }
-                    {/*환불 신청에 값이 없으면 토스트 띄우기*/}
-                  </ColSpan2>
-                </RowSpan>
-                <RowSpan style={{margin:"0"}}>
-                  <ColSpan4>
-                    <AdvertisingCostStatus>
-                      <span className={'won'}>{decimalFormat(advertisingBalance + requestAmountValue)}</span>
-                    </AdvertisingCostStatus>
-                  </ColSpan4>
-                </RowSpan>
-              </ColSpan2>
-              <ColSpan2 column={true} style={{padding:"0", gap:"0"}}>
-                <RowSpan style={{width:"100%", margin:"0"}}>
-                  <ColSpan2 style={{alignItems:"baseline", marginBottom:"15px"}}>환불 정보</ColSpan2>
-                  {refundData.refundBankType === null?
-                    <ColSpan2 style={{justifyContent:"right"}}>
-                      <RegisterRefundInformationButton onPaymentDetailsReceived={handlePaymentDetailsReceived} title={'등록'} modalInfo={'USER'} onSave={null} onSubmit={null} refundData={refundData} setRefundData={setRefundData}/>
+                      {refundData.refundBankType === null?
+                        <DefaultButton
+                          onClick={handleRegisterRefund}
+                          style={{background:"#fff", color:"#777"}}
+                        >
+                          환불 신청
+                        </DefaultButton>
+                        :
+                        <RefundRequestButton
+                          title={'환불 신청'}
+                          modalInfo={'USER'}
+                          onSave={null}
+                          onSubmit={null}
+                          refundData={refundData}
+                          onPaymentDetailsReceived={handlePaymentDetailsReceived}
+                          totalAmount={totalAmount}
+                        />
+                      }
+                      {/*환불 신청에 값이 없으면 토스트 띄우기*/}
                     </ColSpan2>
-                    :
-                    <ColSpan2 style={{justifyContent:"right", width:"70px", height:"15px"}}>
-                      <RegisterRefundInformationButton onPaymentDetailsReceived={handlePaymentDetailsReceived} title={''} modalInfo={'USER'} onSave={null} onSubmit={null} refundData={refundData} setRefundData={setRefundData}/>
-                    </ColSpan2>
-                  }
-                </RowSpan>
-                <RowSpan>
-                  <ColSpan4>
-                    {refundData.refundBankType === null?
-                      <AdvertisingCostStatus style={{marginTop: "15px"}}>
-                        <small>등록된 환불 정보가 없습니다. 환불 정보를 등록해주세요.</small>
+                  </RowSpan>
+                  <RowSpan style={{margin:"0"}}>
+                    <ColSpan4>
+                      <AdvertisingCostStatus>
+                        <span className={'won'}>{decimalFormat(advertisingBalance + requestAmountValue)}</span>
                       </AdvertisingCostStatus>
+                    </ColSpan4>
+                  </RowSpan>
+                </ColSpan2>
+                <ColSpan2 column={true} style={{padding:"0", gap:"0"}}>
+                  <RowSpan style={{width:"100%", margin:"0"}}>
+                    <ColSpan2 style={{alignItems:"baseline", marginBottom:"15px"}}>환불 정보</ColSpan2>
+                    {refundData.refundBankType === null?
+                      <ColSpan2 style={{justifyContent:"right"}}>
+                        <RegisterRefundInformationButton onPaymentDetailsReceived={handlePaymentDetailsReceived} title={'등록'} modalInfo={'USER'} onSave={null} onSubmit={null} refundData={refundData} setRefundData={setRefundData}/>
+                      </ColSpan2>
                       :
-                      <RefundRequestTable refundData={refundData} advertisingBalance={advertisingBalance} setAdvertisingBalance={setAdvertisingBalance}/>
+                      <ColSpan2 style={{justifyContent:"right", width:"70px", height:"15px"}}>
+                        <RegisterRefundInformationButton onPaymentDetailsReceived={handlePaymentDetailsReceived} title={''} modalInfo={'USER'} onSave={null} onSubmit={null} refundData={refundData} setRefundData={setRefundData}/>
+                      </ColSpan2>
                     }
-                  </ColSpan4>
-                </RowSpan>
-              </ColSpan2>
-            </RowSpan>
+                  </RowSpan>
+                  <RowSpan>
+                    <ColSpan4>
+                      {refundData.refundBankType === null?
+                        <AdvertisingCostStatus style={{marginTop: "15px"}}>
+                          <small>등록된 환불 정보가 없습니다. 환불 정보를 등록해주세요.</small>
+                        </AdvertisingCostStatus>
+                        :
+                        <RefundRequestTable refundData={refundData} advertisingBalance={advertisingBalance} setAdvertisingBalance={setAdvertisingBalance}/>
+                      }
+                    </ColSpan4>
+                  </RowSpan>
+                </ColSpan2>
+              </RowSpan>
+            </ColSpan4>
           </BoardSearchDetail>
           <div style={{
             width:'100%',

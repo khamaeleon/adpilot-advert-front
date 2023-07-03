@@ -73,7 +73,7 @@ export const costPaymentColumns = [
     showColumnMenuTool: false,
     textAlign: 'center',
     width: 400,
-    render: ({ value, cellProps })=> {
+    render: ({ value, data })=> {
       let valueType = {
         //[d] 아래 목록 따로 빼서 관리 사용자, 어드민 모두 사용
         KDB_BANK: { label: 'KDB산업은행' },
@@ -104,15 +104,12 @@ export const costPaymentColumns = [
         TOSS_BANK: { label: '토스뱅크' },
       }[value] || { label: '', color: '' };
       return (
-        <>
-          {valueType.label === "" ?
-            <p>-</p>
-            :
-            <>
-              <p>{valueType.label} / {cellProps.data.refundBankAccount} / {cellProps.data.refundBankAccountHolder}</p>
-            </>
+        <p className={'ellipsis'}>
+          {valueType.label !== "" ?
+            `${valueType.label} / ${data.refundBankAccount} / ${data.refundBankAccountHolder}`
+            : '-'
           }
-        </>
+        </p>
       )
     }
   },
@@ -121,12 +118,14 @@ export const costPaymentColumns = [
     header: '광고주명',
     showColumnMenuTool: false,
     textAlign: 'center',
+    render: ({value}) => <p className={'ellipsis'}>{value}</p>
   },
   {
     name: 'username',
     header: '광고주 아이디',
     showColumnMenuTool: false,
     textAlign: 'center',
+    render: ({value}) => <p className={'ellipsis'}>{value}</p>
   },
   {
     //[d] 신청 아이디 적당한 값이 애매함...UPDATED_BY 값으로 나와 있음..
@@ -136,15 +135,9 @@ export const costPaymentColumns = [
     textAlign: 'center',
     render: ({value}) =>{
     return (
-        <>
-          {value === "" ?
-            <p>-</p>
-            :
-            <>
-              <p>{value}</p>
-            </>
-          }
-        </>
+        <p className={'ellipsis'}>
+          {value !== "" ? value : '-'}
+        </p>
       )
     }
   },
@@ -172,6 +165,7 @@ export const costPaymentColumns = [
     sortable: false,
     showColumnMenuTool: false,
     textAlign: 'center',
+    render: ({value}) => <p className={'ellipsis'}>{value}</p>
   }
 ];
 function CellComponent({ value, cellProps }) {
@@ -196,11 +190,7 @@ function CellComponent({ value, cellProps }) {
           refundData={cellProps}
         />
       ):(
-        <p
-          style={{
-            color: valueType.color,
-          }}
-        >
+        <p style={{color: valueType.color}}>
           {valueType.label}
         </p>
       )
@@ -410,6 +400,7 @@ function AdvertisingPayments() {
             sortable={false}
             style={gridStyle}
             activeCell={null}
+            showHoverRows={false}
           />
         </BoardTableContainer>
       </Board>

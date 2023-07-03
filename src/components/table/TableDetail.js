@@ -29,6 +29,7 @@ function TableDetail (props) {
     settings.setColumns.map(item => {
       Object.assign(columns[item.target],item.value)
       Object.assign(columns[item.target],item.function)
+      return null
     })
   }
 

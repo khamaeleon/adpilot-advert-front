@@ -1068,7 +1068,7 @@ export function CampaignFour() {
           </Board>
         </>
       }
-      <SubmitContainer>
+      록<SubmitContainer>
         <CancelButton type={'button'} onClick={() => state !== null ? window.history.back() : setStepCampaign({steps: 2})}>{state !== null ? '목록' : '이전'}</CancelButton>
         <SubmitButton type={'submit'}>{state !== null ? '수정' : '저장'}</SubmitButton>
       </SubmitContainer>

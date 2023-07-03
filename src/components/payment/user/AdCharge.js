@@ -12,9 +12,8 @@ import {
   RelativeDiv,
   ValidationScript,
   SubmitButton,
-  lightGray
+  InputLabel, Input, ColSpan1
 } from "../../../assets/GlobalStyles";
-import {SmallButton} from "../../../pages/campaign/styles/common";
 import {decimalFormat, removeStr} from "../../../common/StringUtils";
 import {useForm} from "react-hook-form";
 import {paymentRequest} from "../../../services/payment/user/PaymentUserAxios";
@@ -113,86 +112,80 @@ function AdChargeModal (props) {
       <ModalHeader title={title}/>
       <ModalBody>
         <RowSpan>
-          <ColSpan4>
-            <div style={{display:'flex',flexDirection:'column',width: '100%', alignItems: 'start', marginBottom: '25px'}}>
-              <RowSpan>
-                <ColSpan2>결제 방식</ColSpan2>
-                <ColSpan3>
-                  <RelativeDiv>
-                    <label>
-                      <input
-                        type={'radio'}
-                        name={'paymentMethod'}
-                        value="CARD"
-                        checked={payMethod === 'CARD'}
-                        onChange={(e) => setPayMethod(e.target.value)}
-                      />
-                      <span>카드 결제</span>
-                    </label>
-                    <label>
-                      <input
-                        type={'radio'}
-                        name={'paymentMethod'}
-                        value="TRANS"
-                        checked={payMethod === 'TRANS'}
-                        onChange={(e) => setPayMethod(e.target.value)}
-                      />
-                      <span>계좌이체</span>
-                    </label>
-                  </RelativeDiv>
-                </ColSpan3>
-              </RowSpan>
-              <RowSpan>
-                <ColSpan2>충전 금액</ColSpan2>
-                <ColSpan3>
-                  <RelativeDiv className={'color-black'}>
-                    <Input
-                      type={'text'}
-                      value={decimalFormat(chargeAmount + ' 원')}
-                      onClick={()=>handleReset()}
-                      maxLength="19"
-                      {...register("chargeAmount", {
-                        required: "충전 금액을 입력해 주세요.",
-                        pattern: {
-                          message: "숫자만 입력 가능합니다.",
-                          value: "^[0-9,]+원?$",
-                        },
-                        onChange:(e)=>handleChange(e.target.value)
-                      })}
-                    />
-                    {errors.chargeAmount && <ValidationScript style={{left:"0", bottom:"-16px"}}>{errors.chargeAmount.message}</ValidationScript>}
-                  </RelativeDiv>
-                </ColSpan3>
-                <ColSpan3>
-                  <SmallButton type={'button'} onClick={()=>handleClickChargeButton(100000)}>10만원</SmallButton>
-                  <SmallButton type={'button'} onClick={()=>handleClickChargeButton(500000)}>50만원</SmallButton>
-                  <SmallButton type={'button'} onClick={()=>handleClickChargeButton(1000000)}>100만원</SmallButton>
-                </ColSpan3>
-              </RowSpan>
-              <RowSpan>
-                <div style={{display: "flex", flexDirection:'column'}}>
-                  <ColSpan2>결제 금액
-                    <span>
-                                            <small>충전 금액 </small>
-                                            <small className={'won'}>{decimalFormat(chargeAmount)}</small> |
-                                            <small> 부가세 </small><small className={'won'}>{decimalFormat(chargeAmount / 10)}</small>
-                                        </span>
-                  </ColSpan2>
-                  <ColSpan4 style={{padding:"15px 0 0 73px", color:"#000", fontWeight:"bold"}}>
-                    총 결제 금액
-                    {chargeAmount?
-                      (<span className={'won'} style={{color:'#f5811f'}}>{decimalFormat(calcAmount())}</span>)
-                      :(<span className={'won'}>0</span>)}
-총
-                  </ColSpan4>
-                </div>
-              </RowSpan>
-              <RowSpan>
-                <ColSpan2>문의</ColSpan2>
-                <ColSpan4 style={{paddingLeft:"35px"}}>010-4070-3122</ColSpan4>
-              </RowSpan>
-            </div>
-          </ColSpan4>
+          <ColSpan1>결제 방식</ColSpan1>
+          <RelativeDiv>
+            <ColSpan3>
+              <label>
+                <input
+                  type={'radio'}
+                  name={'paymentMethod'}
+                  value="CARD"
+                  checked={payMethod === 'CARD'}
+                  onChange={(e) => setPayMethod(e.target.value)}
+                />
+                <span>카드 결제</span>
+              </label>
+              <label>
+                <input
+                  type={'radio'}
+                  name={'paymentMethod'}
+                  value="TRANS"
+                  checked={payMethod === 'TRANS'}
+                  onChange={(e) => setPayMethod(e.target.value)}
+                />
+                <span>계좌이체</span>
+              </label>
+            </ColSpan3>
+          </RelativeDiv>
+        </RowSpan>
+        <RowSpan>
+          <ColSpan1>충전 금액</ColSpan1>
+          <RelativeDiv>
+            <ColSpan2>
+              <InputLabel label={'원'}>
+                <Input
+                  type={'text'}
+                  value={decimalFormat(chargeAmount)}
+                  onClick={()=>handleReset()}
+                  maxLength="19"
+                  {...register("chargeAmount", {
+                    required: "충전 금액을 입력해 주세요.",
+                    pattern: {
+                      message: "숫자만 입력 가능합니다.",
+                      value: "^[0-9,]+원?$",
+                    },
+                    onChange:(e)=>handleChange(e.target.value)
+                  })}
+                />
+              </InputLabel>
+            </ColSpan2>
+            <ColSpan2>
+              <SmallButton type={'button'} onClick={()=>handleClickChargeButton(100000)}>10만원</SmallButton>
+              <SmallButton type={'button'} onClick={()=>handleClickChargeButton(500000)}>50만원</SmallButton>
+              <SmallButton type={'button'} onClick={()=>handleClickChargeButton(1000000)}>100만원</SmallButton>
+            </ColSpan2>
+            {errors.chargeAmount && <ValidationScript style={{left:15}}>{errors.chargeAmount.message}</ValidationScript>}
+          </RelativeDiv>
+        </RowSpan>
+        <RowSpan style={{justifyContent: 'flex-start',marginTop: 20}}>
+          <ColSpan1>결제 금액</ColSpan1>
+          <RowSpan column={true} style={{width: '100%', marginTop: 0}}>
+            <ColSpan4>
+                <small>충전 금액 </small>
+                <small className={'won'}>{decimalFormat(chargeAmount)}</small> |
+                <small> 부가세 </small><small className={'won'}>{decimalFormat(chargeAmount / 10)}</small>
+            </ColSpan4>
+            <ColSpan4 style={{fontWeight:"bold"}}>
+              총 결제 금액
+              {chargeAmount?
+                (<span className={'won'} style={{color:'#f5811f'}}>{decimalFormat(calcAmount())}</span>)
+                :(<span className={'won'}>0</span>)}
+            </ColSpan4>
+          </RowSpan>
+        </RowSpan>
+        <RowSpan>
+          <ColSpan1>문의</ColSpan1>
+          <ColSpan4>010-4070-3122</ColSpan4>
         </RowSpan>
       </ModalBody>
       <ModalFooter>
@@ -201,17 +194,9 @@ function AdChargeModal (props) {
     </form>
   )
 }
-/**스타일 시트**/
-const Input = styled.input `
-  width: 200px;
-  font-size: 18px;
-  font-weight: 600;
-  border: 1px solid ${lightGray};
+export const SmallButton = styled.button`
+  padding: 5px 12px;
   border-radius: 5px;
-  text-align: right;
-  padding: 3px 8px;
-  &:after {
-    font-size: 13px;
-    font-weight: 400;
-  }
+  background-color: #535353;
+  color: #fff;
 `
