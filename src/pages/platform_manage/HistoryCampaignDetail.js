@@ -1,13 +1,5 @@
-import {
-  Board,
-  BoardHeader,
-  BoardSearchDetail,
-  BoardTableContainer,
-  BoardTap,
-  BoardTapTitle, CancelButton, DefaultButton, SearchButton, SubmitButton, SubmitContainer
-} from "../../assets/GlobalStyles";
+import {BoardTableContainer, BoardTap, BoardTapTitle, CancelButton, SubmitContainer} from "../../assets/GlobalStyles";
 import React from "react";
-import {ButtonGroup} from "../signup/styles";
 import {Link} from "react-router-dom";
 
 export function HistoryCampaignDetail () {

@@ -1,21 +1,8 @@
-import {
-  Board,
-  BoardHeader,
-  BoardTableContainer,
-  BoardTap,
-  BoardTapTitle, CancelButton,
-  SubmitContainer
-} from "../../assets/GlobalStyles";
-import React, {useEffect, useState} from "react";
-import {Link, useLocation} from "react-router-dom";
-import DragToSelect from "../../components/common/DragToSelect";
-import {useAtom} from "jotai";
-import {budgetTimes, timeBudgetDetailDataAtom} from "../settings/entity/BudgetTime";
-import {selBudgetTimeDetailInfo} from "../../services/settings/BudgetTimeAxios";
+import {BoardTableContainer, BoardTap, BoardTapTitle, CancelButton, SubmitContainer} from "../../assets/GlobalStyles";
+import React from "react";
+import {Link} from "react-router-dom";
 
 export function HistoryTimeDetail () {
-  const {state} = useLocation()
-
   return (
     <>
       {/*캠페인 정보*/}

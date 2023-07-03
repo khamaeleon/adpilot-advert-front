@@ -1,11 +1,4 @@
-import {
-  Board,
-  BoardHeader,
-  BoardTableContainer,
-  BoardTap,
-  BoardTapTitle, CancelButton,
-  SubmitContainer
-} from "../../assets/GlobalStyles";
+import {BoardTableContainer, BoardTap, BoardTapTitle, CancelButton, SubmitContainer} from "../../assets/GlobalStyles";
 import React from "react";
 import {Link} from "react-router-dom";
 
