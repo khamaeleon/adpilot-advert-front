@@ -65,10 +65,12 @@ export function FrameEditor(props){
     if(publicSetting !== undefined){
       setElementPosition(publicSetting)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [set]);
 
   useEffect(() => {
     setPublicSetting(elementPosition)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [elementPosition]);
 
   const handleDoubleClick = (e, index) => {

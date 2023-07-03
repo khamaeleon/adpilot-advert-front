@@ -859,7 +859,7 @@ export function CampaignFour() {
       setClickInducementType(response.data)
     })
 
-    if (resistBool && campaignBasicInfo.productType ==='BANNER'|| (state !==null && state.productType==='BANNER')) {
+    if ((resistBool && campaignBasicInfo.productType ==='BANNER')|| (state !==null && state.productType==='BANNER')) {
       selEnumInfo('CREATIVE_TYPE_BANNER').then(response => {
         setCreativeType(response.data)
       })
@@ -872,6 +872,7 @@ export function CampaignFour() {
         })
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   const selCreativeGroup = (selectedCreateType) => {
     let time = dateFormat(toDay(), 'YYMMDDHHmm');
@@ -954,7 +955,7 @@ export function CampaignFour() {
             <BoardSearchResult>
               <Span4>크리에이티브 그룹 선택</Span4>
               <RowSpan box={true} column={false}>
-                {creativeType !== null && (resistBool && campaignBasicInfo.productType==='BANNER'|| (state !==null && state.productType==='BANNER')) &&
+                {creativeType !== null && ((resistBool && campaignBasicInfo.productType==='BANNER')|| (state !==null && state.productType==='BANNER')) &&
                   <ColSpan1 padding={'0'}>
                     <CampaignButton type={'button'}
                                     onClick={() => selCreativeGroup('BANNER')}
@@ -1056,10 +1057,10 @@ export function CampaignFour() {
                 <Validation>{errors.pcReferralCode && errors.pcReferralCode.message}</Validation>
                 <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
               </ValidationGroup>
-              {campaignCreativeInfo.creativeType === 'BANNER' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
+              {campaignCreativeInfo.creativeType === 'BANNER' && ((resistBool && campaignBasicInfo.productType==='BANNER') || (state !== null && state.productType==='BANNER')) &&
                 <CampaignFourBanner control={control} errors={errors} setError={setError} register={register} onImageError={onImageError} />
               }
-              {campaignCreativeInfo.creativeType === 'NATIVE' && (resistBool && campaignBasicInfo.productType==='BANNER' || (state !== null && state.productType==='BANNER')) &&
+              {campaignCreativeInfo.creativeType === 'NATIVE' && ((resistBool && campaignBasicInfo.productType==='BANNER') || (state !== null && state.productType==='BANNER')) &&
                 <CampaignFourNative control={control} errors={errors} setError={setError} register={register} onImageError={onImageError}/>
               }
 

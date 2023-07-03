@@ -3,8 +3,9 @@ import {
   Board,
   BoardContainer,
   BoardHeader,
-  BoardSearchDetail, ColSpan1, ColSpan2,
-  ColSpan3,
+  BoardSearchDetail,
+  ColSpan1,
+  ColSpan2,
   ColTitle,
   Input,
   RelativeDiv,
@@ -50,6 +51,7 @@ function PlatformAdminDetail() {
         })
       }
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   /**

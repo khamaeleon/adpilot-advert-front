@@ -133,7 +133,7 @@ function BannerList ({list, frameKey, setFrameKey}) {
     <div>
       <ModalHeader title={'배너 불러오기'}/>
       <ModalBody>
-        {list.length !== 0 &&
+        {list.length !== 0 ?
          <>
            <BannerListItem style={{fontWeight: 'bold'}}>
              <div style={{width: 70}}>아이디</div>
@@ -150,7 +150,7 @@ function BannerList ({list, frameKey, setFrameKey}) {
              )
            })}
          </>
-        ||
+        :
           <div>데이터가 없습니다.</div>
         }
       </ModalBody>
@@ -483,7 +483,7 @@ export function BannerCreative() {
 
   /** 리드 **/
   const readIndexedDBValue = (key) => {
-    const data = getByID(key).then(response =>{
+    getByID(key).then(response =>{
       setSelectedBanner(response.row.map(item => item.size))
       setDefaultSetting({
         key: response.key,
@@ -511,13 +511,13 @@ export function BannerCreative() {
   }
   /** 크리에이트 **/
   const createIndexedDB = async (data) => {
-    const create = await add(data).then(response => {
+    await add(data).then(response => {
       console.log(response)
     })
   }
   /** 업데이트 **/
   const putIndexedDB = async (data) => {
-    const put = await update(data).then(response => {
+    await update(data).then(response => {
       console.log(response)
     })
   }
@@ -924,7 +924,7 @@ export function BannerCreative() {
                 <div key={key}>
                   <div>{item}</div>
                   {isLoading &&
-                    <iframe name={item} src={'../frame.html'} width={size[0]} height={size[1]} style={{border: '1px solid #ddd'}}/>
+                    <iframe title={`s_frame${key}`} name={item} src={'../frame.html'} width={size[0]} height={size[1]} style={{border: '1px solid #ddd'}}/>
                   }
                 </div>
               )
@@ -938,7 +938,7 @@ export function BannerCreative() {
               return (
                 <div key={key}>
                   <div>{item}</div>
-                  <iframe name={item} src={'../frame.html'} width={size[0]} height={size[1]} style={{border: '1px solid #ddd'}}/>
+                  <iframe title={`w_frame${key}`} name={item} src={'../frame.html'} width={size[0]} height={size[1]} style={{border: '1px solid #ddd'}}/>
                 </div>
               )
             })}
@@ -951,7 +951,7 @@ export function BannerCreative() {
               return (
                 <div key={key}>
                   <div>{item}</div>
-                  <iframe name={item} src={'../frame.html'} width={size[0]} height={size[1]} style={{border: '1px solid #ddd'}}/>
+                  <iframe title={`h_frame${key}`} name={item} src={'../frame.html'} width={size[0]} height={size[1]} style={{border: '1px solid #ddd'}}/>
                 </div>
               )
             })}

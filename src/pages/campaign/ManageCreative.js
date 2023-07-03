@@ -92,7 +92,7 @@ export function ManageCreative() {
               <CreativeType>{item.creativeType}</CreativeType>
               <CreativeType>{item.productType}</CreativeType>
               <CreativeInfo>
-                {item.images.length > 6 &&
+                {item.images.length > 6 ?
                 <SliderComponent {...settings} style={{marginLeft: 35,width: 660}}>
                   {item.images.map((info,idx) => {
                     const onErrorImg = (e) => {
@@ -105,7 +105,7 @@ export function ManageCreative() {
                     )
                   })}
                 </SliderComponent>
-                  ||
+                  :
                   <div>
                     {item.images.map((info,idx) => {
                       const onErrorImg = (e) => {
