@@ -11,11 +11,12 @@ RUN npm install -g react-scripts
 
 # 소스를 작업폴더로 복사하고 빌드
 ENV GENERATE_SOURCEMAP=false
-ENV NODE_OPTIONS=--max-old-space-size=2048
+#ENV NODE_OPTIONS=--max-old-space-size=2048
 COPY . /home/app
-ARG PROFILE_ARG
-ENV REACT_APP_PROFILE=PROFILE_ARG
-CMD ["sh", "-c", "yarn  ${REACT_APP_PROFILE}"]
+COPY run.sh /home/app/run.sh
+RUN chmod 764 run.sh
+EXPOSE 3000
+ENTRYPOINT ["/bin/sh", "/home/app/run.sh"]
 
 #FROM nginx:latest
 # nginx의 기본 설정을 삭제하고 앱에서 설정한 파일을 복사
