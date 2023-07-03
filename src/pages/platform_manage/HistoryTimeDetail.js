@@ -1,0 +1,119 @@
+import {
+  Board,
+  BoardHeader,
+  BoardTableContainer,
+  BoardTap,
+  BoardTapTitle, CancelButton,
+  SubmitContainer
+} from "../../assets/GlobalStyles";
+import React, {useEffect, useState} from "react";
+import {Link, useLocation} from "react-router-dom";
+import DragToSelect from "../../components/common/DragToSelect";
+import {useAtom} from "jotai";
+import {budgetTimes, timeBudgetDetailDataAtom} from "../settings/entity/BudgetTime";
+import {selBudgetTimeDetailInfo} from "../../services/settings/BudgetTimeAxios";
+
+export function HistoryTimeDetail () {
+  const {state} = useLocation()
+
+  return (
+    <>
+      {/*캠페인 정보*/}
+      <BoardTapTitle>캠페인 정보</BoardTapTitle>
+      <BoardTap>
+        <BoardTableContainer>
+          <table>
+            <colgroup>
+              <col width='15%'/>
+              <col width='35%'/>
+              <col width='15%'/>
+              <col width='35%'/>
+            </colgroup>
+            <tbody>
+            <tr>
+              <th>광고주 명</th>
+              <td>나이키</td>
+              <th>광고주 아이디</th>
+              <td>nike123@naver.com</td>
+            </tr>
+            </tbody>
+          </table>
+        </BoardTableContainer>
+      </BoardTap>
+      {/*이력정보*/}
+      <BoardTapTitle>이력 정보</BoardTapTitle>
+      <BoardTap>
+        <BoardTableContainer>
+          <table>
+            <colgroup>
+              <col width='15%'/>
+              <col width='35%'/>
+              <col width='15%'/>
+              <col width='35%'/>
+            </colgroup>
+            <tbody>
+            <tr>
+              <th>변경 일시</th>
+              <td>YYYY.MM.DD HH:MM</td>
+              <th>변경자 아이지</th>
+              <td>gildong12@mcor.com</td>
+            </tr>
+            </tbody>
+          </table>
+        </BoardTableContainer>
+      </BoardTap>
+      {/*이벤트 단가 그룹 설정*/}
+      <BoardTapTitle>이벤트 단가 그룹 설정</BoardTapTitle>
+      <BoardTap>
+        <BoardTableContainer>
+          <table>
+            <colgroup>
+              <col width='15%'/>
+              <col width='35%'/>
+              <col width='35%'/>
+            </colgroup>
+            <tbody>
+              <tr>
+                <th className={'border-r'}>항목명</th>
+                <th>이전 내역</th>
+                <th>변경 내역</th>
+              </tr>
+              <tr>
+                <th className={'border-r border-t'}>시간별 예산 그룹명</th>
+                <td className={'border-t'}>균등 그룹</td>
+                <td className={'border-t'}>쇼핑 시간 집중 그룹</td>
+              </tr>
+            </tbody>
+          </table>
+        </BoardTableContainer>
+        <BoardTableContainer style={{marginTop: 30}}>
+          <table>
+            <colgroup>
+              <col width='15%'/>
+              <col width='70%'/>
+            </colgroup>
+            <tbody>
+              <tr>
+                <th className={'border-r'}>이전 내역</th>
+                <td>
+                </td>
+              </tr>
+              <tr>
+                <th className={'border-r border-t'}>변경 내역</th>
+                <td className={'border-t'}>
+
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </BoardTableContainer>
+      </BoardTap>
+
+      <SubmitContainer>
+        <Link to={'/board/historyTimeManage'}>
+          <CancelButton type={'button'}>목록</CancelButton>
+        </Link>
+      </SubmitContainer>
+    </>
+  )
+}

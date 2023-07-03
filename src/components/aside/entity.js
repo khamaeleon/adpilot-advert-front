@@ -93,7 +93,7 @@ export const menuList = [
   {
     name: "platform",
     header: "플랫폼 관리",
-    include: ["platform",'platformDetail',"categoryManage","productManage",'historyManage','conversionManage','paymentManage','advertisingPayments'],
+    include: ["platform",'platformDetail',"categoryManage","productManage",'historyCampaignManage','historyPriceManage','historyEventManage','historyTimeManage','historyCampaignDetail','historyPriceDetail','historyEventDetail','historyTimeDetail','conversionManage','paymentManage','advertisingPayments'],
     child:[
       {
         name: "platform",
@@ -113,8 +113,24 @@ export const menuList = [
         header: "전환 관리"
       },
       {
-        name: "historyManage",
-        header: "이력 관리"
+        name: "historyCampaignManage",
+        header: "캠페인 이력 관리",
+        detail: 'historyCampaignDetail'
+      },
+      {
+        name: "historyPriceManage",
+        header: "이벤트 단가 이력 관리",
+        detail: 'historyPriceDetail'
+      },
+      {
+        name: "historyEventManage",
+        header: "이벤트 예산 이력 관리",
+        detail: 'historyEventDetail'
+      },
+      {
+        name: "historyTimeManage",
+        header: "시간별 예산 이력 관리",
+        detail: 'historyTimeDetail'
       },
       {
         name: "paymentManage",
