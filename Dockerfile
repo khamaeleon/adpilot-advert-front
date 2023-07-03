@@ -13,7 +13,7 @@ RUN npm install -g react-scripts
 ENV GENERATE_SOURCEMAP=false
 ENV NODE_OPTIONS=--max-old-space-size=2048
 COPY . /home/app
-
+RUN chmod 764 run.sh
 CMD ["sh", "-c", "/home/app/run.sh"]
 
 #FROM nginx:latest
