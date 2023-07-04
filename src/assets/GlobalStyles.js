@@ -119,6 +119,9 @@ export const GlobalStyles = createGlobalStyle`
     border: 0;
     border-radius: 5px;
     cursor: pointer;
+    &:disabled {
+      cursor: no-drop;
+    }
   }
   input, textarea {
     outline: none;
