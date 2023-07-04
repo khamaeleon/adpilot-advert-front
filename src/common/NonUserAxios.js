@@ -8,6 +8,6 @@ export const nonUserAxios = axios.create({
     Accept: '*/*',
   },
   validateStatus: function (status) {
-    return status !== 401 && status <= 500;
+    return status !== 401 && status !== 403 && status <= 500;
   },
 });
