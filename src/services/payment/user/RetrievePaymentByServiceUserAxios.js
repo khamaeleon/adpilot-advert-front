@@ -1,9 +1,9 @@
 import {AdverAxios} from "../../../common/Axios";
 
-const ACTION_URL_PAYMENTS = '/payments/ADVERTISE/';
+const ACTION_URL_PAYMENTS = '/payments/ADVERTISE';
 const LIST_PAYMENTS = '/list'
 
-const ACTION_URL_POINT = '/payments/point/';
+const ACTION_URL_POINT = '/payments/point';
 const LIST_POINT = '/histories'
 
 

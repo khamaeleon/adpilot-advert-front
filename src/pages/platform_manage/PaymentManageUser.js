@@ -1,3 +1,4 @@
+
 import React, {useCallback, useEffect, useState} from "react";
 import {
   Board,
@@ -43,11 +44,11 @@ export function RefundRequestTable(props) {
     <RefundInformation>
       <table style={{margin:"0"}}>
         <thead>
-          <tr>
-            <th>은행</th>
-            <th>계좌번호</th>
-            <th>예금주</th>
-          </tr>
+        <tr>
+          <th>은행</th>
+          <th>계좌번호</th>
+          <th>예금주</th>
+        </tr>
         </thead>
         <tbody>
         <tr>
@@ -99,6 +100,7 @@ function PaymentManageUser() {
     };
     return paymentListRequest( tokenUserInfo.id, requestData)
       .then((response) => {
+        console.log(response);
         if (response !== null) {
           const { totalCount, rows: data } = response;
           setTotalInfo(totalCount);
@@ -225,7 +227,7 @@ function PaymentManageUser() {
                 <ColSpan2 column={true} style={{borderRight:"1px solid #ddd", padding:"0 20px 0 0", gap:"0"}}>
                   <RowSpan style={{width:"100%", margin:"0 0 30px 0"}}>
                     <ColSpan2 style={{alignItems:"baseline"}}>광고비 현황</ColSpan2>
-                    {/*<ColSpan2 style={{justifyContent:"right"}}>
+                    <ColSpan2 style={{justifyContent:"right"}}>
                       <AdChargeButton
                         title={'광고비 충전'}
                         modalInfo={'USER'}
@@ -253,8 +255,8 @@ function PaymentManageUser() {
                           totalAmount={totalAmount}
                         />
                       }
-                      환불 신청에 값이 없으면 토스트 띄우기
-                    </ColSpan2>*/}
+                      {/*환불 신청에 값이 없으면 토스트 띄우기*/}
+                    </ColSpan2>
                   </RowSpan>
                   <RowSpan style={{margin:"0"}}>
                     <ColSpan4>
@@ -324,7 +326,7 @@ function PaymentManageUser() {
                 <SaveExcelButton>엑셀 저장</SaveExcelButton>
               </div>
             </BoardSearchResultTitle>
-  {/*          <ReactDataGrid
+            <ReactDataGrid
               licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
               handle={null}
               columns={PaymentDetailsColumns}
@@ -341,7 +343,7 @@ function PaymentManageUser() {
               sortable={false}
               style={gridStyle}
               activeCell={null}
-            />*/}
+            />
             <BoardSearchResultTitle style={{alignItems:"end", paddingTop:"20px", paddingBottom: "10px"}}>
               <div>
                 <TotalCount><span/>총 <span>{totalPointInfo}</span> 건의 포인트 지급 내역</TotalCount>
@@ -429,5 +431,6 @@ const RefundInformation = styled.div`
 
 
 export default PaymentManageUser
+
 
 
