@@ -228,15 +228,15 @@ function PaymentManageUser() {
                   <RowSpan style={{width:"100%", margin:"0 0 30px 0"}}>
                     <ColSpan2 style={{alignItems:"baseline"}}>광고비 현황</ColSpan2>
                     <ColSpan2 style={{justifyContent:"right"}}>
-                      <AdChargeButton
-                        title={'광고비 충전'}
-                        modalInfo={'USER'}
-                        onSave={null}
-                        onSubmit={null}
-                        requestAmountValue={requestAmountValue}
-                        setRequestAmountValue={setRequestAmountValue}
-                        onPaymentDetailsReceived={handlePaymentDetailsReceived}
-                      />
+                      {/*<AdChargeButton*/}
+                      {/*  title={'광고비 충전'}*/}
+                      {/*  modalInfo={'USER'}*/}
+                      {/*  onSave={null}*/}
+                      {/*  onSubmit={null}*/}
+                      {/*  requestAmountValue={requestAmountValue}*/}
+                      {/*  setRequestAmountValue={setRequestAmountValue}*/}
+                      {/*  onPaymentDetailsReceived={handlePaymentDetailsReceived}*/}
+                      {/*/>*/}
                       {refundData.refundBankType === null?
                         <DefaultButton
                           onClick={handleRegisterRefund}
