@@ -225,7 +225,7 @@ function PaymentManageUser() {
                 <ColSpan2 column={true} style={{borderRight:"1px solid #ddd", padding:"0 20px 0 0", gap:"0"}}>
                   <RowSpan style={{width:"100%", margin:"0 0 30px 0"}}>
                     <ColSpan2 style={{alignItems:"baseline"}}>광고비 현황</ColSpan2>
-                    <ColSpan2 style={{justifyContent:"right"}}>
+                    {/*<ColSpan2 style={{justifyContent:"right"}}>
                       <AdChargeButton
                         title={'광고비 충전'}
                         modalInfo={'USER'}
@@ -253,8 +253,8 @@ function PaymentManageUser() {
                           totalAmount={totalAmount}
                         />
                       }
-                      {/*환불 신청에 값이 없으면 토스트 띄우기*/}
-                    </ColSpan2>
+                      환불 신청에 값이 없으면 토스트 띄우기
+                    </ColSpan2>*/}
                   </RowSpan>
                   <RowSpan style={{margin:"0"}}>
                     <ColSpan4>
