@@ -165,7 +165,7 @@ export const costPaymentColumns = [
     sortable: false,
     showColumnMenuTool: false,
     textAlign: 'center',
-    render: ({value}) => <p className={'ellipsis'}>{value}</p>
+    render: ({value}) => <p className={'ellipsis'}>{value !== null ? value : '-'}</p>
   }
 ];
 function CellComponent({ value, cellProps }) {
@@ -370,17 +370,15 @@ function AdvertisingPayments() {
               />
               <StatusBtn type={'button'} id={'REFUND_REQUEST_OF_USER'} onClick={(event)=> handlePaymentStatus(event.currentTarget.id)}>환불완료</StatusBtn>
             </ColSpan2>
-            <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-              <SearchAdvertiser title={'이력 추가'} btnStyle={'historyAddButton'} onSubmit={handleHistoryAdd}/>
-            </div>
           </RowSpan>
           <BoardSearchResultTitle style={{alignItems:"end", paddingBottom: "10px"}}>
             <div>
               <TotalCount><span/>총 <span>{totalInfo}</span> 건의 결제 내역</TotalCount>
             </div>
-            <div>
+            <ColSpan2 style={{justifyContent: 'flex-end'}}>
+              <SearchAdvertiser style={{marginRight: 10}} title={'이력 추가'} btnStyle={'historyAddButton'} onSubmit={handleHistoryAdd}/>
               <SaveExcelButton>엑셀 저장</SaveExcelButton>
-            </div>
+            </ColSpan2>
           </BoardSearchResultTitle>
           <ReactDataGrid
             licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}

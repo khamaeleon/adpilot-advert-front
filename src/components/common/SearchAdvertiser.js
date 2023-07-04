@@ -4,7 +4,6 @@ import {ModalBody, ModalHeader} from "../modal/Modal";
 import styled from "styled-components";
 import {selKeywordUser} from "../../services/Platform/ManageUserAxios";
 import {modalController} from "../../store";
-import {toast} from "react-toastify";
 import {
   borderColor,
   ColSpan1,
@@ -53,9 +52,11 @@ function SearchModal (props) {
   const [enterAmount, setEnterAmount] = useState(0) // 이력추가 금액 입력
   const [adverPoint, setAdverPoint] = useState(0);
   const [note, setNote] = useState("") // 비고 내용
+  const [validation, setValidation] = useState('')
   const {register, handleSubmit, setError, formState:{errors} } = useForm()
   const handleSelect = (item) => {
     setSelectedItem(item)
+    setValidation('')
   }
 
   const handleChange = (event) => {
@@ -65,10 +66,8 @@ function SearchModal (props) {
   }
 
   const searchSubmit = () => {
-    if(searchKeyword === '') {
-      toast.warning('검색어를 입력해주세요.')
-    } else if (selectedItem.id === undefined) {
-      toast.warning('광고주를 선택해주세요')
+    if (selectedItem.id === undefined) {
+      setValidation('광고주를 선택해주세요.')
     } else if(props.title === "이력 추가") {
       setHistoryState(true);
       // [d] 해당 광고주 전체 포인트 조회??
@@ -96,14 +95,16 @@ function SearchModal (props) {
     }
   }
 
-  const handleSearch = (e) => {
+  const handleSearch = () => {
     if(searchKeyword!==''){
       selKeywordUser(searchKeyword).then(response => {
         setAdverSearchInfo(response)
+        response?.length !== 0 ? setValidation('') : setValidation('검색된 광고주가 존재하지 않습니다.')
       })
     } else {
-      toast.warning('검색어를 입력해주세요.')
+      setValidation('검색어를 입력해주세요.')
     }
+    setSelectedItem({})
   }
 
   const onSubmit = async () => {
@@ -154,16 +155,17 @@ function SearchModal (props) {
                      autoFocus={true}
                      value={historyState === true?selectedItem.adverName:searchKeyword}
                      onChange={e => handleOnSearchKeyword(e)}
-                     disabled={historyState === true?true:false}
+                     disabled={historyState ? true : false}
                      onKeyDown={event => (event.code === 'Enter') && handleSearch() }
               />
               <button
                 type={'button'}
                 onClick={handleSearch}
-                disabled={historyState === true?true:false}>검색</button>
+                disabled={historyState ? true : false}>검색</button>
             </InputGroup>
           </div>
         </MediaSearchColumn>
+        {validation !== '' && <Validation>{validation}</Validation>}
         <MediaSearchResult>
           {adverSearchInfo.length !== 0 && historyState === false ?
             <>
@@ -231,7 +233,7 @@ function SearchModal (props) {
                   <InputLabel label={'원'}>
                     <Input
                       type={'text'}
-                      textAlingn={'right'}
+                      textAlign={'right'}
                       value={decimalFormat(enterAmount)}
                       maxLength={19}
                       {...register("enterAmount", {
@@ -254,7 +256,7 @@ function SearchModal (props) {
                 <ColSpan3>
                   <Input
                     type={'text'}
-                    textAlingn={'right'}
+                    textAlign={'right'}
                     value={decimalFormat( adverPoint + '원')}
                     disabled={true}
                   />
@@ -370,7 +372,7 @@ const Input = styled.input `
   font-weight: 600;
   border: 1px solid ${lightGray};
   border-radius: 5px;
-  text-align: ${props => props.textAlingn};
+  text-align: ${props => props.textAlign};
   padding: 4px 10px;
   height: 40px;
   &:after {
@@ -382,4 +384,10 @@ const Input = styled.input `
     font-size: 14px;
     font-weight:400;
   }
+`
+const Validation = styled.div`
+  margin-top: 10px;
+  text-align: center;
+  color: #f55a5a;
+  font-size: 13px !important;
 `
