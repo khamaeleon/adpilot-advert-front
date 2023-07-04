@@ -324,7 +324,7 @@ function PaymentManageUser() {
                 <SaveExcelButton>엑셀 저장</SaveExcelButton>
               </div>
             </BoardSearchResultTitle>
-            <ReactDataGrid
+  {/*          <ReactDataGrid
               licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
               handle={null}
               columns={PaymentDetailsColumns}
@@ -341,7 +341,7 @@ function PaymentManageUser() {
               sortable={false}
               style={gridStyle}
               activeCell={null}
-            />
+            />*/}
             <BoardSearchResultTitle style={{alignItems:"end", paddingTop:"20px", paddingBottom: "10px"}}>
               <div>
                 <TotalCount><span/>총 <span>{totalPointInfo}</span> 건의 포인트 지급 내역</TotalCount>
