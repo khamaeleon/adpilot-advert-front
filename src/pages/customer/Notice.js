@@ -57,7 +57,7 @@ function NotionList(props) {
   useEffect(()=>{
         onSearch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, []);
+      }, [tokenUserInfo]);
 
   const handleSearch = (e) => {
     setSearchCondition({
