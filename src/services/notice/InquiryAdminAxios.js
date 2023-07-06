@@ -16,7 +16,7 @@ export async function selInquiryListAdmin(searchCondition) {
     }else{
       returnVal = null
     }
-  }).catch((e) => returnVal = false)
+  }).catch((e) => returnVal = null)
 
   return returnVal;
 }
@@ -32,7 +32,7 @@ export async function selInquiryByIdAdmin(inquiryId) {
     }else{
       returnVal = null
     }
-  }).catch((e) => returnVal = false)
+  }).catch((e) => returnVal = null)
 
   return returnVal;
 }
@@ -50,7 +50,7 @@ export async function updateInquiryReply(inquiryId, reply) {
     }else{
       returnVal = null
     }
-  }).catch((e) => returnVal = false)
+  }).catch((e) => returnVal = null)
 
   return returnVal;
 }

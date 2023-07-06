@@ -15,7 +15,7 @@ export async function selInquiryList(userId, searchCondition) {
     }else{
       returnVal = null
     }
-  }).catch((e) => returnVal = false)
+  }).catch((e) => returnVal = null)
 
   return returnVal;
 }
@@ -31,7 +31,7 @@ export async function selInquiryById(inquiryId, searchCondition) {
     }else{
       returnVal = null
     }
-  }).catch((e) => returnVal = false)
+  }).catch((e) => returnVal = null)
 
   return returnVal;
 }
@@ -47,7 +47,7 @@ export async function createInquiry(inquiryParam) {
     }else{
       returnVal = null
     }
-  }).catch((e) => returnVal = false)
+  }).catch((e) => returnVal = null)
 
   return returnVal;
 }
