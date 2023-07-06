@@ -43,46 +43,48 @@ function ChartComponent() {
   const [chartList, setChartList] = useState([])
 
   useEffect(()=>{
-    if(tokenUserInfo.role !== 'NORMAL') {
-      retrieveOverview(searchCondition).then(response => {
-        let data = response
-        if(data !== null) {
-          data?.map((item,key) => {
-            Object.assign(data[key],{clickRate: item.validClickCount !== 0 ? (item.validClickCount / item.exposureCount) *100 : 0})
-            Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
-            Object.assign(data[key],{costPerConversion: item.costAmount !== 0 ? item?.costAmount / item.totalConversionCount : 0})
-            Object.assign(data[key],{avgConversionAmount: item.totalConversionCount !== 0 ? item.totalConversionAmount / item.totalConversionCount : 0})
-            // Object.assign(data[key],{sessionRoas: item.costAmount !== 0 ? (item.sessionConversionAmount / item.costAmount) *100 : 0})
-            // Object.assign(data[key],{directRoas: item.costAmount !== 0 ? (item.directConversionAmount / item.costAmount) *100 : 0})
-            // Object.assign(data[key],{exposureRoas: item.costAmount !== 0 ? (item.exposureConversionAmount / item.costAmount) *100 : 0})
-            // Object.assign(data[key],{totalRoas: item.costAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
-            Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0})
-            Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.validClickCount) *100 : 0})
-            return null
-          })
-          setChartDataInfo(data)
-        }
-      })
-    } else {
-      retrieveAdverOverview(tokenUserInfo.id, searchCondition).then(response => {
-        let data = response
-        if(response !== null) {
-          data?.map((item,key) => {
-            Object.assign(data[key],{clickRate: item.validClickCount !== 0 ? (item.validClickCount / item.exposureCount) *100 : 0})
-            Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
-            Object.assign(data[key],{costPerConversion: item.totalConversionCount !== 0 ? item?.costAmount / item.totalConversionCount : 0})
-            Object.assign(data[key],{avgConversionAmount: item.totalConversionAmount !== 0 ? item.totalConversionAmount / item.totalConversionCount : 0})
-            //Object.assign(data[key],{totalRoas: item.totalConversionAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
-            Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0})
-            Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.validClickCount) *100 : 0})
-            return null
-          })
-          setChartDataInfo(data)
-        }
-      })
+    if(tokenUserInfo.role !== '') {
+      if(tokenUserInfo.role !== 'NORMAL') {
+        retrieveOverview(searchCondition).then(response => {
+          let data = response
+          if(data !== null) {
+            data?.map((item,key) => {
+              Object.assign(data[key],{clickRate: item.validClickCount !== 0 ? (item.validClickCount / item.exposureCount) *100 : 0})
+              Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
+              Object.assign(data[key],{costPerConversion: item.costAmount !== 0 ? item?.costAmount / item.totalConversionCount : 0})
+              Object.assign(data[key],{avgConversionAmount: item.totalConversionCount !== 0 ? item.totalConversionAmount / item.totalConversionCount : 0})
+              // Object.assign(data[key],{sessionRoas: item.costAmount !== 0 ? (item.sessionConversionAmount / item.costAmount) *100 : 0})
+              // Object.assign(data[key],{directRoas: item.costAmount !== 0 ? (item.directConversionAmount / item.costAmount) *100 : 0})
+              // Object.assign(data[key],{exposureRoas: item.costAmount !== 0 ? (item.exposureConversionAmount / item.costAmount) *100 : 0})
+              // Object.assign(data[key],{totalRoas: item.costAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
+              Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0})
+              Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.validClickCount) *100 : 0})
+              return null
+            })
+            setChartDataInfo(data)
+          }
+        })
+      } else {
+        retrieveAdverOverview(tokenUserInfo.id, searchCondition).then(response => {
+          let data = response
+          if(response !== null) {
+            data?.map((item,key) => {
+              Object.assign(data[key],{clickRate: item.validClickCount !== 0 ? (item.validClickCount / item.exposureCount) *100 : 0})
+              Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
+              Object.assign(data[key],{costPerConversion: item.totalConversionCount !== 0 ? item?.costAmount / item.totalConversionCount : 0})
+              Object.assign(data[key],{avgConversionAmount: item.totalConversionAmount !== 0 ? item.totalConversionAmount / item.totalConversionCount : 0})
+              //Object.assign(data[key],{totalRoas: item.totalConversionAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
+              Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0})
+              Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.validClickCount) *100 : 0})
+              return null
+            })
+            setChartDataInfo(data)
+          }
+        })
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[searchCondition])
+  },[searchCondition,tokenUserInfo])
 
   useEffect(() => {
     makeChartData()
@@ -375,36 +377,38 @@ function DashBoardIndex() {
   const [gridRef, setGridRef] = useState(null);
 
   useEffect(() => {
-    if(tokenUserInfo.role !== 'NORMAL') {
-      //광고주 현황 조회
-      retrieveAdvertiserStatus(searchCondition).then(response => {
-        if(response !== null) {
-          setAdverStatusData(response)
-          setTotalInfo({
-            totalCount: response.length
-          })
-        } else {
-          setAdverStatusData([])
-        }
-      })
-    } else {
-      retrieveUserAdvertiserCampaignStatus(tokenUserInfo.id, searchCondition).then(response => {
-        if(response !== null) {
-          setAdverStatusData(response)
-          setTotalInfo({
-            totalCount: response?.length
-          })
-        } else {
-          setAdverStatusData([])
-        }
-      })
+    if(tokenUserInfo.role !=='') {
+      if(tokenUserInfo.role !== 'NORMAL') {
+        //광고주 현황 조회
+        retrieveAdvertiserStatus(searchCondition).then(response => {
+          if(response !== null) {
+            setAdverStatusData(response)
+            setTotalInfo({
+              totalCount: response.length
+            })
+          } else {
+            setAdverStatusData([])
+          }
+        })
+      } else {
+        retrieveUserAdvertiserCampaignStatus(tokenUserInfo.id, searchCondition).then(response => {
+          if(response !== null) {
+            setAdverStatusData(response)
+            setTotalInfo({
+              totalCount: response?.length
+            })
+          } else {
+            setAdverStatusData([])
+          }
+        })
+      }
     }
     searchCondition.keyword !== '' ? setKeyword(searchCondition.keyword) : setKeyword('')
     setSearchState({
       ...searchCondition
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchCondition])
+  }, [searchCondition,tokenUserInfo])
   /**
    * 검색 버튼
    */
