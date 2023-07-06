@@ -62,6 +62,9 @@ function Layout() {
                   name: data.name,
                   accessToken: data.token.accessToken
                 })
+              }else{
+                // eslint-disable-next-line no-restricted-globals
+                location.replace('/')
               }
             })
           }

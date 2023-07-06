@@ -19,8 +19,6 @@ export const adverAxios = rateLimit(axios.create({
 adverAxios.interceptors.request.use(
   async (config) => {
     const tokenAtom =store.get(tokenResultAtom)
-    console.log("토큰가져간다 111111111111111111111111111111111111")
-    console.log(tokenAtom)
     config.headers.Authorization = `Bearer ${tokenAtom.accessToken}`;
     return config;
   },

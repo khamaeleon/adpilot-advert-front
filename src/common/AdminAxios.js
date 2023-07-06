@@ -57,7 +57,6 @@ adminAxios.interceptors.response.use(
         isTokenRefreshing = true;
         await refreshAdmin().then(response => {
           const {data,responseCode} =response
-          console.log(responseCode.statusCode)
           if (responseCode.statusCode === 200) {
             store.set(tokenResultAtom, {
               id: data.email,
