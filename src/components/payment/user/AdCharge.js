@@ -73,7 +73,8 @@ function AdChargeModal (props) {
     setInputValue(1)
   }
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
+    console.log("1111111111111111")
     if (chargeAmount <= 0) {
       setError('chargeAmount', {type: 'required', message:'충전 금액을 입력해 주세요'})
     } else {
@@ -83,26 +84,20 @@ function AdChargeModal (props) {
         amount: (chargeAmount / 10) + chargeAmount,
         payMethodType: payMethod
       }
-
-      await paymentRequest ( requestData )
+      console.log(requestData)
+      paymentRequest ( requestData )
         .then(response => {
           // 성공적인 응답 처리
           console.log("결제 성공!!", response);
-          const newWindow = window.open('', '_blank', 'width=500,height=500');
+        /*  const newWindow = window.open('', '_blank', 'width=500,height=500');
           const iframe = document.createElement('iframe');
           iframe.src = 'https://testapi.co.kr?authenticationId=01023012301';
           iframe.width = '100%';
           iframe.height = '100%';
           newWindow.document.body.appendChild(iframe);
           setRequestAmountValue(requestAmountValue => requestAmountValue + calcAmount());
-          props.onPaymentDetailsReceived();
+          props.onPaymentDetailsReceived();*/
         })
-        .catch(error => {
-          // 실패한 응답 처리
-          console.error("실패 응답 처리",error);
-          // 에러 메시지 등을 사용자에게 알려줄 수 있습니다.
-          // 에러 상태, 결제 실패 기타 등등 상황에 맞게 토스트 날립시다
-        });
     }
   }
   const onError = () => console.log(errors)

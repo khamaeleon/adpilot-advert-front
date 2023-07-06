@@ -8,13 +8,15 @@ const ACTION_URL = '/payments/ADVERTISE/payment-request';
  */
 export async function paymentRequest( param ) {
     let returnVal = null;
+    console.log(param)
     await AdverAxios('POST', ACTION_URL, param)
         .then((response) => {
+          console.log(response)
             if (response.responseCode.statusCode === 200) {
                 returnVal = response.data
             } else {
                 returnVal = null
             }
-        }).catch((e) => returnVal = null)
+        }).catch(() => returnVal = null)
     return returnVal;
 }

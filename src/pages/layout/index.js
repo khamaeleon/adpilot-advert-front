@@ -43,26 +43,25 @@ function Layout() {
     useEffect(() => {
       if (tokenUserInfo.role === '') {
         refreshAdmin().then(response => {
-          if (response) {
+          const {data,responseCode} =response
+          if (responseCode.statusCode === 200) {
             setTokenUserInfo({
-              id: response.email,
-              role: response.role,
-              name: response.name,
-              accessToken: response.token.accessToken
+              id: data.email,
+              role: data.role,
+              name: data.name,
+              accessToken: data.token.accessToken
             })
           } else {
             refresh().then(response => {
-              if (response) {
+              const {data,responseCode} =response
+              if (responseCode.statusCode === 200) {
                 setTokenUserInfo({
-                  id: response.id,
-                  username:response.username,
-                  role: response.role,
-                  name: response.name,
-                  accessToken: response.token.accessToken
+                  id: data.id,
+                  username:data.username,
+                  role: data.role,
+                  name: data.name,
+                  accessToken: data.token.accessToken
                 })
-              }else{
-                // eslint-disable-next-line no-restricted-globals
-                location.replace('/')
               }
             })
           }
@@ -82,7 +81,7 @@ function Layout() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id])
   //[d] 광고비 잔액
-  useEffect(() => {
+  /*useEffect(() => {
     if (tokenUserInfo.role === 'NORMAL') {
       const pointData = async () => {
         try {
@@ -96,7 +95,7 @@ function Layout() {
       pointData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenUserInfo]);
+  }, [tokenUserInfo]);*/
 
 
 
@@ -121,7 +120,7 @@ function Layout() {
         }
       }).then(() => {
           // eslint-disable-next-line no-restricted-globals
-          location.replace('/')
+          // location.replace('/')
         }
       )
     } else {
@@ -131,7 +130,7 @@ function Layout() {
         }
       }).then(() => {
           // eslint-disable-next-line no-restricted-globals
-          location.replace('/')
+          // location.replace('/')
         }
       )
     }
