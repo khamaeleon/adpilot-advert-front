@@ -123,7 +123,7 @@ function Layout() {
         }
       }).then(() => {
           // eslint-disable-next-line no-restricted-globals
-          // location.replace('/')
+          location.replace('/')
         }
       )
     } else {
@@ -133,7 +133,7 @@ function Layout() {
         }
       }).then(() => {
           // eslint-disable-next-line no-restricted-globals
-          // location.replace('/')
+          location.replace('/')
         }
       )
     }
