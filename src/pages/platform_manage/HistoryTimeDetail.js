@@ -1,8 +1,19 @@
 import {BoardTableContainer, BoardTap, BoardTapTitle, CancelButton, SubmitContainer} from "../../assets/GlobalStyles";
-import React from "react";
-import {Link} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Link, useLocation} from "react-router-dom";
+import {findRevisionBudgetTimeDetail} from "../../services/Platform/HistoryAxios";
 
 export function HistoryTimeDetail () {
+  const {state} = useLocation()
+  const [data, setData] = useState()
+
+  useEffect(()=> {
+    findRevisionBudgetTimeDetail(state).then(response =>{
+      setData(response)
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+
   return (
     <>
       {/*캠페인 정보*/}
@@ -19,9 +30,9 @@ export function HistoryTimeDetail () {
             <tbody>
             <tr>
               <th>광고주 명</th>
-              <td>나이키</td>
+              <td>{data?.adverName}</td>
               <th>광고주 아이디</th>
-              <td>nike123@naver.com</td>
+              <td>{data?.username}</td>
             </tr>
             </tbody>
           </table>
@@ -41,9 +52,9 @@ export function HistoryTimeDetail () {
             <tbody>
             <tr>
               <th>변경 일시</th>
-              <td>YYYY.MM.DD HH:MM</td>
+              <td>{data?.revisionDateTime}</td>
               <th>변경자 아이지</th>
-              <td>gildong12@mcor.com</td>
+              <td>{data?.modifiedBy}</td>
             </tr>
             </tbody>
           </table>
@@ -67,8 +78,8 @@ export function HistoryTimeDetail () {
               </tr>
               <tr>
                 <th className={'border-r border-t'}>시간별 예산 그룹명</th>
-                <td className={'border-t'}>균등 그룹</td>
-                <td className={'border-t'}>쇼핑 시간 집중 그룹</td>
+                <td className={'border-t'}>{data?.previous !== null ? data?.previous?.groupName : '-'}</td>
+                <td className={'border-t'}>{data?.current !== null ? data?.current?.groupName : '-'}</td>
               </tr>
             </tbody>
           </table>
@@ -83,6 +94,9 @@ export function HistoryTimeDetail () {
               <tr>
                 <th className={'border-r'}>이전 내역</th>
                 <td>
+                  {data?.previous !== null &&
+                    <div></div>
+                  }
                 </td>
               </tr>
               <tr>
@@ -95,7 +109,6 @@ export function HistoryTimeDetail () {
           </table>
         </BoardTableContainer>
       </BoardTap>
-
       <SubmitContainer>
         <Link to={'/board/historyTimeManage'}>
           <CancelButton type={'button'}>목록</CancelButton>
