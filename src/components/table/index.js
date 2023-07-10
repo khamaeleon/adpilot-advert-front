@@ -22,6 +22,7 @@ import {navigationName} from "../common/entity";
 import moment from "moment";
 import {useLocation} from "react-router-dom";
 import {light} from "../../assets/theme";
+import {hostList} from "../../pages/signup/entity/Common";
 
 export function SwitchComponent(props){
   const {value, cellProps, type, eventClick} = props
@@ -252,7 +253,21 @@ function Table(props) {
     const columns = gridRef.current.visibleColumns;
 
     const header = columns.map((c) => c.header).join(',');
-    const rows = gridRef.current.data.map((data) => columns.map((c) => data[c.id]).join(','));
+    const rows = gridRef.current.data.map((data) =>
+      columns.map((c) => {
+        if(c.id === 'userCompanyProfile') {
+          return data['userCompanyProfile'].companyName;
+        } else if(c.id === 'adverType') {
+          return data['adverType'] === 'ADVER' ? "광고주" : "대행사";
+        } else if(c.id === 'hostType') {
+          return hostList.find(obj => obj.value === data['hostType']).label
+        } else if(c.id === 'status') {
+          return data['status'] !== 'NORMAL' ? "미사용" : "사용";
+        } else {
+          return data[c.id];
+        }
+      }).join(',')
+    );
     const uFEFF = "\uFEFF"
 
     // Office 2007 이전에는 ANSI 1252 인코딩을 기본 값, BOM을 추가하면 Office 2007 이후 버전
