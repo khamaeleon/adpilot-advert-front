@@ -78,8 +78,14 @@ function ConversionManage() {
   const exportCSV = () => {
     const columns = gridRef.current.visibleColumns;
 
-    const header = columns.map((c) => c.header).join(',');
-    const rows = gridRef.current.data.map((data) => columns.map((c) => data[c.id]).join(','));
+    const header = columns.map((c) => typeof c.header === 'string' ? c.header : '').join(',');
+    const rows = gridRef.current.data.map((data) =>
+        columns.map((c) => {
+          if(c.id !== 'conversionId'){
+            return data[c.id]
+          }
+        }).join(','));
+
     const uFEFF = "\uFEFF"
 
     // Office 2007 이전에는 ANSI 1252 인코딩을 기본 값, BOM을 추가하면 Office 2007 이후 버전

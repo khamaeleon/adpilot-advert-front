@@ -250,21 +250,24 @@ function Table(props) {
     document.body.removeChild(link);
   };
   const exportCSV = () => {
-    const columns = gridRef.current.visibleColumns;
 
-    const header = columns.map((c) => c.header).join(',');
+    const columns = gridRef.current.visibleColumns;
+    const header = columns.map((c) =>
+        typeof c.header === 'string' ? c.header : c.label).join(',');
     const rows = gridRef.current.data.map((data) =>
       columns.map((c) => {
-        if(c.id === 'userCompanyProfile') {
-          return data['userCompanyProfile'].companyName;
-        } else if(c.id === 'adverType') {
-          return data['adverType'] === 'ADVER' ? "광고주" : "대행사";
-        } else if(c.id === 'hostType') {
-          return hostList.find(obj => obj.value === data['hostType']).label
-        } else if(c.id === 'status') {
-          return data['status'] !== 'NORMAL' ? "미사용" : "사용";
-        } else {
-          return data[c.id];
+        switch (c.id){
+          case 'userCompanyProfile': return data['userCompanyProfile'].companyName; break;
+          case 'adverType': return data['adverType'] === 'ADVER' ? "광고주" : "대행사"; break;
+          case 'hostType': return hostList.find(obj => obj.value === data['hostType']).label;break;
+          case 'status': return data['status'] !== 'NORMAL' ? "미사용" : "사용";break;
+          case 'productImages': return data['productImages'][0] != undefined ? data['productImages'][0].imageUrl : ''; break;
+          case 'productImages1': return data['productImages'][1] != undefined ? data['productImages'][1]?.imageUrl: ''; break;
+          case 'productImages2': return data['productImages'][2] != undefined ? data['productImages'][2]?.imageUrl: ''; break;
+          case 'productCategorys': return data['productCategorys'][0]?.name; break;
+          case 'productCategorys1': return data['productCategorys'][1]?.name; break;
+          case 'productCategorys2': return data['productCategorys'][2]?.name; break;
+          default: return data[c.id]; break;
         }
       }).join(',')
     );
@@ -280,7 +283,7 @@ function Table(props) {
     // (문서의 맨 앞에 /ufeff 문자열을 추가 하면 해당 내용이 어떤 문자열로 인코딩 되었는지 표현하는 식별자.
     // 이것을 맨 앞에 적어 놓으면 엑셀 프로그램은 파일의 인코딩을 이해하고 그에 맞게 출력한다.)
 
-    const contents = [header].concat(rows).join('\n');
+    const contents = [header].concat(rows.map(r=>r.replace('\n',''))).join('\n');
     const blob = new Blob([uFEFF+contents], { encoding: 'UTF-8', type: 'text/csv;charset=utf-8;' });
 
     downloadBlob(blob);
