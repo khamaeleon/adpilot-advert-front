@@ -80,11 +80,7 @@ function ConversionManage() {
 
     const header = columns.map((c) => typeof c.header === 'string' ? c.header : '').join(',');
     const rows = gridRef.current.data.map((data) =>
-        columns.map((c) => {
-          if(c.id !== 'conversionId'){
-            return data[c.id]
-          }
-        }).join(','));
+        columns.map((c) => c.id !== 'conversionId' && data[c.id]).join(','));
 
     const uFEFF = "\uFEFF"
 

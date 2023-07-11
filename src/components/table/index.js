@@ -257,17 +257,17 @@ function Table(props) {
     const rows = gridRef.current.data.map((data) =>
       columns.map((c) => {
         switch (c.id){
-          case 'userCompanyProfile': return data['userCompanyProfile'].companyName; break;
-          case 'adverType': return data['adverType'] === 'ADVER' ? "광고주" : "대행사"; break;
-          case 'hostType': return hostList.find(obj => obj.value === data['hostType']).label;break;
-          case 'status': return data['status'] !== 'NORMAL' ? "미사용" : "사용";break;
-          case 'productImages': return data['productImages'][0] != undefined ? data['productImages'][0].imageUrl : ''; break;
-          case 'productImages1': return data['productImages'][1] != undefined ? data['productImages'][1]?.imageUrl: ''; break;
-          case 'productImages2': return data['productImages'][2] != undefined ? data['productImages'][2]?.imageUrl: ''; break;
-          case 'productCategorys': return data['productCategorys'][0]?.name; break;
-          case 'productCategorys1': return data['productCategorys'][1]?.name; break;
-          case 'productCategorys2': return data['productCategorys'][2]?.name; break;
-          default: return data[c.id]; break;
+          case 'userCompanyProfile': return data['userCompanyProfile'].companyName;
+          case 'adverType': return data['adverType'] === 'ADVER' ? "광고주" : "대행사";
+          case 'hostType': return hostList.find(obj => obj.value === data['hostType']).label;
+          case 'status': return data['status'] !== 'NORMAL' ? "미사용" : "사용";
+          case 'productImages': return data['productImages'][0] !== undefined ? data['productImages'][0].imageUrl : '';
+          case 'productImages1': return data['productImages'][1] !== undefined ? data['productImages'][1]?.imageUrl: '';
+          case 'productImages2': return data['productImages'][2] !== undefined ? data['productImages'][2]?.imageUrl: '';
+          case 'productCategorys': return data['productCategorys'][0]?.name;
+          case 'productCategorys1': return data['productCategorys'][1]?.name;
+          case 'productCategorys2': return data['productCategorys'][2]?.name;
+          default: return data[c.id];
         }
       }).join(',')
     );
