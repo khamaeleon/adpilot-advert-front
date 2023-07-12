@@ -72,7 +72,7 @@ function AsideList (props) {
               <Link to={`/board/${item.name}`} className={mode? "icon-mode" : "list-mode"}>
                 <Icon style={id.indexOf(item.name) > -1? {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: 1}: {backgroundImage: `url(${selectedIcon[item.name]})`, opacity: .5}}/>
                 <span className={mode? "fadeOut" : "fadeIn"}>{item.header}</span>
-                {item.child.length > 0 && <DropIcon className={mode? "fadeOut" : "fadeIn"} style={id.indexOf(item.name) > -1 ? narrowStyle.button : widenStyle.button}/>}
+                {item.child.length > 0 && <DropIcon className={mode? "fadeOut" : "fadeIn"} style={id.indexOf(item.name) > -1 ? narrowStyle.button : null}/>}
               </Link>
               {item.child.length > 0 &&
                 <>
@@ -133,7 +133,7 @@ function Aside() {
         </Menu>
         <Narrow>
           <button type={'button'} onClick={handleChangeWidth}>
-            <BtnNarrow style={asideWidth ? narrowStyle.button : widenStyle.button}/>
+            <BtnNarrow style={asideWidth ? narrowStyle.button : null}/>
           </button>
         </Narrow>
       </AsideContainer>
@@ -249,8 +249,12 @@ const SubMenu = styled.div`
   `${((length > maxLength ? maxLength : length) * 36)+20}px`
   : 0};
   & > div {
-    &:first-child {padding: 18px 0 8px}
-    &:last-child {padding: 8px 0 18px}
+    &:first-child {
+      padding: ${({length}) => length > 1 ? '18px 0 8px' : '18px 0'}
+    }
+    &:last-child {
+      padding: ${({length}) => length > 1 ? '8px 0 18px' : '18px 0'}
+    }
     color: #cccccc;
     font-size: 13px;
     padding: 8px 0;
