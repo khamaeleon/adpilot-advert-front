@@ -1,6 +1,12 @@
 import styled from "styled-components";
 import {Link, useParams} from "react-router-dom";
-import {menuList, narrowStyle, reportsInfoAtom, selectedIcon, widenStyle} from "./entity";
+import {
+  menuList,
+  narrowStyle,
+  reportsInfoAtom,
+  selectedIcon,
+  widenStyle
+} from "./entity";
 import {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity/Common";
@@ -35,17 +41,16 @@ function AsideList (props) {
    */
 
   useEffect(() => {
-    if(tokenUserInfo.role === 'NORMAL'){
-      retrieveCustomReportsList(tokenUserInfo.id).then(response => {
-        setReportLists(response)
-      })
-    } else {
-      if(tokenUserInfo.id !== '') {
+    if(tokenUserInfo.role !== '') {
+      if(tokenUserInfo.role === 'NORMAL'){
+        retrieveCustomReportsList(tokenUserInfo.id).then(response => {
+          setReportLists(response)
+        })
+      } else {
         retrieveCustomReportsAdminList(tokenUserInfo.id).then(response => {
           setReportLists(response)
         })
       }
-
     }
   }, [tokenUserInfo, reportsInfo.id]);
 
@@ -71,30 +76,27 @@ function AsideList (props) {
               </Link>
               {item.child.length > 0 &&
                 <>
+                {/* SubMenu 컴포넌트에 maxLength 값 설정시 length 가 더 크면 스크롤 생김*/}
                 {item.name === 'reports' ?
-                  <SubMenu active={item.include.includes(id)} length={reportLists?.length + 1}>
+                  <SubMenu active={item.include.includes(id)} length={reportLists?.length + 1} maxLength={11}>
                     <div>
-                      <div>
-                        <Link to={`/board/reports`} style={id === 'reports' ? {color:'#fff'}:null}>보고서 생성</Link>
-                      </div>
-                      {reportLists !== null && reportLists.length !== 0 && reportLists.map((list, index) => {
-                        return(
-                          <div key={index}>
-                            <Link to={`/board/customReports`} onClick={() =>handleChangeReportsInfo(list.id,list.groupByPeriod)} style={list.id === reportsInfo.id ? {color:'#fff'}:null}>{list.adverName} {list.reportName}</Link>
-                          </div>
-                        )
-                      })}
+                      <Link to={`/board/reports`} style={id === 'reports' ? {color:'#fff'}:null}>보고서 생성</Link>
                     </div>
+                    {reportLists !== null && reportLists.length !== 0  && reportLists.map((list, index) => {
+                      return(
+                        <div key={index}>
+                          <Link to={`/board/customReports`} onClick={() =>handleChangeReportsInfo(list.id,list.groupByPeriod)} style={list.id === reportsInfo.id ? {color:'#fff'}:null}>{list.adverName} {list.reportName}</Link>
+                        </div>
+                      )
+                    })}
                   </SubMenu>
                   :
                   <SubMenu active={item.include.includes(id)} length={item.child.length}>
                       {item.child.map((child, key) => {
                         return (
                           <div key={key}>
-                            <div>
-                              <Link to={`/board/${child.name}`}
-                                    style={id === child.name || id === child.detail || id === child.detail2 ? {color: '#fff'} : null}>{child.header}</Link>
-                            </div>
+                            <Link to={`/board/${child.name}`}
+                                  style={id === child.name || id === child.detail || id === child.detail2 ? {color: '#fff'} : null}>{child.header}</Link>
                           </div>
                         )
                       })}
@@ -158,18 +160,17 @@ const Logo = styled.div`
   background-image: url("/assets/images/logos/logo_inline_w@3x.png");
   background-size: contain;
   background-repeat: no-repeat;
+  transition-duration: 0.3s;
 `
 
 const Menu = styled.ul`
   margin-top: 20px;
   width: 100%;
-
   & li {
     display: flex;
     flex-direction: column;
     cursor: pointer;
     transition-duration: 0.5s;
-
     & > a {
       display: inline-block;
       padding-left: ${menuPL};
@@ -237,21 +238,26 @@ const BtnNarrow = styled.div`
 
 const SubMenu = styled.div`
   background-color: #212020;
-  transition-duration: .7s;
-  overflow-y: ${props => props?.length > 6 ? 'auto' : 'hidden'};
+  transition-duration: .5s;
+  overflow-y: ${({length, maxLength}) => length > maxLength ? 'scroll' : 'hidden'};
   white-space: nowrap;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding-left:52px;
-  padding-top: ${props => props.active ? '10px':0};
-  padding-bottom: ${props => props.active ?'10px':0};
-  max-height: ${({active,length}) => active ? `${(length*34.5)+20}px` : 0};
+  max-height: ${({active,length,maxLength}) => active ? 
+  `${((length > maxLength ? maxLength : length) * 36)+20}px`
+  : 0};
   & > div {
-    & > div {
-      color: #cccccc;
-      font-size: 13px;
-      padding: 8px 0;
+    &:first-child {padding: 18px 0 8px}
+    &:last-child {padding: 8px 0 18px}
+    color: #cccccc;
+    font-size: 13px;
+    padding: 8px 0;
+    > a {
+      padding-right: 5px;
+      display: block;
+      height: 20px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

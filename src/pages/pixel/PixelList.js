@@ -48,13 +48,11 @@ export function SubCategory({topLevelCategory, subs}) {
   useEffect(()=>{
     if(tokenResult.role !== 'NORMAL') {
       retrieveSubLevelCategoryKeyValue(topLevelCategory).then(response => {
-        console.log(response);
         const subsLabel = response.find(subCategory => subCategory.value === subs).label
         setSubCategory(subsLabel)
       })
     } else {
       retrieveUserSubLevelCategoryKeyValue(topLevelCategory).then(response => {
-        console.log(response);
         const subsLabel = response.find(subCategory => subCategory.value === subs).label
         setSubCategory(subsLabel)
       })
@@ -421,12 +419,11 @@ function PixelList() {
     })
   }
   const rowExpandHeight = ({ data }) => {
-    if(data?.pixelCnt < 8) {
-      return 82+(data.pixelCnt*45)
-    } else if(data?.pixelCnt === 0) {
-      return 300
-    }
-    return 420;
+    if(data?.pixelCnt !== 0) {
+      if(data?.pixelCnt < 8) {
+        return 82+(data.pixelCnt*45)
+      } else return 420;
+    } else return 300;
   }
   return (
     <main>

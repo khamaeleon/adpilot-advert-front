@@ -438,12 +438,11 @@ function DashBoardIndex() {
     );
   }
   const rowExpandHeight = ({ data }) => {
-    if(data.campaignCount < 6) {
-      return 112+(data.campaignCount*60)
-    } else if(data?.campaignCount === 0) {
-      return 300
-    }
-    return 500;
+    if(data?.campaignCount !== 0) {
+      if(data.campaignCount < 6) {
+        return 112+(data.campaignCount*60)
+      } else return 300
+    } else return 500;
   }
   return (
       <>

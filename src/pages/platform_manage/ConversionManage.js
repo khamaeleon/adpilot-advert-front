@@ -100,12 +100,11 @@ function ConversionManage() {
     downloadBlob(blob);
   };
   const rowExpandHeight = ({ data }) => {
-    if(data?.totalProductCount < 8) {
-      return 82+(data?.totalProductCount*45)
-    } else if(data?.totalProductCount === 0) {
-      return 300
-    }
-    return 420;
+    if(data?.totalProductCount !== 0) {
+      if(data?.totalProductCount < 8) {
+        return 82+(data?.totalProductCount*45)
+      } else return 420;
+    } else return 300
   }
   return (
     <main>

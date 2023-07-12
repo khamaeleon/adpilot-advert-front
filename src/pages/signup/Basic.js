@@ -572,7 +572,8 @@ export default function Basic(props) {
                 /*readOnly={true}*/
               />
               {errors.businessNumber && <ValidationScript>{errors.businessNumber?.message}</ValidationScript>}
-              <DuplicateButton type={'button'} onClick={() => handleCheckBusinessNumber()}>사업자 조회</DuplicateButton>
+              {/*사업자 조회 임시 닫음*/}
+              {/*<DuplicateButton type={'button'} onClick={() => handleCheckBusinessNumber()}>사업자 조회</DuplicateButton>*/}
             </div>
           </RelativeDiv>
           <RelativeDiv>
