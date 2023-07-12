@@ -594,7 +594,7 @@ export const selectStyle = {
             isFocused ? light.color.mainColorOpacity20
               :undefined,
       color:
-        isDisabled ? light.color.textColor :
+        isDisabled ? light.color.lightGray :
           isSelected ? '#fff' : light.color.textColor,
       ':active': {
         ...baseStyles[':active'],
