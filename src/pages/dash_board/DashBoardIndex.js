@@ -243,12 +243,13 @@ function ChartComponent() {
             const dateColor = dateFormat(date, 'ddd').includes('Sun') && 'red'
             return {color: dateColor, tooltipDate: dateFormat(date, 'YYYY.MM.DD'), x: formattedDate, y: isNaN(item[id]) ? 0 : item[id]}
           }),
-          color: fixedColors[colorIndex]
+          color: fixedColors[colorIndex],
+          order: colorIndex
         })
       }
       return null
     })
-    setChartList(list.sort().reverse())
+    setChartList(list.sort((a,b) => {if(a.order>b.order){return -1}else{return 1}}))
   }
 
 
