@@ -66,22 +66,22 @@ export default function CreateReports() {
   const [columns, setColumns] = useState([])
   const [creativeInfo, setCreativeInfo] = useState({})
   const [reportName, setReportName] = useState('')
-  const { register,  formState: { errors } } = useForm();
+  const { register, setError, clearErrors, formState: { errors } } = useForm();
   const tokenResult = useAtomValue(tokenResultAtom)
   const setReportsInfo = useSetAtom(reportsInfoAtom)
   const navigate = useNavigate()
   const [defaultType, setDefaultType] = useState(null)
 
   useEffect(() => {
-    if(tokenResult.role !== 'NORMAL') {
+    if(tokenResult?.role !== 'NORMAL') {
       setCreativeInfo({
         ...creativeInfo,
-        email: tokenResult.id
+        email: tokenResult?.id
       })
     } else {
       setCreativeInfo({
         ...creativeInfo,
-        id: tokenResult.id
+        id: tokenResult?.id
       })
     }
     setReportsInfo({
@@ -176,6 +176,7 @@ export default function CreateReports() {
    * @param e
    */
   const handleChangeReportName = (e) => {
+    clearErrors('reportName')
     if(reportName.length < 13){
       setReportName(e.target.value)
     }
@@ -186,7 +187,9 @@ export default function CreateReports() {
    */
   const handleCreateReports = async () => {
     let params;
-    if(defaultType === null){
+    if (reportName === '') {
+      setError('reportName',{type: 'required', message: '보고서 명을 작성해주세요.'})
+    } else if(defaultType === null){
       toast.warning("기준항목을 선택해주세요.")
     } else if (defaultType === 'period' && period === 'NONE') {
       toast.warning("기간별 항목을 선택해주세요.")
@@ -253,7 +256,6 @@ export default function CreateReports() {
     setDataItems([])
     setColumns([])
   }
-
   return(
     <>
       <Board>

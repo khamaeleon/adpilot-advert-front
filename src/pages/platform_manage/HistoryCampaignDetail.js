@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import {Link, useLocation} from "react-router-dom";
 import {findRevisionCampaignDetail} from "../../services/Platform/HistoryAxios";
 import {Loading} from "./entity/History";
+import styled from "styled-components";
 
 const eventGoalGroup = {
   WEB: 'PC 웹',
@@ -41,14 +42,17 @@ const creativeHistory = [
   {pcReferralCode: 'PC 인식코드 '},
   {mobLandingUrl: 'MOBILE 랜딩 URL'},
   {mobReferralCode: 'MOBILE 인식코드'},
-  {name: '광고 소재'},
-  {name: '광고 타이틀'},
-  {name: '광고 제목1'},
-  {name: '광고 제목2'},
-  {name: '긴 광고 제목'},
-  {name: '클릭 유도 문안'},
-  {name: '로고 이미지'},
-  {name: '광고 설명'},
+]
+
+const materialDetailInfo = [
+  {serviceName: '서비스 명'},
+  {title1: '광고 타이틀'},
+  {title2: '광고 제목1'},
+  {title3: '광고 제목2'},
+  {titleLong: '긴 광고 제목'},
+  {clickInducementType: '클릭 유도 문안'},
+  {logoPaths: '로고 이미지'},
+  {description: '광고 설명'},
 ]
 
 export function HistoryCampaignDetail () {
@@ -63,65 +67,144 @@ export function HistoryCampaignDetail () {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const campConverters = (status,arg) => {
+  const campConverters = (timing,arg) => {
     let value;
-    const campaignReserved = data[status]
+    const campaignData = data[timing]
     if(Object.keys(arg)[0] === 'publishYn') {
-      value = campaignReserved[Object.keys(arg)] === 'Y' ? '게제 중' : '게재 중지'
+      value = campaignData[Object.keys(arg)] === 'Y' ? '게제 중' : '게재 중지'
     } else {
-      value = campaignReserved[Object.keys(arg)]
+      value = campaignData[Object.keys(arg)]
     }
     return value
   }
 
-  const budgetConverters  = (status,arg) => {
+  const budgetConverters  = (timing,arg) => {
     let value;
-    const budgetReserved = data[status]?.budget
+    const budgetData = data[timing]?.budget
     if(Object.keys(arg)[0] === 'infiniteBudgetYn') {
-      value = budgetReserved[Object.keys(arg)] === 'N' ? `PC ${data[status]?.budget.pcBudget}원  / MOBILE ${data[status]?.budget.mobBudget}원` : '-'
+      value = budgetData[Object.keys(arg)] === 'N' ? `PC ${budgetData.pcBudget}원  / MOBILE ${budgetData.mobBudget}원` : '-'
     } else {
-      value = budgetReserved[Object.keys(arg)]
+      value = budgetData[Object.keys(arg)]
     }
     return isNaN(value) ? value : value + '원'
   }
 
-  const inventoryConverter = (status,arg) => {
+  const inventoryConverter = (timing,arg) => {
     let value;
-    const inventoryReserved = data[status]?.inventory
+    const inventoryData = data[timing]?.inventory
     if(Object.keys(arg)[0] === 'audienceTargetConfigType') {
       const audience = () => {
         return (
           <>
-            <p>{inventoryReserved?.audienceTargetConfig.exposureConversionYn === 'Y' && '미전환'}</p>
-            <p>{inventoryReserved?.audienceTargetConfig.exposureNewYn}</p>
-            <p>{inventoryReserved?.audienceTargetConfig.exposurePotentialYn}</p>
-            <p>{inventoryReserved?.audienceTargetConfig.exposureShoppingYn}</p>
-            <p>{inventoryReserved?.audienceTargetConfig.nonExposureDaysOfConversion}</p>
+            <p>{inventoryData?.audienceTargetConfig.exposureConversionYn === 'Y' && '미전환'}</p>
+            <p>{inventoryData?.audienceTargetConfig.exposureNewYn}</p>
+            <p>{inventoryData?.audienceTargetConfig.exposurePotentialYn}</p>
+            <p>{inventoryData?.audienceTargetConfig.exposureShoppingYn}</p>
+            <p>{inventoryData?.audienceTargetConfig.nonExposureDaysOfConversion}</p>
           </>
         )
       }
-      value = inventoryReserved[Object.keys(arg)] === 'AUTO' ? `자동최적화` : audience
+      value = inventoryData[Object.keys(arg)] === 'AUTO' ? `자동최적화` : audience
     } else if(Object.keys(arg)[0] === 'userTargetConfigType') {
       const user = () => {
         return (
           <>
-            <p>{inventoryReserved?.userTargetConfig.exposureAttentionUserYn}</p>
-            <p>{inventoryReserved?.userTargetConfig.exposureConversionUserYn}</p>
-            <p>{inventoryReserved?.userTargetConfig.exposureShoppingUserYn}</p>
-            <p>{inventoryReserved?.userTargetConfig.exposureVisitUserYn}</p>
-            <p>{inventoryReserved?.userTargetConfig.nonExposureDaysOfConversion}</p>
+            <p>{inventoryData?.userTargetConfig.exposureAttentionUserYn}</p>
+            <p>{inventoryData?.userTargetConfig.exposureConversionUserYn}</p>
+            <p>{inventoryData?.userTargetConfig.exposureShoppingUserYn}</p>
+            <p>{inventoryData?.userTargetConfig.exposureVisitUserYn}</p>
+            <p>{inventoryData?.userTargetConfig.nonExposureDaysOfConversion}</p>
           </>
         )
       }
-      value = inventoryReserved[Object.keys(arg)] === 'AUTO' ? `자동최적화` : user
+      value = inventoryData[Object.keys(arg)] === 'AUTO' ? `자동최적화` : user
     } else if(Object.keys(arg)[0] === 'startDate') {
-      value = `${inventoryReserved['startDate']} ~ ${inventoryReserved['endDate']}`
+      value = `${inventoryData['startDate']} ~ ${inventoryData['endDate']}`
     } else if (Object.keys(arg)[0] === 'allowInventoryCategories' || Object.keys(arg)[0] === 'disAllowInventoryCategories') {
-      value = inventoryReserved[Object.keys(arg)].length !== 0 ? `[${inventoryReserved[Object.keys(arg)].join('/ ')}]` : '없음'
+      value = inventoryData[Object.keys(arg)].length !== 0 ? `[${inventoryData[Object.keys(arg)].join('/ ')}]` : '없음'
     } else if(Object.keys(arg)[0] === 'exposureAgentType') {
-      value = inventoryReserved[Object.keys(arg)].length !== 0 ? `[${inventoryReserved[Object.keys(arg)].map((item) => eventGoalGroup[item]).join('/ ')}]` : '-'
+      value = inventoryData[Object.keys(arg)].length !== 0 ? `[${inventoryData[Object.keys(arg)].map((item) => eventGoalGroup[item]).join('/ ')}]` : '-'
     } else {
-      value = inventoryReserved[Object.keys(arg)]
+      value = inventoryData[Object.keys(arg)]
+    }
+    return value
+  }
+
+  const creativeConverters = (timing, arg) => {
+    let value;
+    const creativeData = data[timing]?.creative
+    value = creativeData[Object.keys(arg)]
+    return value
+  }
+  const materialConverters = (timing, arg) => {
+    let value;
+    const materialData = data[timing]?.creative?.materialDetailInfo
+    const image = (path) => {
+      return (
+        <ImageGroup>
+          {path.map((img, key) => {
+            return(
+              <img width={70} height={70} style={{objectFit:'cover'}} key={key} src={img} alt={'로고이미지'}/>
+              )
+          })}
+        </ImageGroup>
+      )
+    }
+    if (Object.keys(arg)[0] === 'logoPaths') {
+      value = image(materialData[Object.keys(arg)])
+    } else {
+      value = materialData[Object.keys(arg)]
+    }
+    return value
+  }
+
+  const bannerImages = (timing) => {
+    const bannerData = data[timing]?.creative
+    let value
+    const bannerImage = () => {
+      return (
+        <div>{bannerData?.bannerMaterials.map((item, key) => {
+          console.log(item)
+          return (
+            <div style={{display: 'flex',gap: 10, margin: 5}}>
+              <div key={key} style={{whiteSpace: 'nowrap'}}>{item?.bannerSize}</div>
+              <ImageGroup>
+                {item?.bannerImages.map((img, key) => {
+                  return (
+                    <img key={key} src={img.thumbnailPath} alt={img.id}/>
+                  )
+                })}
+              </ImageGroup>
+            </div>
+          )
+        })}</div>
+      )
+    }
+
+    const nativeImage = () => {
+      return (
+        <div>
+          <div style={{display: 'flex',gap: 10, margin: 5}}>
+            <ImageGroup>
+              {bannerData?.nativeImages.map((img, key) => {
+                return (
+                  <img key={key} src={img.thumbnailPath} alt={img.id}/>
+                )
+              })}
+            </ImageGroup>
+          </div>
+        </div>
+      )
+    }
+
+    if(bannerData?.creativeType === 'BANNER') {
+      value = bannerImage()
+    } else if (bannerData?.creativeType === 'NATIVE') {
+      value = nativeImage()
+    } else if (bannerData?.creativeType === 'PRODUCT_BANNER') {
+
+    } else if (bannerData?.creativeType === 'POP_UNDER') {
+
     }
     return value
   }
@@ -234,18 +317,18 @@ export function HistoryCampaignDetail () {
 
               <tr>
                 <th className={'border-r border-t'}>이벤트 단가 그룹</th>
-                <td className={'border-t'}></td>
-                <td className={'border-t'}></td>
+                <td className={'border-t'}>기본 단가 그룹</td>
+                <td className={'border-t'}>기본 단가 그룹</td>
               </tr>
               <tr>
                 <th className={'border-r border-t'}>이벤트 예산 그룹</th>
-                <td className={'border-t'}></td>
-                <td className={'border-t'}></td>
+                <td className={'border-t'}>기본 예산 그룹</td>
+                <td className={'border-t'}>기본 예산 그룹</td>
               </tr>
               <tr>
                 <th className={'border-r border-t'}>시간대별 예산 그룹</th>
-                <td className={'border-t'}></td>
-                <td className={'border-t'}></td>
+                <td className={'border-t'}>기본 예산 그룹</td>
+                <td className={'border-t'}>기본 예산 그룹</td>
               </tr>
               </tbody>
             </table>
@@ -302,101 +385,25 @@ export function HistoryCampaignDetail () {
                 return (
                   <tr>
                     <th className={'border-r border-t'}>{Object.values(entry)}</th>
-                    <td className={'border-t'}></td>
-                    <td className={'border-t'}></td>
+                    <td className={'border-t'}>{data?.previous !== null && data?.previous !== undefined && data?.previous?.creative !== null ? creativeConverters('previous',entry) : '-'}</td>
+                    <td className={'border-t'}>{data?.current !== null && data?.current !== undefined && data?.current?.creative !== null ? creativeConverters('current',entry) : '-'}</td>
                   </tr>
                 )
               })}
               <tr>
-                <th className={'border-r border-t'}>광고 그룹명</th>
-                <td className={'border-t'}>{data?.previous?.creative !== null ? data?.previous?.creative?.name : '-'}</td>
-                <td className={'border-t'}>{data?.current?.creative !== null ? data?.current?.creative?.name : '-'}</td>
+                <th className={'border-r border-t'}>배너소재</th>
+                <td className={'border-t'}>{data?.previous !== null && data?.previous !== undefined && data?.previous?.creative !== null ? bannerImages('previous') : '-'}</td>
+                <td className={'border-t'}>{data?.current !== null && data?.current !== undefined && data?.current?.creative !== null ? bannerImages('current') : '-'}</td>
               </tr>
-              <tr>
-                <th className={'border-r border-t'}>크리에이티브 유형</th>
-                <td className={'border-t'}>고정 배너</td>
-                <td className={'border-t'}>네이티브</td>
-              </tr>
-              <tr>
-                <th className={'border-r border-t'}>PC 랜딩URL</th>
-                <td className={'border-t'}>https://www.naver.com</td>
-                <td className={'border-t'}>https://www.google.com</td>
-              </tr>
-              <tr>
-                <th className={'border-r border-t'}>PC 인식코드</th>
-                <td className={'border-t'}>=wpdkfm</td>
-                <td className={'border-t'}>=wpdkfm23></td>
-              </tr>
-              <tr>
-                <th className={'border-r border-t'}>MOBILE 랜딩URL</th>
-                <td className={'border-t'}>https://m.naver.com</td>
-                <td className={'border-t'}>https://m.google.com</td>
-              </tr>
-              <tr>
-                <th className={'border-r border-t'}>MOBILE 인식코드</th>
-                <td className={'border-t'}>=wpdkfm</td>
-                <td className={'border-t'}>=wpdkfm23</td>
-              </tr>
-              <tr>
-                <th className={'border-r border-t'}>광고 소재</th>
-                <td className={'border-t'}>
-                  <div>
-                    <h5>250*250</h5>
-                    <img src={''} alt="이미지2"/>
-                  </div>
-                </td>
-                <td className={'border-t'}>
-                  <div>
-                    <h5>600*300</h5>
-                    <img src={''} alt="이미지"/>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <th className={'border-r border-t'}>광고 타이틀</th>
-                <td className={'border-t'}>나이키 특별 기획전</td>
-                <td className={'border-t'}>NIKE 특별 기획전</td>
-              </tr>
-              <tr>
-                <th className={'border-r border-t'}>광고 제목1</th>
-                <td className={'border-t'}>JUST DO IT</td>
-                <td className={'border-t'}>JUST DO IT</td>
-              </tr>
-              <tr>
-                <th className={'border-r border-t'}>광고 제목2</th>
-                <td className={'border-t'}>-</td>
-                <td className={'border-t'}>-</td>
-              </tr>
-              <tr>
-                <th className={'border-r border-t'}>긴 광고 제목</th>
-                <td className={'border-t'}>불가능은 없다</td>
-                <td className={'border-t'}>-</td>
-              </tr>
-              <tr>
-                <th className={'border-r border-t'}>클릭 유도 문안</th>
-                <td className={'border-t'}>구매하기</td>
-                <td className={'border-t'}>바로가기</td>
-              </tr>
-              <tr>
-                <th className={'border-r border-t'}>로고 이미지</th>
-                <td className={'border-t'}>
-                  <div>
-                    <img src={''} alt={'로고'}/>
-                    <img src={''} alt={'로고'}/>
-                  </div>
-                </td>
-                <td className={'border-t'}>
-                  <div>
-                    <img src={''} alt={'로고'}/>
-                    <img src={''} alt={'로고'}/>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <th className={'border-r border-t'}>광고 설명</th>
-                <td className={'border-t'}>NIKE 특별 기획전은 2023 새학기 기념 이벤트</td>
-                <td className={'border-t'}>-</td>
-              </tr>
+              {materialDetailInfo.map((entry, key) => {
+                return (
+                  <tr key={key}>
+                    <th className={'border-r border-t'}>{Object.values(entry)}</th>
+                    <td className={'border-t'}>{data?.previous !== null && data?.previous !== undefined && data?.previous?.creative !== null && data?.previous?.creative?.metarialDetailInfo !== undefined !== null ? materialConverters('previous',entry) : '-'}</td>
+                    <td className={'border-t'}>{data?.current !== null && data?.current !== undefined && data?.current?.creative !== null && data?.previous?.creative?.metarialDetailInfo !== undefined ? materialConverters('current',entry) : '-'}</td>
+                  </tr>
+                )
+              })}
               </tbody>
             </table>
           </BoardTableContainer>
@@ -410,3 +417,15 @@ export function HistoryCampaignDetail () {
     </>
   )
 }
+
+const ImageGroup = styled.div`
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  width: 100%;
+  background-color: #fafafa;
+  & img {
+    width: 70px;
+    object-fit: cover;
+  }
+`

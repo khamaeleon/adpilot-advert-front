@@ -232,6 +232,7 @@ export default Layout
 const BoardBody = styled.div`
   width: 100%;
   background-color: ${bgColor};
+  overflow-x: auto;
 `
 const BoardHeader = styled.div`
   display: flex;

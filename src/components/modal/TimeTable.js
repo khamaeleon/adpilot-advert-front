@@ -8,29 +8,25 @@ import {ColTitle, RowSpan, Script} from "../../assets/GlobalStyles";
 import styled from "styled-components";
 
 function TimeTableComponent (props) {
+  const timeType = () => {
+    if(props.exposureTimeType !== "DIRECT_SETTINGS") {
+      if(props.exposureTimeType !== 'EQUAL_DISTRIBUTION') {
+        return '빠른소진'
+      } else return '균등분배'
+    } else return '직접 설정'
+  }
   return(
     <div>
       <ModalHeader title={"설정된 시간별 예산"}/>
       <ModalBody>
-        {props.exposureTimeType !== "DIRECT_SETTINGS" ?
-          <>
-            <RowSpan>
-              <ColTitle><strong>예산 소진 설정 | 균등소진/빠른소진</strong></ColTitle>
-            </RowSpan>
-            <RowSpan box={true}>
-              <DragToSelect readOnly={props.readOnly}/>
-            </RowSpan>
-          </>
-          :
-          <>
-            <RowSpan>
-              <ColTitle><strong>예산 소진 설정 | 직접 설정</strong></ColTitle>
-            </RowSpan>
-            <RowSpan box={true}>
-              <InsertToSelect readOnly={props.readOnly}/>
-            </RowSpan>
-          </>
-        }
+        <RowSpan>
+          <ColTitle><strong>예산 소진 설정 | {timeType()}</strong></ColTitle>
+        </RowSpan>
+        <RowSpan box={true}>
+          {props.exposureTimeType !== "DIRECT_SETTINGS" ?
+            <DragToSelect readOnly={props.readOnly}/>
+            : <InsertToSelect readOnly={props.readOnly}/>}
+        </RowSpan>
       </ModalBody>
     </div>
   )
