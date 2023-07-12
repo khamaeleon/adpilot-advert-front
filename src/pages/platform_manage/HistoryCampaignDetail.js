@@ -8,7 +8,8 @@ const eventGoalGroup = {
   WEB: 'PC 웹',
   WEB_APP: 'PC 어플리케이션',
   MOBILE_WEB: 'MOBILE 웹',
-  MOBILE_NATIVE_APP: 'MOBILE 어플리케이션'
+  MOBILE_HYBRID_APP: '하이브리드 APP',
+  MOBILE_NATIVE_APP: '네이티브 APP'
 }
 
 const campaignHistory = [
