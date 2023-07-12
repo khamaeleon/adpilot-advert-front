@@ -92,16 +92,16 @@ function AsideList (props) {
                   </SubMenu>
                   :
                   <SubMenu active={item.include.includes(id)} length={item.child.length}>
-                      {item.child.map((child, key) => {
-                        return (
-                          <div key={key}>
-                            <Link to={`/board/${child.name}`}
-                                  style={id === child.name || id === child.detail || id === child.detail2 ? {color: '#fff'} : null}>{child.header}</Link>
-                          </div>
-                        )
-                      })}
-                    </SubMenu>
-                  }
+                    {item.child.map((child, key) => {
+                      return (
+                        <div key={key}>
+                          <Link to={`/board/${child.name}`}
+                                style={id === child.name || id === child.detail || id === child.detail2 ? {color: '#fff'} : null}>{child.header}</Link>
+                        </div>
+                      )
+                    })}
+                  </SubMenu>
+                }
                 </>
               }
             </li>
