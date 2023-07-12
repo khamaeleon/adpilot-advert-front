@@ -248,7 +248,7 @@ function ChartComponent() {
       }
       return null
     })
-    setChartList(list)
+    setChartList(list.sort().reverse())
   }
 
 
