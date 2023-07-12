@@ -35,7 +35,7 @@ import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 /** 플래폼 현황 차트 **/
 function ChartComponent() {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
-  const [chartData, setChartData] = useAtom(chartDataAtom);
+  const [chartData, setChartData] = useState(chartDataAtom);
   const searchCondition = useAtomValue(searchConditionAtom)
   const [dataType, setDataType] = useState('cpc')
   const [dataType2, setDataType2] = useState('costAmount')
