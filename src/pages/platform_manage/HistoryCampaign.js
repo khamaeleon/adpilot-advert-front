@@ -18,7 +18,6 @@ export function HistoryCampaignManage () {
 
   useEffect(() => {
     findRevisionCampaignList(searchCondition).then(response =>{
-      console.log(response)
       setDataSource(response.rows)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -40,7 +39,6 @@ export function HistoryCampaignManage () {
 
   const handleClickSearch = () =>{
     findRevisionCampaignList(searchCondition).then(response =>{
-      console.log(response)
       setDataSource(response.rows)
     })
   }

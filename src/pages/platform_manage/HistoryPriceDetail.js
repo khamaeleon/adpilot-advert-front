@@ -92,9 +92,8 @@ export function HistoryPriceDetail () {
                   <th>변경 내역</th>
                 </tr>
                 {budgetPriceHistory.map((entry, key) => {
-                  console.log(data?.current[Object.keys(entry)])
                   return (
-                    <tr>
+                    <tr key={key}>
                       <th className={'border-r border-t'}>{Object.values(entry)}</th>
                       <td className={'border-t'}>{data?.previous !== null ? data?.previous[Object.keys(entry)] : '-'}</td>
                       <td className={'border-t'}>{data?.current !== null ? data?.current[Object.keys(entry)] : '-'}</td>

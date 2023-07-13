@@ -18,7 +18,6 @@ export function HistoryTargetingManage () {
 
   useEffect(() => {
     findRevisionTargetingBudgetList(searchCondition).then(response =>{
-      console.log(response)
       setDataSource(response.rows)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -40,7 +39,6 @@ export function HistoryTargetingManage () {
 
   const handleClickSearch = () =>{
     findRevisionTargetingBudgetList(searchCondition).then(response =>{
-      console.log(response)
       setDataSource(response.rows)
     })
   }

@@ -96,11 +96,10 @@ export function HistoryCampaignDetail () {
       const audience = () => {
         return (
           <>
-            <p>{inventoryData?.audienceTargetConfig.exposureConversionYn === 'Y' && '미전환'}</p>
-            <p>{inventoryData?.audienceTargetConfig.exposureNewYn}</p>
-            <p>{inventoryData?.audienceTargetConfig.exposurePotentialYn}</p>
-            <p>{inventoryData?.audienceTargetConfig.exposureShoppingYn}</p>
-            <p>{inventoryData?.audienceTargetConfig.nonExposureDaysOfConversion}</p>
+            <p>[전환유저 - {inventoryData?.audienceTargetConfig.exposureConversionYn === 'Y' ? '노출' : `미노출 ${inventoryData?.audienceTargetConfig.nonExposureDaysOfConversion}일`}]</p>
+            <p>[신규유저 - {inventoryData?.audienceTargetConfig.exposureNewYn === 'Y' ? '노출' : '미노출'}]</p>
+            <p>[잠재유저 - {inventoryData?.audienceTargetConfig.exposurePotentialYn === 'Y' ? '노출' : '미노출'}]</p>
+            <p>[쇼핑유저 - {inventoryData?.audienceTargetConfig.exposureShoppingYn === 'Y' ? '노출' : '미노출'}]</p>
           </>
         )
       }
@@ -109,11 +108,10 @@ export function HistoryCampaignDetail () {
       const user = () => {
         return (
           <>
-            <p>{inventoryData?.userTargetConfig.exposureAttentionUserYn}</p>
-            <p>{inventoryData?.userTargetConfig.exposureConversionUserYn}</p>
-            <p>{inventoryData?.userTargetConfig.exposureShoppingUserYn}</p>
-            <p>{inventoryData?.userTargetConfig.exposureVisitUserYn}</p>
-            <p>{inventoryData?.userTargetConfig.nonExposureDaysOfConversion}</p>
+            <p>[전환고객 - {inventoryData?.userTargetConfig.exposureConversionUserYn === 'Y' ? '노출' : `미노출 ${inventoryData?.userTargetConfig.nonExposureDaysOfConversion}일`}]</p>
+            <p>[관심고객 - {inventoryData?.userTargetConfig.exposureAttentionUserYn === 'Y' ? '노출' : `미노출`}]</p>
+            <p>[쇼핑고객 - {inventoryData?.userTargetConfig.exposureShoppingUserYn === 'Y' ? '노출' : '미노출'}]</p>
+            <p>[방문고객 - {inventoryData?.userTargetConfig.exposureVisitUserYn === 'Y' ? '노출' : '미노출'}]</p>
           </>
         )
       }

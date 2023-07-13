@@ -2,6 +2,39 @@ import {BoardTableContainer, BoardTap, BoardTapTitle, CancelButton, SubmitContai
 import React, {useEffect, useState} from "react";
 import {Link, useLocation} from "react-router-dom";
 import {findRevisionBudgetTimeDetail} from "../../services/Platform/HistoryAxios";
+import {timesInfo, weeksInfo} from "../settings/entity/BudgetTime";
+import styled from "styled-components";
+
+
+function TimeTable (props) {
+  const {data, type} = props
+  return (
+    <>
+      <TimeTableComponent>
+        {timesInfo.map((data, index) => {
+          return <div key={index}>{data.time + data.label}</div>
+        })}
+      </TimeTableComponent>
+      {weeksInfo.map((info, key) => {
+        return (
+          <TimeTableComponent key={key}>
+            {timesInfo.map((time, index) => {
+              const allowTime = data[key]?.allowTimeAreas
+              const styles = data[key] !== undefined && allowTime.find(item => item.hour === time.time - 1) !== undefined ? {backgroundColor: '#4b85ff'} : null
+              const percent = data[key] !== undefined &&  allowTime.find(item => item.hour === time.time - 1)?.ratio !== undefined ? `${allowTime.find(item => item.hour === time.time - 1)?.ratio}%` : ''
+              return (
+                <div className={'time'} key={index} style={type !== 'DIRECT_SETTINGS' ? styles : null}>
+                  {type !== 'DIRECT_SETTINGS' ? null : `${percent}`}
+                  {index === 0 && info.week}
+                </div>
+              )
+            })}
+          </TimeTableComponent>
+        )
+      })}
+    </>
+  )
+}
 
 export function HistoryTimeDetail () {
   const {state} = useLocation()
@@ -94,15 +127,17 @@ export function HistoryTimeDetail () {
               <tr>
                 <th className={'border-r'}>이전 내역</th>
                 <td>
-                  {data?.previous !== null &&
-                    <div></div>
+                  {data?.previous !== null && data?.previous !== undefined &&
+                    <TimeTable data={data?.previous?.allowTimes} type={data?.previous?.exposureTimeType}/>
                   }
                 </td>
               </tr>
               <tr>
                 <th className={'border-r border-t'}>변경 내역</th>
                 <td className={'border-t'}>
-
+                  {data?.current !== null  && data?.current !== undefined &&
+                    <TimeTable data={data?.current?.allowTimes} type={data?.current?.exposureTimeType}/>
+                  }
                 </td>
               </tr>
             </tbody>
@@ -117,3 +152,19 @@ export function HistoryTimeDetail () {
     </>
   )
 }
+
+const TimeTableComponent = styled.div`
+  display: flex;
+  margin: -1px 20px;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  border-right: 1px solid #eee;
+  & div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+    border-left: 1px solid #eee;
+  }
+`

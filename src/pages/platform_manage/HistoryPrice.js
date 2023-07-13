@@ -17,7 +17,6 @@ export function HistoryPriceManage () {
 
   useEffect(() => {
     findRevisionTargetingPriceList(searchCondition).then(response =>{
-      console.log(response)
       setDataSource(response.rows)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -39,7 +38,6 @@ export function HistoryPriceManage () {
 
   const handleClickSearch = () =>{
     findRevisionTargetingPriceList(searchCondition).then(response =>{
-      console.log(response)
       setDataSource(response.rows)
     })
   }

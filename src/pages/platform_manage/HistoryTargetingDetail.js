@@ -18,7 +18,6 @@ export function HistoryTargetingDetail () {
 
   useEffect(()=> {
     findRevisionTargetingBudgetDetail(state).then(response =>{
-      console.log(response)
       setData(response)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
