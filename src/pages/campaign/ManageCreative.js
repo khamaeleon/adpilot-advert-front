@@ -3,7 +3,11 @@ import {
   BoardHeader,
   BoardSearchDetail,
   BoardSearchResult,
-  ColSpan2, lightGray, mainColor, mainColorOpacity20, mainColorOpacity5,
+  ColSpan4, GraySearchButton,
+  lightGray,
+  mainColor,
+  mainColorOpacity20,
+  mainColorOpacity5,
   RowSpan,
   SearchButton,
   SearchInput
@@ -133,14 +137,14 @@ export function ManageCreative() {
       <BoardHeader>크리에이티브 그룹 현황</BoardHeader>
       <BoardSearchDetail>
         <RowSpan>
-          <ColSpan2>
+          <ColSpan4>
             <SearchInput>
-              <input type={'text'} value={keyword} onChange={(e) => setKeyword(e.target.value)}/>
+              <input type={'text'} value={keyword}
+                     placeholder={'광고주명 및 아이디 검색'}
+                     onChange={(e) => setKeyword(e.target.value)}/>
             </SearchInput>
-          </ColSpan2>
-          <ColSpan2>
-            <SearchButton onClick={handleSearchKeyword}>검색</SearchButton>
-          </ColSpan2>
+          </ColSpan4>
+          <GraySearchButton onClick={handleSearchKeyword}>검색</GraySearchButton>
         </RowSpan>
       </BoardSearchDetail>
       <BoardSearchResult>
@@ -155,7 +159,7 @@ export function ManageCreative() {
             return(
               <div key={key}>
                 <CustomTableRow onClick={() => handleDetailData(item.userId)} style={{color: item.userId === open.id ? light.color.mainColor :null}}>
-                  <div>{item.adverName}</div>
+                  <div style={{textDecoration:'underline'}}>{item.adverName}</div>
                   <div>{item.username}</div>
                   <div>{item.managerName}</div>
                   <div>{item.creativeCount}</div>
