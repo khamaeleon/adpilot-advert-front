@@ -6,8 +6,8 @@ export const searchConditionAtom = atomWithReset({
   searchEndDate: getThisMonth().endDay,
   productType: null,
   targetingType: null,
-  deviceType : null,
-  agentTypes: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_NATIVE_APP'],
+  deviceTypes : ['PC', 'MOBILE', 'RESPONSIVE_WEB', 'APP'],
+  agentTypes: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_HYBRID_APP', 'MOBILE_NATIVE_APP'],
   keyword: '',
 })
 
@@ -19,16 +19,17 @@ export const productType = [
 ]
 
 export const deviceType = [
-  {key:1,value: null,label: '전체'},
-  {key:2,value:'PC',label: 'PC'},
-  {key:3,value:'MOBILE',label: '모바일'},
-  {key:4,value:'RESPONSIVE_WEB',label: '반응형 웹'}
+  {key:1, value: null, label: '전체'},
+  {key:2, value:'PC', label: 'PC'},
+  {key:3, value:'MOBILE', label: '모바일 웹'},
+  {key:4, value:'RESPONSIVE_WEB', label: '반응형 웹'},
+  {key:5, value:'APP', label: 'APP'}
 ]
 
 export const targetingType = [
-  {key:1,value:null,label: '전체'},
-  {key:2,value:'SAW_THE_PRODUCT',label: '카트 추천'},
-  {key:3,value:'CART_THE_PRODUCT',label: '상품 추천'},
-  {key:4,value:'DOMAIN_MATCHING',label: '유저 매칭'},
-  {key:5,value:'USER_OPTIMIZATION',label: '유저 최적화'}
+  {key:1, value:null,label: '전체'},
+  {key:2, value:'SAW_THE_PRODUCT',label: '카트 추천'},
+  {key:3, value:'CART_THE_PRODUCT',label: '상품 추천'},
+  {key:4, value:'DOMAIN_MATCHING',label: '유저 매칭'},
+  {key:5, value:'USER_OPTIMIZATION',label: '유저 최적화'}
 ]

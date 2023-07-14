@@ -1,8 +1,52 @@
 import {BoardTableContainer, BoardTap, BoardTapTitle, CancelButton, SubmitContainer} from "../../assets/GlobalStyles";
-import React from "react";
-import {Link} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Link, useLocation} from "react-router-dom";
+import {findRevisionBudgetTimeDetail} from "../../services/Platform/HistoryAxios";
+import {timesInfo, weeksInfo} from "../settings/entity/BudgetTime";
+import styled from "styled-components";
+
+
+function TimeTable (props) {
+  const {data, type} = props
+  return (
+    <>
+      <TimeTableComponent>
+        {timesInfo.map((data, index) => {
+          return <div key={index}>{data.time + data.label}</div>
+        })}
+      </TimeTableComponent>
+      {weeksInfo.map((info, key) => {
+        return (
+          <TimeTableComponent key={key}>
+            {timesInfo.map((time, index) => {
+              const allowTime = data[key]?.allowTimeAreas
+              const styles = data[key] !== undefined && allowTime.find(item => item.hour === time.time - 1) !== undefined ? {backgroundColor: '#4b85ff'} : null
+              const percent = data[key] !== undefined &&  allowTime.find(item => item.hour === time.time - 1)?.ratio !== undefined ? `${allowTime.find(item => item.hour === time.time - 1)?.ratio}%` : ''
+              return (
+                <div className={'time'} key={index} style={type !== 'DIRECT_SETTINGS' ? styles : null}>
+                  {type !== 'DIRECT_SETTINGS' ? null : `${percent}`}
+                  {index === 0 && info.week}
+                </div>
+              )
+            })}
+          </TimeTableComponent>
+        )
+      })}
+    </>
+  )
+}
 
 export function HistoryTimeDetail () {
+  const {state} = useLocation()
+  const [data, setData] = useState()
+
+  useEffect(()=> {
+    findRevisionBudgetTimeDetail(state).then(response =>{
+      setData(response)
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+
   return (
     <>
       {/*캠페인 정보*/}
@@ -19,9 +63,9 @@ export function HistoryTimeDetail () {
             <tbody>
             <tr>
               <th>광고주 명</th>
-              <td>나이키</td>
+              <td>{data?.adverName}</td>
               <th>광고주 아이디</th>
-              <td>nike123@naver.com</td>
+              <td>{data?.username}</td>
             </tr>
             </tbody>
           </table>
@@ -41,9 +85,9 @@ export function HistoryTimeDetail () {
             <tbody>
             <tr>
               <th>변경 일시</th>
-              <td>YYYY.MM.DD HH:MM</td>
+              <td>{data?.revisionDateTime}</td>
               <th>변경자 아이지</th>
-              <td>gildong12@mcor.com</td>
+              <td>{data?.modifiedBy}</td>
             </tr>
             </tbody>
           </table>
@@ -67,8 +111,8 @@ export function HistoryTimeDetail () {
               </tr>
               <tr>
                 <th className={'border-r border-t'}>시간별 예산 그룹명</th>
-                <td className={'border-t'}>균등 그룹</td>
-                <td className={'border-t'}>쇼핑 시간 집중 그룹</td>
+                <td className={'border-t'}>{data?.previous !== null ? data?.previous?.groupName : '-'}</td>
+                <td className={'border-t'}>{data?.current !== null ? data?.current?.groupName : '-'}</td>
               </tr>
             </tbody>
           </table>
@@ -83,19 +127,23 @@ export function HistoryTimeDetail () {
               <tr>
                 <th className={'border-r'}>이전 내역</th>
                 <td>
+                  {data?.previous !== null && data?.previous !== undefined &&
+                    <TimeTable data={data?.previous?.allowTimes} type={data?.previous?.exposureTimeType}/>
+                  }
                 </td>
               </tr>
               <tr>
                 <th className={'border-r border-t'}>변경 내역</th>
                 <td className={'border-t'}>
-
+                  {data?.current !== null  && data?.current !== undefined &&
+                    <TimeTable data={data?.current?.allowTimes} type={data?.current?.exposureTimeType}/>
+                  }
                 </td>
               </tr>
             </tbody>
           </table>
         </BoardTableContainer>
       </BoardTap>
-
       <SubmitContainer>
         <Link to={'/board/historyTimeManage'}>
           <CancelButton type={'button'}>목록</CancelButton>
@@ -104,3 +152,19 @@ export function HistoryTimeDetail () {
     </>
   )
 }
+
+const TimeTableComponent = styled.div`
+  display: flex;
+  margin: -1px 20px;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  border-right: 1px solid #eee;
+  & div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+    border-left: 1px solid #eee;
+  }
+`

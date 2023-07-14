@@ -64,11 +64,13 @@ export const searchAccountInfo = {
 export const columnUserData = [
   {
     name: 'adverName',
-    header: '광고주명'
+    header: '광고주명',
+    label: '광고주명'
   },
   {
     name: 'adverType',
     header: '광고주 구분',
+    label: '광고주 구분',
     render: ({value}) => {
       return (
         <>{value === 'ADVER' ? "광고주" : "대행사"}</>
@@ -78,6 +80,7 @@ export const columnUserData = [
   {
     name: 'hostType',
     header: '호스팅',
+    label: '호스팅',
     render: ({value}) => {
       return (
         <>{hostList.find(obj => obj.value === value).label}</>
@@ -87,6 +90,7 @@ export const columnUserData = [
   {
     name: 'username',
     header: '아이디',
+    label: '아이디',
     cellProps: {
       style: {
         textDecoration: 'underline'
@@ -101,6 +105,7 @@ export const columnUserData = [
   {
     name: 'userCompanyProfile',
     header: '상호명',
+    label: '상호명',
     render: ({value})=> {
       return (
         <span>{value.companyName}</span>
@@ -109,15 +114,18 @@ export const columnUserData = [
   },
   {
     name: 'managerName',
-    header: '담당자명'
+    header: '담당자명',
+    label: '담당자명'
   },
   {
     name: 'managerEmail',
     header: '이메일',
+    label: '이메일',
   },
   {
     name: 'createdAt',
     header: '가입 일시',
+    label: '가입 일시',
     render: ({value}) => {
       return (
         <span>{moment(value).format('YYYY년 MM월 DD일')}</span>
@@ -127,6 +135,7 @@ export const columnUserData = [
   {
     name: 'status',
     header: '사용 여부',
+    label: '사용 여부',
     render: ({value}) => {
       return (
         <>{value !== 'NORMAL' ? "미사용" : "사용"}</>

@@ -22,6 +22,7 @@ import {navigationName} from "../common/entity";
 import moment from "moment";
 import {useLocation} from "react-router-dom";
 import {light} from "../../assets/theme";
+import {hostList} from "../../pages/signup/entity/Common";
 
 export function SwitchComponent(props){
   const {value, cellProps, type, eventClick} = props
@@ -249,10 +250,27 @@ function Table(props) {
     document.body.removeChild(link);
   };
   const exportCSV = () => {
-    const columns = gridRef.current.visibleColumns;
 
-    const header = columns.map((c) => c.header).join(',');
-    const rows = gridRef.current.data.map((data) => columns.map((c) => data[c.id]).join(','));
+    const columns = gridRef.current.visibleColumns;
+    const header = columns.map((c) =>
+        typeof c.header === 'string' ? c.header : c.label).join(',');
+    const rows = gridRef.current.data.map((data) =>
+      columns.map((c) => {
+        switch (c.id){
+          case 'userCompanyProfile': return data['userCompanyProfile'].companyName;
+          case 'adverType': return data['adverType'] === 'ADVER' ? "광고주" : "대행사";
+          case 'hostType': return hostList.find(obj => obj.value === data['hostType']).label;
+          case 'status': return data['status'] !== 'NORMAL' ? "미사용" : "사용";
+          case 'productImages': return data['productImages'][0] !== undefined ? data['productImages'][0].imageUrl : '';
+          case 'productImages1': return data['productImages'][1] !== undefined ? data['productImages'][1]?.imageUrl: '';
+          case 'productImages2': return data['productImages'][2] !== undefined ? data['productImages'][2]?.imageUrl: '';
+          case 'productCategorys': return data['productCategorys'][0]?.name;
+          case 'productCategorys1': return data['productCategorys'][1]?.name;
+          case 'productCategorys2': return data['productCategorys'][2]?.name;
+          default: return data[c.id];
+        }
+      }).join(',')
+    );
     const uFEFF = "\uFEFF"
 
     // Office 2007 이전에는 ANSI 1252 인코딩을 기본 값, BOM을 추가하면 Office 2007 이후 버전
@@ -265,7 +283,7 @@ function Table(props) {
     // (문서의 맨 앞에 /ufeff 문자열을 추가 하면 해당 내용이 어떤 문자열로 인코딩 되었는지 표현하는 식별자.
     // 이것을 맨 앞에 적어 놓으면 엑셀 프로그램은 파일의 인코딩을 이해하고 그에 맞게 출력한다.)
 
-    const contents = [header].concat(rows).join('\n');
+    const contents = [header].concat(rows.map(r=>r.replace('\n',''))).join('\n');
     const blob = new Blob([uFEFF+contents], { encoding: 'UTF-8', type: 'text/csv;charset=utf-8;' });
 
     downloadBlob(blob);

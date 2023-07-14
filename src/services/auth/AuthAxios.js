@@ -107,15 +107,13 @@ export async function refreshAdmin() {
   let returnVal = null;
   await NonUserAxios('POST', ADMIN_REFRESH_URL, param).then((response) => {
     const {data,responseCode} =response.data
-    returnVal = data
+    returnVal = response.data
     if (responseCode.statusCode === 200) {
       localStorage.removeItem("refreshToken")
       localStorage.setItem("refreshToken", data.token.refreshToken);
-    } else {
-      returnVal = false
     }
   }).catch((e) => returnVal = false)
-  return returnVal;
+  return returnVal ;
 }
 
 /**
@@ -130,12 +128,10 @@ export async function refresh() {
   let returnVal = null;
   await NonUserAxios('POST', USER_REFRESH_URL, param).then((responseUser) => {
     const {data,responseCode} =responseUser.data
-    returnVal = data
+    returnVal = responseUser.data
     if (responseCode.statusCode === 200) {
       localStorage.removeItem("refreshToken")
       localStorage.setItem("refreshToken", data.token.refreshToken);
-    } else {
-      returnVal = false
     }
   }).catch((e) => returnVal = false)
   return returnVal;

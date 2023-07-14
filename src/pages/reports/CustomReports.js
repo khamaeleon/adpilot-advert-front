@@ -321,33 +321,32 @@ export default function CustomReports() {
   const [showPrevious, setShowPrevious] = useState(true)
 
   useEffect(() => {
-    if(reportsInfo.id === null) {
-      navigate('/board/reports')
-    }
-    if(tokenResult.role !== "NORMAL") {
-      retrieveCustomReportsAdminDetail(tokenResult.id, reportsInfo.id, searchCondition).then(response => {
-        if(response){
-          let newObject = response.adminSetting.groupByPeriod !== 'NONE' ? [defaultColumn[reportsInfo.groupBy]].concat(response.headers) : [].concat(response.headers)
+    if(tokenResult?.role !== '') {
+      if(tokenResult?.role !== "NORMAL") {
+        retrieveCustomReportsAdminDetail(tokenResult?.id, reportsInfo.id, searchCondition).then(response => {
+          if(response){
+            let newObject = response?.adminSetting.groupByPeriod !== 'NONE' ? [defaultColumn[reportsInfo.groupBy]].concat(response.headers) : [].concat(response.headers)
+            newObject.map((item, key) => {
+              Object.assign(newObject[key], defaultColumn[item.name])
+              return null
+            })
+            setCampaignColumn(newObject)
+            setCampaignData(response?.pagingCommonResponse.rows)
+            setReportSettingInfo(response?.adminSetting)
+          }
+        })
+      } else {
+        retrieveCustomReportsDetail(tokenResult?.id, reportsInfo.id, searchCondition).then(response => {
+          let newObject =  response.userSetting.groupByPeriod !== 'NONE' ? [defaultColumn[reportsInfo.groupBy]].concat(response.headers) : [].concat(response.headers)
           newObject.map((item, key) => {
             Object.assign(newObject[key], defaultColumn[item.name])
             return null
           })
           setCampaignColumn(newObject)
           setCampaignData(response.pagingCommonResponse.rows)
-          setReportSettingInfo(response.adminSetting)
-        }
-      })
-    } else {
-      retrieveCustomReportsDetail(tokenResult.id, reportsInfo.id, searchCondition).then(response => {
-        let newObject =  response.userSetting.groupByPeriod !== 'NONE' ? [defaultColumn[reportsInfo.groupBy]].concat(response.headers) : [].concat(response.headers)
-        newObject.map((item, key) => {
-          Object.assign(newObject[key], defaultColumn[item.name])
-          return null
+          setReportSettingInfo(response.userSetting)
         })
-        setCampaignColumn(newObject)
-        setCampaignData(response.pagingCommonResponse.rows)
-        setReportSettingInfo(response.userSetting)
-      })
+      }
     }
     return () => {
       setDateActive('thisMonth')

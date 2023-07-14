@@ -25,6 +25,7 @@ export const GlobalStyles = createGlobalStyle`
     sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
   html, body, button, input, textarea, pre {
     font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -593,7 +594,7 @@ export const selectStyle = {
             isFocused ? light.color.mainColorOpacity20
               :undefined,
       color:
-        isDisabled ? light.color.textColor :
+        isDisabled ? light.color.lightGray :
           isSelected ? '#fff' : light.color.textColor,
       ':active': {
         ...baseStyles[':active'],

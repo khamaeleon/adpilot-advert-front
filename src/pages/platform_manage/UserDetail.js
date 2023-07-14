@@ -181,18 +181,21 @@ function PlatformUserDetail() {
   useEffect(() => {
     if(tokenUserInfo.role ==='NORMAL'){
       selUserMyPageInfo(state.id).then(response => {
-        setAccountInfoState(response)
-        reset(response)
+        if(response) {
+          setAccountInfoState(response)
+          reset(response)
+        }
       })
     }else{
       selUserInfo(state.id).then(response => {
-        console.log(response)
-        setAccountInfoState(response)
-        reset(response)
+        if(response){
+          setAccountInfoState(response)
+          reset(response)
+        }
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [tokenUserInfo])
 
   /**
    * 담당자명 입력
@@ -316,7 +319,7 @@ function PlatformUserDetail() {
 
 
   const imageDownload = (fileUrl) => {
-    const url = "http://192.168.0.104:9000/temp" + fileUrl;
+    const url = "http://192.168.0.199:9000/temp" + fileUrl;
     let type;
     fetch(url, { method: 'GET' })
     .then((res) => {
@@ -325,7 +328,7 @@ function PlatformUserDetail() {
     })
     .then((blob) => {
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createlement('a');
       a.href = url;
       a.download = accountInfoState?.userCompanyProfile.companyName + "_사업자등록증."+type;
       document.body.appendChild(a);

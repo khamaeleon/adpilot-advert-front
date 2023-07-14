@@ -15,7 +15,7 @@ export async function selNoticeList(searchCondition) {
     }else{
       returnVal = null
     }
-  }).catch((e) => returnVal = false)
+  }).catch((e) => returnVal = null)
 
   return returnVal;
 }
@@ -31,7 +31,7 @@ export async function selNotice(noticeId, searchCondition) {
     }else{
       returnVal = null
     }
-  }).catch((e) => returnVal = false)
+  }).catch((e) => returnVal = null)
 
   return returnVal;
 }

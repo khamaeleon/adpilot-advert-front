@@ -10,11 +10,11 @@ import PaymentManage from "./PaymentManage";
 import PlatformUserDetail from "./UserDetail";
 import AdvertisingPayments from "./AdvertisingPayments";
 import {HistoryCampaignManage} from "./HistoryCampaign";
-import {HistoryEventManage} from "./HistoryEvent";
+import {HistoryTargetingManage} from "./HistoryTargeting";
 import {HistoryTimeManage} from "./HistoryTime";
 import {HistoryCampaignDetail} from "./HistoryCampaignDetail";
 import {HistoryPriceDetail} from "./HistoryPriceDetail";
-import {HistoryEventDetail} from "./HistoryEventDetail";
+import {HistoryTargetingDetail} from "./HistoryTargetingDetail";
 import {HistoryTimeDetail} from "./HistoryTimeDetail";
 import {HistoryPriceManage} from "./HistoryPrice";
 
@@ -36,11 +36,11 @@ function PlatformUser(){
         {params.id === 'advertisingPayments' && <AdvertisingPayments/>}
         {params.id === 'historyCampaignManage' && <HistoryCampaignManage/>}
         {params.id === 'historyPriceManage' && <HistoryPriceManage/>}
-        {params.id === 'historyEventManage' && <HistoryEventManage/>}
+        {params.id === 'historyEventManage' && <HistoryTargetingManage/>}
         {params.id === 'historyTimeManage' && <HistoryTimeManage/>}
         {params.id === 'historyCampaignDetail' && <HistoryCampaignDetail/>}
         {params.id === 'historyPriceDetail' && <HistoryPriceDetail/>}
-        {params.id === 'historyEventDetail' && <HistoryEventDetail/>}
+        {params.id === 'historyEventDetail' && <HistoryTargetingDetail/>}
         {params.id === 'historyTimeDetail' && <HistoryTimeDetail/>}
 
       </BoardContainer>

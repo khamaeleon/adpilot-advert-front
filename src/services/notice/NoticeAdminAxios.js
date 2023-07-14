@@ -16,7 +16,7 @@ export async function selNoticeListAdmin(searchCondition) {
     }else{
       returnVal = null
     }
-  }).catch((e) => returnVal = false)
+  }).catch((e) => returnVal = null)
 
   return returnVal;
 }
@@ -32,7 +32,7 @@ export async function selNoticeAdmin(noticeId, searchCondition) {
     }else{
       returnVal = null
     }
-  }).catch((e) => returnVal = false)
+  }).catch((e) => returnVal = null)
 
   return returnVal;
 }
@@ -50,7 +50,7 @@ export async function updateNoticePublishAdmin(noticeId, publishYn) {
     }else{
       returnVal = null
     }
-  }).catch((e) => returnVal = false)
+  }).catch((e) => returnVal = null)
 
   return returnVal;
 }
@@ -66,7 +66,7 @@ export async function createNoticeAdmin(noticeParam) {
     }else{
       returnVal = null
     }
-  }).catch((e) => returnVal = false)
+  }).catch((e) => returnVal = null)
 
   return returnVal;
 }

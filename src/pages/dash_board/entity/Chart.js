@@ -32,15 +32,15 @@ export const userPlatformStatusType = [
 ]
 
 /*플랫폼 현황 차트 항목별 합산*/
-export const chartDataAtom = atom({
+export const chartDataAtom = {
   validClickCount: {status: true, label: '클릭수', totalCount: 0},
   exposureCount: {status: true, label: '노출수', totalCount: 0},
   totalConversionCount: {status: true, label: '전환수', totalCount: 0},
   totalExposureCount: {status: false, label: '총 노출수', totalCount: 0},
   totalClickCount: {status: false, label: '총 클릭수', totalCount: 0},
   clickRate: {status: false, label: '클릭률', totalCount: 0},
-  costAmount: {status: true, label: '비용', totalCount: 0},
   cpc: {status: true, label: 'CPC', totalCount: 0},
+  costAmount: {status: true, label: '비용', totalCount: 0},
   conversionRate: {status: false, label: '전환율', totalCount: 0},
   costPerConversion: {status: false, label: '전환 단가', totalCount: 0},
   avgConversionAmount: {status: false, label: '평균 구매액', totalCount: 0},
@@ -49,7 +49,7 @@ export const chartDataAtom = atom({
   exposureConversionAmount: {status: false, label: '노출매출', totalCount: 0},
   totalConversionAmount: {status: false, label: '총매출', totalCount: 0},
   ecpm: {status: false, label: 'ECPM', totalCount: 0},
-})
+}
 
 export const commonProperties = {
   margin:{top: 30, right: 50, bottom: 30, left: 50},

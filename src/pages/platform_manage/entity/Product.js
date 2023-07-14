@@ -27,13 +27,15 @@ export const productListColumn = [
         <div><p>광고주</p><p>아이디</p></div>
       )
     },
+    label: '광고주 아이디',
     textAlign: 'center',
     minWidth: 80,
-    showColumnMenuTool: false,
+    showColumnMenuTool: false
   },
   {
     name: 'productCode',
     header: '상품 코드',
+    label: '상품 코드',
     textAlign: 'center',
     width: 80,
     sortable: false, //정렬
@@ -46,6 +48,7 @@ export const productListColumn = [
   {
     name: 'createdAt',
     header: '등록 일시',
+    label: '등록 일시',
     textAlign: 'center',
     width: 90,
     resizeable: false,
@@ -61,6 +64,7 @@ export const productListColumn = [
         <div><p>중지/품절</p><p>여부</p></div>
       )
     },
+    label: '중지/품절 여부',
     textAlign: 'center',
     width: 100,
     resizeable: false,
@@ -76,6 +80,7 @@ export const productListColumn = [
           <div><p>상품</p><p>이미지1</p></div>
       )
     },
+    label: '상품 이미지1',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
@@ -98,6 +103,7 @@ export const productListColumn = [
           <div><p>상품</p><p>이미지2</p></div>
       )
     },
+    label: '상품 이미지2',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
@@ -120,6 +126,7 @@ export const productListColumn = [
           <div><p>상품</p><p>이미지3</p></div>
       )
     },
+    label: '상품 이미지3',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
@@ -142,6 +149,7 @@ export const productListColumn = [
         <div><p>표준 카테고리</p><p>(seq)</p></div>
       )
     },
+    label: '표준 카테고리 (seq)',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
@@ -163,6 +171,7 @@ export const productListColumn = [
         <div><p>상품</p><p>카테고리1</p></div>
       )
     },
+    label: '상품 카테고리1',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
@@ -184,6 +193,7 @@ export const productListColumn = [
         <div><p>상품</p><p>카테고리2</p></div>
       )
     },
+    label: '상품 카테고리2',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
@@ -201,6 +211,7 @@ export const productListColumn = [
   {
     name: 'productName',
     header: '상품명',
+    label: '상품명',
     textAlign: 'center',
     minWidth: 200,
     showColumnMenuTool: false,
@@ -209,6 +220,7 @@ export const productListColumn = [
   {
     name: 'price',
     header: '원가',
+    label: '원가',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
@@ -218,6 +230,7 @@ export const productListColumn = [
   {
     name: 'discountRate',
     header: '할인가',
+    label: '할인가',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
@@ -234,6 +247,7 @@ export const productListColumn = [
   {
     name: 'productUrl',
     header: '사이트',
+    label: '사이트',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
@@ -250,6 +264,7 @@ export const productListColumn = [
   {
     name: 'ratingPoint',
     header: '평점',
+    label: '평점',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
@@ -258,6 +273,7 @@ export const productListColumn = [
   {
     name: 'reviewCount',
     header: '리뷰수',
+    label: '리뷰수',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
@@ -266,6 +282,7 @@ export const productListColumn = [
   {
     name: 'keyword',
     header: '키워드',
+    label: '키워드',
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,

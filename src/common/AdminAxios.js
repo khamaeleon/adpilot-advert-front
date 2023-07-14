@@ -56,19 +56,22 @@ adminAxios.interceptors.response.use(
       if (!isTokenRefreshing) {
         isTokenRefreshing = true;
         await refreshAdmin().then(response => {
-          if (response) {
+          const {data,responseCode} =response
+          if (responseCode.statusCode === 200) {
             store.set(tokenResultAtom, {
-              id: response.email,
-              role: response.role,
-              name: response.name,
-              accessToken: response.token.accessToken
+              id: data.email,
+              role: data.role,
+              name: data.name,
+              accessToken: data.token.accessToken
             })
-            onTokenRefreshed(response.token.accessToken);
-          } else {
+            onTokenRefreshed(data.token.accessToken);
+          } else if (responseCode.statusCode ===403) {
             refreshSubscribers = [];
             isTokenRefreshing = false;
             // eslint-disable-next-line no-restricted-globals
             location.replace('/')
+          } else {
+            return Promise.reject(error)
           }
         })
       }

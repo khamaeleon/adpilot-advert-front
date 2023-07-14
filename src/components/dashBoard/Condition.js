@@ -33,16 +33,26 @@ export function DashBoardCondition(props) {
   const {role, keyword, setKeyword, handleData, productType, targetingType, searchState, setSearchState} = props
   const [dateRange, setDateRange] = useState([new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
-  const [isCheckedAll, setIsCheckedAll] = useState(true)
+  const [isDeviceCheckedAll, setIsDeviceCheckedAll] = useState(true)
+  // const [isAgentCheckedAll, setIsAgentCheckedAll] = useState(true)
   const [showPrevious, setShowPrevious] = useState(true)
 
+  // useEffect(() => {
+  //   if (searchState?.agentTypes.length === 5) {
+  //     setIsAgentCheckedAll(true)
+  //   } else {
+  //     setIsAgentCheckedAll(false)
+  //   }
+  // }, [searchState?.agentTypes]);
+
   useEffect(() => {
-    if (searchState?.agentTypes.length === 4) {
-      setIsCheckedAll(true)
+    if (searchState?.deviceTypes.length === 4) {
+      setIsDeviceCheckedAll(true)
     } else {
-      setIsCheckedAll(false)
+      setIsDeviceCheckedAll(false)
     }
-  }, [searchState?.agentTypes]);
+  }, [searchState?.deviceTypes]);
+
   /**
    * 날짜 레인지 선택
    * @param rangeType
@@ -132,27 +142,57 @@ export function DashBoardCondition(props) {
    * @param event
    */
 
-  const handleChangeCheckAll = (event) => {
+  // const handleAgentChangeCheckAll = (event) => {
+  //   if (event.target.checked === true) {
+  //     setSearchState({
+  //       ...searchState,
+  //       agentTypes: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_HYBRID_APP','MOBILE_NATIVE_APP']
+  //     })
+  //     setIsAgentCheckedAll(event.target.checked)
+  //   }
+  // }
+
+  /**
+   * 디바이스 타입 체크
+   * @param event
+   */
+  const handleDeviceTypeChangeCheckAll = (event) => {
     if (event.target.checked === true) {
       setSearchState({
         ...searchState,
-        agentTypes: ['WEB', 'WEB_APP', 'MOBILE_WEB', 'MOBILE_NATIVE_APP']
+        deviceTypes: ['PC', 'MOBILE', 'RESPONSIVE_WEB', 'APP']
       })
-      setIsCheckedAll(event.target.checked)
+      setIsDeviceCheckedAll(event.target.checked)
     }
   }
 
-  const handleChangeCheck = (event) => {
+  // const handleAgentChangeCheck = (event) => {
+  //   if (event.currentTarget.checked) {
+  //     setSearchState({
+  //       ...searchState,
+  //       agentTypes: searchState.agentTypes.concat(event.currentTarget.value)
+  //     })
+  //   } else {
+  //     if(searchState.agentTypes.length > 1) {
+  //       setSearchState({
+  //         ...searchState,
+  //         agentTypes: searchState.agentTypes.filter(id => id !== event.currentTarget.value)
+  //       })
+  //     }
+  //   }
+  // }
+
+  const handleDeviceChangeCheck = (event) => {
     if (event.currentTarget.checked) {
       setSearchState({
         ...searchState,
-        agentTypes: searchState.agentTypes.concat(event.currentTarget.value)
+        deviceTypes: searchState.deviceTypes.concat(event.currentTarget.value)
       })
     } else {
-      if(searchState.agentTypes.length > 1) {
+      if(searchState.deviceTypes.length > 1) {
         setSearchState({
           ...searchState,
-          agentTypes: searchState.agentTypes.filter(id => id !== event.currentTarget.value)
+          deviceTypes: searchState.deviceTypes.filter(id => id !== event.currentTarget.value)
         })
       }
     }
@@ -167,7 +207,7 @@ export function DashBoardCondition(props) {
   }
   return (
     <BoardSearchDetail>
-      <div>
+      <div style={{marginRight: 10}}>
         <RowSpan style={{marginTop: 0, justifyContent: 'flex-start'}}>
           <ColSpan0 style={{marginRight: 10}}>
             <ColTitle style={{paddingLeft: 0}}>광고 상품</ColTitle>
@@ -190,44 +230,90 @@ export function DashBoardCondition(props) {
             />
           </ColSpan0>
           <ColSpan0>
-            <ColTitle style={{paddingLeft: 0}}>에이전트</ColTitle>
+            <ColTitle style={{paddingLeft: 0}}>디바이스</ColTitle>
             <RelativeDiv>
               <AgentType>
                 <Checkbox label={'전체'}
                           type={'c'}
                           id={'all'}
                           value={'All'}
-                          isChecked={isCheckedAll}
-                          onChange={handleChangeCheckAll}
+                          isChecked={isDeviceCheckedAll}
+                          onChange={handleDeviceTypeChangeCheckAll}
                 />
-                <Checkbox label={'PC 웹'}
+                <Checkbox label={'PC'}
                           type={'c'}
-                          id={'WEB'}
-                          value={'WEB'}
-                          isChecked={searchState?.agentTypes.includes('WEB') ? true : false}
-                          onChange={handleChangeCheck}/>
-                <Checkbox label={'PC 어플리케이션'}
-                          type={'c'}
-                          id={'WEB_APP'}
-                          value={'WEB_APP'}
-                          isChecked={searchState?.agentTypes.includes('WEB_APP') ? true : false}
-                          onChange={handleChangeCheck}/>
+                          id={'PC'}
+                          value={'PC'}
+                          isChecked={searchState?.deviceTypes.includes('PC') ? true : false}
+                          onChange={handleDeviceChangeCheck}/>
                 <Checkbox label={'모바일 웹'}
                           type={'c'}
-                          id={'MOBILE_WEB'}
-                          value={'MOBILE_WEB'}
-                          isChecked={searchState?.agentTypes.includes('MOBILE_WEB') ? true : false}
-                          onChange={handleChangeCheck}/>
-                <Checkbox label={'모바일 APP'}
+                          id={'MOBILE'}
+                          value={'MOBILE'}
+                          isChecked={searchState?.deviceTypes.includes('MOBILE') ? true : false}
+                          onChange={handleDeviceChangeCheck}/>
+                <Checkbox label={'반응형 웹'}
                           type={'c'}
-                          id={'MOBILE_NATIVE_APP'}
-                          value={'MOBILE_NATIVE_APP'}
-                          isChecked={searchState?.agentTypes.includes('MOBILE_NATIVE_APP') ? true : false}
-                          onChange={handleChangeCheck}/>
+                          id={'RESPONSIVE_WEB'}
+                          value={'RESPONSIVE_WEB'}
+                          isChecked={searchState?.deviceTypes.includes('RESPONSIVE_WEB') ? true : false}
+                          onChange={handleDeviceChangeCheck}/>
+                <Checkbox label={'APP'}
+                          type={'c'}
+                          id={'APP'}
+                          value={'APP'}
+                          isChecked={searchState?.deviceTypes.includes('APP') ? true : false}
+                          onChange={handleDeviceChangeCheck}/>
               </AgentType>
             </RelativeDiv>
           </ColSpan0>
         </RowSpan>
+        {/*<RowSpan>*/}
+        {/*  <ColSpan0>*/}
+        {/*    <ColTitle style={{paddingLeft: 0}}>에이전트</ColTitle>*/}
+        {/*    <RelativeDiv>*/}
+        {/*      <AgentType>*/}
+        {/*        <Checkbox label={'전체'}*/}
+        {/*                  type={'c'}*/}
+        {/*                  id={'all'}*/}
+        {/*                  value={'All'}*/}
+        {/*                  isChecked={isAgentCheckedAll}*/}
+        {/*                  onChange={handleAgentChangeCheckAll}*/}
+        {/*        />*/}
+        {/*        <Checkbox label={'PC 웹'}*/}
+        {/*                  type={'c'}*/}
+        {/*                  id={'WEB'}*/}
+        {/*                  value={'WEB'}*/}
+        {/*                  isChecked={searchState?.agentTypes.includes('WEB') ? true : false}*/}
+        {/*                  onChange={handleAgentChangeCheck}/>*/}
+        {/*        <Checkbox label={'PC 어플리케이션'}*/}
+        {/*                  type={'c'}*/}
+        {/*                  id={'WEB_APP'}*/}
+        {/*                  value={'WEB_APP'}*/}
+        {/*                  isChecked={searchState?.agentTypes.includes('WEB_APP') ? true : false}*/}
+        {/*                  onChange={handleAgentChangeCheck}/>*/}
+        {/*        <Checkbox label={'모바일 웹'}*/}
+        {/*                  type={'c'}*/}
+        {/*                  id={'MOBILE_WEB'}*/}
+        {/*                  value={'MOBILE_WEB'}*/}
+        {/*                  isChecked={searchState?.agentTypes.includes('MOBILE_WEB') ? true : false}*/}
+        {/*                  onChange={handleAgentChangeCheck}/>*/}
+        {/*        <Checkbox label={'하이브리드 APP'}*/}
+        {/*                  type={'c'}*/}
+        {/*                  id={'MOBILE_HYBRID_APP'}*/}
+        {/*                  value={'MOBILE_HYBRID_APP'}*/}
+        {/*                  isChecked={searchState?.agentTypes.includes('MOBILE_HYBRID_APP') ? true : false}*/}
+        {/*                  onChange={handleAgentChangeCheck}/>*/}
+        {/*        <Checkbox label={'네이티브 APP'}*/}
+        {/*                  type={'c'}*/}
+        {/*                  id={'MOBILE_NATIVE_APP'}*/}
+        {/*                  value={'MOBILE_NATIVE_APP'}*/}
+        {/*                  isChecked={searchState?.agentTypes.includes('MOBILE_NATIVE_APP') ? true : false}*/}
+        {/*                  onChange={handleAgentChangeCheck}/>*/}
+        {/*      </AgentType>*/}
+        {/*    </RelativeDiv>*/}
+        {/*  </ColSpan0>*/}
+        {/*</RowSpan>*/}
         <RowSpan style={{justifyContent: 'flex-start'}}>
           <ColSpan0>
             <ColTitle style={{paddingLeft: 0}}>기간</ColTitle>

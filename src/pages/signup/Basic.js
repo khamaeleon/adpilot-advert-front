@@ -7,42 +7,42 @@ import {CancelButton, DefaultButton, Input, RelativeDiv, selectStyle} from "../.
 import {accountInfoAtom, hostList, nextStepAtom} from "./entity/Common";
 import {ButtonGroup, DuplicateButton, Form, SignUpVerify, ValidationScript, VerticalRule} from "./styles";
 import Select from "react-select";
-import {useSetAtom} from "jotai";
-import {modalController} from "../../store";
-import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
+// import {useSetAtom} from "jotai";
+// import {modalController} from "../../store";
+// import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import ImageUploading from "react-images-uploading";
 import styled from "styled-components";
-
-function ModalCheckBusinessNumber(props) {
-  const {onSubmit} =props
-  const setModalOpen = useSetAtom(modalController)
-  return (
-    <div>
-      <ModalHeader title={"사업자 조회 결과"}/>
-      <ModalBody>
-        <div>
-          <p>입력하신 사업자 등록번호 111-111-11111의 결과입니다.</p>
-          <p>M corporation</p>
-        </div>
-        <VerticalRule/>
-        <p>조회하신 사업자 정보로 등록하시겠습니까?</p>
-      </ModalBody>
-      <ModalFooter>
-        <CancelButton onClick={() => setModalOpen({isShow: false,modalComponent: null})}>취소</CancelButton>
-        <DefaultButton onClick={onSubmit}>등록</DefaultButton>
-      </ModalFooter>
-    </div>
-  )
-}
+// 사업자 번호 조회 기능 임의 구현. 현재 버튼 미노출로 주석 처리함.
+// function ModalCheckBusinessNumber(props) {
+//   const {onSubmit} =props
+//   const setModalOpen = useSetAtom(modalController)
+//   return (
+//     <div>
+//       <ModalHeader title={"사업자 조회 결과"}/>
+//       <ModalBody>
+//         <div>
+//           <p>입력하신 사업자 등록번호 111-111-11111의 결과입니다.</p>
+//           <p>M corporation</p>
+//         </div>
+//         <VerticalRule/>
+//         <p>조회하신 사업자 정보로 등록하시겠습니까?</p>
+//       </ModalBody>
+//       <ModalFooter>
+//         <CancelButton onClick={() => setModalOpen({isShow: false,modalComponent: null})}>취소</CancelButton>
+//         <DefaultButton onClick={onSubmit}>등록</DefaultButton>
+//       </ModalFooter>
+//     </div>
+//   )
+// }
 
 export default function Basic(props) {
   const [showPassword, setShowPassword] = useState(false)
   const [accountInfo, setAccountInfo] = useAtom(accountInfoAtom);
   const [agreeValidation, setAgreeValidation] = useAtom(nextStepAtom)
-  const setModal = useSetAtom(modalController)
+  //const setModal = useSetAtom(modalController) 사업자 번호 조회 기능 임의 구현. 현재 버튼 미노출로 주석 처리함.
 
 
-  const { register, handleSubmit,reset, control, watch, formState: {errors}, clearErrors} = useForm({
+  const { register, handleSubmit, control, watch, formState: {errors}, clearErrors} = useForm({
     mode: "onSubmit",
     defaultValues: accountInfo
   })
@@ -257,46 +257,47 @@ export default function Basic(props) {
       businessNumber: event.target.value
     })
   }
-
-  const onResistBusinessNumber = (data) => {
-    setAccountInfo({
-      ...accountInfo,
-      companyName:'파인딩랩',
-      businessNumber: '111-1111-1111',
-      location: '서울특별시 금천구 가산디지털 1로 149',
-      locationDetail: '505호 (신한이노플렉스)',
-      typeOfBusiness:'통신/전자',
-      itemsOfBusiness:'판매업',
-      taxInvoiceEmail:'findinglab@findinglab.co.kr',
-      ceoName:'임제민'
-    })
-    reset({
-      ...accountInfo,
-      companyName:'파인딩랩',
-      businessNumber: '111-1111-1111',
-      location: '서울특별시 금천구 가산디지털 1로 149',
-      locationDetail: '505호 (신한이노플렉스)',
-      typeOfBusiness:'통신/전자',
-      itemsOfBusiness:'판매업',
-      taxInvoiceEmail:'findinglab@findinglab.co.kr',
-      ceoName:'임제민'
-    })
-    setModal({
-      isShow: false,
-      modalComponent: null
-    })
-  }
+  // 사업자 번호 조회 기능 임의 구현. 현재 버튼 미노출로 주석 처리함.
+  // const onResistBusinessNumber = (data) => {
+  //   setAccountInfo({
+  //     ...accountInfo,
+  //     companyName:'파인딩랩',
+  //     businessNumber: '111-1111-1111',
+  //     location: '서울특별시 금천구 가산디지털 1로 149',
+  //     locationDetail: '505호 (신한이노플렉스)',
+  //     typeOfBusiness:'통신/전자',
+  //     itemsOfBusiness:'판매업',
+  //     taxInvoiceEmail:'findinglab@findinglab.co.kr',
+  //     ceoName:'임제민'
+  //   })
+  //   reset({
+  //     ...accountInfo,
+  //     companyName:'파인딩랩',
+  //     businessNumber: '111-1111-1111',
+  //     location: '서울특별시 금천구 가산디지털 1로 149',
+  //     locationDetail: '505호 (신한이노플렉스)',
+  //     typeOfBusiness:'통신/전자',
+  //     itemsOfBusiness:'판매업',
+  //     taxInvoiceEmail:'findinglab@findinglab.co.kr',
+  //     ceoName:'임제민'
+  //   })
+  //   setModal({
+  //     isShow: false,
+  //     modalComponent: null
+  //   })
+  // }
 
   /**
    * 사업자 등록증 조회
    */
-  const handleCheckBusinessNumber = () => {
-    setModal({
-      isShow: true,
-      width: 700,
-      modalComponent: () => <ModalCheckBusinessNumber onSubmit={onResistBusinessNumber}/>
-    })
-  }
+  // 사업자 번호 조회 기능 임의 구현. 현재 버튼 미노출로 주석 처리함.
+  // const handleCheckBusinessNumber = () => {
+  //   setModal({
+  //     isShow: true,
+  //     width: 700,
+  //     modalComponent: () => <ModalCheckBusinessNumber onSubmit={onResistBusinessNumber}/>
+  //   })
+  // }
 
   /**
    * 사업자등록증 파일 첨부
@@ -572,7 +573,8 @@ export default function Basic(props) {
                 /*readOnly={true}*/
               />
               {errors.businessNumber && <ValidationScript>{errors.businessNumber?.message}</ValidationScript>}
-              <DuplicateButton type={'button'} onClick={() => handleCheckBusinessNumber()}>사업자 조회</DuplicateButton>
+              {/*사업자 번호 조회 기능 임의 구현. 현재 버튼 미노출로 주석 처리함.*/}
+              {/*<DuplicateButton type={'button'} onClick={() => handleCheckBusinessNumber()}>사업자 조회</DuplicateButton>*/}
             </div>
           </RelativeDiv>
           <RelativeDiv>

@@ -59,7 +59,6 @@ export default function DragToSelect({readOnly}) {
         </TableDragSelect>
       </div>
     </TimeTableContainer>
-
   )
 }
 

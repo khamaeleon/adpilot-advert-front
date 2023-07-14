@@ -68,7 +68,7 @@ function InquiryList(props) {
   useEffect(()=> {
     onSearch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [userRole]);
 
   const handleSearch = (e) => {
     setSearchCondition({
