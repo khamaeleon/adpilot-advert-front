@@ -5,6 +5,7 @@ import {findRevisionCampaignList} from "../../services/Platform/HistoryAxios";
 import {campaignColumns, HistorySearchCondition, searchConditionData} from "./entity/History";
 
 const option = [
+  {key: 0, value: 'ALL', label: '전체'},
   {key: 1, value: 'ADVER_NAME', label: '광고주명'},
   {key: 2, value: 'USER_NAME', label: '광고주 아이디'},
   {key: 3, value: 'CAMPAIGN_NAME', label: '캠페인명'},

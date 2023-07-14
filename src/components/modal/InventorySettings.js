@@ -57,7 +57,7 @@ function SearchModal (props) {
       setMediaInventoryInfo([])
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  },[campaignGroupInfo])
 
   const handleSearchKeyword = (event)=>{
     setSearchKeyword(event.target.value)

@@ -71,7 +71,7 @@ export const adverListColumn = [
     header: '비용',
     minWidth: 180,
     textAlign: 'end',
-    cellDOMProps: (cellProps) => ({ style: {color: '#F9AB00'} }),
+    cellDOMProps: (cellProps) => ({ style: {color: '#D93025'} }),
     render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -80,7 +80,7 @@ export const adverListColumn = [
     header: 'CPC',
     minWidth: 100,
     textAlign: 'end',
-    cellDOMProps: (cellProps) => ({ style: {color: '#F9AB00'} }),
+    cellDOMProps: (cellProps) => ({ style: {color: '#7325D9'} }),
     render: ({data}) => {
       let value = data.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -92,7 +92,7 @@ export const adverListColumn = [
     header: '전환 수',
     minWidth: 100,
     textAlign: 'end',
-    cellDOMProps: (cellProps) => ({ style: {color: '#F5811F'} }),
+    cellDOMProps: (cellProps) => ({ style: {color: '#D93025'} }),
     render: ({value}) => <p>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -201,7 +201,7 @@ export const adverListColumn = [
     header: 'ECPM',
     minWidth: 100,
     textAlign: 'end',
-    cellDOMProps: (cellProps) => ({ style: {color: '#F5811F'} }),
+    cellDOMProps: (cellProps) => ({ style: {color: '#7325D9'} }),
     render: ({data}) => {
       let value = data.exposureCount !== 0 ? (data.totalConversionAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -332,7 +332,7 @@ export const adverStatusDetailColumn = [
     header: '클릭률',
     minWidth: 150,
     textAlign: 'end',
-    style: { color: '#1E8E3E' },
+    cellDOMProps: (cellProps) => ({ style: {color: '#1E8E3E'} }),
     render: ({data}) => {
       let value = data.exposureCount !== 0 ? (data.validClickCount / data.exposureCount) * 100 : 0;
       return <p className={'pct'}>{numberToFixedFormat(value)}</p>
@@ -344,7 +344,7 @@ export const adverStatusDetailColumn = [
     header: '비용',
     minWidth: 150,
     textAlign: 'end',
-    cellDOMProps: (cellProps) => ({ style: {color: '#F9AB00'} }),
+    cellDOMProps: (cellProps) => ({ style: {color: '#D93025'} }),
     render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -353,7 +353,7 @@ export const adverStatusDetailColumn = [
     header: 'CPC',
     minWidth: 150,
     textAlign: 'end',
-    cellDOMProps: (cellProps) => ({ style: {color: '#F9AB00'} }),
+    cellDOMProps: (cellProps) => ({ style: {color: '#7325D9'} }),
     render: ({data}) => {
       let value = data.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -365,7 +365,7 @@ export const adverStatusDetailColumn = [
     header: '전환 수',
     minWidth: 100,
     textAlign: 'end',
-    cellDOMProps: (cellProps) => ({ style: {color: '#F5811F'} }),
+    cellDOMProps: (cellProps) => ({ style: {color: '#D93025'} }),
     render: ({value}) => <p>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -474,7 +474,7 @@ export const adverStatusDetailColumn = [
     minWidth: 150,
     header: 'ECPM',
     textAlign: 'end',
-    cellDOMProps: (cellProps) => ({ style: {color: '#F5811F'} }),
+    cellDOMProps: (cellProps) => ({ style: {color: '#7325D9'} }),
     render: ({data}) => {
       let value = data.exposureCount !== 0 ? (data.totalConversionAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -666,9 +666,9 @@ export const lockedRows = [
         style.justifyContent = 'center'
       }
       if(column.name === 'username' || column.name === 'campaignCount' ) {style.justifyContent = 'center'}
-      if(column.name === 'costAmount' || column.name === 'cpc' ) {style.color = '#F9AB00'}
+      if(column.name === 'costAmount' || column.name === 'totalConversionCount') {style.color = '#D93025'}
       if(column.name === 'clickRate' || column.name === 'conversionRate') {style.color = '#1E8E3E'}
-      if(column.name === 'totalConversionCount' || column.name === 'ecpm') {style.color = '#F5811F'}
+      if(column.name === 'cpc' || column.name === 'ecpm') {style.color = '#7325D9'}
 
       if(column.name === 'costPerConversion' || column.name === 'avgConversionAmount' || column.name === 'sessionConversionAmount' || column.name === 'directConversionAmount' || column.name === 'exposureConversionAmount' || column.name === 'totalConversionAmount' ) {style.color = '#1A73E8'}
 

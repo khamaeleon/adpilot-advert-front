@@ -1,6 +1,15 @@
 import {Link} from "react-router-dom";
 import React from "react";
-import {ColSpan1, ColSpan3, Input, RowSpan, selectStyle} from "../../../assets/GlobalStyles";
+import {
+  BoardSearchDetail,
+  ColSpan0,
+  ColSpan1,
+  ColSpan3, GraySearchButton,
+  Input,
+  RowSpan,
+  SearchInput,
+  selectStyle, Span2
+} from "../../../assets/GlobalStyles";
 import Select from "react-select";
 import {SearchButton} from "../styles/common";
 import styled, {keyframes} from "styled-components";
@@ -157,15 +166,29 @@ export function HistorySearchCondition (props) {
   const {option,searchCondition,handleChangeSearchKeyword, handleChangeSearchKeywordType, handleClickSearch} = props
 
   return (
-    <RowSpan>
-      <ColSpan1>
-        <Select styles={selectStyle} options={option} value={option.find(item => item.value === searchCondition.searchKeywordType)} onChange={handleChangeSearchKeywordType}/>
-      </ColSpan1>
-      <ColSpan3>
-        <Input type={'text'} value={searchCondition.searchKeyword || ''} onChange={handleChangeSearchKeyword}/>
-        <SearchButton onClick={handleClickSearch}>검색</SearchButton>
-      </ColSpan3>
-    </RowSpan>
+    <BoardSearchDetail>
+      <div style={{marginRight: 10}}>
+        <RowSpan style={{justifyContent: 'flex-start', marginTop:0}}>
+          <ColSpan0>
+            <Span2>검색어</Span2>
+              <Select styles={selectStyle}
+                      options={option}
+                      width={133}
+                      value={searchCondition.searchKeywordType !== null ? option.find(item => item.value === searchCondition.searchKeywordType) : option[0]}
+                      onChange={handleChangeSearchKeywordType}/>
+            <SearchInput style={{width: '490px'}}>
+              <Input type={'text'}
+                     placeholder={'검색어를 입력해주세요.'}
+                     value={searchCondition.searchKeyword || ''}
+                     style={{marginRight: 0}}
+                     onKeyDown={e => (e.code === 'Enter') && handleChangeSearchKeyword()}
+                     onChange={handleChangeSearchKeyword}/>
+            </SearchInput>
+          </ColSpan0>
+        </RowSpan>
+      </div>
+      <GraySearchButton onClick={handleClickSearch}>검색</GraySearchButton>
+    </BoardSearchDetail>
   )
 }
 
