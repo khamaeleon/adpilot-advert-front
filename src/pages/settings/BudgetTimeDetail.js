@@ -76,6 +76,7 @@ function BudgetTimeDetail() {
 
     let isTimePerOver = false;
     let isTimePerZero = false;
+    let isTimeNull= false;
     if(timeBudgetDetailDataState.exposureTimeType === 'DIRECT_SETTINGS'){
       let weekSumArr = timeBudgetDetailDataState.allowTimes.map((rowData,i)=>{
         let rowSum = rowData.map(d=>parseInt(d)).reduce((a,b)=>{return a+b;});
@@ -86,11 +87,17 @@ function BudgetTimeDetail() {
         return rowSum;
       })
       isTimePerZero = (weekSumArr.reduce((a,b)=>{return a+b;}) === 0);
+    }else {
+      isTimeNull = timeBudgetDetailDataState.allowTimes.map((rowData)=>{
+        return rowData.filter(data=> data===true).length !==0
+      }).includes(true)
     }
 
     if(isTimePerOver) {
       toast.warning('[해당 요일]의 \n시간별 예산 설정을 확인해주세요.')
     }else if(isTimePerZero){
+      toast.warning('값이 입력되지 않았습니다. 시간별 예산 설정을 확인해주세요.')
+    }else if(!isTimeNull){
       toast.warning('값이 입력되지 않았습니다. 시간별 예산 설정을 확인해주세요.')
     }else {
       const callbackFun = (response) => {
@@ -98,7 +105,7 @@ function BudgetTimeDetail() {
           toast.success(saveType === 'resist' ? "저장 되었습니다." : "수정 되었습니다.",{autoClose:100, delay:0})
           toast.onChange(payload => {
             if(payload.status === "removed" && payload.type === toast.TYPE.SUCCESS) {
-              navigate('/board/budgetTimeList', {state: {id: timeBudgetDetailDataState.userId}})
+              navigate('/board/budgetTimeList', {state: {id: timeBudgetDetailDataState.userId}});
             }
           })
         }
@@ -138,7 +145,7 @@ function BudgetTimeDetail() {
                            onChange: (e) => handleGroupName(e),
                            // disabled: saveType !== 'resist'
                          })}
-                         value={timeBudgetDetailDataState?.groupName || ""}
+                         value={timeBudgetDetailDataState?.groupName}
                   />
                 {errors.groupName && <Span4><ValidationScript>{errors.groupName?.message}</ValidationScript></Span4>}
               </ColSpan4>
