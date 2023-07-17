@@ -166,19 +166,19 @@ function Layout() {
               </UserName>
               {/*[d] 20230411 사용자 화면에서 픽셀 관리 노출 보류*/}
               {/*<MyPage onClick={pixel}>픽셀 관리</MyPage>*/}
-              <MyPage onClick={pixel} active={params.id==='pixel'}>픽셀 관리</MyPage>
-              <MyPage onClick={payment} active={params.id==='paymentManageUser'}>결제</MyPage>
+              <MyPage onClick={pixel} active={['pixel', 'pixelDetail'].includes(params.id)}>픽셀 관리</MyPage>
+              <MyPage onClick={payment} active={['paymentManageUser'].includes(params.id)}>결제</MyPage>
             </>
             :
             <>
-              <MyPage onClick={pixel} active={params.id==='pixel'}>픽셀 관리</MyPage>
+              <MyPage onClick={pixel} active={['pixel', 'pixelDetail'].includes(params.id)}>픽셀 관리</MyPage>
               <UserName>
                 <UserIcon/>
                 <span>{tokenUserInfo.name}</span>
               </UserName>
             </>
           }
-          <MyPage onClick={myPage} active={params.id==='myPageAdmin' || params.id==='myPageUser'}>
+          <MyPage onClick={myPage} active={['myPageAdmin', 'myPageUser'].includes(params.id)}>
             <span>마이페이지</span>
           </MyPage>
           <Logout>
