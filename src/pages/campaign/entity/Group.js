@@ -26,7 +26,6 @@ export const campaignGroupInfoAtom = atomWithReset({
   }
 )
 export const mediaCategoryAtom = atom(null)
-export const mediaInventoryInfoAtom = atom(null)
 export const allowInventoryIdsAtom = atom(null)
 export const disAllowInventoryIdsAtom = atom(null)
 
