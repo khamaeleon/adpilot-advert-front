@@ -61,7 +61,6 @@ export function HistoryCampaignDetail () {
 
   useEffect(()=> {
     findRevisionCampaignDetail(state).then(response => {
-      console.log(response)
       setData(response)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -149,7 +148,9 @@ export function HistoryCampaignDetail () {
       )
     }
     if (Object.keys(arg)[0] === 'logoPaths') {
-      value = image(materialData[Object.keys(arg)])
+      if(materialData.logoPaths.length !== 0) {
+        value = image(materialData[Object.keys(arg)])
+      }
     } else {
       value = materialData[Object.keys(arg)]
     }
@@ -398,7 +399,7 @@ export function HistoryCampaignDetail () {
                   <tr key={key}>
                     <th className={'border-r border-t'}>{Object.values(entry)}</th>
                     <td className={'border-t'}>{data?.previous !== null && data?.previous !== undefined && data?.previous?.creative !== null && data?.previous?.creative?.metarialDetailInfo !== undefined !== null ? materialConverters('previous',entry) : '-'}</td>
-                    <td className={'border-t'}>{data?.current !== null && data?.current !== undefined && data?.current?.creative !== null && data?.previous?.creative?.metarialDetailInfo !== undefined ? materialConverters('current',entry) : '-'}</td>
+                    <td className={'border-t'}>{data?.current !== null && data?.current !== undefined && data?.current?.creative !== null && data?.current?.creative?.metarialDetailInfo !== undefined ? materialConverters('current',entry) : '-'}</td>
                   </tr>
                 )
               })}

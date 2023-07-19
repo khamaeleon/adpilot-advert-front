@@ -3,15 +3,14 @@ import React from "react";
 import {
   BoardSearchDetail,
   ColSpan0,
-  ColSpan1,
-  ColSpan3, GraySearchButton,
+  GraySearchButton,
   Input,
   RowSpan,
   SearchInput,
-  selectStyle, Span2
+  selectStyle,
+  Span2
 } from "../../../assets/GlobalStyles";
 import Select from "react-select";
-import {SearchButton} from "../styles/common";
 import styled, {keyframes} from "styled-components";
 
 export const campaignColumns = [

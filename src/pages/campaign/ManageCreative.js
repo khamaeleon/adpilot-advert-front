@@ -3,13 +3,13 @@ import {
   BoardHeader,
   BoardSearchDetail,
   BoardSearchResult,
-  ColSpan4, GraySearchButton,
+  ColSpan4,
+  GraySearchButton,
   lightGray,
   mainColor,
   mainColorOpacity20,
   mainColorOpacity5,
   RowSpan,
-  SearchButton,
   SearchInput
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";

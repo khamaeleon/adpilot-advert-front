@@ -25,9 +25,8 @@ import {FormProvider, useForm} from "react-hook-form";
 import {CampaignThree} from "../campaign/steps/CampaignThree";
 import {CampaignFour} from "../campaign/steps/CampaignFour";
 import {stepCampaignAtom} from "../campaign/entity";
-import {retrieveUserPoint, requestAmountPoint} from "./entity/UserPoint";
+import {requestAmountPoint, retrieveUserPoint} from "./entity/UserPoint";
 import {searchConditionAtom} from "../dash_board/entity/Common";
-import {retrieveUserPointRequest} from "../../services/payment/user/RetrieveUserPointAxios";
 import Customer from "../customer";
 
 function Layout() {
@@ -35,7 +34,7 @@ function Layout() {
   const navigate = useNavigate()
   const methods = useForm()
   const [tokenUserInfo, setTokenUserInfo] = useAtom(tokenResultAtom)
-  const [userPoint, setUserPoint] = useAtom(retrieveUserPoint)
+  const [userPoint, ] = useAtom(retrieveUserPoint)
   const [requestAmount, ] = useAtom(requestAmountPoint)
   const setStepCampaign = useSetAtom(stepCampaignAtom)
   const resetInfo = useResetAtom(searchConditionAtom)
