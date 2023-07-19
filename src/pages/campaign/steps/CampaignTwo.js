@@ -34,7 +34,6 @@ import {selBudgetInfo, updateCampaignBudget} from "../../../services/campaign/Bu
 import {campaignBudgetInfoAtom} from "../entity/Budget";
 import {useLocation, useNavigate} from "react-router-dom";
 import {toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import {useResetAtom} from "jotai/utils";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';

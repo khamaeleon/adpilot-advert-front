@@ -49,7 +49,6 @@ import {
   uploadNativeImages
 } from "../../../services/campaign/CreativeAxios";
 import {toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useResetAtom} from "jotai/utils";
 import {dateFormat, multiAxiosCall, toDay} from "../../../common/StringUtils";

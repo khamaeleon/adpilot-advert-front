@@ -27,7 +27,6 @@ import {CampaignFour} from "../campaign/steps/CampaignFour";
 import {stepCampaignAtom} from "../campaign/entity";
 import {retrieveUserPoint, requestAmountPoint} from "./entity/UserPoint";
 import {searchConditionAtom} from "../dash_board/entity/Common";
-import {retrieveUserPointRequest} from "../../services/payment/user/RetrieveUserPointAxios";
 import Customer from "../customer";
 
 function Layout() {

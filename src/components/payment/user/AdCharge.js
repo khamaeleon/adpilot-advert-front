@@ -4,15 +4,17 @@ import {ModalBody, ModalFooter, ModalHeader} from "../../modal/Modal";
 import styled from "styled-components";
 import {modalController} from "../../../store";
 import {
+  ColSpan1,
   ColSpan2,
   ColSpan3,
   ColSpan4,
   DefaultButton,
-  RowSpan,
+  Input,
+  InputLabel,
   RelativeDiv,
-  ValidationScript,
+  RowSpan,
   SubmitButton,
-  InputLabel, Input, ColSpan1
+  ValidationScript
 } from "../../../assets/GlobalStyles";
 import {decimalFormat, removeStr} from "../../../common/StringUtils";
 import {useForm} from "react-hook-form";
@@ -45,7 +47,7 @@ export function AdChargeButton(props) {
 }
 
 function AdChargeModal (props) {
-  const {title, setRequestAmountValue} = props
+  const {title} = props
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const {register, handleSubmit, setError, formState:{errors} } = useForm()
   const [chargeAmount, setChargeAmount] = useState(0) // 충전 금액

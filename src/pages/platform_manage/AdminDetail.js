@@ -22,7 +22,6 @@ import {useForm} from "react-hook-form";
 import {useAtom} from "jotai";
 import {selAdminInfo, updateAdmin} from "../../services/Platform/ManageAdminAxios";
 import {toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 
 import {PwChange} from "./UserDetail";
 import {modalController} from "../../store";

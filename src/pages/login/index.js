@@ -10,7 +10,6 @@ import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
 import {RowSpan, TextMainColor, ValidationScript} from "../../assets/GlobalStyles";
 import {toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import {selChangePassword, selFindUserId} from "../../services/Platform/ManageUserAxios";
 import {ComponentModalFindId, ComponentModalFindPassword} from "../../components/modal";
 import {HorizontalRule} from "../../components/common/Common";

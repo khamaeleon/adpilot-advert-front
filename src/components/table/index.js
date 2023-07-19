@@ -289,10 +289,21 @@ function Table(props) {
     downloadBlob(blob);
   };
 
+  /** 국제화 **/
+  const i18n = Object.assign({}, ReactDataGrid.defaultProps.i18n, {
+    sortAsc: '오름차순',
+    sortDesc: '내림차순',
+    autoSizeToFit: '자동맞춤',
+    autoresizeThisColumn:'이 컬럼에 맞춤',
+    autoresizeAllColumns:'전체 컬럼에 맞춤',
+    columns: '컬럼'
+  })
+
   const gridElement = (
     <ReactDataGrid
       licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
       idProperty={props.idProperty}
+      i18n={i18n}
       handle={setGridRef}
       columns={columns}
       dataSource={data}

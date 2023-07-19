@@ -1,28 +1,32 @@
 import {
   Board,
   BoardHeader,
-  ColSpan0,
   ColSpan1,
-  ColSpan3, GraySearchButton,
+  ColSpan3,
+  GraySearchButton,
   Input,
-  RowSpan, SearchInput,
+  RowSpan,
+  SearchInput,
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import {useResetAtom} from "jotai/utils";
 import {
   createNewCategory,
-  retrieveCategoryByParentCode, retrieveTopLevelAllCategory,
+  retrieveCategoryByParentCode,
+  retrieveTopLevelAllCategory,
   retrieveTopLevelCategory
 } from "../../services/Platform/CategoryAxios";
 import {categoryListAtom, createCategoryAtom, selectCategoryAtom, topLevelCategoryListAtom} from "./entity/Category";
 import {
-  CategoryBody, CategoryContainer,
+  CategoryBody,
+  CategoryContainer,
   CategoryEnroll,
   CategoryHeader,
   CategoryItem,
   EnrollButton,
-  MainCategory, SearchButton,
+  MainCategory,
+  SearchButton,
   SubCategory,
   SubCategoryBody,
   SubCategoryItem

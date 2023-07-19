@@ -15,7 +15,7 @@ import {
   Span3,
   Span4
 } from "../../assets/GlobalStyles";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {CreateImage, DeleteIcon, ImageUploadCard, Row, Validation} from "./styles/common";
 import ImageUploading from "react-images-uploading";
 import Select from "react-select";
@@ -201,6 +201,12 @@ export function BannerCreative() {
   const setModalOpen = useSetAtom(modalController)
   const { getByID, getAll, update, add } = useIndexedDB('frameTable')
   const [guide, setGuide] = useState(false)
+  const [forceUpdate, setForceUpdate] = useState(false)
+
+  useEffect(() => {
+    setForceUpdate(true)
+  }, [selectedBanner]);
+
   /** 스냅 가이드 모드 **/
   const handleChangeMode = () =>{
     setGuide(!guide)
@@ -422,14 +428,15 @@ export function BannerCreative() {
   }
   /** 배너 사이즈 선택 **/
   const handleSelectBannerType = (type) => {
+    setForceUpdate(false)
     if(selectedBanner.filter(datum => datum === type).length === 0){
       setSelectedBanner(prev => [...prev, type])
     } else {
-      const newItemType = selectedBanner.filter(datum => datum !== type)
-      setSelectedBanner(newItemType)
-
       const newPublicSet = publicSetting.filter(datum => datum.size !== type)
       setPublicSetting(newPublicSet)
+
+      const newItemType = selectedBanner.filter(datum => datum !== type)
+      setSelectedBanner(newItemType)
     }
   }
   /** PC랜딩 URL **/
@@ -897,6 +904,7 @@ export function BannerCreative() {
               </ColSpan1>
             </RowSpan>
             <RowSpan box={true}>
+              {forceUpdate &&
               <FlexWrap>
                 {selectedBanner.map((item, key) => {
                   const position = publicSetting.find(value => value.size === item)
@@ -905,6 +913,7 @@ export function BannerCreative() {
                   )
                 })}
               </FlexWrap>
+              }
             </RowSpan>
           </>
           }

@@ -1,5 +1,3 @@
-import {atom} from "jotai";
-
 /* 플랫폼 현황 차트 셀렉트 */
 export const platformStatusType = [
   {id: 2, value: "totalExposureCount", label: "총노출수"},
