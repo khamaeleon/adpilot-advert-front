@@ -46,7 +46,7 @@ function WriteForm(props) {
   const { formType, title, onSubmitProps, onClose, userId } = props;
   const [notice, setNotice] = useState({title: '', content: ''});
   const [noticePublish, setNoticePublish] = useState({publishYn: 'N'});
-  const [inquiryType, setInquiryType] = useState({id: 0, value: 'DEFAULT', label:'전체'});
+  const [inquiryType, setInquiryType] = useState({id: 0, value: 'ADVER_INQUIRY', label:'광고 문의'});
   const {control, handleSubmit, clearErrors, formState: {errors}} = useForm({
     mode: "onSubmit"
   })
@@ -164,10 +164,10 @@ function WriteForm(props) {
                       <Select styles={selectStyle}
                               width={150}
                               isSearchable={false}
-                              options={inquiryTypes}
+                              options={inquiryTypes.filter((d,i)=> i!=0)}
                               value={inquiryType.value !== '' ? inquiryTypes.find(
                                       type => type.value === inquiryType.value)
-                                  : inquiryTypes[0]}
+                                  : inquiryTypes[1]}
                               onChange={handleSearchType}
                       />
                     </RelativeDiv>

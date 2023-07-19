@@ -207,7 +207,7 @@ function Layout() {
         {/* 보고서 */}
         {['reports', 'customReports'].includes(params.id) && <Reports/>}
         {/* 고객 센터 */}
-        {['notice', 'inquiry'].includes(params.id) && <Customer/>}
+        {['notice', 'noticeDetail', 'inquiry', 'inquiryDetail'].includes(params.id) && <Customer/>}
         {/* 설정 */}
         {['settings', 'settingsDetail', 'budgetEvent', 'budgetEventDetail', 'budgetTime', 'budgetTimeDetail','budgetTimeList'].includes(params.id) &&
           <Settings/>}

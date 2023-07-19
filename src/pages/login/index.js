@@ -320,19 +320,20 @@ function LoginComponent() {
    */
   const onSubmit = () => {
     login(loginParamsValue).then(response => {
-      if (response === 'disabled') {
-        toast.warning('로그인이 제한된 사용자입니다. 담당자에게 문의해주세요.')
-      }
       if (response) {
-        setTokenResult({
-          id: response.id,
-          username: response.username,
-          role: response.role,
-          name: response.name,
-          accessToken: response.token.accessToken,
-          refreshToken: response.token.refreshToken
-        })
-        navigate('/board/dashboard')
+        if (response === 'disabled') {
+          toast.warning('로그인이 제한된 사용자입니다. 담당자에게 문의해주세요.')
+        } else {
+          setTokenResult({
+            id: response.id,
+            username: response.username,
+            role: response.role,
+            name: response.name,
+            accessToken: response.token.accessToken,
+            refreshToken: response.token.refreshToken
+          });
+          navigate('/board/dashboard');
+        }
       } else {
         toast.info('아이디와 비밀번호를 확인해 주세요.')
       }

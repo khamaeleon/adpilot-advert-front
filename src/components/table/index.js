@@ -194,7 +194,7 @@ export function Icon(props) {
 }
 
 function Table(props) {
-  const {columns, data, settings, groups, noDirectives } = props
+  const {columns, data, settings, groups, noDirectives, defaultLimit } = props
   const [, setActiveCell] = useState([0]);
   const [gridRef, setGridRef] = useState(null);
   const gridStyle = {minHeight: 550}
@@ -304,7 +304,7 @@ function Table(props) {
       showColumnMenuLockOptions={false}
       showColumnMenuGroupOptions={false}
       emptyText={emptyText}
-      limit={30}
+      defaultLimit={defaultLimit}
       style={gridStyle}
       pagination={props.pagenations}
       showHoverRows={false}
