@@ -25,49 +25,53 @@ import {FormProvider, useForm} from "react-hook-form";
 import {CampaignThree} from "../campaign/steps/CampaignThree";
 import {CampaignFour} from "../campaign/steps/CampaignFour";
 import {stepCampaignAtom} from "../campaign/entity";
-import {requestAmountPoint, retrieveUserPoint} from "./entity/UserPoint";
+import {retrieveUserPoint, requestAmountPoint} from "./entity/UserPoint";
 import {searchConditionAtom} from "../dash_board/entity/Common";
 import Customer from "../customer";
 
 function Layout() {
-  const params = useParams()
-  const navigate = useNavigate()
-  const methods = useForm()
-  const [tokenUserInfo, setTokenUserInfo] = useAtom(tokenResultAtom)
-  const [userPoint, ] = useAtom(retrieveUserPoint)
-  const [requestAmount, ] = useAtom(requestAmountPoint)
-  const setStepCampaign = useSetAtom(stepCampaignAtom)
-  const resetInfo = useResetAtom(searchConditionAtom)
+  const params = useParams();
+  const navigate = useNavigate();
+  const methods = useForm();
+  const [tokenUserInfo, setTokenUserInfo] = useAtom(tokenResultAtom);
+  const [userPoint, setUserPoint] = useAtom(retrieveUserPoint);
+  const [requestAmount, ] = useAtom(requestAmountPoint);
+  const setStepCampaign = useSetAtom(stepCampaignAtom);
+  const resetInfo = useResetAtom(searchConditionAtom);
 
     useEffect(() => {
       if (tokenUserInfo.role === '') {
         refreshAdmin().then(response => {
-          const {data,responseCode} =response
-          if (responseCode.statusCode === 200) {
-            setTokenUserInfo({
-              id: data.email,
-              role: data.role,
-              name: data.name,
-              accessToken: data.token.accessToken
-            })
-          } else {
-            refresh().then(response => {
-              const {data,responseCode} =response
-              if (responseCode.statusCode === 200) {
-                setTokenUserInfo({
-                  id: data.id,
-                  username:data.username,
-                  role: data.role,
-                  name: data.name,
-                  accessToken: data.token.accessToken
-                })
-              }else{
-                // eslint-disable-next-line no-restricted-globals
-                location.replace('/')
-              }
-            })
+          if(response){
+            const {data,responseCode} = response
+            if (responseCode.statusCode === 200) {
+              setTokenUserInfo({
+                id: data.email,
+                role: data.role,
+                name: data.name,
+                accessToken: data.token.accessToken
+              })
+            } else {
+              refresh().then(response => {
+                const {data,responseCode} = response
+                if(response) {
+                  if (responseCode.statusCode === 200) {
+                    setTokenUserInfo({
+                      id: data.id,
+                      username: data.username,
+                      role: data.role,
+                      name: data.name,
+                      accessToken: data.token.accessToken
+                    })
+                  } else {
+                    // eslint-disable-next-line no-restricted-globals
+                    navigate('/');
+                  }
+                }
+              }).catch(navigate('/'));
+            }
           }
-        })
+        }).catch(navigate('/'));
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
@@ -202,7 +206,7 @@ function Layout() {
         {/* 보고서 */}
         {['reports', 'customReports'].includes(params.id) && <Reports/>}
         {/* 고객 센터 */}
-        {['notice', 'inquiry'].includes(params.id) && <Customer/>}
+        {['notice', 'noticeDetail', 'inquiry', 'inquiryDetail'].includes(params.id) && <Customer/>}
         {/* 설정 */}
         {['settings', 'settingsDetail', 'budgetEvent', 'budgetEventDetail', 'budgetTime', 'budgetTimeDetail','budgetTimeList'].includes(params.id) &&
           <Settings/>}

@@ -1,7 +1,6 @@
 import {Link} from "react-router-dom";
 import React, {useState} from "react";
 import {toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import Terms from "./Terms";
 import Basic from "./Basic";
 import Done from "./Done";

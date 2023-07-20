@@ -4,6 +4,8 @@ import Notice from "./Notice";
 import Inquiry from "./Inquiry";
 import Navigator from "../../components/common/Navigator";
 import React from "react";
+import NoticeDetail from "./NoticeDetail";
+import InquiryDetail from "./InquiryDetail";
 
 export default function Customer() {
   const params = useParams();
@@ -15,7 +17,9 @@ export default function Customer() {
             <Navigator/>
           </TitleContainer>
           {params.id === 'notice' && <Notice/>}
+          {params.id === 'noticeDetail' && <NoticeDetail/>}
           {params.id === 'inquiry' && <Inquiry/>}
+          {params.id === 'inquiryDetail' && <InquiryDetail/>}
         </BoardContainer>
       </main>
   )

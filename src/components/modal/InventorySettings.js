@@ -20,6 +20,7 @@ import {
 } from "../../pages/campaign/entity/Group";
 import {selSearchMediaInfo, selSearchMediaList} from "../../services/campaign/GroupAxios";
 import {toast} from "react-toastify";
+import {deviceType} from "../../pages/dash_board/entity/Common";
 
 export function InventoryButton(props) {
   const {title, buttonText, type} = props;
@@ -45,7 +46,7 @@ function SearchModal (props) {
   const [allowInventoryIds, setAllowInventoryIds] = useAtom(allowInventoryIdsAtom)
   const [disAllowInventoryIds, setDisAllowInventoryIds] = useAtom(disAllowInventoryIdsAtom)
   const [searchKeyword,setSearchKeyword] =useState('')
-  const [mediaInventoryInfo,setMediaInventoryInfo] = useAtom(mediaInventoryInfoAtom)
+  const [mediaInventoryInfo,setMediaInventoryInfo] = useState(null)
   const [campaignGroupInfo, setCampaignGroupInfo] = useAtom(campaignGroupInfoAtom)
 
   useEffect(()=>{
@@ -53,9 +54,6 @@ function SearchModal (props) {
     selSearchMediaList(param).then(response => {
       setAllowInventoryIds(response)
     })
-    return () => {
-      setMediaInventoryInfo([])
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[campaignGroupInfo])
 
@@ -185,8 +183,8 @@ function SearchModal (props) {
                       <UserId>{item.username}</UserId>
                       <Category>{item.category1}</Category>
                       <Code><a href={item.siteUrl} target={'_blank'} rel="noreferrer">사이트보기</a></Code>
-                      <Device>{item.deviceType}</Device>
-                      <BannerSize>{item.bannerSize.replace('IMG','')}</BannerSize>
+                      <Device>{deviceType.filter(d=> d.value === item.deviceType)[0].label}</Device>
+                      <BannerSize>{item.bannerSize?.replace('IMG','')}</BannerSize>
                     </InventoryItem>
                   )
                 })}
@@ -220,8 +218,8 @@ function SearchModal (props) {
                       <UserId>{item.username}</UserId>
                       <Category>{item.category1}</Category>
                       <Code><a href={item.siteUrl} target={'_blank'} rel="noreferrer">사이트보기</a></Code>
-                      <Device>{item.deviceType}</Device>
-                      <BannerSize>{item.bannerSize.replace('IMG','')}</BannerSize>
+                      <Device>{deviceType.filter(d=> d.value === item.deviceType)[0].label}</Device>
+                      <BannerSize>{item.bannerSize?.replace('IMG','')}</BannerSize>
                     </SelectedInventoryResultItem>
                   )
                 })}
@@ -233,8 +231,8 @@ function SearchModal (props) {
                       <UserId>{item.username}</UserId>
                       <Category>{item.category1}</Category>
                       <Code><a href={item.siteUrl} target={'_blank'} rel="noreferrer">사이트보기</a></Code>
-                      <Device>{item.deviceType}</Device>
-                      <BannerSize>{item.bannerSize.replace('IMG','')}</BannerSize>
+                      <Device>{deviceType.filter(d=> d.value === item.deviceType)[0].label}</Device>
+                      <BannerSize>{item.bannerSize?.replace('IMG','')}</BannerSize>
                     </SelectedInventoryResultItem>
                   )
                 })}

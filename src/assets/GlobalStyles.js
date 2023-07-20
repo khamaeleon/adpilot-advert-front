@@ -1477,7 +1477,7 @@ export const ReportsDetail = styled.div`
 export const TextArea = styled.textarea`
   width: 100%;
   padding-top: 10px;
-  padding-left: 20px;
+  padding-left: 10px;
   border: 1px solid rgb(229, 229, 229);
   border-radius: 5px;
   resize: none;

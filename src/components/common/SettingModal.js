@@ -230,7 +230,7 @@ function SettingChangeModal(props) {
     <div>
       <form onSubmit={handleSubmit(label === 'won' ? handlePriceEventSave : handleBudgetEventSave, onError)}>
         <ModalBody>
-          <RowSpan>
+          <RowSpan validation>
             <ColSpan4>
               <ColTitle><Span2>그룹명</Span2></ColTitle>
               <RelativeDiv>
@@ -247,7 +247,7 @@ function SettingChangeModal(props) {
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
-          <RowSpan>
+          <RowSpan validation>
             <ColSpan4>
               <ColTitle><Span2>쇼퍼 맞춤</Span2></ColTitle>
               <RelativeDiv style={{flexDirection: 'column', alignItems: 'flex-start'}}>
@@ -268,7 +268,7 @@ function SettingChangeModal(props) {
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
-          <RowSpan>
+          <RowSpan validation>
             <ColSpan4>
               <ColTitle><Span2>카트 추천</Span2></ColTitle>
               <RelativeDiv style={{flexDirection: 'column', alignItems: 'flex-start'}}>
@@ -289,7 +289,7 @@ function SettingChangeModal(props) {
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
-          <RowSpan>
+          <RowSpan validation>
             <ColSpan4>
               <ColTitle><Span2>상품 추천</Span2></ColTitle>
               <RelativeDiv style={{flexDirection: 'column', alignItems: 'flex-start'}}>
@@ -310,7 +310,7 @@ function SettingChangeModal(props) {
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
-          <RowSpan>
+          <RowSpan validation>
             <ColSpan4>
               <ColTitle><Span2>유저 매치</Span2></ColTitle>
               <RelativeDiv style={{flexDirection: 'column', alignItems: 'flex-start'}}>
@@ -331,7 +331,7 @@ function SettingChangeModal(props) {
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
-          <RowSpan>
+          <RowSpan validation>
             <ColSpan4>
               <ColTitle><Span2>오디언스</Span2></ColTitle>
               <RelativeDiv style={{flexDirection: 'column', alignItems: 'flex-start'}}>
@@ -352,7 +352,7 @@ function SettingChangeModal(props) {
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
-          <RowSpan>
+          <RowSpan validation>
             <ColSpan4>
               <ColTitle><Span2>유저 최적화</Span2></ColTitle>
               <RelativeDiv style={{flexDirection: 'column', alignItems: 'flex-start'}}>
@@ -374,11 +374,13 @@ function SettingChangeModal(props) {
             </ColSpan4>
           </RowSpan>
           {label === 'pct' &&
-            <RowSpan>
+            <RowSpan validation>
               <ColSpan4>
                 <ColTitle><Span2>설정 비율</Span2></ColTitle>
-                <Span2>{calculatePercent}/100</Span2>
-                {calculatePercent < 0 && <ValidationScript>모든 항목의 합은 100%를 넘을수 없습니다.</ValidationScript>}
+                <RelativeDiv>
+                  <Span2>{calculatePercent}/100</Span2>
+                  {calculatePercent < 0 && <ValidationScript>이벤트 비율의 총합 100% 미만인 경우 등록 불가</ValidationScript>}
+                </RelativeDiv>
               </ColSpan4>
             </RowSpan>
           }

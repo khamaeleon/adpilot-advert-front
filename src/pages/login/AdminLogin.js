@@ -5,7 +5,6 @@ import {loginAdmin} from "../../services/auth/AuthAxios";
 import {useForm} from "react-hook-form";
 import {RowSpan, TextMainColor, ValidationScript} from "../../assets/GlobalStyles";
 import {toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components'
 import {useCookies} from "react-cookie";
 import Checkbox from "../../components/common/Checkbox";

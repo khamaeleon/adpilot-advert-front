@@ -49,7 +49,7 @@ function BudgetTimeDetail() {
     const {id, groupId, listCount} = state
     if (state !== null && groupId !== undefined) {
       selBudgetTimeDetailInfo(id, groupId).then(response => {
-        setTimeBudgetDetailDataState(response)
+        if(response != null) setTimeBudgetDetailDataState(response)
       })
       setSaveType('update')
     } else {
@@ -71,7 +71,7 @@ function BudgetTimeDetail() {
       groupName:e.target.value
     })
   }
-  const onSaveBudgetTimes = () => {
+  const onSaveBudgetTimes = (e) => {
     setCheckIndex(null)
 
     let isTimePerOver = false;
@@ -93,20 +93,16 @@ function BudgetTimeDetail() {
       }).includes(true)
     }
 
+
     if(isTimePerOver) {
-      toast.warning('[해당 요일]의 \n시간별 예산 설정을 확인해주세요.')
-    }else if(isTimePerZero){
-      toast.warning('값이 입력되지 않았습니다. 시간별 예산 설정을 확인해주세요.')
-    }else if(!isTimeNull){
+      const a = toast.warning('[해당 요일]의 \n시간별 예산 설정을 확인해주세요.');
+    }else if(isTimePerZero || !isTimeNull){
       toast.warning('값이 입력되지 않았습니다. 시간별 예산 설정을 확인해주세요.')
     }else {
       const callbackFun = (response) => {
         if (response[0]) {
-          toast.success(saveType === 'resist' ? "저장 되었습니다." : "수정 되었습니다.",{autoClose:100, delay:0})
-          toast.onChange(payload => {
-            if(payload.status === "removed" && payload.type === toast.TYPE.SUCCESS) {
-              navigate('/board/budgetTimeList', {state: {id: timeBudgetDetailDataState.userId}});
-            }
+          toast.success(saveType === 'resist' ? "저장 되었습니다." : "수정 되었습니다.",{autoClose:100, delay:0, onClose:()=>
+              navigate('/board/budgetTimeList', {state: {id: timeBudgetDetailDataState.userId}})
           })
         }
       }

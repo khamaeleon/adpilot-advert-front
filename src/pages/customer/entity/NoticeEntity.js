@@ -18,7 +18,10 @@ export const columnNotice = [
   {
     name: 'id',
     header: 'No',
-    defaultWidth: 100
+    defaultWidth: 100,
+    render: ({value, cellProps}) => {
+      return cellProps.totalDataCount - cellProps.rowIndex
+    }
   },
   {
     name: 'title',
@@ -30,7 +33,7 @@ export const columnNotice = [
       }
     },
     render: ({value, cellProps}) => {
-      return <Link to={'/board/notice'} state={{data: cellProps.data}}>{value}</Link>
+      return <Link to={'/board/noticeDetail'} state={{data: cellProps.data}}>{value}</Link>
     }
 
   },
@@ -42,11 +45,14 @@ export const columnNotice = [
       return <p>{value === 'Y' ? '공개' : '비공개'}</p>
     }
   },
-  {
-    name: 'createdBy',
-    header: '작성자',
-    defaultWidth: 150
-  },
+  // {
+  //   name: 'createdBy',
+  //   header: '작성자',
+  //   defaultWidth: 150,
+  //   render: ({value, cellProps}) => {
+  //     return <p>{'관리자'}</p>
+  //   }
+  // },
   {
     name: 'createdAt',
     header: '작성 일시',
@@ -56,17 +62,17 @@ export const columnNotice = [
 
 
 export const columnInquiry = [
-  {
-    name: 'id',
-    header: 'No',
-    defaultWidth: 100
-  },
+  // {
+  //   name: 'id',
+  //   header: 'No',
+  //   defaultWidth: 100
+  // },
   {
     name: 'title',
     header: '제목',
     defaultWidth: 500,
     render: ({value, cellProps}) => {
-      return <Link to={'/board/inquiry'} state={{data: cellProps.data}}>{value}</Link>
+      return <Link to={'/board/inquiryDetail'} state={{data: cellProps.data}}>{value}</Link>
     }
   },
   {
@@ -77,11 +83,11 @@ export const columnInquiry = [
       return <p>{inquiryTypes.find(type => type.value === value)?.label}</p>;
     }
   },
-  {
-    name: 'createdBy',
-    header: '작성자',
-    defaultWidth: 150
-  },
+  // {
+  //   name: 'createdBy',
+  //   header: '작성자',
+  //   defaultWidth: 150
+  // },
   {
     name: 'createdAt',
     header: '작성 일시',

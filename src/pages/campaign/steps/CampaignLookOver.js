@@ -26,7 +26,6 @@ import {
 import {tokenResultAtom} from "../../login/entity/Common";
 import {selEnumInfo} from "../../../services/campaign/InfoAxios";
 import {toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import {campaignBasicInfoAtom} from "../entity/Info";
 import {useResetAtom} from "jotai/utils";
 

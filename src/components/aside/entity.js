@@ -55,15 +55,17 @@ export const menuList = [
   {
     name: "notice",
     header: "고객센터",
-    include: ['notice','inquiry'],
+    include: ['notice','noticeDetail','inquiry', 'inquiryDetail'],
     child: [
       {
         name: "notice",
-        header: "공지사항"
+        header: "공지사항",
+        detail: "noticeDetail"
       },
       {
         name: "inquiry",
-        header: "1:1문의"
+        header: "1:1문의",
+        detail: 'inquiryDetail'
       }
     ]
   },
