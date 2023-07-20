@@ -52,7 +52,11 @@ function SearchModal (props) {
   useEffect(()=>{
     let param = {inventoryIds: type==='allow' ? campaignGroupInfo.allowInventoryIds : campaignGroupInfo.disAllowInventoryIds};
     selSearchMediaList(param).then(response => {
-      setAllowInventoryIds(response)
+      if(type==='allow'){
+        setAllowInventoryIds(response)
+      } else {
+        setDisAllowInventoryIds(response);
+      }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[campaignGroupInfo])

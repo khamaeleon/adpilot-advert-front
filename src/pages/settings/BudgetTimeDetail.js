@@ -24,7 +24,7 @@ import styled from "styled-components";
 import InsertToSelect from "../../components/common/InsertToSelect";
 import {resistBudgetTimes, selBudgetTimeDetailInfo, updateBudgetTimes} from "../../services/settings/BudgetTimeAxios";
 import {ValidationScript} from "../signup/styles";
-import {useForm} from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 
 function BudgetTimeDetail() {
   const [timeBudgetDetailDataState, setTimeBudgetDetailDataState] = useAtom(timeBudgetDetailDataAtom)
@@ -32,7 +32,7 @@ function BudgetTimeDetail() {
   const [saveType, setSaveType] = useState('update')
   const [checkIndex, setCheckIndex] = useState(null)
   const {state} = useLocation()
-  const {register, handleSubmit, reset, formState: {errors}} = useForm({
+  const {control, handleSubmit, reset, formState: {errors}, setValue} = useForm({
     mode: "onSubmit",
     defaultValues: timeBudgetDetailDataState
   })
@@ -70,8 +70,9 @@ function BudgetTimeDetail() {
       ...timeBudgetDetailDataState,
       groupName:e.target.value
     })
+    setValue('groupName', e.target.value);
   }
-  const onSaveBudgetTimes = () => {
+  const onSubmit = () => {
     setCheckIndex(null)
 
     let isTimePerOver = false;
@@ -116,7 +117,7 @@ function BudgetTimeDetail() {
   return (
       <>
         <Board>
-          <form onSubmit={handleSubmit(onSaveBudgetTimes, onError)}>
+          <form onSubmit={handleSubmit(onSubmit, onError)}>
             <BoardHeader>시간별 예산 기본 정보</BoardHeader>
             <RowSpan style={{justifyContent: 'flex-end'}}>
               <div>
@@ -133,21 +134,33 @@ function BudgetTimeDetail() {
               </div>
             </RowSpan>
             <BoardSearchDetail>
-              <RowSpan box={true}>
+              <RowSpan box={true} validation>
                 <ColSpan4 style={{padding: 0}}>
-                  <ColTitle style={{padding: 0}}>시간별 예산 그룹명</ColTitle>
-                  <Input style={{height: 38, width: 350}}
-                         type={'text'}
-                      // readOnly={saveType !== 'resist'}
-                         placeholder={'그룹명을 입력해주세요'}
-                         {...register("groupName", {
-                           required: "그룹명을 입력해주세요",
-                           onChange: (e) => handleGroupName(e),
-                           // disabled: saveType !== 'resist'
-                         })}
-                         value={timeBudgetDetailDataState?.groupName}
-                  />
-                  {errors.groupName && <Span4><ValidationScript>{errors.groupName?.message}</ValidationScript></Span4>}
+                  <Span4 style={{padding: 0}}>시간별 예산 그룹명</Span4>
+                  <RelativeDiv>
+                    <Controller
+                        name="groupName"
+                        control={control}
+                        rules={{
+                          required: {
+                            value: timeBudgetDetailDataState.groupName === '',
+                            message: '그룹명을 입력해주세요.'
+                          }
+                        }}
+                        render={({field}) => (
+                            <Input style={{height: 38, width: 350}}
+                                   type={'text'}
+                                   {...field}
+                                   placeholder={'그룹명을 입력해주세요'}
+                                   value={timeBudgetDetailDataState?.groupName}
+                                   onChange={(e) => handleGroupName(e)}
+                            />
+                          )}
+                    />
+                    {errors.groupName &&
+                        <ValidationScript style={{left:10}}>{errors.groupName?.message}</ValidationScript>
+                    }
+                  </RelativeDiv>
                 </ColSpan4>
               </RowSpan>
               <RowSpan style={{alignItems: 'center', marginLeft: 20}}>

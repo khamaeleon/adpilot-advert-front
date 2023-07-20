@@ -13,7 +13,14 @@ export const budgetTimeDataAtom = atom(null)
  * 시간 예산 광고주 상세 리스트 Atom
  * @type {Atom<unknown>}
  */
-export const timeBudgetDetailDataAtom = atom(null)
+export const timeBudgetDetailDataAtom = atom({
+  allowTimes:[],
+  budgetItemId: 0,
+  exposureTimeType: '',
+  groupName: '',
+  lastModifiedAt: '',
+  userId: ''
+})
 export const timesInfo = [
   {"time" : '',"ratio" :'', "label": ''},
   {"time" : 1,"ratio" :0, "label": '시'},

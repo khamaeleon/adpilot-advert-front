@@ -193,7 +193,7 @@ function SettingChangeModal(props) {
   }
 
   const handleBudgetEventSave = () => {
-    if(calculatePercent >= 0){
+    if(calculatePercent === 0){
       if (saveType === 'create') {
         resistBudgetEvent({...dataState, userId: state.id}).then(response => {
           if (response) {
@@ -376,11 +376,7 @@ function SettingChangeModal(props) {
           {label === 'pct' &&
             <RowSpan validation>
               <ColSpan4>
-                <ColTitle><Span2>설정 비율</Span2></ColTitle>
-                <RelativeDiv>
-                  <Span2>{calculatePercent}/100</Span2>
-                  {calculatePercent < 0 && <ValidationScript>이벤트 비율의 총합 100% 미만인 경우 등록 불가</ValidationScript>}
-                </RelativeDiv>
+                  {(100 > calculatePercent && calculatePercent != 0) && <ValidationScript style={{justifyContent: 'flex-end'}}>이벤트 비율을 100%로 설정해주세요.</ValidationScript>}
               </ColSpan4>
             </RowSpan>
           }
