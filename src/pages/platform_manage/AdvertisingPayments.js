@@ -377,7 +377,7 @@ function AdvertisingPayments() {
             </div>
             <ColSpan2 style={{justifyContent: 'flex-end'}}>
               <SearchAdvertiser style={{marginRight: 10}} title={'이력 추가'} btnStyle={'historyAddButton'} onSubmit={handleHistoryAdd}/>
-              <SaveExcelButton>엑셀 저장</SaveExcelButton>
+              {/*<SaveExcelButton>엑셀 저장</SaveExcelButton>*/}
             </ColSpan2>
           </BoardSearchResultTitle>
           <ReactDataGrid

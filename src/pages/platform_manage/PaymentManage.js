@@ -89,7 +89,7 @@ function PaymentManage() {
               <TotalCount><span/>총 <span>{totalInfo}</span> 건의 결제 내역</TotalCount>
             </div>
             <div>
-              <SaveExcelButton>엑셀 저장</SaveExcelButton>
+              {/*<SaveExcelButton>엑셀 저장</SaveExcelButton>*/}
             </div>
           </BoardSearchResultTitle>
           <ReactDataGrid

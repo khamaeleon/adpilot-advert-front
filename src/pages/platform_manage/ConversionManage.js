@@ -114,7 +114,7 @@ function ConversionManage() {
           { conversionListDataState !== null &&
             <>
               <RowSpan style={{display: 'flex', justifyContent: 'flex-end'}}>
-                <SaveExcelButton style={{ margin: '0 10px 20px' }} onClick={exportCSV}>엑셀 저장</SaveExcelButton>
+                {/*<SaveExcelButton style={{ margin: '0 10px 20px' }} onClick={exportCSV}>엑셀 저장</SaveExcelButton>*/}
               </RowSpan>
               <ReactDataGrid
                 licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}

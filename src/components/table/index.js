@@ -327,7 +327,7 @@ function Table(props) {
     <>
       {props.downloadList &&
         <RowSpan style={{justifyContent: 'flex-end'}}>
-          <SaveExcelButton onClick={exportCSV}>엑셀 저장</SaveExcelButton>
+          {/*<SaveExcelButton onClick={exportCSV}>엑셀 저장</SaveExcelButton>*/}
         </RowSpan>
       }
       <RowSpan>
