@@ -7,6 +7,7 @@ import Done from "./Done";
 import {useAtomValue} from "jotai";
 import {nextStepAtom} from "./entity/Common";
 import {Arrow, ButtonGroup, Logo, SignUpContents, SignUpHeader, Step, StepContainer, Steps} from "./styles";
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function SignUp() {

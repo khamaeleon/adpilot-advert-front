@@ -38,6 +38,7 @@ import {useResetAtom} from "jotai/utils";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import {decimalFormat, multiAxiosCall, removeStr} from "../../../common/StringUtils";
+import 'react-toastify/dist/ReactToastify.css';
 
 export function CampaignTwo() {
   const setStepCampaign = useSetAtom(stepCampaignAtom)

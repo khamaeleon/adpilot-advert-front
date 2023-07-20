@@ -54,6 +54,7 @@ import {useResetAtom} from "jotai/utils";
 import {dateFormat, multiAxiosCall, toDay} from "../../../common/StringUtils";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RegistryBannerItem = (props) => {
   const {size, onImageError, label} = props;
