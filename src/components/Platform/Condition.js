@@ -41,7 +41,7 @@ import {light} from "../../assets/theme";
 ResetButton.propTypes = {onClick: PropTypes.func};
 
 export function PlatformCondition(props) {
-  const [dateActive,setDateActive] = useState('')
+  const [dateActive,setDateActive] = useState('thisMonth')
   const {searchCondition, setSearchCondition, handleTableData, searchType} = props;
   const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
