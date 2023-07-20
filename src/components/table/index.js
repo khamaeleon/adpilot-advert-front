@@ -34,6 +34,7 @@ export function SwitchComponent(props){
   const handleClick = (confirm) => {
     if(confirm){
       eventClick();
+      setSelect(!select)
       if(type === 'publish'){
         cellProps.data.publishYn = cellProps.data.publishYn === 'Y' ? 'N' : 'Y';
       }else{
@@ -46,14 +47,13 @@ export function SwitchComponent(props){
   }
   const showModal = () => {
     const btnSmall = { width: 100, height: 42 }
-    setSelect(!select)
     setModal({
       isShow: true,
       width: 400,
       modalComponent: () => {
         return (
           <div>
-            {type !== 'publish' && <ModalHeader title={'연동 상태 변경'}/>}
+            {type !== 'publish' && <ModalHeader title={'연동 상태 변경'} closeButton/>}
             <ModalBody>
               <p style={{fontSize: 16, paddingTop: 10}}>
                 {type !== 'publish' ? (!select ? '연동을 사용 하시겠습니까?'

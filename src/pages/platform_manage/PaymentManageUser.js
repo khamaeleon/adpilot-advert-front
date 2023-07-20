@@ -28,7 +28,7 @@ import {RefundRequestButton} from "../../components/payment/user/RefundRequest";
 import {RegisterRefundInformationButton} from "../../components/payment/user/RegisterRefundInformation";
 import {getThisMonth, getToDay} from "../../common/DateUtils";
 import {decimalFormat} from "../../common/StringUtils";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import {paymentListRequest, pointListRequest} from "../../services/payment/user/RetrievePaymentByServiceUserAxios";
 import {retrieveUserRefundInfoRequestAxios} from "../../services/payment/user/RetrieveUserRefundInfoRequestAxios";
 import {selUserInfo} from "../../services/Platform/ManageUserAxios";
@@ -370,18 +370,6 @@ function PaymentManageUser() {
           </ColSpan4>
         </Board>
       </BoardContainer>
-      <ToastContainer
-        position="top-center"
-        autoClose={1500}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        style={{zIndex: 9999999}}
-      />
     </main>
   )
 }

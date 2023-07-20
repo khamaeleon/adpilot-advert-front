@@ -34,7 +34,7 @@ import {selGroupInfo, selMediaCategoryInfo, updateCampaignConfigInventory} from 
 import {campaignGroupInfoAtom, mediaCategoryAtom, noViewType} from "../entity/Group";
 import {dateFormat, toDay, unlimitedDate} from "../../../common/StringUtils";
 import {selEnumInfo} from "../../../services/campaign/InfoAxios";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useResetAtom} from "jotai/utils";
 
@@ -67,7 +67,6 @@ export function CampaignThree() {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
 
   useEffect(() => {
     if((state !== null || ['STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED'].includes(campaignBasicInfo.step))){
@@ -408,6 +407,7 @@ export function CampaignThree() {
                                 render={({field}) =>
                                   <input
                                     type={'radio'}
+                                    {...field}
                                     name={'inventory'}
                                     id={'inventoryMANUAL'}
                                     onChange={() => setExposureInventoryType('MANUAL')}
@@ -423,7 +423,7 @@ export function CampaignThree() {
                   {campaignGroupInfo.exposureInventoryType === 'MANUAL' && campaignGroupInfo.allowInventoryIds?.length !== 0 &&
                     <small>{campaignGroupInfo.allowInventoryIds?.length}개 지면 송출 설정</small>
                   }
-                  {errors.inventoryMANUAL && <small><ValidationScript style={{position: 'unset'}}>{errors.inventoryMANUAL.message}</ValidationScript></small>}
+                  {errors.inventoryMANUAL && campaignGroupInfo.allowInventoryIds?.length === 0 && <small><ValidationScript style={{position: 'unset'}}>{errors.inventoryMANUAL.message}</ValidationScript></small>}
                 </ColSpan2>
               </RelativeDiv>
             </ColSpan4>
@@ -464,6 +464,7 @@ export function CampaignThree() {
                               render={({field}) =>
                                 <input
                                   type={'radio'}
+                                  {...field}
                                   id={'disInventoryCATEGORY'}
                                   name={'disInventory'}
                                   onChange={() => setDisExposureInventoryType('CATEGORY')}
@@ -496,7 +497,7 @@ export function CampaignThree() {
                   {campaignGroupInfo.disExposureInventoryType === 'MANUAL' && campaignGroupInfo.disAllowInventoryIds?.length !== 0 &&
                     <small>{campaignGroupInfo.disAllowInventoryIds?.length}개 지면 송출 설정</small>
                   }
-                  {errors.disInventoryMANUAL && <small><ValidationScript style={{position: 'unset'}}>{errors.disInventoryMANUAL.message}</ValidationScript></small>}
+                  {errors.disInventoryMANUAL && campaignGroupInfo.disAllowInventoryIds?.length === 0 && <small><ValidationScript style={{position: 'unset'}}>{errors.disInventoryMANUAL.message}</ValidationScript></small>}
                 </ColSpan2>
               </RelativeDiv>
             </ColSpan4>
@@ -915,18 +916,7 @@ export function CampaignThree() {
         <CancelButton type={'button'} onClick={()=>onCancel()}>{state !== null ? '목록' : '이전'}</CancelButton>
         <SubmitButton type={'submit'}>{state !== null ? '수정' : '다음[3/4]'}</SubmitButton>
       </SubmitContainer>
-      <ToastContainer
-        position="top-center"
-        autoClose={1000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        style={{zIndex: 9999999}}
-      />
+
     </form>
   )
 }

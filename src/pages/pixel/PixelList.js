@@ -17,7 +17,7 @@ import {
 } from "../../assets/GlobalStyles";
 import React, {useCallback, useEffect, useState} from "react";
 import {useAtom, useAtomValue} from "jotai";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {Controller, useForm} from "react-hook-form";
@@ -197,7 +197,7 @@ function PixelAdd(props){
   }
   return (
     <form onSubmit={handleSubmit(handleSave, onError)}>
-      <ModalHeader title={'픽셀 추가'}/>
+      <ModalHeader title={'픽셀 추가'} />
       <ModalBody>
         <RowSpan>
           <ColSpan4>
@@ -463,16 +463,6 @@ function PixelList() {
           }
         </BoardTableContainer>
       </Board>
-      <ToastContainer position="top-center"
-                      autoClose={1500}
-                      hideProgressBar
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                      style={{zIndex: 9999999}}/>
       </>
     </main>
   )

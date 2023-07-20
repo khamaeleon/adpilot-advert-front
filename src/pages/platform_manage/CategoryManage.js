@@ -31,7 +31,7 @@ import {
   SubCategoryBody,
   SubCategoryItem
 } from "./styles/common";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 
 
 export function CategoryManage() {
@@ -220,7 +220,6 @@ export function CategoryManage() {
           </SubCategory>
         </CategoryContainer>
       </Board>
-      <ToastContainer/>
     </>
   )
 }

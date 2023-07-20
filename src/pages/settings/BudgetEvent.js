@@ -10,7 +10,6 @@ import {
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {ToastContainer} from "react-toastify";
 import {adverEventBudgetColumns, budgetEventDataAtom} from "./entity/BudgetEvent";
 import {selAdverBudgetEventList} from "../../services/settings/BudgetEventAxios";
 import {selAdverPriceEventList} from "../../services/settings/EventPriceAxios";
@@ -63,16 +62,7 @@ function BudgetEvent() {
           }
         </BoardTableContainer>
       </Board>
-      <ToastContainer position="top-center"
-                      autoClose={1500}
-                      hideProgressBar
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                      style={{zIndex: 9999999}}/>
+
     </>
   )
 }

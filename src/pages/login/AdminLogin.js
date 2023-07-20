@@ -4,13 +4,12 @@ import {loginAdminParams, tokenResultAtom} from "./entity/Common";
 import {loginAdmin} from "../../services/auth/AuthAxios";
 import {useForm} from "react-hook-form";
 import {RowSpan, TextMainColor, ValidationScript} from "../../assets/GlobalStyles";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import styled from 'styled-components'
 import {useCookies} from "react-cookie";
 import Checkbox from "../../components/common/Checkbox";
 import {useAtom} from "jotai";
 import {HorizontalRule} from "../../components/common/Common";
-import 'react-toastify/dist/ReactToastify.css';
 
 function AdminLogin() {
   const [loginParamsValue, setLoginParams] = useState(loginAdminParams);
@@ -174,16 +173,7 @@ function AdminLogin() {
           </LoginInputComponent>
         </div>
       </LoginContainer>
-      <ToastContainer position="top-center"
-                      autoClose={1500}
-                      hideProgressBar
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                      style={{zIndex: 9999999}}/>
+
     </>
   )
 }
