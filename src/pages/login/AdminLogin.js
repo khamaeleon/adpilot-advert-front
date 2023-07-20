@@ -10,7 +10,7 @@ import {useCookies} from "react-cookie";
 import Checkbox from "../../components/common/Checkbox";
 import {useAtom} from "jotai";
 import {HorizontalRule} from "../../components/common/Common";
-
+import 'react-toastify/dist/ReactToastify.css';
 
 function AdminLogin() {
   const [loginParamsValue, setLoginParams] = useState(loginAdminParams);

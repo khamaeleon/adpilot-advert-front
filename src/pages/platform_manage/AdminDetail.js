@@ -26,6 +26,7 @@ import {toast, ToastContainer} from "react-toastify";
 import {PwChange} from "./UserDetail";
 import {modalController} from "../../store";
 import {adminInfoAtom} from "./entity/Admin";
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function PlatformAdminDetail() {

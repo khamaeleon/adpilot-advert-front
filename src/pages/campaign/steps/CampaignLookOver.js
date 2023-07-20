@@ -28,6 +28,7 @@ import {selEnumInfo} from "../../../services/campaign/InfoAxios";
 import {toast, ToastContainer} from "react-toastify";
 import {campaignBasicInfoAtom} from "../entity/Info";
 import {useResetAtom} from "jotai/utils";
+import 'react-toastify/dist/ReactToastify.css';
 
 export function CampaignLookOver() {
   const {state} = useLocation()

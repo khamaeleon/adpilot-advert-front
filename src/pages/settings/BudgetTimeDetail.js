@@ -49,7 +49,7 @@ function BudgetTimeDetail() {
     const {id, groupId, listCount} = state
     if (state !== null && groupId !== undefined) {
       selBudgetTimeDetailInfo(id, groupId).then(response => {
-        if(response != null) setTimeBudgetDetailDataState(response)
+        setTimeBudgetDetailDataState(response)
       })
       setSaveType('update')
     } else {
@@ -71,7 +71,7 @@ function BudgetTimeDetail() {
       groupName:e.target.value
     })
   }
-  const onSaveBudgetTimes = (e) => {
+  const onSaveBudgetTimes = () => {
     setCheckIndex(null)
 
     let isTimePerOver = false;
@@ -93,16 +93,20 @@ function BudgetTimeDetail() {
       }).includes(true)
     }
 
-
     if(isTimePerOver) {
-      const a = toast.warning('[해당 요일]의 \n시간별 예산 설정을 확인해주세요.');
-    }else if(isTimePerZero || !isTimeNull){
+      toast.warning('[해당 요일]의 \n시간별 예산 설정을 확인해주세요.')
+    }else if(isTimePerZero){
+      toast.warning('값이 입력되지 않았습니다. 시간별 예산 설정을 확인해주세요.')
+    }else if(!isTimeNull){
       toast.warning('값이 입력되지 않았습니다. 시간별 예산 설정을 확인해주세요.')
     }else {
       const callbackFun = (response) => {
         if (response[0]) {
-          toast.success(saveType === 'resist' ? "저장 되었습니다." : "수정 되었습니다.",{autoClose:100, delay:0, onClose:()=>
-              navigate('/board/budgetTimeList', {state: {id: timeBudgetDetailDataState.userId}})
+          toast.success(saveType === 'resist' ? "저장 되었습니다." : "수정 되었습니다.",{autoClose:100, delay:0})
+          toast.onChange(payload => {
+            if(payload.status === "removed" && payload.type === toast.TYPE.SUCCESS) {
+              navigate('/board/budgetTimeList', {state: {id: timeBudgetDetailDataState.userId}});
+            }
           })
         }
       }
@@ -110,31 +114,31 @@ function BudgetTimeDetail() {
     }
   }
   return (
-    <>
-      <Board>
-        <form onSubmit={handleSubmit(onSaveBudgetTimes, onError)}>
-          <BoardHeader>시간별 예산 기본 정보</BoardHeader>
-          <RowSpan style={{justifyContent: 'flex-end'}}>
-            <div>
-              <ColTitle>
-                {saveType !== 'resist' &&
-                    <>
-                      <span>최근 수정 : </span>
-                      <span>{dateFormat(timeBudgetDetailDataState !== null
-                          && timeBudgetDetailDataState.lastModifiedAt,
-                          'YYYY.MM.DD HH:mm')}</span>
-                    </>
-                }
-              </ColTitle>
-            </div>
-          </RowSpan>
-          <BoardSearchDetail>
-            <RowSpan box={true}>
-              <ColSpan4 style={{padding: 0}}>
-                <ColTitle style={{padding: 0}}>시간별 예산 그룹명</ColTitle>
+      <>
+        <Board>
+          <form onSubmit={handleSubmit(onSaveBudgetTimes, onError)}>
+            <BoardHeader>시간별 예산 기본 정보</BoardHeader>
+            <RowSpan style={{justifyContent: 'flex-end'}}>
+              <div>
+                <ColTitle>
+                  {saveType !== 'resist' &&
+                      <>
+                        <span>최근 수정 : </span>
+                        <span>{dateFormat(timeBudgetDetailDataState !== null
+                            && timeBudgetDetailDataState.lastModifiedAt,
+                            'YYYY.MM.DD HH:mm')}</span>
+                      </>
+                  }
+                </ColTitle>
+              </div>
+            </RowSpan>
+            <BoardSearchDetail>
+              <RowSpan box={true}>
+                <ColSpan4 style={{padding: 0}}>
+                  <ColTitle style={{padding: 0}}>시간별 예산 그룹명</ColTitle>
                   <Input style={{height: 38, width: 350}}
                          type={'text'}
-                         // readOnly={saveType !== 'resist'}
+                      // readOnly={saveType !== 'resist'}
                          placeholder={'그룹명을 입력해주세요'}
                          {...register("groupName", {
                            required: "그룹명을 입력해주세요",
@@ -143,96 +147,96 @@ function BudgetTimeDetail() {
                          })}
                          value={timeBudgetDetailDataState?.groupName}
                   />
-                {errors.groupName && <Span4><ValidationScript>{errors.groupName?.message}</ValidationScript></Span4>}
-              </ColSpan4>
-            </RowSpan>
-            <RowSpan style={{alignItems: 'center', marginLeft: 20}}>
-              <Span4><strong>예산 소진 설정</strong></Span4>
-              <RelativeDiv>
-                <label>
-                  <input
-                    type={'radio'}
-                    name={'exhaust'}
-                    value={'EQUAL_DISTRIBUTION'}
-                    checked={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType === 'EQUAL_DISTRIBUTION'}
-                    onChange={handleRadioSelect}
-                  />
-                  <span>균등 소진</span>
-                </label>
-                <label>
-                  <input
-                    type={'radio'}
-                    name={'exhaust'}
-                    value={'FAST_EXHAUSTION'}
-                    checked={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType === 'FAST_EXHAUSTION'}
-                    onChange={handleRadioSelect}
-                  />
-                  <span>빠른 소진</span>
-                </label>
-                <label>
-                  <input
-                    type={'radio'}
-                    name={'exhaust'}
-                    value={'DIRECT_SETTINGS'}
-                    checked={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType === 'DIRECT_SETTINGS'}
-                    onChange={handleRadioSelect}
-                  />
-                  <span>직접 설정</span>
-                </label>
-              </RelativeDiv>
-            </RowSpan>
-          </BoardSearchDetail>
-          {['EQUAL_DISTRIBUTION', 'FAST_EXHAUSTION'].includes(timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType) &&
-            <BoardSearchResult>
-              <RowSpan>
-                <div><strong>광고 노출 요일 및 시간 설정</strong></div>
+                  {errors.groupName && <Span4><ValidationScript>{errors.groupName?.message}</ValidationScript></Span4>}
+                </ColSpan4>
               </RowSpan>
-              <RowSpan>
-                <RelativeDiv box={true} column={true}>
-                  <ColSpan4 style={{color: '#ccc', marginBottom: 10, justifyContent: 'space-between'}}>
-                    <div>Drag & Drop으로 원하는 요일 및 시간을 설정하세요.</div>
-                    <div style={{width: 'auto', minHeight: 24}}>
-                      <SelectShape active={true}><span>노출</span></SelectShape>
-                      <SelectShape><span>미노출</span></SelectShape>
-                    </div>
-                  </ColSpan4>
-                  <DragToSelect reset={reset}/>
+              <RowSpan style={{alignItems: 'center', marginLeft: 20}}>
+                <Span4><strong>예산 소진 설정</strong></Span4>
+                <RelativeDiv>
+                  <label>
+                    <input
+                        type={'radio'}
+                        name={'exhaust'}
+                        value={'EQUAL_DISTRIBUTION'}
+                        checked={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType === 'EQUAL_DISTRIBUTION'}
+                        onChange={handleRadioSelect}
+                    />
+                    <span>균등 소진</span>
+                  </label>
+                  <label>
+                    <input
+                        type={'radio'}
+                        name={'exhaust'}
+                        value={'FAST_EXHAUSTION'}
+                        checked={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType === 'FAST_EXHAUSTION'}
+                        onChange={handleRadioSelect}
+                    />
+                    <span>빠른 소진</span>
+                  </label>
+                  <label>
+                    <input
+                        type={'radio'}
+                        name={'exhaust'}
+                        value={'DIRECT_SETTINGS'}
+                        checked={timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType === 'DIRECT_SETTINGS'}
+                        onChange={handleRadioSelect}
+                    />
+                    <span>직접 설정</span>
+                  </label>
                 </RelativeDiv>
               </RowSpan>
-            </BoardSearchResult>
-          }
-          {timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType === 'DIRECT_SETTINGS' &&
-            <BoardSearchResult>
-              <RowSpan>
-                <div><strong>요일 및 시간별 예산 설정</strong></div>
-              </RowSpan>
-              <RowSpan>
-                <RelativeDiv box={true} column={true}>
-                  <ColSpan4 style={{color: '#ccc', marginBottom: 10, justifyContent: 'space-between'}}>
-                    <div style={{minHeight: 24}}>요일 및 시간별 예산을 % 단위로 설정해주세요</div>
-                  </ColSpan4>
-                  <InsertToSelect checkWeek={checkIndex}/>
-                </RelativeDiv>
-              </RowSpan>
-            </BoardSearchResult>
-          }
-          <SubmitContainer>
-            <CancelButton type={'button'} onClick={() => navigate('/board/budgetTimeList', {state: {id: state.id}})}>목록</CancelButton>
-            <DefaultButton type={'submit'}>{saveType !== 'resist' ? '수정' : '저장'}</DefaultButton>
-          </SubmitContainer>
-        </form>
-      </Board>
-      <ToastContainer position="top-center"
-                      autoClose={1500}
-                      hideProgressBar
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                      style={{zIndex: 9999999}}/>
-    </>
+            </BoardSearchDetail>
+            {['EQUAL_DISTRIBUTION', 'FAST_EXHAUSTION'].includes(timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType) &&
+                <BoardSearchResult>
+                  <RowSpan>
+                    <div><strong>광고 노출 요일 및 시간 설정</strong></div>
+                  </RowSpan>
+                  <RowSpan>
+                    <RelativeDiv box={true} column={true}>
+                      <ColSpan4 style={{color: '#ccc', marginBottom: 10, justifyContent: 'space-between'}}>
+                        <div>Drag & Drop으로 원하는 요일 및 시간을 설정하세요.</div>
+                        <div style={{width: 'auto', minHeight: 24}}>
+                          <SelectShape active={true}><span>노출</span></SelectShape>
+                          <SelectShape><span>미노출</span></SelectShape>
+                        </div>
+                      </ColSpan4>
+                      <DragToSelect reset={reset}/>
+                    </RelativeDiv>
+                  </RowSpan>
+                </BoardSearchResult>
+            }
+            {timeBudgetDetailDataState !== null && timeBudgetDetailDataState.exposureTimeType === 'DIRECT_SETTINGS' &&
+                <BoardSearchResult>
+                  <RowSpan>
+                    <div><strong>요일 및 시간별 예산 설정</strong></div>
+                  </RowSpan>
+                  <RowSpan>
+                    <RelativeDiv box={true} column={true}>
+                      <ColSpan4 style={{color: '#ccc', marginBottom: 10, justifyContent: 'space-between'}}>
+                        <div style={{minHeight: 24}}>요일 및 시간별 예산을 % 단위로 설정해주세요</div>
+                      </ColSpan4>
+                      <InsertToSelect checkWeek={checkIndex}/>
+                    </RelativeDiv>
+                  </RowSpan>
+                </BoardSearchResult>
+            }
+            <SubmitContainer>
+              <CancelButton type={'button'} onClick={() => navigate('/board/budgetTimeList', {state: {id: state.id}})}>목록</CancelButton>
+              <DefaultButton type={'submit'}>{saveType !== 'resist' ? '수정' : '저장'}</DefaultButton>
+            </SubmitContainer>
+          </form>
+        </Board>
+        <ToastContainer position="top-center"
+                        autoClose={1500}
+                        hideProgressBar
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        style={{zIndex: 9999999}}/>
+      </>
   )
 }
 

@@ -13,6 +13,7 @@ import {toast, ToastContainer} from "react-toastify";
 import {selChangePassword, selFindUserId} from "../../services/Platform/ManageUserAxios";
 import {ComponentModalFindId, ComponentModalFindPassword} from "../../components/modal";
 import {HorizontalRule} from "../../components/common/Common";
+import 'react-toastify/dist/ReactToastify.css';
 
 export const FindIdResultAtom = atom(findIdResult)
 
