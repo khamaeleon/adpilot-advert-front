@@ -323,8 +323,8 @@ function PaymentManageUser() {
                 <TotalCount><span/>총 <span>{totalInfo}</span> 건의 결제 내역</TotalCount>
               </div>
               <div>
-                <SaveExcelButton>엑셀 저장</SaveExcelButton>
-              </div>
+                {/*<SaveExcelButton>엑셀 저장</SaveExcelButton>*/}
+              </div>ㄴ
             </BoardSearchResultTitle>
             <ReactDataGrid
               licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
