@@ -34,6 +34,7 @@ export function SwitchComponent(props){
   const handleClick = (confirm) => {
     if(confirm){
       eventClick();
+      setSelect(!select)
       if(type === 'publish'){
         cellProps.data.publishYn = cellProps.data.publishYn === 'Y' ? 'N' : 'Y';
       }else{
@@ -46,7 +47,6 @@ export function SwitchComponent(props){
   }
   const showModal = () => {
     const btnSmall = { width: 100, height: 42 }
-    setSelect(!select)
     setModal({
       isShow: true,
       width: 400,
