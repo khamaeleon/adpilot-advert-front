@@ -473,7 +473,7 @@ function DashBoardIndex() {
                 enableColumnAutosize={true}
                 emptyText={'데이터가 없습니다.'}
                 idProperty={'userId'}
-                dataSource={adverStatusData}
+                dataSource={adverStatusData.sort((a,b)=>{if(a.username>b.username){return 1}else{return -1}})}
                 detailsGridCacheKey={'campaignId'}
                 columns={adverListColumn}
                 onDataSourceCacheChange={()=>{gridRef?.current.collapseAllRows()}}
