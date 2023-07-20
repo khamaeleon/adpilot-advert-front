@@ -423,7 +423,7 @@ export function CampaignThree() {
                   {campaignGroupInfo.exposureInventoryType === 'MANUAL' && campaignGroupInfo.allowInventoryIds?.length !== 0 &&
                     <small>{campaignGroupInfo.allowInventoryIds?.length}개 지면 송출 설정</small>
                   }
-                  {errors.inventoryMANUAL && <ValidationScript style={{position: 'unset'}}>{errors.inventoryMANUAL.message}</ValidationScript>}
+                  {errors.inventoryMANUAL && <small><ValidationScript style={{position: 'unset'}}>{errors.inventoryMANUAL.message}</ValidationScript></small>}
                 </ColSpan2>
               </RelativeDiv>
             </ColSpan4>
