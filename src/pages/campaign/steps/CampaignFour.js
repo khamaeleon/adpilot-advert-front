@@ -847,7 +847,8 @@ export function CampaignFour() {
       let name = campaignBasicInfo.productType !== 'BANNER' ? '_PU_' : '_BA_'
       setCampaignCreative({
         ...campaignCreativeAtom.init,
-        name: creativeType+name+time
+        name: creativeType+name+time,
+        creativeType: campaignBasicInfo.productType
       })
       setValue('name', creativeType+name+time)
     }
@@ -865,10 +866,6 @@ export function CampaignFour() {
     } else {
       selEnumInfo('CREATIVE_TYPE_POP_UNDER').then(response => {
         setCreativeType(response.data)
-        setCampaignCreative({
-          ...campaignCreativeInfo,
-          creativeType: 'POP_UNDER'
-        })
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
