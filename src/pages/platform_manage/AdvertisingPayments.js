@@ -15,7 +15,7 @@ import {
 } from "./entity/Payment";
 import {StatusBtn} from "./styles/common";
 import {TotalCount} from "../../components/table/TableDetail";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import {PaymentCondition} from "../../components/Platform/Condition";
 import {atom, useAtom} from "jotai/index";
 import {dateFormat, decimalFormat} from "../../common/StringUtils";
@@ -402,16 +402,6 @@ function AdvertisingPayments() {
           />
         </BoardTableContainer>
       </Board>
-      <ToastContainer position="top-center"
-                      autoClose={1500}
-                      hideProgressBar
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                      style={{zIndex: 9999999}}/>
     </>
   )
 }

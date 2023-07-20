@@ -1,7 +1,6 @@
 import React from "react";
 import {stepCampaignAtom} from "./entity";
 import {CampaignThree} from "./steps/CampaignThree";
-import {ToastContainer} from "react-toastify";
 import {FormProvider, useForm} from "react-hook-form";
 import {CampaignLookOver} from "./steps/CampaignLookOver";
 import {CampaignOne} from "./steps/CampaignOne";
@@ -29,18 +28,6 @@ export default function CreateCampaign() {
       {stepCampaign?.steps === 4 &&
         <CampaignLookOver/>
       }
-      <ToastContainer
-        position="top-center"
-        autoClose={1000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        style={{zIndex: 9999999}}
-      />
     </FormProvider>
   )
 }

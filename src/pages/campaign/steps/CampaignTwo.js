@@ -33,12 +33,11 @@ import {timeBudgetDetailDataAtom} from "../../settings/entity/BudgetTime";
 import {selBudgetInfo, updateCampaignBudget} from "../../../services/campaign/BudgetAxios";
 import {campaignBudgetInfoAtom} from "../entity/Budget";
 import {useLocation, useNavigate} from "react-router-dom";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import {useResetAtom} from "jotai/utils";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import {decimalFormat, multiAxiosCall, removeStr} from "../../../common/StringUtils";
-import 'react-toastify/dist/ReactToastify.css';
 
 export function CampaignTwo() {
   const setStepCampaign = useSetAtom(stepCampaignAtom)
@@ -516,18 +515,7 @@ export function CampaignTwo() {
         <CancelButton type={'button'} onClick={() => state !== null ? navigate('/board/dashboard') : setStepCampaign({steps: 0})}>{state !== null ? '목록' : '이전'}</CancelButton>
         <SubmitButton type={'submit'}>{state !== null ? '수정' : '다음[2/4]'}</SubmitButton>
       </SubmitContainer>
-      <ToastContainer
-        position="top-center"
-        autoClose={1000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        style={{zIndex: 9999999}}
-      />
+
     </form>
   )
 }

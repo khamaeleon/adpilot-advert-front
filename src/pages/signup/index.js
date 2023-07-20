@@ -1,14 +1,12 @@
 import {Link} from "react-router-dom";
 import React, {useState} from "react";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import Terms from "./Terms";
 import Basic from "./Basic";
 import Done from "./Done";
 import {useAtomValue} from "jotai";
 import {nextStepAtom} from "./entity/Common";
 import {Arrow, ButtonGroup, Logo, SignUpContents, SignUpHeader, Step, StepContainer, Steps} from "./styles";
-import 'react-toastify/dist/ReactToastify.css';
-
 
 function SignUp() {
   const agreeValidation = useAtomValue(nextStepAtom)
@@ -114,18 +112,6 @@ function SignUp() {
           </>
         }
       </SignUpContents>
-      <ToastContainer
-        position="top-center"
-        autoClose={1500}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        style={{zIndex: 9999999}}
-      />
     </div>
   )
 }

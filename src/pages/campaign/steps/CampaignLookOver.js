@@ -25,10 +25,9 @@ import {
 } from "../../../services/campaign/ConfirmAxios";
 import {tokenResultAtom} from "../../login/entity/Common";
 import {selEnumInfo} from "../../../services/campaign/InfoAxios";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import {campaignBasicInfoAtom} from "../entity/Info";
 import {useResetAtom} from "jotai/utils";
-import 'react-toastify/dist/ReactToastify.css';
 
 export function CampaignLookOver() {
   const {state} = useLocation()
@@ -313,18 +312,7 @@ export function CampaignLookOver() {
         {tokenUserInfo.role !== 'NORMAL' && state !== null &&
           <SubmitButton type={'button'} onClick={()=> onSubmit()}>저장</SubmitButton>}
       </SubmitContainer>
-      <ToastContainer
-        position="top-center"
-        autoClose={1000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        style={{zIndex: 9999999}}
-      />
+
     </>
   )
 }

@@ -14,7 +14,7 @@ import {
 import React, {useEffect, useState} from "react";
 import {useAtom, useAtomValue} from "jotai";
 import Table from "../../components/table";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
 import {selPixelAdverInfoList, selPixelInfoList, updatePixelInfo} from "../../services/header/ManagePixelAxios";
@@ -347,16 +347,7 @@ function PixelDetail() {
           {/*  <DefaultButton>저장</DefaultButton>*/}
           {/*</SubmitContainer>*/}
       </Board>
-      <ToastContainer position="top-center"
-                      autoClose={1500}
-                      hideProgressBar
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                      style={{zIndex: 9999999}}/>
+
     </>
   )
 }

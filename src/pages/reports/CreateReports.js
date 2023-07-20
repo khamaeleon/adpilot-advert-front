@@ -19,7 +19,7 @@ import {VerticalRule} from "../../components/common/Common";
 import {Row} from "../campaign/styles/common";
 import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
 import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
 import {createCustomReportsAxios, retrieveCustomReportsList} from "../../services/reports/ReportsAxios";
 import {tokenResultAtom} from "../login/entity/Common";
@@ -497,16 +497,7 @@ export default function CreateReports() {
       <SubmitContainer>
         <SubmitButton type={'button'} onClick={handleCreateReports}>보고서 생성</SubmitButton>
       </SubmitContainer>
-      <ToastContainer position="top-center"
-                      autoClose={1500}
-                      hideProgressBar
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                      style={{zIndex: 9999999}}/>
+
     </>
   )
 }

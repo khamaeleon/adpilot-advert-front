@@ -28,7 +28,7 @@ function SettingChangeModal(props) {
   const setModal = useSetAtom(modalController)
   const setEventBudgetDetailDataState = useSetAtom(eventBudgetDetailDataAtom)
   const setEventUnitPriceDetailDataState = useSetAtom(eventUnitPriceDetailDataAtom)
-  const [calculatePercent, setCalculatePercent] = useState(100)
+  const [calculatePercent, setCalculatePercent] = useState(-1)
   const {state} = useLocation()
   const [dataState, setDataState] = useState(saveType !== 'create' ? data : {
     audience: '',
@@ -72,13 +72,18 @@ function SettingChangeModal(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[dataState])
   const sumValue = () => {
-    let calc = parseInt(dataState.shopperMatching !== '' ? dataState.shopperMatching : 0)+
-      parseInt(dataState.cartRecommendation !== '' ? dataState.cartRecommendation : 0)+
-      parseInt(dataState.productRecommendation !== '' ? dataState.productRecommendation : 0)+
-      parseInt(dataState.userMatching !== '' ? dataState.userMatching : 0)+
-      parseInt(dataState.userOptimization !== '' ? dataState.userOptimization : 0)+
-      parseInt(dataState.audience !== '' ? dataState.audience : 0)
-      setCalculatePercent(100 - calc)
+    if(dataState.shopperMatching !== '' &&
+    dataState.cartRecommendation !== '' &&
+    dataState.productRecommendation !== '' &&
+    dataState.userMatching !== '' &&
+    dataState.userOptimization !== '' &&
+    dataState.audience !== ''){
+
+    let calc = parseInt(dataState.shopperMatching) + parseInt(dataState.cartRecommendation) +
+      parseInt(dataState.productRecommendation) + parseInt(dataState.userMatching) +
+      parseInt(dataState.userOptimization) + parseInt(dataState.audience)
+      setCalculatePercent(calc)
+    }
   }
   /**
    * 쇼퍼 맞춤
@@ -193,7 +198,7 @@ function SettingChangeModal(props) {
   }
 
   const handleBudgetEventSave = () => {
-    if(calculatePercent === 0){
+    if(calculatePercent === 100){
       if (saveType === 'create') {
         resistBudgetEvent({...dataState, userId: state.id}).then(response => {
           if (response) {
@@ -376,7 +381,7 @@ function SettingChangeModal(props) {
           {label === 'pct' &&
             <RowSpan validation>
               <ColSpan4>
-                  {(100 > calculatePercent && calculatePercent != 0) && <ValidationScript style={{justifyContent: 'flex-end'}}>이벤트 비율을 100%로 설정해주세요.</ValidationScript>}
+                {calculatePercent >= 0 && 100 !== calculatePercent && <ValidationScript style={{justifyContent: 'flex-end'}}>이벤트 비율을 100%로 설정해주세요.</ValidationScript>}
               </ColSpan4>
             </RowSpan>
           }

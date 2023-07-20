@@ -10,7 +10,6 @@ import {
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {ToastContainer} from "react-toastify";
 import {adverTimeBudgetColumns, budgetTimeDataAtom} from "./entity/BudgetTime";
 import {selBudgetTimeAdverList} from "../../services/settings/BudgetTimeAxios";
 
@@ -64,16 +63,7 @@ function BudgetTime() {
           }
         </BoardTableContainer>
       </Board>
-      <ToastContainer position="top-center"
-                      autoClose={1500}
-                      hideProgressBar
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                      style={{zIndex: 9999999}}/>
+
     </>
   )
 }

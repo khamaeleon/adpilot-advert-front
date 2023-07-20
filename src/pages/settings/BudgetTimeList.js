@@ -13,7 +13,6 @@ import {
 import React, {useEffect} from "react";
 import {useAtom} from "jotai";
 import Table from "../../components/table";
-import {ToastContainer} from "react-toastify";
 import {dateFormat} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
 import {budgetTimeDetailColumns, budgetTimeListAtom} from "./entity/BudgetTime";
@@ -86,16 +85,7 @@ function EventTimeList() {
           <CancelButton onClick={()=>navigate('/board/budgetTime')}>목록</CancelButton>
         </SubmitContainer>
       </Board>
-      <ToastContainer position="top-center"
-                      autoClose={1500}
-                      hideProgressBar
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                      style={{zIndex: 9999999}}/>
+
     </>
   )
 }

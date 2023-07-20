@@ -43,7 +43,7 @@ export function ModalHeader (props) {
     <ModalHeaderContainer style={props.style}>
       <LabelInline>
         <span>{props.title}</span>
-        {/*<Close onClick={modalClose}/>*/}
+        {!props.closeButton && <Close onClick={modalClose}/>}
       </LabelInline>
     </ModalHeaderContainer>
   )

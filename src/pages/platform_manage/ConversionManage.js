@@ -7,7 +7,6 @@ import {
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
-import {ToastContainer} from "react-toastify";
 import {PlatformCondition} from "../../components/Platform/Condition";
 import {selConversionDetailList, selConversionList} from "../../services/conversion/ConversionAxios";
 import {searchConditionAtom} from "./entity/Common";
@@ -146,16 +145,6 @@ function ConversionManage() {
           }
         </BoardTableContainer>
       </Board>
-      <ToastContainer position="top-center"
-                      autoClose={1500}
-                      hideProgressBar
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                      style={{zIndex: 9999999}}/>
     </main>
   )
 }

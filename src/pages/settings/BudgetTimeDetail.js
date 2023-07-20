@@ -15,7 +15,7 @@ import {
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import {useAtom} from "jotai";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import {dateFormat, multiAxiosCall} from "../../common/StringUtils";
 import {useLocation, useNavigate} from "react-router-dom";
 import {budgetTimes, budgetTimesDirect, timeBudgetDetailDataAtom} from "./entity/BudgetTime";
@@ -89,21 +89,20 @@ function BudgetTimeDetail() {
       })
       isTimePerZero = (weekSumArr.reduce((a,b)=>{return a+b;}) === 0);
     }else {
-      isTimeNull = timeBudgetDetailDataState.allowTimes.map((rowData)=>{
+      isTimeNull = !timeBudgetDetailDataState.allowTimes.map((rowData)=>{
         return rowData.filter(data=> data===true).length !==0
       }).includes(true)
     }
-
     if(isTimePerOver) {
       toast.warning('[해당 요일]의 \n시간별 예산 설정을 확인해주세요.')
     }else if(isTimePerZero){
       toast.warning('값이 입력되지 않았습니다. 시간별 예산 설정을 확인해주세요.')
-    }else if(!isTimeNull){
+    }else if(isTimeNull){
       toast.warning('값이 입력되지 않았습니다. 시간별 예산 설정을 확인해주세요.')
     }else {
       const callbackFun = (response) => {
         if (response[0]) {
-          toast.success(saveType === 'resist' ? "저장 되었습니다." : "수정 되었습니다.",{autoClose:100, delay:0})
+          toast.success(saveType === 'resist' ? "저장 되었습니다." : "수정 되었습니다.")
           toast.onChange(payload => {
             if(payload.status === "removed" && payload.type === toast.TYPE.SUCCESS) {
               navigate('/board/budgetTimeList', {state: {id: timeBudgetDetailDataState.userId}});
@@ -239,16 +238,6 @@ function BudgetTimeDetail() {
             </SubmitContainer>
           </form>
         </Board>
-        <ToastContainer position="top-center"
-                        autoClose={1500}
-                        hideProgressBar
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        style={{zIndex: 9999999}}/>
       </>
   )
 }

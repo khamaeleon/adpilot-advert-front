@@ -9,11 +9,10 @@ import {atom, useAtom, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {useForm} from "react-hook-form";
 import {RowSpan, TextMainColor, ValidationScript} from "../../assets/GlobalStyles";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import {selChangePassword, selFindUserId} from "../../services/Platform/ManageUserAxios";
 import {ComponentModalFindId, ComponentModalFindPassword} from "../../components/modal";
 import {HorizontalRule} from "../../components/common/Common";
-import 'react-toastify/dist/ReactToastify.css';
 
 export const FindIdResultAtom = atom(findIdResult)
 
@@ -487,16 +486,7 @@ function Login(props) {
           }
         </div>
       </LoginContainer>
-      <ToastContainer position="top-center"
-                      autoClose={1500}
-                      hideProgressBar
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                      style={{zIndex: 9999999}}/>
+
     </>
   )
 }

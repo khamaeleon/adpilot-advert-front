@@ -22,7 +22,7 @@ import Select from "react-select";
 import {ChromePicker} from 'react-color'
 import {FrameEditor} from "./Frame/FrameEditor";
 import {confirmAlert} from "react-confirm-alert";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import {fontTypes} from "./entity/bannerCreator";
 import {
   BannerItemContainer,
@@ -918,7 +918,6 @@ export function BannerCreative() {
           </>
           }
         </BoardSearchResult>
-        <ToastContainer/>
       </Board>
       <ButtonGroup>
         <SignUpVerify type={"submit"}>{isIframeKey !== null ? '수정' : '저장'}</SignUpVerify>

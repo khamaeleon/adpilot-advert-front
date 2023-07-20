@@ -48,13 +48,12 @@ import {
   uploadLogoImages,
   uploadNativeImages
 } from "../../../services/campaign/CreativeAxios";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useResetAtom} from "jotai/utils";
 import {dateFormat, multiAxiosCall, toDay} from "../../../common/StringUtils";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import 'react-toastify/dist/ReactToastify.css';
 
 const RegistryBannerItem = (props) => {
   const {size, onImageError, label} = props;
@@ -1072,18 +1071,6 @@ export function CampaignFour() {
         <CancelButton type={'button'} onClick={() => state !== null ? window.history.back() : setStepCampaign({steps: 2})}>{state !== null ? '목록' : '이전'}</CancelButton>
         <SubmitButton type={'submit'}>{state !== null ? '수정' : '저장'}</SubmitButton>
       </SubmitContainer>
-      <ToastContainer
-        position="top-center"
-        autoClose={800}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        style={{zIndex: 9999999}}
-      />
     </form>
   )
 }

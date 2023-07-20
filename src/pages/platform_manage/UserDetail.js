@@ -29,7 +29,7 @@ import {
   updateMyPageUser,
   updateUser
 } from "../../services/Platform/ManageUserAxios";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import Select from "react-select";
 import ImageUploading from "react-images-uploading";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
@@ -792,17 +792,7 @@ function PlatformUserDetail() {
           <SubmitButton type={"submit"}>저장</SubmitButton>
         </SubmitContainer>
       </form>
-      <ToastContainer position="top-center"
-                      autoClose={1500}
-                      hideProgressBar
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                      limit={1}
-                      style={{zIndex: 9999999}}/>
+
     </>
   )
 }

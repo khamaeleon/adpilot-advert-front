@@ -14,6 +14,8 @@ import {NotFound} from "./pages/404";
 import "react-datepicker/dist/react-datepicker.css";
 import "../src/assets/DatePicker.css"
 import {initDB} from "react-indexed-db";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 export const DBConfig = {
   name: 'FrameDB',
   version: 1,
@@ -60,6 +62,16 @@ function App() {
         </BrowserRouter>
       </ThemeProvider>
       </AtomsDevtools>
+      <ToastContainer position="top-center"
+                      autoClose={800}
+                      hideProgressBar
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss={true}
+                      draggable
+                      pauseOnHover={false}
+                      style={{zIndex: 9999999}}/>
     </div>
   );
 }

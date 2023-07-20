@@ -21,13 +21,11 @@ import React, {useEffect} from "react";
 import {useForm} from "react-hook-form";
 import {useAtom} from "jotai";
 import {selAdminInfo, updateAdmin} from "../../services/Platform/ManageAdminAxios";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 
 import {PwChange} from "./UserDetail";
 import {modalController} from "../../store";
 import {adminInfoAtom} from "./entity/Admin";
-import 'react-toastify/dist/ReactToastify.css';
-
 
 function PlatformAdminDetail() {
   const [, setModal] = useAtom(modalController)
@@ -168,16 +166,6 @@ function PlatformAdminDetail() {
             <SubmitButton type={"submit"}>저장</SubmitButton>
           </SubmitContainer>
         </BoardContainer>
-        <ToastContainer position="top-center"
-                        autoClose={1500}
-                        hideProgressBar
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        style={{zIndex: 9999999}}/>
       </form>
     </main>
   )

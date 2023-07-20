@@ -53,7 +53,7 @@ export function SwitchComponent(props){
       modalComponent: () => {
         return (
           <div>
-            {type !== 'publish' && <ModalHeader title={'연동 상태 변경'}/>}
+            {type !== 'publish' && <ModalHeader title={'연동 상태 변경'} closeButton/>}
             <ModalBody>
               <p style={{fontSize: 16, paddingTop: 10}}>
                 {type !== 'publish' ? (!select ? '연동을 사용 하시겠습니까?'
