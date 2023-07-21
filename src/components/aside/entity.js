@@ -1,4 +1,5 @@
 import {atomWithStorage} from "jotai/utils";
+import {atom} from "jotai/index";
 
 export const selectedIcon = {
   dashboard: "/assets/images/aside/gmd_menu_01_on@3x.png",
@@ -172,4 +173,4 @@ export const widenStyle = {
   },
 }
 
-export const reportsInfoAtom = atomWithStorage('reportsInfo', {id:null, groupBy: null})
+export const reportsInfoAtom = atom({id:null, groupBy: null})
