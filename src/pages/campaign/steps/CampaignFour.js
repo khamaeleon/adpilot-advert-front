@@ -417,23 +417,6 @@ function CampaignFourBanner(props) {
           </ColSpan2>
         </RowBody>
       </RowSpan>
-      <RowSpan column={true}>
-        <Row>
-          <Span4>크리에이티브명</Span4>
-          <input
-            type={'text'}
-            maxLength={25}
-            name={'name'}
-            value={campaignCreativeInfo?.name}
-            style={{width: '100%'}}
-            {...register('name', {
-              required: '크리에이티브명을 입력해주세요',
-              onChange: (e)=>handleChangeInputs(e)
-            })}
-          />
-        </Row>
-        <Row><Span4></Span4>{errors?.name && <ValidationScript style={{position:'unset'}}>{errors.name.message}</ValidationScript>}</Row>
-      </RowSpan>
     </>
   )
 }
@@ -764,23 +747,6 @@ function CampaignFourNative(props) {
         </RowSpan>
       </RowSpan>
       <PreviewNativeBanner />
-      <RowSpan column={true}>
-        <Row>
-          <Span4>크리에이티브명</Span4>
-          <input
-            type={'text'}
-            maxLength={25}
-            name={'name'}
-            value={campaignCreativeInfo?.name}
-            style={{width: '100%'}}
-            {...register('name', {
-              required: '크리에이티브명을 입력해주세요',
-              onChange: (e)=>handleChangeInputs(e)
-            })}
-          />
-        </Row>
-        <Row><Span4></Span4>{errors?.name && <ValidationScript style={{position:'unset'}}>{errors.name.message}</ValidationScript>}</Row>
-      </RowSpan>
     </>
   )
 }
@@ -1064,7 +1030,23 @@ export function CampaignFour() {
               {campaignCreativeInfo.creativeType === 'NATIVE' && ((resistBool && campaignBasicInfo.productType==='BANNER') || (state !== null && state.productType==='BANNER')) &&
                 <CampaignFourNative control={control} errors={errors} setError={setError} register={register} onImageError={onImageError}/>
               }
-
+              <RowSpan column={true}>
+                <Row>
+                  <Span4>크리에이티브명</Span4>
+                  <input
+                      type={'text'}
+                      maxLength={25}
+                      name={'name'}
+                      value={campaignCreativeInfo?.name}
+                      style={{width: '100%'}}
+                      {...register('name', {
+                        required: '크리에이티브명을 입력해주세요',
+                        onChange: (e)=>handleChangeInputs(e)
+                      })}
+                  />
+                </Row>
+                <Row><Span4></Span4>{errors?.name && <ValidationScript style={{position:'unset'}}>{errors.name.message}</ValidationScript>}</Row>
+              </RowSpan>
             </BoardSearchResult>
           </Board>
         </>

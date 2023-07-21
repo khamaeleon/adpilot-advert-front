@@ -68,7 +68,7 @@ function Layout() {
                     navigate('/');
                   }
                 }
-              }).catch(navigate('/'));
+              })
             }
           }
         });
