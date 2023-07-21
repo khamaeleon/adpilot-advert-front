@@ -15,7 +15,7 @@ import {
   RangePicker,
   RowSpan,
   Span1,
-  selectStyle
+  selectStyle, ColSpan4, ColSpan2
 } from "../../assets/GlobalStyles";
 import Select from "react-select";
 import ko from "date-fns/locale/ko";
@@ -524,90 +524,94 @@ export default function CustomReports() {
   return(
     <Board>
       <BoardHeader>{`${tokenResult.role !== 'NORMAL' ? reportSettingInfo.adverName !== null ? reportSettingInfo.adverName: '어드민' : tokenResult.name} 보고서`}</BoardHeader>
-      <BoardSearchDetail>
-        <RowSpan box={true} style={{width: '100%',justifyContent: 'flex-start'}}>
-          <div>
-            <RowSpan style={{marginTop:0}}>
-              <ColSpan1 style={{borderBottom: '1px solid #ddd'}}>
-                <div style={{padding: '10px 0'}}>{`${tokenResult.role !== 'NORMAL' ? reportSettingInfo.adverName !== null ? reportSettingInfo.adverName: '어드민' : tokenResult.name}_${reportSettingInfo.reportName}`}</div>
-                <DeleteButton onClick={handleDeleteReport}/>
-              </ColSpan1>
-            </RowSpan>
-            <RowSpan>
-              <ColSpan0>
-                <Span1>광고 상품</Span1>
-                <Select options={productType}
-                        defaultValue={productType[0]}
-                        value={productType.find(item => item.value === searchCondition.productType)}
-                        onChange={handleChangeProduct}
-                        width={130}
-                        styles={selectStyle}
-                        isSearchable={false}
-                />
-                {/*<Select styles={selectStyle} defaultValue={productType[0]} options={productType} onChange={handleChangeProduct} value={productType.find(item => item.value === searchCondition.productType)}/>*/}
-              </ColSpan0>
-              <ColSpan0>
-                <ColTitle><Span1>디바이스</Span1></ColTitle>
-                <Select options={deviceType}
-                        defaultValue={deviceType[0]}
-                        value={deviceType.find(item => item.value === searchCondition.deviceType)}
-                        onChange={handleChangeDevice}
-                        width={130}
-                        styles={selectStyle}
-                        isSearchable={false}
-                />
-                {/*<div style={{width: '100px'}}>*/}
-                {/*  <Select styles={selectStyle} defaultValue={deviceType[0]} options={deviceType} onChange={handleChangeDevice} value={deviceType.find(item => item.value === searchCondition.deviceType)}/>*/}
-                {/*</div>*/}
-              </ColSpan0>
-              <ColSpan0>
-                <ColTitle><Span1>기간</Span1></ColTitle>
-                <div>
-                  <DateContainer>
-                    <CalendarBox>
-                      <CalendarIcon/>
-                    </CalendarBox>
-                    <CustomDatePicker
-                      selectsRange={true}
-                      startDate={startDate}
-                      endDate={endDate}
-                      onChange={(date) => handleChangeDate(date)}
-                      dateFormat="yyyy-MM-dd"
-                      maxDate={new Date()}
-                      locale={ko}
-                      isClearable={false}
-                      monthsShown={2}
-                      showPreviousMonths={showPrevious}
-                      openToDate={endDate}
-                    />
-                  </DateContainer>
-                </div>
-                <div>
-                  <RangePicker style={{backgroundColor: '#fff', width: '100%', justifyContent: 'space-around'}}>
-                    <div onClick={() => handleRangeDate('thisMonth')} style={dateActive==='thisMonth'?{color:'#f5811f'}:null}>이번달</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastMonth')} style={dateActive==='lastMonth'?{color:'#f5811f'}:null}>지난달</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('today')} style={dateActive==='today'?{color:'#f5811f'}:null}>오늘</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastDay')} style={dateActive==='lastDay'?{color:'#f5811f'}:null}>어제</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastWeekDay')} style={dateActive==='lastWeekDay'?{color:'#f5811f'}:null}>지난7일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastThirtyDay')} style={dateActive==='lastThirtyDay'?{color:'#f5811f'}:null}>지난30일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastNinetyDay')} style={dateActive==='lastNinetyDay'?{color:'#f5811f'}:null}>지난90일</div>
-                  </RangePicker>
-                </div>
-              </ColSpan0>
-            </RowSpan>
-            {/*<ValidationGroup>*/}
-            {/*  <DefaultButton onClick={handleSearchReports}>검색</DefaultButton>*/}
-            {/*</ValidationGroup>*/}
+      <RowSpan style={{justifyContent: 'flex-start'}}>
+        <ColSpan1 style={{borderBottom: '1px solid #ddd'}}>
+          <div style={{padding: '10px 0'}}>{`${tokenResult.role !== 'NORMAL' ? reportSettingInfo.adverName !== null ? reportSettingInfo.adverName: '어드민' : tokenResult.name}_${reportSettingInfo.reportName}`}</div>
+          <DeleteButton onClick={handleDeleteReport}/>
+        </ColSpan1>
+      </RowSpan>
+      <RowSpan style={{marginTop: 0}}>
+        <BoardSearchDetail>
+          <div style={{marginRight: 10}}>
+              <RowSpan style={{justifyContent: 'flex-start'}}>
+                <ColSpan4>
+                <ColSpan0>
+                  <Span1>광고 상품</Span1>
+                  <Select options={productType}
+                          defaultValue={productType[0]}
+                          value={productType.find(item => item.value === searchCondition.productType)}
+                          onChange={handleChangeProduct}
+                          width={130}
+                          styles={selectStyle}
+                          isSearchable={false}
+                  />
+                  {/*<Select styles={selectStyle} defaultValue={productType[0]} options={productType} onChange={handleChangeProduct} value={productType.find(item => item.value === searchCondition.productType)}/>*/}
+                </ColSpan0>
+                <ColSpan0>
+                  <ColTitle><Span1>디바이스</Span1></ColTitle>
+                  <Select options={deviceType}
+                          defaultValue={deviceType[0]}
+                          value={deviceType.find(item => item.value === searchCondition.deviceType)}
+                          onChange={handleChangeDevice}
+                          width={130}
+                          styles={selectStyle}
+                          isSearchable={false}
+                  />
+                  {/*<div style={{width: '100px'}}>*/}
+                  {/*  <Select styles={selectStyle} defaultValue={deviceType[0]} options={deviceType} onChange={handleChangeDevice} value={deviceType.find(item => item.value === searchCondition.deviceType)}/>*/}
+                  {/*</div>*/}
+                </ColSpan0>
+                </ColSpan4>
+              </RowSpan>
+            <RowSpan style={{justifyContent: 'flex-start'}}>
+                <ColSpan4>
+                  {/*<ColTitle><Span1>기간</Span1></ColTitle>*/}
+                    <DateContainer>
+                      <CalendarBox>
+                        <CalendarIcon/>
+                      </CalendarBox>
+                      <CustomDatePicker
+                        selectsRange={true}
+                        startDate={startDate}
+                        endDate={endDate}
+                        onChange={(date) => handleChangeDate(date)}
+                        dateFormat="yyyy-MM-dd"
+                        maxDate={new Date()}
+                        locale={ko}
+                        isClearable={false}
+                        monthsShown={2}
+                        showPreviousMonths={showPrevious}
+                        openToDate={endDate}
+                      />
+                    </DateContainer>
+                  <ColSpan2>
+                    <div>
+                      <RangePicker>
+                        <div onClick={() => handleRangeDate('thisMonth')} style={dateActive==='thisMonth'?{color:'#f5811f'}:null}>이번달</div>
+                        <HorizontalRule style={{margin: "0 10px"}}/>
+                        <div onClick={() => handleRangeDate('lastMonth')} style={dateActive==='lastMonth'?{color:'#f5811f'}:null}>지난달</div>
+                        <HorizontalRule style={{margin: "0 10px"}}/>
+                        <div onClick={() => handleRangeDate('today')} style={dateActive==='today'?{color:'#f5811f'}:null}>오늘</div>
+                        <HorizontalRule style={{margin: "0 10px"}}/>
+                        <div onClick={() => handleRangeDate('lastDay')} style={dateActive==='lastDay'?{color:'#f5811f'}:null}>어제</div>
+                        <HorizontalRule style={{margin: "0 10px"}}/>
+                        <div onClick={() => handleRangeDate('lastWeekDay')} style={dateActive==='lastWeekDay'?{color:'#f5811f'}:null}>지난7일</div>
+                        <HorizontalRule style={{margin: "0 10px"}}/>
+                        <div onClick={() => handleRangeDate('lastThirtyDay')} style={dateActive==='lastThirtyDay'?{color:'#f5811f'}:null}>지난30일</div>
+                        <HorizontalRule style={{margin: "0 10px"}}/>
+                        <div onClick={() => handleRangeDate('lastNinetyDay')} style={dateActive==='lastNinetyDay'?{color:'#f5811f'}:null}>지난90일</div>
+                      </RangePicker>
+                    </div>
+                  </ColSpan2>
+                </ColSpan4>
+              </RowSpan>
+              {/*<ValidationGroup>*/}
+              {/*  <DefaultButton onClick={handleSearchReports}>검색</DefaultButton>*/}
+              {/*</ValidationGroup>*/}
           </div>
           <GraySearchButton onClick={handleSearchReports}>적용</GraySearchButton>
-        </RowSpan>
-      </BoardSearchDetail>
+        </BoardSearchDetail>
+      </RowSpan>
       <BoardSearchResult>
         <Table
           style={{fontSize: 13, minHeight: campaignData.length !== 0 ? 550 : 300}}

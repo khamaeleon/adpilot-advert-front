@@ -904,7 +904,12 @@ export function CampaignFour() {
         toast.success("수정되었습니다.",{autoClose:100, delay:0})
         toast.onChange(payload => {
           if (payload.status === "removed" && payload.type === toast.TYPE.SUCCESS) {
-            navigate('/board/dashboard')
+
+            if(state.backLink){
+              navigate('/board/manageCreative')
+            } else {
+              navigate('/board/dashboard')
+            }
             resetInfo()
           }
         })

@@ -19,15 +19,15 @@ export const BorderSpan = styled.div`
 
 export const CampaignTypeItem = styled.div`
   padding: 30px 80px 20px;
-  background-color: #fff;
+  background-color: ${(props) => props.readOnly ? "" : "#fff"};
   border-radius: 8px;
-  border: 2px solid ${(props) => props.active ? "#f5811f" : "#fff"};
+  border: 2px solid ${(props) => props.active ? "#f5811f" : (props.readOnly ?"f9fafb":"#fff")};
   box-shadow: 0 2px 3px 0 rgba(10, 10, 10, 0.2);
   font-size: 12px;
   white-space: break-spaces;
   &:hover {
-    border: 2px solid #f5811f;
-    cursor: pointer;
+    border: ${(props) => props.readOnly ? "" : "2px solid #f5811f" };
+    cursor: ${(props) => props.readOnly ? "" : "pointer" };
   }
   & > p {
     font-size: 13px;
@@ -40,15 +40,15 @@ export const CampaignTypeItem = styled.div`
 
 export const CampaignTypeItem2 = styled.div`
   padding: 15px 20px;
-  background-color: #fff;
+  background-color: ${(props) => props.readOnly ? "" : "#fff"};
   border-radius: 8px;
-  border: 2px solid ${(props) => props.active ? "#f5811f" : "#fff"};
+  border: 2px solid ${(props) => props.active ? "#f5811f" : (props.readOnly ?"f9fafb":"#fff")};
   box-shadow: 0 2px 3px 0 rgba(10, 10, 10, 0.2);
   font-size: 12px;
   white-space: break-spaces;
   &:hover {
-    border: 2px solid #f5811f;
-    cursor: pointer;
+    border: ${(props) => props.readOnly ? "" : "2px solid #f5811f" };
+    cursor: ${(props) => props.readOnly ? "" : "pointer" };
   }
   & .tit {
     font-size: 13px;
