@@ -21,10 +21,12 @@ export const campaignColumns = [
   {
     name: 'adverName',
     header: '광고주명',
+    textAlign: 'center'
   },
   {
     name: 'username',
     header: '광고주아이디',
+    textAlign: 'center'
   },
   {
     name: 'campaignId',
@@ -43,6 +45,11 @@ export const campaignColumns = [
   {
     name: 'revisionType',
     header: '변경 항목',
+    render: (props) =>{
+      return (
+        <div style={{textAlign:'center'}}>{props.value === 'ADD' ? '추가' : '수정'}</div>
+      )
+    }
   },
   {
     name: 'revisionDateTime',
