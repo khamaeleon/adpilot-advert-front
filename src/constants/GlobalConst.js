@@ -18,4 +18,5 @@ export const ADVER_SERVER = adver
 /* 사용자: nate9988 , P@ssw0rd!@#4 */
 
 export const defaultImage = "";
+export const IMAGE_SERVER = "http://192.168.100.135:9000/temp";
 

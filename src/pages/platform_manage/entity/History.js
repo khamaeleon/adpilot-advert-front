@@ -78,7 +78,6 @@ export const budgetPriceColumns = [
     name: 'groupName',
     header: '이벤트 단가 그룹명',
     render: ({value, cellProps}) => {
-      console.log(cellProps)
       return (
         <Link to={'/board/historyPriceDetail'} state={cellProps.data.revisionId}>{value}</Link>
       )
@@ -165,7 +164,7 @@ export const searchConditionData = {
   searchEndDate : null,
   sortType : null,
   searchKeywordType : 'DEFAULT',
-  searchKeyword : null
+  searchKeyword : ''
 }
 
 export function HistorySearchCondition (props) {

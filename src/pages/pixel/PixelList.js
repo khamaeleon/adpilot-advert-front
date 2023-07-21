@@ -74,7 +74,6 @@ export function PixelModal(props) {
         isShow: true,
         width: 800,
         modalComponent: () => {
-          console.log(data)
           return (
             <PixelAdd data={data} title={title} setPixelList={setPixelList}/>
           )
@@ -385,7 +384,7 @@ function PixelList() {
   const handleFetchDetailData = useCallback(async (props) => {
     if(tokenResult.role !== 'NORMAL') {
       let detailPixelData = await selAdminPixelDetailList(props.userId)
-      console.log(detailPixelData)
+
       detailPixelData.map((item,key) => {
         detailPixelData[key]['mainCategoryLabel'] = topLevelCategoryList.find(category => category.value === item.mainCategoryCode).label
         return null
@@ -393,7 +392,7 @@ function PixelList() {
       return detailPixelData
     } else {
       let detailPixelData = await selAdverPixelList(tokenResult.id)
-      console.log(detailPixelData)
+
       detailPixelData.map((item,key) => {
         detailPixelData[key]['mainCategoryLabel'] = topLevelCategoryList.find(category => category.value === item.mainCategoryCode).label
         return null

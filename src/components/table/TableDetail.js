@@ -62,8 +62,7 @@ function TableDetail (props) {
    * @param data
    * @returns {JSX.Element}
    */
-  const renderContactsGrid = useCallback(({data, dataSource,rowId,remoteRowIndex}) => {
-    console.log(data, dataSource,rowId,remoteRowIndex)
+  const renderContactsGrid = useCallback(({data}) => {
     return (
       <ReactDataGrid
         handle={setGridDetailRef}
