@@ -61,10 +61,11 @@ adverAxios.interceptors.response.use(
         });
       });
       if (!isTokenRefreshing ) {
-        isTokenRefreshing = true;
+
         await refresh().then(response =>{
           const {data,responseCode} =response
           if (responseCode.statusCode === 200) {
+            isTokenRefreshing = true;
               store.set(tokenResultAtom, {
                 id: data.id,
                 username: data.username,
@@ -79,6 +80,7 @@ adverAxios.interceptors.response.use(
               // eslint-disable-next-line no-restricted-globals
               location.replace('/')
           } else {
+            isTokenRefreshing = false;
             return Promise.reject(error)
           }
         })

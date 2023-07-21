@@ -159,7 +159,7 @@ function WriteForm(props) {
                 :
                 <RowSpan>
                   <ColSpan4>
-                    <Span4>문의 형식</Span4>
+                    <Span4>문의 구분</Span4>
                     <RelativeDiv>
                       <Select styles={selectStyle}
                               width={150}

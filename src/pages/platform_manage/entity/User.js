@@ -33,6 +33,7 @@ export const selectAccountUseInfo = [
  * @type {[{label: string, value: string, key: string},{label: string, value: string, key: string},{label: string, value: string, key: string},{label: string, value: string, key: string},{label: string, value: string, key: string}]}
  */
 export const selectKeywordType = [
+  {key:"0",value: "DEFAULT",label: "전체"},
   {key:"1",value:"ADVER_NAME",label:"광고주명"},
   {key:"2",value:"USERNAME",label:"아이디"},
   {key:"3",value:"COMPANY_NAME",label:"상호명"},
@@ -50,7 +51,7 @@ export const searchAccountInfo = {
   adverType: null,
   hostType: null,
   accountStateType: null,
-  searchType: null,
+  searchType: {key:"0",value: "DEFAULT",label: "전체"},
   keyword: null
 }
 

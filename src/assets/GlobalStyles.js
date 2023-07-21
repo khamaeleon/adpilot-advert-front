@@ -1037,7 +1037,7 @@ export const CampaignType = styled.div`
 `
 export const DateContainer = styled.div`
   display: flex;
-  width: 100%;
+  width: 250px;
   height: 40px;
   border: 1px solid ${lightGray};
   border-radius: 5px;
@@ -1069,7 +1069,7 @@ export const CustomDatePicker = styled(DatePicker)`
   border: none !important;
   color: #a2aab2;
   font-size: 14px;
-  width: 100%;
+  width: 200px;
   padding: 0 15px;
 `
 

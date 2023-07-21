@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
 import React from "react";
 import {
   BoardSearchDetail,
-  ColSpan0,
+  ColSpan4,
   GraySearchButton,
   Input,
   RowSpan,
@@ -157,7 +157,7 @@ export const searchConditionData = {
   searchStartDate : null,
   searchEndDate : null,
   sortType : null,
-  searchKeywordType : null,
+  searchKeywordType : 'DEFAULT',
   searchKeyword : null
 }
 
@@ -168,22 +168,23 @@ export function HistorySearchCondition (props) {
     <BoardSearchDetail>
       <div style={{marginRight: 10}}>
         <RowSpan style={{justifyContent: 'flex-start', marginTop:0}}>
-          <ColSpan0>
-            <Span2>검색어</Span2>
+          <ColSpan4>
+            {/*<Span2>검색어</Span2>*/}
               <Select styles={selectStyle}
                       options={option}
                       width={133}
                       value={searchCondition.searchKeywordType !== null ? option.find(item => item.value === searchCondition.searchKeywordType) : option[0]}
                       onChange={handleChangeSearchKeywordType}/>
-            <SearchInput style={{width: '490px'}}>
+            <SearchInput>
               <Input type={'text'}
                      placeholder={'검색어를 입력해주세요.'}
-                     value={searchCondition.searchKeyword || ''}
+                     value={searchCondition.searchKeyword}
                      style={{marginRight: 0}}
-                     onKeyDown={e => (e.code === 'Enter') && handleChangeSearchKeyword()}
+                     readOnly={searchCondition.searchKeywordType === 'DEFAULT'}
+                     onKeyDown={e => (e.code === 'Enter') && handleClickSearch()}
                      onChange={handleChangeSearchKeyword}/>
             </SearchInput>
-          </ColSpan0>
+          </ColSpan4>
         </RowSpan>
       </div>
       <GraySearchButton onClick={handleClickSearch}>검색</GraySearchButton>

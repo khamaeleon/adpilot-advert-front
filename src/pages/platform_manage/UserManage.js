@@ -3,7 +3,7 @@ import {
   BoardHeader,
   BoardSearchDetail,
   BoardTableContainer,
-  ColSpan0,
+  ColSpan0, ColSpan4,
   ColTitle,
   GraySearchButton,
   RowSpan,
@@ -89,10 +89,18 @@ export default function UserManage(){
    * @param searchType
    */
   const handleSearchType = (searchType) =>{
-    setSearchAccountInfoState({
-      ...searchAccountInfoState,
-      searchType:searchType
-    })
+    if(searchType.value === 'DEFAULT') {
+      setSearchAccountInfoState({
+        ...searchAccountInfoState,
+        searchType: searchType,
+        keyword: ''
+      })
+    } else {
+      setSearchAccountInfoState({
+        ...searchAccountInfoState,
+        searchType: searchType
+      })
+    }
   }
 
   /**
@@ -135,57 +143,59 @@ export default function UserManage(){
         <BoardSearchDetail style={{marginTop: 10}}>
           <div style={{marginRight: 10}}>
             <RowSpan style={{marginTop: 0, justifyContent: 'flex-start'}}>
-              <ColSpan0>
-                <Span2>광고주 구분</Span2>
-                <Select options={adverTypeState}
-                        value={(searchAccountInfoState.adverType !== null && searchAccountInfoState.adverType.value !== '') ? searchAccountInfoState.adverType : adverTypeState[0]}
-                        onChange={handleAdverType}
-                        width={140}
-                        styles={selectStyle}
-                        isSearchable={false}
-                />
-              </ColSpan0>
-              <ColSpan0>
-                <ColTitle><Span2>호스팅 타입</Span2></ColTitle>
-                <Select options={hostTypeState}
-                        value={searchAccountInfoState?.hostType !== null ? hostList.find(value => value.value === searchAccountInfoState?.hostType) : hostTypeState[0]  }
-                        onChange={handleSelectHosting}
-                        width={140}
-                        styles={selectStyle}
-                        isSearchable={false}
-                />
-              </ColSpan0>
-              <ColSpan0>
-                <ColTitle><Span2>사용 여부</Span2></ColTitle>
-                <Select options={accountUseYnState}
-                        value={(searchAccountInfoState.accountStateType !== null && searchAccountInfoState.accountStateType.value !== '') ? searchAccountInfoState.accountStateType : accountUseYnState[0]}
-                        onChange={handleSelectAccountStateType}
-                        width={140}
-                        styles={selectStyle}
-                        isSearchable={false}
-                />
-              </ColSpan0>
+              <ColSpan4>
+                <ColSpan0>
+                  <Span2>광고주 구분</Span2>
+                  <Select options={adverTypeState}
+                          value={(searchAccountInfoState.adverType !== null && searchAccountInfoState.adverType.value !== '') ? searchAccountInfoState.adverType : adverTypeState[0]}
+                          onChange={handleAdverType}
+                          width={140}
+                          styles={selectStyle}
+                          isSearchable={false}
+                  />
+                </ColSpan0>
+                <ColSpan0>
+                  <ColTitle><Span2>호스팅 타입</Span2></ColTitle>
+                  <Select options={hostTypeState}
+                          value={searchAccountInfoState?.hostType !== null ? hostList.find(value => value.value === searchAccountInfoState?.hostType) : hostTypeState[0]  }
+                          onChange={handleSelectHosting}
+                          width={140}
+                          styles={selectStyle}
+                          isSearchable={false}
+                  />
+                </ColSpan0>
+                <ColSpan0>
+                  <ColTitle><Span2>사용 여부</Span2></ColTitle>
+                  <Select options={accountUseYnState}
+                          value={(searchAccountInfoState.accountStateType !== null && searchAccountInfoState.accountStateType.value !== '') ? searchAccountInfoState.accountStateType : accountUseYnState[0]}
+                          onChange={handleSelectAccountStateType}
+                          width={140}
+                          styles={selectStyle}
+                          isSearchable={false}
+                  />
+                </ColSpan0>
+              </ColSpan4>
             </RowSpan>
             <RowSpan style={{justifyContent: 'flex-start'}}>
-              <ColSpan0>
-                <Span2>검색어</Span2>
+              <ColSpan4>
+                {/*<Span2>검색어</Span2>*/}
                 <Select options={searchType}
-                        value={(searchAccountInfoState.searchType !== null && searchAccountInfoState.searchType.value !== '') ? searchAccountInfoState.searchType : {key: "0", value: "select", label: "선택"}}
+                        value={(searchAccountInfoState.searchType !== null && searchAccountInfoState.searchType.value !== '') ? searchAccountInfoState.searchType : searchType[0]}
                         onChange={handleSearchType}
                         width={140}
                         styles={selectStyle}
                         isSearchable={false}
                 />
-                <SearchInput style={{width: 490}}>
+                <SearchInput>
                   <input type={'text'}
                          placeholder={'아이디 및 담당자명 검색'}
                          value={searchAccountInfoState?.keyword !== null ? searchAccountInfoState?.keyword : ''}
                          onChange={handleSearchKeyword}
-                         readOnly={(searchAccountInfoState.searchType === null || searchAccountInfoState.searchType.value === 'select') ? true : false}
+                         readOnly={searchAccountInfoState.searchType.value === 'DEFAULT'}
                          onKeyDown={e => (e.code === 'Enter') && searchUserList() }
                   />
                 </SearchInput>
-              </ColSpan0>
+              </ColSpan4>
             </RowSpan>
           </div>
           <GraySearchButton onClick={()=>searchUserList()}>적용</GraySearchButton>

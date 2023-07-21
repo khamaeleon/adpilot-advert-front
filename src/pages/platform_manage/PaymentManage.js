@@ -3,7 +3,7 @@ import {
   Board,
   BoardHeader,
   BoardSearchResultTitle,
-  BoardTableContainer,
+  BoardTableContainer, ColSpan2, RowSpan,
   SaveExcelButton
 } from "../../assets/GlobalStyles";
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -18,6 +18,7 @@ import {
 } from "./entity/Payment";
 import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 import {TotalCount} from "../../components/table/TableDetail";
+import {Small} from "../../components/table/styles";
 
 function PaymentManage() {
   const [totalInfo, setTotalInfo] = useState(0)
@@ -84,14 +85,12 @@ function PaymentManage() {
         <BoardHeader>결재 현황</BoardHeader>
         <PaymentCondition searchType={searchPaymentType} searchCondition={searchState} setSearchCondition={setSearchState} handleTableData={handleData} />
         <BoardTableContainer>
-          <BoardSearchResultTitle style={{alignItems:"end", paddingBottom: "10px"}}>
-            <div>
+          <RowSpan>
+            <ColSpan2 style={{paddingLeft: 0}}>
               <TotalCount><span/>총 <span>{totalInfo}</span> 건의 결제 내역</TotalCount>
-            </div>
-            <div>
+            </ColSpan2>
               {/*<SaveExcelButton>엑셀 저장</SaveExcelButton>*/}
-            </div>
-          </BoardSearchResultTitle>
+          </RowSpan>
           <ReactDataGrid
             licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
             handle={null}

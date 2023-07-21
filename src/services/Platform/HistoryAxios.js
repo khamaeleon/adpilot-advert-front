@@ -6,9 +6,20 @@ const TARGET_BUDGET = ACTION_URL+'target-budget'
 const TARGET_PRICE = ACTION_URL+'target-price'
 const BUDGET_TIME = ACTION_URL+'budget-time'
 
-export async function findRevisionCampaignList (params) {
+export async function findRevisionCampaignList(params) {
   let returnVal = null;
-  await AdminAxios('POST', CAMPAIGN_URL, params)
+  let searchParam = null;
+
+  if(params.searchKeywordType === 'DEFAULT'){
+    searchParam = {
+      ...params,
+      searchKeywordType: null
+    };
+  } else {
+    searchParam = params;
+  }
+
+  await AdminAxios('POST', CAMPAIGN_URL, searchParam)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
         returnVal = response.data
@@ -34,7 +45,17 @@ export async function findRevisionCampaignDetail(revID) {
 
 export async function findRevisionTargetingBudgetList (params) {
   let returnVal = null;
-  await AdminAxios('POST', TARGET_BUDGET, params)
+  let searchParam = null;
+
+  if(params.searchKeywordType === 'DEFAULT'){
+    searchParam = {
+      ...params,
+      searchKeywordType: null
+    };
+  } else {
+    searchParam = params;
+  }
+  await AdminAxios('POST', TARGET_BUDGET, searchParam)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
         returnVal = response.data
@@ -60,7 +81,18 @@ export async function findRevisionTargetingBudgetDetail (revId) {
 
 export async function findRevisionTargetingPriceList (params) {
   let returnVal = null;
-  await AdminAxios('POST', TARGET_PRICE, params)
+  let searchParam = null;
+
+  if(params.searchKeywordType === 'DEFAULT'){
+    searchParam = {
+      ...params,
+      searchKeywordType: null
+    };
+  } else {
+    searchParam = params;
+  }
+
+  await AdminAxios('POST', TARGET_PRICE, searchParam)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
         returnVal = response.data
@@ -86,7 +118,18 @@ export async function findRevisionTargetingPriceDetail(revID) {
 
 export async function findRevisionBudgetTimeList(params) {
   let returnVal = null;
-  await AdminAxios('POST', BUDGET_TIME, params)
+  let searchParam = null;
+
+  if(params.searchKeywordType === 'DEFAULT'){
+    searchParam = {
+      ...params,
+      searchKeywordType: null
+    };
+  } else {
+    searchParam = params;
+  }
+
+  await AdminAxios('POST', BUDGET_TIME, searchParam)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
         returnVal = response.data
