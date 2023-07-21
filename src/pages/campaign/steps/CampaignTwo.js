@@ -81,9 +81,23 @@ export function CampaignTwo() {
     let userId = state !== null ? state.userId : campaignBasicInfo?.userId;
 
     const callbackFunc = (response) => {
-      setBudgetTimeListState(response[0]?.timeGroups.map(data => {return {value: data.id, label: data.groupName}}))
-      setBudgetEventListState(response[1]?.targetingBudgetDtos.map(data => {return {value: data.targetingBudgetId, label: data.groupName}}))
-      setPriceEventListState(response[2]?.targetingPriceDtos.map(data => {return {value: data.targetingPriceId, label: data.groupName}}))
+
+      const budgetTimeList = response[0]?.timeGroups.map(data => {return {value: data.id, label: data.groupName}});
+      const budgetEventList = response[1]?.targetingBudgetDtos.map(data => {return {value: data.targetingBudgetId, label: data.groupName}});
+      const priceEventList = response[2]?.targetingPriceDtos.map(data => {return {value: data.targetingPriceId, label: data.groupName}});
+
+      setBudgetTimeListState(budgetTimeList);
+      setBudgetEventListState(budgetEventList);
+      setPriceEventListState(priceEventList);
+      setCampaignBudgetInfo({
+        ...campaignBudgetInfo,
+        budgetTimeId: budgetTimeList[0].value,
+        targetingBudgetId: budgetEventList[0].value,
+        targetingPriceId: priceEventList[0].value,
+      })
+      selBudgetTimeDetailInfo(userId, budgetTimeList[0].value).then(response => {
+        setTimeBudgetDetailDataState(response)
+      })
     }
     multiAxiosCall([selBudgetTimeList(userId), selBudgetEventList(userId), selPriceEventList(userId)], callbackFunc)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -214,6 +228,7 @@ export function CampaignTwo() {
       maxBiddingPrice: maxBiddingPrice
     })
   }
+  const onError = (e) => {console.log(e)}
   const onSubmit = () => {
     if (campaignBudgetInfo.maxBiddingPrice < 1) {
       setError('maxBiddingPrice', {type: 'required', message: '최대 입찰가를 입력해주세요'})
@@ -264,7 +279,7 @@ export function CampaignTwo() {
     }
   }
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit, onError)}>
       {state !== null && <AdverInfo><span>광고주 정보</span><p></p><span>{state?.adverInfo}</span></AdverInfo>}
       <Board>
         <BoardHeader>예산 및 입찰 설정</BoardHeader>
@@ -380,7 +395,7 @@ export function CampaignTwo() {
                         <Select options={budgetTimeListState}
                                 placeholder={'시간대 예산 선택'}
                                 {...field}
-                                value={campaignBudgetInfo?.budgetTimeId !== '' ? budgetTimeListState.find(value => value.value === campaignBudgetInfo?.budgetTimeId) : handleChangeBudgetTimes(budgetTimeListState[0])}
+                                value={campaignBudgetInfo?.budgetTimeId !== '' ? budgetTimeListState.find(value => value.value === campaignBudgetInfo?.budgetTimeId) : budgetTimeListState[0]}
                                 onChange={handleChangeBudgetTimes}
                                 styles={selectStyle}
                         />
@@ -417,7 +432,7 @@ export function CampaignTwo() {
                         <Select options={budgetEventListState}
                                 placeholder={'타겟팅 예산 선택'}
                                 {...field}
-                                value={campaignBudgetInfo?.targetingBudgetId !== undefined ? budgetEventListState.find(value => value.value === campaignBudgetInfo?.targetingBudgetId) : handleChangeBudgetEvents(budgetEventListState[0])}
+                                value={campaignBudgetInfo?.targetingBudgetId !== undefined ? budgetEventListState.find(value => value.value === campaignBudgetInfo?.targetingBudgetId) : budgetEventListState[0]}
                                 onChange={handleChangeBudgetEvents}
                                 styles={selectStyle}
                         />
@@ -465,6 +480,7 @@ export function CampaignTwo() {
                         render={({ field }) =>(
                           <Input type={'text'}
                                  step={100}
+                                {...field}
                                  placeholder={'최대 입찰가를 설정해주세요'}
                                  style={{color:'#f5811f'}}
                                  value={campaignBudgetInfo !== null && decimalFormat(campaignBudgetInfo.maxBiddingPrice)}
@@ -496,7 +512,7 @@ export function CampaignTwo() {
                         <Select options={priceEventListState}
                                 placeholder={'타겟팅 단가 선택'}
                                 {...field}
-                                value={campaignBudgetInfo?.targetingPriceId !== undefined ? priceEventListState.find(value => value.value === campaignBudgetInfo?.targetingPriceId) : handleChangePriceEvent(priceEventListState[0])}
+                                value={campaignBudgetInfo?.targetingPriceId !== undefined ? priceEventListState.find(value => value.value === campaignBudgetInfo?.targetingPriceId) : priceEventListState[0]}
                                 onChange={handleChangePriceEvent}
                                 styles={selectStyle}
                         />
