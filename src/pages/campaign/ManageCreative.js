@@ -35,7 +35,6 @@ export function ManageCreative() {
   useEffect(() => {
     if(tokenResult.role !== 'NORMAL'){
       findCreativeGroupList(keyword).then(response => {
-        console.log(response)
         setCreativeData(response.creativeGroupDtos)
       })
     }

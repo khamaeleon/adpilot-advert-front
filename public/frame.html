@@ -79,7 +79,7 @@
     const createData = localStorage.getItem('frameData')
     //기본 소재 기본값
     const baseData = JSON.parse(createData)
-    const subData = baseData.row.find(item => item.size === window.name)
+    const subData = baseData?.row.find(item => item.size === window.name)
     const root = document.querySelector("#root")
     //공장화
     function factory (name) {
