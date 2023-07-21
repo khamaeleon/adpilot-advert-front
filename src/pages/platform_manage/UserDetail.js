@@ -40,6 +40,7 @@ import {accountInfoAtom} from "./entity/User";
 import {adminInfoAtom} from "./entity/Admin";
 import {DuplicateButton, InputValidationCon} from "./styles/common";
 import {tokenResultAtom} from "../login/entity/Common";
+import {IMAGE_SERVER} from "../../constants/GlobalConst";
 
 export function PwChange(props) {
   const {onSubmit, modalInfo, onSave, title} = props;
@@ -319,7 +320,7 @@ function PlatformUserDetail() {
 
 
   const imageDownload = (fileUrl) => {
-    const url = "http://192.168.0.199:9000/temp" + fileUrl;
+    const url = IMAGE_SERVER + fileUrl;
     let type;
     fetch(url, { method: 'GET' })
     .then((res) => {
@@ -328,7 +329,7 @@ function PlatformUserDetail() {
     })
     .then((blob) => {
       const url = window.URL.createObjectURL(blob);
-      const a = document.createlement('a');
+      const a = document.createElement('a');
       a.href = url;
       a.download = accountInfoState?.userCompanyProfile.companyName + "_사업자등록증."+type;
       document.body.appendChild(a);

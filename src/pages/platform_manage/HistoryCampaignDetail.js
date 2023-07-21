@@ -36,7 +36,7 @@ const inventoryHistory = [
 ]
 
 const creativeHistory = [
-  {name: '광고 그룹명'},
+  {name: '크리에이티브 명'},
   {creativeType: '크리에이티브 유형'},
   {pcLandingUrl: 'PC 랜딩 URL'},
   {pcReferralCode: 'PC 인식코드 '},
@@ -90,7 +90,7 @@ export function HistoryCampaignDetail () {
 
   const inventoryConverter = (timing,arg) => {
     let value;
-    const inventoryData = data[timing]?.inventory
+    const inventoryData = data[timing]?.inventory;
     if(Object.keys(arg)[0] === 'audienceTargetConfigType') {
       const audience = () => {
         return (
@@ -102,7 +102,8 @@ export function HistoryCampaignDetail () {
           </>
         )
       }
-      value = inventoryData[Object.keys(arg)] === 'AUTO' ? `자동최적화` : audience
+      value = inventoryData[Object.keys(arg)] === 'AUTO' ? `자동최적화` : audience();
+
     } else if(Object.keys(arg)[0] === 'userTargetConfigType') {
       const user = () => {
         return (
@@ -114,7 +115,7 @@ export function HistoryCampaignDetail () {
           </>
         )
       }
-      value = inventoryData[Object.keys(arg)] === 'AUTO' ? `자동최적화` : user
+      value = inventoryData[Object.keys(arg)] === 'AUTO' ? `자동최적화` : user();
     } else if(Object.keys(arg)[0] === 'startDate') {
       value = `${inventoryData['startDate']} ~ ${inventoryData['endDate']}`
     } else if (Object.keys(arg)[0] === 'allowInventoryCategories' || Object.keys(arg)[0] === 'disAllowInventoryCategories') {
@@ -147,12 +148,15 @@ export function HistoryCampaignDetail () {
         </ImageGroup>
       )
     }
-    if (Object.keys(arg)[0] === 'logoPaths') {
-      if(materialData.logoPaths.length !== 0) {
-        value = image(materialData[Object.keys(arg)])
+
+    if(materialData !== undefined){
+      if (Object.keys(arg)[0] === 'logoPaths') {
+        if(materialData.logoPaths.length !== 0) {
+          value = image(materialData[Object.keys(arg)])
+        }
+      } else {
+        value = materialData[Object.keys(arg)]
       }
-    } else {
-      value = materialData[Object.keys(arg)]
     }
     return value
   }
@@ -163,7 +167,7 @@ export function HistoryCampaignDetail () {
     const bannerImage = () => {
       return (
         <div>{bannerData?.bannerMaterials.map((item, key) => {
-          console.log(item)
+
           return (
             <div style={{display: 'flex',gap: 10, margin: 5}}>
               <div key={key} style={{whiteSpace: 'nowrap'}}>{item?.bannerSize}</div>
@@ -351,6 +355,7 @@ export function HistoryCampaignDetail () {
                   <th>변경 내역</th>
                 </tr>
                 {inventoryHistory.map((entry, key) => {
+
                   return (
                     <tr key={key}>
                       <th className={'border-r border-t'}>{Object.values(entry)}</th>
@@ -382,19 +387,21 @@ export function HistoryCampaignDetail () {
               </tr>
               {creativeHistory.map((entry, key) => {
                 return (
-                  <tr>
+                  <tr key={key}>
                     <th className={'border-r border-t'}>{Object.values(entry)}</th>
                     <td className={'border-t'}>{data?.previous !== null && data?.previous !== undefined && data?.previous?.creative !== null ? creativeConverters('previous',entry) : '-'}</td>
                     <td className={'border-t'}>{data?.current !== null && data?.current !== undefined && data?.current?.creative !== null ? creativeConverters('current',entry) : '-'}</td>
                   </tr>
                 )
               })}
-              <tr>
-                <th className={'border-r border-t'}>배너소재</th>
-                <td className={'border-t'}>{data?.previous !== null && data?.previous !== undefined && data?.previous?.creative !== null ? bannerImages('previous') : '-'}</td>
-                <td className={'border-t'}>{data?.current !== null && data?.current !== undefined && data?.current?.creative !== null ? bannerImages('current') : '-'}</td>
-              </tr>
-              {materialDetailInfo.map((entry, key) => {
+              {data?.productType !== 'POP_UNDER' &&
+                <tr>
+                  <th className={'border-r border-t'}>배너소재</th>
+                  <td className={'border-t'}>{data?.previous !== null && data?.previous !== undefined && data?.previous?.creative !== null ? bannerImages('previous') : '-'}</td>
+                  <td className={'border-t'}>{data?.current !== null && data?.current !== undefined && data?.current?.creative !== null ? bannerImages('current') : '-'}</td>
+                </tr>
+              }
+              {data?.productType !== 'POP_UNDER' && materialDetailInfo.map((entry, key) => {
                 return (
                   <tr key={key}>
                     <th className={'border-r border-t'}>{Object.values(entry)}</th>
