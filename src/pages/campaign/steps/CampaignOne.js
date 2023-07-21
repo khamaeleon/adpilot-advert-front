@@ -39,6 +39,7 @@ export function CampaignOne() {
   const resetInfo = useResetAtom(campaignBasicInfoAtom)
   const [adverInfo, setAdverInfo] = useState(null)
   const [temporaryBool, setTemporaryBool] = useState(false)
+  const [temporaryActive, setTemporaryActive] = useState(false)
   const [goalList, setGoalList] = useState(null)
   const [goalValueLabel, setGoalValueLabel] = useState('')
   const [pixelList, setPixelList] = useState(null)
@@ -131,6 +132,7 @@ export function CampaignOne() {
       setValue('goalValue',response.goalValue)
     })
     setTemporaryBool(false)
+    setTemporaryActive(true)
     clearErrors();
   }
   /**
@@ -172,14 +174,16 @@ export function CampaignOne() {
    * @param type
    */
   const handleChangeProductType = (type) => {
-    setCampaignBasicInfo({
-      ...campaignBasicInfo,
-      productType: type,
-    })
+    if(!temporaryActive){
+      setCampaignBasicInfo({
+        ...campaignBasicInfo,
+        productType: type,
+      })
+    }
   }
 
   const handleChangeProductTarget = (type) => {
-    if (campaignBasicInfo.goalType !== type) {
+    if (!temporaryActive && campaignBasicInfo.goalType !== type) {
       selEnumInfo(type).then(response => {
         setGoalList(response.data)
       })
@@ -194,14 +198,16 @@ export function CampaignOne() {
   }
 
   const handleGoalValue = (value) =>{
-    let num = removeStr(value)
-    let goalValue = num !== '' ? Number(num) : 0;
+    if(!temporaryActive){
+      let num = removeStr(value)
+      let goalValue = num !== '' ? Number(num) : 0;
 
-    setCampaignBasicInfo({
-      ...campaignBasicInfo,
-      goalValue: goalValue
-    })
-    goalValue !== 0 ? clearErrors('goalValue') : setError('goalValue', {type: 'required', message: '캠페인 상세 목표를 입력해주세요.'})
+      setCampaignBasicInfo({
+        ...campaignBasicInfo,
+        goalValue: goalValue
+      })
+      goalValue !== 0 ? clearErrors('goalValue') : setError('goalValue', {type: 'required', message: '캠페인 상세 목표를 입력해주세요.'})
+    }
   }
 
   const onSubmit = () => {
@@ -252,7 +258,7 @@ export function CampaignOne() {
               <ColSpan2>
                 <SearchAdvertiser title={'광고주 검색'} onSubmit={handleSearchAdvertiser}/>
                 {temporaryBool &&
-                  <TemporaryListModal onSubmit={handleSelectedTemporaryList} userId={campaignBasicInfo.userId} />
+                  <TemporaryListModal onClose={()=>setTemporaryBool(false)} onSubmit={handleSelectedTemporaryList} userId={campaignBasicInfo.userId} />
                 }
               </ColSpan2>
             </ColSpan4>
@@ -280,7 +286,7 @@ export function CampaignOne() {
                       render={({field}) => (
                         <Select options={pixelList !== null ? pixelList :[]}
                                 placeholder={campaignBasicInfo.pixelId !== '' && (pixelList === null || pixelList?.length === 0) ? '최적화 픽셀이 없습니다.' : '최적화 픽셀 선택'}
-                                isDisabled={pixelList === null || pixelList?.length === 0}
+                                isDisabled={pixelList === null || pixelList?.length === 0 || temporaryActive}
                                 {...field}
                                 value={campaignBasicInfo !== null && pixelList !== null  ? pixelList.find(item =>item.value === campaignBasicInfo.pixelId) : ''}
                                 onChange={handleChangePixel}
@@ -307,6 +313,7 @@ export function CampaignOne() {
               <CampaignType>
                 <CampaignTypeItem
                   active={campaignBasicInfo !== null ? campaignBasicInfo.productType === 'BANNER' : false}
+                  readOnly={temporaryActive}
                   onClick={() => handleChangeProductType('BANNER')}>
                   <img
                     alt={'이미지'}
@@ -315,6 +322,7 @@ export function CampaignOne() {
                 </CampaignTypeItem>
                 <CampaignTypeItem
                   active={campaignBasicInfo !== null ? campaignBasicInfo.productType === 'POP_UNDER' : false}
+                  readOnly={temporaryActive}
                   onClick={() => handleChangeProductType('POP_UNDER')}>
                   <img
                     alt={'이미지'}
@@ -332,17 +340,17 @@ export function CampaignOne() {
           <RowSpan>
             <ColSpan4>
               <CampaignType>
-                <CampaignTypeItem2 active={campaignBasicInfo !== null && campaignBasicInfo.goalType === 'CAMPAIGN_CONVERSION_GOAL'}
+                <CampaignTypeItem2 active={campaignBasicInfo !== null && campaignBasicInfo.goalType === 'CAMPAIGN_CONVERSION_GOAL'} readOnly={temporaryActive}
                                    onClick={() => handleChangeProductTarget('CAMPAIGN_CONVERSION_GOAL')}>
                   <div className={'tit'}>전환</div>
                   <div>전환 가능성과 관심도가 높은 대상에게 구매 또는 참여, 설치 등의 행동을 유도 합니다.</div>
                 </CampaignTypeItem2>
-                <CampaignTypeItem2 active={campaignBasicInfo !== null && campaignBasicInfo.goalType === 'CAMPAIGN_VISIT_GOAL'}
+                <CampaignTypeItem2 active={campaignBasicInfo !== null && campaignBasicInfo.goalType === 'CAMPAIGN_VISIT_GOAL'} readOnly={temporaryActive}
                                    onClick={() => handleChangeProductTarget('CAMPAIGN_VISIT_GOAL')}>
                   <div className={'tit'}>방문</div>
                   <div>원하는 랜딩으로 사용자들의 방문을 극대화해서 마케팅 목표를 달성합니다.</div>
                 </CampaignTypeItem2>
-                <CampaignTypeItem2 active={campaignBasicInfo !== null && campaignBasicInfo.goalType === 'CAMPAIGN_VIEW_GOAL'}
+                <CampaignTypeItem2 active={campaignBasicInfo !== null && campaignBasicInfo.goalType === 'CAMPAIGN_VIEW_GOAL'} readOnly={temporaryActive}
                                    onClick={() => handleChangeProductTarget('CAMPAIGN_VIEW_GOAL')}>
                   <div className={'tit'}>노출</div>
                   <div>광고주의 크리에이티브 노출을 극대화해서 홍보 및 브랜딩을 강화합니다.</div>
@@ -369,6 +377,7 @@ export function CampaignOne() {
                         options={goalList !== null ? goalList : []}
                         styles={selectStyle}
                         width={158}
+                        isDisabled={temporaryActive}
                         isSearchable={false}
                         placeholder={'목표 선택'}
                         {...field}
@@ -387,7 +396,7 @@ export function CampaignOne() {
                     <InputLabel label={goalValueLabel}>
                       <Input type={'text'}
                              style={{width: 300, textAlign: 'right'}}
-                             readOnly={(campaignBasicInfo.goal === '' || campaignBasicInfo.goal === null) && true}
+                             readOnly={(campaignBasicInfo.goal === '' || campaignBasicInfo.goal === null || temporaryActive) && true}
                              value={campaignBasicInfo.goalValue !== 0 ? decimalFormat(campaignBasicInfo.goalValue) : ''}
                              {...register("goalValue", {
                                required: "캠페인 상세 목표를 입력해주세요.",

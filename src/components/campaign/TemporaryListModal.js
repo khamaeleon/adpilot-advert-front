@@ -10,7 +10,7 @@ import {deleteTemporary, selTemporaryList} from "../../services/campaign/InfoAxi
 import {light} from "../../assets/theme";
 
 export function TemporaryListModal(props) {
-  const {onSubmit, userId} = props;
+  const {onSubmit, userId, onClose} = props;
   const [, setModal] = useAtom(modalController)
   useEffect( () => {
     setModal({
@@ -18,7 +18,7 @@ export function TemporaryListModal(props) {
       width: 600,
       modalComponent: () => {
         return (
-          <TemporaryList onSubmit={onSubmit} userId={userId}/>
+          <TemporaryList onSubmit={onSubmit} userId={userId} onClose={onClose}/>
         )
       }
     })
@@ -57,7 +57,7 @@ function TemporaryList (props) {
   }
   return (
     <div>
-      <ModalHeader title={"임시저장 리스트"}/>
+      <ModalHeader title={"임시저장 리스트"} onClose={props.onClose}/>
       <ModalBody>
         <MediaSearchResult>
           {campaignTemporaryList !==null && campaignTemporaryList.length !== 0 &&

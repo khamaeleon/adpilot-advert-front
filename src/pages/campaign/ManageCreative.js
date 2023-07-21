@@ -23,6 +23,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import {light} from "../../assets/theme";
+import {creativeType, productType} from "../dash_board/entity/Common";
 
 export function ManageCreative() {
   const [open, setOpen] = useState({id: 0})
@@ -81,7 +82,9 @@ export function ManageCreative() {
       <CustomDetailTable>
         <CustomDetailHeader>
           <CreativeGroup>크리에이티브 그룹명</CreativeGroup>
-          <CreativeInfo>크리에이티브 정보</CreativeInfo>
+          <CreativeType>광고 상품</CreativeType>
+          <CreativeType>크리에이티브 유형</CreativeType>
+          <CreativeInfo>소재 정보</CreativeInfo>
         </CustomDetailHeader>
         {creativeDetailData.length !== 0 && creativeDetailData.map((item,key) => {
           return(
@@ -89,12 +92,12 @@ export function ManageCreative() {
               <CreativeGroup>
                 <Link
                   to={'/board/manageCreativeDetail'}
-                  state={{campaignId: item?.campaignId, creativeType: item?.creativeType, productType: item.productType, adverInfo: adverName}}>
+                  state={{campaignId: item?.campaignId, creativeType: item?.creativeType, productType: item.productType, adverInfo: adverName, backLink: 'manageCreative'}}>
                   {item.creativeName}
                 </Link>
               </CreativeGroup>
-              <CreativeType>{item.creativeType}</CreativeType>
-              <CreativeType>{item.productType}</CreativeType>
+              <CreativeType>{productType.find(type=> type.value === item.productType).label}</CreativeType>
+              <CreativeType>{creativeType.find(type=> type.value === item.creativeType).label}</CreativeType>
               <CreativeInfo>
                 {item.images.length > 6 ?
                 <SliderComponent {...settings} style={{marginLeft: 35,width: 660}}>
@@ -238,11 +241,13 @@ export const CreativeType = styled.div`
   padding: 9px 0;
   flex-basis: 10%;
   border-bottom: 1px solid ${mainColorOpacity20};
-  border-left: 1px solid ${mainColorOpacity20}
 `
 export const CreativeInfo = styled.div`
   padding: 9px 0;
   flex-basis: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 60%;
   border-bottom: 1px solid ${mainColorOpacity20};
 `

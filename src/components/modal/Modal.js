@@ -22,6 +22,7 @@ function Modal(props) {
 export function ModalHeader (props) {
   const [,setModal] = useAtom(modalController)
   const modalClose = () => {
+    if(props.onClose !== undefined){props.onClose();}
     setModal({
       isShow: false,
       modalComponent: null

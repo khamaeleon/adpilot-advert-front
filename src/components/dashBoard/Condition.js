@@ -234,7 +234,7 @@ export function DashBoardCondition(props) {
             </ColSpan0>
             <ColSpan0>
               <ColTitle style={{paddingLeft: 0}}>디바이스</ColTitle>
-              <RelativeDiv>
+              <RelativeDiv style={{marginRight: 0}}>
                 <AgentType>
                   <Checkbox label={'전체'}
                             type={'c'}
@@ -342,7 +342,7 @@ export function DashBoardCondition(props) {
               </DateContainer>
             <ColSpan0>
               <div>
-                <RangePicker style={{marginRight: 0}}>
+                <RangePicker>
                   <div onClick={() => handleRangeDate('thisMonth')} style={pickedDate === 'thisMonth' ? {color:'#f5811f'}:null}>이번달</div>
                   <HorizontalRule style={{margin: "0 10px"}}/>
                   <div onClick={() => handleRangeDate('lastMonth')} style={pickedDate === 'lastMonth' ? {color:'#f5811f'}:null}>지난달</div>

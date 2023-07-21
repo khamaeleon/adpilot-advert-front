@@ -168,7 +168,7 @@ export function PlatformCondition(props) {
               </ColSpan0>
             </RowSpan>
       }
-      <RowSpan>
+      <RowSpan style={{marginTop: 0}}>
         <BoardSearchDetail style={{marginTop: 10}}>
           <div style={{marginRight: 10}}>
             <RowSpan style={{justifyContent: 'flex-start', marginTop:0}}>

@@ -18,6 +18,14 @@ export const productType = [
   {id: "3", value: "POP_UNDER", label: "팝언더"}
 ]
 
+/* 크리에이티브 타입 */
+export const creativeType = [
+  {id: "0", value: null, label: "전체"},
+  {id: "1", value: "BANNER", label: "배너"},
+  {id: "2", value: "NATIVE", label: "네이티브"},
+  {id: "3", value: "POP_UNDER", label: "팝언더"}
+]
+
 export const deviceType = [
   {key:1, value: null, label: '전체'},
   {key:2, value:'PC', label: 'PC'},
