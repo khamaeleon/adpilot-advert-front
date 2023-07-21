@@ -3,7 +3,7 @@ import {
   BoardSearchDetail,
   CalendarBox,
   CalendarIcon,
-  ColSpan0,
+  ColSpan0, ColSpan4,
   ColTitle,
   CustomDatePicker,
   DateContainer,
@@ -211,115 +211,116 @@ export function DashBoardCondition(props) {
     <BoardSearchDetail>
       <div style={{marginRight: 10}}>
         <RowSpan style={{marginTop: 0, justifyContent: 'flex-start'}}>
-          <ColSpan0 style={{marginRight: 10}}>
-            <ColTitle style={{paddingLeft: 0}}>광고 상품</ColTitle>
-            <Select options={productType}
-                    value={productType.find(value => value.value === searchState?.productType)}
-                    onChange={handleProductType}
-                    width={160}
-                    styles={selectStyle}
-                    isSearchable={false}
-            />
-          </ColSpan0>
-          <ColSpan0 style={{marginRight: 10}}>
-            <ColTitle style={{paddingLeft: 0}}>타겟팅</ColTitle>
-            <Select options={targetingType}
-                    value={targetingType.find(value => value.value === searchState?.targetingType)}
-                    onChange={handleTargetingType}
-                    width={160}
-                    styles={selectStyle}
-                    isSearchable={false}
-            />
-          </ColSpan0>
-          <ColSpan0>
-            <ColTitle style={{paddingLeft: 0}}>디바이스</ColTitle>
-            <RelativeDiv>
-              <AgentType>
-                <Checkbox label={'전체'}
-                          type={'c'}
-                          id={'all'}
-                          value={'All'}
-                          isChecked={isDeviceCheckedAll}
-                          onChange={handleDeviceTypeChangeCheckAll}
-                />
-                <Checkbox label={'PC'}
-                          type={'c'}
-                          id={'PC'}
-                          value={'PC'}
-                          isChecked={searchState?.deviceTypes.includes('PC') ? true : false}
-                          onChange={handleDeviceChangeCheck}/>
-                <Checkbox label={'모바일 웹'}
-                          type={'c'}
-                          id={'MOBILE'}
-                          value={'MOBILE'}
-                          isChecked={searchState?.deviceTypes.includes('MOBILE') ? true : false}
-                          onChange={handleDeviceChangeCheck}/>
-                <Checkbox label={'반응형 웹'}
-                          type={'c'}
-                          id={'RESPONSIVE_WEB'}
-                          value={'RESPONSIVE_WEB'}
-                          isChecked={searchState?.deviceTypes.includes('RESPONSIVE_WEB') ? true : false}
-                          onChange={handleDeviceChangeCheck}/>
-                <Checkbox label={'APP'}
-                          type={'c'}
-                          id={'APP'}
-                          value={'APP'}
-                          isChecked={searchState?.deviceTypes.includes('APP') ? true : false}
-                          onChange={handleDeviceChangeCheck}/>
-              </AgentType>
-            </RelativeDiv>
-          </ColSpan0>
+          <ColSpan4>
+            <ColSpan0 style={{marginRight: 10}}>
+              <ColTitle style={{paddingLeft: 0}}>광고 상품</ColTitle>
+              <Select options={productType}
+                      value={productType.find(value => value.value === searchState?.productType)}
+                      onChange={handleProductType}
+                      width={160}
+                      styles={selectStyle}
+                      isSearchable={false}
+              />
+            </ColSpan0>
+            <ColSpan0 style={{marginRight: 10}}>
+              <ColTitle style={{paddingLeft: 0}}>타겟팅</ColTitle>
+              <Select options={targetingType}
+                      value={targetingType.find(value => value.value === searchState?.targetingType)}
+                      onChange={handleTargetingType}
+                      width={160}
+                      styles={selectStyle}
+                      isSearchable={false}
+              />
+            </ColSpan0>
+            <ColSpan0>
+              <ColTitle style={{paddingLeft: 0}}>디바이스</ColTitle>
+              <RelativeDiv>
+                <AgentType>
+                  <Checkbox label={'전체'}
+                            type={'c'}
+                            id={'all'}
+                            value={'All'}
+                            isChecked={isDeviceCheckedAll}
+                            onChange={handleDeviceTypeChangeCheckAll}
+                  />
+                  <Checkbox label={'PC'}
+                            type={'c'}
+                            id={'PC'}
+                            value={'PC'}
+                            isChecked={searchState?.deviceTypes.includes('PC') ? true : false}
+                            onChange={handleDeviceChangeCheck}/>
+                  <Checkbox label={'모바일 웹'}
+                            type={'c'}
+                            id={'MOBILE'}
+                            value={'MOBILE'}
+                            isChecked={searchState?.deviceTypes.includes('MOBILE') ? true : false}
+                            onChange={handleDeviceChangeCheck}/>
+                  <Checkbox label={'반응형 웹'}
+                            type={'c'}
+                            id={'RESPONSIVE_WEB'}
+                            value={'RESPONSIVE_WEB'}
+                            isChecked={searchState?.deviceTypes.includes('RESPONSIVE_WEB') ? true : false}
+                            onChange={handleDeviceChangeCheck}/>
+                  <Checkbox label={'APP'}
+                            type={'c'}
+                            id={'APP'}
+                            value={'APP'}
+                            isChecked={searchState?.deviceTypes.includes('APP') ? true : false}
+                            onChange={handleDeviceChangeCheck}/>
+                </AgentType>
+              </RelativeDiv>
+            </ColSpan0>
+          </ColSpan4>
         </RowSpan>
-        {/*<RowSpan>*/}
-        {/*  <ColSpan0>*/}
-        {/*    <ColTitle style={{paddingLeft: 0}}>에이전트</ColTitle>*/}
-        {/*    <RelativeDiv>*/}
-        {/*      <AgentType>*/}
-        {/*        <Checkbox label={'전체'}*/}
-        {/*                  type={'c'}*/}
-        {/*                  id={'all'}*/}
-        {/*                  value={'All'}*/}
-        {/*                  isChecked={isAgentCheckedAll}*/}
-        {/*                  onChange={handleAgentChangeCheckAll}*/}
-        {/*        />*/}
-        {/*        <Checkbox label={'PC 웹'}*/}
-        {/*                  type={'c'}*/}
-        {/*                  id={'WEB'}*/}
-        {/*                  value={'WEB'}*/}
-        {/*                  isChecked={searchState?.agentTypes.includes('WEB') ? true : false}*/}
-        {/*                  onChange={handleAgentChangeCheck}/>*/}
-        {/*        <Checkbox label={'PC 어플리케이션'}*/}
-        {/*                  type={'c'}*/}
-        {/*                  id={'WEB_APP'}*/}
-        {/*                  value={'WEB_APP'}*/}
-        {/*                  isChecked={searchState?.agentTypes.includes('WEB_APP') ? true : false}*/}
-        {/*                  onChange={handleAgentChangeCheck}/>*/}
-        {/*        <Checkbox label={'모바일 웹'}*/}
-        {/*                  type={'c'}*/}
-        {/*                  id={'MOBILE_WEB'}*/}
-        {/*                  value={'MOBILE_WEB'}*/}
-        {/*                  isChecked={searchState?.agentTypes.includes('MOBILE_WEB') ? true : false}*/}
-        {/*                  onChange={handleAgentChangeCheck}/>*/}
-        {/*        <Checkbox label={'하이브리드 APP'}*/}
-        {/*                  type={'c'}*/}
-        {/*                  id={'MOBILE_HYBRID_APP'}*/}
-        {/*                  value={'MOBILE_HYBRID_APP'}*/}
-        {/*                  isChecked={searchState?.agentTypes.includes('MOBILE_HYBRID_APP') ? true : false}*/}
-        {/*                  onChange={handleAgentChangeCheck}/>*/}
-        {/*        <Checkbox label={'네이티브 APP'}*/}
-        {/*                  type={'c'}*/}
-        {/*                  id={'MOBILE_NATIVE_APP'}*/}
-        {/*                  value={'MOBILE_NATIVE_APP'}*/}
-        {/*                  isChecked={searchState?.agentTypes.includes('MOBILE_NATIVE_APP') ? true : false}*/}
-        {/*                  onChange={handleAgentChangeCheck}/>*/}
-        {/*      </AgentType>*/}
-        {/*    </RelativeDiv>*/}
-        {/*  </ColSpan0>*/}
-        {/*</RowSpan>*/}
+          {/*<RowSpan>*/}
+          {/*  <ColSpan0>*/}
+          {/*    <ColTitle style={{paddingLeft: 0}}>에이전트</ColTitle>*/}
+          {/*    <RelativeDiv>*/}
+          {/*      <AgentType>*/}
+          {/*        <Checkbox label={'전체'}*/}
+          {/*                  type={'c'}*/}
+          {/*                  id={'all'}*/}
+          {/*                  value={'All'}*/}
+          {/*                  isChecked={isAgentCheckedAll}*/}
+          {/*                  onChange={handleAgentChangeCheckAll}*/}
+          {/*        />*/}
+          {/*        <Checkbox label={'PC 웹'}*/}
+          {/*                  type={'c'}*/}
+          {/*                  id={'WEB'}*/}
+          {/*                  value={'WEB'}*/}
+          {/*                  isChecked={searchState?.agentTypes.includes('WEB') ? true : false}*/}
+          {/*                  onChange={handleAgentChangeCheck}/>*/}
+          {/*        <Checkbox label={'PC 어플리케이션'}*/}
+          {/*                  type={'c'}*/}
+          {/*                  id={'WEB_APP'}*/}
+          {/*                  value={'WEB_APP'}*/}
+          {/*                  isChecked={searchState?.agentTypes.includes('WEB_APP') ? true : false}*/}
+          {/*                  onChange={handleAgentChangeCheck}/>*/}
+          {/*        <Checkbox label={'모바일 웹'}*/}
+          {/*                  type={'c'}*/}
+          {/*                  id={'MOBILE_WEB'}*/}
+          {/*                  value={'MOBILE_WEB'}*/}
+          {/*                  isChecked={searchState?.agentTypes.includes('MOBILE_WEB') ? true : false}*/}
+          {/*                  onChange={handleAgentChangeCheck}/>*/}
+          {/*        <Checkbox label={'하이브리드 APP'}*/}
+          {/*                  type={'c'}*/}
+          {/*                  id={'MOBILE_HYBRID_APP'}*/}
+          {/*                  value={'MOBILE_HYBRID_APP'}*/}
+          {/*                  isChecked={searchState?.agentTypes.includes('MOBILE_HYBRID_APP') ? true : false}*/}
+          {/*                  onChange={handleAgentChangeCheck}/>*/}
+          {/*        <Checkbox label={'네이티브 APP'}*/}
+          {/*                  type={'c'}*/}
+          {/*                  id={'MOBILE_NATIVE_APP'}*/}
+          {/*                  value={'MOBILE_NATIVE_APP'}*/}
+          {/*                  isChecked={searchState?.agentTypes.includes('MOBILE_NATIVE_APP') ? true : false}*/}
+          {/*                  onChange={handleAgentChangeCheck}/>*/}
+          {/*      </AgentType>*/}
+          {/*    </RelativeDiv>*/}
+          {/*  </ColSpan0>*/}
+          {/*</RowSpan>*/}
         <RowSpan style={{justifyContent: 'flex-start'}}>
-          <ColSpan0>
-            <ColTitle style={{paddingLeft: 0}}>기간</ColTitle>
-            <div>
+          <ColSpan4>
+            {/*<ColTitle style={{paddingLeft: 0}}>기간</ColTitle>*/}
               <DateContainer>
                 <CalendarBox>
                   <CalendarIcon/>
@@ -339,35 +340,35 @@ export function DashBoardCondition(props) {
                   openToDate={endDate}
                 />
               </DateContainer>
-            </div>
-            <div>
-              <RangePicker>
-                <div onClick={() => handleRangeDate('thisMonth')} style={pickedDate === 'thisMonth' ? {color:'#f5811f'}:null}>이번달</div>
-                <HorizontalRule style={{margin: "0 10px"}}/>
-                <div onClick={() => handleRangeDate('lastMonth')} style={pickedDate === 'lastMonth' ? {color:'#f5811f'}:null}>지난달</div>
-                <HorizontalRule style={{margin: "0 10px"}}/>
-                <div onClick={() => handleRangeDate('today')} style={pickedDate === 'today' ? {color:'#f5811f'}:null}>오늘</div>
-                <HorizontalRule style={{margin: "0 10px"}}/>
-                <div onClick={() => handleRangeDate('lastDay')} style={pickedDate === 'lastDay' ? {color:'#f5811f'}:null}>어제</div>
-                <HorizontalRule style={{margin: "0 10px"}}/>
-                <div onClick={() => handleRangeDate('lastWeekDay')} style={pickedDate === 'lastWeekDay' ? {color:'#f5811f'}:null}>지난7일</div>
-                <HorizontalRule style={{margin: "0 10px"}}/>
-                <div onClick={() => handleRangeDate('lastThirtyDay')} style={pickedDate === 'lastThirtyDay' ? {color:'#f5811f'}:null}>지난30일</div>
-              </RangePicker>
-            </div>
-          </ColSpan0>
+            <ColSpan0>
+              <div>
+                <RangePicker style={{marginRight: 0}}>
+                  <div onClick={() => handleRangeDate('thisMonth')} style={pickedDate === 'thisMonth' ? {color:'#f5811f'}:null}>이번달</div>
+                  <HorizontalRule style={{margin: "0 10px"}}/>
+                  <div onClick={() => handleRangeDate('lastMonth')} style={pickedDate === 'lastMonth' ? {color:'#f5811f'}:null}>지난달</div>
+                  <HorizontalRule style={{margin: "0 10px"}}/>
+                  <div onClick={() => handleRangeDate('today')} style={pickedDate === 'today' ? {color:'#f5811f'}:null}>오늘</div>
+                  <HorizontalRule style={{margin: "0 10px"}}/>
+                  <div onClick={() => handleRangeDate('lastDay')} style={pickedDate === 'lastDay' ? {color:'#f5811f'}:null}>어제</div>
+                  <HorizontalRule style={{margin: "0 10px"}}/>
+                  <div onClick={() => handleRangeDate('lastWeekDay')} style={pickedDate === 'lastWeekDay' ? {color:'#f5811f'}:null}>지난7일</div>
+                  <HorizontalRule style={{margin: "0 10px"}}/>
+                  <div onClick={() => handleRangeDate('lastThirtyDay')} style={pickedDate === 'lastThirtyDay' ? {color:'#f5811f'}:null}>지난30일</div>
+                </RangePicker>
+              </div>
+            </ColSpan0>
           {role !== 'NORMAL' &&
-            <ColSpan0 style={{marginLeft: 20}}>
-              <ColTitle style={{paddingLeft: 0}}>검색어</ColTitle>
+            <ColSpan0>
+              {/*<ColTitle style={{paddingLeft: 0}}>검색어</ColTitle>*/}
               <Input type={'text'}
                      placeholder={'광고주명 및 아이디 검색'}
                      value={keyword}
                      onChange={handleSearchValue}
                      onKeyDown={e => (e.code === 'Enter') && handleData()}
-                     style={{width: 220}}
               />
             </ColSpan0>
           }
+          </ColSpan4>
         </RowSpan>
       </div>
       <GraySearchButton onClick={handleData}>적용</GraySearchButton>

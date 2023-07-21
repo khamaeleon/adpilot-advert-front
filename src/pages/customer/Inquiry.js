@@ -97,10 +97,18 @@ export default function InquiryList(props) {
   }
 
   const handleSearchType = (e) => {
-    setSearchCondition({
-      ...searchCondition,
-      inquiryType: e
-    })
+    if(e.id === 0) {
+      setSearchCondition({
+        ...searchCondition,
+        inquiryType: e,
+        keyword: ''
+      })
+    }else{
+      setSearchCondition({
+        ...searchCondition,
+        inquiryType: e
+      })
+    }
   }
 
   return (
@@ -120,6 +128,7 @@ export default function InquiryList(props) {
                 <Input
                     placeholder={'제목 검색'}
                     value={searchCondition.keyword}
+                    readOnly={searchCondition.inquiryType === 'DEFAULT' || searchCondition.inquiryType.id === 0}
                     onChange={handleSearch}
                     onKeyDown={e => (e.code === 'Enter') && onSearch() }
 

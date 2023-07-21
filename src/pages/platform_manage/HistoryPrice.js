@@ -5,10 +5,11 @@ import {findRevisionTargetingPriceList} from "../../services/Platform/HistoryAxi
 import {budgetPriceColumns, HistorySearchCondition, searchConditionData} from "./entity/History";
 
 const option = [
-  {key: 0, value: 'ADVER_NAME', label: '광고주명'},
-  {key: 1, value: 'USER_NAME', label: '광고주 아이디'},
-  {key: 2, value: 'TARGETING_PRICE_GROUP_NAME', label: '이벤트 단가 그룹명'},
-  {key: 3, value: 'MODIFIED_BY', label: '변경자 아이디'}
+  {key: 0, value: 'DEFAULT', label: '전체'},
+  {key: 1, value: 'ADVER_NAME', label: '광고주명'},
+  {key: 2, value: 'USER_NAME', label: '광고주 아이디'},
+  {key: 3, value: 'TARGETING_PRICE_GROUP_NAME', label: '이벤트 단가 그룹명'},
+  {key: 4, value: 'MODIFIED_BY', label: '변경자 아이디'}
 ]
 
 export function HistoryPriceManage () {
@@ -17,16 +18,26 @@ export function HistoryPriceManage () {
 
   useEffect(() => {
     findRevisionTargetingPriceList(searchCondition).then(response =>{
-      setDataSource(response.rows)
+      if(response) {
+        setDataSource(response.rows)
+      }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChangeSearchKeywordType = (e) => {
-    setSearchCondition({
-      ...searchCondition,
-      searchKeywordType: e.value
-    })
+    if(e.value === 'DEFAULT') {
+      setSearchCondition({
+        ...searchCondition,
+        searchKeywordType: e.value,
+        searchKeyword: ''
+      })
+    } else {
+      setSearchCondition({
+        ...searchCondition,
+        searchKeywordType: e.value
+      })
+    }
   }
 
   const handleChangeSearchKeyword = (e) => {

@@ -4,7 +4,7 @@ import {
   CalendarBox,
   CalendarIcon,
   ColSpan0,
-  ColSpan1,
+  ColSpan1, ColSpan4,
   ColTitle,
   CustomDatePicker,
   DateContainer,
@@ -126,10 +126,18 @@ export function PlatformCondition(props) {
     setDateRange(date)
   }
   const handleSearchType = (selectSearchType) => {
-    setSearchCondition({
-      ...searchCondition,
-      searchType: selectSearchType.value
-    })
+    if(selectSearchType.value === 'DEFAULT'){
+      setSearchCondition({
+        ...searchCondition,
+        searchType: selectSearchType.value,
+        keyword: ''
+      })
+    }else {
+      setSearchCondition({
+        ...searchCondition,
+        searchType: selectSearchType.value
+      })
+    }
   }
 
   const handleSearchValue = (event) => {
@@ -161,75 +169,72 @@ export function PlatformCondition(props) {
             </RowSpan>
       }
       <RowSpan>
-        <BoardSearchDetail>
+        <BoardSearchDetail style={{marginTop: 10}}>
           <div style={{marginRight: 10}}>
             <RowSpan style={{justifyContent: 'flex-start', marginTop:0}}>
-              <ColSpan0>
-                <Span2>기간</Span2>
-                <div>
-                  <DateContainer style={{marginRight: 0}}>
-                    <CalendarBox>
-                      <CalendarIcon/>
-                    </CalendarBox>
-                    <CustomDatePicker
-                      selectsRange={true}
-                      startDate={startDate}
-                      endDate={endDate}
-                      maxDate={new Date()}
-                      onChange={(date) => handelChangeDateRange(date)}
-                      dateFormat="yyyy-MM-dd"
-                      locale={ko}
-                      isClearable={false}
-                      monthsShown={2}
-                      showPreviousMonths={showPrevious}
-                      openToDate={endDate}
-                    />
-                  </DateContainer>
-                </div>
-              </ColSpan0>
-              <ColSpan1>
-                <div>
-                  <RangePicker>
-                    <div onClick={() => handleRangeDate('thisMonth')} style={dateActive==='thisMonth'?{color: mainColor}:null}>이번달</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastMonth')} style={dateActive==='lastMonth'?{color: mainColor}:null}>지난달</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('today')} style={dateActive==='today'?{color: mainColor}:null}>오늘</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastDay')} style={dateActive==='lastDay'?{color: mainColor}:null}>어제</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastWeekDay')} style={dateActive==='lastWeekDay'?{color: mainColor}:null}>지난7일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastThirtyDay')} style={dateActive==='lastThirtyDay'?{color: mainColor}:null}>지난30일</div>
-                    <HorizontalRule style={{margin: "0 10px"}}/>
-                    <div onClick={() => handleRangeDate('lastNinetyDay')} style={dateActive==='lastNinetyDay'?{color: mainColor}:null}>지난90일</div>
-                    {/*<HorizontalRule style={{margin: "0 10px"}}/>*/}
-                    {/*<div onClick={() => handleRangeDate('lastOneEightyDay')} style={dateActive==='lastOneEightyDay'?{color: mainColor}:null}>지난180일</div>*/}
-                  </RangePicker>
-                </div>
-
-              </ColSpan1>
-
-            </RowSpan>
-              <RowSpan style={{justifyContent: 'flex-start'}}>
+              <ColSpan4>
+                  {/*<Span2>기간</Span2>*/}
+                    <DateContainer style={{marginRight: 0}}>
+                      <CalendarBox>
+                        <CalendarIcon/>
+                      </CalendarBox>
+                      <CustomDatePicker
+                        selectsRange={true}
+                        startDate={startDate}
+                        endDate={endDate}
+                        maxDate={new Date()}
+                        onChange={(date) => handelChangeDateRange(date)}
+                        dateFormat="yyyy-MM-dd"
+                        locale={ko}
+                        isClearable={false}
+                        monthsShown={2}
+                        showPreviousMonths={showPrevious}
+                        openToDate={endDate}
+                      />
+                    </DateContainer>
                 <ColSpan0>
-                  <Span2>검색어</Span2>
+                  <div>
+                    <RangePicker>
+                      <div onClick={() => handleRangeDate('thisMonth')} style={dateActive==='thisMonth'?{color: mainColor}:null}>이번달</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div onClick={() => handleRangeDate('lastMonth')} style={dateActive==='lastMonth'?{color: mainColor}:null}>지난달</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div onClick={() => handleRangeDate('today')} style={dateActive==='today'?{color: mainColor}:null}>오늘</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div onClick={() => handleRangeDate('lastDay')} style={dateActive==='lastDay'?{color: mainColor}:null}>어제</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div onClick={() => handleRangeDate('lastWeekDay')} style={dateActive==='lastWeekDay'?{color: mainColor}:null}>지난7일</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div onClick={() => handleRangeDate('lastThirtyDay')} style={dateActive==='lastThirtyDay'?{color: mainColor}:null}>지난30일</div>
+                      <HorizontalRule style={{margin: "0 10px"}}/>
+                      <div onClick={() => handleRangeDate('lastNinetyDay')} style={dateActive==='lastNinetyDay'?{color: mainColor}:null}>지난90일</div>
+                      {/*<HorizontalRule style={{margin: "0 10px"}}/>*/}
+                      {/*<div onClick={() => handleRangeDate('lastOneEightyDay')} style={dateActive==='lastOneEightyDay'?{color: mainColor}:null}>지난180일</div>*/}
+                    </RangePicker>
+                  </div>
+                </ColSpan0>
+              </ColSpan4>
+            </RowSpan>
+            <RowSpan style={{justifyContent: 'flex-start'}}>
+                <ColSpan4>
+                  {/*<Span2>검색어</Span2>*/}
                     <Select options={searchType}
-                            value={searchCondition.searchType !== '' ? searchType.find(value => value.value === searchCondition.searchType) : ''}
+                            value={searchCondition.searchType !== '' ? searchType.find(value => value.value === searchCondition.searchType) : searchType[0]}
                             onChange={handleSearchType}
                             isSearchable={false}
                             width={133}
                             styles={selectStyle}
                     />
-                    <SearchInput style={{width: '490px'}}>
+                    <SearchInput>
                       <input type={'text'}
                              placeholder={'검색어를 입력해주세요.'}
+                             readOnly={searchCondition.searchType === 'DEFAULT' || searchCondition.searchType.id === 0}
                              value={searchCondition.keyword}
                              onChange={handleSearchValue}
                       />
                     </SearchInput>
-                </ColSpan0>
-            </RowSpan>
+                </ColSpan4>
+        </RowSpan>
           </div>
           <GraySearchButton onClick={handleTableData}>적용</GraySearchButton>
         </BoardSearchDetail>
@@ -319,10 +324,19 @@ export function PaymentCondition(props) {
     }
   }
   const handleSearchType = (selectSearchType) => {
-    setSearchCondition({
-      ...searchCondition,
-      searchType: selectSearchType.value
-    })
+
+    if(selectSearchType.value === 'ALL') {
+      setSearchCondition({
+        ...searchCondition,
+        searchType: selectSearchType.value,
+        search: ''
+      })
+    } else {
+      setSearchCondition({
+        ...searchCondition,
+        searchType: selectSearchType.value
+      })
+    }
     setSearchSelected(selectSearchType)
   }
 
@@ -337,90 +351,88 @@ export function PaymentCondition(props) {
         <BoardSearchDetail>
           <div style={{marginRight: 10}}>
             <RowSpan style={{justifyContent: 'flex-start', marginTop:0}}>
-              <ColSpan0>
-                <Span2>기간</Span2>
-                <div>
-                  <DateContainer style={{width: '100%'}}>
-                    <CalendarBox>
-                      <CalendarIcon/>
-                    </CalendarBox>
-                    <CustomDatePicker
-                      selectsRange={true}
-                      startDate={startDate}
-                      endDate={endDate}
-                      maxDate={new Date(getToDay())}
-                      onChange={(date) => handelChangeDateRange(date)}
-                      dateFormat="yyyy-MM-dd"
-                      locale={ko}
-                      isClearable={false}
-                      monthsShown={2}
-                      showPreviousMonths={showPrevious}
-                      openToDate={endDate}
-                    />
-                  </DateContainer>
-                </div>
-              </ColSpan0>
-              <ColSpan0>
-                <ColTitle><span>신청 상태</span></ColTitle>
-                <div>
-                  <AgentType>
-                    {params.id === 'advertisingPayments' &&
-                      <>
-                        <Checkbox label={'전체'}
-                                  type={'c'}
-                                  id={'ALL'}
-                                  isChecked={isCheckedAll}
-                                  onChange={handleChangeCostCheckAll}
-                        />
-                        <Checkbox label={'광고비 지급'}
-                                  type={'c'}
-                                  id={'GIVEN_BY_ADMIN'}
-                                  isChecked={searchCondition.statusList.includes('GIVEN_BY_ADMIN')}
-                                  onChange={handleChangeChecked}/>
-                        <Checkbox label={'광고비 차감'}
-                                  type={'c'}
-                                  id={'TAKEN_BY_ADMIN'}
-                                  isChecked={searchCondition.statusList.includes('TAKEN_BY_ADMIN')}
-                                  onChange={handleChangeChecked}/>
-                        <Checkbox label={'환불 신청'}
-                                  type={'c'}
-                                  id={'REFUND_REQUEST_OF_USER'}
-                                  isChecked={searchCondition.statusList.includes('REFUND_REQUEST_OF_USER')}
-                                  onChange={handleChangeChecked}/>
-                        <Checkbox label={'환불 완료'}
-                                  type={'c'}
-                                  id={'REFUNDED_BY_ADMIN'}
-                                  isChecked={searchCondition.statusList.includes('REFUNDED_BY_ADMIN')}
-                                  onChange={handleChangeChecked}/>
-                      </>
-                    }
-                    {params.id === 'paymentManage' &&
-                      <>
-                        <Checkbox label={'전체'}
-                                  type={'c'}
-                                  id={'ALL'}
-                                  isChecked={isCheckedAll}
-                                  onChange={handleChangeCheckAll}
-                        />
-                        <Checkbox label={'결제 완료'}
-                                  type={'c'}
-                                  id={'PAYMENT_COMPLETED'}
-                                  isChecked={searchCondition.statusList.includes('PAYMENT_COMPLETED')}
-                                  onChange={handleChangeChecked}/>
-                        <Checkbox label={'결제 실패'}
-                                  type={'c'}
-                                  id={'PAYMENT_FAILED'}
-                                  isChecked={searchCondition.statusList.includes('PAYMENT_FAILED')}
-                                  onChange={handleChangeChecked}/>
-                      </>
-                    }
-                  </AgentType>
-                </div>
-              </ColSpan0>
+              <ColSpan4>
+                  {/*<Span2>기간</Span2>*/}
+                    <DateContainer style={{marginRight: 0}}>
+                      <CalendarBox>
+                        <CalendarIcon/>
+                      </CalendarBox>
+                      <CustomDatePicker
+                        selectsRange={true}
+                        startDate={startDate}
+                        endDate={endDate}
+                        maxDate={new Date(getToDay())}
+                        onChange={(date) => handelChangeDateRange(date)}
+                        dateFormat="yyyy-MM-dd"
+                        locale={ko}
+                        isClearable={false}
+                        monthsShown={2}
+                        showPreviousMonths={showPrevious}
+                        openToDate={endDate}
+                      />
+                    </DateContainer>
+                <ColSpan0>
+                  <ColTitle><span>신청 상태</span></ColTitle>
+                  <div style={{marginRight: 0}}>
+                    <AgentType>
+                      {params.id === 'advertisingPayments' &&
+                        <>
+                          <Checkbox label={'전체'}
+                                    type={'c'}
+                                    id={'ALL'}
+                                    isChecked={isCheckedAll}
+                                    onChange={handleChangeCostCheckAll}
+                          />
+                          <Checkbox label={'광고비 지급'}
+                                    type={'c'}
+                                    id={'GIVEN_BY_ADMIN'}
+                                    isChecked={searchCondition.statusList.includes('GIVEN_BY_ADMIN')}
+                                    onChange={handleChangeChecked}/>
+                          <Checkbox label={'광고비 차감'}
+                                    type={'c'}
+                                    id={'TAKEN_BY_ADMIN'}
+                                    isChecked={searchCondition.statusList.includes('TAKEN_BY_ADMIN')}
+                                    onChange={handleChangeChecked}/>
+                          <Checkbox label={'환불 신청'}
+                                    type={'c'}
+                                    id={'REFUND_REQUEST_OF_USER'}
+                                    isChecked={searchCondition.statusList.includes('REFUND_REQUEST_OF_USER')}
+                                    onChange={handleChangeChecked}/>
+                          <Checkbox label={'환불 완료'}
+                                    type={'c'}
+                                    id={'REFUNDED_BY_ADMIN'}
+                                    isChecked={searchCondition.statusList.includes('REFUNDED_BY_ADMIN')}
+                                    onChange={handleChangeChecked}/>
+                        </>
+                      }
+                      {params.id === 'paymentManage' &&
+                        <>
+                          <Checkbox label={'전체'}
+                                    type={'c'}
+                                    id={'ALL'}
+                                    isChecked={isCheckedAll}
+                                    onChange={handleChangeCheckAll}
+                          />
+                          <Checkbox label={'결제 완료'}
+                                    type={'c'}
+                                    id={'PAYMENT_COMPLETED'}
+                                    isChecked={searchCondition.statusList.includes('PAYMENT_COMPLETED')}
+                                    onChange={handleChangeChecked}/>
+                          <Checkbox label={'결제 실패'}
+                                    type={'c'}
+                                    id={'PAYMENT_FAILED'}
+                                    isChecked={searchCondition.statusList.includes('PAYMENT_FAILED')}
+                                    onChange={handleChangeChecked}/>
+                        </>
+                      }
+                    </AgentType>
+                  </div>
+                </ColSpan0>
+              </ColSpan4>
             </RowSpan>
             <RowSpan style={{justifyContent: 'flex-start'}}>
-              <ColSpan0>
-                <Span2>검색어</Span2>
+              <ColSpan4>
+                {/*<Span2>검색어</Span2>*/}
                   <Select options={searchType}
                           value={searchCondition.searchType.value !== '' ? searchType.find(value => value.value === searchCondition.searchType) : searchType[0]}
                           onChange={handleSearchType}
@@ -428,16 +440,17 @@ export function PaymentCondition(props) {
                           width={133}
                           styles={selectStyle}
                   />
-                  <SearchInput style={{width: '490px'}}>
+                  <SearchInput>
                     <input type={'text'}
                            placeholder={'검색어를 입력해주세요.'}
                            value={searchCondition.search}
                            onChange={handlePaymentSearchValue}
+                           readOnly={searchCondition.searchType === 'ALL'}
                            style={{marginRight: 0}}
                            onKeyDown={e => (e.code === 'Enter') && handleTableData()}
                     />
                   </SearchInput>
-              </ColSpan0>
+              </ColSpan4>
             </RowSpan>
           </div>
           <GraySearchButton onClick={handleTableData}>적용</GraySearchButton>
