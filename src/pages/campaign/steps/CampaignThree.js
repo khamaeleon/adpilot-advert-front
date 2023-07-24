@@ -52,7 +52,6 @@ export function CampaignThree() {
   const {state} = useLocation()
   const navigate = useNavigate()
   const resetInfo = useResetAtom(campaignGroupInfoAtom)
-  const [showPrevious, setShowPrevious] = useState(true)
 
   useEffect(()=>{
     resetInfo();
@@ -101,7 +100,7 @@ export function CampaignThree() {
         startDate: dateFormat(startDate, 'YYYY-MM-DD'),
         endDate: dateFormat(endDate, 'YYYY-MM-DD'),
       })
-    } else setShowPrevious(false)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[dateRange])
 
@@ -545,7 +544,6 @@ export function CampaignThree() {
                           selected={startDate}
                           inputRef={ref}
                           monthsShown={2}
-                          showPreviousMonths={showPrevious}
                           openToDate={startDate}
                         />
                       )}

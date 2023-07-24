@@ -61,13 +61,16 @@ function ProductManage() {
   const [productData, setProductData] = useAtom(productListDataAtom)
 
   useEffect(() => {
-    retrieveProduct(searchCondition).then(response =>{
-      if(response){
-        setProductData(response)
-      }
-    })
+    console.log(searchCondition)
+    if(searchCondition.username !== '') {
+      retrieveProduct(searchCondition).then(response =>{
+        if(response){
+          setProductData(response)
+        }
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  },[searchCondition.username])
   /**
    * 상품 수집 검색
    */
