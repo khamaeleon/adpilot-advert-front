@@ -60,7 +60,6 @@ const columnList= {
 }
 
 const indexedColumns = (columns) => {
-  console.log(columns.includes('BY_DAILY'))
   return [
     {name:"BY_DAILY", header: "일별", textAlign: 'center', visible: columns.includes('BY_DAILY'), sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"BY_WEEKLY", header: "주별", textAlign: 'center', visible: columns.includes('BY_WEEKLY'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
@@ -69,23 +68,23 @@ const indexedColumns = (columns) => {
     {name:"BY_CAMPAIGN", header: "캠페인 명", textAlign: 'center', visible: columns.includes('BY_CAMPAIGN'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"BY_PRODUCT", header: "광고 상품", textAlign: 'center', visible: columns.includes('BY_PRODUCT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"BY_TARGETING", header: "타겟팅", textAlign: 'center', visible: columns.includes('BY_TARGETING'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
-    {name:"COUNT_BY_ADVERTISE", header: '광고주 수', textAlign: 'center', visible: columns.includes('TOTAL_EXPOSURE_COUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
-    {name:"TOTAL_EXPOSURE_COUNT", header: "총 노출수", textAlign: 'center', visible: columns.includes('BY_DAILY'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"COUNT_BY_ADVERTISE", header: '광고주 수', textAlign: 'center', visible: columns.includes('COUNT_BY_ADVERTISE'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"TOTAL_EXPOSURE_COUNT", header: "총 노출수", textAlign: 'center', visible: columns.includes('TOTAL_EXPOSURE_COUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"EXPOSURE_COUNT", header: "노출수", textAlign: 'center', visible: columns.includes('EXPOSURE_COUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"TOTAL_CLICK_COUNT", header: "총 클릭수", textAlign: 'center', visible: columns.includes('TOTAL_CLICK_COUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"VALID_CLICK_COUNT", header: "클릭수", textAlign: 'center', visible: columns.includes('VALID_CLICK_COUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
-    {name:"CLICK_RATE", header: "클릭율", textAlign: 'center', visible: columns.includes('CLICK_RATE'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"CLICK_RATE", header: "클릭률", textAlign: 'center', visible: columns.includes('CLICK_RATE'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"COST_AMOUNT", header: "비용", textAlign: 'center', visible: columns.includes('COST_AMOUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"CPC", header: "CPC", textAlign: 'center', visible: columns.includes('CPC'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"CONVERSION_PRICE", header: "전환단가", textAlign: 'center', visible: columns.includes('CONVERSION_PRICE'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"CONVERSION_COUNT", header: "전환수", textAlign: 'center', visible: columns.includes('CONVERSION_COUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"CONVERSION_RATE", header: "전환율", textAlign: 'center', visible: columns.includes('CONVERSION_RATE'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
-    {name:"CONVERSION_PRICE", header: "전환비용", textAlign: 'center', visible: columns.includes('CONVERSION_PRICE'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
-    {name:"AMOUNT_PURCHASED_AVG", header: "평균", textAlign: 'center', visible: columns.includes('AMOUNT_PURCHASED_AVG'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"AMOUNT_PURCHASED_AVG", header: "평균구매액", textAlign: 'center', visible: columns.includes('AMOUNT_PURCHASED_AVG'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"SESSION_CONVERSION_AMOUNT", header: "세션 매출", textAlign: 'center', visible: columns.includes('SESSION_CONVERSION_AMOUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"SESSION_CONVERSION_ROAS", header: "세션 ROAS", textAlign: 'center', visible: columns.includes('SESSION_CONVERSION_ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"DIRECT_CONVERSION_AMOUNT", header: "직접 매출", textAlign: 'center', visible: columns.includes('DIRECT_CONVERSION_AMOUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"DIRECT_CONVERSION_ROAS", header: "직접 ROAS", textAlign: 'center', visible: columns.includes('DIRECT_CONVERSION_ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
-    {name:"ROAS", header: "ROAS", textAlign: 'center', visible: columns.includes('ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"ROAS", header: "총 ROAS", textAlign: 'center', visible: columns.includes('ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"EXPOSURE_CONVERSION_AMOUNT", header: "노출 매출", textAlign: 'center', visible: columns.includes('EXPOSURE_CONVERSION_AMOUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"EXPOSURE_CONVERSION_ROAS", header: "노출 ROAS", textAlign: 'center', visible: columns.includes('EXPOSURE_CONVERSION_ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"E_CPM", header: "eCPM", textAlign: 'center', visible: columns.includes('E_CPM'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
@@ -129,7 +128,6 @@ export default function CreateReports() {
     setDefaultColumn(indexedColumns(columns))
   }, [columns]);
 
-
   /**
    * 광고주 검색
    * @param data
@@ -142,6 +140,10 @@ export default function CreateReports() {
    * @param item
    */
   const handleAddPeriodItem = (item) => {
+    setScopes([])
+    setPeriod('NONE')
+    setDataItems([])
+    setColumns([])
     setPeriod(item)
     setColumns([item])
   }
@@ -155,7 +157,7 @@ export default function CreateReports() {
       setColumns(prev => [...prev, item])
     } else {
       const newScopesData = scopes.filter(datum => datum !== item)
-      const newColumnData = columns.filter(datum => datum => datum !== item)
+      const newColumnData = columns.filter(datum => datum !== item)
       setScopes(newScopesData)
       setColumns(newColumnData)
     }
@@ -172,7 +174,7 @@ export default function CreateReports() {
       const newColumnData = columns.filter(datum => datum !== item)
       const newDataItems = dataItems.filter(datum => datum !== item)
       setColumns(newColumnData)
-      setDataItems(newDataItems !== undefined ? newDataItems : [])
+      setDataItems(newDataItems)
     }
   }
   /**
@@ -221,7 +223,6 @@ export default function CreateReports() {
           "groupByScopes" : defaultType === 'scopes' ? scopes : ['NONE'],
           "columns" :  dataItems
         }
-
         if(creativeInfo.id !== undefined) {
           params.userId = creativeInfo.id
           params.adverName = creativeInfo.adverName
@@ -493,18 +494,13 @@ export default function CreateReports() {
               </ColSpan2>
             </RowSpan>
             <RowSpan style={{marginTop: 25}}>
-              <ReactDataGrid
-                licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
-                headerHeight={40}
-                columns={defaultColumn}
-                dataSource={[]}
-                showCellBorders={'horizontal'}
-                showZebraRows={false}
-                activateRowOnFocus
-                emptyText={columns.length === 0 ? '보고서 항목을 선택해주세요.' : ''}
-                style={{fontSize: '13px'}}
-                activeCell={null}
-              />
+              <ColumnData>
+                {defaultColumn.map((column, key) => {
+                  if(column.visible) {
+                    return <ColumnItems key={key}>{column.header}</ColumnItems>
+                  }
+                })}
+              </ColumnData>
             </RowSpan>
           </RowSpan>
         </BoardSearchResult>
@@ -543,4 +539,26 @@ const DefaultItemButton = styled.div`
   & p {
     padding: 0 20px
   }
+`
+
+const ColumnData = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+  background-color: #fafafa;
+`
+
+const ColumnItems = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 100px;
+  height: 42px;
+  text-align: center;
+  white-space: nowrap;
+  border-right: 1px solid #e5e5e5;
+  font-size: 13px;
 `
