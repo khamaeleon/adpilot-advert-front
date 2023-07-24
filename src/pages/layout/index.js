@@ -70,6 +70,8 @@ function Layout() {
                 }
               })
             }
+          } else {
+            navigate('/');
           }
         });
       }
