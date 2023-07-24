@@ -91,6 +91,8 @@ export const productListColumn = [
         <>
           {props.cellProps.data.productImages.length !== 0 &&
             <img src={props.cellProps.data.productImages[0].imageUrl} style={{height: 30}} alt={'이미지'}/>
+            ||
+            <span>-</span>
           }
         </>
       )
@@ -114,6 +116,8 @@ export const productListColumn = [
         <>
           {props.cellProps.data.productImages.length > 1 &&
             <ImageView url={props.cellProps.data.productImages[1]}/>
+            ||
+            <span>-</span>
           }
         </>
       )
@@ -137,6 +141,8 @@ export const productListColumn = [
         <>
           {props.cellProps.data.productImages.length > 2 &&
             <ImageView url={props.cellProps.data.productImages[2]}/>
+            ||
+            <span>-</span>
           }
         </>
       )
@@ -159,6 +165,8 @@ export const productListColumn = [
         <>
           {props.cellProps.data.productCategorys.length !== 0 &&
             <span>{props.cellProps.data.productCategorys[0].name}</span>
+            ||
+            <span>-</span>
           }
         </>
       )
@@ -181,6 +189,8 @@ export const productListColumn = [
         <>
           {props.cellProps.data.productCategorys.length > 1 &&
             <span>{props.cellProps.data.productCategorys[1].name}</span>
+            ||
+            <span>-</span>
           }
         </>
       )
@@ -203,6 +213,8 @@ export const productListColumn = [
         <>
           {props.cellProps.data.productCategorys.length > 2 &&
             <span>{props.cellProps.data.productCategorys[2].name}</span>
+            ||
+            <span>-</span>
           }
         </>
       )
