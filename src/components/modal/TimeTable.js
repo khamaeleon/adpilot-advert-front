@@ -2,7 +2,7 @@ import {useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import DragToSelect from "../common/DragToSelect";
 import {ModalBody, ModalHeader} from "./Modal";
-import React from "react";
+import React, {useEffect} from "react";
 import InsertToSelect from "../common/InsertToSelect";
 import {ColTitle, RowSpan, Script} from "../../assets/GlobalStyles";
 import styled from "styled-components";
@@ -33,6 +33,12 @@ function TimeTableComponent (props) {
 }
 export default function TimeTable(props){
   const setModal = useSetAtom(modalController)
+  useEffect(()=>{
+    return ()=> {
+      setModal({isShow: false})
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
   const handleOpenTimeTable = () => {
     setModal({
       isShow: true,

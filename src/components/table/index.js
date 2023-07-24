@@ -30,7 +30,12 @@ export function SwitchComponent(props){
   const [, setModal] = useAtom(modalController)
   const background = !select ? {background: light.color.lightGray} : {background: light.color.mainColor};
   const position = select ? {left: ' calc(100% - 4px)', transform: 'translateX(-100%)'} : null
-
+  useEffect(()=>{
+    return ()=> {
+      setModal({isShow: false})
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
   const handleClick = (confirm) => {
     if(confirm){
       eventClick();

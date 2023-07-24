@@ -164,7 +164,7 @@ function SearchModal (props) {
                          placeholder= {'매체명, 지면명, 아이디, 지면 코드를 입력해주세요.'}
                          value = {searchKeyword}
                          onChange={handleSearchKeyword}
-                         onKeyDown={e => (e.code === 'Enter') && onSearchMediaInventory() }
+                         onKeyDown={e => (e.key === 'Enter') && onSearchMediaInventory() }
                   />
                   <button type={'button'} onClick={onSearchMediaInventory}>검색</button>
                 </SearchInventoryInputGroup>

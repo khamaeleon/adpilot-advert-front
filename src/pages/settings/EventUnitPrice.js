@@ -47,7 +47,7 @@ function EventUnitPrice() {
                    placeholder={'광고주명 및 아이디 검색'}
                    value={searchParams.keyword}
                    onChange={handleSearch}
-                   onKeyDown={e => (e.code === 'Enter') && onSearchAdverEventPrice() }
+                   onKeyDown={e => (e.key === 'Enter') && onSearchAdverEventPrice() }
 
             />
             <DefaultButton onClick={onSearchAdverEventPrice}>검색</DefaultButton>

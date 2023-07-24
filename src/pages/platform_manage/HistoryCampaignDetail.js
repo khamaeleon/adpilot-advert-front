@@ -70,7 +70,7 @@ export function HistoryCampaignDetail () {
     let value;
     const campaignData = data[timing]
     if(Object.keys(arg)[0] === 'publishYn') {
-      value = campaignData[Object.keys(arg)] === 'Y' ? '게제 중' : '게재 중지'
+      value = campaignData[Object.keys(arg)] === 'Y' ? '게재 중' : '게재 중지'
     } else {
       value = campaignData[Object.keys(arg)]
     }

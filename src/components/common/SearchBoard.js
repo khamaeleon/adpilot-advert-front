@@ -172,7 +172,7 @@ export default function SearchBoard (props) {
                      placeholder={'검색할 매체명을 입력해주세요.'}
                      value={searchInfoState.keyword}
                      onChange={handleSearchName}
-                     onKeyDown={event => (event.code === 'Enter') && onClickSearch() }
+                     onKeyDown={event => (event.key === 'Enter') && onClickSearch() }
 
               />
             </SearchInput>
