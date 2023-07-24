@@ -23,11 +23,11 @@ import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
 import {createCustomReportsAxios, retrieveCustomReportsList} from "../../services/reports/ReportsAxios";
 import {tokenResultAtom} from "../login/entity/Common";
-import {useAtomValue, useSetAtom} from "jotai";
+import {useAtom, useAtomValue, useSetAtom} from "jotai";
 import {useNavigate} from "react-router-dom";
 import {reportsInfoAtom} from "../../components/aside/entity";
 import {createCustomReportsAdminAxios, retrieveCustomReportsAdminList} from "../../services/reports/ReportsAdminAxios";
-
+import {atom} from "jotai/index";
 
 const columnList= {
   BY_DAILY: "일별",
@@ -59,6 +59,39 @@ const columnList= {
   E_CPM: "eCPM",
 }
 
+const indexedColumns = (columns) => {
+  console.log(columns.includes('BY_DAILY'))
+  return [
+    {name:"BY_DAILY", header: "일별", textAlign: 'center', visible: columns.includes('BY_DAILY'), sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"BY_WEEKLY", header: "주별", textAlign: 'center', visible: columns.includes('BY_WEEKLY'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"BY_MONTHLY", header: "월별", textAlign: 'center', visible: columns.includes('BY_MONTHLY') ,sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"BY_ADVERTISE", header: "광고주 명", textAlign: 'center', visible: columns.includes('BY_ADVERTISE') ,sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"BY_CAMPAIGN", header: "캠페인 명", textAlign: 'center', visible: columns.includes('BY_CAMPAIGN'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"BY_PRODUCT", header: "광고 상품", textAlign: 'center', visible: columns.includes('BY_PRODUCT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"BY_TARGETING", header: "타겟팅", textAlign: 'center', visible: columns.includes('BY_TARGETING'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"COUNT_BY_ADVERTISE", header: '광고주 수', textAlign: 'center', visible: columns.includes('TOTAL_EXPOSURE_COUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"TOTAL_EXPOSURE_COUNT", header: "총 노출수", textAlign: 'center', visible: columns.includes('BY_DAILY'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"EXPOSURE_COUNT", header: "노출수", textAlign: 'center', visible: columns.includes('EXPOSURE_COUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"TOTAL_CLICK_COUNT", header: "총 클릭수", textAlign: 'center', visible: columns.includes('TOTAL_CLICK_COUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"VALID_CLICK_COUNT", header: "클릭수", textAlign: 'center', visible: columns.includes('VALID_CLICK_COUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"CLICK_RATE", header: "클릭율", textAlign: 'center', visible: columns.includes('CLICK_RATE'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"COST_AMOUNT", header: "비용", textAlign: 'center', visible: columns.includes('COST_AMOUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"CPC", header: "CPC", textAlign: 'center', visible: columns.includes('CPC'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"CONVERSION_COUNT", header: "전환수", textAlign: 'center', visible: columns.includes('CONVERSION_COUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"CONVERSION_RATE", header: "전환율", textAlign: 'center', visible: columns.includes('CONVERSION_RATE'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"CONVERSION_PRICE", header: "전환비용", textAlign: 'center', visible: columns.includes('CONVERSION_PRICE'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"AMOUNT_PURCHASED_AVG", header: "평균", textAlign: 'center', visible: columns.includes('AMOUNT_PURCHASED_AVG'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"SESSION_CONVERSION_AMOUNT", header: "세션 매출", textAlign: 'center', visible: columns.includes('SESSION_CONVERSION_AMOUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"SESSION_CONVERSION_ROAS", header: "세션 ROAS", textAlign: 'center', visible: columns.includes('SESSION_CONVERSION_ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"DIRECT_CONVERSION_AMOUNT", header: "직접 매출", textAlign: 'center', visible: columns.includes('DIRECT_CONVERSION_AMOUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"DIRECT_CONVERSION_ROAS", header: "직접 ROAS", textAlign: 'center', visible: columns.includes('DIRECT_CONVERSION_ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"ROAS", header: "ROAS", textAlign: 'center', visible: columns.includes('ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"EXPOSURE_CONVERSION_AMOUNT", header: "노출 매출", textAlign: 'center', visible: columns.includes('EXPOSURE_CONVERSION_AMOUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"EXPOSURE_CONVERSION_ROAS", header: "노출 ROAS", textAlign: 'center', visible: columns.includes('EXPOSURE_CONVERSION_ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"E_CPM", header: "eCPM", textAlign: 'center', visible: columns.includes('E_CPM'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+  ]
+}
+
 export default function CreateReports() {
   const [period, setPeriod] = useState('NONE')
   const [scopes, setScopes] = useState([])
@@ -71,6 +104,7 @@ export default function CreateReports() {
   const setReportsInfo = useSetAtom(reportsInfoAtom)
   const navigate = useNavigate()
   const [defaultType, setDefaultType] = useState(null)
+  const [defaultColumn, setDefaultColumn] = useState(indexedColumns(columns))
 
   useEffect(() => {
     if(tokenResult?.role !== 'NORMAL') {
@@ -90,6 +124,12 @@ export default function CreateReports() {
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    setDefaultColumn(indexedColumns(columns))
+  }, [columns]);
+
+
   /**
    * 광고주 검색
    * @param data
@@ -102,38 +142,20 @@ export default function CreateReports() {
    * @param item
    */
   const handleAddPeriodItem = (item) => {
-    const data = {
-      name: item,
-      header: columnList[item],
-      textAlign: 'center',
-      sortable: false,
-      resizable: false,
-      showColumnMenuTool: false,
-      draggable: false,
-    }
     setPeriod(item)
-    setColumns([data])
+    setColumns([item])
   }
   /**
    * 기준항목 선택
    * @param item
    */
   const handleAddScopesItem = (item) => {
-    const data = {
-      name: item,
-      header: columnList[item],
-      textAlign: 'center',
-      sortable: false,
-      resizable: false,
-      showColumnMenuTool: false,
-      draggable: false,
-    }
     if(columns.filter(datum => datum.name === item).length === 0){
       setScopes(prev => [...prev, item])
-      setColumns(prev => [...prev, data])
+      setColumns(prev => [...prev, item])
     } else {
       const newScopesData = scopes.filter(datum => datum !== item)
-      const newColumnData = columns.filter(datum => datum.name !== data.name)
+      const newColumnData = columns.filter(datum => datum => datum !== item)
       setScopes(newScopesData)
       setColumns(newColumnData)
     }
@@ -143,20 +165,11 @@ export default function CreateReports() {
    * @param item
    */
   const handleAddReportsItem = (item) => {
-    const data = {
-      name: item,
-      header: columnList[item],
-      textAlign: 'center',
-      sortable: false,
-      resizable: false,
-      showColumnMenuTool: false,
-      draggable:false,
-    }
     if(dataItems.filter(datum => datum === item).length === 0){
-      setColumns(prev => [...prev, data])
+      setColumns(prev => [...prev, item])
       setDataItems(prev => [...prev, item])
     } else {
-      const newColumnData = columns.filter(datum => datum.name !== item)
+      const newColumnData = columns.filter(datum => datum !== item)
       const newDataItems = dataItems.filter(datum => datum !== item)
       setColumns(newColumnData)
       setDataItems(newDataItems !== undefined ? newDataItems : [])
@@ -168,8 +181,8 @@ export default function CreateReports() {
    * @returns {boolean}
    */
   const includeItem = (name) => {
-    const i = columns.filter((item) => { return item.name === name });
-    return i[0]?.name === name
+    const i = columns.filter((item) => { return item === name });
+    return i[0] === name
   }
   /**
    * 보고서 명 인풋
@@ -229,13 +242,15 @@ export default function CreateReports() {
           "groupByScopes" : defaultType === 'scopes' ? scopes : ['NONE'],
           "columns" :  dataItems
         }
-        createCustomReportsAxios(params).then(() => {
-          retrieveCustomReportsList(tokenResult.id).then(response => {
-            const data  = response[response.length-1]
-            setReportsInfo({id: data.id, groupBy: data.groupByPeriod})
-            navigate('/board/customReports')
+        if(creativeInfo.id !== null && creativeInfo.id !== undefined) {
+          createCustomReportsAxios(params).then(() => {
+            retrieveCustomReportsList(tokenResult.id).then(response => {
+              const data  = response[response.length-1]
+              setReportsInfo({id: data.id, groupBy: data.groupByPeriod})
+              navigate('/board/customReports')
+            })
           })
-        })
+        }
       }
     }
   }
@@ -481,7 +496,7 @@ export default function CreateReports() {
               <ReactDataGrid
                 licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
                 headerHeight={40}
-                columns={columns}
+                columns={defaultColumn}
                 dataSource={[]}
                 showCellBorders={'horizontal'}
                 showZebraRows={false}
@@ -497,7 +512,6 @@ export default function CreateReports() {
       <SubmitContainer>
         <SubmitButton type={'button'} onClick={handleCreateReports}>보고서 생성</SubmitButton>
       </SubmitContainer>
-
     </>
   )
 }
