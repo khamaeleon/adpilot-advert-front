@@ -31,6 +31,7 @@ import moment from "moment/moment";
 import {TemporaryListModal} from "../../../components/campaign/TemporaryListModal";
 import {useResetAtom} from "jotai/utils";
 import {decimalFormat, removeStr} from "../../../common/StringUtils";
+import {campaignBudgetInfoAtom} from "../entity/Budget";
 
 export function CampaignOne() {
   const [,setStepCampaign] = useAtom(stepCampaignAtom)
@@ -44,6 +45,8 @@ export function CampaignOne() {
   const [goalValueLabel, setGoalValueLabel] = useState('')
   const [pixelList, setPixelList] = useState(null)
   const {register, handleSubmit, setValue, setError, reset, control, formState: {errors}, clearErrors} = useFormContext()
+
+  const resetBudgetInfo = useResetAtom(campaignBudgetInfoAtom)
   /**
    * 캠페인 목표 설정
    */
@@ -231,6 +234,7 @@ export function CampaignOne() {
         }
       })
     }
+    resetBudgetInfo()
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

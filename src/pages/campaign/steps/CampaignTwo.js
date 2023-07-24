@@ -38,6 +38,7 @@ import {useResetAtom} from "jotai/utils";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import {decimalFormat, multiAxiosCall, removeStr} from "../../../common/StringUtils";
+import {campaignGroupInfoAtom} from "../entity/Group";
 
 export function CampaignTwo() {
   const setStepCampaign = useSetAtom(stepCampaignAtom)
@@ -51,13 +52,9 @@ export function CampaignTwo() {
   const [timeBudgetDetailDataState, setTimeBudgetDetailDataState] = useAtom(timeBudgetDetailDataAtom)
   const {state} =useLocation()
   const navigate = useNavigate()
-  const resetInfo = useResetAtom(campaignBudgetInfoAtom)
   const {register, handleSubmit,reset,setError, control, formState: {errors}, clearErrors} = useFormContext()
 
-  useEffect(()=>{
-      resetInfo()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  const resetGroupInfo = useResetAtom(campaignGroupInfoAtom)
 
   useEffect(() => {
     let userId = state !== null ? state.userId : campaignBasicInfo?.userId;
@@ -75,7 +72,7 @@ export function CampaignTwo() {
         setTimeBudgetDetailDataState(response)
       })
 
-      if(state == null){
+      if(state == null && ['INIT'].includes(campaignBasicInfo.step)){
         setCampaignBudgetInfo({
           ...campaignBudgetInfo,
           budgetTimeId: budgetTimeList[0]?.value,
@@ -89,8 +86,6 @@ export function CampaignTwo() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
 
     if (state !== null || ['STEP2_BUDGET','STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED'].includes(campaignBasicInfo.step)) {
-      console.log('수정')
-
       //수정
       let campaignId = (state !== null ? state.campaignId : campaignBasicInfo.campaignId);
 
@@ -257,7 +252,6 @@ export function CampaignTwo() {
                     label: '확인',
                     onClick: () => {
                       navigate('/board/dashboard')
-                      resetInfo()
                     }
                   }
                 ]
@@ -267,7 +261,6 @@ export function CampaignTwo() {
               toast.onChange(payload => {
                 if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
                   navigate('/board/dashboard')
-                  resetInfo()
                 }
               })
             }
@@ -282,6 +275,7 @@ export function CampaignTwo() {
           }
         }
       })
+      resetGroupInfo()
     }
   }
   return (

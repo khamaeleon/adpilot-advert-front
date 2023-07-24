@@ -762,7 +762,6 @@ export function CampaignFour() {
   const [, setClickInducementType] = useAtom(clickInducementTypeAtom)
   const {control, register, handleSubmit, reset, setError, setValue, formState: {errors}} = useFormContext()
   const [resistBool] =useState(state === null)
-  const resetInfo = useResetAtom(campaignCreativeAtom)
 
   useEffect(() => {
     if(!resistBool){
@@ -876,7 +875,6 @@ export function CampaignFour() {
             } else {
               navigate('/board/dashboard')
             }
-            resetInfo()
           }
         })
       } else {
