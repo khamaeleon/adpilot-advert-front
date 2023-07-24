@@ -99,7 +99,6 @@ export default function Notice() {
       <BoardTableContainer>
         <Table columns={tokenUserInfo.role !== 'NORMAL' ? columnNotice : columnNotice.filter(column => column.name !== 'publishYn')}
                totalCount={[totalInfo.totalCount, '공지사항']}
-               pagenations
                defaultLimit={searchCondition.pageSize}
                data={noticeList?.sort((a,b) => {
                  if(a.id > b.id) return -1

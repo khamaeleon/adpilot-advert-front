@@ -150,7 +150,6 @@ export default function InquiryList(props) {
             <Table columns={columnInquiry}
                    idProperty={'id'}
                    totalCount={[totalInfo.totalCount, '1:1문의']}
-                   pagenations
                    defaultLimit={searchCondition.pageSize}
                    data={inquiryList.sort((a,b) => {
                      if(a.id > b.id) return -1

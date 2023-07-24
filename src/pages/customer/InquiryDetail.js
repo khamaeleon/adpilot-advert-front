@@ -35,11 +35,13 @@ export default function InquiryDetail() {
   const navigate = useNavigate();
   const [reply, setReply] = useState({title:'', content:''});
   const callbackFunc = (response) => {
-    if(response?.replies.length != 0) setReply(response?.replies[0]);
+    if(response?.replies.length != 0) {
+      setReply(response?.replies[0]);
+    }
   }
 
   useEffect(()=>{
-    if(tokenUserInfo !== 'NORMAL'){
+    if(tokenUserInfo.role !== 'NORMAL'){
       selInquiryByIdAdmin(state.data.id).then(callbackFunc)
     } else {
       selInquiryById(state.data.id).then(callbackFunc)
@@ -93,7 +95,7 @@ export default function InquiryDetail() {
               <ColSpan4 style={{alignItems: 'start'}}>
                 <Span4 style={{paddingTop: '10px'}}>내용</Span4>
                 <RelativeDiv>
-                  <TextArea rows={!(tokenUserInfo === 'NORMAL' && reply === undefined) ? 10 : 20}
+                  <TextArea rows={!(tokenUserInfo.role === 'NORMAL' && reply?.title === '') ? 10 : 20}
                             style={{backgroundColor: 'transparent', borderWidth: 0}}
                             value={state.data?.content}
                             readOnly={true}
@@ -103,7 +105,7 @@ export default function InquiryDetail() {
             </RowSpan>
           </BoardTableContainer>
         </Board>
-        { !(tokenUserInfo === 'NORMAL' && reply === undefined) &&
+        { !(tokenUserInfo.role === 'NORMAL' && reply?.title === '') &&
           <Board>
             <BoardHeader>
               <ColSpan3>
@@ -128,8 +130,8 @@ export default function InquiryDetail() {
                             <Input type={'text'}
                                    {...field}
                                    value={reply?.title}
-                                   style={tokenUserInfo === 'NORMAL' ? {backgroundColor: 'transparent', borderWidth: 0, padding: '10px', fontWeight: 'bold'} : {padding: '10px'}}
-                                   readOnly={tokenUserInfo === 'NORMAL'}
+                                   style={tokenUserInfo.role === 'NORMAL' ? {backgroundColor: 'transparent', borderWidth: 0, padding: '10px', fontWeight: 'bold'} : {padding: '10px'}}
+                                   readOnly={tokenUserInfo.role === 'NORMAL'}
                                    onChange={(e) => {
                                      setReply({...reply, title: e.target.value})
                                    }}
@@ -158,8 +160,8 @@ export default function InquiryDetail() {
                                 rows={7}
                                 {...field}
                                 value={reply?.content}
-                                style={tokenUserInfo === 'NORMAL' ? {backgroundColor: 'transparent', borderWidth: 0} : {}}
-                                readOnly={tokenUserInfo === 'NORMAL'}
+                                style={tokenUserInfo.role === 'NORMAL' ? {backgroundColor: 'transparent', borderWidth: 0} : {}}
+                                readOnly={tokenUserInfo.role === 'NORMAL'}
                                 onChange={(e) => {
                                   setReply({...reply, content: e.target.value})
                                 }}
@@ -175,7 +177,7 @@ export default function InquiryDetail() {
         }
         <SubmitContainer>
           <CancelButton type={"button"} onClick={()=> navigate('/board/inquiry')}>목록</CancelButton>
-          {tokenUserInfo !== 'NORMAL' &&
+          {tokenUserInfo.role !== 'NORMAL' &&
               <SubmitButton type={"submit"}>{'저장'}</SubmitButton>
           }
         </SubmitContainer>

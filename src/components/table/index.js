@@ -317,7 +317,7 @@ function Table(props) {
       emptyText={emptyText}
       defaultLimit={defaultLimit}
       style={gridStyle}
-      pagination={props.pagenations}
+      pagination={props.paginations}
       showHoverRows={false}
       activeCell={null}
       {...props}
