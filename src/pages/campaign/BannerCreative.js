@@ -205,6 +205,10 @@ export function BannerCreative() {
 
   useEffect(() => {
     setForceUpdate(true)
+    return () => {
+      setModalOpen({isShow:false});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedBanner]);
 
   /** 스냅 가이드 모드 **/

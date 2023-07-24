@@ -442,8 +442,8 @@ function DashBoardIndex() {
     if(data?.campaignCount !== 0) {
       if(data.campaignCount < 6) {
         return 112+(data.campaignCount*60)
-      } else return 300
-    } else return 500;
+      } else return 442
+    } else return 300;
   }
   return (
       <>
@@ -465,7 +465,7 @@ function DashBoardIndex() {
                 lockedRows={lockedRows}
                 summaryReducer={summaryReducer}
                 onReady={setGridRef}
-                style={{minHeight: 500}}
+                style={{minHeight: 1012}}
                 headerHeight={50}
                 rowExpandHeight={rowExpandHeight}
                 rowHeight={60}

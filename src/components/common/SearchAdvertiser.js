@@ -1,5 +1,5 @@
 import {useAtom} from "jotai";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ModalBody, ModalHeader} from "../modal/Modal";
 import styled from "styled-components";
 import {selKeywordUser} from "../../services/Platform/ManageUserAxios";
@@ -25,6 +25,12 @@ import {light} from "../../assets/theme";
 export function SearchAdvertiser(props) {
   const {title, onSubmit, btnStyle, historyAdd} = props;
   const [, setModal] = useAtom(modalController)
+  useEffect(() => {
+    return () => {
+      setModal({isShow: false})
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
   const handleModalComponent = () => {
     setModal({
       isShow: true,
@@ -156,7 +162,7 @@ function SearchModal (props) {
                      value={historyState === true?selectedItem.adverName:searchKeyword}
                      onChange={e => handleOnSearchKeyword(e)}
                      disabled={historyState ? true : false}
-                     onKeyDown={event => (event.code === 'Enter') && handleSearch() }
+                     onKeyDown={event => (event.key === 'Enter') && handleSearch() }
               />
               <button
                 type={'button'}

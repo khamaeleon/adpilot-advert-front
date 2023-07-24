@@ -4,7 +4,7 @@ import {
   CalendarBox,
   CalendarIcon,
   ColSpan0,
-  ColSpan1, ColSpan4,
+  ColSpan4,
   ColTitle,
   CustomDatePicker,
   DateContainer,
@@ -229,7 +229,7 @@ export function PlatformCondition(props) {
                              readOnly={searchCondition.searchType === 'DEFAULT' || searchCondition.searchType.id === 0}
                              value={searchCondition.keyword}
                              onChange={handleSearchValue}
-                             onKeyDown={e => (e.code === 'Enter') && handleTableData()}
+                             onKeyDown={e => (e.key === 'Enter') && handleTableData()}
                       />
                     </SearchInput>
                 </ColSpan4>
@@ -444,7 +444,7 @@ export function PaymentCondition(props) {
                            onChange={handlePaymentSearchValue}
                            readOnly={searchCondition.searchType === 'ALL'}
                            style={{marginRight: 0}}
-                           onKeyDown={e => (e.code === 'Enter') && handleTableData()}
+                           onKeyDown={e => (e.key === 'Enter') && handleTableData()}
                     />
                   </SearchInput>
               </ColSpan4>

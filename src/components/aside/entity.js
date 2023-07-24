@@ -1,4 +1,3 @@
-import {atomWithStorage} from "jotai/utils";
 import {atom} from "jotai/index";
 
 export const selectedIcon = {

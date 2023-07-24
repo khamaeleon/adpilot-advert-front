@@ -49,7 +49,7 @@ function BudgetTime() {
                    placeholder={'광고주명 및 아이디 검색'}
                    value={searchParams.keyword}
                    onChange={handleSearch}
-                   onKeyDown={e => (e.code === 'Enter') && onSearchAdverBudgetTime() }
+                   onKeyDown={e => (e.key === 'Enter') && onSearchAdverBudgetTime() }
             />
             <DefaultButton onClick={onSearchAdverBudgetTime}>검색</DefaultButton>
           </ColSpan1>

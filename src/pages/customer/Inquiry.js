@@ -109,7 +109,7 @@ export default function InquiryList(props) {
                     value={searchCondition.keyword}
                     readOnly={searchCondition.inquiryType === 'DEFAULT' || searchCondition.inquiryType.id === 0}
                     onChange={handleSearch}
-                    onKeyDown={e => (e.code === 'Enter') && onSearch() }
+                    onKeyDown={e => (e.key === 'Enter') && onSearch() }
 
                 />
                 <DefaultButton onClick={onSearch}>검색</DefaultButton>

@@ -22,6 +22,9 @@ export function TemporaryListModal(props) {
         )
       }
     })
+    return () => {
+      setModal({isShow: false})
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 }

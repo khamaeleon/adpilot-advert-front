@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
   CancelButton,
   ColSpan4,
@@ -22,6 +22,12 @@ import {inquiryTypes} from "../../pages/customer/entity/NoticeEntity";
 export default function WriteNoticeModal(props) {
   const {formType, title, onClick, buttonText, userId} = props;
   const [, setModal] = useAtom(modalController)
+  useEffect(()=>{
+    return ()=> {
+      onClose()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
   const onClose = () => {
     setModal({ isShow: false })
   }

@@ -33,9 +33,9 @@ export default function Notice() {
       {keyword:'', pageSize: 20, currentPage: 1, publishYn:''});
 
   useEffect(()=>{
-        onSearch()
+    onSearch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [tokenUserInfo]);
+  }, [tokenUserInfo]);
 
   const handleSearch = (e) => {
     setSearchCondition({
@@ -80,7 +80,7 @@ export default function Notice() {
                 placeholder={'제목 검색'}
                 value={searchCondition.keyword}
                 onChange={handleSearch}
-                onKeyDown={e => (e.code === 'Enter') && onSearch() }
+                onKeyDown={e => (e.key === 'Enter') && onSearch() }
 
             />
             <DefaultButton onClick={onSearch}>검색</DefaultButton>

@@ -166,7 +166,7 @@ export function CategoryManage() {
                 value={searchKeyword}
                 onChange={handleChangeSearchCategory}
                 placeholder={'카테고리 검색'}
-                onKeyDown={event => (event.code === 'Enter') && handleSearchCategory()}
+                onKeyDown={event => (event.key === 'Enter') && handleSearchCategory()}
               />
             </SearchInput>
           </ColSpan1>

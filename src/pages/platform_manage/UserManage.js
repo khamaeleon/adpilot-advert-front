@@ -192,7 +192,7 @@ export default function UserManage(){
                          value={searchAccountInfoState?.keyword !== null ? searchAccountInfoState?.keyword : ''}
                          onChange={handleSearchKeyword}
                          readOnly={searchAccountInfoState.searchType.value === 'DEFAULT'}
-                         onKeyDown={e => (e.code === 'Enter') && searchUserList() }
+                         onKeyDown={e => (e.key === 'Enter') && searchUserList() }
                   />
                 </SearchInput>
               </ColSpan4>
