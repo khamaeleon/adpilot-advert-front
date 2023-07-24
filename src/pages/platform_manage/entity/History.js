@@ -47,7 +47,7 @@ export const campaignColumns = [
     header: '변경 항목',
     render: (props) =>{
       return (
-        <div style={{textAlign:'center'}}>{props.value === 'ADD' ? '추가' : '수정'}</div>
+        <div style={{textAlign:'center'}}>{props.value === 'ADD' ? '추가' : (props.value === 'DEL' ? '삭제' : '수정')}</div>
       )
     }
   },
