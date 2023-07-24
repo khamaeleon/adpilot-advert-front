@@ -55,7 +55,7 @@ export function HistoryTimeManage () {
   }
   return (
     <Board>
-      <BoardHeader>시간별 예산 이력 관리</BoardHeader>
+      <BoardHeader>시간별 예산 이력 현황</BoardHeader>
       <BoardSearchDetail column={true}>
         <HistorySearchCondition
           option={option}

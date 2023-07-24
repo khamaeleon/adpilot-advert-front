@@ -55,7 +55,7 @@ export function HistoryTargetingManage () {
   }
   return (
     <Board>
-      <BoardHeader>이벤트 예산 이력 관리</BoardHeader>
+      <BoardHeader>이벤트 예산 이력 현황</BoardHeader>
       <BoardSearchDetail column={true}>
         <HistorySearchCondition
           option={option}
