@@ -318,7 +318,6 @@ export default function CustomReports() {
   const [reportSettingInfo, setReportSettingInfo] = useState({})
   const navigate = useNavigate()
   const [reportsInfo, setReportsInfo] = useAtom(reportsInfoAtom)
-  const [showPrevious, setShowPrevious] = useState(true)
 
   useEffect(() => {
     if(reportsInfo.id === null) return navigate('/board/reports')
@@ -374,7 +373,7 @@ export default function CustomReports() {
         searchStartDate: moment(date[0]).format('YYYY-MM-DD'),
         searchEndDate: moment(date[1]).format('YYYY-MM-DD'),
       })
-    } else setShowPrevious(false)
+    }
   }
   /**
    * 날짜 레인지 선택
@@ -579,7 +578,6 @@ export default function CustomReports() {
                         locale={ko}
                         isClearable={false}
                         monthsShown={2}
-                        showPreviousMonths={showPrevious}
                         openToDate={endDate}
                       />
                     </DateContainer>

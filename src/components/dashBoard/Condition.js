@@ -36,7 +36,6 @@ export function DashBoardCondition(props) {
   const [isDeviceCheckedAll, setIsDeviceCheckedAll] = useState(true)
   const [pickedDate, setPickedDate] = useState('thisMonth')
   // const [isAgentCheckedAll, setIsAgentCheckedAll] = useState(true)
-  const [showPrevious, setShowPrevious] = useState(true)
 
   // useEffect(() => {
   //   if (searchState?.agentTypes.length === 5) {
@@ -60,7 +59,6 @@ export function DashBoardCondition(props) {
    */
   const handleRangeDate = (rangeType) => {
     setPickedDate(rangeType)
-    rangeType !== 'lastMonth' ? setShowPrevious(true) : setShowPrevious(false)
     if (rangeType === 'thisMonth') {
       setSearchState({
         ...searchState,
@@ -113,7 +111,8 @@ export function DashBoardCondition(props) {
         searchStartDate: moment(date[0]).format('YYYY-MM-DD'),
         searchEndDate: moment(date[1]).format('YYYY-MM-DD')
       })
-    } else setShowPrevious(false)
+      setPickedDate('')
+    }
     setDateRange(date)
   }
 
@@ -336,7 +335,6 @@ export function DashBoardCondition(props) {
                   locale={ko}
                   isClearable={false}
                   monthsShown={2}
-                  showPreviousMonths={showPrevious}
                   openToDate={endDate}
                 />
               </DateContainer>

@@ -45,7 +45,6 @@ export function PlatformCondition(props) {
   const {searchCondition, setSearchCondition, handleTableData, searchType} = props;
   const [dateRange, setDateRange] = useState([ new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
-  const [showPrevious, setShowPrevious] = useState(true)
   const params = useParams()
   const mainColor = light.color.mainColor
   /**
@@ -53,7 +52,6 @@ export function PlatformCondition(props) {
    * @param rangeType
    */
   const handleRangeDate = (rangeType) => {
-    rangeType !== 'lastMonth' ? setShowPrevious(true) : setShowPrevious(false)
     setDateActive(rangeType)
     if (rangeType === 'thisMonth') {
       setSearchCondition({
@@ -122,7 +120,8 @@ export function PlatformCondition(props) {
         searchStartDate: moment(date[0]).format('YYYY-MM-DD'),
         searchEndDate: moment(date[1]).format('YYYY-MM-DD')
       })
-    } else setShowPrevious(false)
+      setDateActive('')
+    }
     setDateRange(date)
   }
   const handleSearchType = (selectSearchType) => {
@@ -188,7 +187,6 @@ export function PlatformCondition(props) {
                         locale={ko}
                         isClearable={false}
                         monthsShown={2}
-                        showPreviousMonths={showPrevious}
                         openToDate={endDate}
                       />
                     </DateContainer>
@@ -250,7 +248,6 @@ export function PaymentCondition(props) {
   const [isCheckedAll, setIsCheckedAll] = useState(true)
   const [searchTypeSelect] = useState(searchType)
   const [, setSearchSelected] = useState(searchTypeSelect[0])
-  const [showPrevious, setShowPrevious] = useState(true)
 
   const params = useParams()
 
@@ -261,7 +258,7 @@ export function PaymentCondition(props) {
         startAt: moment(date[0]).format('YYYY-MM-DD'),
         endAt: moment(date[1]).format('YYYY-MM-DD')
       })
-    } else setShowPrevious(false)
+    }
     setDateRange(date)
   }
 
@@ -367,7 +364,6 @@ export function PaymentCondition(props) {
                         locale={ko}
                         isClearable={false}
                         monthsShown={2}
-                        showPreviousMonths={showPrevious}
                         openToDate={endDate}
                       />
                     </DateContainer>
