@@ -60,7 +60,37 @@ export function CampaignTwo() {
   },[])
 
   useEffect(() => {
+    let userId = state !== null ? state.userId : campaignBasicInfo?.userId;
+
+    const callbackFunc = (response) => {
+      const budgetTimeList = response[0]?.timeGroups.map(data => {return {value: data.id, label: data.groupName}});
+      const budgetEventList = response[1]?.targetingBudgetDtos.map(data => {return {value: data.targetingBudgetId, label: data.groupName}});
+      const priceEventList = response[2]?.targetingPriceDtos.map(data => {return {value: data.targetingPriceId, label: data.groupName}});
+
+      setBudgetTimeListState(budgetTimeList);
+      setBudgetEventListState(budgetEventList);
+      setPriceEventListState(priceEventList);
+
+      selBudgetTimeDetailInfo(userId, budgetTimeList[0].value).then(response => {
+        setTimeBudgetDetailDataState(response)
+      })
+
+      if(state == null){
+        setCampaignBudgetInfo({
+          ...campaignBudgetInfo,
+          budgetTimeId: budgetTimeList[0]?.value,
+          targetingBudgetId: budgetEventList[0]?.value,
+          targetingPriceId: priceEventList[0]?.value
+        })
+      }
+
+    }
+    multiAxiosCall([selBudgetTimeList(userId), selBudgetEventList(userId), selPriceEventList(userId)], callbackFunc);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     if (state !== null || ['STEP2_BUDGET','STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED'].includes(campaignBasicInfo.step)) {
+      console.log('수정')
+
       //수정
       let campaignId = (state !== null ? state.campaignId : campaignBasicInfo.campaignId);
 
@@ -77,30 +107,6 @@ export function CampaignTwo() {
         reset(response);
       })
     }
-
-    let userId = state !== null ? state.userId : campaignBasicInfo?.userId;
-
-    const callbackFunc = (response) => {
-
-      const budgetTimeList = response[0]?.timeGroups.map(data => {return {value: data.id, label: data.groupName}});
-      const budgetEventList = response[1]?.targetingBudgetDtos.map(data => {return {value: data.targetingBudgetId, label: data.groupName}});
-      const priceEventList = response[2]?.targetingPriceDtos.map(data => {return {value: data.targetingPriceId, label: data.groupName}});
-
-      setBudgetTimeListState(budgetTimeList);
-      setBudgetEventListState(budgetEventList);
-      setPriceEventListState(priceEventList);
-      setCampaignBudgetInfo({
-        ...campaignBudgetInfo,
-        budgetTimeId: budgetTimeList[0].value,
-        targetingBudgetId: budgetEventList[0].value,
-        targetingPriceId: priceEventList[0].value,
-      })
-      selBudgetTimeDetailInfo(userId, budgetTimeList[0].value).then(response => {
-        setTimeBudgetDetailDataState(response)
-      })
-    }
-    multiAxiosCall([selBudgetTimeList(userId), selBudgetEventList(userId), selPriceEventList(userId)], callbackFunc)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
   /**
    * 시간대별 예산 셀렉트

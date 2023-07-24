@@ -69,6 +69,7 @@ export function HistoryCampaignManage () {
         <Table columns={campaignColumns}
                data={dataSource}
                downloadList={true}
+               idProperty={'revisionId'}
                emptyText={'캠페인 이력 변경 내역이 없습니다.'}/>
       </BoardSearchResult>
     </Board>
