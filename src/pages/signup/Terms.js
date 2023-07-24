@@ -110,7 +110,8 @@ export default function Terms() {
             termsInfo.map((value) => {
               let val;
               if (value.termsType === 'SERVICE') {
-                val = value.content
+                // val = value.content
+                val = <div dangerouslySetInnerHTML={{__html: value.content}}></div>
               }
               return val
             })
@@ -136,7 +137,7 @@ export default function Terms() {
             termsInfo.map((value) => {
               let val
               if (value.termsType === 'PRIVACY') {
-                 val = value.content
+                val = <div dangerouslySetInnerHTML={{__html: value.content}}></div>
               }
               return val
             })
@@ -159,7 +160,7 @@ export default function Terms() {
             termsInfo.map((value) => {
               let val;
               if (value.termsType === 'OPERATION') {
-                val = value.content
+                val = <div dangerouslySetInnerHTML={{__html: value.content}}></div>
               }
               return val
             })
