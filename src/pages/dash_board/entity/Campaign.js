@@ -568,7 +568,7 @@ export const userCampaignListColumn = [
     name: 'costAmount',
     header: '비용',
     minWidth: 150,
-    cellDOMProps: (cellProps) => ({ style: {color: '#F9AB00', textAlign: 'right'} }),
+    cellDOMProps: (cellProps) => ({ style: {color: '#D93025', textAlign: 'right'} }),
     render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -576,7 +576,7 @@ export const userCampaignListColumn = [
     name: 'cpc',
     header: 'CPC',
     minWidth: 150,
-    cellDOMProps: (cellProps) => ({ style: {color: '#F9AB00', textAlign: 'right'} }),
+    cellDOMProps: (cellProps) => ({ style: {color: '#7325D9', textAlign: 'right'} }),
     render: ({data}) => {
       let value = data.validClickCount !== 0 ? data?.costAmount / data.validClickCount : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>
@@ -587,7 +587,7 @@ export const userCampaignListColumn = [
     name: 'totalConversionCount',
     header: '전환 수',
     minWidth: 100,
-    cellDOMProps: (cellProps) => ({ style: {color: '#F5811F', textAlign: 'right'} }),
+    cellDOMProps: (cellProps) => ({ style: {color: '#D93025', textAlign: 'right'} }),
     render: ({value}) => <p>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
@@ -643,7 +643,7 @@ export const userCampaignListColumn = [
     name: 'ecpm',
     minWidth: 150,
     header: 'ECPM',
-    cellDOMProps: (cellProps) => ({ style: {color: '#F5811F', textAlign: 'right'}}),
+    cellDOMProps: (cellProps) => ({ style: {color: '#7325D9', textAlign: 'right'}}),
     render: ({data}) => {
       let value = data.exposureCount !== 0 ? (data.totalConversionAmount / data.exposureCount) * 1000 : 0;
       return <p className={'won'}>{moneyToFixedFormat(value)}</p>

@@ -337,7 +337,7 @@ export default function CustomReports() {
       })
     } else {
       retrieveCustomReportsDetail(tokenResult?.id, reportsInfo.id, searchCondition).then(response => {
-        let newObject =  response.userSetting.groupByPeriod !== 'NONE' ? [defaultColumn[reportsInfo.groupBy]].concat(response.headers) : [].concat(response.headers)
+        let newObject =  response?.userSetting.groupByPeriod !== 'NONE' ? [defaultColumn[reportsInfo.groupBy]].concat(response.headers) : [].concat(response.headers)
         newObject.map((item, key) => {
           Object.assign(newObject[key], defaultColumn[item.name])
           return null
