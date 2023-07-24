@@ -20,6 +20,9 @@ function SelectBox(props){
 
   useEffect(()=>{
     setSelect(value)
+    return () => {
+      setModal({isShow:false});
+    }
   },[value])
   const showModal = (e) => {
     setSelect(e.target.value)

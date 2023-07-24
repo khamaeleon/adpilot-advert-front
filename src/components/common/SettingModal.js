@@ -400,6 +400,12 @@ function SettingChangeModal(props) {
 export function SettingAdd(props) {
   const {onSubmit, data, title, saveType, label} = props;
   const [, setModal] = useAtom(modalController)
+  useEffect(()=>{
+    return ()=> {
+      setModal({ isShow: false })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
   const handleModalComponent = () => {
     console.log(data)
     setModal({

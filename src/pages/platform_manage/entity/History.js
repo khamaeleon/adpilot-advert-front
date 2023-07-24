@@ -8,7 +8,6 @@ import {
   RowSpan,
   SearchInput,
   selectStyle,
-  Span2
 } from "../../../assets/GlobalStyles";
 import Select from "react-select";
 import styled, {keyframes} from "styled-components";
@@ -187,7 +186,7 @@ export function HistorySearchCondition (props) {
                      value={searchCondition.searchKeyword}
                      style={{marginRight: 0}}
                      readOnly={searchCondition.searchKeywordType === 'DEFAULT'}
-                     onKeyDown={e => (e.code === 'Enter') && handleClickSearch()}
+                     onKeyDown={e => (e.key === 'Enter') && handleClickSearch()}
                      onChange={handleChangeSearchKeyword}/>
             </SearchInput>
           </ColSpan4>

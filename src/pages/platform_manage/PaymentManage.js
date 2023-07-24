@@ -2,9 +2,7 @@ import React, {useCallback, useEffect, useState} from "react";
 import {
   Board,
   BoardHeader,
-  BoardSearchResultTitle,
   BoardTableContainer, ColSpan2, RowSpan,
-  SaveExcelButton
 } from "../../assets/GlobalStyles";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
@@ -18,7 +16,6 @@ import {
 } from "./entity/Payment";
 import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 import {TotalCount} from "../../components/table/TableDetail";
-import {Small} from "../../components/table/styles";
 
 function PaymentManage() {
   const [totalInfo, setTotalInfo] = useState(0)
