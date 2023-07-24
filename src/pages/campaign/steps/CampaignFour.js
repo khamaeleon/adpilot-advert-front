@@ -956,7 +956,7 @@ export function CampaignFour() {
                     <Input
                       type={'text'}
                       name={'pcLandingUrl'}
-                      value={campaignCreativeInfo.pcLandingUrl}
+                      value={campaignCreativeInfo?.pcLandingUrl || ''}
                       {...register('pcLandingUrl', {
                         required: 'PC 랜딩 URL을 작성해주세요',
                         pattern:{
@@ -973,7 +973,7 @@ export function CampaignFour() {
                     <Input
                       type={'text'}
                       name={'mobLandingUrl'}
-                      value={campaignCreativeInfo.mobLandingUrl}
+                      value={campaignCreativeInfo?.mobLandingUrl || ''}
                       {...register('mobLandingUrl', {
                         required: '모바일 랜딩 URL을 작성해주세요',
                         pattern:{
@@ -998,7 +998,7 @@ export function CampaignFour() {
                     <Input
                       type={'text'}
                       name={'pcReferralCode'}
-                      value={campaignCreativeInfo.pcReferralCode}
+                      value={campaignCreativeInfo?.pcReferralCode || ''}
                       {...register('pcReferralCode', {
                         required: 'PC 인식 코드를 작성해주세요',
                         onChange: (e) => handleChangeInputs(e)
@@ -1011,7 +1011,7 @@ export function CampaignFour() {
                     <Input
                       type={'text'}
                       name={'mobReferralCode'}
-                      value={campaignCreativeInfo.mobReferralCode}
+                      value={campaignCreativeInfo?.mobReferralCode || ''}
                       {...register('mobReferralCode', {
                         required: '모바일 인식 코드를 작성해주세요',
                         onChange: (e) => handleChangeInputs(e)
@@ -1037,7 +1037,7 @@ export function CampaignFour() {
                       type={'text'}
                       maxLength={25}
                       name={'name'}
-                      value={campaignCreativeInfo?.name}
+                      value={campaignCreativeInfo?.name || ''}
                       style={{width: '100%'}}
                       {...register('name', {
                         required: '크리에이티브명을 입력해주세요',
