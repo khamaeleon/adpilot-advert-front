@@ -169,8 +169,8 @@ export function HistoryCampaignDetail () {
         <div>{bannerData?.bannerMaterials.map((item, key) => {
 
           return (
-            <div style={{display: 'flex',gap: 10, margin: 5}}>
-              <div key={key} style={{whiteSpace: 'nowrap'}}>{item?.bannerSize}</div>
+            <div key={key} style={{display: 'flex',gap: 10, margin: 5}}>
+              <div style={{whiteSpace: 'nowrap'}}>{item?.bannerSize}</div>
               <ImageGroup>
                 {item?.bannerImages.map((img, key) => {
                   return (

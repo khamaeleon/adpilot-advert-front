@@ -84,9 +84,9 @@ const indexedColumns = (columns) => {
     {name:"SESSION_CONVERSION_ROAS", header: "세션 ROAS", textAlign: 'center', visible: columns.includes('SESSION_CONVERSION_ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"DIRECT_CONVERSION_AMOUNT", header: "직접 매출", textAlign: 'center', visible: columns.includes('DIRECT_CONVERSION_AMOUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"DIRECT_CONVERSION_ROAS", header: "직접 ROAS", textAlign: 'center', visible: columns.includes('DIRECT_CONVERSION_ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
-    {name:"ROAS", header: "총 ROAS", textAlign: 'center', visible: columns.includes('ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"EXPOSURE_CONVERSION_AMOUNT", header: "노출 매출", textAlign: 'center', visible: columns.includes('EXPOSURE_CONVERSION_AMOUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"EXPOSURE_CONVERSION_ROAS", header: "노출 ROAS", textAlign: 'center', visible: columns.includes('EXPOSURE_CONVERSION_ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    {name:"ROAS", header: "총 ROAS", textAlign: 'center', visible: columns.includes('ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"E_CPM", header: "eCPM", textAlign: 'center', visible: columns.includes('E_CPM'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
   ]
 }
