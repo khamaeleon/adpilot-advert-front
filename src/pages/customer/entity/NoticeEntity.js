@@ -2,7 +2,31 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import {TextMainColor} from "../../../assets/GlobalStyles";
+import moment from "moment";
 
+function getTimeData (time) {
+  const TIME_ZONE = 3240 * 10000;
+  const start = new Date(time)
+  const end = new Date(new Date().getTime() + TIME_ZONE)
+  const diff = (end - start)/1000
+  const times = [
+    { name: '시간', milliSeconds: 60 * 60 },
+    { name: '분', milliSeconds: 60 },
+  ];
+  // 년 단위부터 알맞는 단위 찾기
+  for (const value of times) {
+    const betweenTime = Math.floor(diff / value.milliSeconds);
+
+    // 큰 단위는 0보다 작은 소수 단위 나옴
+    if (betweenTime < 25) {
+      return `${betweenTime}${value.name} 전`;
+    } else {
+      return time.substring(0,16)
+    }
+  }
+  // 모든 단위가 맞지 않을 시
+  return "방금 전";
+}
 export const inquiryTypes = [
   {id: 0, value: 'DEFAULT', label:'전체'},
   {id: 1, value: 'ADVER_INQUIRY', label:'광고문의'},
@@ -56,7 +80,10 @@ export const columnNotice = [
   {
     name: 'createdAt',
     header: '작성 일시',
-    defaultWidth: 300
+    defaultWidth: 300,
+    render: ({value}) => {
+      return <p>{value.substring(0,16)}</p>
+    }
   }
 ]
 
@@ -91,7 +118,10 @@ export const columnInquiry = [
   {
     name: 'createdAt',
     header: '작성 일시',
-    defaultWidth: 300
+    defaultWidth: 300,
+    render: ({value}) => {
+      return <p>{getTimeData(value)}</p>;
+    }
   },
   {
     name: 'replies',

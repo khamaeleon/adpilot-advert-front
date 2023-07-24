@@ -133,7 +133,7 @@ function ScriptComponent(props){
               </RowSpan>
               <RowSpan>
                   <ColTitle style={{paddingTop: 10}}>
-                    <p>스크립트</p>
+                    <p style={{whiteSpace: 'nowrap'}}>스크립트</p>
                     <SubmitButton onClick={() => handleCopyClipBoard(cellProps.data.script)} style={{width: '100%', marginTop: 8, padding: '5px 0'}}>
                       복사
                     </SubmitButton>

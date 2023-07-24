@@ -61,7 +61,6 @@ function ProductManage() {
   const [productData, setProductData] = useAtom(productListDataAtom)
 
   useEffect(() => {
-    console.log(searchCondition)
     if(searchCondition.username !== '') {
       retrieveProduct(searchCondition).then(response =>{
         if(response){
@@ -107,4 +106,3 @@ function ProductManage() {
 }
 
 export default ProductManage;
-
