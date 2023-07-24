@@ -158,7 +158,7 @@ export const budgetTimeColumns = [
 ]
 
 export const searchConditionData = {
-  pageSize : 10,
+  pageSize : 100,
   currentPage : 1,
   searchStartDate : null,
   searchEndDate : null,

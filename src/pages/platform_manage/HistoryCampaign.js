@@ -55,7 +55,7 @@ export function HistoryCampaignManage () {
   }
   return (
     <Board>
-      <BoardHeader>캠페인 이력 관리</BoardHeader>
+      <BoardHeader>캠페인 이력 현황</BoardHeader>
       <BoardSearchDetail column={true}>
         <HistorySearchCondition
           option={option}

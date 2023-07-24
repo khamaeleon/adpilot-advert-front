@@ -54,7 +54,7 @@ export function HistoryPriceManage () {
   }
   return (
     <Board>
-      <BoardHeader>이벤트 단가 이력 관리</BoardHeader>
+      <BoardHeader>이벤트 단가 이력 현황</BoardHeader>
       <BoardSearchDetail column={true}>
         <HistorySearchCondition
           option={option}

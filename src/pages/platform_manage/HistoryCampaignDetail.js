@@ -405,8 +405,9 @@ export function HistoryCampaignDetail () {
                 return (
                   <tr key={key}>
                     <th className={'border-r border-t'}>{Object.values(entry)}</th>
-                    <td className={'border-t'}>{data?.previous !== null && data?.previous !== undefined && data?.previous?.creative !== null && data?.previous?.creative?.metarialDetailInfo !== undefined !== null ? materialConverters('previous',entry) : '-'}</td>
-                    <td className={'border-t'}>{data?.current !== null && data?.current !== undefined && data?.current?.creative !== null && data?.current?.creative?.metarialDetailInfo !== undefined ? materialConverters('current',entry) : '-'}</td>
+
+                    <td className={'border-t'}>{data?.previous !== null && data?.previous !== undefined && data?.previous?.creative !== null && data?.previous?.creative?.materialDetailInfo !== undefined  ? materialConverters('previous',entry) : '-'}</td>
+                    <td className={'border-t'}>{data?.current !== null && data?.current !== undefined && data?.current?.creative !== null && data?.current?.creative?.materialDetailInfo !== undefined ? materialConverters('current',entry) : '-'}</td>
                   </tr>
                 )
               })}
