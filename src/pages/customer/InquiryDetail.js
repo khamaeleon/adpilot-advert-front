@@ -46,7 +46,7 @@ export default function InquiryDetail() {
     } else {
       selInquiryById(state.data.id).then(callbackFunc)
     }
-  },[])
+  },[tokenUserInfo])
 
   const onError = () => {}
   const onSubmit = () => {
@@ -129,7 +129,7 @@ export default function InquiryDetail() {
                         render={({field}) => (
                             <Input type={'text'}
                                    {...field}
-                                   value={reply?.title}
+                                   value={reply?.title || ''}
                                    style={tokenUserInfo.role === 'NORMAL' ? {backgroundColor: 'transparent', borderWidth: 0, padding: '10px', fontWeight: 'bold'} : {padding: '10px'}}
                                    readOnly={tokenUserInfo.role === 'NORMAL'}
                                    onChange={(e) => {
@@ -159,7 +159,7 @@ export default function InquiryDetail() {
                             <TextArea
                                 rows={7}
                                 {...field}
-                                value={reply?.content}
+                                value={reply?.content  || ''}
                                 style={tokenUserInfo.role === 'NORMAL' ? {backgroundColor: 'transparent', borderWidth: 0} : {}}
                                 readOnly={tokenUserInfo.role === 'NORMAL'}
                                 onChange={(e) => {
