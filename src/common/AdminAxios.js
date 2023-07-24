@@ -71,12 +71,9 @@ adminAxios.interceptors.response.use(
               accessToken: data.token.accessToken
             })
             onTokenRefreshed(data.token.accessToken);
-          } else if (responseCode.statusCode === 401 || responseCode.statusCode === 403) {
+          } else {
             refreshSubscribers = [];
             isTokenRefreshing = false;
-            // eslint-disable-next-line no-restricted-globals
-            location.replace('/')
-          } else {
             return Promise.reject(error)
           }
         })
