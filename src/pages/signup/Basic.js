@@ -252,9 +252,10 @@ export default function Basic(props) {
    * 사업자 등록번호
    */
   const handleBusinessNumber = (event) => {
+    const isNum = (/[0-9]+$/g).test(event.target.value)
     setAccountInfo({
       ...accountInfo,
-      businessNumber: event.target.value
+      businessNumber: isNum && event.target.value
     })
   }
   // 사업자 번호 조회 기능 임의 구현. 현재 버튼 미노출로 주석 처리함.
@@ -566,7 +567,11 @@ export default function Basic(props) {
                 type={'text'}
                 placeholder={'사업자 등록 번호'}
                 {...register("businessNumber", {
-                  required: "사업자 조회를 해주세요",
+                  required: "사업자 등록번호를 입력해주세요",
+                  pattern: {
+                    value: /[0-9]/,
+                    message: "숫자만 입력 해 주세요"
+                  },
                   onChange: (e) => handleBusinessNumber(e)
                 })}
                 value={accountInfo.businessNumber || ""}
@@ -637,9 +642,13 @@ export default function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'업태를 입력해주세요'}
-                onChange={(e) => handleTypeOfBusiness(e)}
+                {...register("typeOfBusiness", {
+                  required: "업태 명을 입력해주세요",
+                  onChange: (e) => handleTypeOfBusiness(e)
+                })}
                 value={accountInfo.typeOfBusiness || ""}
               />
+              {errors.typeOfBusiness && <ValidationScript>{errors.typeOfBusiness?.message}</ValidationScript>}
             </div>
           </RelativeDiv>
           <RelativeDiv>
@@ -648,9 +657,13 @@ export default function Basic(props) {
               <input
                 type={'text'}
                 placeholder={'종목을 입력해주세요'}
-                onChange={(e) => handleItemsOfBusiness(e)}
-                value={accountInfo.itemsOfBusiness}
+                {...register("itemsOfBusiness", {
+                  required: "종목 명을 입력해주세요",
+                  onChange: (e) => handleItemsOfBusiness(e)
+                })}
+                value={accountInfo.itemsOfBusiness || ""}
               />
+              {errors.itemsOfBusiness && <ValidationScript>{errors.itemsOfBusiness?.message}</ValidationScript>}
             </div>
           </RelativeDiv>
           <RelativeDiv>
