@@ -1481,8 +1481,11 @@ export const TextArea = styled.textarea`
   border: 1px solid rgb(229, 229, 229);
   border-radius: 5px;
   resize: none;
-
   ::placeholder {
     color: #bbb;
+  }
+  :read-only {
+    cursor: not-allowed;
+    background-color: #eee;
   }
 `

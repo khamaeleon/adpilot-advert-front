@@ -227,7 +227,7 @@ export const productListColumn = [
     textAlign: 'center',
     minWidth: 200,
     showColumnMenuTool: false,
-    render: ({value}) => <p className={'ellipsis'}>{value}</p>
+    render: ({value}) => <p className={'ellipsis'}>{value !== null && value !== ''  ? value : '-'}</p>
   },
   {
     name: 'price',
@@ -237,7 +237,7 @@ export const productListColumn = [
     minWidth: 100,
     maxWidth: 100,
     showColumnMenuTool: false,
-    render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>
+    render: ({value}) => <p className={'won'}>{value !== 0 ? decimalFormat(value) : '-'}</p>
   },
   {
     name: 'discountRate',
@@ -252,7 +252,7 @@ export const productListColumn = [
       const discount = parseFloat(props.cellProps.data.discountRate)
       const value = price - (price / discount)
       return (
-        <p className={'won'}>{decimalFormat(value)}</p>
+        <p className={'won'}>{value !== 0 ? decimalFormat(value) : '-'}</p>
       )
     }
   },
@@ -268,7 +268,14 @@ export const productListColumn = [
     render: ({value, cellProps}) => {
       return (
         <div style={{display: 'flex', justifyContent:'center',alignItems: 'center'}}>
-          <p>이동</p> <Icon icon={'url'} value={value} cellProps={cellProps}/>
+          {value !== '' ?
+            <>
+              <p>이동</p>
+              <Icon icon={'url'} value={value} cellProps={cellProps}/>
+            </>
+            :
+            <span>-</span>
+          }
         </div>
       )
     }
@@ -280,7 +287,10 @@ export const productListColumn = [
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
-    showColumnMenuTool: false
+    showColumnMenuTool: false,
+    render: ({value, cellProps}) => {
+      return <span>{value > 0 ? value : '-'}</span>
+    }
   },
   {
     name: 'reviewCount',
@@ -289,7 +299,10 @@ export const productListColumn = [
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
-    showColumnMenuTool: false
+    showColumnMenuTool: false,
+    render: ({value, cellProps}) => {
+      return <span>{value > 0 ? value : '-'}</span>
+    }
   },
   {
     name: 'keyword',
@@ -298,6 +311,9 @@ export const productListColumn = [
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
-    showColumnMenuTool: false
+    showColumnMenuTool: false,
+    render: ({value, cellProps}) => {
+      return <span>{value !== null && value !== '' ? value : '-'}</span>
+    }
   }
 ]

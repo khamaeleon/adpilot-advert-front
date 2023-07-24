@@ -63,11 +63,9 @@ export function CampaignLookOver() {
   }
   useEffect(() => {
     if(tokenUserInfo.role !== 'NORMAL'){
-
       selEnumInfo('AGENT_TYPE').then(response => {
         setAgentTypeState(response.data)
       })
-
       let campaignId = (state !== null ? state.campaignId : campaignBasicInfo.campaignId);
       if(campaignId != null) retrieveConfirm(campaignId).then(response => {
         setCampaignData({
@@ -88,6 +86,7 @@ export function CampaignLookOver() {
         inventoryExposure(response.inventoryDetail)
       })
     }
+    console.log(campaignData)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -153,7 +152,7 @@ export function CampaignLookOver() {
               <Row>
                 <ColSpan2>
                   <Span4>캠페인 상품</Span4>
-                  <ValueText>{campaignData.productType !== 'BANNER' ? '팝언더' : '배너'}</ValueText>
+                  <ValueText>{campaignData.productType !== '배너' ? '팝언더' : '배너'}</ValueText>
                 </ColSpan2>
                 <HorizontalRule/>
                 <ColSpan2>

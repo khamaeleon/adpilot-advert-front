@@ -3,8 +3,8 @@ import {atomWithReset} from "jotai/utils";
 export const campaignBudgetInfoAtom =atomWithReset({
   campaignId:'',
   budgetTimeId:'',
-  budgetEventId:'',
-  priceEventId:'',
+  targetingBudgetId:'',
+  targetingPriceId:'',
   biddingType:'CPC',
   infiniteBudgetYn:'N',
   budgetRate: 50,

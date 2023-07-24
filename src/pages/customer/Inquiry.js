@@ -4,43 +4,22 @@ import {
   BoardSearchDetail,
   BoardSearchResultTitle,
   BoardTableContainer,
-  CancelButton,
   ColSpan2,
-  ColSpan3,
-  ColSpan4,
   DefaultButton,
   Input,
-  RelativeDiv,
-  RowSpan,
-  selectStyle, Span2,
-  Span4,
-  SubmitButton,
-  SubmitContainer,
-  TextArea,
-  ValidationScript
+  selectStyle
 } from "../../assets/GlobalStyles";
 import {Row} from "../campaign/styles/common";
 import WriteNoticeModal from "../../components/common/WriteNoticeModal";
 import Table from "../../components/table";
-import {
-  inquiryTypes,
-  initDataInquiry, columnInquiry
-} from "./entity/NoticeEntity";
+import {columnInquiry, initDataInquiry, inquiryTypes} from "./entity/NoticeEntity";
 import React, {useEffect, useState} from "react";
 import {dataTotalInfo} from "../../components/common/entity";
 import Select from "react-select";
 import {tokenResultAtom} from "../login/entity/Common";
-import {
-  createInquiry, selInquiryById,
-  selInquiryList
-} from "../../services/notice/InquiryAxios";
+import {createInquiry, selInquiryList} from "../../services/notice/InquiryAxios";
 import {useAtom} from "jotai/index";
-import {useLocation, useNavigate} from "react-router-dom";
-import {
-  selInquiryByIdAdmin,
-  selInquiryListAdmin, updateInquiryReply
-} from "../../services/notice/InquiryAdminAxios";
-import {Controller, useForm} from "react-hook-form";
+import {selInquiryListAdmin} from "../../services/notice/InquiryAdminAxios";
 
 export default function InquiryList(props) {
 

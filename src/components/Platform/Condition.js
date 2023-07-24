@@ -229,6 +229,7 @@ export function PlatformCondition(props) {
                              readOnly={searchCondition.searchType === 'DEFAULT' || searchCondition.searchType.id === 0}
                              value={searchCondition.keyword}
                              onChange={handleSearchValue}
+                             onKeyDown={e => (e.code === 'Enter') && handleTableData()}
                       />
                     </SearchInput>
                 </ColSpan4>

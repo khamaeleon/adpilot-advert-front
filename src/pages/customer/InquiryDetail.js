@@ -87,7 +87,7 @@ export default function InquiryDetail() {
               <ColSpan4>
                 <Span4>작성일</Span4>
                 <RelativeDiv>
-                  <span style={{paddingLeft: '20px'}}>{state.data?.createdAt}</span>
+                  <span style={{paddingLeft: '20px'}}>{state.data?.createdAt.substring(0,16)}</span>
                 </RelativeDiv>
               </ColSpan4>
             </RowSpan>
@@ -131,7 +131,7 @@ export default function InquiryDetail() {
                                    {...field}
                                    value={reply?.title || ''}
                                    style={tokenUserInfo.role === 'NORMAL' ? {backgroundColor: 'transparent', borderWidth: 0, padding: '10px', fontWeight: 'bold'} : {padding: '10px'}}
-                                   readOnly={tokenUserInfo.role === 'NORMAL'}
+                                   readOnly={tokenUserInfo.role === 'NORMAL' || reply.title !== ''}
                                    onChange={(e) => {
                                      setReply({...reply, title: e.target.value})
                                    }}
@@ -161,7 +161,7 @@ export default function InquiryDetail() {
                                 {...field}
                                 value={reply?.content  || ''}
                                 style={tokenUserInfo.role === 'NORMAL' ? {backgroundColor: 'transparent', borderWidth: 0} : {}}
-                                readOnly={tokenUserInfo.role === 'NORMAL'}
+                                readOnly={tokenUserInfo.role === 'NORMAL' || reply?.content !== ''}
                                 onChange={(e) => {
                                   setReply({...reply, content: e.target.value})
                                 }}
