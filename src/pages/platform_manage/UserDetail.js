@@ -721,7 +721,7 @@ function PlatformUserDetail() {
                       </InputValidationCon>
                     </RelativeDiv>
                   </ColSpan2>
-                  <ColSpan1 style={errors.businessLicenseWebPath ? {paddingBottom: 17} : {paddingBottom: 0}}>
+                  <ColSpan1 style={errors.businessLicenseWebPath?.message !== '' ? {paddingBottom: 0} : {paddingBottom: 17}}>
                     <ImageUploading
                       acceptType={["jpg", "gif", "png"]}
                       onChange={handleBusinessLicense}
