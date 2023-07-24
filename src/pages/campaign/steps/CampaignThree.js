@@ -37,6 +37,7 @@ import {selEnumInfo} from "../../../services/campaign/InfoAxios";
 import {toast} from "react-toastify";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useResetAtom} from "jotai/utils";
+import {campaignCreativeAtom} from "../entity/Creative";
 
 export function CampaignThree() {
   const [, setStepCampaign] = useAtom(stepCampaignAtom)
@@ -51,10 +52,9 @@ export function CampaignThree() {
   const {register, handleSubmit, reset, setValue, setError, control, formState: {errors}, clearErrors} = useFormContext()
   const {state} = useLocation()
   const navigate = useNavigate()
-  const resetInfo = useResetAtom(campaignGroupInfoAtom)
+  const resetCreativeInfo = useResetAtom(campaignCreativeAtom)
 
   useEffect(()=>{
-    resetInfo();
     selMediaCategoryInfo().then(response => {
       if (response) {
         setMediaCategory(response)
@@ -69,6 +69,7 @@ export function CampaignThree() {
 
   useEffect(() => {
     if((state !== null || ['STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED'].includes(campaignBasicInfo.step))){
+
       let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
       selGroupInfo(campaignId).then(response =>{
         setCampaignGroupInfo(response)
@@ -154,7 +155,8 @@ export function CampaignThree() {
     setCampaignGroupInfo({
       ...campaignGroupInfo,
       exposureInventoryType: exposureInventoryType,
-      allowInventoryCategories: []
+      allowInventoryCategories: [],
+      allowInventoryIds: []
     })
     clearErrors('inventoryCATEGORY')
     clearErrors('inventoryMANUAL')
@@ -164,7 +166,8 @@ export function CampaignThree() {
     setCampaignGroupInfo({
       ...campaignGroupInfo,
       disExposureInventoryType: exposureInventoryType,
-      disAllowInventoryCategories: []
+      disAllowInventoryCategories: [],
+      disAllowInventoryIds: []
     })
     clearErrors('disInventoryCATEGORY')
     clearErrors('disInventoryMANUAL')
@@ -295,7 +298,6 @@ export function CampaignThree() {
     } else{
       setStepCampaign({steps: 1})
     }
-    resetInfo();
   }
 
   const onSubmit = () => {
@@ -314,7 +316,6 @@ export function CampaignThree() {
             toast.onChange(payload => {
               if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
                 navigate('/board/dashboard')
-                resetInfo()
               }
             })
           } else {
@@ -329,6 +330,7 @@ export function CampaignThree() {
           }
         }
       })
+      resetCreativeInfo()
     }
   }
 
