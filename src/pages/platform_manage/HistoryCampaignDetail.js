@@ -174,7 +174,7 @@ export function HistoryCampaignDetail () {
               <ImageGroup>
                 {item?.bannerImages.map((img, key) => {
                   return (
-                    <img key={key} src={img.thumbnailPath} alt={img.id}/>
+                    <img key={key} src={img.imagePath} alt={img.id}/>
                   )
                 })}
               </ImageGroup>
@@ -191,7 +191,7 @@ export function HistoryCampaignDetail () {
             <ImageGroup>
               {bannerData?.nativeImages.map((img, key) => {
                 return (
-                  <img key={key} src={img.thumbnailPath} alt={img.id}/>
+                  <img key={key} src={img.imagePath} alt={img.id}/>
                 )
               })}
             </ImageGroup>

@@ -36,6 +36,11 @@ export function SwitchComponent(props){
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
+
+  useEffect(() => {
+    setSelect(cellProps.data.interlockYn === 'Y')
+  }, [value]);
+  
   const handleClick = (confirm) => {
     if(confirm){
       eventClick();

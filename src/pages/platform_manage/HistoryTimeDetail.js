@@ -49,13 +49,15 @@ function ExposerType ({data}) {
   useEffect(() => {
     if(data === 'EQUAL_DISTRIBUTION'){
       setValue('균등 소진')
+    } else if (data === 'DIRECT_SETTINGS') {
+      setValue('직접 설정')
     } else {
       setValue('빠른 소진')
     }
   }, []);
 
   return (
-    <div>{value}</div>
+    <div style={{width: '100%', paddingBottom: 10, paddingLeft: 20, textAlign: 'left'}}>{value}</div>
   )
 }
 
