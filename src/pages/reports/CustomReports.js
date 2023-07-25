@@ -336,14 +336,16 @@ export default function CustomReports() {
       })
     } else {
       retrieveCustomReportsDetail(tokenResult?.id, reportsInfo.id, searchCondition).then(response => {
-        let newObject =  response?.userSetting.groupByPeriod !== 'NONE' ? [defaultColumn[reportsInfo.groupBy]].concat(response.headers) : [].concat(response.headers)
-        newObject.map((item, key) => {
-          Object.assign(newObject[key], defaultColumn[item.name])
-          return null
-        })
-        setCampaignColumn(newObject)
-        setCampaignData(response.pagingCommonResponse.rows)
-        setReportSettingInfo(response.userSetting)
+        if(response) {
+          let newObject =  response?.userSetting.groupByPeriod !== 'NONE' ? [defaultColumn[reportsInfo.groupBy]].concat(response.headers) : [].concat(response.headers)
+          newObject.map((item, key) => {
+            Object.assign(newObject[key], defaultColumn[item.name])
+            return null
+          })
+          setCampaignColumn(newObject)
+          setCampaignData(response.pagingCommonResponse.rows)
+          setReportSettingInfo(response.userSetting)
+        }
       })
     }
     return () => {
