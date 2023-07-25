@@ -85,7 +85,7 @@ export async function createNewCategory (params) {
 export async function retrieveTopLevelCategoryKeyValue(params) {
   let returnVal;
   let response = await retrieveTopLevelCategory(params);
-  returnVal = response.map((item, idx) => {
+  returnVal = response?.map((item, idx) => {
     return {key: idx, value: item.code, label: item.name}
   })
 
@@ -95,7 +95,7 @@ export async function retrieveTopLevelCategoryKeyValue(params) {
 export async function retrieveSubLevelCategoryKeyValue(parentCode, params) {
   let returnVal;
   let response = await retrieveCategoryByParentCode(parentCode, params)
-  returnVal = response.map((item, idx) => {
+  returnVal = response?.map((item, idx) => {
     return {key: idx, value: item.code, label: item.name}
   })
 
@@ -124,8 +124,8 @@ export async function retrieveUserTopLevelCategory(searchKeyword) {
 export async function retrieveUserTopLevelCategoryKeyValue(params) {
   let returnVal;
   let response = await retrieveUserTopLevelCategory(params);
-  console.log(response)
-  returnVal = response.map((item, idx) => {
+
+  returnVal = response?.map((item, idx) => {
     return {key: idx, value: item.code, label: item.name}
   })
 
@@ -149,7 +149,7 @@ export async function retrieveUserCategoryByParentCode(parentCode, searchKeyword
 export async function retrieveUserSubLevelCategoryKeyValue(parentCode, params) {
   let returnVal;
   let response = await retrieveUserCategoryByParentCode(parentCode, params)
-  returnVal = response.map((item, idx) => {
+  returnVal = response?.map((item, idx) => {
     return {key: idx, value: item.code, label: item.name}
   })
 

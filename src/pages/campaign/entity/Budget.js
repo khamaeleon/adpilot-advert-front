@@ -1,6 +1,6 @@
 import {atomWithReset} from "jotai/utils";
 
-export const campaignBudgetInfoAtom =atomWithReset({
+export const campaignBudgetInfoAtom = atomWithReset({
   campaignId:'',
   budgetTimeId:'',
   targetingBudgetId:'',

@@ -58,7 +58,7 @@ export function SubCategory({topLevelCategory, subs}) {
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  },[tokenResult])
   return(
     <span>{subCategory}</span>
   )
@@ -182,7 +182,7 @@ function PixelAdd(props){
          */
         setPixelList !== undefined ? selAdminPixelDetailList(data.userId).then(response => {
           let clonePixelList = []
-          response.map(data => {
+          response?.map(data => {
             clonePixelList = [...clonePixelList, {value: data.pixelId, label: data.pixelName}]
             return null
           })
@@ -379,7 +379,7 @@ function PixelList() {
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  },[tokenResult])
 
   const handleFetchDetailData = useCallback(async (props) => {
     if(tokenResult.role !== 'NORMAL') {

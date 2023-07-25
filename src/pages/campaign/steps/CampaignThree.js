@@ -604,7 +604,7 @@ export function CampaignThree() {
                 <RelativeDiv box={true} column={true}>
                   <RowInBox>
                     <div>
-                      <span>전환 유저</span>
+                      <span>전환 고객</span>
                       <span style={{color: '#ccc'}}>광고주 상품을 구매한 고객을 대상으로 정책 설정</span>
                     </div>
                     <div>
@@ -738,7 +738,7 @@ export function CampaignThree() {
               </ColSpan4>
             }
             <ColSpan4>
-              <Span4 style={{letterSpacing: -1.2}}>유저 데이터 분석 설정</Span4>
+              <Span4 style={{letterSpacing: -1.2}}>오디언스 분석 설정</Span4>
               <RelativeDiv>
                 <label>
                   <input

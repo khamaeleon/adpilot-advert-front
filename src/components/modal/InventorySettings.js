@@ -368,7 +368,9 @@ const SelectedInventoryResultItem = styled.div`
 const InventoryName = styled.div`
   padding: 9px 0;
   text-align: center;
-  width:25%;
+  width:100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 const Code = styled.div`
   display: flex;
