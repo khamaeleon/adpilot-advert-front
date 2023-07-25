@@ -50,7 +50,6 @@ export default function InquiryDetail() {
 
   const onError = () => {}
   const onSubmit = () => {
-
     updateInquiryReply(state.data.id, reply).then(()=>
         navigate('/board/inquiry')
     )
@@ -105,7 +104,7 @@ export default function InquiryDetail() {
             </RowSpan>
           </BoardTableContainer>
         </Board>
-        { !(tokenUserInfo.role === 'NORMAL' && reply?.title === '') &&
+        {(tokenUserInfo.role === 'NORMAL' && reply?.title !== '' && reply?.title !== undefined ) &&
           <Board>
             <BoardHeader>
               <ColSpan3>
@@ -131,7 +130,7 @@ export default function InquiryDetail() {
                                    {...field}
                                    value={reply?.title || ''}
                                    style={tokenUserInfo.role === 'NORMAL' ? {backgroundColor: 'transparent', borderWidth: 0, padding: '10px', fontWeight: 'bold'} : {padding: '10px'}}
-                                   readOnly={tokenUserInfo.role === 'NORMAL' || reply.title !== ''}
+                                   readOnly={tokenUserInfo.role === 'NORMAL' || reply?.title !== ''}
                                    onChange={(e) => {
                                      setReply({...reply, title: e.target.value})
                                    }}
