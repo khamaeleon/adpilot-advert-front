@@ -89,9 +89,9 @@ export const productListColumn = [
     render: (props) => {
       return (
         <>
-          {props.cellProps.data.productImages.length !== 0 &&
+          {props.cellProps.data.productImages.length !== 0 ?
             <img src={props.cellProps.data.productImages[0].imageUrl} style={{height: 30}} alt={'이미지'}/>
-            ||
+            :
             <span>-</span>
           }
         </>
@@ -114,9 +114,9 @@ export const productListColumn = [
     render: (props) => {
       return (
         <>
-          {props.cellProps.data.productImages.length > 1 &&
+          {props.cellProps.data.productImages.length > 1 ?
             <ImageView url={props.cellProps.data.productImages[1]}/>
-            ||
+            :
             <span>-</span>
           }
         </>
@@ -139,9 +139,9 @@ export const productListColumn = [
     render: (props) => {
       return (
         <>
-          {props.cellProps.data.productImages.length > 2 &&
+          {props.cellProps.data.productImages.length > 2 ?
             <ImageView url={props.cellProps.data.productImages[2]}/>
-            ||
+            :
             <span>-</span>
           }
         </>
@@ -163,9 +163,9 @@ export const productListColumn = [
     render: (props) => {
       return (
         <>
-          {props.cellProps.data.productCategorys.length !== 0 &&
+          {props.cellProps.data.productCategorys.length !== 0 ?
             <span>{props.cellProps.data.productCategorys[0].name}</span>
-            ||
+            :
             <span>-</span>
           }
         </>
@@ -187,9 +187,9 @@ export const productListColumn = [
     render: (props) => {
       return (
         <>
-          {props.cellProps.data.productCategorys.length > 1 &&
+          {props.cellProps.data.productCategorys.length > 1 ?
             <span>{props.cellProps.data.productCategorys[1].name}</span>
-            ||
+            :
             <span>-</span>
           }
         </>
@@ -211,9 +211,9 @@ export const productListColumn = [
     render: (props) => {
       return (
         <>
-          {props.cellProps.data.productCategorys.length > 2 &&
+          {props.cellProps.data.productCategorys.length > 2 ?
             <span>{props.cellProps.data.productCategorys[2].name}</span>
-            ||
+            :
             <span>-</span>
           }
         </>
@@ -227,7 +227,7 @@ export const productListColumn = [
     textAlign: 'center',
     minWidth: 200,
     showColumnMenuTool: false,
-    render: ({value}) => <p className={'ellipsis'}>{value !== null && value !== ''  ? value : '-'}</p>
+    render: ({value}) => <p className={'ellipsis'}>{value}</p>
   },
   {
     name: 'price',
@@ -237,7 +237,7 @@ export const productListColumn = [
     minWidth: 100,
     maxWidth: 100,
     showColumnMenuTool: false,
-    render: ({value}) => <p className={'won'}>{value !== 0 ? decimalFormat(value) : '-'}</p>
+    render: ({value}) => <p className={'won'}>{decimalFormat(value)}</p>
   },
   {
     name: 'discountRate',
@@ -252,7 +252,7 @@ export const productListColumn = [
       const discount = parseFloat(props.cellProps.data.discountRate)
       const value = price - (price / discount)
       return (
-        <p className={'won'}>{value !== 0 ? decimalFormat(value) : '-'}</p>
+        <p className={'won'}>{decimalFormat(value)}</p>
       )
     }
   },
@@ -268,14 +268,7 @@ export const productListColumn = [
     render: ({value, cellProps}) => {
       return (
         <div style={{display: 'flex', justifyContent:'center',alignItems: 'center'}}>
-          {value !== '' ?
-            <>
-              <p>이동</p>
-              <Icon icon={'url'} value={value} cellProps={cellProps}/>
-            </>
-            :
-            <span>-</span>
-          }
+          <p>이동</p> <Icon icon={'url'} value={value} cellProps={cellProps}/>
         </div>
       )
     }
@@ -287,10 +280,7 @@ export const productListColumn = [
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
-    showColumnMenuTool: false,
-    render: ({value, cellProps}) => {
-      return <span>{value > 0 ? value : '-'}</span>
-    }
+    showColumnMenuTool: false
   },
   {
     name: 'reviewCount',
@@ -299,10 +289,7 @@ export const productListColumn = [
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
-    showColumnMenuTool: false,
-    render: ({value, cellProps}) => {
-      return <span>{value > 0 ? value : '-'}</span>
-    }
+    showColumnMenuTool: false
   },
   {
     name: 'keyword',
@@ -311,9 +298,6 @@ export const productListColumn = [
     textAlign: 'center',
     minWidth: 100,
     maxWidth: 100,
-    showColumnMenuTool: false,
-    render: ({value, cellProps}) => {
-      return <span>{value !== null && value !== '' ? value : '-'}</span>
-    }
+    showColumnMenuTool: false
   }
 ]
