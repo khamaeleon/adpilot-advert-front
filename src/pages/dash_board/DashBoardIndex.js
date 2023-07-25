@@ -424,7 +424,6 @@ function DashBoardIndex() {
     return (
       <ReactDataGrid
         handle={null}
-        idProperty={'userId'}
         clearNodeCacheOnDataSourceChange={true}
         dataSource={adverStatusDetailData.sort((a,b)=>{if(a.campaignName>b.campaignName){return 1}else{return -1}})}
         columns={adverStatusDetailColumn}
