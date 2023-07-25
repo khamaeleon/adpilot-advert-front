@@ -48,13 +48,17 @@ export function SubCategory({topLevelCategory, subs}) {
   useEffect(()=>{
     if(tokenResult.role !== 'NORMAL') {
       retrieveSubLevelCategoryKeyValue(topLevelCategory).then(response => {
-        const subsLabel = response.find(subCategory => subCategory.value === subs).label
-        setSubCategory(subsLabel)
+        if(response !== null) {
+          const subsLabel = response.find(subCategory => subCategory.value === subs).label
+          setSubCategory(subsLabel)
+        }
       })
     } else {
       retrieveUserSubLevelCategoryKeyValue(topLevelCategory).then(response => {
-        const subsLabel = response.find(subCategory => subCategory.value === subs).label
-        setSubCategory(subsLabel)
+        if(response !== null) {
+          const subsLabel = response.find(subCategory => subCategory.value === subs).label
+          setSubCategory(subsLabel)
+        }
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -110,7 +114,9 @@ function PixelAdd(props){
 
   useEffect(() => {
     retrieveTopLevelCategoryKeyValue().then(response => {
-      setTopLevelCategoryList(response)
+      if(response !== null) {
+        setTopLevelCategoryList(response)
+      }
     })
   }, [])
   /**
@@ -144,7 +150,9 @@ function PixelAdd(props){
       subCategoryCode:''
     })
     retrieveSubLevelCategoryKeyValue(selectTopCategory.value).then(response => {
-      setRowLevelCategoryList(response)
+      if(response){
+        setRowLevelCategoryList(response)
+      }
     })
   }
   /**
@@ -181,12 +189,14 @@ function PixelAdd(props){
          * 픽셀 리스트 조회
          */
         setPixelList !== undefined ? selAdminPixelDetailList(data.userId).then(response => {
-          let clonePixelList = []
-          response?.map(data => {
-            clonePixelList = [...clonePixelList, {value: data.pixelId, label: data.pixelName}]
-            return null
-          })
-          setPixelList(clonePixelList)
+          if(response) {
+            let clonePixelList = []
+            response?.map(data => {
+              clonePixelList = [...clonePixelList, {value: data.pixelId, label: data.pixelName}]
+              return null
+            })
+            setPixelList(clonePixelList)
+          }
         }): navigate(0)
       }else{
         console.log('실패')
@@ -368,14 +378,20 @@ function PixelList() {
   useEffect(()=>{
     if(tokenResult.role !== 'NORMAL'){
       selAdminPixelList(searchParams).then(response =>{
-        setPixelDataState(response)
+        if(response !== null) {
+          setPixelDataState(response)
+        }
       })
       retrieveTopLevelCategoryKeyValue().then(response => {
-        setTopLevelCategoryList(response)
+        if(response !== null) {
+          setTopLevelCategoryList(response)
+        }
       })
     } else {
       retrieveUserTopLevelCategoryKeyValue().then(response => {
-        setTopLevelCategoryList(response)
+        if(response !== null) {
+          setTopLevelCategoryList(response)
+        }
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -384,20 +400,27 @@ function PixelList() {
   const handleFetchDetailData = useCallback(async (props) => {
     if(tokenResult.role !== 'NORMAL') {
       let detailPixelData = await selAdminPixelDetailList(props.userId)
+      if(detailPixelData !== null) {
+        detailPixelData?.map((item,key) => {
+          detailPixelData[key]['mainCategoryLabel'] = topLevelCategoryList.find(category => category.value === item.mainCategoryCode).label
+          return null
+        })
+        return detailPixelData
+      }  else {
+        return []
+      }
 
-      detailPixelData.map((item,key) => {
-        detailPixelData[key]['mainCategoryLabel'] = topLevelCategoryList.find(category => category.value === item.mainCategoryCode).label
-        return null
-      })
-      return detailPixelData
     } else {
       let detailPixelData = await selAdverPixelList(tokenResult.id)
-
-      detailPixelData.map((item,key) => {
-        detailPixelData[key]['mainCategoryLabel'] = topLevelCategoryList.find(category => category.value === item.mainCategoryCode).label
-        return null
-      })
-      return detailPixelData
+      if(detailPixelData !== null) {
+        detailPixelData?.map((item,key) => {
+          detailPixelData[key]['mainCategoryLabel'] = topLevelCategoryList.find(category => category.value === item.mainCategoryCode).label
+          return null
+        })
+        return detailPixelData
+      } else {
+        return []
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[topLevelCategoryList])
@@ -414,7 +437,9 @@ function PixelList() {
    */
   const onSearchAdverUserId = async() => {
     await selAdminPixelList(searchParams).then(response =>{
-      setPixelDataState(response)
+      if(response !== null) {
+        setPixelDataState(response)
+      }
     })
   }
   const rowExpandHeight = ({ data }) => {

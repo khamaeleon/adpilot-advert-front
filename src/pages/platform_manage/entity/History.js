@@ -56,7 +56,7 @@ export const campaignColumns = [
   },
   {
     name: 'modifiedBy',
-    header: '변경인 아이디',
+    header: '변경자 아이디',
   },
 ]
 
@@ -88,7 +88,7 @@ export const budgetPriceColumns = [
   },
   {
     name: 'modifiedBy',
-    header: '변경인 아이디',
+    header: '변경자 아이디',
   },
 ]
 
@@ -120,7 +120,7 @@ export const targetingColumns = [
   },
   {
     name: 'modifiedBy',
-    header: '변경인 아이디',
+    header: '변경자 아이디',
   },
 ]
 
@@ -152,7 +152,7 @@ export const budgetTimeColumns = [
   },
   {
     name: 'modifiedBy',
-    header: '변경인 아이디',
+    header: '변경자 아이디',
   },
 ]
 
