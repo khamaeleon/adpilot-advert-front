@@ -2,10 +2,18 @@ import {BoardTableContainer, BoardTap, BoardTapTitle, CancelButton, SubmitContai
 import React, {useEffect, useState} from "react";
 import {Link, useLocation} from "react-router-dom";
 import {findRevisionBudgetTimeDetail} from "../../services/Platform/HistoryAxios";
-import {timesInfo, weeksInfo} from "../settings/entity/BudgetTime";
+import {timesInfo} from "../settings/entity/BudgetTime";
 import styled from "styled-components";
 
-
+export const weeksInfo = [
+  {week: '월', dayOfWeek: 'MONDAY'},
+  {week: '화', dayOfWeek: 'TUESDAY'},
+  {week: '수', dayOfWeek: 'WEDNESDAY'},
+  {week: '목', dayOfWeek: 'THURSDAY'},
+  {week: '금', dayOfWeek: 'FRIDAY'},
+  {week: '토', dayOfWeek: 'SATURDAY'},
+  {week: '일', dayOfWeek: 'SUNDAY'}
+]
 function TimeTable (props) {
   const {data, type} = props
   return (
@@ -19,9 +27,9 @@ function TimeTable (props) {
         return (
           <TimeTableComponent key={key}>
             {timesInfo.map((time, index) => {
-              const allowTime = data[key]?.allowTimeAreas
-              const styles = data[key] !== undefined && allowTime.find(item => item.hour === time.time - 1) !== undefined ? {backgroundColor: '#4b85ff'} : null
-              const percent = data[key] !== undefined &&  allowTime.find(item => item.hour === time.time - 1)?.ratio !== undefined ? `${allowTime.find(item => item.hour === time.time - 1)?.ratio}%` : ''
+              const allowTime = data.find(item => item.dayOfWeek === info.dayOfWeek)?.allowTimeAreas
+              const styles = allowTime !== undefined && allowTime.find(item => item.hour === time.time - 1) !== undefined ? {backgroundColor: '#4b85ff'} : null
+              const percent = allowTime !== undefined &&  allowTime.find(item => item.hour === time.time - 1)?.ratio !== undefined ? `${allowTime.find(item => item.hour === time.time - 1)?.ratio}%` : ''
               return (
                 <div className={'time'} key={index} style={type !== 'DIRECT_SETTINGS' ? styles : null}>
                   {type !== 'DIRECT_SETTINGS' ? null : `${percent}`}
@@ -159,6 +167,7 @@ const TimeTableComponent = styled.div`
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
   border-right: 1px solid #eee;
+  min-height: 30px;
   & div {
     display: flex;
     justify-content: center;
