@@ -104,8 +104,10 @@ export default function InquiryDetail() {
             </RowSpan>
           </BoardTableContainer>
         </Board>
-        {(tokenUserInfo.role === 'NORMAL' && reply?.title !== '' && reply?.title !== undefined ) &&
-          <Board>
+        { !(tokenUserInfo.role === 'NORMAL' && reply?.title === '') &&
+          <Board style={{
+            display: reply?.title === undefined?'none':'block'
+          }}>
             <BoardHeader>
               <ColSpan3>
                 <p>답변</p>
