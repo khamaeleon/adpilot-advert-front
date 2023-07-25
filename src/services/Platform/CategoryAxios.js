@@ -85,7 +85,7 @@ export async function createNewCategory (params) {
 export async function retrieveTopLevelCategoryKeyValue(params) {
   let returnVal;
   await retrieveTopLevelCategory(params).then(response => {
-    if (response?.responseCode.statusCode === 200) {
+    if (response?.length > 0) {
       returnVal = response?.map((item, idx) => {
         return {key: idx, value: item.code, label: item.name}
       })
@@ -99,7 +99,7 @@ export async function retrieveTopLevelCategoryKeyValue(params) {
 export async function retrieveSubLevelCategoryKeyValue(parentCode, params) {
   let returnVal;
   await retrieveCategoryByParentCode(parentCode, params).then(response => {
-    if(response.responseCode.statusCode === 200) {
+    if(response.length > 0) {
       returnVal = response?.map((item, idx) => {
         return {key: idx, value: item.code, label: item.name}
       })

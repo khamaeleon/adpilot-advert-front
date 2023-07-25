@@ -16,6 +16,7 @@ import "../src/assets/DatePicker.css"
 import {initDB} from "react-indexed-db";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import {ServerError} from "./pages/500";
 export const DBConfig = {
   name: 'FrameDB',
   version: 1,
@@ -57,6 +58,7 @@ function App() {
               <Route path={':/*'} element={<NotFound />}/>
             </Route>
             <Route path={"*"} element={<NotFound/>}/>
+            <Route path={'500'} element={<ServerError/>}/>
           </Routes>
           <Modal isShow={modal.isShow}></Modal>
         </BrowserRouter>
