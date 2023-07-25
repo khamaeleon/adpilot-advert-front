@@ -82,6 +82,8 @@ export function HistoryCampaignDetail () {
     const budgetData = data[timing]?.budget
     if(Object.keys(arg)[0] === 'infiniteBudgetYn') {
       value = budgetData[Object.keys(arg)] === 'N' ? `PC ${budgetData.pcBudget}원  / MOBILE ${budgetData.mobBudget}원` : '-'
+    } else if(Object.keys(arg)[0] === 'dailyAvgBudget'){
+      value = budgetData[Object.keys(arg)] === 0 ? '무제한' : value = budgetData[Object.keys(arg)];
     } else {
       value = budgetData[Object.keys(arg)]
     }
@@ -320,18 +322,18 @@ export function HistoryCampaignDetail () {
 
               <tr>
                 <th className={'border-r border-t'}>이벤트 단가 그룹</th>
-                <td className={'border-t'}>기본 단가 그룹</td>
-                <td className={'border-t'}>기본 단가 그룹</td>
+                <td className={'border-t'}>{data?.previous !== undefined && data?.previous?.budget !== null && data?.previous?.budget !== undefined ? data?.previous?.budget?.targetingPriceGroupName : '-'}</td>
+                <td className={'border-t'}>{data?.current !== undefined && data?.current?.budget !== null && data?.current?.budget !== undefined ? data?.current?.budget?.targetingPriceGroupName : '-'}</td>
               </tr>
               <tr>
                 <th className={'border-r border-t'}>이벤트 예산 그룹</th>
-                <td className={'border-t'}>기본 예산 그룹</td>
-                <td className={'border-t'}>기본 예산 그룹</td>
+                <td className={'border-t'}>{data?.previous !== undefined && data?.previous?.budget !== null && data?.previous?.budget !== undefined ? data?.previous?.budget?.targetingBudgetGroupName : '-'}</td>
+                <td className={'border-t'}>{data?.current !== undefined && data?.current?.budget !== null && data?.current?.budget !== undefined ? data?.current?.budget?.targetingBudgetGroupName : '-'}</td>
               </tr>
               <tr>
                 <th className={'border-r border-t'}>시간대별 예산 그룹</th>
-                <td className={'border-t'}>기본 예산 그룹</td>
-                <td className={'border-t'}>기본 예산 그룹</td>
+                <td className={'border-t'}>{data?.previous !== undefined && data?.previous?.budget !== null && data?.previous?.budget !== undefined ? data?.previous?.budget?.budgetTimeGroupName : '-'}</td>
+                <td className={'border-t'}>{data?.current !== undefined && data?.current?.budget !== null && data?.current?.budget !== undefined ? data?.current?.budget?.budgetTimeGroupName : '-'}</td>
               </tr>
               </tbody>
             </table>
