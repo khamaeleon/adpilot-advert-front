@@ -44,6 +44,21 @@ function TimeTable (props) {
   )
 }
 
+function ExposerType ({data}) {
+  const [value, setValue] = useState('')
+  useEffect(() => {
+    if(data === 'EQUAL_DISTRIBUTION'){
+      setValue('균등 소진')
+    } else {
+      setValue('빠른 소진')
+    }
+  }, []);
+
+  return (
+    <div>{value}</div>
+  )
+}
+
 export function HistoryTimeDetail () {
   const {state} = useLocation()
   const [data, setData] = useState()
@@ -136,7 +151,11 @@ export function HistoryTimeDetail () {
                 <th className={'border-r'}>이전 내역</th>
                 <td>
                   {data?.previous !== null && data?.previous !== undefined &&
-                    <TimeTable data={data?.previous?.allowTimes} type={data?.previous?.exposureTimeType}/>
+                    <>
+                      <ExposerType data={data?.previous?.exposureTimeType} />
+                      <TimeTable data={data?.previous?.allowTimes} type={data?.previous?.exposureTimeType}/>
+                    </>
+
                   }
                 </td>
               </tr>
@@ -144,7 +163,10 @@ export function HistoryTimeDetail () {
                 <th className={'border-r border-t'}>변경 내역</th>
                 <td className={'border-t'}>
                   {data?.current !== null  && data?.current !== undefined &&
-                    <TimeTable data={data?.current?.allowTimes} type={data?.current?.exposureTimeType}/>
+                    <>
+                      <ExposerType data={data?.current?.exposureTimeType} />
+                      <TimeTable data={data?.current?.allowTimes} type={data?.current?.exposureTimeType}/>
+                    </>
                   }
                 </td>
               </tr>

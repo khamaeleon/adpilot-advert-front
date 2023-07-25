@@ -142,7 +142,7 @@ export function HistoryCampaignDetail () {
         <ImageGroup>
           {path.map((img, key) => {
             return(
-              <img width={70} height={70} style={{objectFit:'cover'}} key={key} src={img} alt={'로고이미지'}/>
+              <img width={70} height={70} style={{objectFit:'contain'}} key={key} src={img} alt={'로고이미지'}/>
               )
           })}
         </ImageGroup>
@@ -405,9 +405,8 @@ export function HistoryCampaignDetail () {
                 return (
                   <tr key={key}>
                     <th className={'border-r border-t'}>{Object.values(entry)}</th>
-
-                    <td className={'border-t'}>{data?.previous !== null && data?.previous !== undefined && data?.previous?.creative !== null && data?.previous?.creative?.materialDetailInfo !== undefined  ? materialConverters('previous',entry) : '-'}</td>
-                    <td className={'border-t'}>{data?.current !== null && data?.current !== undefined && data?.current?.creative !== null && data?.current?.creative?.materialDetailInfo !== undefined ? materialConverters('current',entry) : '-'}</td>
+                    <td className={'border-t'} style={{padding: 10}}>{data?.previous !== null && data?.previous !== undefined && data?.previous?.creative !== null && data?.previous?.creative?.materialDetailInfo !== undefined  ? materialConverters('previous',entry) : '-'}</td>
+                    <td className={'border-t'} style={{padding: 10}}>{data?.current !== null && data?.current !== undefined && data?.current?.creative !== null && data?.current?.creative?.materialDetailInfo !== undefined ? materialConverters('current',entry) : '-'}</td>
                   </tr>
                 )
               })}
@@ -433,6 +432,6 @@ const ImageGroup = styled.div`
   background-color: #fafafa;
   & img {
     width: 70px;
-    object-fit: cover;
+    object-fit: contain;
   }
 `

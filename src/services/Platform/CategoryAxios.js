@@ -84,21 +84,29 @@ export async function createNewCategory (params) {
  */
 export async function retrieveTopLevelCategoryKeyValue(params) {
   let returnVal;
-  let response = await retrieveTopLevelCategory(params);
-  returnVal = response?.map((item, idx) => {
-    return {key: idx, value: item.code, label: item.name}
+  await retrieveTopLevelCategory(params).then(response => {
+    if (response?.responseCode.statusCode === 200) {
+      returnVal = response?.map((item, idx) => {
+        return {key: idx, value: item.code, label: item.name}
+      })
+    } else {
+      returnVal = null
+    }
   })
-
   return returnVal;
 }
 
 export async function retrieveSubLevelCategoryKeyValue(parentCode, params) {
   let returnVal;
-  let response = await retrieveCategoryByParentCode(parentCode, params)
-  returnVal = response?.map((item, idx) => {
-    return {key: idx, value: item.code, label: item.name}
+  await retrieveCategoryByParentCode(parentCode, params).then(response => {
+    if(response.responseCode.statusCode === 200) {
+      returnVal = response?.map((item, idx) => {
+        return {key: idx, value: item.code, label: item.name}
+      })
+    } else {
+      returnVal = null
+    }
   })
-
   return returnVal;
 }
 
@@ -111,7 +119,6 @@ export async function retrieveUserTopLevelCategory(searchKeyword) {
   let params = {keyword: searchKeyword != null ? searchKeyword : ''}
   await AdverAxios('GET', USER_CATEGORY_ALL, params)
     .then((response) => {
-
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
       } else {
@@ -123,13 +130,18 @@ export async function retrieveUserTopLevelCategory(searchKeyword) {
 
 export async function retrieveUserTopLevelCategoryKeyValue(params) {
   let returnVal;
-  let response = await retrieveUserTopLevelCategory(params);
-
-  returnVal = response?.map((item, idx) => {
-    return {key: idx, value: item.code, label: item.name}
+  await retrieveUserTopLevelCategory(params).then(response => {
+    if(response.responseCode.statusCode === 200) {
+      returnVal = response?.map((item, idx) => {
+        return {key: idx, value: item.code, label: item.name}
+      })
+    } else {
+      returnVal = null
+    }
+    return returnVal;
   })
 
-  return returnVal;
+
 }
 
 export async function retrieveUserCategoryByParentCode(parentCode, searchKeyword) {
@@ -148,10 +160,14 @@ export async function retrieveUserCategoryByParentCode(parentCode, searchKeyword
 
 export async function retrieveUserSubLevelCategoryKeyValue(parentCode, params) {
   let returnVal;
-  let response = await retrieveUserCategoryByParentCode(parentCode, params)
-  returnVal = response?.map((item, idx) => {
-    return {key: idx, value: item.code, label: item.name}
+  await retrieveUserCategoryByParentCode(parentCode, params).then(response => {
+    if (response.responseCode.statusCode === 200) {
+      returnVal = response.data
+    } else if(response.responseCode.statusCode === 400 || response.responseCode.statusCode === 500) {
+      returnVal = []
+    } else {
+      returnVal = []
+    }
   })
-
   return returnVal;
 }

@@ -88,6 +88,8 @@ export async function selAdminPixelDetailList(userId) {
       const {data, responseCode} =response
       if(responseCode.statusCode ===200){
         returnVal = data
+      } else if (responseCode.statusCode === 500 || responseCode.statusCode === 400) {
+        returnVal = null
       }else{
         returnVal = null
       }
