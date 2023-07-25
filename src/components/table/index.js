@@ -307,7 +307,6 @@ function Table(props) {
   const gridElement = (
     <ReactDataGrid
       licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
-      idProperty={props.idProperty}
       i18n={i18n}
       handle={setGridRef}
       columns={columns}
@@ -321,8 +320,8 @@ function Table(props) {
       showColumnMenuGroupOptions={false}
       emptyText={emptyText}
       defaultLimit={defaultLimit}
+      pagination={props.pagination}
       style={gridStyle}
-      pagination={props.paginations}
       showHoverRows={false}
       activeCell={null}
       {...props}

@@ -424,8 +424,9 @@ function DashBoardIndex() {
     return (
       <ReactDataGrid
         handle={null}
+        idProperty={'userId'}
         clearNodeCacheOnDataSourceChange={true}
-        dataSource={adverStatusDetailData}
+        dataSource={adverStatusDetailData.sort((a,b)=>{if(a.campaignName>b.campaignName){return 1}else{return -1}})}
         columns={adverStatusDetailColumn}
         enableColumnAutosize={true}
         groups={false}
@@ -494,7 +495,7 @@ function DashBoardIndex() {
               : <Table columns={userCampaignListColumn}
                        totalCount={[totalInfo.totalCount, '캠페인']}
                        rowHeight={null}
-                       data={adverStatusData}/>
+                       data={adverStatusData.sort((a,b)=>{if(a.username>b.username){return 1}else{return -1}})}/>
             }
           </DashBoardBody>
         </DashBoardCard>

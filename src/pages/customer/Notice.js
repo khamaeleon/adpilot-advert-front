@@ -8,10 +8,10 @@ import {
   Input,
 } from "../../assets/GlobalStyles";
 import Table from "../../components/table";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useCallback, useState} from "react";
 import {dataTotalInfo} from "../../components/common/entity";
 import {Row} from "../campaign/styles/common";
-import {columnNotice, initDataNotice} from "./entity/NoticeEntity";
+import {columnNotice} from "./entity/NoticeEntity";
 import WriteNoticeModal from "../../components/common/WriteNoticeModal";
 import {
   selNoticeList,
@@ -27,10 +27,10 @@ export default function Notice() {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
 
   const [totalInfo, setTotalInfo] = useState(dataTotalInfo);
-  const [noticeList, setNoticeList] = useState(initDataNotice);
+  const [isSearch, setIsSearch] = useState(false);
 
   const [searchCondition, setSearchCondition] = useState(
-      {keyword:'', pageSize: 20, currentPage: 1, publishYn:''});
+      {keyword:'', pageSize: 10, currentPage: 1, publishYn:''});
 
   useEffect(()=>{
     onSearch()
@@ -51,25 +51,41 @@ export default function Notice() {
   }
 
   const onSearch = () => {
-    const callbackFunc = (response) => {
+    setIsSearch(true);
+  }
 
-      if (response != null) {
+  const loadData = ({skip, limit}) => {
+    let params = {
+      ...searchCondition,
+      currentPage: skip/limit + 1,
+      pageSize: limit
+    }
+
+    if(tokenUserInfo.role !== 'NORMAL') {
+      return selNoticeListAdmin(params).then(response => {
+        const totalCount = response.totalCount;
+        setIsSearch(false);
         setTotalInfo({
           totalCount: response.totalCount,
           currentPage: response.currentPage,
           totalPages: response.totalPages
-        })
-        setNoticeList(response.rows);
-      }
-    }
-
-    if(tokenUserInfo.role !== 'NORMAL'){
-      selNoticeListAdmin(searchCondition).then(callbackFunc);
-    }else{
-      selNoticeList({...searchCondition, publishYn: 'Y'}).then(callbackFunc);
+        });
+        return {data: response.rows, count: parseInt(totalCount)};
+      })
+    } else {
+      return selNoticeList({...params, publishYn: 'Y'}).then(response => {
+        const totalCount = response.totalCount;
+        setIsSearch(false);
+        setTotalInfo({
+          totalCount: response.totalCount,
+          currentPage: response.currentPage,
+          totalPages: response.totalPages
+        });
+        return {data: response.rows, count: parseInt(totalCount)};
+      })
     }
   }
-
+  const dataSource = useCallback(loadData, [searchCondition.currentPage, isSearch])
   return <>
     <Board>
       <BoardHeader>공지사항 현황</BoardHeader>
@@ -97,13 +113,12 @@ export default function Notice() {
         </div>
       </BoardSearchResultTitle>
       <BoardTableContainer>
-        <Table columns={tokenUserInfo.role !== 'NORMAL' ? columnNotice : columnNotice.filter(column => column.name !== 'publishYn')}
-               totalCount={[totalInfo.totalCount, '공지사항']}
-               defaultLimit={searchCondition.pageSize}
-               data={noticeList?.sort((a,b) => {
-                 if(a.id > b.id) return -1
-                 else return 1
-               })}
+        <Table
+            columns={tokenUserInfo.role !== 'NORMAL' ? columnNotice : columnNotice.filter(column => column.name !== 'publishYn')}
+            totalCount={[totalInfo.totalCount, '공지사항']}
+            defaultLimit={searchCondition.pageSize}
+            data={dataSource}
+            pagination
         />
       </BoardTableContainer>
     </Board>

@@ -12,8 +12,8 @@ import {
 import {Row} from "../campaign/styles/common";
 import WriteNoticeModal from "../../components/common/WriteNoticeModal";
 import Table from "../../components/table";
-import {columnInquiry, initDataInquiry, inquiryTypes} from "./entity/NoticeEntity";
-import React, {useEffect, useState} from "react";
+import {columnInquiry, inquiryTypes} from "./entity/NoticeEntity";
+import React, {useCallback, useEffect, useState} from "react";
 import {dataTotalInfo} from "../../components/common/entity";
 import Select from "react-select";
 import {tokenResultAtom} from "../login/entity/Common";
@@ -21,12 +21,12 @@ import {createInquiry, selInquiryList} from "../../services/notice/InquiryAxios"
 import {useAtom} from "jotai/index";
 import {selInquiryListAdmin} from "../../services/notice/InquiryAdminAxios";
 
-export default function InquiryList(props) {
+export default function InquiryList() {
 
   const [tokenUserInfo] = useAtom(tokenResultAtom);
 
   const [totalInfo, setTotalInfo] = useState(dataTotalInfo);
-  const [inquiryList, setInquiryList] = useState(initDataInquiry);
+  const [isSearch, setIsSearch] = useState(false);
 
   const [searchCondition, setSearchCondition] = useState(
       {keyword:'', inquiryType: 'DEFAULT', pageSize: 10, currentPage: 1});
@@ -49,30 +49,7 @@ export default function InquiryList(props) {
   }
 
   const onSearch = () => {
-    const callbackFunc = (response) => {
-      if (response != null) {
-        setInquiryList(response.rows);
-        setTotalInfo({
-          totalCount: response.totalCount,
-          currentPage: response.currentPage,
-          totalPages: response.totalPages
-        })
-      }
-    }
-
-    if(tokenUserInfo.role !== 'NORMAL'){
-      selInquiryListAdmin({
-        ...searchCondition,
-        inquiryType: searchCondition.inquiryType.value
-      })
-      .then(callbackFunc)
-    } else {
-      selInquiryList(tokenUserInfo.id ,{
-        ...searchCondition,
-        inquiryType: searchCondition.inquiryType.value
-      })
-      .then(callbackFunc)
-    }
+    setIsSearch(true);
   }
 
   const handleSearchType = (e) => {
@@ -90,6 +67,39 @@ export default function InquiryList(props) {
     }
   }
 
+  const loadData = ({skip, limit}) => {
+    let params = {
+      ...searchCondition,
+      currentPage: skip/limit + 1,
+      pageSize: limit,
+      inquiryType: searchCondition.inquiryType.value
+    }
+
+    if(tokenUserInfo.role !== 'NORMAL') {
+      return selInquiryListAdmin(params).then(response => {
+        const totalCount = response.totalCount;
+        setIsSearch(false);
+        setTotalInfo({
+          totalCount: response.totalCount,
+          currentPage: response.currentPage,
+          totalPages: response.totalPages
+        });
+        return {data: response.rows, count: parseInt(totalCount)};
+      })
+    } else {
+      return selInquiryList(tokenUserInfo.id, params).then(response => {
+        const totalCount = response.totalCount;
+        setIsSearch(false);
+        setTotalInfo({
+          totalCount: response.totalCount,
+          currentPage: response.currentPage,
+          totalPages: response.totalPages
+        });
+        return {data: response.rows, count: parseInt(totalCount)};
+      })
+    }
+  }
+  const dataSource = useCallback(loadData, [searchCondition.currentPage, isSearch])
   return (
       <>
         <Board>
@@ -130,10 +140,9 @@ export default function InquiryList(props) {
                    idProperty={'id'}
                    totalCount={[totalInfo.totalCount, '1:1문의']}
                    defaultLimit={searchCondition.pageSize}
-                   data={inquiryList.sort((a,b) => {
-                     if(a.id > b.id) return -1
-                     else return 1
-                   })}/>
+                   data={dataSource}
+                   pagination
+            />
           </BoardTableContainer>
         </Board>
       </>

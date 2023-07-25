@@ -1,8 +1,9 @@
 import {Board, BoardHeader, BoardSearchDetail, BoardSearchResult} from "../../assets/GlobalStyles";
-import React, {useEffect, useState} from "react";
+import React, { useCallback, useState} from "react";
 import Table from "../../components/table";
 import {findRevisionTargetingPriceList} from "../../services/Platform/HistoryAxios";
 import {budgetPriceColumns, HistorySearchCondition, searchConditionData} from "./entity/History";
+import {dataTotalInfo} from "../../components/common/entity";
 
 const option = [
   {key: 0, value: 'DEFAULT', label: '전체'},
@@ -14,16 +15,8 @@ const option = [
 
 export function HistoryPriceManage () {
   const [searchCondition, setSearchCondition] = useState(searchConditionData)
-  const [dataSource, setDataSource] = useState([])
-
-  useEffect(() => {
-    findRevisionTargetingPriceList(searchCondition).then(response =>{
-      if(response) {
-        setDataSource(response.rows)
-      }
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const [totalInfo, setTotalInfo] = useState(dataTotalInfo);
+  const [isSearch, setIsSearch] = useState(false);
 
   const handleChangeSearchKeywordType = (e) => {
     if(e.value === 'DEFAULT') {
@@ -48,10 +41,29 @@ export function HistoryPriceManage () {
   }
 
   const handleClickSearch = () =>{
-    findRevisionTargetingPriceList(searchCondition).then(response =>{
-      setDataSource(response.rows)
+    setIsSearch(true);
+  }
+
+  const loadData = ({skip, limit}) => {
+    let params = {
+      ...searchCondition,
+      currentPage: skip/limit + 1,
+      pageSize: limit
+    }
+
+    return findRevisionTargetingPriceList(params).then(response => {
+      const totalCount = response.totalCount;
+      setIsSearch(false);
+      setTotalInfo({
+        totalCount: response.totalCount,
+        currentPage: response.currentPage,
+        totalPages: response.totalPages
+      });
+      return {data: response.rows, count: parseInt(totalCount)};
     })
   }
+  const dataSource = useCallback(loadData, [searchCondition.currentPage, isSearch])
+
   return (
     <Board>
       <BoardHeader>이벤트 단가 이력 현황</BoardHeader>
@@ -66,9 +78,13 @@ export function HistoryPriceManage () {
       </BoardSearchDetail>
       <BoardSearchResult>
         <Table columns={budgetPriceColumns}
-               data={dataSource}
+               totalCount={[totalInfo.totalCount, '이벤트 단가 이력']}
                downloadList={true}
-               emptyText={'이벤트 단가 변경 내역이 없습니다.'}/>
+               emptyText={'이벤트 단가 변경 내역이 없습니다.'}
+               defaultLimit={searchCondition.pageSize}
+               data={dataSource}
+               pagination
+        />
       </BoardSearchResult>
     </Board>
   )

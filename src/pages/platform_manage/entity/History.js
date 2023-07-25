@@ -157,11 +157,11 @@ export const budgetTimeColumns = [
 ]
 
 export const searchConditionData = {
-  pageSize : 100,
+  pageSize : 10,
   currentPage : 1,
   searchStartDate : null,
   searchEndDate : null,
-  sortType : null,
+  sortType : "DATE_DESC",
   searchKeywordType : 'DEFAULT',
   searchKeyword : ''
 }

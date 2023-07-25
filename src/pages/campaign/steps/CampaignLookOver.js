@@ -47,17 +47,17 @@ export function CampaignLookOver() {
     setUserTargetConfig(
       [
             inventoryDetail.exposureConversionUserYn === 'Y' ? '전환 고객 노출' : `전환 고객 미노출[${inventoryDetail.nonExposureDaysOfConversionUser !== null ? inventoryDetail.nonExposureDaysOfConversionUser : 0}일]`,
-            inventoryDetail.exposureShoppingUserYn === 'Y' ? ' 쇼핑 고객 노출' : ' 쇼핑 고객 미노출',
-            inventoryDetail.exposureAttentionUserYn === 'Y' ? ' 관심 고객 노출' : ' 관심 고객 미노출',
+            inventoryDetail.exposureShoppingUserYn === 'Y' ? '쇼핑 고객 노출' : '쇼핑 고객 미노출',
+            inventoryDetail.exposureAttentionUserYn === 'Y' ? '관심 고객 노출' : '관심 고객 미노출',
             inventoryDetail.exposureVisitUserYn === 'Y' ? '방문 고객 노출' : '방문 고객 미노출'
       ]
     )
     setAudienceTargetConfig(
       [
             inventoryDetail.exposureConversionAudienceYn === 'Y' ? '전환 유저 노출' : `전환 유저 미노출[${inventoryDetail.nonExposureDaysOfConversionAudience !== null ? inventoryDetail.nonExposureDaysOfConversionAudience : 0}일]`,
-            inventoryDetail.exposureShoppingAudienceYn === 'Y' ? ' 쇼핑 유저 노출' : ' 쇼핑 유저 미노출',
-            inventoryDetail.exposurePotentialAudienceYn === 'Y' ? ' 관심 유저 노출' : ' 관심 유저 미노출',
-            inventoryDetail.exposureNewAudienceYn === 'Y' ? '방문 유저 노출' : '방문 유저 미노출'
+            inventoryDetail.exposureShoppingAudienceYn === 'Y' ? '쇼핑 유저 노출' : '쇼핑 유저 미노출',
+            inventoryDetail.exposurePotentialAudienceYn === 'Y' ? '잠재 유저 노출' : '잠재 유저 미노출',
+            inventoryDetail.exposureNewAudienceYn === 'Y' ? '신규 유저 노출' : '신규 유저 미노출'
           ]
     )
   }

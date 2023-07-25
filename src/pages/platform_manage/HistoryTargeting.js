@@ -1,8 +1,9 @@
 import {Board, BoardHeader, BoardSearchDetail, BoardSearchResult} from "../../assets/GlobalStyles";
-import React, {useEffect, useState} from "react";
+import React, { useCallback, useState} from "react";
 import Table from "../../components/table";
-import {findRevisionTargetingBudgetList} from "../../services/Platform/HistoryAxios";
+import {  findRevisionTargetingBudgetList} from "../../services/Platform/HistoryAxios";
 import {HistorySearchCondition, searchConditionData, targetingColumns} from "./entity/History";
+import {dataTotalInfo} from "../../components/common/entity";
 
 const option = [
   {key: 0, value: 'DEFAULT', label: '전체'},
@@ -12,19 +13,10 @@ const option = [
   {key: 4, value: 'MODIFIED_BY', label: '변경자 아이디'},
 ]
 
-
 export function HistoryTargetingManage () {
-  const [searchCondition, setSearchCondition] = useState(searchConditionData)
-  const [dataSource, setDataSource] = useState([])
-
-  useEffect(() => {
-    findRevisionTargetingBudgetList(searchCondition).then(response =>{
-      if(response) {
-        setDataSource(response.rows)
-      }
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const [searchCondition, setSearchCondition] = useState(searchConditionData);
+  const [totalInfo, setTotalInfo] = useState(dataTotalInfo);
+  const [isSearch, setIsSearch] = useState(false);
 
   const handleChangeSearchKeywordType = (e) => {
     if(e.value === 'DEFAULT') {
@@ -49,10 +41,29 @@ export function HistoryTargetingManage () {
   }
 
   const handleClickSearch = () =>{
-    findRevisionTargetingBudgetList(searchCondition).then(response =>{
-      setDataSource(response.rows)
+    setIsSearch(true)
+  }
+
+  const loadData = ({skip, limit}) => {
+    let params = {
+      ...searchCondition,
+      currentPage: skip/limit + 1,
+      pageSize: limit
+    }
+
+    return findRevisionTargetingBudgetList(params).then(response => {
+      const totalCount = response.totalCount;
+      setIsSearch(false);
+      setTotalInfo({
+        totalCount: response.totalCount,
+        currentPage: response.currentPage,
+        totalPages: response.totalPages
+      });
+      return {data: response.rows, count: parseInt(totalCount)};
     })
   }
+  const dataSource = useCallback(loadData, [searchCondition.currentPage, isSearch])
+
   return (
     <Board>
       <BoardHeader>이벤트 예산 이력 현황</BoardHeader>
@@ -67,9 +78,13 @@ export function HistoryTargetingManage () {
       </BoardSearchDetail>
       <BoardSearchResult>
         <Table columns={targetingColumns}
-               data={dataSource}
                downloadList={true}
-               emptyText={'이벤트 예산 변경 내역이 없습니다.'}/>
+               totalCount={[totalInfo.totalCount, '이벤트 예산 이력']}
+               emptyText={'이벤트 예산 변경 내역이 없습니다.'}
+               defaultLimit={searchCondition.pageSize}
+               data={dataSource}
+               pagination
+        />
       </BoardSearchResult>
     </Board>
   )

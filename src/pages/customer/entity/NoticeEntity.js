@@ -39,14 +39,14 @@ export const initDataNotice = [];
 export const initDataInquiry = [];
 
 export const columnNotice = [
-  {
-    name: 'id',
-    header: 'No',
-    defaultWidth: 100,
-    render: ({value, cellProps}) => {
-      return cellProps.totalDataCount - cellProps.rowIndex
-    }
-  },
+  // {
+  //   name: 'id',
+  //   header: 'No',
+  //   defaultWidth: 100,
+  //   render: ({value, cellProps}) => {
+  //     return cellProps.totalDataCount - cellProps.rowIndex
+  //   }
+  // },
   {
     name: 'title',
     header: '제목',

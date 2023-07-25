@@ -1,8 +1,9 @@
 import {Board, BoardHeader, BoardSearchDetail, BoardSearchResult} from "../../assets/GlobalStyles";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useState} from "react";
 import Table from "../../components/table";
 import {findRevisionCampaignList} from "../../services/Platform/HistoryAxios";
 import {campaignColumns, HistorySearchCondition, searchConditionData} from "./entity/History";
+import {dataTotalInfo} from "../../components/common/entity";
 
 const option = [
   {key: 0, value: 'DEFAULT', label: '전체'},
@@ -14,17 +15,10 @@ const option = [
 ]
 
 export function HistoryCampaignManage () {
-  const [searchCondition, setSearchCondition] = useState(searchConditionData)
-  const [dataSource, setDataSource] = useState([])
+  const [searchCondition, setSearchCondition] = useState(searchConditionData);
 
-  useEffect(() => {
-    findRevisionCampaignList(searchCondition).then(response =>{
-      if(response){
-        setDataSource(response.rows)
-      }
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const [totalInfo, setTotalInfo] = useState(dataTotalInfo);
+  const [isSearch, setIsSearch] = useState(false);
 
   const handleChangeSearchKeywordType = (e) => {
     if(e.value === 'DEFAULT'){
@@ -49,10 +43,31 @@ export function HistoryCampaignManage () {
   }
 
   const handleClickSearch = () =>{
-    findRevisionCampaignList(searchCondition).then(response =>{
-      setDataSource(response.rows)
-    })
+    setIsSearch(true);
   }
+
+  const loadData = ({skip, limit}) => {
+    let params = {
+      ...searchCondition,
+      currentPage: skip/limit + 1,
+      pageSize: limit
+    }
+
+    return findRevisionCampaignList(params).then(response => {
+      const totalCount = response.totalCount;
+      setIsSearch(false);
+      setTotalInfo({
+        totalCount: response.totalCount,
+        currentPage: response.currentPage,
+        totalPages: response.totalPages
+      });
+      return {data: response.rows, count: parseInt(totalCount)};
+    })
+
+  }
+
+  const dataSource = useCallback(loadData, [searchCondition.currentPage, isSearch])
+
   return (
     <Board>
       <BoardHeader>캠페인 이력 현황</BoardHeader>
@@ -67,10 +82,14 @@ export function HistoryCampaignManage () {
       </BoardSearchDetail>
       <BoardSearchResult>
         <Table columns={campaignColumns}
-               data={dataSource}
+               totalCount={[totalInfo.totalCount, '캠페인 이력']}
                downloadList={true}
                idProperty={'revisionId'}
-               emptyText={'캠페인 이력 변경 내역이 없습니다.'}/>
+               emptyText={'캠페인 이력 변경 내역이 없습니다.'}
+               defaultLimit={searchCondition.pageSize}
+               data={dataSource}
+               pagination
+        />
       </BoardSearchResult>
     </Board>
   )
