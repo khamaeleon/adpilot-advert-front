@@ -12,7 +12,7 @@ function TimeTableComponent (props) {
     if(props.exposureTimeType !== "DIRECT_SETTINGS") {
       if(props.exposureTimeType !== 'EQUAL_DISTRIBUTION') {
         return '빠른소진'
-      } else return '균등분배'
+      } else return '균등소진'
     } else return '직접 설정'
   }
   return(

@@ -121,7 +121,7 @@ export const adverTimeBudgetColumns = [ //시간 단가 컬럼
 ]
 
 const exposureTimeTypeAll =[
-  {id: "1", value: "EQUAL_DISTRIBUTION", label: "균등분배"},
+  {id: "1", value: "EQUAL_DISTRIBUTION", label: "균등소진"},
   {id: "2", value: "FAST_EXHAUSTION", label: "빠른소진"},
   {id: "3", value: "DIRECT_SETTINGS", label: "직접설정"}
 ]
