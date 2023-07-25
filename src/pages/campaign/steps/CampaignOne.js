@@ -52,7 +52,7 @@ export function CampaignOne() {
    */
   useEffect(() => {
     selEnumInfo(campaignBasicInfo.goalType).then(response => {
-      setGoalList(response.data)
+      setGoalList(response?.data)
     })
       resetInfo();
       reset();

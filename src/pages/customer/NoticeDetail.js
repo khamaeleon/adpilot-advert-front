@@ -4,6 +4,7 @@ import {
   ColSpan3, ColSpan4,
   Input, RelativeDiv, RowSpan, Span4, SubmitButton, SubmitContainer, TextArea,
 } from "../../assets/GlobalStyles";
+import { Small } from "../../components/table/styles";
 import React, {useState} from "react";
 import {useForm} from "react-hook-form";
 import {
@@ -110,10 +111,13 @@ export default function NoticeDetail(props) {
             </RowSpan>
           </BoardTableContainer>
         </Board>
+        {tokenUserInfo.role !== "NORMAL" &&
+          <Small>* 수정 버튼은 공개 / 비공개 여부 수정</Small>
+        }
         <SubmitContainer>
           <CancelButton type={"button"} onClick={()=> navigate('/board/notice')}>목록</CancelButton>
           {tokenUserInfo.role !== "NORMAL" &&
-            <SubmitButton type={"submit"}>{'수정'}</SubmitButton>
+            <SubmitButton type={"submit"} title="공개 / 비공개 여부 수정">{'수정'}</SubmitButton>
           }
         </SubmitContainer>
       </form>
