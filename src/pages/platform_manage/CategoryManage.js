@@ -54,13 +54,32 @@ export function CategoryManage() {
    * 카테고리 조회
    */
   useEffect(() => {
-    setSearchKeyword('')
-    retrieveTopLevelAllCategory().then(response => {
-      setTopLevelCategoryList(response)
-      if(response.length !== 0) handleSelectCategory(category ? selectCategory :  response[0].code )
-    })
+    // setSearchKeyword('')
+    // retrieveTopLevelAllCategory().then(response => {
+    //   setTopLevelCategoryList(response)
+    //   if(response.length !== 0) handleSelectCategory(category ? selectCategory :  response[0].code )
+    // })
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    setSearchKeyword('');
+    retrieveTopLevelAllCategory()
+      .then(response => {
+        // 옵셔널 체이닝 연산자와 Null 병합 연산자를 사용하여 null 처리
+        const topLevelCategoryList = response?.length ? response : [];
+        setTopLevelCategoryList(topLevelCategoryList);
+
+        if (topLevelCategoryList.length !== 0) {
+          // handleSelectCategory 함수 내부에서 selectCategory 또는 response[0].code를 처리하므로, 별도의 null 처리 필요하지 않음
+          handleSelectCategory(category ? selectCategory : topLevelCategoryList[0].code);
+        }
+      })
+      .catch(error => {
+        // 오류 처리
+        console.error('Error retrieving top-level categories:', error);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
+
+
   /**
    * 카테고리 선택
    * @param code

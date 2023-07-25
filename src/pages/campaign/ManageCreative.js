@@ -33,13 +33,27 @@ export function ManageCreative() {
   const [keyword, setKeyword] = useState('')
 
   useEffect(() => {
-    if(tokenResult.role !== 'NORMAL'){
-      findCreativeGroupList(keyword).then(response => {
-        setCreativeData(response.creativeGroupDtos)
-      })
+    // if(tokenResult.role !== 'NORMAL'){
+    //   findCreativeGroupList(keyword).then(response => {
+    //     setCreativeData(response.creativeGroupDtos)
+    //   })
+    // }
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (tokenResult.role !== 'NORMAL') {
+      findCreativeGroupList(keyword)
+        .then(response => {
+          // 옵셔널 체이닝 연산자와 Null 병합 연산자를 사용하여 null 처리
+          const creativeGroupDtos = response?.creativeGroupDtos ?? [];
+          setCreativeData(creativeGroupDtos);
+        })
+        .catch(error => {
+          // 오류 처리
+          console.error('Error fetching creative group list:', error);
+        });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   const handleDetailData = (userId) => {
     retrieveCreativeByUserId(userId).then(response => {

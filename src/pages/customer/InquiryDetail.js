@@ -132,7 +132,7 @@ export default function InquiryDetail() {
                                    {...field}
                                    value={reply?.title || ''}
                                    style={tokenUserInfo.role === 'NORMAL' ? {backgroundColor: 'transparent', borderWidth: 0, padding: '10px', fontWeight: 'bold'} : {padding: '10px'}}
-                                   readOnly={tokenUserInfo.role === 'NORMAL' || reply?.title !== ''}
+                                   readOnly={tokenUserInfo.role === 'NORMAL'}
                                    onChange={(e) => {
                                      setReply({...reply, title: e.target.value})
                                    }}
@@ -162,7 +162,7 @@ export default function InquiryDetail() {
                                 {...field}
                                 value={reply?.content  || ''}
                                 style={tokenUserInfo.role === 'NORMAL' ? {backgroundColor: 'transparent', borderWidth: 0} : {}}
-                                readOnly={tokenUserInfo.role === 'NORMAL' || reply?.content !== ''}
+                                readOnly={tokenUserInfo.role === 'NORMAL'}
                                 onChange={(e) => {
                                   setReply({...reply, content: e.target.value})
                                 }}
@@ -179,7 +179,7 @@ export default function InquiryDetail() {
         <SubmitContainer>
           <CancelButton type={"button"} onClick={()=> navigate('/board/inquiry')}>목록</CancelButton>
           {tokenUserInfo.role !== 'NORMAL' &&
-              <SubmitButton type={"submit"}>{'저장'}</SubmitButton>
+              <SubmitButton type={"submit"}>{reply?.content === ''?'저장':'수정'}</SubmitButton>
           }
         </SubmitContainer>
       </form>
