@@ -68,10 +68,9 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export function reactConfirmClose() {
   const target = document.getElementById('react-confirm-alert');
-  if(!target) {
-    return false
-  }
+  if(!target) return false
   const svg = document.getElementById('react-confirm-alert-firm-svg');
+  if(!svg) return false
   target.parentNode.removeChild(target);
   svg.parentNode.removeChild(svg);
   const root = document.body.children[0];
