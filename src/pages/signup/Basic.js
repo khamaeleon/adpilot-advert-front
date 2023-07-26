@@ -84,6 +84,7 @@ export default function Basic(props) {
             setIsIdCheck(true)
           } else {
             toast.warning('중복된 아이디입니다')
+            setIsIdCheck(false)
           }
         })
       } else {
@@ -96,6 +97,7 @@ export default function Basic(props) {
    * @param event
    */
   const handleMemberId = (event) => {
+    setIsIdCheck(false)
     setAccountInfo({
       ...accountInfo,
       username: event.target.value
@@ -339,6 +341,7 @@ export default function Basic(props) {
           })
           handleNextStep()
         } else {
+          setIsIdCheck(false)
           toast.warning('회원가입에 실패하였습니다. 관리자에게 문의하세요')
         }
       })
