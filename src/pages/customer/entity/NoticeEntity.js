@@ -120,7 +120,7 @@ export const columnInquiry = [
     header: '작성 일시',
     defaultWidth: 300,
     render: ({value}) => {
-      return <p>{getTimeData(value)}</p>;
+      return <p>{value.substring(0,16)}</p>;
     }
   },
   {

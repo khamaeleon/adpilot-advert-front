@@ -66,15 +66,23 @@ import {dateFormat, multiAxiosCall, toDay} from "../../../common/StringUtils";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
+export function reactConfirmClose() {
+  const target = document.getElementById('react-confirm-alert');
+  if(!target) {
+    return false
+  }
+  const svg = document.getElementById('react-confirm-alert-firm-svg');
+  target.parentNode.removeChild(target);
+  svg.parentNode.removeChild(svg);
+  const root = document.body.children[0];
+  root.classList.remove('react-confirm-alert-blur');
+  return true
+}
+
 const RegistryBannerItem = (props) => {
   const {size, onImageError, label} = props;
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
-
-  const alertRef = useRef()
-  useEffect(() => {
-    console.log(alertRef)
-  }, [alertRef]);
-
+  
   const handleDeleteImage = (imagePath) => {
     confirmAlert({
       title: '알림',
@@ -177,14 +185,7 @@ function CampaignFourBanner(props) {
   const [bannerSize] = useAtom(bannerSizeAtom)
   const [fold, setFold] = useState(true)
 
-  useEffect(() => {
-    return () => {
-
-    };
-  }, []);
-  
   const handleDeleteLogoImage = (imagePath) => {
-
     confirmAlert({
       title: '알림',
       message: '해당 이미지를 삭제하시겠습니까?',
@@ -482,8 +483,6 @@ function CampaignFourNative(props) {
         </RowSpan>
     )
   }
-
-
   const handleDeleteLogoImage = (imagePath) => {
     confirmAlert({
       title: '알림',
@@ -786,6 +785,7 @@ export function CampaignFour() {
   const {control, register, handleSubmit, reset, setError, setValue, formState: {errors}} = useFormContext()
   const [resistBool] =useState(state === null)
 
+
   useEffect(() => {
     if(!resistBool){
       if(state.creativeType ==='BANNER' ){
@@ -856,6 +856,9 @@ export function CampaignFour() {
         setCreativeType(response.data)
       })
     }
+    return () => {
+      reactConfirmClose()
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   const selCreativeGroup = (selectedCreateType) => {
