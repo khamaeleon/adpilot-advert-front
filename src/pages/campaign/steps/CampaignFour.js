@@ -178,11 +178,15 @@ const RegistryBannerItem = (props) => {
 }
 
 function CampaignFourBanner(props) {
-  const {control, errors, setError, register, onImageError} = props
+  const {control, errors, setError, register, onImageError, folding} = props
   const [clickInducementType] = useAtom(clickInducementTypeAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
   const [bannerSize] = useAtom(bannerSizeAtom)
   const [fold, setFold] = useState(true)
+
+  useEffect(()=>{
+    setFold(folding);
+  }, [folding])
 
   const handleDeleteLogoImage = (imagePath) => {
     confirmAlert({
@@ -782,8 +786,7 @@ export function CampaignFour() {
   const [creativeType, setCreativeType] = useAtom(creativeTypeAtom)
   const [, setClickInducementType] = useAtom(clickInducementTypeAtom)
   const {control, register, handleSubmit, reset, setError, setValue, formState: {errors}} = useFormContext()
-  const [resistBool] =useState(state === null)
-
+  const [resistBool] =useState(state === null);
 
   useEffect(() => {
     if(!resistBool){
@@ -921,7 +924,6 @@ export function CampaignFour() {
         campaignId: campaignBasicInfo.campaignId,
         name: campaignCreativeInfo.name
       };
-      console.log(param)
       let updateFunc;
       switch(campaignCreativeInfo.creativeType){
         case "BANNER": updateFunc = updateCampaignBanner(param); break;
@@ -1047,7 +1049,15 @@ export function CampaignFour() {
                 <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
               </ValidationGroup>
               {campaignCreativeInfo.creativeType === 'BANNER' && ((resistBool && campaignBasicInfo.productType==='BANNER') || (state !== null && state.productType==='BANNER')) &&
-                <CampaignFourBanner control={control} errors={errors} setError={setError} register={register} onImageError={onImageError} />
+                <CampaignFourBanner control={control} errors={errors} setError={setError} register={register} onImageError={onImageError}
+                                    folding={campaignCreativeInfo.title1 === ''
+                                        && campaignCreativeInfo.title2 === ''
+                                        && campaignCreativeInfo.title3 === ''
+                                        && campaignCreativeInfo.titleLong === ''
+                                        && campaignCreativeInfo.logoPaths.length === 0
+                                        && campaignCreativeInfo.serviceName === ''
+                                        && campaignCreativeInfo.description === ''
+                                        && campaignCreativeInfo.clickInducementType === null}/>
               }
               {campaignCreativeInfo.creativeType === 'NATIVE' && ((resistBool && campaignBasicInfo.productType==='BANNER') || (state !== null && state.productType==='BANNER')) &&
                 <CampaignFourNative control={control} errors={errors} setError={setError} register={register} onImageError={onImageError}/>
