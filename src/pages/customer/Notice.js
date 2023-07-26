@@ -67,6 +67,7 @@ export default function Notice() {
         setIsSearch(false);
         setTotalInfo({
           totalCount: response.totalCount,
+          currentCount: response?.rows.length,
           currentPage: response.currentPage,
           totalPages: response.totalPages
         });
@@ -78,6 +79,7 @@ export default function Notice() {
         setIsSearch(false);
         setTotalInfo({
           totalCount: response.totalCount,
+          currentCount: response?.rows.length,
           currentPage: response.currentPage,
           totalPages: response.totalPages
         });
@@ -115,7 +117,7 @@ export default function Notice() {
       <BoardTableContainer>
         <Table
             columns={tokenUserInfo.role !== 'NORMAL' ? columnNotice : columnNotice.filter(column => column.name !== 'publishYn')}
-            totalCount={[totalInfo.totalCount, '공지사항']}
+            totalCount={[totalInfo.currentCount, '공지사항']}
             defaultLimit={searchCondition.pageSize}
             data={dataSource}
             pagination

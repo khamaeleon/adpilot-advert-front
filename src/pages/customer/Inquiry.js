@@ -81,6 +81,7 @@ export default function InquiryList() {
         setIsSearch(false);
         setTotalInfo({
           totalCount: response.totalCount,
+          currentCount: response?.rows.length,
           currentPage: response.currentPage,
           totalPages: response.totalPages
         });
@@ -92,6 +93,7 @@ export default function InquiryList() {
         setIsSearch(false);
         setTotalInfo({
           totalCount: response.totalCount,
+          currentCount: response?.rows.length,
           currentPage: response.currentPage,
           totalPages: response.totalPages
         });
@@ -138,7 +140,7 @@ export default function InquiryList() {
           <BoardTableContainer>
             <Table columns={columnInquiry}
                    idProperty={'id'}
-                   totalCount={[totalInfo.totalCount, '1:1문의']}
+                   totalCount={[totalInfo.currentCount, '1:1문의']}
                    defaultLimit={searchCondition.pageSize}
                    data={dataSource}
                    pagination
