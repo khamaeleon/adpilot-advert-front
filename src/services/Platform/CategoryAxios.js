@@ -135,18 +135,12 @@ export async function retrieveUserTopLevelCategory(searchKeyword) {
 
 export async function retrieveUserTopLevelCategoryKeyValue(params) {
   let returnVal;
-  await retrieveUserTopLevelCategory(params).then(response => {
-    if(response.responseCode.statusCode === 200) {
-      returnVal = response?.map((item, idx) => {
+  await retrieveUserTopLevelCategory(params).then(data => {
+      returnVal = data?.map((item, idx) => {
         return {key: idx, value: item.code, label: item.name}
       })
-    } else {
-      returnVal = null
-    }
-    return returnVal;
   })
-
-
+  return returnVal;
 }
 
 export async function retrieveUserCategoryByParentCode(parentCode, searchKeyword) {
@@ -166,14 +160,10 @@ export async function retrieveUserCategoryByParentCode(parentCode, searchKeyword
 
 export async function retrieveUserSubLevelCategoryKeyValue(parentCode, params) {
   let returnVal;
-  await retrieveUserCategoryByParentCode(parentCode, params).then(response => {
-    if (response.responseCode.statusCode === 200) {
-      returnVal = response.data
-    } else if(response.responseCode.statusCode === 400 || response.responseCode.statusCode === 500) {
-      returnVal = []
-    } else {
-      returnVal = []
-    }
+  await retrieveUserCategoryByParentCode(parentCode, params).then(data => {
+    returnVal = data?.map((item, idx) => {
+      return {key: idx, value: item.code, label: item.name}
+    })
   })
   return returnVal;
 }

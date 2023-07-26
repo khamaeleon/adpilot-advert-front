@@ -113,15 +113,17 @@ export async function selPixelInfoList(pixelId) {
 
 export async function selAdverPixelList(userId) {
   let returnVal = null;
-  await AdverAxios('GET', ADVER_NORMAL + ADVER_LIST +'/'+userId ,null)
-    .then((response) => {
-      const {data, responseCode} = response
-      if(responseCode.statusCode ===200){
-        returnVal = data
-      }else{
-        returnVal = null
-      }
-    }).catch((e) => returnVal = false)
+  if(userId != undefined) {
+    await AdverAxios('GET', ADVER_NORMAL + ADVER_LIST +'/'+userId ,null)
+      .then((response) => {
+        const {data, responseCode} = response
+        if(responseCode.statusCode ===200){
+          returnVal = data
+        }else{
+          returnVal = null
+        }
+      }).catch((e) => returnVal = false)
+  }
   return returnVal;
 }
 
