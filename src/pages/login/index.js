@@ -364,6 +364,7 @@ function LoginComponent() {
             <input
               type={'text'}
               placeholder={'유저 아이디'}
+              maxLength={20}
               value={loginParamsValue.username || ''}
               {...register('username', {
                 required: "아이디를 입력해주세요.",
@@ -386,6 +387,7 @@ function LoginComponent() {
             <input
               type={!showPassword ? 'password' : 'text'}
               placeholder={'비밀번호(8~12자)'}
+              maxLength={16}
               value={loginParamsValue.password || ''}
               {...register("password", {
                 required: "비밀번호를 입력해주세요",

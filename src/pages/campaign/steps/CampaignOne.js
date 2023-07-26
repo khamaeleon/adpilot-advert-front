@@ -51,7 +51,7 @@ export function CampaignOne() {
    * 캠페인 목표 설정
    */
   useEffect(() => {
-    selEnumInfo(campaignBasicInfo.goalType).then(response => {
+    selEnumInfo('CAMPAIGN_CONVERSION_GOAL').then(response => {
       setGoalList(response?.data)
     })
       resetInfo();
@@ -414,7 +414,7 @@ export function CampaignOne() {
                         isSearchable={false}
                         placeholder={'목표 선택'}
                         {...field}
-                        value={(campaignBasicInfo.goal !== undefined && goalList != null) ? goalList.find(d=>d.value === campaignBasicInfo.goal) : campaignBasicInfo.goal}
+                        value={(campaignBasicInfo.goal !== undefined && campaignBasicInfo.goal !== null && goalList != null) ? goalList.find(d=>d.value === campaignBasicInfo.goal) : ''}
                         onChange={handleChangeTargetDetail}
                       />
                     )}

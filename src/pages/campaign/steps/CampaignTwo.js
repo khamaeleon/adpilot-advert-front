@@ -481,7 +481,7 @@ export function CampaignTwo() {
                         render={({ field }) =>(
                           <Input type={'text'}
                                  step={100}
-                                 maxLength={12}
+                                 maxLength={13}
                                   {...field}
                                  placeholder={'최대 입찰가를 설정해주세요'}
                                  style={{color:'#f5811f'}}

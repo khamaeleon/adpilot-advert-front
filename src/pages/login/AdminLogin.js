@@ -149,6 +149,7 @@ function AdminLogin() {
                   <input
                     type={!showPassword ? 'password' : 'text'}
                     placeholder={'비밀번호(8~12자)'}
+                    maxLength={16}
                     value={loginParamsValue.password || ''}
                     {...register("password", {
                       required: "비밀번호를 입력해주세요",

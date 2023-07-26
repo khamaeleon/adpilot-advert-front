@@ -107,6 +107,7 @@ function PwChangeModal(props) {
                 <Input
                   type={showPassword ? 'text' : 'password'}
                   placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
+                  maxLength={16}
                   {...register("password", {
                     required: "비밀번호를 입력해주세요",
                     pattern: {
@@ -142,6 +143,7 @@ function PwChangeModal(props) {
                 <Input
                   type={showPassword ? 'text' : 'password'}
                   placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
+                  maxLength={16}
                   value={accountInfoState.confirmPassword !== undefined ? accountInfoState.confirmPassword : ''}
                   {...register("confirmPassword", {
                     required: "비밀번호를 입력해주세요",

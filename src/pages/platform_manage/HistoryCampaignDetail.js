@@ -4,6 +4,7 @@ import {Link, useLocation} from "react-router-dom";
 import {findRevisionCampaignDetail} from "../../services/Platform/HistoryAxios";
 import {Loading} from "./entity/History";
 import styled from "styled-components";
+import {decimalFormat} from "../../common/StringUtils";
 
 const eventGoalGroup = {
   WEB: 'PC 웹',
@@ -81,13 +82,13 @@ export function HistoryCampaignDetail () {
     let value;
     const budgetData = data[timing]?.budget
     if(Object.keys(arg)[0] === 'infiniteBudgetYn') {
-      value = budgetData[Object.keys(arg)] === 'N' ? `PC ${budgetData.pcBudget}원  / MOBILE ${budgetData.mobBudget}원` : '-'
+      value = budgetData[Object.keys(arg)] === 'N' ? `PC ${decimalFormat(budgetData.pcBudget)}원  / MOBILE ${decimalFormat(budgetData.mobBudget)}원` : '-'
     } else if(Object.keys(arg)[0] === 'dailyAvgBudget'){
-      value = budgetData[Object.keys(arg)] === 0 ? '무제한' : value = budgetData[Object.keys(arg)];
+      value = budgetData[Object.keys(arg)] === 0 ? '무제한' : budgetData[Object.keys(arg)];
     } else {
       value = budgetData[Object.keys(arg)]
     }
-    return isNaN(value) ? value : value + '원'
+    return isNaN(value) ? value : decimalFormat(value) + '원'
   }
 
   const inventoryConverter = (timing,arg) => {
@@ -98,30 +99,31 @@ export function HistoryCampaignDetail () {
         return (
           <>
             <p>[전환유저 - {inventoryData?.audienceTargetConfig.exposureConversionYn === 'Y' ? '노출' : `미노출 ${inventoryData?.audienceTargetConfig.nonExposureDaysOfConversion}일`}]</p>
-            <p>[신규유저 - {inventoryData?.audienceTargetConfig.exposureNewYn === 'Y' ? '노출' : '미노출'}]</p>
-            <p>[잠재유저 - {inventoryData?.audienceTargetConfig.exposurePotentialYn === 'Y' ? '노출' : '미노출'}]</p>
             <p>[쇼핑유저 - {inventoryData?.audienceTargetConfig.exposureShoppingYn === 'Y' ? '노출' : '미노출'}]</p>
+            <p>[잠재유저 - {inventoryData?.audienceTargetConfig.exposurePotentialYn === 'Y' ? '노출' : '미노출'}]</p>
+            <p>[신규유저 - {inventoryData?.audienceTargetConfig.exposureNewYn === 'Y' ? '노출' : '미노출'}]</p>
+
           </>
         )
       }
-      value = inventoryData[Object.keys(arg)] === 'AUTO' ? `자동최정적화` : audience();
+      value = inventoryData[Object.keys(arg)] === 'AUTO' ? `자동 최적화` : audience();
 
     } else if(Object.keys(arg)[0] === 'userTargetConfigType') {
       const user = () => {
         return (
           <>
             <p>[전환고객 - {inventoryData?.userTargetConfig.exposureConversionUserYn === 'Y' ? '노출' : `미노출 ${inventoryData?.userTargetConfig.nonExposureDaysOfConversion}일`}]</p>
-            <p>[관심고객 - {inventoryData?.userTargetConfig.exposureAttentionYn === 'Y' ? '노출' : `미노출`}]</p>
             <p>[쇼핑고객 - {inventoryData?.userTargetConfig.exposureShoppingYn === 'Y' ? '노출' : '미노출'}]</p>
+            <p>[관심고객 - {inventoryData?.userTargetConfig.exposureAttentionYn === 'Y' ? '노출' : `미노출`}]</p>
             <p>[방문고객 - {inventoryData?.userTargetConfig.exposureVisitYn === 'Y' ? '노출' : '미노출'}]</p>
           </>
         )
       }
-      value = inventoryData[Object.keys(arg)] === 'AUTO' ? `자동최적화` : user();
+      value = inventoryData[Object.keys(arg)] === 'AUTO' ? `자동 최적화` : user();
     } else if(Object.keys(arg)[0] === 'startDate') {
-      value = `${inventoryData['startDate']} ~ ${inventoryData['endDate']}`
+      value = `${inventoryData['startDate']} ~ ${inventoryData['endDate'] === '3000-12-31' ? '종료일 미지정' : inventoryData['endDate']}`
     } else if (Object.keys(arg)[0] === 'allowInventoryCategories') {
-      value = inventoryData[Object.keys(arg)].length !== 0 ? `[${inventoryData[Object.keys(arg)].join('/ ')}]` : '없음'
+      value = inventoryData[Object.keys(arg)].length !== 0 ? `[${inventoryData[Object.keys(arg)].join('/ ')}]` : '자동 최적화'
     }else if  (Object.keys(arg)[0] === 'disAllowInventoryCategories') {
       value = inventoryData[Object.keys(arg)].length !== 0 ? `[${inventoryData[Object.keys(arg)].join('/ ')}]` : '없음'
     } else if(Object.keys(arg)[0] === 'exposureAgentType') {

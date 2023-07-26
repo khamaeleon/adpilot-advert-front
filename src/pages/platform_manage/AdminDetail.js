@@ -26,9 +26,11 @@ import {toast} from "react-toastify";
 import {PwChange} from "./UserDetail";
 import {modalController} from "../../store";
 import {adminInfoAtom} from "./entity/Admin";
+import {useNavigate} from "react-router-dom";
 
 function PlatformAdminDetail() {
   const [, setModal] = useAtom(modalController)
+  const navigate = useNavigate()
   const [adminInfoState, setAdminInfoState] = useAtom(adminInfoAtom)
   const {register, handleSubmit, reset, formState: {errors}} = useForm({
     mode: "onSubmit",
@@ -66,7 +68,13 @@ function PlatformAdminDetail() {
   const onSubmit = () => {
     updateAdmin(adminInfoState).then((response) => {
       if (response) {
-        toast.success("정보 변경이 완료되었습니다.")
+        toast.success("정보 변경이 완료되었습니다.", {toastId: 'updateAdmin'})
+        toast.onChange(payload => {
+          if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR && payload.id === 'updateAdmin') {
+            navigate('/board/dashboard')
+          }
+        })
+
       } else {
         toast.warning("어드민 계정이 수정이 실패 하였습니다.")
       }
