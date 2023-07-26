@@ -20,8 +20,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {decimalFormat, isUnlimited} from "../../../common/StringUtils";
 import {
   retrieveAdverConfirm,
-  retrieveConfirm, selAdverEnumInfo,
-  UpdateCampaignDefaultInfo
+  retrieveConfirm, selAdverEnumInfo, updateCampaignDefaultInfo,
 } from "../../../services/campaign/ConfirmAxios";
 import {tokenResultAtom} from "../../login/entity/Common";
 import {selEnumInfo} from "../../../services/campaign/InfoAxios";
@@ -113,11 +112,11 @@ export function CampaignLookOver() {
   }
 
   const onSubmit = () => {
-    campaignName !== '' ? UpdateCampaignDefaultInfo(state.campaignId, campaignName).then(response => {
+    campaignName !== '' ? updateCampaignDefaultInfo(state.campaignId, campaignName).then(response => {
       if(response) {
-        toast.success("캠페인명이 수정되었습니다.",{autoClose: 100,delay: 0})
+        toast.success("캠페인명이 수정되었습니다.",{autoClose: 100,delay: 0, toastId: 'updateCampaign'})
         toast.onChange(payload => {
-          if(payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
+          if(payload.status === "removed" && payload.type !== toast.TYPE.ERROR && payload.id === 'updateCampaign') {
             navigate('/board/dashboard')
           }
         })

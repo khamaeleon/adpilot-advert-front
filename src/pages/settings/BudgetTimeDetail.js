@@ -102,9 +102,9 @@ function BudgetTimeDetail() {
     }else {
       const callbackFun = (response) => {
         if (response[0]) {
-          toast.success(saveType === 'resist' ? "저장 되었습니다." : "수정 되었습니다.")
+          toast.success(saveType === 'resist' ? "저장 되었습니다." : "수정 되었습니다.", {toastId: 'resistBudgetTimes'})
           toast.onChange(payload => {
-            if(payload.status === "removed" && payload.type === toast.TYPE.SUCCESS) {
+            if(payload.status === "removed" && payload.type === toast.TYPE.SUCCESS && payload.id === 'resistBudgetTimes') {
               navigate('/board/budgetTimeList', {state: {id: timeBudgetDetailDataState.userId}});
             }
           })

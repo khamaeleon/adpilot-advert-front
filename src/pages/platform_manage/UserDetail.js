@@ -391,9 +391,9 @@ function PlatformUserDetail() {
     if(tokenUserInfo.role==='NORMAL'){
       updateMyPageUser(accountInfoState).then(response => {
         if (response) {
-          toast.success("수정 되었습니다.",{autoClose:100, delay:0})
+          toast.success("수정 되었습니다.",{autoClose:100, delay:0, toastId:'updateMyPageUser'})
           toast.onChange(payload => {
-            if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
+            if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR && payload.id === 'updateMyPageUser') {
               navigate('/board/dashboard')
             }
           })
@@ -404,9 +404,9 @@ function PlatformUserDetail() {
     }else{
       updateUser(accountInfoState).then(response => {
         if(response){
-          toast.success("수정 되었습니다.",{autoClose:100, delay:0})
+          toast.success("수정 되었습니다.",{autoClose:100, delay:0, toastId:'updateUser'})
           toast.onChange(payload => {
-            if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
+            if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR && payload.id === 'updateUser') {
               navigate('/board/platform')
             }
           })
@@ -420,9 +420,9 @@ function PlatformUserDetail() {
     if(tokenUserInfo.role==='NORMAL'){
       updateMyPageUser(data).then(response => {
         if (response) {
-          toast.success("비밀번호가 변경되었습니다.",{autoClose:100, delay:0})
+          toast.success("비밀번호가 변경되었습니다.",{autoClose:100, delay:0, toastId: 'updateMyPageUser'})
           toast.onChange(payload => {
-            if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
+            if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR && payload.id === 'updateMyPageUser') {
               setModal({
                 isShow: false,
                 modalComponent: null
@@ -436,9 +436,9 @@ function PlatformUserDetail() {
     }else{
       updateUser(data).then(response => {
         if (response) {
-          toast.success("비밀번호가 변경되었습니다.",{autoClose:100, delay:0})
+          toast.success("비밀번호가 변경되었습니다.",{autoClose:100, delay:0, toastId: 'updateUser'})
           toast.onChange(payload => {
-            if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
+            if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR && payload.id === 'updateUser') {
               setModal({
                 isShow: false,
                 modalComponent: null

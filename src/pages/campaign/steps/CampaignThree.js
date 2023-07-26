@@ -312,9 +312,9 @@ export function CampaignThree() {
       updateCampaignConfigInventory(param).then(response => {
         if (response) {
           if (state !== null) {
-            toast.success("수정되었습니다.",{autoClose:100, delay:0})
+            toast.success("수정되었습니다.",{autoClose:100, delay:0, toastId: 'updateCampaignConfigInventory'})
             toast.onChange(payload => {
-              if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR) {
+              if (payload.status === "removed" && payload.type !== toast.TYPE.ERROR && payload.id === 'updateCampaignConfigInventory') {
                 navigate('/board/dashboard')
               }
             })
