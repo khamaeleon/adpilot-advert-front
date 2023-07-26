@@ -253,20 +253,12 @@ function Table(props) {
     autoSizeToFit: '자동맞춤',
     autoresizeThisColumn:'이 컬럼에 맞춤',
     autoresizeAllColumns:'전체 컬럼에 맞춤',
-    columns: '컬럼'
+    columns: '컬럼',
+    pageText: '페이지',
+    ofText: '/',
+    perPageText: '페이지 당',
+    showingText: '페이지',
   })
-
-  const renderPaginationToolbar = useCallback((paginationProps) => {
-    console.log(paginationProps)
-    const i18n = Object.assign({}, ReactDataGrid.defaultProps.i18n, {
-      page: '페이지'
-    })
-    return(
-      <div style={{ height: 89 }}>
-        <PaginationToolbar i18n={i18n}{...paginationProps} bordered={false} />
-      </div>
-      )
-  }, [])
 
   const gridElement = (
     <ReactDataGrid
@@ -288,7 +280,6 @@ function Table(props) {
       style={gridStyle}
       showHoverRows={false}
       activeCell={null}
-      renderPaginationToolbar={renderPaginationToolbar}
       {...props}
     />
   )
