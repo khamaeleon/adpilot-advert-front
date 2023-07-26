@@ -10,9 +10,12 @@ export const platformStatusType = [
   {id: 9, value: "avgConversionAmount", label: "평균 구매액"},
   {id: 11, value: "sessionConversionAmount", label: "세션매출"},
   {id: 12, value: "directConversionAmount", label: "직접매출"},
-  {id: 13, value: "exposureConversionAmount", label: "노출매출"},
+  // {id: 13, value: "exposureConversionAmount", label: "노출매출"},
   {id: 14, value: "totalConversionAmount", label: "총매출"},
   {id: 15, value: "ecpm", label: "ECPM"},
+  {id: 16, value: "sessionRoas", label: "세션 ROAS"},
+  {id: 17, value: "directRoas", label: "직접 ROAS"},
+  {id: 18, value: "totalRoas", label: "총 ROAS"},
 ]
 
 /* 특정 광고주 광고 현황 차트 셀렉트 */
@@ -27,6 +30,7 @@ export const userPlatformStatusType = [
   {id: 9, value: "avgConversionAmount", label: "평균 구매액"},
   {id: 14, value: "totalConversionAmount", label: "총매출"},
   {id: 15, value: "ecpm", label: "ECPM"},
+  {id: 16, value: "totalRoas", label: "총 ROAS"},
 ]
 
 /*플랫폼 현황 차트 항목별 합산*/
@@ -44,9 +48,12 @@ export const chartDataAtom = {
   avgConversionAmount: {status: false, label: '평균 구매액', totalCount: 0},
   sessionConversionAmount: {status: false, label: '세션매출', totalCount: 0},
   directConversionAmount: {status: false, label: '직접매출', totalCount: 0},
-  exposureConversionAmount: {status: false, label: '노출매출', totalCount: 0},
+  // exposureConversionAmount: {status: false, label: '노출매출', totalCount: 0},
   totalConversionAmount: {status: false, label: '총매출', totalCount: 0},
   ecpm: {status: false, label: 'ECPM', totalCount: 0},
+  sessionRoas: {status: false, label: '세션 ROAS', totalCount: 0},
+  directRoas: {status: false, label: '직접 ROAS', totalCount: 0},
+  totalRoas: {status: false, label: '총 ROAS', totalCount: 0},
 }
 
 export const commonProperties = {

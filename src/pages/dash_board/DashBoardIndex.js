@@ -53,10 +53,10 @@ function ChartComponent() {
               Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
               Object.assign(data[key],{costPerConversion: item.costAmount !== 0 ? item?.costAmount / item.totalConversionCount : 0})
               Object.assign(data[key],{avgConversionAmount: item.totalConversionCount !== 0 ? item.totalConversionAmount / item.totalConversionCount : 0})
-              // Object.assign(data[key],{sessionRoas: item.costAmount !== 0 ? (item.sessionConversionAmount / item.costAmount) *100 : 0})
-              // Object.assign(data[key],{directRoas: item.costAmount !== 0 ? (item.directConversionAmount / item.costAmount) *100 : 0})
+              Object.assign(data[key],{sessionRoas: item.costAmount !== 0 ? (item.sessionConversionAmount / item.costAmount) *100 : 0})
+              Object.assign(data[key],{directRoas: item.costAmount !== 0 ? (item.directConversionAmount / item.costAmount) *100 : 0})
               // Object.assign(data[key],{exposureRoas: item.costAmount !== 0 ? (item.exposureConversionAmount / item.costAmount) *100 : 0})
-              // Object.assign(data[key],{totalRoas: item.costAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
+              Object.assign(data[key],{totalRoas: item.costAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
               Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0})
               Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.validClickCount) *100 : 0})
               return null
@@ -73,7 +73,7 @@ function ChartComponent() {
               Object.assign(data[key],{cpc:item.validClickCount !== 0 ? item?.costAmount / item.validClickCount : 0})
               Object.assign(data[key],{costPerConversion: item.totalConversionCount !== 0 ? item?.costAmount / item.totalConversionCount : 0})
               Object.assign(data[key],{avgConversionAmount: item.totalConversionAmount !== 0 ? item.totalConversionAmount / item.totalConversionCount : 0})
-              //Object.assign(data[key],{totalRoas: item.totalConversionAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
+              Object.assign(data[key],{totalRoas: item.totalConversionAmount !== 0 ? (item.totalConversionAmount / item.costAmount) *100 : 0})
               Object.assign(data[key],{ecpm: item.exposureCount !== 0 ? (item?.costAmount / item.exposureCount) *1000 : 0})
               Object.assign(data[key],{conversionRate: item.totalConversionCount !== 0 ? (item.totalConversionCount / item.validClickCount) *100 : 0})
               return null
@@ -102,9 +102,9 @@ function ChartComponent() {
     const costAmountSum = calculatePropertySum('costAmount');
     const totalConversionCountSum = calculatePropertySum('totalConversionCount');
     const totalConversionAmountSum = calculatePropertySum('totalConversionAmount');
-    // const sessionConversionAmountSum = calculatePropertySum('sessionConversionAmount');
-    // const directConversionAmountSum = calculatePropertySum('directConversionAmount');
-    // const exposureConversionAmountSum = calculatePropertySum('exposureConversionAmount');
+    const sessionConversionAmountSum = calculatePropertySum('sessionConversionAmount');
+    const directConversionAmountSum = calculatePropertySum('directConversionAmount');
+    //const exposureConversionAmountSum = calculatePropertySum('exposureConversionAmount');
 
     //[d] 개별 계산값을 포함한 개별 공식 계싼값 switch 문으로 구성
     let calc = 0;
@@ -142,22 +142,22 @@ function ChartComponent() {
         const caseValueE = totalConversionAmountSum;
         calc = caseValueE !== 0 ? totalConversionAmountSum / totalConversionCountSum : 0;
         break;
-      // case 'sessionRoas':
-      //   const caseValueF = costAmountSum;
-      //   calc = caseValueF !== 0 ? (sessionConversionAmountSum / costAmountSum) * 100 : 0;
-      //   break;
-      // case 'directRoas':
-      //   const caseValueG = costAmountSum;
-      //   calc = caseValueG !== 0 ? (directConversionAmountSum / costAmountSum) * 100 : 0;
-      //   break;
+      case 'sessionRoas':
+        const caseValueF = costAmountSum;
+        calc = caseValueF !== 0 ? (sessionConversionAmountSum / costAmountSum) * 100 : 0;
+        break;
+      case 'directRoas':
+        const caseValueG = costAmountSum;
+        calc = caseValueG !== 0 ? (directConversionAmountSum / costAmountSum) * 100 : 0;
+        break;
       // case 'exposureRoas':
       //   const caseValueH = costAmountSum;
       //   calc = caseValueH !== 0 ? (exposureConversionAmountSum / costAmountSum) * 100 : 0;
       //   break;
-      // case 'totalRoas':
-      //   const caseValueI = costAmountSum;
-      //   calc = caseValueI !== 0 ? (totalConversionAmountSum / costAmountSum) * 100 : 0;
-      //   break;
+      case 'totalRoas':
+        const caseValueI = costAmountSum;
+        calc = caseValueI !== 0 ? (totalConversionAmountSum / costAmountSum) * 100 : 0;
+        break;
       case 'ecpm':
         const caseValueJ = exposureCountSum;
         calc = caseValueJ !== 0 ? (costAmountSum / exposureCountSum) * 1000 : 0;
@@ -167,7 +167,7 @@ function ChartComponent() {
     }
 
     let value;
-    if (['clickRate','conversionRate'].includes(property)) {
+    if (['clickRate','conversionRate','sessionRoas','directRoas','totalRoas'].includes(property)) {
       value = numberToFixedFormat(calc)+'%'
     } else if(['validClickCount','exposureCount','totalConversionCount','userCount','totalExposureCount','totalClickCount'].includes(property)) {
       value = decimalFormat(calc)
@@ -255,7 +255,7 @@ function ChartComponent() {
 
   const yFormatted = (data) => {
     let value;
-    if (['clickRate','conversionRate'].includes(data.serieId)) {
+    if (['clickRate','conversionRate','sessionRoas','directRoas','totalRoas'].includes(data.serieId)) {
       value = numberToFixedFormat(data.data.y)+'%'
     } else if(['validClickCount','exposureCount','totalConversionCount','userCount','totalExposureCount','totalClickCount'].includes(data.serieId)) {
       value = decimalFormat(data.data.y)

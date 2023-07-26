@@ -164,22 +164,22 @@ export const adverListColumn = [
     },
     showColumnMenuTool: false
   },
-  {
-    name: 'exposureConversionAmount',
-    minWidth: 150,
-    textAlign: 'end',
-    cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8'} }),
-    header: () => {
-      return(
-        <div><p>노출매출</p><small>(ROAS)</small></div>
-      )
-    },
-    render: ({value,data}) => {
-      let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
-      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small style={{color: '#1E8E3E'}}>({numberToFixedFormat(pctValue)} %)</small></>
-    },
-    showColumnMenuTool: false
-  },
+  // {
+  //   name: 'exposureConversionAmount',
+  //   minWidth: 150,
+  //   textAlign: 'end',
+  //   cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8'} }),
+  //   header: () => {
+  //     return(
+  //       <div><p>노출매출</p><small>(ROAS)</small></div>
+  //     )
+  //   },
+  //   render: ({value,data}) => {
+  //     let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
+  //     return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small style={{color: '#1E8E3E'}}>({numberToFixedFormat(pctValue)} %)</small></>
+  //   },
+  //   showColumnMenuTool: false
+  // },
   {
     name: 'totalConversionAmount',
     textAlign: 'end',
@@ -437,22 +437,22 @@ export const adverStatusDetailColumn = [
     },
     showColumnMenuTool: false
   },
-  {
-    name: 'exposureConversionAmount',
-    minWidth: 150,
-    textAlign: 'end',
-    cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8'} }),
-    header: () => {
-      return(
-        <div><p>노출매출</p><small>(ROAS)</small></div>
-      )
-    },
-    render: ({value,data}) => {
-      let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
-      return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small style={{color: '#1E8E3E'}}>({numberToFixedFormat(pctValue)} %)</small></>
-    },
-    showColumnMenuTool: false
-  },
+  // {
+  //   name: 'exposureConversionAmount',
+  //   minWidth: 150,
+  //   textAlign: 'end',
+  //   cellDOMProps: (cellProps) => ({ style: {color: '#1A73E8'} }),
+  //   header: () => {
+  //     return(
+  //       <div><p>노출매출</p><small>(ROAS)</small></div>
+  //     )
+  //   },
+  //   render: ({value,data}) => {
+  //     let pctValue = data.costAmount !== 0 ? (value / data.costAmount) * 100 : 0;
+  //     return <><p className={'won'}>{moneyToFixedFormat(value)}</p><small style={{color: '#1E8E3E'}}>({numberToFixedFormat(pctValue)} %)</small></>
+  //   },
+  //   showColumnMenuTool: false
+  // },
   {
     name: 'totalConversionAmount',
     minWidth: 150,
