@@ -41,7 +41,6 @@ export function CampaignLookOver() {
   const [agentTypeState, setAgentTypeState] = useState([])
   const resetBasicInfo = useResetAtom(campaignBasicInfoAtom)
 
-
   const inventoryExposure = (inventoryDetail) => {
     setUserTargetConfig(
       [
@@ -73,7 +72,6 @@ export function CampaignLookOver() {
         setCampaignName(response.name)
         inventoryExposure(response.inventoryDetail)
       })
-
     } else {
       selAdverEnumInfo('AGENT_TYPE').then(response => {
         setAgentTypeState(response.data)
@@ -85,7 +83,6 @@ export function CampaignLookOver() {
         inventoryExposure(response.inventoryDetail)
       })
     }
-    console.log(campaignData)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

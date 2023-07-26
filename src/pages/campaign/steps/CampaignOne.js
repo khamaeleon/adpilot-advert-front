@@ -213,16 +213,45 @@ export function CampaignOne() {
     }
   }
 
+  const goalType  = (type) => {
+    let name
+    if (type === 'CAMPAIGN_CONVERSION_GOAL') {
+      name = 'CONV'
+    } else if (type === 'CAMPAIGN_VISIT_GOAL') {
+      name = 'LAND'
+    } else {
+      name = 'VIEW'
+    }
+    return name
+  }
+
+  const goal = (type) => {
+    switch (type) {
+      case 'CONVERSION_SESSION_ROAS' : return 'sROAS';
+      case 'CONVERSION_DIRECT_ROAS' : return 'dROAS';
+      case 'CONVERSION_TOTAL_ROAS' : return 'tROAS';
+      case 'CONVERSION_SESSION_SALES' : return 'sSALES';
+      case 'CONVERSION_DIRECT_SALES' : return 'dSALES';
+      case 'CONVERSION_TOTAL_SALES' : return 'tSALES';
+      case 'CONVERSION_PER_SALES' : return 'CPA';
+      case 'CONVERSION_COUNT' : return 'CONV';
+      case 'VISIT_CLICK_COUNT' : return 'CLICK';
+      case 'VISIT_SPENT_COST' : return 'COST';
+      case 'VISIT_CLICK_COST' : return 'CPC';
+      case 'VIEW_COUNT' : return 'IMP';
+      case 'VIEW_CPM_COST' : return 'CPM';
+    }
+  }
+
   const onSubmit = () => {
     if(campaignBasicInfo.step !== ''){
       setStepCampaign({steps: 1})
     }else{
-
       resistCampaignBasic({
         ...campaignBasicInfo,
         goal:campaignBasicInfo.goal,
         pixelId:campaignBasicInfo.pixelId,
-        name:campaignBasicInfo.productType + '_' + campaignBasicInfo.goal + '_' + moment().format('YYYY-MM-DD hh:mm:ss').replace(' ' ,'_')
+        name: `${campaignBasicInfo.productType !== 'BANNER' ? 'BA' : 'PU'}_${goalType(campaignBasicInfo.goalType)}_${goal(campaignBasicInfo.goal)}_${moment().format('YYYY-MM-DD hh:mm:ss').replace(' ' ,'_')}`
       }).then(response =>{
         if(response){
           setCampaignBasicInfo({

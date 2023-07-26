@@ -36,7 +36,6 @@ export function SwitchComponent(props){
   },[])
 
   useEffect(() => {
-    console.log(type)
     if(type === 'publish') {
       setSelect(cellProps.data.publishYn === 'Y')
     } else {

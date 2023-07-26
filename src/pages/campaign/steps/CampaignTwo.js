@@ -481,7 +481,8 @@ export function CampaignTwo() {
                         render={({ field }) =>(
                           <Input type={'text'}
                                  step={100}
-                                {...field}
+                                 maxLength={12}
+                                  {...field}
                                  placeholder={'최대 입찰가를 설정해주세요'}
                                  style={{color:'#f5811f'}}
                                  value={campaignBudgetInfo !== null && decimalFormat(campaignBudgetInfo.maxBiddingPrice)}

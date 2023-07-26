@@ -828,9 +828,9 @@ export function CampaignFour() {
           reset(response)
         })
       }
-    }else{
+    } else {
       let time = dateFormat(toDay(), 'YYMMDDHHmm');
-      let creativeType = campaignCreativeAtom.init.creativeType !== "POP_UNDER" ? (campaignCreativeAtom.init.creativeType !== 'BANNER' ? 'NATIVE' : 'FIX') : 'POP_UNDER'
+      let creativeType = campaignCreativeAtom.init.creativeType !== "POP_UNDER" ? (campaignCreativeAtom.init.creativeType !== 'BANNER' ? 'NATIVE' : 'FIX') : 'PU'
       let name = campaignBasicInfo.productType !== 'BANNER' ? '_PU_' : '_BA_'
       setCampaignCreative({
         ...campaignCreativeAtom.init,
@@ -894,7 +894,6 @@ export function CampaignFour() {
         toast.success("수정되었습니다.",{autoClose:100, delay:0, toastId: 'updateCampaignCreative'})
         toast.onChange(payload => {
           if (payload.status === "removed" && payload.type === toast.TYPE.SUCCESS && payload.id === 'updateCampaignCreative') {
-
             if(state.backLink){
               navigate('/board/manageCreative')
             } else {

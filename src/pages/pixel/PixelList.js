@@ -99,7 +99,7 @@ function PixelAdd(props){
   const [pixelInfoListState, setPixelInfoListState] = useState({
     userId: data.userId,
     pixelName:'',
-    linkUrl:'',
+    linkUrl:'https://',
     mainCategoryCode:'',
     subCategoryCode:'',
     hostType:''
