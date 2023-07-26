@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {
   CancelButton,
   ColSpan2,
@@ -19,7 +19,7 @@ import {TotalCount} from "./TableDetail";
 import SettingAdd from "../common/SettingModal";
 import {BorderBox, Off, On, PreviewSubmit, Small, SwitchBox, TitColor} from "./styles";
 import {light} from "../../assets/theme";
-
+import PaginationToolbar from '@inovua/reactdatagrid-community/packages/PaginationToolbar'
 export function SwitchComponent(props){
   const {value, cellProps, type, eventClick} = props
   const [select, setSelect] = useState(value)
@@ -256,6 +256,18 @@ function Table(props) {
     columns: '컬럼'
   })
 
+  const renderPaginationToolbar = useCallback((paginationProps) => {
+    console.log(paginationProps)
+    const i18n = Object.assign({}, ReactDataGrid.defaultProps.i18n, {
+      page: '페이지'
+    })
+    return(
+      <div style={{ height: 89 }}>
+        <PaginationToolbar i18n={i18n}{...paginationProps} bordered={false} />
+      </div>
+      )
+  }, [])
+
   const gridElement = (
     <ReactDataGrid
       licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
@@ -276,6 +288,7 @@ function Table(props) {
       style={gridStyle}
       showHoverRows={false}
       activeCell={null}
+      renderPaginationToolbar={renderPaginationToolbar}
       {...props}
     />
   )

@@ -27,37 +27,6 @@ import {useAtom, useAtomValue, useSetAtom} from "jotai";
 import {useNavigate} from "react-router-dom";
 import {reportsInfoAtom} from "../../components/aside/entity";
 import {createCustomReportsAdminAxios, retrieveCustomReportsAdminList} from "../../services/reports/ReportsAdminAxios";
-import {atom} from "jotai/index";
-
-const columnList= {
-  BY_DAILY: "일별",
-  BY_WEEKLY: "주별",
-  BY_MONTHLY: "월별",
-  BY_ADVERTISE: "광고주 명",
-  BY_CAMPAIGN: "캠페인 명",
-  BY_PRODUCT: "광고 상품",
-  BY_TARGETING: "타겟팅",
-  COUNT_BY_ADVERTISE: '광고주 수',
-  TOTAL_EXPOSURE_COUNT: "총 노출수",
-  EXPOSURE_COUNT: "노출수",
-  TOTAL_CLICK_COUNT: "총 클릭수",
-  VALID_CLICK_COUNT: "클릭수",
-  CLICK_RATE: "클릭율",
-  COST_AMOUNT: "비용",
-  CPC: "CPC",
-  CONVERSION_COUNT: "전환수",
-  CONVERSION_RATE: "전환율",
-  CONVERSION_PRICE: "전환비용",
-  AMOUNT_PURCHASED_AVG: "평균",
-  SESSION_CONVERSION_AMOUNT: "세션 매출",
-  SESSION_CONVERSION_ROAS: "세션 ROAS",
-  DIRECT_CONVERSION_AMOUNT: "직접 매출",
-  DIRECT_CONVERSION_ROAS: "직접 ROAS",
-  ROAS: "ROAS",
-  EXPOSURE_CONVERSION_AMOUNT: "노출 매출",
-  EXPOSURE_CONVERSION_ROAS: "노출 ROAS",
-  E_CPM: "eCPM",
-}
 
 const indexedColumns = (columns) => {
   return [
@@ -84,8 +53,8 @@ const indexedColumns = (columns) => {
     {name:"SESSION_CONVERSION_ROAS", header: "세션 ROAS", textAlign: 'center', visible: columns.includes('SESSION_CONVERSION_ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"DIRECT_CONVERSION_AMOUNT", header: "직접 매출", textAlign: 'center', visible: columns.includes('DIRECT_CONVERSION_AMOUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"DIRECT_CONVERSION_ROAS", header: "직접 ROAS", textAlign: 'center', visible: columns.includes('DIRECT_CONVERSION_ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
-    {name:"EXPOSURE_CONVERSION_AMOUNT", header: "노출 매출", textAlign: 'center', visible: columns.includes('EXPOSURE_CONVERSION_AMOUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
-    {name:"EXPOSURE_CONVERSION_ROAS", header: "노출 ROAS", textAlign: 'center', visible: columns.includes('EXPOSURE_CONVERSION_ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    // {name:"EXPOSURE_CONVERSION_AMOUNT", header: "노출 매출", textAlign: 'center', visible: columns.includes('EXPOSURE_CONVERSION_AMOUNT'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
+    // {name:"EXPOSURE_CONVERSION_ROAS", header: "노출 ROAS", textAlign: 'center', visible: columns.includes('EXPOSURE_CONVERSION_ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"ROAS", header: "총 ROAS", textAlign: 'center', visible: columns.includes('ROAS'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
     {name:"E_CPM", header: "eCPM", textAlign: 'center', visible: columns.includes('E_CPM'),sortable: false, resizable: false, showColumnMenuTool: false, draggable: false},
   ]
@@ -447,12 +416,12 @@ export default function CreateReports() {
                       <DefaultItemButton
                         active={includeItem('DIRECT_CONVERSION_ROAS')}
                         onClick={()=>handleAddReportsItem('DIRECT_CONVERSION_ROAS')}>직접 ROAS</DefaultItemButton>
-                      <DefaultItemButton
-                        active={includeItem('EXPOSURE_CONVERSION_AMOUNT')}
-                        onClick={()=>handleAddReportsItem('EXPOSURE_CONVERSION_AMOUNT')}>노출 매출</DefaultItemButton>
-                      <DefaultItemButton
-                        active={includeItem('EXPOSURE_CONVERSION_ROAS')}
-                        onClick={()=>handleAddReportsItem('EXPOSURE_CONVERSION_ROAS')}>노출 ROAS</DefaultItemButton>
+                      {/*<DefaultItemButton*/}
+                      {/*  active={includeItem('EXPOSURE_CONVERSION_AMOUNT')}*/}
+                      {/*  onClick={()=>handleAddReportsItem('EXPOSURE_CONVERSION_AMOUNT')}>노출 매출</DefaultItemButton>*/}
+                      {/*<DefaultItemButton*/}
+                      {/*  active={includeItem('EXPOSURE_CONVERSION_ROAS')}*/}
+                      {/*  onClick={()=>handleAddReportsItem('EXPOSURE_CONVERSION_ROAS')}>노출 ROAS</DefaultItemButton>*/}
                       <DefaultItemButton
                         active={includeItem('ROAS')}
                         onClick={()=>handleAddReportsItem('ROAS')}>총 ROAS</DefaultItemButton>

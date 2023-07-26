@@ -31,12 +31,12 @@ function SettingChangeModal(props) {
   const [calculatePercent, setCalculatePercent] = useState(-1)
   const {state} = useLocation()
   const [dataState, setDataState] = useState(saveType !== 'create' ? data : {
-    audience: '',
+    audience: '0',
     cartRecommendation: '',
     id: '',
     groupName: '',
     productRecommendation: '',
-    shopperMatching: '',
+    shopperMatching: '0',
     userMatching: '',
     userOptimization: ''
   })
@@ -252,27 +252,27 @@ function SettingChangeModal(props) {
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
-          <RowSpan validation>
-            <ColSpan4>
-              <ColTitle><Span2>쇼퍼 맞춤</Span2></ColTitle>
-              <RelativeDiv style={{flexDirection: 'column', alignItems: 'flex-start'}}>
-                <InputLabel label={label !== 'won' ? '%': '원'}>
-                  <Input
-                    type={'text'}
-                    min={0}
-                    placeholder={label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요'}
-                    {...register("shopperMatching", {
-                      required: label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요',
-                      pattern: /[0-9]*/,
-                      onChange: (e) => handleShopperMatching(e)
-                    })}
-                    value={dataState?.shopperMatching}
-                  />
-                </InputLabel>
-                {errors.shopperMatching && <ValidationScript>{errors.shopperMatching?.message}</ValidationScript>}
-              </RelativeDiv>
-            </ColSpan4>
-          </RowSpan>
+          {/*<RowSpan validation>*/}
+          {/*  <ColSpan4>*/}
+          {/*    <ColTitle><Span2>쇼퍼 맞춤</Span2></ColTitle>*/}
+          {/*    <RelativeDiv style={{flexDirection: 'column', alignItems: 'flex-start'}}>*/}
+          {/*      <InputLabel label={label !== 'won' ? '%': '원'}>*/}
+          {/*        <Input*/}
+          {/*          type={'text'}*/}
+          {/*          min={0}*/}
+          {/*          placeholder={label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요'}*/}
+          {/*          {...register("shopperMatching", {*/}
+          {/*            required: label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요',*/}
+          {/*            pattern: /[0-9],*/}
+          {/*            onChange: (e) => handleShopperMatching(e)*/}
+          {/*          })}*/}
+          {/*          value={dataState?.shopperMatching}*/}
+          {/*        />*/}
+          {/*      </InputLabel>*/}
+          {/*      {errors.shopperMatching && <ValidationScript>{errors.shopperMatching?.message}</ValidationScript>}*/}
+          {/*    </RelativeDiv>*/}
+          {/*  </ColSpan4>*/}
+          {/*</RowSpan>*/}
           <RowSpan validation>
             <ColSpan4>
               <ColTitle><Span2>카트 추천</Span2></ColTitle>
@@ -336,27 +336,27 @@ function SettingChangeModal(props) {
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>
-          <RowSpan validation>
-            <ColSpan4>
-              <ColTitle><Span2>오디언스</Span2></ColTitle>
-              <RelativeDiv style={{flexDirection: 'column', alignItems: 'flex-start'}}>
-                <InputLabel label={label !== 'won' ? '%': '원'}>
-                  <Input
-                    type={'text'}
-                    min={0}
-                    placeholder={label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요'}
-                    {...register("audience", {
-                      required: label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요',
-                      pattern: /[0-9]*/,
-                      onChange: (e) => handleAudience(e)
-                    })}
-                    value={dataState?.audience}
-                  />
-                </InputLabel>
-                {errors.audience && <ValidationScript>{errors.audience?.message}</ValidationScript>}
-              </RelativeDiv>
-            </ColSpan4>
-          </RowSpan>
+          {/*<RowSpan validation>*/}
+          {/*  <ColSpan4>*/}
+          {/*    <ColTitle><Span2>오디언스</Span2></ColTitle>*/}
+          {/*    <RelativeDiv style={{flexDirection: 'column', alignItems: 'flex-start'}}>*/}
+          {/*      <InputLabel label={label !== 'won' ? '%': '원'}>*/}
+          {/*        <Input*/}
+          {/*          type={'text'}*/}
+          {/*          min={0}*/}
+          {/*          placeholder={label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요'}*/}
+          {/*          {...register("audience", {*/}
+          {/*            required: label !== 'won' ? '비율을 입력해주세요' : '금액을 입력해주세요',*/}
+          {/*            pattern: /[0-9]*/}
+          {/*            onChange: (e) => handleAudience(e)*/}
+          {/*          })}*/}
+          {/*          value={dataState?.audience}*/}
+          {/*        />*/}
+          {/*      </InputLabel>*/}
+          {/*      {errors.audience && <ValidationScript>{errors.audience?.message}</ValidationScript>}*/}
+          {/*    </RelativeDiv>*/}
+          {/*  </ColSpan4>*/}
+          {/*</RowSpan>*/}
           <RowSpan validation>
             <ColSpan4>
               <ColTitle><Span2>유저 최적화</Span2></ColTitle>

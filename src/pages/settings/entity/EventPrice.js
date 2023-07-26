@@ -75,13 +75,6 @@ export const eventUnitPriceDetailColumns = [ //타겟팅 단가 상세 컬럼
     }
   },
   {
-    name: 'shopperMatching',
-    header: '쇼퍼 맞춤',
-    defaultFlex: 1,
-    resizable: false,
-    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
-  },
-  {
     name: 'cartRecommendation',
     header: '카트 추천',
     defaultFlex: 1,
@@ -98,13 +91,6 @@ export const eventUnitPriceDetailColumns = [ //타겟팅 단가 상세 컬럼
   {
     name: 'userMatching',
     header: '유저매치',
-    defaultFlex: 1,
-    resizable: false,
-    render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>
-  },
-  {
-    name: 'audience',
-    header: '오디언스',
     defaultFlex: 1,
     resizable: false,
     render: ({ value })=> <p className={'won'}>{decimalFormat(value)}</p>

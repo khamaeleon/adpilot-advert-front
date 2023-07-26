@@ -73,13 +73,13 @@ export const budgetEventDetailColumns = [ //타겟팅 예산 상세 컬럼
       )
     }
   },
-  {
-    name: 'shopperMatching',
-    header: '쇼퍼 맞춤',
-    defaultFlex: 1,
-    resizable: false,
-    render: ({ value })=> <p className={'pct'}>{value}</p>
-  },
+  // {
+  //   name: 'shopperMatching',
+  //   header: '쇼퍼 맞춤',
+  //   defaultFlex: 1,
+  //   resizable: false,
+  //   render: ({ value })=> <p className={'pct'}>{value}</p>
+  // },
   {
     name: 'cartRecommendation',
     header: '카트 추천',
@@ -101,13 +101,13 @@ export const budgetEventDetailColumns = [ //타겟팅 예산 상세 컬럼
     resizable: false,
     render: ({ value })=> <p className={'pct'}>{value}</p>
   },
-  {
-    name: 'audience',
-    header: '오디언스',
-    defaultFlex: 1,
-    resizable: false,
-    render: ({ value })=> <p className={'pct'}>{value}</p>
-  },
+  // {
+  //   name: 'audience',
+  //   header: '오디언스',
+  //   defaultFlex: 1,
+  //   resizable: false,
+  //   render: ({ value })=> <p className={'pct'}>{value}</p>
+  // },
   {
     name: 'userOptimization',
     header: '유저 최적화',
