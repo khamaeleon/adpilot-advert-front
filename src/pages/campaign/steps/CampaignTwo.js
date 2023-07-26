@@ -295,6 +295,7 @@ export function CampaignTwo() {
                   <InputLabel label={'원'}>
                     <Input type={'text'}
                            step={100}
+                           maxLength={13}
                            readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
                            placeholder={campaignBudgetInfo.infiniteBudgetYn !== 'Y' ? '일일 평균 예산을 설정해주세요.' : ''}
                            style={{color:'#f5811f'}}

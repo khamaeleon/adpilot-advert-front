@@ -83,17 +83,19 @@ export async function updatePixelInfo(pixelId,pixelInfo) {
 
 export async function selAdminPixelDetailList(userId) {
   let returnVal = null;
-  await AdminAxios('GET', ACTION_URL + ADVER_LIST +'/'+userId ,null)
-    .then((response) => {
-      const {data, responseCode} =response
-      if(responseCode.statusCode ===200){
-        returnVal = data
-      } else if (responseCode.statusCode === 500 || responseCode.statusCode === 400) {
-        returnVal = null
-      }else{
-        returnVal = null
-      }
-    }).catch((e) => returnVal = false)
+  if(userId != undefined){
+    await AdminAxios('GET', ACTION_URL + ADVER_LIST +'/'+userId ,null)
+      .then((response) => {
+        const {data, responseCode} =response
+        if(responseCode.statusCode ===200){
+          returnVal = data
+        } else if (responseCode.statusCode === 500 || responseCode.statusCode === 400) {
+          returnVal = null
+        }else{
+          returnVal = null
+        }
+      }).catch((e) => returnVal = false)
+  }
   return returnVal;
 }
 

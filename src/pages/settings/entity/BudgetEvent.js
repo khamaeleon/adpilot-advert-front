@@ -37,7 +37,7 @@ export const adverEventBudgetColumns = [ //타겟팅 단가 컬럼
   },
   {
     name: 'username',
-    header: '아이디',
+    header: '광고주 아이디',
     defaultFlex: 1,
     resizable: false,
   },

@@ -399,6 +399,7 @@ export function CampaignOne() {
                   <div className={'relative'}>
                     <InputLabel label={goalValueLabel}>
                       <Input type={'text'}
+                             maxLength={13}
                              style={{width: 300, textAlign: 'right'}}
                              readOnly={(campaignBasicInfo.goal === '' || campaignBasicInfo.goal === null || temporaryActive) && true}
                              value={campaignBasicInfo.goalValue !== 0 ? decimalFormat(campaignBasicInfo.goalValue) : ''}
