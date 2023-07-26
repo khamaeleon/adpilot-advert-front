@@ -13,16 +13,24 @@ import {
   Span3,
   Span4,
   SubmitButton,
-  SubmitContainer, ValidationScript
+  SubmitContainer,
+  ValidationScript
 } from "../../../assets/GlobalStyles";
 import {
-  AdverInfo, ArrowButton,
+  AdverInfo,
+  ArrowButton,
   CampaignButton,
-  CategoryItem, CreateImage,
+  CategoryItem,
+  CreateImage,
   DeleteIcon,
   FolderButton,
-  ImageUploadCard, PrevButton, PrevFrame,
-  PrevImage250, PrevImage728, PrevTitle250, PrevTitle728,
+  ImageUploadCard,
+  PrevButton,
+  PrevFrame,
+  PrevImage250,
+  PrevImage728,
+  PrevTitle250,
+  PrevTitle728,
   ResistBanner,
   Row,
   RowBody,
@@ -33,7 +41,7 @@ import {
 } from "../styles/common";
 import {HorizontalRule} from "../../../components/common/Common";
 import Select from "react-select";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Controller, useFormContext} from "react-hook-form";
 import {useAtom} from "jotai";
 import {stepCampaignAtom} from "../entity";
@@ -42,15 +50,18 @@ import {selEnumInfo} from "../../../services/campaign/InfoAxios";
 import {bannerSizeAtom, campaignCreativeAtom, clickInducementTypeAtom, creativeTypeAtom} from "../entity/Creative";
 import ImageUploading from "react-images-uploading";
 import {
-  selCreativeBannerInfo, selCreativeNativeInfo, selCreativePopUnderInfo,
-  updateCampaignBanner, updateCampaignNative, updateCampaignPopUnder,
+  selCreativeBannerInfo,
+  selCreativeNativeInfo,
+  selCreativePopUnderInfo,
+  updateCampaignBanner,
+  updateCampaignNative,
+  updateCampaignPopUnder,
   uploadBannerImages,
   uploadLogoImages,
   uploadNativeImages
 } from "../../../services/campaign/CreativeAxios";
 import {toast} from "react-toastify";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import {useResetAtom} from "jotai/utils";
 import {dateFormat, multiAxiosCall, toDay} from "../../../common/StringUtils";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -58,6 +69,11 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 const RegistryBannerItem = (props) => {
   const {size, onImageError, label} = props;
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
+
+  const alertRef = useRef()
+  useEffect(() => {
+    console.log(alertRef)
+  }, [alertRef]);
 
   const handleDeleteImage = (imagePath) => {
     confirmAlert({
@@ -161,10 +177,18 @@ function CampaignFourBanner(props) {
   const [bannerSize] = useAtom(bannerSizeAtom)
   const [fold, setFold] = useState(true)
 
+  useEffect(() => {
+    return () => {
+
+    };
+  }, []);
+  
   const handleDeleteLogoImage = (imagePath) => {
+
     confirmAlert({
       title: '알림',
       message: '해당 이미지를 삭제하시겠습니까?',
+      closeOnClickOutside: true,
       buttons: [
         {
           label: '확인',
@@ -179,7 +203,6 @@ function CampaignFourBanner(props) {
         }
       ]
     });
-
   }
 
   const handleAddCreative = (e) => {
@@ -460,6 +483,7 @@ function CampaignFourNative(props) {
     )
   }
 
+
   const handleDeleteLogoImage = (imagePath) => {
     confirmAlert({
       title: '알림',
@@ -478,7 +502,6 @@ function CampaignFourNative(props) {
         }
       ]
     });
-
   }
 
   const handleChangeInputs = (e) => {

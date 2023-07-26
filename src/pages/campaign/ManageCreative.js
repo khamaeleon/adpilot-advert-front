@@ -279,6 +279,7 @@ export const CreativeImage = styled.div`
     margin-top: 50%;
     transform: translateY(-50%);
     max-width: 100%;
+    max-height:100%;
   }
 `
 

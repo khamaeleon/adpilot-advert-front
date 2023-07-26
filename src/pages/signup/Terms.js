@@ -107,11 +107,11 @@ export default function Terms() {
         <h3>서비스 약관 (필수)</h3>
         <TermsBox>
           {termsInfo !== null &&
-            termsInfo.map((value) => {
+            termsInfo.map((value, index) => {
               let val;
               if (value.termsType === 'SERVICE') {
                 // val = value.content
-                val = <div dangerouslySetInnerHTML={{__html: value.content}}></div>
+                val = <div key={index} dangerouslySetInnerHTML={{__html: value.content}}></div>
               }
               return val
             })
@@ -134,10 +134,10 @@ export default function Terms() {
         <h3>개인처리방침 약관(필수)</h3>
         <TermsBox>
           {termsInfo !== null &&
-            termsInfo.map((value) => {
+            termsInfo.map((value, index) => {
               let val
               if (value.termsType === 'PRIVACY') {
-                val = <div dangerouslySetInnerHTML={{__html: value.content}}></div>
+                val = <div key={index} dangerouslySetInnerHTML={{__html: value.content}}></div>
               }
               return val
             })
@@ -157,10 +157,10 @@ export default function Terms() {
         <h3>운영 처리방침(필수)</h3>
         <TermsBox>
           {termsInfo !== null &&
-            termsInfo.map((value) => {
+            termsInfo.map((value, index) => {
               let val;
               if (value.termsType === 'OPERATION') {
-                val = <div dangerouslySetInnerHTML={{__html: value.content}}></div>
+                val = <div key={index} dangerouslySetInnerHTML={{__html: value.content}}></div>
               }
               return val
             })

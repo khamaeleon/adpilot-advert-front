@@ -39,6 +39,7 @@ export default function Basic(props) {
   const [showPassword, setShowPassword] = useState(false)
   const [accountInfo, setAccountInfo] = useAtom(accountInfoAtom);
   const [agreeValidation, setAgreeValidation] = useAtom(nextStepAtom)
+  const [isIdCheck, setIsIdCheck] = useState(false)
   //const setModal = useSetAtom(modalController) 사업자 번호 조회 기능 임의 구현. 현재 버튼 미노출로 주석 처리함.
 
 
@@ -75,15 +76,19 @@ export default function Basic(props) {
     if (accountInfo.username === '') {
       toast.warning('아이디를 입력해주세요')
     } else {
-      selValidUserId(accountInfo.username).then(response => {
-        console.log(response)
-        if (response.validUsername) {
-          //사용가능한 아이디 입니다.
-          toast.success('사용가능한 아이디입니다')
-        } else {
-          toast.warning('중복된 아이디입니다')
-        }
-      })
+      if((/^[a-z]+[a-z0-9-_]{3,19}$/g).test(accountInfo.username)) {
+        selValidUserId(accountInfo.username).then(response => {
+          if (response.validUsername) {
+            //사용가능한 아이디 입니다.
+            toast.success('사용가능한 아이디입니다')
+            setIsIdCheck(true)
+          } else {
+            toast.warning('중복된 아이디입니다')
+          }
+        })
+      } else {
+        toast.warning('아이디를 확인해주세요')
+      }
     }
   }
   /**
@@ -325,17 +330,22 @@ export default function Basic(props) {
    */
   const onSubmit = (data) => {
     console.log(accountInfo)
-    signUp({...accountInfo, hostType:accountInfo.hostType.value}).then(response => {
-      if (response.responseCode.statusCode === 200) {
-        setAgreeValidation({
-          terms: true,
-          validation: true
-        })
-        handleNextStep()
-      } else {
-        toast.warning('회원가입에 실패하였습니다. 관리자에게 문의하세요')
-      }
-    })
+    if(isIdCheck){
+      signUp({...accountInfo, hostType:accountInfo.hostType.value}).then(response => {
+        if (response.responseCode.statusCode === 200) {
+          setAgreeValidation({
+            terms: true,
+            validation: true
+          })
+          handleNextStep()
+        } else {
+          toast.warning('회원가입에 실패하였습니다. 관리자에게 문의하세요')
+        }
+      })
+    } else {
+      toast.warning('아이디 중복 검사를 해주세요')
+    }
+
   }
   const onError = (error) => console.log(error)
 
@@ -389,7 +399,7 @@ export default function Basic(props) {
                 value={accountInfo.username}
               />
               {errors.username && <ValidationScript>{errors.username?.message}</ValidationScript>}
-              <DefaultButton type={'button'} onClick={() => checkUserId()}>중복검사</DefaultButton>
+              <DefaultButton type={'button'} onClick={() => checkUserId()} style={isIdCheck ? {backgroundColor:'#ddd'}:null}>중복검사</DefaultButton>
             </div>
           </RelativeDiv>
           <RelativeDiv>

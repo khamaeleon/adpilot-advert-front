@@ -120,7 +120,9 @@ export function HistoryCampaignDetail () {
       value = inventoryData[Object.keys(arg)] === 'AUTO' ? `자동최적화` : user();
     } else if(Object.keys(arg)[0] === 'startDate') {
       value = `${inventoryData['startDate']} ~ ${inventoryData['endDate']}`
-    } else if (Object.keys(arg)[0] === 'allowInventoryCategories' || Object.keys(arg)[0] === 'disAllowInventoryCategories') {
+    } else if (Object.keys(arg)[0] === 'allowInventoryCategories') {
+      value = inventoryData[Object.keys(arg)].length !== 0 ? `[${inventoryData[Object.keys(arg)].join('/ ')}]` : '없음'
+    }else if  (Object.keys(arg)[0] === 'disAllowInventoryCategories') {
       value = inventoryData[Object.keys(arg)].length !== 0 ? `[${inventoryData[Object.keys(arg)].join('/ ')}]` : '없음'
     } else if(Object.keys(arg)[0] === 'exposureAgentType') {
       value = inventoryData[Object.keys(arg)].length !== 0 ? `[${inventoryData[Object.keys(arg)].map((item) => eventGoalGroup[item]).join('/ ')}]` : '-'
