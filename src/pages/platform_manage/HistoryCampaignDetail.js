@@ -104,16 +104,16 @@ export function HistoryCampaignDetail () {
           </>
         )
       }
-      value = inventoryData[Object.keys(arg)] === 'AUTO' ? `자동최적화` : audience();
+      value = inventoryData[Object.keys(arg)] === 'AUTO' ? `자동최정적화` : audience();
 
     } else if(Object.keys(arg)[0] === 'userTargetConfigType') {
       const user = () => {
         return (
           <>
             <p>[전환고객 - {inventoryData?.userTargetConfig.exposureConversionUserYn === 'Y' ? '노출' : `미노출 ${inventoryData?.userTargetConfig.nonExposureDaysOfConversion}일`}]</p>
-            <p>[관심고객 - {inventoryData?.userTargetConfig.exposureAttentionUserYn === 'Y' ? '노출' : `미노출`}]</p>
-            <p>[쇼핑고객 - {inventoryData?.userTargetConfig.exposureShoppingUserYn === 'Y' ? '노출' : '미노출'}]</p>
-            <p>[방문고객 - {inventoryData?.userTargetConfig.exposureVisitUserYn === 'Y' ? '노출' : '미노출'}]</p>
+            <p>[관심고객 - {inventoryData?.userTargetConfig.exposureAttentionYn === 'Y' ? '노출' : `미노출`}]</p>
+            <p>[쇼핑고객 - {inventoryData?.userTargetConfig.exposureShoppingYn === 'Y' ? '노출' : '미노출'}]</p>
+            <p>[방문고객 - {inventoryData?.userTargetConfig.exposureVisitYn === 'Y' ? '노출' : '미노출'}]</p>
           </>
         )
       }
