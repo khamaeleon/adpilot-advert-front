@@ -34,7 +34,7 @@ import Select from "react-select";
 import ImageUploading from "react-images-uploading";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {modalController} from "../../store";
-import {phoneNumFormat} from "../../common/StringUtils";
+import {phoneNumFormat, phoneNumFormatType2} from "../../common/StringUtils";
 import {hostList} from "../signup/entity/Common";
 import {accountInfoAtom} from "./entity/User";
 import {adminInfoAtom} from "./entity/Admin";
@@ -531,12 +531,13 @@ function PlatformUserDetail() {
                           {...register("managerPhone", {
                             required: "담당자 연락처를 입력해주세요.",
                             pattern: {
-                              value: /0([1-9][0-9]?){1,2}?([0-9]{3,4})?([0-9]{4})/g,
+                              value: /0([1-9][0-9]?){1,2}?([0-9]{3,4})?[-]?([0-9]{4})/g,
                               message: "연락처 정보를 확인해주세요"
                             },
                             onChange : (e) => handleManagerPhone(e)
                           })}
-                          value={phoneNumFormat(accountInfoState.managerPhone)}
+                          // value={phoneNumFormatType2(accountInfoState.managerPhone)}
+                          value={accountInfoState.managerPhone}
                         />
                         {errors.managerPhone && <ValidationScript>{errors.managerPhone?.message}</ValidationScript>}
                       </InputValidationCon>
