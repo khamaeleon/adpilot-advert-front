@@ -11,9 +11,7 @@ export const SwitchBox = styled.div`
   background: ${lightGray};
   border-radius: 68px;
   position: relative;
-  transition: background-color .2s;
   box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-
   & > label {
     content: '';
     position: absolute;
@@ -22,7 +20,6 @@ export const SwitchBox = styled.div`
     width: 22px;
     height: 22px;
     border-radius: 22px;
-    transition: 0.2s;
     background: #fff;
     box-shadow: 0 2px 3px 0 rgba(10, 10, 10, 0.4);
   }

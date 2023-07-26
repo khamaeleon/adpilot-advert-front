@@ -64,7 +64,6 @@ export function HistoryCampaignManage () {
       });
       return {data: response.rows, count: parseInt(totalCount)};
     })
-
   }
 
   const dataSource = useCallback(loadData, [searchCondition.currentPage, isSearch])

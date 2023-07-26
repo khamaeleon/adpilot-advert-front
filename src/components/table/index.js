@@ -36,7 +36,12 @@ export function SwitchComponent(props){
   },[])
 
   useEffect(() => {
-    setSelect(cellProps.data.interlockYn === 'Y')
+    console.log(type)
+    if(type === 'publish') {
+      setSelect(cellProps.data.publishYn === 'Y')
+    } else {
+      setSelect(cellProps.data.interlockYn === 'Y')
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
   

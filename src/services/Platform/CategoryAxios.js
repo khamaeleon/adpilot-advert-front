@@ -136,7 +136,7 @@ export async function retrieveUserTopLevelCategory(searchKeyword) {
 export async function retrieveUserTopLevelCategoryKeyValue(params) {
   let returnVal;
   await retrieveUserTopLevelCategory(params).then(response => {
-    if(response.responseCode.statusCode === 200) {
+    if(response.length > 0) {
       returnVal = response?.map((item, idx) => {
         return {key: idx, value: item.code, label: item.name}
       })
