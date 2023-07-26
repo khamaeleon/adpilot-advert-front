@@ -151,12 +151,13 @@ function PlatformAdminDetail() {
                   <ColTitle><Span4>담당자 연락처</Span4></ColTitle>
                   <RelativeDiv>
                     <Input
-                      type={'text'}
+                      type={'text'}거
                       placeholder={'연락처를 입력해주세요.'}
                       {...register("phoneNumber", {
                         required: "담당자 연락처를 입력해주세요.",
                         pattern: {
-                          value: /0([1-9][0-9]?){1,2}?([0-9]{3,4})?([0-9]{4})/g,
+                          // value: /0([1-9][0-9]?){1,2}?([0-9]{3,4})?([0-9]{4})/g,
+                          value: /^[0-9-]+$/g,
                           message: "숫자만 입력해주세요"
                         },
                         onChange: (e) => handleManagerPhone(e),
