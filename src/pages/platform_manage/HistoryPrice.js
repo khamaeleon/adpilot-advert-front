@@ -56,6 +56,7 @@ export function HistoryPriceManage () {
       setIsSearch(false);
       setTotalInfo({
         totalCount: response.totalCount,
+        currentCount: response?.rows.length,
         currentPage: response.currentPage,
         totalPages: response.totalPages
       });
@@ -78,7 +79,7 @@ export function HistoryPriceManage () {
       </BoardSearchDetail>
       <BoardSearchResult>
         <Table columns={budgetPriceColumns}
-               totalCount={[totalInfo.totalCount, '이벤트 단가 이력']}
+               totalCount={[totalInfo.currentCount, '이벤트 단가 이력']}
                downloadList={true}
                emptyText={'이벤트 단가 변경 내역이 없습니다.'}
                defaultLimit={searchCondition.pageSize}

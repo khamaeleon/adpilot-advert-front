@@ -41,6 +41,7 @@ export const navigationName = {
 }
 export const dataTotalInfo = {
   totalCount:1,
+  currentCount:1,
   totalPages:1,
   currentPage:1
 }

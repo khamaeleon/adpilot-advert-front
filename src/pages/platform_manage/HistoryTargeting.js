@@ -56,6 +56,7 @@ export function HistoryTargetingManage () {
       setIsSearch(false);
       setTotalInfo({
         totalCount: response.totalCount,
+        currentCount: response?.rows.length,
         currentPage: response.currentPage,
         totalPages: response.totalPages
       });
@@ -79,7 +80,7 @@ export function HistoryTargetingManage () {
       <BoardSearchResult>
         <Table columns={targetingColumns}
                downloadList={true}
-               totalCount={[totalInfo.totalCount, '이벤트 예산 이력']}
+               totalCount={[totalInfo.currentCount, '이벤트 예산 이력']}
                emptyText={'이벤트 예산 변경 내역이 없습니다.'}
                defaultLimit={searchCondition.pageSize}
                data={dataSource}

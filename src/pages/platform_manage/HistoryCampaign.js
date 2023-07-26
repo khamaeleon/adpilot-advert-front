@@ -58,6 +58,7 @@ export function HistoryCampaignManage () {
       setIsSearch(false);
       setTotalInfo({
         totalCount: response.totalCount,
+        currentCount: response?.rows.length,
         currentPage: response.currentPage,
         totalPages: response.totalPages
       });
@@ -82,7 +83,7 @@ export function HistoryCampaignManage () {
       </BoardSearchDetail>
       <BoardSearchResult>
         <Table columns={campaignColumns}
-               totalCount={[totalInfo.totalCount, '캠페인 이력']}
+               totalCount={[totalInfo.currentCount, '캠페인 이력']}
                downloadList={true}
                idProperty={'revisionId'}
                emptyText={'캠페인 이력 변경 내역이 없습니다.'}

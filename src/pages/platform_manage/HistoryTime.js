@@ -57,6 +57,7 @@ export function HistoryTimeManage () {
       setIsSearch(false);
       setTotalInfo({
         totalCount: response.totalCount,
+        currentCount: response?.rows.length,
         currentPage: response.currentPage,
         totalPages: response.totalPages
       });
@@ -80,7 +81,7 @@ export function HistoryTimeManage () {
       </BoardSearchDetail>
       <BoardSearchResult>
         <Table columns={budgetTimeColumns}
-               totalCount={[totalInfo.totalCount, '시간별 예산 이력']}
+               totalCount={[totalInfo.currentCount, '시간별 예산 이력']}
                downloadList={true}
                emptyText={'시간별 예산 변경 내역이 없습니다.'}
                defaultLimit={searchCondition.pageSize}

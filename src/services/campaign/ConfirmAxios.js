@@ -15,7 +15,7 @@ export async function retrieveConfirm(campaignId) { //어드민 캠페인 검토
   return returnVal;
 };
 
-export async function UpdateCampaignDefaultInfo(campaignId, name) { //어드민 캠페인명 수정
+export async function updateCampaignDefaultInfo(campaignId, name) { //어드민 캠페인명 수정
   let returnVal = null;
   await AdminAxios('PUT', ACTION_URL+campaignId, name)
     .then((response) => {

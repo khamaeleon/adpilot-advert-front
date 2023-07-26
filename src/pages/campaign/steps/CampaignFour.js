@@ -866,9 +866,9 @@ export function CampaignFour() {
   const onSubmitToast = (response) => {
     if(response[0]) {
       if (state !== null) {
-        toast.success("수정되었습니다.",{autoClose:100, delay:0})
+        toast.success("수정되었습니다.",{autoClose:100, delay:0, toastId: 'updateCampaignCreative'})
         toast.onChange(payload => {
-          if (payload.status === "removed" && payload.type === toast.TYPE.SUCCESS) {
+          if (payload.status === "removed" && payload.type === toast.TYPE.SUCCESS && payload.id === 'updateCampaignCreative') {
 
             if(state.backLink){
               navigate('/board/manageCreative')
