@@ -77,7 +77,7 @@ export default function NoticeDetail(props) {
                 <Span4>제목</Span4>
                 <RelativeDiv>
                   <Input type={'text'}
-                         style={{backgroundColor: 'transparent', borderWidth: 0, padding: '10px', fontWeight: 'bold'}}
+                         style={{backgroundColor: 'transparent', borderWidth: 0, padding: '10px', fontWeight: 'bold', cursor: 'default'}}
                          value={state.data?.title}
                          readOnly={true}
                   />
@@ -99,7 +99,7 @@ export default function NoticeDetail(props) {
                 <Span4 style={{paddingTop: '10px'}}>내용</Span4>
                 <RelativeDiv>
                   <TextArea rows={25}
-                            style={{backgroundColor: 'transparent', borderWidth: 0}}
+                            style={{backgroundColor: 'transparent', borderWidth: 0, cursor: 'default'}}
                             value={state.data?.content}
                             readOnly={true}
                   />
