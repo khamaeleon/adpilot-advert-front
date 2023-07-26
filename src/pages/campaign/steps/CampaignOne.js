@@ -251,7 +251,7 @@ export function CampaignOne() {
         ...campaignBasicInfo,
         goal:campaignBasicInfo.goal,
         pixelId:campaignBasicInfo.pixelId,
-        name: `${campaignBasicInfo.productType !== 'BANNER' ? 'BA' : 'PU'}_${goalType(campaignBasicInfo.goalType)}_${goal(campaignBasicInfo.goal)}_${moment().format('YYYY-MM-DD hh:mm:ss').replace(' ' ,'_')}`
+        name: `${campaignBasicInfo.productType !== 'BANNER' ? 'PU' : 'BA'}_${goalType(campaignBasicInfo.goalType)}_${goal(campaignBasicInfo.goal)}_${moment().format('YYYY-MM-DD hh:mm:ss').replace(' ' ,'_')}`
       }).then(response =>{
         if(response){
           setCampaignBasicInfo({
