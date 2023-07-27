@@ -143,30 +143,56 @@ export const phoneNumFormat = (phoneNum) => {
 //핸드폰 번호 포맷 추가 작업 중...
 export const phoneNumFormatType2 = (str) => {
   str = str.replace(/[^0-9]/g, '');
-  var tmp = '';
-  if( str.length < 4){
-    return str;
-  }else if(str.length < 7){
-    tmp += str.substr(0, 3);
-    tmp += '-';
-    tmp += str.substr(3);
-    return tmp;
-  }else if(str.length < 11){
-    tmp += str.substr(0, 3);
-    tmp += '-';
-    tmp += str.substr(3, 3);
-    tmp += '-';
-    tmp += str.substr(6);
-    return tmp;
-  }else{
-    tmp += str.substr(0, 3);
-    tmp += '-';
-    tmp += str.substr(3, 4);
-    tmp += '-';
-    tmp += str.substr(7);
-    return tmp;
+  let tmp = '';
+  // 서울 번호
+  if (str.substring(0, 2) === '02') {
+    if (str.length < 3) {
+      return str;
+    } else if (str.length < 6) {
+      tmp += str.substr(0, 2);
+      tmp += '-';
+      tmp += str.substr(2);
+      return tmp;
+    } else if (str.length < 10) {
+      tmp += str.substr(0, 2);
+      tmp += '-';
+      tmp += str.substr(2, 3);
+      tmp += '-';
+      tmp += str.substr(5);
+      return tmp;
+    } else {
+      tmp += str.substr(0, 2);
+      tmp += '-';
+      tmp += str.substr(2, 4);
+      tmp += '-';
+      tmp += str.substr(6, 4);
+      return tmp;
+    }
+  } else {
+    // 핸드폰 및 다른 지역 전화번호 일 경우
+    if (str.length < 4) {
+      return str;
+    } else if (str.length < 7) {
+      tmp += str.substr(0, 3);
+      tmp += '-';
+      tmp += str.substr(3);
+      return tmp;
+    } else if (str.length < 11) {
+      tmp += str.substr(0, 3);
+      tmp += '-';
+      tmp += str.substr(3, 3);
+      tmp += '-';
+      tmp += str.substr(6);
+      return tmp;
+    } else {
+      tmp += str.substr(0, 3);
+      tmp += '-';
+      tmp += str.substr(3, 4);
+      tmp += '-';
+      tmp += str.substr(7);
+      return tmp;
+    }
   }
-
   return str;
 }
 

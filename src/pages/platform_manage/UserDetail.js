@@ -541,7 +541,7 @@ function PlatformUserDetail() {
                             onChange : (e) => handleManagerPhone(e)
                           })}
                           // value={phoneNumFormatType2(accountInfoState.managerPhone)}
-                          value={accountInfoState.managerPhone}
+                          value={phoneNumFormatType2(accountInfoState.managerPhone)}
                         />
                         {errors.managerPhone && <ValidationScript>{errors.managerPhone?.message}</ValidationScript>}
                       </InputValidationCon>

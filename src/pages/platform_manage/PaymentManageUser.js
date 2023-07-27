@@ -324,7 +324,7 @@ function PaymentManageUser() {
               </div>
               <div>
                 {/*<SaveExcelButton>엑셀 저장</SaveExcelButton>*/}
-              </div>ㄴ
+              </div>
             </BoardSearchResultTitle>
             <ReactDataGrid
               licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
