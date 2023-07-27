@@ -51,13 +51,13 @@ adverAxios.interceptors.response.use(
 
     if(status === 403 || status === 401) {
       consecutive403Errors++;
-      console.log("에러요청 임계치 테스트", consecutive403Errors)
+      // console.log("에러요청 임계치 테스트", consecutive403Errors)
       if(!config ){
         adverAxios.getMaxRPS()
         return Promise.reject(error)
       }
       if(consecutive403Errors >= maxConsecutive403Errors) {
-        console.log("에러요청 임계치 관리자 문의.");
+        // console.log("에러요청 임계치 관리자 문의.");
         // eslint-disable-next-line no-restricted-globals
         location.replace('/404.js')
       }
