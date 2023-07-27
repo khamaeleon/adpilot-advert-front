@@ -56,17 +56,22 @@ export const PaymentDetailsColumns = [
         }
     },
     {
-        name: 'progressType',
+        // name: 'progressType',
+        name: 'paymentStatusType',
         header: '신청 상태',
         defaultFlex: 1,
         resizable: false,
         textAlign: 'center',
         render: ({ value })=> {
             let valueType = {
-                REGISTRATION_TRADE: { label: '결제 신청', color: 'blue' },
-                AUTHENTICATION_TRADE: { label: '결제 인증', color: 'orange' },
-                APPROVAL_TRADE: { label: '결제 완료', color: 'green' },
-                REVISE_TRADE: { label: '결제 개정', color: 'pink' },
+                // REGISTRATION_TRADE: { label: '결제 신청', color: 'blue' },
+                // AUTHENTICATION_TRADE: { label: '결제 인증', color: 'orange' },
+                // APPROVAL_TRADE: { label: '결제 완료', color: 'green' },
+                // REVISE_TRADE: { label: '결제 개정', color: 'pink' },
+                // PAYMENT_PROGRESS: { label: '결제 진행', color: 'green' },
+                PAYMENT_COMPLETED: { label: '결제 완료', color: 'blue' },
+                PAYMENT_CANCELED: { label: '결제 취소', color: 'orange' },
+                PAYMENT_FAILED: { label: '결제 실패', color: 'red' },
                 ERROR: { label: 'ERROR', color: 'red' }
             }[value] || { label: '', color: '' };
             return (
@@ -149,7 +154,7 @@ export const PointDetailsColumns = [
         textAlign: 'center',
         render: ({ value })=> {
             let valueType = {
-                CHARGE_OF_PAYMENT: { label: '결제 신청', color: 'blue' },
+                CHARGE_OF_PAYMENT: { label: '결제 완료', color: 'blue' },
                 // REFUND_OF_PAYMENT: { label: '환불 신청', color: 'orange' },
                 GIVEN_BY_ADMIN: { label: '포인트 지급', color: 'green' },
                 TAKEN_BY_ADMIN: { label: '포인트 차감', color: 'orange' },
