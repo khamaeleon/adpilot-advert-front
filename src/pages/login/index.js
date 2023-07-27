@@ -249,7 +249,7 @@ function FindId(props) {
 function LoginComponent() {
   const [loginParamsValue, setLoginParams] = useState(loginParams);
   const [isRemember, setIsRemember] = useState(false)
-  const [cookies, setCookie, removeCookie] = useCookies(['rememberId'])
+  const [cookies, setCookie, removeCookie] = useCookies(['rememberAdverId'])
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate();
   const setTokenResult = useSetAtom(tokenResultAtom)
@@ -266,7 +266,7 @@ function LoginComponent() {
     })
     setValue('username', event.target.value)
     if (isRemember) {
-      setCookie('rememberId', event.target.value)
+      setCookie('rememberAdverId', event.target.value)
     }
   }
   /**
@@ -288,9 +288,9 @@ function LoginComponent() {
     console.log(loginParamsValue.username)
     setIsRemember(event.target.checked)
     if (event.target.checked) {
-      setCookie('rememberId', loginParamsValue.username)
+      setCookie('rememberAdverId', loginParamsValue.username)
     } else {
-      removeCookie('rememberId')
+      removeCookie('rememberAdverId')
     }
   }
 
@@ -298,12 +298,12 @@ function LoginComponent() {
    * 쿠키에 아이디 저장 삭제
    */
   useEffect(() => {
-    if (cookies.rememberId !== undefined) {
+    if (cookies.rememberAdverId !== undefined) {
       setLoginParams({
         ...loginParamsValue,
-        username: cookies.rememberId
+        username: cookies.rememberAdverId
       })
-      setValue('username', cookies.rememberId)
+      setValue('username', cookies.rememberAdverId)
       setIsRemember(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
