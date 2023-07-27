@@ -33,7 +33,7 @@ export default function Notice() {
       {keyword:'', pageSize: 10, currentPage: 1, publishYn:''});
 
   useEffect(()=>{
-    onSearch()
+    if(tokenUserInfo.role !== '') onSearch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenUserInfo]);
 

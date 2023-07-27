@@ -32,7 +32,7 @@ export default function InquiryList() {
       {keyword:'', inquiryType: 'DEFAULT', pageSize: 10, currentPage: 1});
 
   useEffect(()=> {
-    onSearch()
+    if(tokenUserInfo.role !== '') onSearch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenUserInfo]);
 
