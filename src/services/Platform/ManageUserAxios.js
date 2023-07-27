@@ -208,11 +208,10 @@ export async function accountFileUpload(data,resourceType) {
   let returnVal = null;
 
   await AxiosFile('POST', UPLOAD_URL + resourceType, data)
-    .then(response =>response.json())
-    .then(data => {
-      console.log(data)
-      if(data.responseCode.statusCode === 200){
-        returnVal = data.data.path
+    .then(response => {
+      const {responseCode, data} = response;
+      if(responseCode.statusCode === 200){
+        returnVal = data.path
       } else {
         returnVal = false
       }

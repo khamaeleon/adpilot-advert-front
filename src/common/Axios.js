@@ -4,6 +4,7 @@ import {nonUserAxios} from "./NonUserAxios";
 import {adverAxios} from "./AdverAxios";
 import store from "../store";
 import {tokenResultAtom} from "../pages/login/entity/Common";
+import {refreshAdmin} from "../services/auth/AuthAxios";
 
 export async function AdminAxios(type, uri, param) {
   switch(type){
@@ -17,6 +18,18 @@ export async function AdminAxios(type, uri, param) {
 
 export async function AxiosImage(type, uri, formData) {
   const tokenAtom = store.get(tokenResultAtom)
+
+  let isTokenRefreshing = false;
+  let refreshSubscribers = [];
+
+  const onTokenRefreshed = () => {
+    refreshSubscribers.map((callback) => callback());
+  };
+
+  const addRefreshSubscriber = (callback) => {
+    refreshSubscribers.push(callback);
+  };
+
   return fetch(ADMIN_SERVER + uri, {
     method: type,
     headers: {
@@ -27,20 +40,102 @@ export async function AxiosImage(type, uri, formData) {
     },
     body: formData
   })
+  .then(response => response.json())
+  .then(data => {
+    const {responseCode} = data;
+    if(responseCode.statusCode === 201) {
+      return data;
+    } else if(responseCode.statusCode === 401 || responseCode.statusCode === 403) {
+      const retryOriginalRequest = new Promise(async (resolve) => {
+        addRefreshSubscriber(() => {
+          refreshSubscribers = [];
+          isTokenRefreshing = false;
+          resolve(AxiosImage(type, uri, formData));
+        })
+      });
+
+      if (!isTokenRefreshing) {
+        isTokenRefreshing = true;
+        refreshAdmin().then(response => {
+          const {data, responseCode} = response
+          if (responseCode.statusCode === 200) {
+            store.set(tokenResultAtom, {
+              id: data.email,
+              role: data.role,
+              name: data.name,
+              accessToken: data.token.accessToken
+            })
+            onTokenRefreshed();
+          } else {
+            refreshSubscribers = [];
+            isTokenRefreshing = false;
+            window.location.replace('/')
+          }
+        })
+      }
+      return retryOriginalRequest;
+    }
+  }).catch(err => console.log(err))
 }
 
 export async function AxiosFile(type, uri, formData) {
-  const accessToken =""
+  const tokenAtom = store.get(tokenResultAtom)
+  let isTokenRefreshing = false;
+  let refreshSubscribers = [];
+
+  const onTokenRefreshed = () => {
+    refreshSubscribers.map((callback) => callback());
+  };
+
+  const addRefreshSubscriber = (callback) => {
+    refreshSubscribers.push(callback);
+  };
   return fetch(ADVER_SERVER + uri, {
     method: type,
     headers: {
-      Authorization: `Bearer  ${accessToken}`,
+      Authorization: `Bearer  ${tokenAtom.accessToken}`,
     },
     validateStatus: function (status) {
       return status <= 500;
     },
     body: formData
   })
+  .then(response => response.json())
+  .then(data => {
+    const {responseCode} = data;
+    if(responseCode.statusCode === 200) {
+      return data;
+    } else if(responseCode.statusCode === 401 || responseCode.statusCode === 403) {
+      const retryOriginalRequest = new Promise(async (resolve) => {
+        addRefreshSubscriber(() => {
+          refreshSubscribers = [];
+          isTokenRefreshing = false;
+          resolve(AxiosImage(type, uri, formData));
+        })
+      });
+
+      if (!isTokenRefreshing) {
+        isTokenRefreshing = true;
+        refreshAdmin().then(response => {
+          const {data, responseCode} = response
+          if (responseCode.statusCode === 200) {
+            store.set(tokenResultAtom, {
+              id: data.email,
+              role: data.role,
+              name: data.name,
+              accessToken: data.token.accessToken
+            })
+            onTokenRefreshed();
+          } else {
+            refreshSubscribers = [];
+            isTokenRefreshing = false;
+            window.location.replace('/')
+          }
+        })
+      }
+      return retryOriginalRequest;
+    }
+  }).catch(err => console.log(err))
 }
 
 export async function NonUserAxios(type, uri, param) {

@@ -292,7 +292,7 @@ function CampaignFourBanner(props) {
                   <p style={{color: '#ccc'}}>사이즈별 소재는 최소 1개 이상, 최대 5개까지 등록 가능합니다.</p>
                   <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between'}}>
                     {campaignCreativeInfo.materials !== undefined && campaignCreativeInfo.materials.map((item, key) => {
-                      let label = bannerSize.find(value => value.value === item.bannerSize).label
+                      let label = bannerSize?.find(value => value.value === item.bannerSize).label
                       return (
                         <RegistryBannerItem key={key} size={item} label={label} onImageError={onImageError}/>
                       )
