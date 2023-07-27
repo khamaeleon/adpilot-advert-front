@@ -94,7 +94,6 @@ function PwChangeModal(props) {
   const handleSave = (data) => {
     props.onSave(data)
   }
-  console.log(accountInfoState)
   return (
     <div>
       <form onSubmit={handleSubmit(handleSave, onError)}>

@@ -228,7 +228,9 @@ export function CampaignLookOver() {
                 <HorizontalRule/>
                 <ColSpan2>
                   <Span4>송출 제한 지면</Span4>
-                  <ValueText>{campaignData.inventoryDetail?.disAllowInventoryIds.length !== 0 ? `${campaignData.inventoryDetail?.disAllowInventoryIds.length} 개 지면 송출 제한 설정` : '송출 제한 지면 없음'}</ValueText>
+                  <ValueText>{
+                    campaignData.inventoryDetail?.disAllowInventoryIds.length !== 0 ?
+                        `${campaignData.inventoryDetail?.disAllowInventoryIds.length} 개 지면 송출 제한 설정` : '송출 제한 지면 없음'}</ValueText>
                 </ColSpan2>
               </Row>
               <Row>
@@ -238,7 +240,7 @@ export function CampaignLookOver() {
                     {
                       campaignData.inventoryDetail?.exposureInventoryType !== 'MANUAL' ?
                         (campaignData.inventoryDetail?.exposureInventoryType !== 'AUTO' ? '카테고리 설정' : '자동 최적화')
-                        : '개별 설정'
+                        : `${campaignData.inventoryDetail?.allowInventoryIds.length} 개 지면 게재 설정`
                     }
                   </ValueText>
                 </ColSpan2>
