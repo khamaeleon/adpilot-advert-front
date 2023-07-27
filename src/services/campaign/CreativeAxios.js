@@ -52,11 +52,10 @@ export async function selCreativePopUnderInfo(campaignId) {
 export async function uploadBannerImages(data,bannerSize) {
   let returnVal = null;
   await AxiosImage('POST', ACTION_URL+IMAGE_UPDATE+'/'+bannerSize, data)
-    .then(response =>response.json())
-    .then(data => {
-      if(data.responseCode.statusCode === 201){
-        console.log(data)
-        returnVal = data.data
+    .then(response => {
+      const {responseCode, data} = response;
+      if(responseCode.statusCode === 201){
+        returnVal = data
       } else {
         returnVal = false
       }
@@ -67,11 +66,10 @@ export async function uploadBannerImages(data,bannerSize) {
 export async function uploadNativeImages(data) {
   let returnVal = null;
   await AxiosImage('POST', ACTION_URL + IMAGE_NATIVE, data)
-    .then(response =>response.json())
-    .then(data => {
-      if(data.responseCode.statusCode === 201){
-        console.log(data)
-        returnVal = data.data
+    .then(response => {
+      const {responseCode, data} = response;
+      if(responseCode.statusCode === 201){
+        returnVal = data
       } else {
         returnVal = false
       }
@@ -83,11 +81,10 @@ export async function uploadNativeImages(data) {
 export async function uploadLogoImages(data) {
   let returnVal = null;
   await AxiosImage('POST', ACTION_URL + IMAGE_LOGO, data)
-    .then(response =>response.json())
-    .then(data => {
-      if(data.responseCode.statusCode === 201){
-        console.log(data)
-        returnVal = data.data
+    .then(response => {
+      const {responseCode, data} = response;
+      if(responseCode.statusCode === 201){
+        returnVal = data
       } else {
         returnVal = false
       }
