@@ -38,6 +38,9 @@ const addRefreshSubscriber = (callback) => {
   refreshSubscribers.push(callback);
 };
 
+let consecutive403Errors = 0; // 변수를 추가하여 연속적인 403 또는 401 에러의 개수를 기록합니다.
+const maxConsecutive403Errors = 10; // 에러 최대 임계값을 설정합니다.
+
 adverAxios.interceptors.response.use(
   (response) => {
     return response.data
@@ -47,10 +50,16 @@ adverAxios.interceptors.response.use(
     const originalRequest = config;
 
     if(status === 403 || status === 401) {
-      console.log(config)
+      consecutive403Errors++;
+      console.log("에러요청 임계치 테스트", consecutive403Errors)
       if(!config ){
         adverAxios.getMaxRPS()
         return Promise.reject(error)
+      }
+      if(consecutive403Errors >= maxConsecutive403Errors) {
+        console.log("에러요청 임계치 관리자 문의.");
+        // eslint-disable-next-line no-restricted-globals
+        location.replace('/404.js')
       }
       const retryOriginalRequest = new Promise((resolve) => {
         addRefreshSubscriber((accessToken) => {
