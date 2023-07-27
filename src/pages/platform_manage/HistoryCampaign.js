@@ -16,7 +16,6 @@ const option = [
 
 export function HistoryCampaignManage () {
   const [searchCondition, setSearchCondition] = useState(searchConditionData);
-
   const [totalInfo, setTotalInfo] = useState(dataTotalInfo);
   const [isSearch, setIsSearch] = useState(false);
 
