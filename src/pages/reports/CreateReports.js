@@ -18,12 +18,11 @@ import styled from "styled-components";
 import {VerticalRule} from "../../components/common/Common";
 import {Row} from "../campaign/styles/common";
 import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
-import ReactDataGrid from "@inovua/reactdatagrid-enterprise";
 import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
 import {createCustomReportsAxios, retrieveCustomReportsList} from "../../services/reports/ReportsAxios";
 import {tokenResultAtom} from "../login/entity/Common";
-import {useAtom, useAtomValue, useSetAtom} from "jotai";
+import {useAtomValue, useSetAtom} from "jotai";
 import {useNavigate} from "react-router-dom";
 import {reportsInfoAtom} from "../../components/aside/entity";
 import {createCustomReportsAdminAxios, retrieveCustomReportsAdminList} from "../../services/reports/ReportsAdminAxios";
@@ -494,6 +493,7 @@ const DefaultItemContainer = styled.div`
   gap: 10px;
   font-size: 13px;
 `
+
 const DefaultItemButton = styled.div`
   display: flex;
   flex-direction: column;

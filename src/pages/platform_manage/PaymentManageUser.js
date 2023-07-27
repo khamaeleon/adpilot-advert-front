@@ -206,7 +206,7 @@ function PaymentManageUser() {
     };
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dateRange]);
+  }, [dateRange, tokenUserInfo]);
   //[d] 차트 데이터에서 역으로 변동값 감지해서 다시 던저주기 paging 처리 관련...
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const dataSource = useCallback(fetchPaymentDetails, [totalInfo]);
