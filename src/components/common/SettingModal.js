@@ -72,16 +72,22 @@ function SettingChangeModal(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[dataState])
   const sumValue = () => {
-    if(dataState.shopperMatching !== '' &&
+    if(
+        // dataState.shopperMatching !== '' &&
     dataState.cartRecommendation !== '' &&
     dataState.productRecommendation !== '' &&
     dataState.userMatching !== '' &&
-    dataState.userOptimization !== '' &&
-    dataState.audience !== ''){
+    dataState.userOptimization !== ''
+    // dataState.audience !== ''
+    ){
 
-    let calc = parseInt(dataState.shopperMatching) + parseInt(dataState.cartRecommendation) +
-      parseInt(dataState.productRecommendation) + parseInt(dataState.userMatching) +
-      parseInt(dataState.userOptimization) + parseInt(dataState.audience)
+    let calc =
+        // parseInt(dataState.shopperMatching)
+        parseInt(dataState.cartRecommendation)
+        + parseInt(dataState.productRecommendation)
+        + parseInt(dataState.userMatching)
+        + parseInt(dataState.userOptimization)
+        // + parseInt(dataState.audience)
       setCalculatePercent(calc)
     }
   }
