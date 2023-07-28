@@ -46,7 +46,7 @@ export default function InsertToSelect(props) {
                       className={key+'-'+day}
                       id={key}
                       name={`${idx}`}
-                      value={day}
+                      value={day === 0 ? '': day }
                       onChange={(e) => handleChangeInput(e)}
                     />
                     <span className={'cell-input-percent'}>%</span>

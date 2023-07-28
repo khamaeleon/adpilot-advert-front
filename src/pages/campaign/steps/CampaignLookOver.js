@@ -295,7 +295,7 @@ export function CampaignLookOver() {
                 </ColSpan2>
                 <HorizontalRule/>
                 <ColSpan2>
-                  <Span4>MOBILE 랜딩 코드</Span4>
+                  <Span4>MOBILE 인식 코드</Span4>
                   <ValueText>{campaignData.mobReferralCode}</ValueText>
                 </ColSpan2>
               </Row>

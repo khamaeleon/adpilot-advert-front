@@ -80,7 +80,9 @@ function BudgetTimeDetail() {
     let isTimeNull= false;
     if(timeBudgetDetailDataState.exposureTimeType === 'DIRECT_SETTINGS'){
       let weekSumArr = timeBudgetDetailDataState.allowTimes.map((rowData,i)=>{
-        let rowSum = rowData.map(d=>parseInt(d)).reduce((a,b)=>{return a+b;});
+        let rowSum = rowData.map(d => d === '' ? 0 : parseInt(d))
+                            .reduce((a,b)=>{return a+b;});
+
         if(0 < rowSum && 100 !== rowSum){
           isTimePerOver = true;
           setCheckIndex(i);

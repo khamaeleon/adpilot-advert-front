@@ -71,7 +71,7 @@
     padding: 5px;
     border-radius: 3px;
     font-size: 12px;
-    background-color: #f9fafb;
+    background-color: #fff;
 }
 
 .table-drag-select td.cell-enabled-input input[type='text']:focus {
