@@ -31,6 +31,7 @@ export function ManageCreative() {
   const [creativeData, setCreativeData] = useState([])
   const [creativeDetailData, setCreativeDetailData] =  useState([])
   const [keyword, setKeyword] = useState('')
+  const [isSearch, setIsSearch] = useState(false)
 
   useEffect(() => {
     // if(tokenResult.role !== 'NORMAL'){
@@ -80,6 +81,7 @@ export function ManageCreative() {
       setCreativeDetailData([])
     })
   }
+
   const detailTable = (adverName) => {
     const settings = {
       dots: false,
@@ -157,7 +159,9 @@ export function ManageCreative() {
             <SearchInput>
               <input type={'text'} value={keyword}
                      placeholder={'광고주명 및 아이디 검색'}
-                     onChange={(e) => setKeyword(e.target.value)}/>
+                     onChange={(e) => setKeyword(e.target.value)}
+                     onKeyDown={e => (e.key === 'Enter') && handleSearchKeyword() }
+              />
             </SearchInput>
           </ColSpan4>
           <GraySearchButton onClick={handleSearchKeyword}>검색</GraySearchButton>
