@@ -38,6 +38,7 @@ import {toast} from "react-toastify";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useResetAtom} from "jotai/utils";
 import {campaignCreativeAtom} from "../entity/Creative";
+import queryString from "query-string";
 
 export function CampaignThree() {
   const [, setStepCampaign] = useAtom(stepCampaignAtom)
@@ -50,9 +51,10 @@ export function CampaignThree() {
   const [dateRange, setDateRange] = useState([]);
   const [startDate, endDate] = dateRange
   const {register, handleSubmit, reset, setValue, setError, control, formState: {errors}, clearErrors} = useFormContext()
-  const {state} = useLocation()
+  const location = useLocation()
   const navigate = useNavigate()
   const resetCreativeInfo = useResetAtom(campaignCreativeAtom)
+  const state = location.search !== '' ? queryString.parse(location.search) : location.state
 
   useEffect(()=>{
     selMediaCategoryInfo().then(response => {
@@ -92,7 +94,7 @@ export function CampaignThree() {
       setValue('name', name)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state])
+  }, [location.state])
 
   useEffect(() => {
     if(dateRange?.length !== 0){

@@ -293,7 +293,7 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({value, data}) => {
-      return <Link to={'/board/campaignThree'} state={{campaignId: data?.campaignId, adverInfo: data?.adverInfo}} className={'line-clamp_2'}>{value}</Link>
+      return <Link to={{pathname:'/board/campaignThree', search: `campaignId=${data?.campaignId}&adverInfo=${data?.adverInfo}`}} state={{campaignId: data?.campaignId, adverInfo: data?.adverInfo}} className={'line-clamp_2'}>{value}</Link>
     }
   },
   {
@@ -308,7 +308,7 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({value, data}) => {
-      return <Link to={'/board/campaignFour'} state={{campaignId: data?.campaignId, creativeType: data?.creativeType, productType: data.productType, adverInfo: data?.adverInfo}} className={'line-clamp_2'}>{value}</Link>
+      return <Link to={{pathname:'/board/campaignFour', search: `campaignId=${data?.campaignId}&creativeType=${data?.creativeType}&productType=${data.productType}&adverInfo=${data?.adverInfo}`}} state={{campaignId: data?.campaignId, creativeType: data?.creativeType, productType: data.productType, adverInfo: data?.adverInfo}} className={'line-clamp_2'}>{value}</Link>
     }
   },
   {

@@ -49,9 +49,9 @@ function PaymentManage() {
       searchStartDate: searchPaymentParamsState.startAt,
       searchEndDate: searchPaymentParamsState.endAt,
       // pointHistoryTypes: null,
-      paymentStatusTypes: null,
+      // paymentStatusTypes: null,
       //[d] 결제 신청만 있어서 null 이 아니면 볼 수 없어요~!
-      // paymentStatusType: searchPaymentParamsState.statusList,
+      paymentStatusType: searchPaymentParamsState.statusList,
       keywordType: searchPaymentParamsState.searchType,
       keyword: searchPaymentParamsState.search
     };
@@ -59,7 +59,7 @@ function PaymentManage() {
       .then(response => {
         // 성공적인 응답 처리
         if (response !== null) {
-          // console.log(response)
+          console.log(response)
           const { totalCount, rows: data } = response;
           setTotalInfo(totalCount);
           return Promise.resolve({ data, count: parseInt(totalCount) });

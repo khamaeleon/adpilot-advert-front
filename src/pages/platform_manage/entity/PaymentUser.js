@@ -155,7 +155,7 @@ export const PointDetailsColumns = [
         render: ({ value })=> {
             let valueType = {
                 CHARGE_OF_PAYMENT: { label: '결제 완료', color: 'blue' },
-                // REFUND_OF_PAYMENT: { label: '환불 신청', color: 'orange' },
+                REFUND_OF_PAYMENT: { label: '환불 신청', color: 'orange' },
                 GIVEN_BY_ADMIN: { label: '포인트 지급', color: 'green' },
                 TAKEN_BY_ADMIN: { label: '포인트 차감', color: 'orange' },
                 REFUND_REQUEST_OF_USER: { label: '환불 요청', color: 'red' },
