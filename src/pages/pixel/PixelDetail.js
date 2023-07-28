@@ -70,7 +70,7 @@ function PixelDetail() {
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [tokenResult.role])
 
   const handleSelectHosting = (selectHostType) => {
     setPixelInfoListState({
@@ -118,7 +118,7 @@ function PixelDetail() {
       }
     })
   }
-  let textColor = {color: pixelInfoListState !== null ? statusTypeAll.find(type => type.value === pixelInfoListState.status).color : ''};
+  let textColor = {color: pixelInfoListState !== null ? statusTypeAll?.find(type => type.value === pixelInfoListState.status).color : ''};
 
   return (
     <>
@@ -215,7 +215,7 @@ function PixelDetail() {
                               <Select options={topLevelCategoryList}
                                       placeholder={'카테고리선택 선택'}
                                       {...field}
-                                      value={pixelInfoListState.mainCategoryCode !== '' ? topLevelCategoryList.find(value => value.value === pixelInfoListState.mainCategoryCode) : ''}
+                                      value={pixelInfoListState.mainCategoryCode !== '' ? topLevelCategoryList?.find(value => value.value === pixelInfoListState.mainCategoryCode) : ''}
                                       onChange={handleSelectTopCategory}
                                       styles={selectStyle}
                                       isSearchable={false}
@@ -241,7 +241,7 @@ function PixelDetail() {
                               <Select options={rowLevelCategoryList}
                                       placeholder={'서브 카테고리 선택'}
                                       {...field}
-                                      value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
+                                      value={pixelInfoListState.subCategoryCode !== '' ? rowLevelCategoryList?.find(value => value.value === pixelInfoListState.subCategoryCode) : ''}
                                       onChange={handleSelectRowCategory}
                                       styles={selectStyle}
                                       isSearchable={false}
@@ -257,11 +257,11 @@ function PixelDetail() {
                   <div className={'row'}>
                     <div className={'w-50'}>
                       <p className={'tit'}>카테고리</p>
-                      <div className={'txt'}>{topLevelCategoryList.find(value => value.value === pixelInfoListState?.mainCategoryCode)?.label}</div>
+                      <div className={'txt'}>{topLevelCategoryList?.find(value => value.value === pixelInfoListState?.mainCategoryCode)?.label}</div>
                     </div>
                     <div className={'w-50'}>
                       <p className={'tit'}>하위 카테고리</p>
-                      <div className={'txt'}>{rowLevelCategoryList.find(value => value.value === pixelInfoListState?.subCategoryCode)?.label}</div>
+                      <div className={'txt'}>{rowLevelCategoryList?.find(value => value.value === pixelInfoListState?.subCategoryCode)?.label}</div>
                     </div>
                   </div>
                 }
@@ -284,7 +284,7 @@ function PixelDetail() {
                 <p className={'tit'}>데이터 수집 상태</p>
                 <div className={'txt'}>
                   <p style={textColor}>
-                    {pixelInfoListState !== null && statusTypeAll.find(type => type.value === pixelInfoListState.status).label}
+                    {pixelInfoListState !== null && statusTypeAll?.find(type => type.value === pixelInfoListState.status).label}
                   </p>
                 </div>
               </div>
@@ -306,7 +306,7 @@ function PixelDetail() {
                           <Select options={hostList}
                                   placeholder={'호스팅 선택'}
                                   {...field}
-                                  value={pixelInfoListState.hostType !== '' ? hostList.find(value => value.value === pixelInfoListState.hostType) : ''}
+                                  value={pixelInfoListState.hostType !== '' ? hostList?.find(value => value.value === pixelInfoListState.hostType) : ''}
                                   onChange={handleSelectHosting}
                                   styles={selectStyle}
                                   isSearchable={false}
@@ -318,7 +318,7 @@ function PixelDetail() {
                   </div>
                   :
                   <div>
-                    {hostList.find(item => item.value === pixelInfoListState?.hostType)?.label}
+                    {hostList?.find(item => item.value === pixelInfoListState?.hostType)?.label}
                   </div>
                 }
               </div>
