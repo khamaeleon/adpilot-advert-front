@@ -208,7 +208,7 @@ const DropIcon = styled.div`
   float: right;
   width: 10px;
   height: 6px;
-  margin: 27px 18px;
+  margin: -11px 18px;
   background-image: url("/assets/images/common/icon_dropup.png");
   background-repeat: no-repeat;
 `
