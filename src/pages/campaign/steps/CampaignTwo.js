@@ -32,13 +32,14 @@ import {selPriceEventList} from "../../../services/settings/EventPriceAxios";
 import {timeBudgetDetailDataAtom} from "../../settings/entity/BudgetTime";
 import {selBudgetInfo, updateCampaignBudget} from "../../../services/campaign/BudgetAxios";
 import {campaignBudgetInfoAtom} from "../entity/Budget";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import {toast} from "react-toastify";
 import {useResetAtom} from "jotai/utils";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import {decimalFormat, multiAxiosCall, removeStr} from "../../../common/StringUtils";
 import {campaignGroupInfoAtom} from "../entity/Group";
+import queryString from "query-string";
 
 export function CampaignTwo() {
   const setStepCampaign = useSetAtom(stepCampaignAtom)
@@ -50,13 +51,14 @@ export function CampaignTwo() {
   const [priceEventListState, setPriceEventListState] = useState(null)
   const [biddingType] = useState(biddingTypeAll)
   const [timeBudgetDetailDataState, setTimeBudgetDetailDataState] = useAtom(timeBudgetDetailDataAtom)
-  const {state} =useLocation()
+  const location = useLocation()
   const navigate = useNavigate()
   const {register, handleSubmit,reset,setError, control, formState: {errors}, clearErrors} = useFormContext()
-
   const resetGroupInfo = useResetAtom(campaignGroupInfoAtom)
+  const state = location.search !== '' ? queryString.parse(location.search) : location.state
 
   useEffect(() => {
+    console.log(location)
     let userId = state !== null ? state.userId : campaignBasicInfo?.userId;
 
     const callbackFunc = (response) => {
@@ -102,7 +104,7 @@ export function CampaignTwo() {
         reset(response);
       })
     }
-  }, [state])
+  }, [])
   /**
    * 시간대별 예산 셀렉트
    * @param selectedBudgetTime

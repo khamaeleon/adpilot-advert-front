@@ -354,6 +354,11 @@ function AdvertisingPayments() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const dataCallback = useCallback( handlePaymentTableData , [totalInfo, searchPaymentParamsState, paymentDataState, refundReceivedData])
 
+  const renderRowContextMenu = (menuProps, { rowProps }) => {
+    menuProps.autoDismiss = true
+    console.log('오른쪽 클릭 방지')
+  }
+
   return (
     <>
       <Board>
@@ -399,6 +404,7 @@ function AdvertisingPayments() {
             style={gridStyle}
             activeCell={null}
             showHoverRows={false}
+            renderRowContextMenu={renderRowContextMenu}
           />
         </BoardTableContainer>
       </Board>

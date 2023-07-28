@@ -104,7 +104,7 @@ export function ManageCreative() {
             <CustomDetailRow key={key}>
               <CreativeGroup>
                 <Link
-                  to={'/board/manageCreativeDetail'}
+                  to={{pathname: '/board/manageCreativeDetail', search:`campaignId=${item?.campaignId}&creativeType=${item?.creativeType}&productType=${item.productType}&adverInfo=${adverName}&backLink='manageCreative'`}}
                   state={{campaignId: item?.campaignId, creativeType: item?.creativeType, productType: item.productType, adverInfo: adverName, backLink: 'manageCreative'}}>
                   {item.creativeName}
                 </Link>

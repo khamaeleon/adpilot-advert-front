@@ -56,6 +56,15 @@ function TableDetail (props) {
       gridRef.current.setColumnSizesToFit()
     }
   },[gridRef])
+  /**
+   * 오른쪽 클릭 방지
+   * @param menuProps
+   * @param rowProps
+   */
+  const renderRowContextMenu = (menuProps, { rowProps }) => {
+    menuProps.autoDismiss = true
+    console.log('오른쪽 클릭 방지')
+  }
 
   /**
    * ...펼쳐보기
@@ -75,6 +84,7 @@ function TableDetail (props) {
         activeCell={null}
         showHoverRows={false}
         style={{minHeight: 45}}
+        renderRowContextMenu={renderRowContextMenu}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -108,6 +118,7 @@ function TableDetail (props) {
         showHoverRows={false}
         multiRowExpand={false}
         activeCell={null}
+        renderRowContextMenu={renderRowContextMenu}
       />
     </>
   )

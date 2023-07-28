@@ -105,6 +105,12 @@ function ConversionManage() {
       } else return 420;
     } else return 300
   }
+
+  const renderRowContextMenu = (menuProps, { rowProps }) => {
+    menuProps.autoDismiss = true
+    console.log('오른쪽 클릭 방지')
+  }
+
   return (
     <main>
       <Board>
@@ -140,6 +146,7 @@ function ConversionManage() {
                 multiRowExpand={false}
                 showHoverRows={false}
                 activeCell={null}
+                renderRowContextMenu={renderRowContextMenu}
               />
             </>
           }

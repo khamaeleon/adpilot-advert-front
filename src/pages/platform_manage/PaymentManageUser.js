@@ -212,6 +212,15 @@ function PaymentManageUser() {
   const dataSource = useCallback(fetchPaymentDetails, [totalInfo]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const dataSourcePoint = useCallback(fetchPointDetails, [totalPointInfo]);
+  /**
+   * 오른쪽 클릭 방지
+   * @param menuProps
+   * @param rowProps
+   */
+  const renderRowContextMenu = (menuProps, { rowProps }) => {
+    menuProps.autoDismiss = true
+    console.log('오른쪽 클릭 방지')
+  }
   return (
     <main>
       <BoardContainer>
@@ -343,6 +352,7 @@ function PaymentManageUser() {
               sortable={false}
               style={gridStyle}
               activeCell={null}
+              renderRowContextMenu={renderRowContextMenu}
             />
             <BoardSearchResultTitle style={{alignItems:"end", paddingTop:"20px", paddingBottom: "10px"}}>
               <div>
@@ -366,6 +376,7 @@ function PaymentManageUser() {
               sortable={false}
               style={gridStyle}
               activeCell={null}
+              renderRowContextMenu={renderRowContextMenu}
             />
           </ColSpan4>
         </Board>

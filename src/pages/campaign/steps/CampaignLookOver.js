@@ -27,9 +27,10 @@ import {selEnumInfo} from "../../../services/campaign/InfoAxios";
 import {toast} from "react-toastify";
 import {campaignBasicInfoAtom} from "../entity/Info";
 import {useResetAtom} from "jotai/utils";
+import queryString from "query-string";
 
 export function CampaignLookOver() {
-  const {state} = useLocation()
+  const location = useLocation()
   const navigate = useNavigate()
   const [campaignBasicInfo] = useAtom(campaignBasicInfoAtom)
   const [, setStepCampaign] = useAtom(stepCampaignAtom)
@@ -40,6 +41,7 @@ export function CampaignLookOver() {
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const [agentTypeState, setAgentTypeState] = useState([])
   const resetBasicInfo = useResetAtom(campaignBasicInfoAtom)
+  const state = location.search !== '' ? queryString.parse(location.search) : location.state
 
   const inventoryExposure = (inventoryDetail) => {
     setUserTargetConfig(
@@ -60,6 +62,7 @@ export function CampaignLookOver() {
     )
   }
   useEffect(() => {
+    console.log(state)
     if(tokenUserInfo.role !== 'NORMAL'){
       selEnumInfo('AGENT_TYPE').then(response => {
         setAgentTypeState(response.data)

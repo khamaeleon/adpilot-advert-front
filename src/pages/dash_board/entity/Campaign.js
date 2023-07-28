@@ -1,8 +1,8 @@
 import {atom} from "jotai";
 import {decimalFormat, moneyToFixedFormat, numberToFixedFormat} from "../../../common/StringUtils";
-import React from "react";
+import React, {useEffect} from "react";
 import {Icon, SwitchComponent} from "../../../components/table";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {updateCampaignPublish} from "../../../services/campaign/CreativeAxios";
 
 /*광고주 현황 리스트 데이터*/
@@ -250,7 +250,7 @@ export const adverStatusDetailColumn = [
       }
     },
     render: ({data, value}) => {
-      return <Link to={'/board/campaignLookOver'} state={{campaignId: data?.campaignId, adverInfo: data?.adverInfo}} className={'line-clamp_2'}>{value}</Link>
+      return <Link to={{pathname:'/board/campaignLookOver', search: `campaignId=${data?.campaignId}&adverInfo=${data?.adverInfo}`}} state={{campaignId: data?.campaignId, adverInfo: data?.adverInfo}} className={'line-clamp_2'}>{value}</Link>
     }
   },
   {
@@ -278,7 +278,7 @@ export const adverStatusDetailColumn = [
     },
     render: ({value, data}) => {
       let valueFormat = data.infiniteBudgetYn !== 'N' ? '무제한': <p>{decimalFormat(value)} 원</p>
-      return  <Link to={'/board/campaignTwo'} state={{campaignId: data?.campaignId, userId: data?.userId, adverInfo: data?.adverInfo}}>{valueFormat}</Link>
+      return  <Link to={{pathname:'/board/campaignTwo', search: `campaignId=${data?.campaignId}&userId=${data?.userId}&adverInfo=${data?.adverInfo}`}}>{valueFormat}</Link>
     }
   },
   {

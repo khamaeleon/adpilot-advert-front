@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
   CancelButton,
   ColSpan2,
@@ -19,7 +19,7 @@ import {TotalCount} from "./TableDetail";
 import SettingAdd from "../common/SettingModal";
 import {BorderBox, Off, On, PreviewSubmit, Small, SwitchBox, TitColor} from "./styles";
 import {light} from "../../assets/theme";
-import PaginationToolbar from '@inovua/reactdatagrid-community/packages/PaginationToolbar'
+
 export function SwitchComponent(props){
   const {value, cellProps, type, eventClick} = props
   const [select, setSelect] = useState(value)
@@ -261,6 +261,11 @@ function Table(props) {
     showingText: '페이지',
   })
 
+  const renderRowContextMenu = (menuProps, { rowProps }) => {
+    menuProps.autoDismiss = true
+    console.log('오른쪽 클릭 방지')
+  }
+
   const gridElement = (
     <ReactDataGrid
       licenseKey={process.env.REACT_APP_DATA_GRID_LICENSE_KEY}
@@ -281,6 +286,7 @@ function Table(props) {
       style={gridStyle}
       showHoverRows={false}
       activeCell={null}
+      renderRowContextMenu={renderRowContextMenu}
       {...props}
     />
   )

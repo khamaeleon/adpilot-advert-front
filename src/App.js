@@ -1,4 +1,4 @@
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import {BrowserRouter, Route, Routes, useParams} from 'react-router-dom'
 import Login from "./pages/login";
 import SignUp from "./pages/signup";
 import {useAtom} from "jotai/index";
@@ -25,7 +25,7 @@ export const DBConfig = {
       store: 'frameTable',
       storeConfig: { keyPath: 'key', autoIncrement: true },
       storeSchema: [
-        { name: 'row', keypath: 'name', options: { unique: false } },
+        { name: 'row', keyPath: 'name', options: { unique: false } },
       ]
     }
   ]
@@ -40,6 +40,7 @@ const AtomsDevtools = ({ children }) => {
 
 function App() {
   const [modal] = useAtom(modalController)
+  let {newState} = useParams()
 
   return (
     <div className="App">
@@ -55,9 +56,8 @@ function App() {
             <Route path={'/signup'} element={<SignUp/>}/>
             <Route path={'/board'} element={<Layout />}>
               <Route path={':id'} element={<Layout />}/>
-              <Route path={':/*'} element={<NotFound />}/>
             </Route>
-            <Route path={"*"} element={<NotFound/>}/>
+            <Route path={'*'} element={<NotFound/>}/>
             <Route path={'500'} element={<ServerError/>}/>
           </Routes>
           <Modal isShow={modal.isShow}></Modal>

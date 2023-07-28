@@ -65,6 +65,7 @@ import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {dateFormat, multiAxiosCall, toDay} from "../../../common/StringUtils";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import queryString from "query-string";
 
 export function reactConfirmClose() {
   const target = document.getElementById('react-confirm-alert');
@@ -777,7 +778,7 @@ function CampaignFourNative(props) {
 }
 
 export function CampaignFour() {
-  const {state} =useLocation()
+  const location =useLocation()
   const navigate = useNavigate()
   const [, setStepCampaign] = useAtom(stepCampaignAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
@@ -786,11 +787,14 @@ export function CampaignFour() {
   const [creativeType, setCreativeType] = useAtom(creativeTypeAtom)
   const [, setClickInducementType] = useAtom(clickInducementTypeAtom)
   const {control, register, handleSubmit, reset, setError, setValue, formState: {errors}} = useFormContext()
-  const [resistBool] =useState(state === null);
+
+  const state = location.search !== '' ? queryString.parse(location.search) : location.state
+  const [resistBool] = useState(state === null);
 
   useEffect(() => {
+    console.log(state)
     if(!resistBool){
-      if(state.creativeType ==='BANNER' ){
+      if(state !== null && state.creativeType ==='BANNER' ){
         selCreativeBannerInfo(state.campaignId).then(response =>{
           setCampaignCreative({
             ...response,
@@ -803,7 +807,7 @@ export function CampaignFour() {
           })
           reset(response)
         })
-      }else if(state.creativeType ==='NATIVE'){
+      }else if(state !== null && state.creativeType ==='NATIVE'){
         selCreativeNativeInfo(state.campaignId).then(response =>{
           setCampaignCreative({
             ...response,
@@ -816,7 +820,7 @@ export function CampaignFour() {
           })
           reset(response)
         })
-      }else if(state.creativeType ==='POP_UNDER') {
+      }else if(state !== null && state.creativeType ==='POP_UNDER') {
         selCreativePopUnderInfo(state.campaignId).then(response => {
           setCampaignCreative({
             ...response,
@@ -863,6 +867,7 @@ export function CampaignFour() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
   const selCreativeGroup = (selectedCreateType) => {
     let time = dateFormat(toDay(), 'YYMMDDHHmm');
     let creativeType = selectedCreateType !== "POP_UNDER" ? (selectedCreateType !== 'BANNER' ? 'NATIVE' : 'FIX') : 'POP_UNDER'
@@ -938,7 +943,7 @@ export function CampaignFour() {
   const params = useParams()
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)}>
-      {campaignCreativeInfo !== null &&
+      {state !== null && campaignCreativeInfo !== null &&
         <>
           {(params.id !== "manageCreativeDetail" && state !== null) && <AdverInfo><span>광고주 정보</span><p></p><span>{state?.adverInfo}</span></AdverInfo>}
           <Board>
