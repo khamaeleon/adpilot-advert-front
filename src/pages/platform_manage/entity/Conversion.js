@@ -9,7 +9,7 @@ export const searchConversionType = [
   {id: "2", value: "ADVER_NAME", label: "광고주명"},
   {id: "3", value: "ADVER_ID", label: "광고주 아이디"},
   {id: "4", value: "ORDER_CODE", label: "주문 번호"},
-  {id: "5", value: "PRODUCT_CODE", label: "전환 코드"}
+  {id: "5", value: "PRODUCT_CODE", label: "상품 코드"}
 ]
 export const conversionListDataAtom = atom(null)
 export const conversionDetailDataAtom = atom(null)
@@ -35,21 +35,14 @@ export const columnConversionData = [
     showColumnMenuTool: false,
   },
   {
-    name: 'conversionCode',
-    header: '전환 코드',
-    textAlign: 'center',
-    showColumnMenuTool: false,
-    width: 100,
-    render: ({value, cellProps}) => {
-      return <Icon icon={'copyCode'} value={value} cellProps={cellProps}/>
-    }
-  },
-  {
     name: 'orderCode',
     header: '주문 번호',
     textAlign: 'center',
-    defaultFlex: 1,
     showColumnMenuTool: false,
+    width: 300,
+    render: ({value, cellProps}) => {
+      return <div style={{display:'flex', alignItems: 'center', justifyContent:'center'}}>{value}<Icon icon={'copyCode'} value={value} cellProps={cellProps}/></div>
+    }
   },
   {
     name: 'totalPurchasePrice',
