@@ -201,7 +201,7 @@ const Icon = styled.div`
   height: 24px;
   background-size: 24px;
   background-repeat: no-repeat;
-  margin: 18px 0;
+  margin: 18px 10px;
 `
 
 const DropIcon = styled.div`
