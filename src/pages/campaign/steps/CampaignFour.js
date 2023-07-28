@@ -164,7 +164,7 @@ const RegistryBannerItem = (props) => {
                     onChange={onDrop}
                     maxFileSize={1048576}
                     maxNumber={5}
-                    onError={(e) => onImageError(e,'image')}
+                    onError={(e) => onImageError(e)}
                 >
                   {({onImageUpload}) => (
                       <CreateImage onClick={onImageUpload}/>
@@ -179,7 +179,7 @@ const RegistryBannerItem = (props) => {
 }
 
 function CampaignFourBanner(props) {
-  const {control, errors, setError, register, onImageError, folding} = props
+  const {control, errors, setError, onImageError, folding} = props
   const [clickInducementType] = useAtom(clickInducementTypeAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
   const [bannerSize] = useAtom(bannerSizeAtom)
@@ -406,7 +406,7 @@ function CampaignFourBanner(props) {
                       onChange={onLogoDrop}
                       maxFileSize={1048576}
                       maxNumber={5}
-                      onError={(e) => onImageError(e,'logo')}
+                      onError={(e) => onImageError(e)}
                     >
                       {({onImageUpload}) => (
                         <CreateImage onClick={onImageUpload}/>
@@ -616,7 +616,7 @@ function CampaignFourNative(props) {
                                     onChange={onNativeDrop}
                                     maxFileSize={1048576}
                                     maxNumber={5}
-                                    onError={(e)=> onImageError(e,'image')}
+                                    onError={(e)=> onImageError(e)}
                                 >
                                   {({onImageUpload}) => (
                                       <CreateImage onClick={onImageUpload}/>
@@ -745,7 +745,7 @@ function CampaignFourNative(props) {
                     onChange={onLogoDrop}
                     maxFileSize={1048576}
                     maxNumber={5}
-                    onError={(e) => onImageError(e,'logo')}
+                    onError={(e) => onImageError(e)}
                   >
                     {({onImageUpload}) => (
                       <CreateImage onClick={onImageUpload}/>
@@ -886,9 +886,9 @@ export function CampaignFour() {
     })
   }
 
-  const onImageError = (errors, type) => {
+  const onImageError = (errors) => {
     if (errors.maxFileSize) {
-      toast.warning('저장 가능한 이미지 사이즈는 '+ (type ==='logo'?'1MB':'10MB')+'입니다.')
+      toast.warning('저장 가능한 이미지 사이즈는 1MB 입니다.')
     } else if (errors.maxNumber) {
       toast.warning('이미지는 5개 까지만 등록 가능합니다.')
     } else if (errors.acceptType) {

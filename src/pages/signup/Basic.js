@@ -355,7 +355,7 @@ export default function Basic(props) {
   }
   const onImageError = (errors) => {
     if (errors.maxFileSize) {
-      setError('businessLicenseWebPath',{ type: 'maxFileSize', message: '저장 가능한 이미지 사이즈는 10MB 입니다.'})
+      setError('businessLicenseWebPath',{ type: 'maxFileSize', message: '저장 가능한 이미지 사이즈는 1MB 입니다.'})
     } else if (errors.acceptType) {
       setError('businessLicenseWebPath',{ type: 'acceptType', message: '"jpg", "gif", "png"의 형식만 등록 가능합니다.'})
     }

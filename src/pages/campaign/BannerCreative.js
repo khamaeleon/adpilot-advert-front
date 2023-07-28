@@ -300,9 +300,9 @@ export function BannerCreative() {
     })
   }
   /** 업로드 에러 **/
-  const onImageError = (errors, type) => {
+  const onImageError = (errors) => {
     if (errors.maxFileSize) {
-      toast.warning('저장 가능한 이미지 사이즈는 '+ (type ==='logo'?'1MB':'10MB')+'입니다.')
+      toast.warning('저장 가능한 이미지 사이즈는 1MB 입니다.')
     } else if (errors.maxNumber) {
       toast.warning('이미지는 5개 까지만 등록 가능합니다.')
     } else if (errors.acceptType) {
@@ -833,7 +833,7 @@ export function BannerCreative() {
                           onChange={onDropMain}
                           maxFileSize={1048576}
                           maxNumber={5}
-                          onError={(e) => onImageError(e,'image')}
+                          onError={(e) => onImageError(e)}
                         >
                           {({onImageUpload}) => (
                             <CreateImage onClick={onImageUpload}/>
@@ -855,7 +855,7 @@ export function BannerCreative() {
                           onChange={onDrop}
                           maxFileSize={1048576}
                           maxNumber={5}
-                          onError={(e) => onImageError(e,'image')}
+                          onError={(e) => onImageError(e)}
                         >
                           {({onImageUpload}) => (
                             <CreateImage onClick={onImageUpload}/>
