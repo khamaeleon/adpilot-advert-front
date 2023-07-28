@@ -1,5 +1,6 @@
 import moment from "moment";
 import axios from "axios";
+import {eventGoalGroup} from "../pages/platform_manage/HistoryCampaignDetail";
 
 export function multiAxiosCall(axiosArr, callbackFunc){
   axios.all(axiosArr).then(axios.spread(function (...args) {
@@ -294,6 +295,20 @@ export const passwordValid = (text) => {
   }else{
     return false;
   }
+}
+
+export const sortingAgentType = (agentTypes) => {
+  const convertArr = [];
+  agentTypes.map((data) => {
+    switch(data){
+      case 'WEB' : convertArr.push({index: 0, label: eventGoalGroup[data]}); break;
+      case 'WEB_APP' : convertArr.push({index: 1, label: eventGoalGroup[data]}); break;
+      case 'MOBILE_WEB' : convertArr.push({index: 2, label: eventGoalGroup[data]}); break;
+      case 'MOBILE_HYBRID_APP' : convertArr.push({index: 3, label: eventGoalGroup[data]}); break;
+      case 'MOBILE_NATIVE_APP' : convertArr.push({index: 4, label: eventGoalGroup[data]}); break;
+    }
+  })
+  return convertArr.sort((a,b)=>{if(a.index>b.index){ return 1} else {return -1}});
 }
 
 /**

@@ -4,9 +4,9 @@ import {Link, useLocation} from "react-router-dom";
 import {findRevisionCampaignDetail} from "../../services/Platform/HistoryAxios";
 import {Loading} from "./entity/History";
 import styled from "styled-components";
-import {decimalFormat} from "../../common/StringUtils";
+import {decimalFormat, sortingAgentType} from "../../common/StringUtils";
 
-const eventGoalGroup = {
+export const eventGoalGroup = {
   WEB: 'PC 웹',
   WEB_APP: 'PC 어플리케이션',
   MOBILE_WEB: 'MOBILE 웹',
@@ -127,7 +127,7 @@ export function HistoryCampaignDetail () {
     }else if  (Object.keys(arg)[0] === 'disAllowInventoryCategories') {
       value = inventoryData[Object.keys(arg)].length !== 0 ? `[${inventoryData[Object.keys(arg)].join('/ ')}]` : '없음'
     } else if(Object.keys(arg)[0] === 'exposureAgentType') {
-      value = inventoryData[Object.keys(arg)].length !== 0 ? `[${inventoryData[Object.keys(arg)].map((item) => eventGoalGroup[item]).join('/ ')}]` : '-'
+      value = inventoryData[Object.keys(arg)].length !== 0 ? `[${sortingAgentType(inventoryData[Object.keys(arg)]).map((item) => item.label).join('/ ')}]` : '-'
     } else {
       value = inventoryData[Object.keys(arg)]
     }

@@ -17,7 +17,11 @@ import {AdverInfo, Row, ValueText} from "../styles/common";
 import {useAtom} from "jotai";
 import {stepCampaignAtom} from "../entity";
 import {useLocation, useNavigate} from "react-router-dom";
-import {decimalFormat, isUnlimited} from "../../../common/StringUtils";
+import {
+  decimalFormat,
+  isUnlimited,
+  sortingAgentType
+} from "../../../common/StringUtils";
 import {
   retrieveAdverConfirm,
   retrieveConfirm, selAdverEnumInfo, updateCampaignDefaultInfo,
@@ -222,9 +226,8 @@ export function CampaignLookOver() {
               <Row>
                 <ColSpan2>
                   <Span4>노출 영역</Span4>
-                  <ValueText>{campaignData.inventoryDetail?.exposureAgentType.length !== agentTypeState.length ?  campaignData.inventoryDetail?.exposureAgentType.map(item => {
-                    return agentTypeState.find(value => value.value === item).label
-                  }).join(',') : '전체'
+                  <ValueText>{campaignData.inventoryDetail?.exposureAgentType.length !== agentTypeState.length ?
+                      sortingAgentType(campaignData.inventoryDetail?.exposureAgentType).map(d => d.label).join(', ') : '전체'
                   }
                   </ValueText>
                 </ColSpan2>
@@ -232,8 +235,11 @@ export function CampaignLookOver() {
                 <ColSpan2>
                   <Span4>송출 제한 지면</Span4>
                   <ValueText>{
-                    campaignData.inventoryDetail?.disAllowInventoryIds.length !== 0 ?
-                        `${campaignData.inventoryDetail?.disAllowInventoryIds.length} 개 지면 송출 제한 설정` : '송출 제한 지면 없음'}</ValueText>
+                    campaignData.inventoryDetail?.disExposureInventoryType !== 'MANUAL' ?
+                        (campaignData.inventoryDetail?.disExposureInventoryType !== 'NONE' ? '카테고리 설정' : '송출 제한 지면 없음')
+                          : `${campaignData.inventoryDetail?.disAllowInventoryIds.length} 개 지면 송출 제한 설정`
+                  }
+                  </ValueText>
                 </ColSpan2>
               </Row>
               <Row>
