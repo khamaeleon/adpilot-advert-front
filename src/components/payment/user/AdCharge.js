@@ -1,5 +1,5 @@
 import {useAtom} from "jotai";
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {ModalBody, ModalFooter, ModalHeader} from "../../modal/Modal";
 import styled from "styled-components";
 import {modalController} from "../../../store";
@@ -24,6 +24,13 @@ import {tokenResultAtom} from "../../../pages/login/entity/Common";
 export function AdChargeButton(props) {
   const {onSubmit, modalInfo, onSave, title, requestAmountValue, setRequestAmountValue, onPaymentDetailsReceived} = props;
   const [, setModal] = useAtom(modalController)
+
+  useEffect(()=>{
+    return ()=> {
+      setModal({isShow: false})
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
   const handleModalComponent = () => {
     setModal({
       isShow: true,
@@ -35,6 +42,7 @@ export function AdChargeButton(props) {
             modalInfo={modalInfo}
             onSubmit={onSubmit}
             title={title}
+            setModal={setModal}
             requestAmountValue={requestAmountValue}
             setRequestAmountValue={setRequestAmountValue}
             onPaymentDetailsReceived={onPaymentDetailsReceived}
@@ -47,14 +55,39 @@ export function AdChargeButton(props) {
 }
 
 function AdChargeModal (props) {
-  const {title} = props
+  const {title, setModal, setRequestAmountValue} = props
   const [tokenUserInfo] = useAtom(tokenResultAtom)
   const {register, handleSubmit, setError, formState:{errors} } = useForm()
   const [chargeAmount, setChargeAmount] = useState(0) // 충전 금액
   const [inputValue, setInputValue] = useState(0) // 인풋 클릭 여부
   const [payMethod, setPayMethod] = useState('CARD'); // 결제 방식
 
+  const [newWindow, setNewWindow] = useState(null);
+
   const calcAmount = () => Math.floor(chargeAmount / 10) + chargeAmount // 부가세 합한 충전 값
+
+
+
+  // useEffect를 사용하여 newWindow 상태 변수의 변화를 주기적으로 체크
+  useEffect(() => {
+    const checkWindowClosed = () => {
+      if (newWindow && newWindow.closed) {
+        // newWindow가 닫혔을 때 수행할 작업을 여기에 추가
+        console.log('newWindow is closed');
+        setModal({ isShow: false });
+        window.location.reload();
+      } else {
+        // newWindow가 아직 열려있는 경우 추가적으로 수행할 작업이 있다면 여기에 추가
+      }
+    };
+
+    const interval = setInterval(checkWindowClosed, 1000);
+
+    // 컴포넌트가 언마운트될 때 interval을 정리(cleanup)하여 메모리 누수 방지
+    return () => {
+      clearInterval(interval);
+    };
+  }, [newWindow]);
 
   const handleClickChargeButton = (plusValue) => {
     if(inputValue === 1){
@@ -75,8 +108,8 @@ function AdChargeModal (props) {
     setInputValue(1)
   }
 
+
   const onSubmit = () => {
-    console.log("1111111111111111")
     if (chargeAmount <= 0) {
       setError('chargeAmount', {type: 'required', message:'충전 금액을 입력해 주세요'})
     } else {
@@ -86,19 +119,21 @@ function AdChargeModal (props) {
         amount: (chargeAmount / 10) + chargeAmount,
         payMethodType: payMethod
       }
-      console.log(requestData)
       paymentRequest ( requestData )
         .then(response => {
           // 성공적인 응답 처리
           console.log("결제 성공!!", response);
-        /*  const newWindow = window.open('', '_blank', 'width=500,height=500');
+          const newWindow = window.open(response.authPageUrl, '_blank', 'width=800,height=800');
           const iframe = document.createElement('iframe');
-          iframe.src = 'https://testapi.co.kr?authenticationId=01023012301';
-          iframe.width = '100%';
-          iframe.height = '100%';
+          setNewWindow(newWindow);
           newWindow.document.body.appendChild(iframe);
-          setRequestAmountValue(requestAmountValue => requestAmountValue + calcAmount());
-          props.onPaymentDetailsReceived();*/
+          props.onPaymentDetailsReceived();
+          // iframe.src = 'https://testapi.co.kr?authenticationId=01023012301';
+          // iframe.src = response.authPageUrl;
+          // iframe.width = '100%';
+          // iframe.height = '100%';
+          // setRequestAmountValue(requestAmountValue => requestAmountValue + calcAmount());
+          // setModal({ isShow: false })
         })
     }
   }

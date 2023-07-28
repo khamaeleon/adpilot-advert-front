@@ -27,6 +27,7 @@ import {CampaignFour} from "../campaign/steps/CampaignFour";
 import {stepCampaignAtom} from "../campaign/entity";
 import {retrieveUserPoint, requestAmountPoint} from "./entity/UserPoint";
 import {searchConditionAtom} from "../dash_board/entity/Common";
+import {retrieveUserPointRequest} from "../../services/payment/user/RetrieveUserPointAxios";
 import Customer from "../customer";
 
 function Layout() {
@@ -89,7 +90,7 @@ function Layout() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id])
   //[d] 광고비 잔액
-  /*useEffect(() => {
+  useEffect(() => {
     if (tokenUserInfo.role === 'NORMAL') {
       const pointData = async () => {
         try {
@@ -103,7 +104,7 @@ function Layout() {
       pointData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenUserInfo]);*/
+  }, [tokenUserInfo]);
 
 
 

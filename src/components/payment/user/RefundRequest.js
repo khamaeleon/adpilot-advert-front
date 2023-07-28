@@ -82,10 +82,11 @@ function RefundRequestModal (props) {
         }
       }
     } else if (refundType === "부분 환불") {
+      console.log("부분 환불")
       if (refundAmount > (userPoint + requestAmount)) {
         setError('refundAmount', { type: 'required', message: '환불 금액이 광고비 잔액보다 큽니다.' });
-      } else if (refundAmount === 0) {
-        setError('refundAmount', { type: 'required', message: '환불 금액을 입력해 주세요.' });
+      // } else if (refundAmount === 0) {
+      //   setError('refundAmount', { type: 'required', message: '환불 금액을 입력해 주세요.' });
       } else {
         const requestData = {
           userId: tokenUserInfo.id,
@@ -103,7 +104,6 @@ function RefundRequestModal (props) {
       }
     }
   };
-
   const onError = () => console.log(errors)
 
     return (
@@ -160,14 +160,16 @@ function RefundRequestModal (props) {
                       disabled={refundType === "전액 환불" ? true : false}
                       value={refundType === "전액 환불" ? '0': decimalFormat(refundAmount)}
                       maxLength="19"
-                      {...register("refundAmount", {
+                      {...register("refundAmount", refundType !== "전액 환불" && {
                         required: "환불 금액을 입력해 주세요.",
                         pattern: {
                           message: "숫자만 입력 가능합니다.",
                           value: "^[0-9,]+원?$",
-                        },
-                        onChange:(e)=>handleChange(e.target.value)
+                        }
                       })}
+                      {...refundType !== "전액 환불" && {
+                        onChange: (e) => handleChange(e.target.value)
+                      }}
                     />
                   </InputLabel>
                   {errors.refundAmount && <ValidationScript style={{bottom: '-40px', left: '142px',}}>{errors.refundAmount.message}</ValidationScript>}

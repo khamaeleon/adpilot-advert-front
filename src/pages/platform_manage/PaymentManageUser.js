@@ -309,7 +309,7 @@ function PaymentManageUser() {
             paddingTop:'20px',
             borderTop:'1px solid #ddd'
           }}>
-            <div style={{width:'300px'}}>
+            <div style={{width:'300px', marginBottom: '20px'}}>
               <DateContainer>
                 <CalendarBox>
                   <CalendarIcon/>

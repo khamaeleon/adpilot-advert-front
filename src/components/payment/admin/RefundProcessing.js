@@ -226,16 +226,18 @@ function RefundRequestModal (props) {
                   disabled={refundType === "전액 환불" ? true : false}
                   value={refundType === "전액 환불" ? '0': decimalFormat(refundAmount)}
                   maxLength="19"
-                  {...register("refundAmount", {
+                  {...register("refundAmount", refundType !== "전액 환불" && {
                     required: "환불 금액을 입력해 주세요.",
                     pattern: {
                       message: "숫자만 입력 가능합니다.",
                       value: "^[0-9,]+원?$",
-                    },
-                    onChange:(e)=>handleChange(e.target.value)
+                    }
                   })}
+                  {...refundType !== "전액 환불" && {
+                    onChange: (e) => handleChange(e.target.value)
+                  }}
                 />
-                {errors.refundAmount && <ValidationScript style={{bottom: '-40px', left: '142px',}}>{errors.refundAmount.message}</ValidationScript>}
+                {errors.refundAmount && <ValidationScript style={{bottom: '-25px', left: '11px',}}>{errors.refundAmount.message}</ValidationScript>}
               </InputLabel>
             </ColSpan2>
           </RelativeDiv>
