@@ -12,6 +12,7 @@ import Select from "react-select";
 // import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import ImageUploading from "react-images-uploading";
 import styled from "styled-components";
+import {businessNumFormat} from "../../common/StringUtils";
 // 사업자 번호 조회 기능 임의 구현. 현재 버튼 미노출로 주석 처리함.
 // function ModalCheckBusinessNumber(props) {
 //   const {onSubmit} =props
@@ -43,7 +44,7 @@ export default function Basic(props) {
   //const setModal = useSetAtom(modalController) 사업자 번호 조회 기능 임의 구현. 현재 버튼 미노출로 주석 처리함.
 
 
-  const { register, handleSubmit, control, watch, formState: {errors}, clearErrors} = useForm({
+  const { register, handleSubmit, control, watch, setError, formState: {errors}, clearErrors} = useForm({
     mode: "onSubmit",
     defaultValues: accountInfo
   })
@@ -258,12 +259,15 @@ export default function Basic(props) {
   /**
    * 사업자 등록번호
    */
-  const handleBusinessNumber = (event) => {
-    const isNum = (/[0-9]+$/g).test(event.target.value)
-    setAccountInfo({
-      ...accountInfo,
-      businessNumber: isNum && event.target.value
-    })
+  const handleBusinessNumber = (value) => {
+    const isNum = (/^[0-9-]+$/).test(value)
+    if(isNum || value ===''){
+      setAccountInfo({
+        ...accountInfo,
+        businessNumber: value
+      })
+      clearErrors('businessNumber')
+    } else setError("businessNumber",{ type: 'required', message: '숫자,-만 입력 가능 합니다.'})
   }
   // 사업자 번호 조회 기능 임의 구현. 현재 버튼 미노출로 주석 처리함.
   // const onResistBusinessNumber = (data) => {
@@ -330,8 +334,7 @@ export default function Basic(props) {
   /**
    * 회원가입
    */
-  const onSubmit = (data) => {
-    console.log(accountInfo)
+  const onSubmit = () => {
     if(isIdCheck){
       signUp({...accountInfo, hostType:accountInfo.hostType.value}).then(response => {
         if (response.responseCode.statusCode === 200) {
@@ -534,6 +537,7 @@ export default function Basic(props) {
                 }}
                 render={({field}) => (
                   <Select options={hostList}
+                          isSearchable={false}
                           placeholder={'호스팅 선택'}
                           {...field}
                           value={accountInfo.hostType !== '' ? accountInfo.hostType : ''}
@@ -566,16 +570,13 @@ export default function Basic(props) {
             <div>
               <input
                 type={'text'}
+                //maxLength={12}
                 placeholder={'사업자 등록 번호'}
                 {...register("businessNumber", {
                   required: "사업자 등록번호를 입력해주세요",
-                  pattern: {
-                    value: /[0-9]/,
-                    message: "숫자만 입력 해 주세요"
-                  },
-                  onChange: (e) => handleBusinessNumber(e)
+                  onChange:(e) => handleBusinessNumber(e.target.value)
                 })}
-                value={accountInfo.businessNumber || ""}
+                value={businessNumFormat(accountInfo.businessNumber)}
                 /*readOnly={true}*/
               />
               {errors.businessNumber && <ValidationScript>{errors.businessNumber?.message}</ValidationScript>}
@@ -682,13 +683,17 @@ export default function Basic(props) {
                 />
                 {errors.location && <ValidationScript>{errors.location?.message}</ValidationScript>}
               </div>
-              <div>
+              <div style={{position: "relative"}}>
                 <input
                   type={'text'}
                   placeholder={'상세 주소를 입력해주세요.'}
                   value={accountInfo.locationDetail || ""}
+                  {...register("locationDetail", {
+                    required: "상세 주소를 입력해주세요",
+                  })}
                   onChange={(e) => handleLocationDetail(e)}
                 />
+                {errors.locationDetail && <ValidationScript style={{left:10, bottom: -19}}>{errors.locationDetail?.message}</ValidationScript>}
               </div>
             </Division>
           </RelativeDiv>
@@ -701,6 +706,10 @@ export default function Basic(props) {
                 value={accountInfo.taxInvoiceEmail || ""}
                 {...register("taxInvoiceEmail", {
                   required: "이메일을 입력해주세요",
+                  pattern: {
+                    value: /[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*/i,
+                    message: "이메일 형식을 확인해주세요"
+                  },
                   onChange: (e) => handleTaxEmail(e)
                 })}
               />

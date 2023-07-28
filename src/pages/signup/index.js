@@ -104,12 +104,13 @@ function SignUp() {
           <Basic nextStep={handleNextStep}/>
         }
         {steps.step1 && steps.step2 && !steps.step3 &&
-          <>
+          <div className={'done'}>
             <Done/>
             <ButtonGroup>
-              <button onClick={() => window.location.replace('/')}>홈으로</button>
+              {/* eslint-disable-next-line no-restricted-globals */}
+              <button onClick={() => location.replace('/')}>로그인하기</button>
             </ButtonGroup>
-          </>
+          </div>
         }
       </SignUpContents>
     </div>

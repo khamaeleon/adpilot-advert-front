@@ -131,6 +131,25 @@ export const birthDateFormat = (birthDate) => {
   }
   return returnVal;
 }
+//사업자 번호 포맷
+export const businessNumFormat = (businessNum) => {
+  businessNum = businessNum.replace(/[^0-9]/g, '');
+  let tmp = '';
+  if (businessNum.length < 4)  {
+    tmp += businessNum
+  } else if(businessNum.length < 7) {
+    tmp += businessNum.substr(0, 3);
+    tmp += '-';
+    tmp += businessNum.substr(3);
+  } else if(businessNum.length < 13){
+    tmp += businessNum.substr(0, 3);
+    tmp += '-';
+    tmp += businessNum.substr(3, 2);
+    tmp += '-';
+    tmp += businessNum.substr(5, 5);
+  }
+  return tmp;
+}
 //핸드폰 번호 포맷
 export const phoneNumFormat = (phoneNum) => {
   let returnVal = phoneNum;

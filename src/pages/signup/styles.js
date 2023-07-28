@@ -16,6 +16,7 @@ export const Logo = styled.div`
   background-size: contain;
 `
 export const StepContainer = styled.div`
+  height: 260px;
   & article {
     padding: 20px 0;
   }
@@ -81,7 +82,13 @@ export const Arrow = styled.div`
 export const SignUpContents = styled.div`
   padding: 50px 0 70px 0;
   background-color: ${bgColor};
-
+  .done {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 480px);
+  }
   & article {
     & h2 {
       margin-bottom: 10px;
@@ -219,8 +226,16 @@ export const SignUpVerify = styled.button`
 `
 export const AfterSignUpGuild = styled.div`
   display: flex;
-  justify-content: space-around;
-  text-align: center;
+  align-items: center;
+  flex-direction: column;
+  & .tit {
+    font-size: 25px;
+    font-weight: 600;
+    margin: 40px 0 15px 0;
+  }
+  & .txt {
+    font-size: 18px;
+  }
 `
 export const Round = styled.div`
   position: relative;
@@ -228,24 +243,10 @@ export const Round = styled.div`
   height: 240px;
   border-radius: 100%;
   border: 1px solid ${borderColor};
+  background-image: url("/assets/images/join/img_number_03.png");
   background-color: #fff;
   background-repeat: no-repeat;
   background-position: center;
-
-  & span {
-    position: absolute;
-    left: 0;
-    top: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 47px;
-    height: 47px;
-    border-radius: 100%;
-    background-color: #535353;
-    color: #fff;
-    font-size: 18px;
-  }
 `
 export const ValidationScript = styled.div`
   position: absolute;

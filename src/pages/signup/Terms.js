@@ -14,7 +14,7 @@ export default function Terms() {
   const resetInfo = useResetAtom(accountInfoAtom)
 
   useEffect(()=> {
-    if (termsInfo?.length !== 0) {
+    if (termsInfo !== null) {
       setAccountInfo({
         ...accountInfo,
         serviceTermsId: termsInfo.find(value => value.termsType === 'SERVICE').id,
@@ -29,7 +29,7 @@ export default function Terms() {
   useEffect(()=>{
     resetInfo();
     selPolicyLatestTerms().then(response => {
-      setTermsInfo(response)
+      if (response !== null) setTermsInfo(response)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])

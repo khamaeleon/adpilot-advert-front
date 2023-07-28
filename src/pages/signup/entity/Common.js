@@ -5,7 +5,7 @@ export const nextStepAtom = atom({
   terms: false,
   validation: false
 })
-export const termsInfoAtom = atom([])
+export const termsInfoAtom = atom(null)
 
 export const accountInfoAtom = atomWithReset({
   username: '',

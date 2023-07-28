@@ -18,6 +18,7 @@ const VALID_USERID = ACTION_URL + '/verify/username'
 const FIND_USERID = ACTION_URL + '/find/my-id'
 const CHANGE_PASSWORD = ACTION_URL + '/find/my-password'
 const UPLOAD_URL = ACTION_URL + '/image' + SLASH;
+
 /**
  * 사용자 리스트 가져오기 api
  * @param userParams
@@ -84,9 +85,10 @@ export async function selPolicyLatestTerms() {
       if (response.responseCode.statusCode === 200) {
         returnVal = response.data
       } else {
-        returnVal = response.responseCode.message
+        returnVal = null
       }
-    }).catch((e) => returnVal = false)
+      // eslint-disable-next-line no-restricted-globals
+    }).catch((e) => {location.replace('/500.js')})
   return returnVal;
 }
 
