@@ -58,7 +58,6 @@ export function CampaignTwo() {
   const state = location.search !== '' ? queryString.parse(location.search) : location.state
 
   useEffect(() => {
-    console.log(location)
     let userId = state !== null ? state.userId : campaignBasicInfo?.userId;
 
     const callbackFunc = (response) => {
@@ -82,7 +81,6 @@ export function CampaignTwo() {
           targetingPriceId: priceEventList[0]?.value
         })
       }
-
     }
     multiAxiosCall([selBudgetTimeList(userId), selBudgetEventList(userId), selPriceEventList(userId)], callbackFunc);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -104,7 +102,7 @@ export function CampaignTwo() {
         reset(response);
       })
     }
-  }, [])
+  }, [location.state])
   /**
    * 시간대별 예산 셀렉트
    * @param selectedBudgetTime
