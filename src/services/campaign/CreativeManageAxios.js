@@ -1,9 +1,8 @@
 import {AdminAxios} from "../../common/Axios";
 
-export async function findCreativeGroupList(keyword) {
+export async function findCreativeGroupList(value) {
   let returnVal = null;
-  const keywordString = `"${keyword}"`
-  await AdminAxios('POST', `/adver/creative/list` ,keywordString)
+  await AdminAxios('POST', `/adver/creative/list` ,{keyword: value})
     .then((response) => {
       const { responseCode } = response
       if(responseCode.statusCode ===200){
