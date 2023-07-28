@@ -459,6 +459,13 @@ function PlatformUserDetail() {
       modalComponent: null
     })
   }
+  const onImageError = (errors) => {
+    if (errors.maxFileSize) {
+      setError('businessLicenseWebPath',{ type: 'maxFileSize', message: '저장 가능한 이미지 사이즈는 1MB 입니다.'})
+    } else if (errors.acceptType) {
+      setError('businessLicenseWebPath',{ type: 'acceptType', message: '"jpg", "gif", "png"의 형식만 등록 가능합니다.'})
+    }
+  }
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit, onError)}>
@@ -732,7 +739,8 @@ function PlatformUserDetail() {
                     <ImageUploading
                       acceptType={["jpg", "gif", "png"]}
                       onChange={handleBusinessLicense}
-                      maxFileSize={10485760}
+                      maxFileSize={1048576}
+                      onError={(e) => onImageError(e)}
                       maxNumber={1}
                     >
                       {({onImageUpload}) => (

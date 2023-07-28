@@ -82,7 +82,7 @@ export function reactConfirmClose() {
 const RegistryBannerItem = (props) => {
   const {size, onImageError, label} = props;
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
-  
+
   const handleDeleteImage = (imagePath) => {
     confirmAlert({
       title: '알림',
@@ -164,7 +164,7 @@ const RegistryBannerItem = (props) => {
                     onChange={onDrop}
                     maxFileSize={10485760}
                     maxNumber={5}
-                    onError={(e) => onImageError(e,'image')}
+                    onError={(e) => onImageError(e)}
                 >
                   {({onImageUpload}) => (
                       <CreateImage onClick={onImageUpload}/>
@@ -179,7 +179,7 @@ const RegistryBannerItem = (props) => {
 }
 
 function CampaignFourBanner(props) {
-  const {control, errors, setError, register, onImageError, folding} = props
+  const {control, errors, setError, onImageError, folding} = props
   const [clickInducementType] = useAtom(clickInducementTypeAtom)
   const [campaignCreativeInfo, setCampaignCreative] = useAtom(campaignCreativeAtom)
   const [bannerSize] = useAtom(bannerSizeAtom)
@@ -406,7 +406,7 @@ function CampaignFourBanner(props) {
                       onChange={onLogoDrop}
                       maxFileSize={1048576}
                       maxNumber={5}
-                      onError={(e) => onImageError(e,'logo')}
+                      onError={(e) => onImageError(e)}
                     >
                       {({onImageUpload}) => (
                         <CreateImage onClick={onImageUpload}/>
@@ -616,7 +616,7 @@ function CampaignFourNative(props) {
                                     onChange={onNativeDrop}
                                     maxFileSize={10485760}
                                     maxNumber={5}
-                                    onError={(e)=> onImageError(e,'image')}
+                                    onError={(e)=> onImageError(e)}
                                 >
                                   {({onImageUpload}) => (
                                       <CreateImage onClick={onImageUpload}/>
@@ -745,7 +745,7 @@ function CampaignFourNative(props) {
                     onChange={onLogoDrop}
                     maxFileSize={1048576}
                     maxNumber={5}
-                    onError={(e) => onImageError(e,'logo')}
+                    onError={(e) => onImageError(e)}
                   >
                     {({onImageUpload}) => (
                       <CreateImage onClick={onImageUpload}/>
@@ -787,14 +787,12 @@ export function CampaignFour() {
   const [creativeType, setCreativeType] = useAtom(creativeTypeAtom)
   const [, setClickInducementType] = useAtom(clickInducementTypeAtom)
   const {control, register, handleSubmit, reset, setError, setValue, formState: {errors}} = useFormContext()
-
   const state = location.search !== '' ? queryString.parse(location.search) : location.state
-  const [resistBool] = useState(state === null);
+  const [resistBool] =useState(state === null);
 
   useEffect(() => {
-    console.log(state)
     if(!resistBool){
-      if(state !== null && state.creativeType ==='BANNER' ){
+      if(state.creativeType ==='BANNER' ){
         selCreativeBannerInfo(state.campaignId).then(response =>{
           setCampaignCreative({
             ...response,
@@ -807,7 +805,7 @@ export function CampaignFour() {
           })
           reset(response)
         })
-      }else if(state !== null && state.creativeType ==='NATIVE'){
+      }else if(state.creativeType ==='NATIVE'){
         selCreativeNativeInfo(state.campaignId).then(response =>{
           setCampaignCreative({
             ...response,
@@ -820,7 +818,7 @@ export function CampaignFour() {
           })
           reset(response)
         })
-      }else if(state !== null && state.creativeType ==='POP_UNDER') {
+      }else if(state.creativeType ==='POP_UNDER') {
         selCreativePopUnderInfo(state.campaignId).then(response => {
           setCampaignCreative({
             ...response,
@@ -867,7 +865,6 @@ export function CampaignFour() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
   const selCreativeGroup = (selectedCreateType) => {
     let time = dateFormat(toDay(), 'YYMMDDHHmm');
     let creativeType = selectedCreateType !== "POP_UNDER" ? (selectedCreateType !== 'BANNER' ? 'NATIVE' : 'FIX') : 'POP_UNDER'
@@ -886,9 +883,9 @@ export function CampaignFour() {
     })
   }
 
-  const onImageError = (errors, type) => {
+  const onImageError = (errors) => {
     if (errors.maxFileSize) {
-      toast.warning('저장 가능한 이미지 사이즈는 '+ (type ==='logo'?'1MB':'10MB')+'입니다.')
+      toast.warning('저장 가능한 이미지 사이즈는 1MB 입니다.')
     } else if (errors.maxNumber) {
       toast.warning('이미지는 5개 까지만 등록 가능합니다.')
     } else if (errors.acceptType) {
@@ -943,7 +940,7 @@ export function CampaignFour() {
   const params = useParams()
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)}>
-      {state !== null && campaignCreativeInfo !== null &&
+      {campaignCreativeInfo !== null &&
         <>
           {(params.id !== "manageCreativeDetail" && state !== null) && <AdverInfo><span>광고주 정보</span><p></p><span>{state?.adverInfo}</span></AdverInfo>}
           <Board>

@@ -179,9 +179,9 @@ export function FrameEditor(props){
     document.addEventListener('mouseup', mouseUpHandler, { once: true });
   }
 
-  const onImageError = (errors, type) => {
+  const onImageError = (errors) => {
     if (errors.maxFileSize) {
-      toast.warning('저장 가능한 이미지 사이즈는 '+ (type ==='logo'?'1MB':'10MB')+'입니다.')
+      toast.warning('저장 가능한 이미지 사이즈는 1MB 입니다.')
     } else if (errors.maxNumber) {
       toast.warning('이미지는 5개 까지만 등록 가능합니다.')
     } else if (errors.acceptType) {
@@ -306,9 +306,9 @@ export function FrameEditor(props){
                 multiple
                 acceptType={["jpg", "gif", "png"]}
                 onChange={onDrop}
-                maxFileSize={10485760}
+                maxFileSize={1048576}
                 maxNumber={5}
-                onError={(e) => onImageError(e,'image')}
+                onError={(e) => onImageError(e)}
                 value={''}>
                 {({onImageUpload}) => (
                   <div onClick={onImageUpload}>이미지 추가</div>
