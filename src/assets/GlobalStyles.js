@@ -1269,7 +1269,7 @@ export const DefaultButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 140px;
+  min-width: 100px;
   height: ${buttonHeightSize}px;
   border: 1px solid ${lightGray};
   background-color: #535353;
