@@ -306,7 +306,7 @@ export function FrameEditor(props){
                 multiple
                 acceptType={["jpg", "gif", "png"]}
                 onChange={onDrop}
-                maxFileSize={10485760}
+                maxFileSize={1048576}
                 maxNumber={5}
                 onError={(e) => onImageError(e,'image')}
                 value={''}>

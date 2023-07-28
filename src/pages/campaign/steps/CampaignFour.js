@@ -162,7 +162,7 @@ const RegistryBannerItem = (props) => {
                     multiple
                     acceptType={["jpg", "gif", "png"]}
                     onChange={onDrop}
-                    maxFileSize={10485760}
+                    maxFileSize={1048576}
                     maxNumber={5}
                     onError={(e) => onImageError(e,'image')}
                 >
@@ -614,7 +614,7 @@ function CampaignFourNative(props) {
                                     multiple
                                     acceptType={["jpg", "gif", "png"]}
                                     onChange={onNativeDrop}
-                                    maxFileSize={10485760}
+                                    maxFileSize={1048576}
                                     maxNumber={5}
                                     onError={(e)=> onImageError(e,'image')}
                                 >

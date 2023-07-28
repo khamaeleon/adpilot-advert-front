@@ -831,7 +831,7 @@ export function BannerCreative() {
                           multiple
                           acceptType={["jpg", "gif", "png"]}
                           onChange={onDropMain}
-                          maxFileSize={10485760}
+                          maxFileSize={1048576}
                           maxNumber={5}
                           onError={(e) => onImageError(e,'image')}
                         >
@@ -853,7 +853,7 @@ export function BannerCreative() {
                           multiple
                           acceptType={["jpg", "gif", "png"]}
                           onChange={onDrop}
-                          maxFileSize={10485760}
+                          maxFileSize={1048576}
                           maxNumber={5}
                           onError={(e) => onImageError(e,'image')}
                         >
