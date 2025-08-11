@@ -1,10 +1,9 @@
 import {AdminAxios} from "../../common/Axios";
 
+const isInit = true;
 
 const ACTION_URL = '/admin';
-
 const UPDATE_ADMIN = ACTION_URL
-
 const INFO_ADMIN = 'admin-user/me'
 
 /**
@@ -25,6 +24,7 @@ export async function updateAdmin(adminInfo) {
   return returnVal;
 };
 
+
 /**
  * 어드민 단건 조회
  * @param adminId
@@ -32,6 +32,17 @@ export async function updateAdmin(adminInfo) {
  */
 export async function selAdminInfo() {
   let returnVal = null;
+  if(isInit){
+    return {
+       id: "ytkim_advert",//          Admin id.
+       email: "ytkim@adpilot.co.kr",//       email.
+       name: "김용태",//        이름.
+       phoneNumber: "01025308548",// 폰번호.
+       role: "ADMIN",//        권한 (Admin).
+       status: "Y",//      상태.
+       createdAt: "20250808",//   생성 시간.
+    }
+  }
   await AdminAxios('GET', INFO_ADMIN)
     .then((response) => {
       if(response.responseCode.statusCode ===200){

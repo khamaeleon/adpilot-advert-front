@@ -205,14 +205,13 @@ function Layout() {
         {/* 픽셀 관리*/}
         {['pixel', 'pixelDetail'].includes(params.id) && <Pixel/>}
         {/* 광고 관리 */}
-        {['campaign', 'manageCreative', 'manageCreativeDetail', 'bannerCreative'].includes(params.id) && <Campaign/>}
+        {['campaign', 'manageCreative', 'manageCreativeDetail', 'bannerCreative', 'audioCreative'].includes(params.id) && <Campaign/>}
         {/* 보고서 */}
         {['reports', 'customReports'].includes(params.id) && <Reports/>}
         {/* 고객 센터 */}
         {['notice', 'noticeDetail', 'inquiry', 'inquiryDetail'].includes(params.id) && <Customer/>}
         {/* 설정 */}
-        {['settings', 'settingsDetail', 'budgetEvent', 'budgetEventDetail', 'budgetTime', 'budgetTimeDetail','budgetTimeList'].includes(params.id) &&
-          <Settings/>}
+        {['settings', 'settingsDetail', 'budgetEvent', 'budgetEventDetail', 'budgetTime', 'budgetTimeDetail','budgetTimeList'].includes(params.id) && <Settings/>}
         {/* 플랫폼 관리 */}
         {['platform', 'platformDetail', 'categoryManage', 'productManage', 'conversionManage', 'historyCampaignManage','historyPriceManage','historyEventManage','historyTimeManage','historyCampaignDetail','historyPriceDetail','historyEventDetail','historyTimeDetail', 'paymentManage','advertisingPayments'].includes(params.id) &&
           <PlatformManage/>}

@@ -287,7 +287,7 @@ function PixelAdd(props){
         </RowSpan>
         <RowSpan validation={true}>
           <ColSpan4>
-            <Span3>카테고리설정</Span3>
+            <Span3>카테고리 설정</Span3>
             <RelativeDiv style={{width: '50%',paddingLeft: 0}}>
               <Controller
                 name="mainCategoryCode"

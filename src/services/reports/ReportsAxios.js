@@ -1,5 +1,6 @@
 import {AdverAxios} from "../../common/Axios";
 
+const isInit = true;
 const ACTION_URL = '/statistics';
 const CREATE_STATISTICS = ACTION_URL+'/custom-report'
 /**
@@ -35,6 +36,17 @@ export async function deleteCustomReportsAxios(deleteInfo) {
  */
 export async function retrieveCustomReportsList(userId){
   let returnVal = null;
+  if(isInit){
+    return [{
+      id: "",
+      userId: "",
+      adverName: "",
+      reportName: "",
+      groupByPeriod: "",
+      groupByScopes: "",
+      columns: ""
+    }]
+  }
   await AdverAxios('GET', `/statistics/${userId}/custom-report`,null)
     .then((response) => {
       returnVal = response.responseCode.statusCode === 200 ? response.data : null

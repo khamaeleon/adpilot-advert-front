@@ -1,4 +1,4 @@
-const mainColor = '#f5811f'
+const mainColor = '#ff0000'
 export const light = {
   // ... 사용자 정의 theme code
   color: {

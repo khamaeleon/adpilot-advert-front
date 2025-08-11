@@ -4,7 +4,7 @@ import {atomWithReset} from "jotai/utils";
 export const campaignCreativeAtom = atomWithReset(
   {
     campaignId: '',
-    creativeType: 'BANNER',
+    creativeType: 'AUDIO',
     materials: [],
     pcLandingUrl: '',
     mobLandingUrl: '',

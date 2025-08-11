@@ -1,5 +1,6 @@
 import {AdminAxios} from "../../common/Axios";
 
+const isInit = true;
 const ACTION_URL = '/adver/statistics';
 const CREATE_STATISTICS = ACTION_URL+'/custom-report'
 /**
@@ -8,6 +9,9 @@ const CREATE_STATISTICS = ACTION_URL+'/custom-report'
  */
 export async function createCustomReportsAdminAxios(params) {
   let returnVal = null;
+  if(isInit){
+    return null;
+  }
   await AdminAxios('POST', CREATE_STATISTICS, params)
     .then((response) => {
       returnVal = response.responseCode.statusCode === 200 ? response.data : null;
@@ -34,6 +38,17 @@ export async function deleteCustomReportsAdminAxios(deleteInfo) {
  */
 export async function retrieveCustomReportsAdminList(userId){
   let returnVal = null;
+  if(isInit){
+    return [{
+      id: "",
+      userId: "",
+      adverName: "",
+      reportName: "",
+      groupByPeriod: "",
+      groupByScopes: "",
+      columns: ""
+    }]
+  }
   await AdminAxios('GET', `/adver/statistics/${userId}/custom-report`,null)
     .then((response) => {
       returnVal = response.responseCode.statusCode === 200 ? response.data : null

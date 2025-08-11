@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie'
@@ -14,6 +14,7 @@ import {selChangePassword, selFindUserId} from "../../services/Platform/ManageUs
 import {ComponentModalFindId, ComponentModalFindPassword} from "../../components/modal";
 import {HorizontalRule} from "../../components/common/Common";
 
+const mainColor = css`${props => props.theme.color.mainColor}`
 export const FindIdResultAtom = atom(findIdResult)
 
 function FindPassword(props) {
@@ -449,7 +450,7 @@ function Login(props) {
       </>
     } else {
       return <>
-        <div>로그인 하시면 아이엠의</div>
+        <div>로그인 하시면 AdPilot의</div>
         <div>다양한 서비스를 이용하실 수 있습니다.</div>
       </>
     }
@@ -469,7 +470,7 @@ function Login(props) {
               {/*  </>*/}
               {/*  :*/}
               {/*  <>*/}
-              {/*    <div>로그인 하시면 아이엠의</div>*/}
+              {/*    <div>로그인 하시면 AdPilot의</div>*/}
               {/*    <div>다양한 서비스를 이용하실 수 있습니다.</div>*/}
               {/*  </>*/}
               {/*}*/}
@@ -559,8 +560,8 @@ const Title = styled.div`
 const LoginLogo = styled.div`
   width: 300px;
   height: 150px;
-  background-image: url('/assets/images/logos/logo_inline_w.png');
-  background-image: -webkit-image-set(url("/assets/images/logos/logo_inline_w.png") 1x, url("/assets/images/logos/logo_inline_w@2x.png") 2x, url("/assets/images/logos/logo_inline_w@3x.png") 3x);
+  background-image: url('/assets/images/logos/adpilot/logo_inline_w.png');
+  background-image: -webkit-image-set(url("/assets/images/logos/adpilot/logo_inline_w.png") 1x, url("/assets/images/logos/adpilot/logo_inline_w@2x.png") 2x, url("/assets/images/logos/adpilot/logo_inline_w@3x.png") 3x);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -569,8 +570,8 @@ const LoginLogo = styled.div`
 const BlockLogo = styled.div`
   width: 120px;
   height: 80px;
-  background-image: url('/assets/images/logos/logo.png');
-  background-image: -webkit-image-set(url("/assets/images/logos/logo.png") 1x, url("/assets/images/logos/logo@2x.png") 2x, url("/assets/images/logos/logo@3x.png") 3x);
+  background-image: url('/assets/images/logos/adpilot/logo.png');
+  background-image: -webkit-image-set(url("/assets/images/logos/adpilot/logo.png") 1x, url("/assets/images/logos/adpilot/logo@2x.png") 2x, url("/assets/images/logos/adpilot/logo@3x.png") 3x);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -604,13 +605,13 @@ const Button = styled.button`
   padding: 16px;
   width: 100%;
   color: #fff;
-  background-color: #f5811f;
+  background-color: ${mainColor};
   font-size: 1.6rem;
   font-weight: 700;
   cursor: pointer;
 
   &:hover {
-    background-color: #db7219;
+    background-color: ${mainColor};
   }
 `
 

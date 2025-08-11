@@ -376,7 +376,7 @@ export function CampaignThree() {
             <ColSpan4>
               <Span4>게재 지면</Span4>
               <RelativeDiv>
-                <label>
+                {/*<label>
                   <input
                     type={'radio'}
                     name={'inventory'}
@@ -402,6 +402,7 @@ export function CampaignThree() {
                   />
                   <span>카테고리 설정</span>
                 </label>
+                */}
                 <ColSpan2>
                   <label>
                     <Controller name={'inventoryMANUAL'}
@@ -447,6 +448,7 @@ export function CampaignThree() {
                 </RelativeDiv>
               </ColSpan4>
             }
+            {/*
             <ColSpan4>
               <Span4>송출 제한 지면</Span4>
               <RelativeDiv>
@@ -504,6 +506,7 @@ export function CampaignThree() {
                 </ColSpan2>
               </RelativeDiv>
             </ColSpan4>
+            */}
             {campaignGroupInfo.disExposureInventoryType === 'CATEGORY' &&
               <ColSpan4>
                 <Span4></Span4>
@@ -569,6 +572,7 @@ export function CampaignThree() {
               </ColSpan4>
             </RowSpan>
           </RowSpan>
+          {/*
           <RowSpan>
             <ColSpan4>
               <Span4>타겟팅 설정</Span4>
@@ -646,7 +650,7 @@ export function CampaignThree() {
                         </div>
                       }
                       {errors.nonExposureDaysOfConversionUser && <small><ValidationScript style={{position: 'unset'}}>{errors.nonExposureDaysOfConversionUser.message}</ValidationScript></small>}
-                      {/*<div>
+                      <div>
                         <SmallInput>
                           <input type={'text'}
                                  readOnly={selectNoViewTypeState.value !== 'DIRECT'}
@@ -655,7 +659,7 @@ export function CampaignThree() {
                           />
                           <Day/>
                         </SmallInput>
-                      </div>*/}
+                      </div>
                     </div>
                   </RowInBox>
                   <RowInBox>
@@ -894,6 +898,7 @@ export function CampaignThree() {
               </ColSpan4>
             }
           </RowSpan>
+*/}
           <RowSpan>
             <ColSpan4>
               <Span4>광고 그룹명</Span4>

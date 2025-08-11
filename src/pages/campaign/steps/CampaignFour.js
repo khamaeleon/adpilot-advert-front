@@ -805,6 +805,19 @@ export function CampaignFour() {
           })
           reset(response)
         })
+      }else if(state.creativeType ==='AUDIO'){
+        selCreativeNativeInfo(state.campaignId).then(response =>{
+          setCampaignCreative({
+            ...response,
+            materials:[]
+          })
+          setCampaignBasicInfo({
+            ...campaignBasicInfo,
+            campaignId: state.campaignId,
+            productType: state.productType
+          })
+          reset(response)
+        })
       }else if(state.creativeType ==='NATIVE'){
         selCreativeNativeInfo(state.campaignId).then(response =>{
           setCampaignCreative({
@@ -855,8 +868,12 @@ export function CampaignFour() {
       selEnumInfo('CREATIVE_TYPE_BANNER').then(response => {
         setCreativeType(response.data)
       })
-    } else {
+    } else if(state !==null && state.productType==='POP_UNDER'){
       selEnumInfo('CREATIVE_TYPE_POP_UNDER').then(response => {
+        setCreativeType(response.data)
+      })
+    } else {
+      selEnumInfo('CREATIVE_TYPE_AUDIO').then(response => {
         setCreativeType(response.data)
       })
     }
@@ -867,7 +884,7 @@ export function CampaignFour() {
   }, [])
   const selCreativeGroup = (selectedCreateType) => {
     let time = dateFormat(toDay(), 'YYMMDDHHmm');
-    let creativeType = selectedCreateType !== "POP_UNDER" ? (selectedCreateType !== 'BANNER' ? 'NATIVE' : 'FIX') : 'POP_UNDER'
+    let creativeType = selectedCreateType !== "AUDIO" ? (selectedCreateType !== 'BANNER' ? 'NATIVE' : 'FIX') : 'AUDIO'
     let name = campaignBasicInfo.productType !== 'BANNER' ? '_PU_' : '_BA_'
     setCampaignCreative({
       ...campaignCreativeInfo,
@@ -965,15 +982,25 @@ export function CampaignFour() {
                   </ColSpan1>
                 }
                 {creativeType !== null && campaignBasicInfo.productType ==='POP_UNDER' &&
-                  <ColSpan1 padding={'0'}>
-                    <CampaignButton type={'button'}
-                                    className={'on'}
-                    >
-                      {creativeType.find(value => value.value === 'POP_UNDER')?.label}
-                    </CampaignButton>
-                  </ColSpan1>
+                    <ColSpan1 padding={'0'}>
+                      <CampaignButton type={'button'}
+                                      className={'on'}
+                      >
+                        {creativeType.find(value => value.value === 'POP_UNDER')?.label}
+                      </CampaignButton>
+                    </ColSpan1>
+                }
+                {creativeType !== null && campaignBasicInfo.productType ==='AUDIO' &&
+                    <ColSpan1 padding={'0'}>
+                      <CampaignButton type={'button'}
+                                      className={'on'}
+                      >
+                        {creativeType.find(value => value.value === 'AUDIO')?.label}
+                      </CampaignButton>
+                    </ColSpan1>
                 }
               </RowSpan>
+              {/*
               <RowSpan column={true}>
                 <Span4>랜딩 url</Span4>
                 <RowSpan box={true} column={false}>
@@ -1050,6 +1077,7 @@ export function CampaignFour() {
                 <Validation>{errors.pcReferralCode && errors.pcReferralCode.message}</Validation>
                 <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
               </ValidationGroup>
+              */}
               {campaignCreativeInfo.creativeType === 'BANNER' && ((resistBool && campaignBasicInfo.productType==='BANNER') || (state !== null && state.productType==='BANNER')) &&
                 <CampaignFourBanner control={control} errors={errors} setError={setError} register={register} onImageError={onImageError}
                                     folding={campaignCreativeInfo.title1 === ''

@@ -1,6 +1,6 @@
 import {AdminAxios, AdverAxios, AxiosFile} from "../../common/Axios";
 import {responseFormatMessage} from "../../common/StringUtils";
-
+const isInit = true;
 
 const ACTION_URL = '/user';
 const USER_MANAGE_URL ='/adver/user'
@@ -170,6 +170,14 @@ export async function selChangePassword(userInfo) {
  */
 export async function selKeywordUser(keyword) {
   let returnVal = null;
+  if(isInit){
+    return [{
+      id:"1",
+      adverName: "용태팡",
+      username: "ytkim_advert",
+      staffName: "김용태",
+    }]
+  }
   await AdminAxios('GET', USER_KEYWORD_SEARCH + '?keyword=' + keyword, null)
   .then((response) => {
     if(response.responseCode.statusCode ===200){

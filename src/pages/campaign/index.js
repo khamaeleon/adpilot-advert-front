@@ -7,6 +7,7 @@ import {ManageCreative} from "./ManageCreative";
 import {CampaignFour} from "./steps/CampaignFour";
 import {FormProvider, useForm} from "react-hook-form";
 import {BannerCreative} from "./BannerCreative";
+import {AudioCreative} from "./AudioCreative";
 
 export default function Campaign(){
   const params = useParams()
@@ -23,6 +24,7 @@ export default function Campaign(){
         {params.id === 'manageCreative' && <ManageCreative />}
         {params.id === 'manageCreativeDetail' && <FormProvider {...methods}><CampaignFour /></FormProvider>}
         {params.id === 'bannerCreative' && <BannerCreative/>}
+        {params.id === 'audioCreative' && <AudioCreative/>}
       </BoardContainer>
     </main>
   )

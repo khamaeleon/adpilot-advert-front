@@ -28,8 +28,11 @@ import {
 import Checkbox from "../common/Checkbox";
 import Select from "react-select";
 import moment from "moment";
+import {light} from "../../assets/theme";
+import {css} from "styled-components";
 
 export function DashBoardCondition(props) {
+  const mainColor = light.color.mainColor;
   const {role, keyword, setKeyword, handleData, productType, targetingType, searchState, setSearchState} = props
   const [dateRange, setDateRange] = useState([new Date(getThisMonth().startDay), new Date(getToDay())]);
   const [startDate, endDate] = dateRange;
@@ -341,17 +344,17 @@ export function DashBoardCondition(props) {
             <ColSpan0>
               <div>
                 <RangePicker>
-                  <div onClick={() => handleRangeDate('thisMonth')} style={pickedDate === 'thisMonth' ? {color:'#f5811f'}:null}>이번달</div>
+                  <div onClick={() => handleRangeDate('thisMonth')} style={pickedDate === 'thisMonth' ? {color:mainColor}:null}>이번달</div>
                   <HorizontalRule style={{margin: "0 10px"}}/>
-                  <div onClick={() => handleRangeDate('lastMonth')} style={pickedDate === 'lastMonth' ? {color:'#f5811f'}:null}>지난달</div>
+                  <div onClick={() => handleRangeDate('lastMonth')} style={pickedDate === 'lastMonth' ? {color:mainColor}:null}>지난달</div>
                   <HorizontalRule style={{margin: "0 10px"}}/>
-                  <div onClick={() => handleRangeDate('today')} style={pickedDate === 'today' ? {color:'#f5811f'}:null}>오늘</div>
+                  <div onClick={() => handleRangeDate('today')} style={pickedDate === 'today' ? {color:mainColor}:null}>오늘</div>
                   <HorizontalRule style={{margin: "0 10px"}}/>
-                  <div onClick={() => handleRangeDate('lastDay')} style={pickedDate === 'lastDay' ? {color:'#f5811f'}:null}>어제</div>
+                  <div onClick={() => handleRangeDate('lastDay')} style={pickedDate === 'lastDay' ? {color:mainColor}:null}>어제</div>
                   <HorizontalRule style={{margin: "0 10px"}}/>
-                  <div onClick={() => handleRangeDate('lastWeekDay')} style={pickedDate === 'lastWeekDay' ? {color:'#f5811f'}:null}>지난7일</div>
+                  <div onClick={() => handleRangeDate('lastWeekDay')} style={pickedDate === 'lastWeekDay' ? {color:mainColor}:null}>지난7일</div>
                   <HorizontalRule style={{margin: "0 10px"}}/>
-                  <div onClick={() => handleRangeDate('lastThirtyDay')} style={pickedDate === 'lastThirtyDay' ? {color:'#f5811f'}:null}>지난30일</div>
+                  <div onClick={() => handleRangeDate('lastThirtyDay')} style={pickedDate === 'lastThirtyDay' ? {color:mainColor}:null}>지난30일</div>
                 </RangePicker>
               </div>
             </ColSpan0>

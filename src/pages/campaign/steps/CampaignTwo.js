@@ -63,7 +63,7 @@ export function CampaignTwo() {
     const callbackFunc = (response) => {
       const budgetTimeList = response[0]?.timeGroups.map(data => {return {value: data.id, label: data.groupName}});
       const budgetEventList = response[1]?.targetingBudgetDtos.map(data => {return {value: data.targetingBudgetId, label: data.groupName}});
-      const priceEventList = response[2]?.targetingPriceDtos.map(data => {return {value: data.targetingPriceId, label: data.groupName}});
+      const priceEventList = response[2]?.targetingPriceDtos.map(data => {return {value: data.targetingPrice, label: data.groupName}});
 
       setBudgetTimeListState(budgetTimeList);
       setBudgetEventListState(budgetEventList);
@@ -78,7 +78,7 @@ export function CampaignTwo() {
           ...campaignBudgetInfo,
           budgetTimeId: budgetTimeList[0]?.value,
           targetingBudgetId: budgetEventList[0]?.value,
-          targetingPriceId: priceEventList[0]?.value
+          targetingPrice: priceEventList[0]?.value
         })
       }
     }
@@ -126,9 +126,9 @@ export function CampaignTwo() {
   const handleChangePriceEvent = (selectedPriceEvent) => {
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
-      targetingPriceId: selectedPriceEvent.value,
+      targetingPrice: selectedPriceEvent,
     })
-    clearErrors('targetingPriceId')
+    clearErrors('targetingPrice')
   }
   /**
    * 이벤트 예산 셀렉트
@@ -231,7 +231,7 @@ export function CampaignTwo() {
   }
   const onError = (e) => {console.log(e)}
   const onSubmit = () => {
-    if (campaignBudgetInfo.maxBiddingPrice < 1) {
+    if (campaignBudgetInfo.maxBiddingPrice !== 0) {
       setError('maxBiddingPrice', {type: 'required', message: '최대 입찰가를 입력해주세요'})
     } else if(campaignBudgetInfo.infiniteBudgetYn !== 'Y' && (campaignBudgetInfo.dailyAvgBudget < 100 || campaignBudgetInfo.dailyAvgBudget.toString().slice(-2) !== '00')) {
       setError('dailyAvgBudget', {type: 'required', message: '일일 평균 예산을 최소 100원 단위로 설정해주세요.'})
@@ -415,6 +415,7 @@ export function CampaignTwo() {
                   <ColSpan1><ValidationScript>{errors.budgetTimeId.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>
+            {/*}
             <ColSpan4>
               <Span4>타겟팅 예산 그룹</Span4>
               <RelativeDiv>
@@ -445,6 +446,7 @@ export function CampaignTwo() {
                   <ColSpan1><ValidationScript>{errors.targetingBudgetId.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>
+            */}
           </RowSpan>
           <RowSpan>
             <Span4>과금 설정</Span4>
@@ -463,6 +465,7 @@ export function CampaignTwo() {
                 </ColSpan1>
               </RelativeDiv>
             </ColSpan4>
+            {/*
             <ColSpan4>
               <Span4>최대 입찰가</Span4>
               <RelativeDiv>
@@ -496,34 +499,38 @@ export function CampaignTwo() {
                   <ColSpan1><ValidationScript>{errors.maxBiddingPrice.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>
+             */}
             <ColSpan4>
-              <Span4>타겟팅 단가 그룹</Span4>
+              <Span4>단가 설정</Span4>
               <RelativeDiv>
                 <ColSpan1>
                   {priceEventListState !== null &&
                     <Controller
-                      name="targetingPriceId"
+                      name="targetingPrice"
                       control={control}
                       rules={{
                         required: {
-                          value: campaignBudgetInfo?.targetingPriceId === '',
+                          value: campaignBudgetInfo?.targetingPrice === '',
                           message: "타겟팅 단가를 선택해주세요"
                         }
                       }}
                       render={({field}) => (
-                        <Select options={priceEventListState}
-                                placeholder={'타겟팅 단가 선택'}
-                                {...field}
-                                value={campaignBudgetInfo?.targetingPriceId !== undefined ? priceEventListState.find(value => value.value === campaignBudgetInfo?.targetingPriceId) : priceEventListState[0]}
-                                onChange={handleChangePriceEvent}
-                                styles={selectStyle}
-                        />
+                        <Input type={'text'}
+                              step={100}
+                              maxLength={13}
+                              {...field}
+                              placeholder={'단가를 설정해주세요'}
+                              style={{color:'#f5811f'}}
+                      value={campaignBudgetInfo?.targetingPrice !== undefined ? priceEventListState.find(value => value.value === campaignBudgetInfo?.targetingPrice) : 0}
+                      onChange={(e)=>handleChangePriceEvent(e.target.value)}
+                            />
                       )}
                     />
                   }
                 </ColSpan1>
-                {errors.targetingPriceId &&
-                  <ColSpan1><ValidationScript>{errors.targetingPriceId.message}</ValidationScript></ColSpan1>}
+                {console.log(errors)}
+                {errors.targetingPrice &&
+                  <ColSpan1><ValidationScript>{errors.targetingPrice.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>

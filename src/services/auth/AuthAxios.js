@@ -1,5 +1,6 @@
 import {NonUserAxios} from "../../common/Axios";
 
+const isInit = true
 const ACTION_URL = '/sign';
 
 const LOGIN_USER = ACTION_URL + '/in/adver';
@@ -17,6 +18,17 @@ const USER_REFRESH_URL = '/adver/refresh-token/1';
  */
 export async function login(loginInfo) {
   let returnVal = null;
+  if(isInit){
+    return {
+      email: loginInfo.email,
+      role: 'ADMIN',
+      name: '김용태',
+      token: {
+        accessToken: '3298dsfh8ds9hfsdfs',
+        refreshToken: '3298dsfh8ds9hfsdfs'
+      }
+    };
+  }
   await NonUserAxios('POST', LOGIN_USER, loginInfo)
     .then((response) => {
       const {data,responseCode} =response.data
@@ -42,6 +54,9 @@ export async function login(loginInfo) {
  */
 export async function logOutUser(userInfo) {
   let returnVal = null;
+  if(isInit){
+    return true;
+  }
   await NonUserAxios('POST', LOGOUT_USER, userInfo)
     .then((response) => {
       returnVal = response.data
@@ -61,6 +76,17 @@ export async function logOutUser(userInfo) {
  */
 export async function loginAdmin(loginInfo) {
   let returnVal = null;
+  if(isInit){
+    return {
+      email: loginInfo.email,
+      role: 'ADMIN',
+      name: '김용태',
+      token: {
+        accessToken: '3298dsfh8ds9hfsdfs',
+        refreshToken: '3298dsfh8ds9hfsdfs'
+      }
+    };
+  }
   await NonUserAxios('POST', LOGIN_ADMIN, loginInfo)
     .then((response) => {
       const {data,responseCode} =response.data
@@ -83,6 +109,9 @@ export async function loginAdmin(loginInfo) {
  */
 export async function logOutAdmin(userInfo) {
   let returnVal = null;
+  if(isInit){
+    return true;
+  }
   await NonUserAxios('POST', LOGOUT_ADMIN, userInfo)
     .then((response) => {
       returnVal = response.data
@@ -104,6 +133,9 @@ export async function refreshAdmin() {
   const param = {
     accessToken: '',
     refreshToken: localStorage.getItem("refreshToken"),
+  }
+  if(isInit){
+    return false;
   }
   let returnVal = null;
   await NonUserAxios('POST', ADMIN_REFRESH_URL, param).then((response) => {

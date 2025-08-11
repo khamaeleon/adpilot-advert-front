@@ -3,10 +3,10 @@ import {atomWithReset} from "jotai/utils";
 
 export const campaignBasicInfoAtom = atomWithReset({
   productType:'BANNER',
-  goalType:'CAMPAIGN_CONVERSION_GOAL',
-  pixelId:'',
-  goal:'',
-  goalValue:0,
+  goalType:'CAMPAIGN_VIEW_GOAL',
+  pixelId:'1',
+  goal:'VIEW_COUNT',
+  goalValue: '',
   campaignId:'',
   step:''
 })

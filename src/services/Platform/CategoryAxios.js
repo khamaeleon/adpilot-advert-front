@@ -1,5 +1,7 @@
 import {AdminAxios, AdverAxios} from "../../common/Axios";
 
+const isInit = true;
+
 const ACTION_URL = '/adver/category';
 const CATEGORY_ALL = ACTION_URL+'/level/1/all'
 const CATEGORY_BY_KEYWORD = ACTION_URL+'/level/1'
@@ -14,6 +16,14 @@ const USER_CATEGORY_BY_PARENT = USER_URL + '/by-parent/{parentCode}'
  */
 export async function retrieveTopLevelAllCategory() {
   let returnVal = null;
+  if(isInit){
+    return [{
+      name   :"예술 및 엔터테인먼트",//    the name of the category
+      code      :"CATE1",// the unique code of the category
+      level     :"1",// the hierarchical level of the category
+      parentCode:"",// the parent code of this category
+    }]
+  }
   await AdminAxios('GET', CATEGORY_ALL, null)
     .then((response) => {
       const {responseCode, data} = response;
@@ -31,6 +41,14 @@ export async function retrieveTopLevelAllCategory() {
  */
 export async function retrieveTopLevelCategory(searchKeyword) {
   let returnVal = null;
+  if(isInit){
+    return [{
+        name   :"예술 및 엔터테인먼트",//    the name of the category
+       code      :"CATE1",// the unique code of the category
+       level     :"1",// the hierarchical level of the category
+       parentCode:"",// the parent code of this category
+    }]
+  }
   let params = {keyword: searchKeyword != null ? searchKeyword : ''}
   await AdminAxios('POST', CATEGORY_BY_KEYWORD, params)
     .then((response) => {
@@ -46,7 +64,7 @@ export async function retrieveTopLevelCategory(searchKeyword) {
 
 /**
  * 하위카테고리 조회
- * @param params
+  params
  * @returns {Promise<null>}
  */
 export async function retrieveCategoryByParentCode(parentCode, searchKeyword) {
@@ -66,7 +84,7 @@ export async function retrieveCategoryByParentCode(parentCode, searchKeyword) {
 
 /**
  * 카테고리 생성
- * @param params
+  params
  * @returns {Promise<null>}
  */
 export async function createNewCategory (params) {
@@ -88,6 +106,25 @@ export async function createNewCategory (params) {
  */
 export async function retrieveTopLevelCategoryKeyValue(params) {
   let returnVal;
+  if(isInit) {
+    return [
+      {
+        pixelId: "",// 픽셀 id
+        interlockYn: "",//연동 상태.
+        pixelName: "",//픽셀 명.
+        username: "",//광고주 로그인 id.
+        adverName: "",// 광고주 명.
+        linkUrl: "",//연동 url.
+        managerName: "",//담당자 명.
+        mainCategoryCode: "",//대 카테고리 코드.
+        subCategoryCode: "",// 하위 카테고리 코드.
+        hostType: "",// 호스팅 타입.
+        status: "",//수집 상태
+        lastModifiedAt: "",//최근 수정 일자.
+        events: ""// 픽셀 events.
+      }
+    ]
+  }
   await retrieveTopLevelCategory(params).then(response => {
     if (response?.length > 0) {
       returnVal = response?.map((item, idx) => {

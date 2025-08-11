@@ -4,6 +4,8 @@ import {refreshAdmin} from "../services/auth/AuthAxios";
 import {tokenResultAtom} from "../pages/login/entity/Common";
 import store from "../store";
 
+const isInit = true;
+
 export const adminAxios = axios.create({
   baseURL: ADMIN_SERVER,
   headers: {

@@ -20,7 +20,7 @@ export const menuList = [
   {
     name: "campaign",
     header: "광고관리",
-    include: ["campaign", "manageCreative", 'manageCreativeDetail', 'bannerCreative'],
+    include: ["campaign", "manageCreative", 'manageCreativeDetail', 'bannerCreative','audioCreative'],
     child:[
       {
         name: "campaign",
@@ -31,9 +31,13 @@ export const menuList = [
         header: "크리에이티브 관리",
         detail: "manageCreativeDetail"
       },
+      //{
+      //  name: 'bannerCreative',
+      //  header: '배너 크리에이터'
+      //},
       {
-        name: 'bannerCreative',
-        header: '배너 크리에이터'
+        name: 'audioCreative',
+        header: '오디오 크리에이터'
       }
     ]
   },
@@ -52,23 +56,23 @@ export const menuList = [
       }
     ]
   },
-  {
-    name: "notice",
-    header: "고객센터",
-    include: ['notice','noticeDetail','inquiry', 'inquiryDetail'],
-    child: [
-      {
-        name: "notice",
-        header: "공지사항",
-        detail: "noticeDetail"
-      },
-      {
-        name: "inquiry",
-        header: "1:1문의",
-        detail: 'inquiryDetail'
-      }
-    ]
-  },
+  // {
+  //   name: "notice",
+  //   header: "고객센터",
+  //   include: ['notice','noticeDetail','inquiry', 'inquiryDetail'],
+  //   child: [
+  //     {
+  //       name: "notice",
+  //       header: "공지사항",
+  //       detail: "noticeDetail"
+  //     },
+  //     {
+  //       name: "inquiry",
+  //       header: "1:1문의",
+  //       detail: 'inquiryDetail'
+  //     }
+  //   ]
+  // },
   {
     name: "settings",
     header: "설정",
@@ -76,12 +80,12 @@ export const menuList = [
     child:[
       {
         name: "settings",
-        header: "타겟팅 단가 관리",
+        header: "단가 관리",
         detail: "settingsDetail"
       },
       {
         name: "budgetEvent",
-        header: "타겟팅 예산 관리",
+        header: "예산 관리",
         detail: "budgetEventDetail"
       },
       {
@@ -106,42 +110,42 @@ export const menuList = [
         name: "categoryManage",
         header: "광고주 카테고리 관리"
       },
-      {
-        name: "productManage",
-        header: "상품 수집 관리"
-      },
-      {
-        name: "conversionManage",
-        header: "전환 관리"
-      },
-      {
-        name: "historyCampaignManage",
-        header: "캠페인 이력 관리",
-        detail: 'historyCampaignDetail'
-      },
-      {
-        name: "historyPriceManage",
-        header: "이벤트 단가 이력 관리",
-        detail: 'historyPriceDetail'
-      },
-      {
-        name: "historyEventManage",
-        header: "이벤트 예산 이력 관리",
-        detail: 'historyEventDetail'
-      },
-      {
-        name: "historyTimeManage",
-        header: "시간별 예산 이력 관리",
-        detail: 'historyTimeDetail'
-      },
-      {
-        name: "paymentManage",
-        header: "결제 관리"
-      },
-      {
-        name: "advertisingPayments", //Advertising cost payment management
-        header: "광고비 지급 관리"
-      }
+     // {
+     //   name: "productManage",
+     //   header: "상품 수집 관리"
+     // },
+    //  {
+    //    name: "conversionManage",
+    //    header: "전환 관리"
+    //  },
+     // {
+     //   name: "historyCampaignManage",
+     //   header: "캠페인 이력 관리",
+     //   detail: 'historyCampaignDetail'
+     // },
+     // {
+     //   name: "historyPriceManage",
+     //   header: "이벤트 단가 이력 관리",
+     //   detail: 'historyPriceDetail'
+     // },
+     // {
+     //   name: "historyEventManage",
+     //   header: "이벤트 예산 이력 관리",
+     //   detail: 'historyEventDetail'
+     // },
+     // {
+     //   name: "historyTimeManage",
+     //   header: "시간별 예산 이력 관리",
+     //   detail: 'historyTimeDetail'
+     // },
+    //  {
+    //    name: "paymentManage",
+    //    header: "결제 관리"
+    //  },
+    //  {
+    //    name: "advertisingPayments", //Advertising cost payment management
+    //    header: "광고비 지급 관리"
+    //  }
     ]
   },
 ]

@@ -1,11 +1,17 @@
 import {AdminAxios} from "../../common/Axios";
 
+const isInit = true
 const ACTION_URL = '/adver/campaign'
 const BUDGET_UPDATE = '/config/budget'
 const BUDGET_INFO = 'budget'
 
 export async function updateCampaignBudget(campaignInfo) {
   let returnVal = null;
+
+  if(isInit) {
+    return true;
+  }
+
   await AdminAxios('PUT', ACTION_URL + '/' + campaignInfo.campaignId + BUDGET_UPDATE, campaignInfo)
     .then((response) => {
       const {responseCode} = response

@@ -259,6 +259,7 @@ export function CampaignLookOver() {
                   <ValueText>{campaignData.inventoryDetail?.startDate} ~ {isUnlimited(campaignData.inventoryDetail?.endDate)}</ValueText>
                 </ColSpan2>
               </Row>
+              {/*
               <Row>
                 <ColSpan2>
                   <Span4>고객 정보 기반 설정</Span4>
@@ -270,6 +271,7 @@ export function CampaignLookOver() {
                   <ValueText>{campaignData.inventoryDetail?.audienceTargetConfigType !== 'AUTO' ? audienceTargetConfig.join(',\u0020') : '자동 최적화'}</ValueText>
                 </ColSpan2>
               </Row>
+              */}
             </RowSpan>
             <RowSpan>
               <Span4>크리에이티브 설정</Span4>
@@ -286,6 +288,7 @@ export function CampaignLookOver() {
                   <ValueText>{campaignData?.creativeName}</ValueText>
                 </ColSpan2>
               </Row>
+              {/*
               <Row>
                 <ColSpan2>
                   <Span4>PC 랜딩 url</Span4>
@@ -308,6 +311,7 @@ export function CampaignLookOver() {
                   <ValueText>{campaignData.mobReferralCode}</ValueText>
                 </ColSpan2>
               </Row>
+              */}
             </RowSpan>
           </BoardSearchResult>
         }

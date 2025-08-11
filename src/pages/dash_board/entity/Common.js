@@ -14,8 +14,9 @@ export const searchConditionAtom = atomWithReset({
 /* 광고 상품 타입 */
 export const productType = [
   {id: "1", value: null, label: "전체"},
-  {id: "2", value: "BANNER", label: "배너"},
-  {id: "3", value: "POP_UNDER", label: "팝언더"}
+  //{id: "2", value: "BANNER", label: "배너"},
+  //{id: "3", value: "POP_UNDER", label: "팝언더"},
+  {id: "2", value: "AUDIO", label: "오디오"}
 ]
 
 /* 크리에이티브 타입 */
@@ -23,7 +24,8 @@ export const creativeType = [
   {id: "0", value: null, label: "전체"},
   {id: "1", value: "BANNER", label: "배너"},
   {id: "2", value: "NATIVE", label: "네이티브"},
-  {id: "3", value: "POP_UNDER", label: "팝언더"}
+  {id: "3", value: "POP_UNDER", label: "팝언더"},
+  {id: "4", value: "AUDIO", label: "오디오"}
 ]
 
 export const deviceType = [

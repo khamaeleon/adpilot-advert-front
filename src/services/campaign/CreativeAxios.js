@@ -1,5 +1,6 @@
 import {AdminAxios, AxiosImage} from "../../common/Axios";
 
+const isInit = true;
 
 const ACTION_URL ='/adver/campaign'
 const PUBLISH ='/publish'
@@ -12,6 +13,59 @@ const CREATE_POP_UNDER ='/config/creative/pop-under'
 
 export async function selCreativeBannerInfo(campaignId) {
   let returnVal = null;
+  if(isInit){
+    return {
+      "name": "IMG200_200_TEST",
+      "pcLandingUrl": "https://naver.com",
+      "pcReferralCode": "ref=mcorpor",
+      "mobLandingUrl": "https://m.naver.com",
+      "mobReferralCode": "ref=mcorpor",
+      "creativeType": "BANNER",
+      "materials": [
+        {
+          "BannerSize": "IMG200_200",
+          "images": [
+            {
+              "imagePath": "https://s3.aws.com/img1",
+              "thumbnailPath": "https://s3.aws.com/thumnail/img1"
+            },
+            {
+              "imagePath": "https://s3.aws.com/img2",
+              "thumbnailPath": "https://s3.aws. com/thumnail/img2"
+            }
+          ]},{
+          "bannerSize": "IMG300_300",
+          "images": [
+            {
+              "imagePath": "https://s3.aws.com/img3",
+              "thumbnailPath": "https://s3.aws.com/thumnail/img3"
+            },
+            {
+              "imagePath": "https://s3.aws.com/img4",
+              "thumbnailPath": "https://s3.aws.com/thumnail/img4"
+            }
+          ]
+        }
+      ],
+      "title1": "타이틀1",
+      "title2": "타이틀2",
+      "title3": "타이틀3",
+      "titleLong": "타이틀 긴거",
+      "clickInducementType": "REGISTER",
+      "logoPaths": [
+        {
+          "imagePath": "https://s3.aws.com/logo/img1",
+          "thumbnailPath": null
+        },
+        {
+          "imagePath": "https://s3.aws.com/logo/img2",
+          "thumbnailPath": null
+        }
+      ],
+      "serviceName": "나이키",
+      "description": "나이키 프로모션"
+    }
+  }
   await AdminAxios('GET', ACTION_URL+'/'+ campaignId +CREATE_BANNER)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
@@ -25,6 +79,59 @@ export async function selCreativeBannerInfo(campaignId) {
 
 export async function selCreativeNativeInfo(campaignId) {
   let returnVal = null;
+  if(isInit){
+    return {
+      "name": "IMG200_200_TEST",
+      "pcLandingUrl": "https://naver.com",
+      "pcReferralCode": "ref=mcorpor",
+      "mobLandingUrl": "https://m.naver.com",
+      "mobReferralCode": "ref=mcorpor",
+      "creativeType": "BANNER",
+      "materials": [
+        {
+          "BannerSize": "IMG200_200",
+          "images": [
+            {
+              "imagePath": "https://s3.aws.com/img1",
+              "thumbnailPath": "https://s3.aws.com/thumnail/img1"
+            },
+            {
+              "imagePath": "https://s3.aws.com/img2",
+              "thumbnailPath": "https://s3.aws. com/thumnail/img2"
+            }
+          ]},{
+          "bannerSize": "IMG300_300",
+          "images": [
+            {
+              "imagePath": "https://s3.aws.com/img3",
+              "thumbnailPath": "https://s3.aws.com/thumnail/img3"
+            },
+            {
+              "imagePath": "https://s3.aws.com/img4",
+              "thumbnailPath": "https://s3.aws.com/thumnail/img4"
+            }
+          ]
+        }
+      ],
+      "title1": "타이틀1",
+      "title2": "타이틀2",
+      "title3": "타이틀3",
+      "titleLong": "타이틀 긴거",
+      "clickInducementType": "REGISTER",
+      "logoPaths": [
+        {
+          "imagePath": "https://s3.aws.com/logo/img1",
+          "thumbnailPath": null
+        },
+        {
+          "imagePath": "https://s3.aws.com/logo/img2",
+          "thumbnailPath": null
+        }
+      ],
+      "serviceName": "나이키",
+      "description": "나이키 프로모션"
+    }
+  }
   await AdminAxios('GET', ACTION_URL+'/'+ campaignId +CREATE_NATIVE)
     .then((response) => {
       if(response.responseCode.statusCode ===200){
@@ -95,6 +202,9 @@ export async function uploadLogoImages(data) {
 
 export async function updateCampaignBanner(creativeInfo) {
   let returnVal = null;
+  if(isInit){
+    return true;
+  }
   await AdminAxios('PUT', ACTION_URL+'/'+ creativeInfo.campaignId +CREATE_BANNER ,creativeInfo)
     .then((response) => {
       const {responseCode} =response
