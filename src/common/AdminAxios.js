@@ -4,7 +4,6 @@ import {refreshAdmin} from "../services/auth/AuthAxios";
 import {tokenResultAtom} from "../pages/login/entity/Common";
 import store from "../store";
 
-const isInit = true;
 
 export const adminAxios = axios.create({
   baseURL: ADMIN_SERVER,
@@ -64,8 +63,8 @@ adminAxios.interceptors.response.use(
             // eslint-disable-next-line no-restricted-globals
             location.replace('/')
           }
-          const {data,responseCode} =response
-          if (responseCode.statusCode === 200) {
+          const {data, status} = response
+          if (status === 200) {
             store.set(tokenResultAtom, {
               id: data.email,
               role: data.role,

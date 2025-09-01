@@ -59,7 +59,6 @@ function PaymentManage() {
       .then(response => {
         // 성공적인 응답 처리
         if (response !== null) {
-          console.log(response)
           const { totalCount, rows: data } = response;
           setTotalInfo(totalCount);
           return Promise.resolve({ data, count: parseInt(totalCount) });

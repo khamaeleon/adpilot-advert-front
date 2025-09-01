@@ -1,6 +1,6 @@
 import {AdminAxios} from "../../common/Axios";
 
-const isInit = true;
+const isInit = false;
 export async function findCreativeGroupList(value) {
   let returnVal = null;
   if(isInit){
@@ -19,9 +19,11 @@ export async function findCreativeGroupList(value) {
   }
   await AdminAxios('POST', `/adver/creative/list` ,{keyword: value})
     .then((response) => {
-      const { responseCode } = response
-      if(responseCode.statusCode ===200){
-        returnVal = responseCode.statusCode === 200 ? response.data : null
+      const { data, statusCode } = response;
+      if(statusCode ===200 ){
+        returnVal = data;
+      } else {
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -45,9 +47,11 @@ export async function retrieveCreativeByUserId(userId) {
   }
   await AdminAxios('GET', `/adver/creative/${userId}` ,null)
     .then((response) => {
-      const {responseCode} =response
-      if(responseCode.statusCode ===200){
-        returnVal = responseCode.statusCode === 200 ? response.data : null
+      const { data, statusCode } = response;
+      if(statusCode ===200 ){
+        returnVal = data;
+      } else {
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;

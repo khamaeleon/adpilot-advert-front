@@ -1,6 +1,6 @@
 import {AdminAxios} from "../../common/Axios";
 
-const isInit = true;
+const isInit = false;
 
 const ACTION_URL = '/adver/setting'
 const PRICE_EVENT = '/price'
@@ -29,11 +29,11 @@ export async function selAdverPriceEventList(keyword) {
   }
   await AdminAxios('POST', ACTION_URL + PRICE_LIST ,keyword)
     .then((response) => {
-      const {data, responseCode} =response
-      if(responseCode.statusCode ===200){
-        returnVal = data
+      const {data, statusCode} = response;
+      if(statusCode === 200){
+        returnVal = data;
       }else{
-        returnVal = null
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -70,11 +70,11 @@ export async function selPriceEventList(userId) {
   }
   await AdminAxios('GET', ACTION_URL + PRICE_EVENT +'/'+userId)
     .then((response) => {
-      const {data, responseCode} =response
-      if(responseCode.statusCode ===200){
-        returnVal = data
+      const {data, statusCode} = response;
+      if(statusCode === 200){
+        returnVal = data;
       }else{
-        returnVal = null
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -89,11 +89,11 @@ export async function resistPriceEvent(priceEventInfo) {
   let returnVal = null;
   await AdminAxios('POST', ACTION_URL + PRICE_EVENT ,priceEventInfo)
     .then((response) => {
-      const {responseCode} =response
-      if(responseCode.statusCode ===201){
-        returnVal = true
+      const {statusCode} =response;
+      if(statusCode === 200){
+        returnVal = true;
       }else{
-        returnVal = false
+        returnVal = false;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -108,11 +108,11 @@ export async function updatePriceEvent(priceEventInfo) {
   let returnVal = null;
   await AdminAxios('PUT', ACTION_URL + PRICE_EVENT ,priceEventInfo)
     .then((response) => {
-      const {responseCode} =response
-      if(responseCode.statusCode ===200){
-        returnVal = true
+      const {statusCode} = response;
+      if(statusCode === 200){
+        returnVal = true;
       }else{
-        returnVal = false
+        returnVal = false;
       }
     }).catch((e) => returnVal = false)
   return returnVal;

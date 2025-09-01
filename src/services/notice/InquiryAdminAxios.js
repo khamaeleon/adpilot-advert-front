@@ -10,11 +10,11 @@ export async function selInquiryListAdmin(searchCondition) {
 
   await AdminAxios('POST', INQUIRY_LIST, searchCondition)
   .then((response) => {
-    const {data, responseCode} = response
-    if(responseCode.statusCode ===200){
-      returnVal = data
+    const { data, statusCode, message } = response;
+    if(statusCode === 200) {
+      returnVal = data;
     }else{
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = null)
 
@@ -26,11 +26,11 @@ export async function selInquiryByIdAdmin(inquiryId) {
 
   await AdminAxios('GET', INQUIRY_DETAIL.replace('{inquiryId}', inquiryId), null)
   .then((response) => {
-    const {data, responseCode} = response
-    if(responseCode.statusCode ===200){
-      returnVal = data
+    const { data, statusCode, message } = response;
+    if(statusCode === 200) {
+      returnVal = data;
     }else{
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = null)
 
@@ -44,11 +44,11 @@ export async function updateInquiryReply(inquiryId, reply) {
 
   await AdminAxios('PUT', INQUIRY_UPDATE.replace('{inquiryId}', inquiryId), params)
   .then((response) => {
-    const {data, responseCode} = response
-    if(responseCode.statusCode ===200){
-      returnVal = data
+    const { data, statusCode, message } = response;
+    if(statusCode === 200) {
+      returnVal = data;
     }else{
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = null)
 

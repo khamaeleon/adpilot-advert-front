@@ -211,8 +211,10 @@ export default function CreateReports() {
           "groupByScopes" : defaultType === 'scopes' ? scopes : ['NONE'],
           "columns" :  dataItems
         }
+        console.log("params: "+params)
         if(creativeInfo.id !== null && creativeInfo.id !== undefined) {
           createCustomReportsAxios(params).then(() => {
+            console.log(tokenResult)
             retrieveCustomReportsList(tokenResult.id).then(response => {
               const data  = response[response.length-1]
               setReportsInfo({id: data.id, groupBy: data.groupByPeriod})
@@ -502,8 +504,8 @@ const DefaultItemButton = styled.div`
   width: 137px;
   height: 36px;
   background-color: #ffffff;
-  border: 1px solid ${(props) => props.active ? '#f5811f' : '#e5e5e5'};
-  color: ${(props) => props.active ? '#f5811f' : null};
+  border: 1px solid ${(props) => props.active ? '#ff0000' : '#e5e5e5'};
+  color: ${(props) => props.active ? '#ff0000' : null};
   cursor: pointer;
   & p {
     padding: 0 20px

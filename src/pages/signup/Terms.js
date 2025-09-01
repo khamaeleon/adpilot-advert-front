@@ -104,7 +104,7 @@ export default function Terms() {
       <VerticalRule/>
       {/*약관 1*/}
       <div>
-        <h3>서비스 이용약관 동의 (필수)</h3>
+        <h3>서비스 이용 약관 동의 (필수)</h3>
         <TermsBox>
           {termsInfo !== null &&
             termsInfo.map((value, index) => {
@@ -154,7 +154,7 @@ export default function Terms() {
       </AlignRight>
       {/*약관3*/}
       <div>
-        <h3>운영정책 동의 (필수)</h3>
+        <h3>운영 정책 동의 (필수)</h3>
         <TermsBox>
           {termsInfo !== null &&
             termsInfo.map((value, index) => {

@@ -1,6 +1,6 @@
 import {AdminAxios} from "../../common/Axios";
 
-const isInit = true;
+const isInit = false;
 
 const ACTION_URL = '/adver/setting'
 const BUDGET_EVENT = '/budget'
@@ -39,11 +39,11 @@ export async function selAdverBudgetEventList(keyword) {
   }
   await AdminAxios('POST', ACTION_URL + BUDGET_LIST, keyword)
   .then((response) => {
-    const {data, responseCode} = response
-    if (responseCode.statusCode === 200) {
-      returnVal = data
-    } else {
-      returnVal = null
+    const { data, statusCode, message } = response;
+    if(statusCode === 200) {
+      returnVal = data;
+    }else{
+      returnVal = null;
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -79,11 +79,11 @@ export async function selBudgetEventList(userId) {
   }
   await AdminAxios('GET', ACTION_URL + BUDGET_EVENT + '/' + userId)
   .then((response) => {
-    const {data, responseCode} = response
-    if (responseCode.statusCode === 200) {
-      returnVal = data
-    } else {
-      returnVal = null
+    const { data, statusCode, message } = response;
+    if(statusCode === 200) {
+      returnVal = data;
+    }else{
+      returnVal = null;
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -98,11 +98,11 @@ export async function resistBudgetEvent(budgetEventInfo) {
   let returnVal = null;
   await AdminAxios('POST', ACTION_URL + BUDGET_EVENT, budgetEventInfo)
   .then((response) => {
-    const {responseCode} = response
-    if (responseCode.statusCode === 201) {
-      returnVal = true
-    } else {
-      returnVal = false
+    const { data, statusCode, message } = response;
+    if(statusCode === 200) {
+      returnVal = true;
+    }else{
+      returnVal = null;
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -117,11 +117,11 @@ export async function updateBudgetEvent(budgetEventInfo) {
   let returnVal = null;
   await AdminAxios('PUT', ACTION_URL + BUDGET_EVENT, budgetEventInfo)
   .then((response) => {
-    const {responseCode} = response
-    if (responseCode.statusCode === 200) {
-      returnVal = true
-    } else {
-      returnVal = false
+    const { data, statusCode, message } = response;
+    if(statusCode === 200) {
+      returnVal = true;
+    }else{
+      returnVal = null;
     }
   }).catch((e) => returnVal = false)
   return returnVal;

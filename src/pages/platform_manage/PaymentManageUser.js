@@ -100,7 +100,6 @@ function PaymentManageUser() {
     };
     return paymentListRequest( tokenUserInfo.id, requestData)
       .then((response) => {
-        console.log(response);
         if (response !== null) {
           const { totalCount, rows: data } = response;
           setTotalInfo(totalCount);
@@ -395,7 +394,7 @@ const AdvertisingCostStatus = styled.div`
   >span {
     width: 100%;
     font-size: 25px;
-    color: #f5811f;
+    color: #ff0000;
     text-align: right;
   }
   >small {

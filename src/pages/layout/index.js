@@ -17,7 +17,12 @@ import PlatformUserDetail from "../platform_manage/UserDetail";
 import PlatformAdminDetail from "../platform_manage/AdminDetail";
 import PaymentManageUser from "../platform_manage/PaymentManageUser"
 import DashBoard from "../dash_board";
-import {bgColor, BoardContainer, TitleContainer} from "../../assets/GlobalStyles";
+import {
+  bgColor,
+  BoardContainer, mainColor, reverseTextColor,
+  textColor,
+  TitleContainer, topicColor
+} from "../../assets/GlobalStyles";
 import Navigator from "../../components/common/Navigator";
 import {CampaignLookOver} from "../campaign/steps/CampaignLookOver";
 import {CampaignTwo} from "../campaign/steps/CampaignTwo";
@@ -44,25 +49,27 @@ function Layout() {
       if (tokenUserInfo.role === '') {
         refreshAdmin().then(response => {
           if(response){
-            const {data,responseCode} = response
-            if (responseCode.statusCode === 200) {
+            const {data, status} = response
+            if (status === 200) {
+              const entity = data.data;
               setTokenUserInfo({
-                id: data.email,
-                role: data.role,
-                name: data.name,
-                accessToken: data.token.accessToken
+                id: entity.email,
+                role: entity.role,
+                name: entity.name,
+                accessToken: entity.token.accessToken
               })
             } else {
               refresh().then(response => {
-                const {data,responseCode} = response
+                const {data, status} = response;
                 if(response) {
-                  if (responseCode.statusCode === 200) {
+                  if (status === 200) {
+                    const entity = data.data;
                     setTokenUserInfo({
-                      id: data.id,
-                      username: data.username,
-                      role: data.role,
-                      name: data.name,
-                      accessToken: data.token.accessToken
+                      id: entity.id,
+                      username: entity.username,
+                      role: entity.role,
+                      name: entity.name,
+                      accessToken: entity.token.accessToken
                     })
                   } else {
                     // eslint-disable-next-line no-restricted-globals
@@ -96,7 +103,7 @@ function Layout() {
         try {
           const userId = tokenUserInfo.id;
           const response = await retrieveUserPointRequest(userId);
-          setUserPoint(response.availablePoint)
+          setUserPoint(response?.availablePoint)
         } catch (error) {
           console.error("실패 응답 처리", error);
         }
@@ -166,18 +173,18 @@ function Layout() {
                 <span>{tokenUserInfo.name}</span>
                 <AdvertisingBalance>
                   <div/>
-                  <small>광고비 잔액</small>
-                  <small className={'won'}>{decimalFormat(userPoint + requestAmount)}</small>
+                  <small>광고비 잔액 : </small>
+                  <small className={'won'}>{decimalFormat(userPoint + (requestAmount != undefined ? requestAmount : 0))}</small>
                 </AdvertisingBalance>
               </UserName>
               {/*[d] 20230411 사용자 화면에서 픽셀 관리 노출 보류*/}
               {/*<MyPage onClick={pixel}>픽셀 관리</MyPage>*/}
-              <MyPage onClick={pixel} active={['pixel', 'pixelDetail'].includes(params.id)}>픽셀 관리</MyPage>
-              <MyPage onClick={payment} active={['paymentManageUser'].includes(params.id)}>결제</MyPage>
+              {/*<MyPage onClick={pixel} active={['pixel', 'pixelDetail'].includes(params.id)}>픽셀 관리</MyPage>*/}
+              {/*<MyPage onClick={payment} active={['paymentManageUser'].includes(params.id)}>결제</MyPage>*/}
             </>
             :
             <>
-              <MyPage onClick={pixel} active={['pixel', 'pixelDetail'].includes(params.id)}>픽셀 관리</MyPage>
+            {/*<MyPage onClick={pixel} active={['pixel', 'pixelDetail'].includes(params.id)}>픽셀 관리</MyPage>*/}
               <UserName>
                 <UserIcon/>
                 <span>{tokenUserInfo.name}</span>
@@ -211,7 +218,7 @@ function Layout() {
         {/* 고객 센터 */}
         {['notice', 'noticeDetail', 'inquiry', 'inquiryDetail'].includes(params.id) && <Customer/>}
         {/* 설정 */}
-        {['settings', 'settingsDetail', 'budgetEvent', 'budgetEventDetail', 'budgetTime', 'budgetTimeDetail','budgetTimeList'].includes(params.id) && <Settings/>}
+        {['budgetTime','budgetTimeDetail','budgetTimeList','settings', 'settingsDetail', 'budgetEvent', 'budgetEventDetail'].includes(params.id) && <Settings/>}
         {/* 플랫폼 관리 */}
         {['platform', 'platformDetail', 'categoryManage', 'productManage', 'conversionManage', 'historyCampaignManage','historyPriceManage','historyEventManage','historyTimeManage','historyCampaignDetail','historyPriceDetail','historyEventDetail','historyTimeDetail', 'paymentManage','advertisingPayments'].includes(params.id) &&
           <PlatformManage/>}
@@ -232,28 +239,28 @@ function Layout() {
   )
 }
 
-export default Layout
+export default Layout;
 
 const BoardBody = styled.div`
   width: 100%;
-  background-color: ${bgColor};
   overflow-x: auto;
+  background-image: linear-gradient(to left, ${reverseTextColor}, ${textColor});
 `
 const BoardHeader = styled.div`
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  height: 45px;
-  background-color: #fff;
-  border-bottom: 1px solid #eee;
+  height: 65px;
+  //border-bottom: 1px solid #eee;
 `
 
 const UserName = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  border-left: 1px solid #eee;
+  //border-left: 1px solid #eee;
   padding-right: 28px;
+  font-weight: bold;
 `
 
 const UserIcon = styled.div`
@@ -273,36 +280,55 @@ const MyPage = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  border-left: 1px solid #eee;
+  //border-left: 1px solid #eee;
   padding-left: 28px;
   margin-right: 28px;
-  color: ${(props) => props.active ? '#f5811f' : null}
+  color: ${(props) => props.active ? '#ff0000' : null};
+
+  & span {
+  font-size: 13px;
+  padding: 4px 28px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 28px;
+}
+  & span:hover{
+    border-color: ${mainColor};
+    background-color: ${mainColor};
+    color: #fff;
+  }
 `
 
 const Logout = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  border-left: 1px solid #eee;
-  padding-left: 28px;
-  margin-right: 28px;
+  //border-left: 1px solid #eee;
+  //padding-left: 28px;
+  margin-right: 48px;
 
-  & button {
+  & > button {
     font-size: 13px;
     padding: 4px 28px;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 28px;
   }
+  & > button:hover {
+    border-color: ${mainColor};
+    background-color: ${mainColor};
+    color: #fff;
+  }
 `
 
 const AdvertisingBalance = styled.div`
   display: flex;
   margin-left: 20px;
-  color: #f5811f;
+  color: ${topicColor};
+  font-size: 14pt;
   >div{
-    width: 18px;
-    height: 18px;
+    width: 25px;
+    height: 25px;
     background-size: cover;
     background-image: url("/assets/images/common/icon_money.png");
     background-image: -webkit-image-set(url('/assets/images/common/icon_money.png') 1x,url('/assets/images/common/icon_money@2x.png') 2x, url('/assets/images/common/icon_money@3x.png') 3x);

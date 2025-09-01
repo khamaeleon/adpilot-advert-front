@@ -1,6 +1,6 @@
 import {AdminAxios, AdverAxios} from "../../common/Axios";
 
-const isInit = true;
+const isInit = false;
 const ACTION_URL = '/adver/dashboard/';
 const OVERVIEW = 'overview';
 
@@ -45,10 +45,11 @@ export async function retrieveOverview(param) {
   }
   await AdminAxios('POST', ACTION_URL + OVERVIEW, param)
   .then((response) => {
-    if (response.responseCode.statusCode === 200) {
-      returnVal = response.data
+    const { data, statusCode, message } = response;
+    if (statusCode === 200) {
+      returnVal = data;
     } else {
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = null)
   return returnVal;
@@ -62,8 +63,7 @@ export async function retrieveOverview(param) {
 export async function retrieveAdverOverview(userId, param) {
   let returnVal = null;
   if (isInit) {
-    return {
-      rows: [
+    return [
         {
           historyDate: 20250805,
           revenueAmount: 10,
@@ -73,15 +73,29 @@ export async function retrieveAdverOverview(userId, param) {
           validClickCount: 10,
           costAmount: 10
         }
-      ], totalCount: 1
-    }
+      ]
+
+    // return {
+    //   rows: [
+    //     {
+    //       historyDate: 20250805,
+    //       revenueAmount: 10,
+    //       requestCount: 10,
+    //       responseCount: 10,
+    //       exposureCount: 10,
+    //       validClickCount: 10,
+    //       costAmount: 10
+    //     }
+    //   ], totalCount: 1
+    // }
   }
   await AdverAxios('POST', '/dashboard/' + userId + '/' + OVERVIEW, param)
   .then((response) => {
-    if (response.responseCode.statusCode === 200) {
-      returnVal = response.data
+    const { data, statusCode, message } = response;
+    if (statusCode === 200) {
+      returnVal = data;
     } else {
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = null)
   return returnVal;

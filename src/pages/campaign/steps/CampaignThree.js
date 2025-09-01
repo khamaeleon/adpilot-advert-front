@@ -64,7 +64,7 @@ export function CampaignThree() {
     });
 
     selEnumInfo('AGENT_TYPE').then(response => {
-      setAgentTypeState(response.data)
+      setAgentTypeState(response.values)
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

@@ -69,7 +69,7 @@ export function CampaignLookOver() {
     console.log(state)
     if(tokenUserInfo.role !== 'NORMAL'){
       selEnumInfo('AGENT_TYPE').then(response => {
-        setAgentTypeState(response.data)
+        setAgentTypeState(response.values)
       })
       let campaignId = (state !== null ? state.campaignId : campaignBasicInfo.campaignId);
       if(campaignId != null) retrieveConfirm(campaignId).then(response => {
@@ -155,25 +155,25 @@ export function CampaignLookOver() {
               <Row>
                 <ColSpan2>
                   <Span4>캠페인 상품</Span4>
-                  <ValueText>{campaignData.productType !== '배너' ? '팝언더' : '배너'}</ValueText>
+                  <ValueText>{campaignData.productType}</ValueText>
                 </ColSpan2>
                 <HorizontalRule/>
-                <ColSpan2>
-                  <Span4>캠페인 목표</Span4>
-                  <ValueText>{campaignData.goalType}</ValueText>
-                </ColSpan2>
+                {/*<ColSpan2>*/}
+                {/*  <Span4>캠페인 목표</Span4>*/}
+                {/*  <ValueText>{campaignData.goalType}</ValueText>*/}
+                {/*</ColSpan2>*/}
               </Row>
-              <Row>
-                <ColSpan2>
-                  <Span4>캠페인 상세 목표</Span4>
-                  <ValueText>{campaignData.goal} - {decimalFormat(campaignData.goalValue)} {goalInfoLabel(campaignData.goal)}</ValueText>
-                </ColSpan2>
-                <HorizontalRule/>
-                <ColSpan2>
-                  <Span4>최적화 픽셀</Span4>
-                  <ValueText>{campaignData.pixelName} - {campaignData?.pixelLinkUrl} ({campaignData?.pixelStatus})</ValueText>
-                </ColSpan2>
-              </Row>
+              {/*<Row>*/}
+              {/*  <ColSpan2>*/}
+              {/*    <Span4>캠페인 상세 목표</Span4>*/}
+              {/*    <ValueText>{campaignData.goal} - {decimalFormat(campaignData.goalValue)} {goalInfoLabel(campaignData.goal)}</ValueText>*/}
+              {/*  </ColSpan2>*/}
+              {/*  <HorizontalRule/>*/}
+              {/*  <ColSpan2>*/}
+              {/*    <Span4>최적화 픽셀</Span4>*/}
+              {/*    <ValueText>{campaignData.pixelName} - {campaignData?.pixelLinkUrl} ({campaignData?.pixelStatus})</ValueText>*/}
+              {/*  </ColSpan2>*/}
+              {/*</Row>*/}
             </RowSpan>
             <RowSpan>
               <Span4>예산 및 입찰 설정</Span4>
@@ -195,11 +195,11 @@ export function CampaignLookOver() {
                   <Span4>시간별 예산 그룹</Span4>
                   <ValueText>{campaignData?.budgetTimeName}</ValueText>
                 </ColSpan2>
-                <HorizontalRule/>
-                <ColSpan2>
-                  <Span4>타겟팅 예산 그룹</Span4>
-                  <ValueText>{campaignData?.targetingBudgetName}</ValueText>
-                </ColSpan2>
+                {/*<HorizontalRule/>*/}
+                {/*<ColSpan2>*/}
+                {/*  <Span4>타겟팅 예산 그룹</Span4>*/}
+                {/*  <ValueText>{campaignData?.targetingBudgetName}</ValueText>*/}
+                {/*</ColSpan2>*/}
               </Row>
               <Row>
                 <ColSpan2>
@@ -207,15 +207,15 @@ export function CampaignLookOver() {
                   <ValueText>{campaignData.biddingType}</ValueText>
                 </ColSpan2>
                 <HorizontalRule/>
+                {/*<ColSpan2>*/}
+                {/*  <Span4>최대 입찰가</Span4>*/}
+                {/*  <ValueText>{decimalFormat(campaignData.maxBiddingPrice)}원</ValueText>*/}
+                {/*</ColSpan2>*/}
+              {/*</Row>*/}
+              {/*<Row>*/}
                 <ColSpan2>
-                  <Span4>최대 입찰가</Span4>
-                  <ValueText>{decimalFormat(campaignData.maxBiddingPrice)}원</ValueText>
-                </ColSpan2>
-              </Row>
-              <Row>
-                <ColSpan2>
-                  <Span4>타겟팅 단가 그룹</Span4>
-                  <ValueText>{campaignData?.targetingPriceName}</ValueText>
+                  <Span4>입찰 단가</Span4>
+                  <ValueText>{campaignData?.biddingPrice}</ValueText>
                 </ColSpan2>
               </Row>
             </RowSpan>
@@ -226,7 +226,7 @@ export function CampaignLookOver() {
               <Row>
                 <ColSpan2>
                   <Span4>노출 영역</Span4>
-                  <ValueText>{campaignData.inventoryDetail?.exposureAgentType.length !== agentTypeState.length ?
+                  <ValueText>{campaignData.inventoryDetail?.exposureAgentType.length !== agentTypeState?.length ?
                       sortingAgentType(campaignData.inventoryDetail?.exposureAgentType).map(d => d.label).join(', ') : '전체'
                   }
                   </ValueText>

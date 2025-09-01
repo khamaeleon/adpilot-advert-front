@@ -1,6 +1,6 @@
 import {AdminAxios, AdverAxios, AxiosFile} from "../../common/Axios";
 import {responseFormatMessage} from "../../common/StringUtils";
-const isInit = true;
+const isInit = false;
 
 const ACTION_URL = '/user';
 const USER_MANAGE_URL ='/adver/user'
@@ -28,8 +28,9 @@ export async function selUserList(userParams) {
   let returnVal = null;
   await AdminAxios('POST', USER_LIST, userParams)
     .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = response.data
+      const {data, statusCode} = response;
+      if (statusCode === 200) {
+        returnVal = data
       } else {
         returnVal = null
       }
@@ -44,10 +45,37 @@ export async function selUserList(userParams) {
  */
 export async function selUserInfo(id) {
   let returnVal = null;
+  if(isInit){
+    return {
+      "id": "7461c622-aab6-4179-b167-1ce664b16697",
+      "hostType": "INDEPENDENT_MALL",
+      "status": "NORMAL",
+      "username": "adpilot_advert",
+      "managerName": "김용태",
+      "managerPhone": "0101112222",
+      "managerEmail": "nate@nate.com",
+      "userCompanyProfile": {
+        "id": 1,
+        "companyName": "애드파일럿",
+        "businessNumber": "12345678",
+        "ceoName": "김용태",
+        "address": {
+          "location": "서울특별시 금천구 가산디지털 1로 1421",
+          "locationDetail": "1503호",
+          "postNumber": "08506"
+        },
+        "typeOfBusiness": "정보통신업 도매 및 소매업",
+        "itemsOfBusiness": "소프트웨어 개발 및 공급업 전자상거래 소매업",
+        "businessLicenseWebPath": "https://test",
+        "taxInvoiceEmail": "ytkim@adpilot.co.kr"
+      }
+    }
+  }
   await AdminAxios('GET', USER_INFO +SLASH + id)
     .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = response.data
+      const {data, statusCode} = response;
+      if (statusCode === 200) {
+        returnVal = data
       } else {
         returnVal = null
       }
@@ -64,8 +92,8 @@ export async function updateUser(userInfo) {
   let returnVal = null;
   await AdminAxios('PUT', USER_MANAGE_URL, userInfo)
     .then((response) => {
-      console.log(response)
-      if(response.responseCode.statusCode ===200){
+      const { statusCode } = response;
+      if(statusCode ===200){
         returnVal = true
       }else{
         returnVal = false
@@ -82,10 +110,11 @@ export async function selPolicyLatestTerms() {
   let returnVal = null;
   await AdverAxios('GET', TERMS_INFO, null)
     .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = response.data
+      const { data, statusCode } = response;
+      if (statusCode === 200) {
+        returnVal = data;
       } else {
-        returnVal = null
+        returnVal = null;
       }
       // eslint-disable-next-line no-restricted-globals
     }).catch((e) => {location.replace('/500.js')})
@@ -98,15 +127,23 @@ export async function selPolicyLatestTerms() {
  * @returns {Promise<*>}
  */
 export async function signUp(userInfo) {
-
+  let returnVal = null;
   let param = {
     ...userInfo,
     isAgreedByOperationTerms: userInfo.isAgreedByOperationTerms ? 'Y' : 'N',
   isAgreedByPrivacyTerms: userInfo.isAgreedByPrivacyTerms ? 'Y' : 'N',
   isAgreedByServiceTerms: userInfo.isAgreedByServiceTerms ? 'Y' : 'N'
 }
-
-  return responseFormatMessage(await AdverAxios('POST', SIGNUP_URL, param))
+  await AdverAxios('POST', SIGNUP_URL, param)
+    .then((response) => {
+      const { data, statusCode, message } = response;
+      if(statusCode === 200){
+        returnVal = true;
+      }else{
+        returnVal = false;
+      }
+    }).catch((e) => returnVal = false)
+  return responseFormatMessage(returnVal);
 }
 
 /**
@@ -118,10 +155,11 @@ export async function selValidUserId(username) {
   let returnVal = null;
   await AdverAxios('GET', VALID_USERID+SLASH+username, null)
     .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = response.data
+      const { data, statusCode, message } = response;
+      if (statusCode === 200) {
+        returnVal = data
       } else {
-        returnVal = response.responseCode.message
+        returnVal = message
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -136,10 +174,11 @@ export async function selFindUserId(userInfo) {
   let returnVal = null;
   await AdverAxios('POST', FIND_USERID, userInfo)
     .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = response.data
+      const { data, statusCode, message } = response;
+      if (statusCode === 200) {
+        returnVal = data;
       } else {
-        returnVal = response.responseCode.message
+        returnVal = message;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -154,7 +193,8 @@ export async function selChangePassword(userInfo) {
   let returnVal = null;
   await AdverAxios('POST', CHANGE_PASSWORD, userInfo)
     .then((response) => {
-      if (response.responseCode.statusCode === 200) {
+      const { data, statusCode } = response;
+      if (statusCode === 200) {
         returnVal = true
       } else {
         returnVal = false
@@ -180,10 +220,10 @@ export async function selKeywordUser(keyword) {
   }
   await AdminAxios('GET', USER_KEYWORD_SEARCH + '?keyword=' + keyword, null)
   .then((response) => {
-    if(response.responseCode.statusCode ===200){
-      returnVal = response.data
+    const { data, statusCode } = response;
+    if(statusCode ===200){
+      returnVal = data
     }else{
-      console.log(response.responseCode.message)
       returnVal = []
     }
   }).catch((e) => returnVal = false)
@@ -199,9 +239,9 @@ export async function selUserByUserId(username) {
   let returnVal = null;
   await AdverAxios('GET', BY_USER_INFO + SLASH + username, null)
     .then((response) => {
-      console.log(response)
-      if(response.responseCode.statusCode ===200){
-        returnVal = response.data
+      const { data, statusCode } = response;
+      if(statusCode ===200){
+        returnVal = data
       } else {
         returnVal = null
       }
@@ -216,14 +256,13 @@ export async function selUserByUserId(username) {
  */
 export async function accountFileUpload(data,resourceType) {
   let returnVal = null;
-
-  await AxiosFile('POST', UPLOAD_URL + resourceType, data)
-    .then(response => {
-      const {responseCode, data} = response;
-      if(responseCode.statusCode === 200){
-        returnVal = data.path
+  await AxiosFile('POST', UPLOAD_URL + resourceType, data).then(response => {
+      console.log(response)
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
       } else {
-        returnVal = false
+        returnVal = false;
       }
     })
     .catch((e) => returnVal = false)
@@ -234,8 +273,9 @@ export async function selUserMyPageInfo(id) {
   let returnVal = null;
   await AdverAxios('GET', MY_PAGE_INFO +SLASH + id)
     .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = response.data
+      const { data, statusCode } = response;
+      if (statusCode === 200) {
+        returnVal = data
       } else {
         returnVal = null
       }
@@ -247,8 +287,8 @@ export async function updateMyPageUser(userInfo) {
   let returnVal = null;
   await AdverAxios('PUT', ACTION_URL, userInfo)
     .then((response) => {
-      console.log(response)
-      if(response.responseCode.statusCode ===200){
+      const { data, statusCode } = response;
+      if(statusCode ===200){
         returnVal = true
       }else{
         returnVal = false

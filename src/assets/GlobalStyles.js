@@ -2,16 +2,18 @@ import styled, {createGlobalStyle, css} from "styled-components";
 import DatePicker from "react-datepicker";
 import {light} from "./theme";
 
-const textColor = css`${props => props.theme.color.textColor}`
-const subColor = css`${props => props.theme.color.subColor}`
-const buttonHeightSize = 40
-
+export const textColor = css`${props => props.theme.color.textColor}`
+export const reverseTextColor = css`${props => props.theme.color.reverseTextColor}`
+export const subColor = css`${props => props.theme.color.subColor}`
+export const buttonHeightSize = 40
 export const mainColor = css`${props => props.theme.color.mainColor}`
+export const topicColor = css`${props => props.theme.color.topicColor}`
 export const mainColorOpacity5 = css`${props => props.theme.color.mainColorOpacity5}`
 export const mainColorOpacity20 = css`${props => props.theme.color.mainColorOpacity20}`
 export const bgColor = css`${props => props.theme.color.bgColor}`
 export const borderColor = css`${props => props.theme.color.borderColor}`
 export const lightGray = css`${props => props.theme.color.lightGray}`
+export const whiteColor = css`${props => props.theme.color.whiteColor}`
 
 export const GlobalStyles = createGlobalStyle`
   html {
@@ -320,7 +322,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   .active > a {
-    background-color: ${mainColor};
+    background-color: ${textColor};
   }
 
   .active span {
@@ -720,9 +722,14 @@ export const InputLabel = styled.div`
 `
 export const TextMainColor = styled.span`
   color: ${mainColor};
+  font-weight: bold;
 `
 export const BoardContainer = styled.div`
-  padding: 10px 30px 30px;
+  padding: 30px 50px 30px 50px;
+  margin-right: 30px;
+  margin-bottom: 30px;
+  background-color: #f8f8f8;
+  border-radius: 18px;
 `
 
 export const TitleContainer = styled.div`
@@ -1319,7 +1326,6 @@ export const ValidationScript = styled.div`
 `
 export const Input = styled('input')`
   padding:0 20px;
-  width: 100%;
   text-align : ${(props)=>props?.textAlign !== 'right' ? 'left' : 'right'};
   border: 1px solid ${lightGray};
   height: ${buttonHeightSize}px;

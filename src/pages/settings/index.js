@@ -23,13 +23,13 @@ export default function Settings() {
           <Navigator/>
         </TitleContainer>
         {/* 이벤트 단가 관리 */}
-        {params.id === 'settings' && <EventUnitPrice/>}
+        {params.id === 'budgetTimeList' && <BudgetTimeList/>}
+        {params.id === 'budgetTimeDetail' && <BudgetTimeDetail/>}
+        {params.id === 'settings' && <BudgetTime/>}
         {params.id === 'settingsDetail' && <EventUnitPriceDetail/>}
         {params.id === 'budgetEvent' && <BudgetEvent/>}
         {params.id === 'budgetEventDetail' && <BudgetEventDetail/>}
         {params.id === 'budgetTime' && <BudgetTime/>}
-        {params.id === 'budgetTimeDetail' && <BudgetTimeDetail/>}
-        {params.id === 'budgetTimeList' && <BudgetTimeList/>}
       </BoardContainer>
     </main>
   )

@@ -1,6 +1,6 @@
 import {AdminAxios} from "../../common/Axios";
 
-const isInit = true;
+const isInit = false;
 
 const ACTION_URL = '/adver/campaign'
 const MEDIA_CATEGORY = '/list'
@@ -28,10 +28,11 @@ export async function selMediaCategoryInfo() {
   }
   await AdminAxios('GET', ACTION_URL + '/MEDIA_CATEGORY' + MEDIA_CATEGORY)
   .then((response) => {
-    if (response.responseCode.statusCode === 200) {
-      returnVal = response.data
+    const { data, statusCode } = response;
+    if (statusCode === 200) {
+      returnVal = data;
     } else {
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -61,10 +62,11 @@ export async function selSearchMediaInfo(keyword) {
   }
   await AdminAxios('GET', MEDIA_SEARCH + '?keyword=' + keyword)
   .then((response) => {
-    if (response.responseCode.statusCode === 200) {
-      returnVal = response.data
+    const { data, statusCode } = response;
+    if (statusCode === 200) {
+      returnVal = data;
     } else {
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -97,10 +99,11 @@ export async function selSearchMediaList(inventoryIds) {
   }
   await AdminAxios('POST', MEDIA_SEARCH_ARRAY, inventoryIds)
   .then((response) => {
-    if (response.responseCode.statusCode === 200) {
-      returnVal = response.data
+    const { data, statusCode } = response;
+    if (statusCode === 200) {
+      returnVal = data;
     } else {
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -115,8 +118,8 @@ export async function updateCampaignConfigInventory(campaignGroupInfo) {
       ACTION_URL + '/' + campaignGroupInfo.campaignId + CONFIG_INVENTORY,
       campaignGroupInfo)
   .then((response) => {
-    const {responseCode} = response
-    if (responseCode.statusCode === 200) {
+    const {statusCode} = response
+    if (statusCode === 200) {
       returnVal = true
     } else {
       returnVal = false
@@ -129,10 +132,11 @@ export async function selGroupInfo(campaignId) {
   let returnVal = null;
   await AdminAxios('GET', ACTION_URL + '/' + campaignId + GROUP_INFO)
   .then((response) => {
-    if (response.responseCode.statusCode === 200) {
-      returnVal = response.data
+    const { data, statusCode } = response;
+    if (statusCode === 200) {
+      returnVal = data;
     } else {
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = false)
   return returnVal;

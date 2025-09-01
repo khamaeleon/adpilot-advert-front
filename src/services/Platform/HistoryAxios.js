@@ -21,10 +21,11 @@ export async function findRevisionCampaignList(params) {
 
   await AdminAxios('POST', CAMPAIGN_URL, searchParam)
     .then((response) => {
-      if(response.responseCode.statusCode ===200){
-        returnVal = response.data
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
       }else{
-        returnVal = null
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -34,10 +35,11 @@ export async function findRevisionCampaignDetail(revID) {
   let returnVal = null;
   await AdminAxios('GET', CAMPAIGN_URL + `/${revID}`, null)
     .then((response) => {
-      if(response.responseCode.statusCode ===200){
-        returnVal = response.data
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
       }else{
-        returnVal = null
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -57,10 +59,11 @@ export async function findRevisionTargetingBudgetList (params) {
   }
   await AdminAxios('POST', TARGET_BUDGET, searchParam)
     .then((response) => {
-      if(response.responseCode.statusCode ===200){
-        returnVal = response.data
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
       }else{
-        returnVal = null
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -70,10 +73,11 @@ export async function findRevisionTargetingBudgetDetail (revId) {
   let returnVal = null;
   await AdminAxios('GET', TARGET_BUDGET+`/${revId}`, null)
     .then((response) => {
-      if(response.responseCode.statusCode ===200){
-        returnVal = response.data
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
       }else{
-        returnVal = null
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -94,10 +98,11 @@ export async function findRevisionTargetingPriceList (params) {
 
   await AdminAxios('POST', TARGET_PRICE, searchParam)
     .then((response) => {
-      if(response.responseCode.statusCode ===200){
-        returnVal = response.data
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
       }else{
-        returnVal = null
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -107,10 +112,11 @@ export async function findRevisionTargetingPriceDetail(revID) {
   let returnVal = null;
   await AdminAxios('GET', TARGET_PRICE + `/${revID}`, null)
     .then((response) => {
-      if(response.responseCode.statusCode ===200){
-        returnVal = response.data
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
       }else{
-        returnVal = null
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -131,10 +137,11 @@ export async function findRevisionBudgetTimeList(params) {
 
   await AdminAxios('POST', BUDGET_TIME, searchParam)
     .then((response) => {
-      if(response.responseCode.statusCode ===200){
-        returnVal = response.data
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
       }else{
-        returnVal = null
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -144,10 +151,11 @@ export async function findRevisionBudgetTimeDetail(revId) {
   let returnVal = null;
   await AdminAxios('GET', BUDGET_TIME + `/${revId}`, null)
     .then((response) => {
-      if(response.responseCode.statusCode ===200){
-        returnVal = response.data
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
       }else{
-        returnVal = null
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;

@@ -39,12 +39,13 @@ export default function UserManage(){
 
   useEffect(()=>{
     selUserList(searchAccountInfoState).then(response =>{
+      console.log(response)
       if(response){
-        setUserInfoList(response.rows)
+        setUserInfoList(response.content)
         setTotalInfo({
-          totalCount: response.totalCount,
+          totalCount: response.totalElements,
           totalPages: response.totalPages,
-          currentPage:response.currentPage
+          currentPage:response.pageNumber
         })
       }
     })
@@ -125,12 +126,13 @@ export default function UserManage(){
       adverType:searchAccountInfoState.adverType?.value,
       searchType: searchAccountInfoState.searchType?.value
     }).then(response =>{
+      console.log(response)
       if(response){
-        setUserInfoList(response.rows)
+        setUserInfoList(response.content)
         setTotalInfo({
-          totalCount: response.totalCount,
+          totalCount: response.totalElements,
           totalPages: response.totalPages,
-          currentPage:response.currentPage
+          currentPage:response.pageNumber
         })
       }
     })

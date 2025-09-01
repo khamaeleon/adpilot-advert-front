@@ -65,6 +65,7 @@ function ChartComponent() {
           }
         })
       } else {
+
         retrieveAdverOverview(tokenUserInfo.id, searchCondition).then(response => {
           let data = response
           if(response !== null) {

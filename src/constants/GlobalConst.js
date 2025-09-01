@@ -19,5 +19,4 @@ export const ADVER_SERVER = adver
 
 export const defaultImage = "";
 export const IMAGE_SERVER = "http://192.168.100.135:9000/temp";
-export const isInit = true
 

@@ -166,6 +166,7 @@ export function CategoryManage() {
   const handleSearchCategory = async () => {
     retrieveTopLevelCategory(searchKeyword).then(response => {
       setTopLevelCategoryList(response)
+      console.log(response)
       if(response.length !== 0) {
         handleSelectCategory(response[0]?.code)
       } else {

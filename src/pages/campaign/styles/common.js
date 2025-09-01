@@ -1,5 +1,9 @@
 import styled from "styled-components";
-import {borderColor, lightGray} from "../../../assets/GlobalStyles";
+import {
+  borderColor,
+  buttonHeightSize,
+  lightGray
+} from "../../../assets/GlobalStyles";
 
 export const BorderSpan = styled.div`
   display: flex;
@@ -21,19 +25,19 @@ export const CampaignTypeItem = styled.div`
   padding: 30px 80px 20px;
   background-color: ${(props) => props.readOnly ? "" : "#fff"};
   border-radius: 8px;
-  border: 2px solid ${(props) => props.active ? "#f5811f" : (props.readOnly ?"f9fafb":"#fff")};
+  border: 2px solid ${(props) => props.active ? "#ff0000" : (props.readOnly ?"f9fafb":"#fff")};
   box-shadow: 0 2px 3px 0 rgba(10, 10, 10, 0.2);
   font-size: 12px;
   white-space: break-spaces;
   &:hover {
-    border: ${(props) => props.readOnly ? "" : "2px solid #f5811f" };
+    border: ${(props) => props.readOnly ? "" : "2px solid #ff0000" };
     cursor: ${(props) => props.readOnly ? "" : "pointer" };
   }
   & > p {
     font-size: 13px;
     font-weight: 500; 
     text-align: center;
-    color: ${(props) => props.active ? "#f5811f" : null};
+    color: ${(props) => props.active ? "#ff0000" : null};
     margin-top: 10px;
   }
 `
@@ -42,17 +46,17 @@ export const CampaignTypeItem2 = styled.div`
   padding: 15px 20px;
   background-color: ${(props) => props.readOnly ? "" : "#fff"};
   border-radius: 8px;
-  border: 2px solid ${(props) => props.active ? "#f5811f" : (props.readOnly ?"f9fafb":"#fff")};
+  border: 2px solid ${(props) => props.active ? "#ff0000" : (props.readOnly ?"f9fafb":"#fff")};
   box-shadow: 0 2px 3px 0 rgba(10, 10, 10, 0.2);
   font-size: 12px;
   white-space: break-spaces;
   &:hover {
-    border: ${(props) => props.readOnly ? "" : "2px solid #f5811f" };
+    border: ${(props) => props.readOnly ? "" : "2px solid #ff0000" };
     cursor: ${(props) => props.readOnly ? "" : "pointer" };
   }
   & .tit {
     font-size: 13px;
-    color: ${(props) => props.active ? "#f5811f" : null};
+    color: ${(props) => props.active ? "#ff0000" : null};
     margin-bottom: 3px;
   }
 `
@@ -79,14 +83,14 @@ export const CategoryItem = styled.div`
   padding: 10px 17px;
   min-width: 100px;
   text-align: center;
-  border: ${props => props.active ? "1px solid #f5811f" : "1px solid #e5e5e5"};
-  color: ${props => props.active ? "#f5811f" : null};
+  border: ${props => props.active ? "1px solid #ff0000" : "1px solid #e5e5e5"};
+  color: ${props => props.active ? "#ff0000" : null};
   border-radius: 3px;
   background-color: #fff;
   font-size: 12px;
   &:hover {
-    color: #f5811f;
-    border: 1px solid #f5811f;
+    color: #ff0000;
+    border: 1px solid #ff0000;
     cursor: pointer;
   }
 `
@@ -145,8 +149,8 @@ export const CampaignButton = styled.button`
   height: 50px;
   background-color: #fff;
   border-radius: 0;
-  border: ${(props)=> props.className === 'on' ? '1px solid #f5811f;' : '1px solid #e5e5e5;'};
-  color: ${(props)=> props.className === 'on' ? '#f5811f;' : null};
+  border: ${(props)=> props.className === 'on' ? '1px solid #ff0000;' : '1px solid #e5e5e5;'};
+  color: ${(props)=> props.className === 'on' ? '#ff0000;' : null};
 `
 
 export const LoadButton  = styled.button`
@@ -356,7 +360,13 @@ export const ImageTitle = styled.div`
 `
 
 export const ValueText = styled.span`
-  font-size: 12px;
+  padding:0 20px;
+  align-content: center;
+  text-align : ${(props)=>props?.textAlign !== 'right' ? 'left' : 'right'};
+  border: 1px solid ${lightGray};
+  height: ${buttonHeightSize}px;
+  border-radius: 5px;
+  background-color: #eee;
 `
 
 export const FolderButton = styled.div`

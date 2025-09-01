@@ -42,10 +42,10 @@ export async function AxiosImage(type, uri, formData) {
   })
   .then(response => response.json())
   .then(data => {
-    const {responseCode} = data;
-    if(responseCode.statusCode === 201) {
+    const { statusCode } = data;
+    if(statusCode === 200) {
       return data;
-    } else if(responseCode.statusCode === 401 || responseCode.statusCode === 403) {
+    } else if(statusCode === 401 || statusCode === 403) {
       const retryOriginalRequest = new Promise(async (resolve) => {
         addRefreshSubscriber(() => {
           refreshSubscribers = [];
@@ -57,8 +57,9 @@ export async function AxiosImage(type, uri, formData) {
       if (!isTokenRefreshing) {
         isTokenRefreshing = true;
         refreshAdmin().then(response => {
-          const {data, responseCode} = response
-          if (responseCode.statusCode === 200) {
+          const {dataEntity, status} = response
+          const data = dataEntity.data;
+          if (status === 200) {
             store.set(tokenResultAtom, {
               id: data.email,
               role: data.role,
@@ -90,35 +91,32 @@ export async function AxiosFile(type, uri, formData) {
   const addRefreshSubscriber = (callback) => {
     refreshSubscribers.push(callback);
   };
-  return fetch(ADVER_SERVER + uri, {
+  return fetch(ADMIN_SERVER + uri, {
     method: type,
     headers: {
-      Authorization: `Bearer  ${tokenAtom.accessToken}`,
-    },
-    validateStatus: function (status) {
-      return status <= 500;
+      Authorization: `Bearer ${tokenAtom.accessToken}`,
     },
     body: formData
   })
   .then(response => response.json())
   .then(data => {
-    const {responseCode} = data;
-    if(responseCode.statusCode === 200) {
+    const {statusCode} = data;
+    if(statusCode === 200) {
       return data;
-    } else if(responseCode.statusCode === 401 || responseCode.statusCode === 403) {
+    } else if(statusCode === 401 || statusCode === 403) {
       const retryOriginalRequest = new Promise(async (resolve) => {
         addRefreshSubscriber(() => {
           refreshSubscribers = [];
           isTokenRefreshing = false;
-          resolve(AxiosImage(type, uri, formData));
+          resolve(AxiosFile(type, uri, formData));
         })
       });
 
       if (!isTokenRefreshing) {
         isTokenRefreshing = true;
         refreshAdmin().then(response => {
-          const {data, responseCode} = response
-          if (responseCode.statusCode === 200) {
+          const {data, statusCode} = response;
+          if (statusCode === 200) {
             store.set(tokenResultAtom, {
               id: data.email,
               role: data.role,

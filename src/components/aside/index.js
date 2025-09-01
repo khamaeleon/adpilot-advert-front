@@ -12,7 +12,7 @@ import {useAtom} from "jotai";
 import {tokenResultAtom} from "../../pages/login/entity/Common";
 import {retrieveCustomReportsList} from "../../services/reports/ReportsAxios";
 import {retrieveCustomReportsAdminList} from "../../services/reports/ReportsAdminAxios";
-import {mainColor} from "../../assets/GlobalStyles";
+import {mainColor, textColor} from "../../assets/GlobalStyles";
 
 function AsideList (props) {
   const {id, mode} = props
@@ -149,7 +149,7 @@ const AsideContainer = styled.div`
   position: relative;
   padding: 20px 0;
   height: 100vh;
-  background-color: #141414;
+  background-image: linear-gradient(to left, ${textColor}, ${mainColor});
   overflow: hidden;
   transition-duration: 0.5s;
 `
@@ -157,7 +157,7 @@ const AsideContainer = styled.div`
 const Logo = styled.div`
   margin-left: ${menuPL};
   height: 28px;
-  background-image: url("/assets/images/logos/logo_inline_w@3x.png");
+  background-image: url("/assets/images/logos/adpilot/logo_inline_w@3x.png");
   background-size: contain;
   background-repeat: no-repeat;
   transition-duration: 0.3s;
@@ -209,6 +209,7 @@ const DropIcon = styled.div`
   width: 10px;
   height: 6px;
   margin: -11px 18px;
+  rotate: 180deg;
   background-image: url("/assets/images/common/icon_dropup.png");
   background-repeat: no-repeat;
 `
@@ -227,8 +228,8 @@ const Narrow = styled.div`
 `
 
 const BtnNarrow = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   background-image: url("/assets/images/aside/btn_close.png");
   background-repeat: no-repeat;
   background-size: contain;

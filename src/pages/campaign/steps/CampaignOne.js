@@ -52,7 +52,7 @@ export function CampaignOne() {
    */
   useEffect(() => {
     selEnumInfo('CAMPAIGN_VIEW_GOAL').then(response => {
-      setGoalList(response?.data)
+      setGoalList(response?.values);
     })
       resetInfo();
       reset();
@@ -107,17 +107,17 @@ export function CampaignOne() {
       if(response.goal.indexOf('CONVERSION') ===0 ){
         goalTypeTemp = 'CAMPAIGN_CONVERSION_GOAL'
         selEnumInfo('CAMPAIGN_CONVERSION_GOAL').then(r => {
-          setGoalList(r.data)
+          setGoalList(r.values)
         })
       }else if(response.goal.indexOf('VISIT') ===0 ){
         goalTypeTemp = 'CAMPAIGN_VISIT_GOAL'
         selEnumInfo('CAMPAIGN_VISIT_GOAL').then(r => {
-          setGoalList(r.data)
+          setGoalList(r.values)
         })
       }else if(response.goal.indexOf('VIEW') ===0 ){
         goalTypeTemp='CAMPAIGN_VIEW_GOAL'
         selEnumInfo('CAMPAIGN_VIEW_GOAL').then(r => {
-          setGoalList(r.data)
+          setGoalList(r.values)
         })
       }
       setCampaignBasicInfo({
@@ -188,7 +188,7 @@ export function CampaignOne() {
   const handleChangeProductTarget = (type) => {
     if (!temporaryActive && campaignBasicInfo.goalType !== type) {
       selEnumInfo(type).then(response => {
-        setGoalList(response.data)
+        setGoalList(response.values)
       })
       setCampaignBasicInfo({
         ...campaignBasicInfo,
@@ -249,9 +249,12 @@ export function CampaignOne() {
     }else{
       resistCampaignBasic({
         ...campaignBasicInfo,
-        goal:campaignBasicInfo.goal,
-        pixelId:campaignBasicInfo.pixelId,
-        name: `${campaignBasicInfo.productType !== 'BANNER' ? 'PU' : 'BA'}_${goalType(campaignBasicInfo.goalType)}_${goal(campaignBasicInfo.goal)}_${moment().format('YYYY-MM-DD HH:mm:ss').replace(' ' ,'_')}`
+        goalType:"VISIT_CLICK_COUNT",
+        goalValue: 1,
+        goal: "VISIT_CLICK_COUNT",
+        pixelId: "10f0a15a-c8c0-48ed-809c-ee643b05ad05",
+        // name: `${campaignBasicInfo.productType !== 'BANNER' ? 'PU' : 'BA'}_${goalType(campaignBasicInfo.goalType)}_${goal(campaignBasicInfo.goal)}_${moment().format('YYYY-MM-DD HH:mm:ss').replace(' ' ,'_')}`
+        name: `${campaignBasicInfo.productType === 'AUDIO' ? 'AU' : 'BA'}_${moment().format('YYYY-MM-DD HH:mm:ss').replace(' ' ,'_')}`
       }).then(response =>{
         if(response){
           setCampaignBasicInfo({
@@ -344,20 +347,20 @@ export function CampaignOne() {
           <RowSpan>
             <ColSpan4>
               <CampaignType>
-                {/*
-                 <CampaignTypeItem active={campaignBasicInfo !== null ? campaignBasicInfo.productType === 'BANNER' : false} readOnly={temporaryActive} onClick={() => handleChangeProductType('BANNER')}>
+                 {/*<CampaignTypeItem active={campaignBasicInfo !== null ? campaignBasicInfo.productType === 'BANNER' : false} readOnly={temporaryActive} onClick={() => handleChangeProductType('BANNER')}>*/}
+                 <CampaignTypeItem active={false} readOnly={true}>
                   <img
                     alt={'이미지'}
                     src={`../assets/images/campaign/img_banner_${campaignBasicInfo !== null && campaignBasicInfo.productType === 'BANNER' ? "on" : "off"}.png`}/>
                   <p>배너</p>
                  </CampaignTypeItem>
-                 <CampaignTypeItem active={campaignBasicInfo !== null ? campaignBasicInfo.productType === 'POP_UNDER' : false} readOnly={temporaryActive} onClick={() => handleChangeProductType('POP_UNDER')}>
+                 {/*<CampaignTypeItem active={campaignBasicInfo !== null ? campaignBasicInfo.productType === 'POP_UNDER' : false} readOnly={temporaryActive} onClick={() => handleChangeProductType('POP_UNDER')}>*/}
+                 <CampaignTypeItem  active={false} readOnly={true}>
                   <img
                     alt={'이미지'}
                     src={`../assets/images/campaign/img_popunder_${campaignBasicInfo !== null && campaignBasicInfo.productType === 'POP_UNDER' ? "on" : "off"}.png`}/>
                   <p>팝언더</p>
                 </CampaignTypeItem>
-                */}
                 <CampaignTypeItem
                     active={campaignBasicInfo !== null ? campaignBasicInfo.productType === 'AUDIO' : false}
                     readOnly={temporaryActive}
@@ -371,7 +374,7 @@ export function CampaignOne() {
               </CampaignType>
             </ColSpan4>
           </RowSpan>
-          <RowSpan>
+          {/*<RowSpan>
             <ColSpan1>
               <Span4>캠페인 목표 선택</Span4>
             </ColSpan1>
@@ -379,7 +382,7 @@ export function CampaignOne() {
           <RowSpan>
             <ColSpan4>
               <CampaignType>
-                {/*<CampaignTypeItem2 active={campaignBasicInfo !== null && campaignBasicInfo.goalType === 'CAMPAIGN_CONVERSION_GOAL'} readOnly={temporaryActive}
+                <CampaignTypeItem2 active={campaignBasicInfo !== null && campaignBasicInfo.goalType === 'CAMPAIGN_CONVERSION_GOAL'} readOnly={temporaryActive}
                                    onClick={() => handleChangeProductTarget('CAMPAIGN_CONVERSION_GOAL')}>
                   <div className={'tit'}>전환</div>
                   <div>전환 가능성과 관심도가 높은 대상에게 구매 또는 참여, 설치 등의 행동을 유도 합니다.</div>
@@ -389,7 +392,7 @@ export function CampaignOne() {
                   <div className={'tit'}>방문</div>
                   <div>원하는 랜딩으로 사용자들의 방문을 극대화해서 마케팅 목표를 달성합니다.</div>
                 </CampaignTypeItem2>
-                */}
+
                 <CampaignTypeItem2 active={campaignBasicInfo !== null && campaignBasicInfo.goalType === 'CAMPAIGN_VIEW_GOAL'} readOnly={temporaryActive}
                                    onClick={() => handleChangeProductTarget('CAMPAIGN_VIEW_GOAL')}>
                   <div className={'tit'}>노출</div>
@@ -455,6 +458,7 @@ export function CampaignOne() {
               </ColSpan1>
             </ColSpan4>
           </RowSpan>
+          */}
         </BoardSearchResult>
       </Board>
       <SubmitContainer>

@@ -35,10 +35,10 @@ export const menuList = [
       //  name: 'bannerCreative',
       //  header: '배너 크리에이터'
       //},
-      {
-        name: 'audioCreative',
-        header: '오디오 크리에이터'
-      }
+      //{
+      //  name: 'audioCreative',
+      //  header: '오디오 크리에이터'
+      //}
     ]
   },
   {
@@ -76,24 +76,30 @@ export const menuList = [
   {
     name: "settings",
     header: "설정",
-    include: ["settings","settingsDetail","budgetEvent","budgetEventDetail","budgetTime","budgetTimeDetail","budgetTimeList"],
+    include: ["budgetTime","settings","settingsDetail","budgetEvent","budgetEventDetail","budgetTimeDetail","budgetTimeList"],
     child:[
+      //{
+      //  name: "settings",
+      //  header: "단가 관리",
+      //  detail: "settingsDetail"
+      //},
       {
         name: "settings",
-        header: "단가 관리",
-        detail: "settingsDetail"
-      },
-      {
-        name: "budgetEvent",
-        header: "예산 관리",
-        detail: "budgetEventDetail"
-      },
-      {
-        name: "budgetTime",
         header: "시간별 예산 관리",
         detail: "budgetTimeList",
         detail2: "budgetTimeDetail"
-      }
+      },
+      //{
+      //  name: "budgetEvent",
+      //  header: "예산 관리",
+      //  detail: "budgetEventDetail"
+      //},
+      //{
+      //  name: "budgetTime",
+      //  header: "시간별 예산 관리",
+      //  detail: "budgetTimeList",
+      //  detail2: "budgetTimeDetail"
+      //}
     ]
   },
   {
@@ -157,12 +163,13 @@ export const narrowStyle = {
     borderRadius: 15
   },
   icon: {
-    backgroundImage: "-webkit-image-set(url('/assets/images/logos/logo_w.png') 1x, url('/assets/images/logos/logo_w@2x.png') 2x,url('/assets/images/logos/logo_w@3x.png') 3x)",
+    backgroundImage: "-webkit-image-set(url('/assets/images/logos/adpilot/logo_inline_w.png') 1x, url('/assets/images/logos/adpilot/logo_inline_w@2x.png') 2x,url('/assets/images/logos/adpilot/logo_inline_w@3x.png') 3x)",
     width: 45,
     backgroundPosition: 'center'
   },
   button: {
-    transform: "rotate(180deg)"
+    transform: "rotate(180deg)",
+    //background : 'none'
   }
 }
 export const widenStyle = {
@@ -171,7 +178,7 @@ export const widenStyle = {
     marginRight: 0,
   },
   icon: {
-    backgroundImage: "url(/assets/images/logos/logo_inline_w@3x.png)",
+    backgroundImage: "url(/assets/images/logos/adpilot/logo_inline_w@3x.png)",
     width: 148,
   },
 }

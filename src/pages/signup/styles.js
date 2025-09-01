@@ -1,17 +1,23 @@
 import styled from "styled-components";
-import {bgColor, borderColor, mainColor} from "../../assets/GlobalStyles";
+import {
+  bgColor,
+  borderColor,
+  mainColor,
+  whiteColor
+} from "../../assets/GlobalStyles";
 
 export const SignUpHeader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100px;
-  border-bottom: 1px solid #eee;
+  //border-bottom: 1px solid #eee;
+  background-image: linear-gradient(to left, ${whiteColor}, ${mainColor});
 `
 export const Logo = styled.div`
   width: 212px;
   height: 45px;
-  background-image: url("/assets/images/logos/logo@2x.png");
+  background-image: url("/assets/images/logos/adpilot/logo_inline_w@2x.png");
   background-repeat: no-repeat;
   background-size: contain;
 `
@@ -81,6 +87,7 @@ export const Arrow = styled.div`
 `
 export const SignUpContents = styled.div`
   padding: 50px 0 70px 0;
+  border-radius: 18px;
   background-color: ${bgColor};
   .done {
     display: flex;
@@ -263,4 +270,9 @@ export const DuplicateButton = styled.button`
   border-radius: 5px;
   color: #fff;
   font-size: 15px;
+`
+
+export const BodyContainer = styled.div`
+  padding: 0px 50px 50px 50px;
+  background-image: linear-gradient(to left, ${whiteColor}, ${mainColor});
 `

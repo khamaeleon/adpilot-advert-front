@@ -3,6 +3,7 @@ import {useLocation} from "react-router-dom";
 import {navigationName} from "./entity";
 import {useEffect, useState} from "react";
 import {light} from "../../assets/theme";
+import {topicColor} from "../../assets/GlobalStyles";
 
 function Navigator () {
   const location = useLocation()
@@ -27,19 +28,23 @@ function Navigator () {
           <Arrow/>
         </>
       }
-      <Depth style={{color: light.color.mainColor}}>
+      <Depth>
         {depth3 ? depth3 : depth2}
       </Depth>
     </NavigatorContainer>
   )
 }
-export default Navigator
+export default Navigator;
 
 const NavigatorContainer = styled.div`
   margin-bottom: 20px;
   display: flex;
   align-items: center;
   height: 20px;
+  & > div:last-child {
+    color: ${topicColor};
+    font-weight: bold;
+  }
 `
 
 const Depth = styled.div`

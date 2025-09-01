@@ -10,11 +10,11 @@ export async function paymentAllListRequest( param ) {
   let returnVal = null;
   await AdminAxios('POST', PRODUCT, param)
     .then((response) => {
-      const {responseCode, data} = response
-      if (responseCode.statusCode === 200) {
-        returnVal = data
-      } else {
-        returnVal = null
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
+      }else{
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;

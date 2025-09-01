@@ -210,7 +210,7 @@ function AdChargeModal (props) {
             <ColSpan4 style={{fontWeight:"bold"}}>
               총 결제 금액
               {chargeAmount?
-                (<span className={'won'} style={{color:'#f5811f'}}>{decimalFormat(calcAmount())}</span>)
+                (<span className={'won'} style={{color:'#ff0000'}}>{decimalFormat(calcAmount())}</span>)
                 :(<span className={'won'}>0</span>)}
             </ColSpan4>
           </RowSpan>

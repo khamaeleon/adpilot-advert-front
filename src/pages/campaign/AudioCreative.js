@@ -44,124 +44,9 @@ import {useAtom, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {PreviewSubmit} from "../../components/table/styles";
-import {useIndexedDB} from "react-indexed-db";
 import {atomWithReset, useResetAtom} from "jotai/utils";
 import {AudioEditor} from "./Frame/AudioEditor";
-
-//사이즈 정의
-const imgSizeWidth = [ 'IMG120_600',  'IMG160_600', 'IMG100_200', 'IMG100_300', 'IMG100_400', 'IMG100_500', 'IMG100_600']
-const imgSizeHeight = [ 'IMG300_150',]
-const square = ['IMG150_150','IMG200_200','IMG300_300', 'IMG400_400', 'IMG500_500','IMG600_600']
-
-function ColorPicker ({onChange, defaultColor}) {
-  const [color, setColor] = useState(defaultColor)
-  const [colorChange, setColorChange] = useState(null)
-  const [displayPicker, setDisplayPicker] = useState(false)
-  // 컬러피커 클릭
-  const handleClickColor = () => {
-    setDisplayPicker(!displayPicker)
-  }
-  // 컬러 변환
-  const handleChangeColor = (color) => {
-    setColorChange(color.hex)
-  }
-  // 변환 완료
-  const handleChangeColorComplete = (color) => {
-    setColorChange(color.hex)
-  }
-  // 컬러 선택 완료
-  const handleChoiceColor = () => {
-    setDisplayPicker(!displayPicker)
-    setColor(colorChange)
-    onChange(colorChange)
-  }
-  const popover = {
-    position: 'absolute',
-    zIndex: '2',
-    bottom: 30,
-    right: 0
-  }
-
-  const popButton = {
-    width: '100%',
-    height: 30,
-    borderRadius: 0,
-    backgroundColor: '#777',
-    color: '#fff',
-    boxShadow: '1px 3px 5px rgba(0, 0, 0, 0.5)'
-  }
-
-  return (
-    <PickerContainer>
-      <PickerHex>{color}</PickerHex>
-      <PickerColor color={color} onClick={handleClickColor}/>
-      {displayPicker ?
-        <div style={ popover }>
-          <ChromePicker
-            color={colorChange !== null ? colorChange : defaultColor}
-            onChange={handleChangeColor}
-            onChangeComplete={handleChangeColorComplete}
-          />
-          <div style={{display: 'flex'}}>
-            <button style={popButton} onClick={() => setDisplayPicker(!displayPicker)}>취소</button>
-            <button style={popButton} onClick={handleChoiceColor}>선택</button>
-          </div>
-        </div>
-        : null}
-    </PickerContainer>
-  )
-}
-function stringToSize(size){
-  const replaceString = size.replace('IMG','')
-  const splitString = replaceString.split('_')
-  return splitString[0] + 'px X ' + splitString[1] + 'px'
-}
-function BannerList ({list, frameKey, setFrameKey}) {
-  const setModalOpen = useSetAtom(modalController)
-  const btnSmall = { width: 100, height: 42 }
-  const [key, setKey] = useState()
-
-  const handleClick = (boolean) => {
-    if(boolean) {
-      setFrameKey(key)
-    }
-    setModalOpen({
-      isShow: false,
-      modalComponent: null
-    })
-  }
-  return (
-    <div>
-      <ModalHeader title={'배너 불러오기'}/>
-      <ModalBody>
-        {list.length !== 0 ?
-         <>
-           <BannerListItem style={{fontWeight: 'bold'}}>
-             <div style={{width: 70}}>아이디</div>
-             <div>광고제목</div>
-             <div style={{width: 120}}>업데이트</div>
-           </BannerListItem>
-           {list.length !== 0 && list.map((banner, index) => {
-             return (
-               <BannerListItem style={{backgroundColor: key === banner.key ? '#ddd' : '#fff'}} key={index} onClick={() => setKey(banner.key)}>
-                 <div style={{width: 70}}>{banner.key}</div>
-                 <div style={{textAlign: 'left'}}>{banner.title.text}</div>
-                 <div style={{width: 120}}>{banner.date}</div>
-               </BannerListItem>
-             )
-           })}
-         </>
-        :
-          <div>데이터가 없습니다.</div>
-        }
-      </ModalBody>
-      <ModalFooter style={{borderTop: 0, paddingTop: 5}}>
-        <CancelButton style={btnSmall} onClick={()=>handleClick(false)}>취소</CancelButton>
-        <PreviewSubmit style={btnSmall} onClick={()=>handleClick(list.length !== 0)}>확인</PreviewSubmit>
-      </ModalFooter>
-    </div>
-  )
-}
+import {uploadAudioFile} from "../../services/campaign/CreativeAxios";
 
 const defaultAtom = atomWithReset({
   pcUrl: '',
@@ -200,9 +85,9 @@ export function AudioCreative() {
   const [isLoading, setIsLoading] = useState(true)
   const {register, reset, handleSubmit, formState: {errors}} = useForm()
   const setModalOpen = useSetAtom(modalController)
-  const { getByID, getAll, update, add } = useIndexedDB('frameTable')
   const [guide, setGuide] = useState(false)
   const [forceUpdate, setForceUpdate] = useState(false)
+  const [file, setFile] = useState(null);
 
   useEffect(() => {
     setSelectedBanner(['AUDIO'])
@@ -215,46 +100,6 @@ export function AudioCreative() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedBanner]);
-  /** 메인 이미지 업로드 **/
-  const onDropMain = (pictureFiles) => {
-    console.log(pictureFiles)
-    if (pictureFiles.length !== 0) {
-      const reader = new FileReader();
-      reader.readAsDataURL(pictureFiles[0].file);
-      return new Promise((resolve) => {
-        reader.onload = () => {
-          const image = new Image()
-          image.src = pictureFiles[0].dataURL
-          image.onload = function () {
-            console.log(this.width, this.height)
-            const obj = {
-              url: pictureFiles[0].dataURL,
-              width:this.width,
-              height: this.height,
-            }
-            setDefaultSetting({
-              ...defaultSetting,
-              mainImage: obj
-            });
-          }
-          resolve();
-        };
-      });
-      // pictureFiles.map((item ,index)=>{
-      //   data.append('images', pictureFiles[index].file, pictureFiles[index].file.name)
-      //   return null
-      // })
-      // uploadBannerImages(data, "IMG600_300").then(response => {
-      //   console.log(response)
-      //   if(response) {
-      //     setDefaultSetting({
-      //       ...defaultSetting,
-      //       mainImage: response.images[0].imagePath
-      //     })
-      //   }
-      // })
-    }
-  }
 
   /** 사이즈별 위치정보 저장 **/
   const handleSetPublicPosition = (value) => {
@@ -276,55 +121,69 @@ export function AudioCreative() {
       }
     }
   }
-
-  /** 리드 **/
-  const readIndexedDBValue = (key) => {
-    getByID(key).then(response =>{
-      setSelectedBanner(response.row.map(item => item.size))
-      setDefaultSetting({
-        key: response.key,
-        pcUrl: response.pcUrl,
-        pcCode: response.pcCode,
-        mobileUrl: response.mobileUrl,
-        mobileCode: response.mobileCode,
-        title: response.title,
-        background: response.background,
-        button: response.button,
-        mainImage: response.mainImage,
+  const pickVideo = async () => {
+    let returnVal = null;
+    if (file.length !== 0) {
+      await uploadAudioFile(file).then(response => {
+        const { uploadedFile, path } = response;
+        if (uploadedFile) {
+          toast.success('업로드에 성공 했습니다.');
+          returnVal = path;
+        } else {
+          toast.warning('업로드에 실패 했습니다.');
+        }
       })
-      setPublicSetting(response.row)
-      setBannerTypes(['square','width','height'])
-      // 여기서부터
-      window.localStorage.setItem('frameData', JSON.stringify(response))
-      setIsLoading(false)
-      if(selectedBanner.length !== 0) {
-        setTimeout(()=>{
-          setIsLoading(true)
-        },1000)
-      }
-      // 여기까지는 서비스 전에 삭제 할것
-    })
+    }
+    return returnVal;
   }
+  /** 리드 **/
+  // const readIndexedDBValue = (key) => {
+  //   getByID(key).then(response =>{
+  //     setSelectedBanner(response.row.map(item => item.size))
+  //     setDefaultSetting({
+  //       key: response.key,
+  //       pcUrl: response.pcUrl,
+  //       pcCode: response.pcCode,
+  //       mobileUrl: response.mobileUrl,
+  //       mobileCode: response.mobileCode,
+  //       title: response.title,
+  //       background: response.background,
+  //       button: response.button,
+  //       mainImage: response.mainImage,
+  //     })
+  //     setPublicSetting(response.row)
+  //     setBannerTypes(['square','width','height'])
+  //     // 여기서부터
+  //     window.localStorage.setItem('frameData', JSON.stringify(response))
+  //     setIsLoading(false)
+  //     if(selectedBanner.length !== 0) {
+  //       setTimeout(()=>{
+  //         setIsLoading(true)
+  //       },1000)
+  //     }
+  //     // 여기까지는 서비스 전에 삭제 할것
+  //   })
+  // }
   /** 크리에이트 **/
-  const createIndexedDB = async (data) => {
-    await add(data).then(response => {
-      console.log(response)
-    })
-  }
+  // const createIndexedDB = async (data) => {
+  //   await add(data).then(response => {
+  //     console.log(response)
+  //   })
+  // }
   /** 업데이트 **/
-  const putIndexedDB = async (data) => {
-    await update(data).then(response => {
-      console.log(response)
-    })
-  }
+  //const putIndexedDB = async (data) => {
+  //  await update(data).then(response => {
+  //    console.log(response)
+  //  })
+  //}
   /** 저장 **/
   const handleSaveFrameData = async () => {
     const newData = Object.assign(defaultSetting, {date: new Date().toLocaleDateString(), row: publicSetting})
     window.localStorage.setItem('frameData', JSON.stringify(newData))
     if(isIframeKey !== null) {
-      await putIndexedDB(newData)
+      //await putIndexedDB(newData)
     } else {
-      await createIndexedDB(newData)
+      //await createIndexedDB(newData)
     }
     setIsLoading(false)
     if(selectedBanner.length !== 0) {
@@ -336,32 +195,32 @@ export function AudioCreative() {
   /** 배너선택 **/
   const handleSelectedBanner = (select) => {
     setIsIframeKey(select)
-    readIndexedDBValue(select)
+    //readIndexedDBValue(select)
   }
-  const handleLoadFrameBanner = async () => {
-    const list = await getAll().then(response => {
-      return response
-    })
-    setModalOpen({
-      isShow: true,
-      modalComponent: () => {
-        return (
-          <BannerList list={list} frameKey={isIframeKey} setFrameKey={handleSelectedBanner} />
-        )
-      }
-    })
-  }
+  // const handleLoadFrameBanner = async () => {
+  //   const list = await getAll().then(response => {
+  //     return response
+  //   })
+  //   setModalOpen({
+  //     isShow: true,
+  //     modalComponent: () => {
+  //       return (
+  //         <BannerList list={list} frameKey={isIframeKey} setFrameKey={handleSelectedBanner} />
+  //       )
+  //     }
+  //   })
+  // }
   /** 벨리데이션 및 전송 **/
-  const onSubmit = async (data) => {
-    console.log(data)
-    if(selectedBanner.length <= 0) {
-      toast.warning('배너를 선택해주세요')
-    }
-    else if(defaultSetting.mainImage === '') {
-      toast.warning('메인 이미지를 업로드해주세요')
-    }
-    else {
-      await handleSaveFrameData()
+  const onSubmit = async () => {
+    console.log(file)
+    if(file.size <= 0) {
+      toast.warning('파일을 업로드해주세요')
+    } else {
+      pickVideo().then((response) =>
+          {
+            handleSaveFrameData()
+          }
+      );
     }
   }
   /** 벨리데이션 에러 **/
@@ -384,7 +243,7 @@ export function AudioCreative() {
                 {selectedBanner.map((item, key) => {
                   const position = publicSetting.find(value => value.size === item)
                   return (
-                    <AudioEditor guide={guide} set={defaultSetting} setSetting={setDefaultSetting} publicSetting={position} setPublicSetting={handleSetPublicPosition} size={item} key={key}/>
+                    <AudioEditor file={file} setFile={setFile} guide={guide} set={defaultSetting} setSetting={setDefaultSetting} publicSetting={position} setPublicSetting={handleSetPublicPosition} size={item} key={key}/>
                   )
                 })}
               </FlexWrap>

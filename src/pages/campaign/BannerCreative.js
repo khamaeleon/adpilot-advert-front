@@ -44,7 +44,6 @@ import {useAtom, useSetAtom} from "jotai";
 import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {PreviewSubmit} from "../../components/table/styles";
-import {useIndexedDB} from "react-indexed-db";
 import {atomWithReset, useResetAtom} from "jotai/utils";
 
 //사이즈 정의
@@ -199,7 +198,6 @@ export function BannerCreative() {
   const [isLoading, setIsLoading] = useState(true)
   const {register, reset, handleSubmit, formState: {errors}} = useForm()
   const setModalOpen = useSetAtom(modalController)
-  const { getByID, getAll, update, add } = useIndexedDB('frameTable')
   const [guide, setGuide] = useState(false)
   const [forceUpdate, setForceUpdate] = useState(false)
 
@@ -493,53 +491,53 @@ export function BannerCreative() {
   }
 
   /** 리드 **/
-  const readIndexedDBValue = (key) => {
-    getByID(key).then(response =>{
-      setSelectedBanner(response.row.map(item => item.size))
-      setDefaultSetting({
-        key: response.key,
-        pcUrl: response.pcUrl,
-        pcCode: response.pcCode,
-        mobileUrl: response.mobileUrl,
-        mobileCode: response.mobileCode,
-        title: response.title,
-        background: response.background,
-        button: response.button,
-        mainImage: response.mainImage,
-      })
-      setPublicSetting(response.row)
-      setBannerTypes(['square','width','height'])
-      // 여기서부터
-      window.localStorage.setItem('frameData', JSON.stringify(response))
-      setIsLoading(false)
-      if(selectedBanner.length !== 0) {
-        setTimeout(()=>{
-          setIsLoading(true)
-        },1000)
-      }
-      // 여기까지는 서비스 전에 삭제 할것
-    })
-  }
+  // const readIndexedDBValue = (key) => {
+  //   getByID(key).then(response =>{
+  //     setSelectedBanner(response.row.map(item => item.size))
+  //     setDefaultSetting({
+  //       key: response.key,
+  //       pcUrl: response.pcUrl,
+  //       pcCode: response.pcCode,
+  //       mobileUrl: response.mobileUrl,
+  //       mobileCode: response.mobileCode,
+  //       title: response.title,
+  //       background: response.background,
+  //       button: response.button,
+  //       mainImage: response.mainImage,
+  //     })
+  //     setPublicSetting(response.row)
+  //     setBannerTypes(['square','width','height'])
+  //     // 여기서부터
+  //     window.localStorage.setItem('frameData', JSON.stringify(response))
+  //     setIsLoading(false)
+  //     if(selectedBanner.length !== 0) {
+  //       setTimeout(()=>{
+  //         setIsLoading(true)
+  //       },1000)
+  //     }
+  //     // 여기까지는 서비스 전에 삭제 할것
+  //   })
+  // }
   /** 크리에이트 **/
-  const createIndexedDB = async (data) => {
-    await add(data).then(response => {
-      console.log(response)
-    })
-  }
+  //const createIndexedDB = async (data) => {
+  //  await add(data).then(response => {
+  //    console.log(response)
+  //  })
+  //}
   /** 업데이트 **/
-  const putIndexedDB = async (data) => {
-    await update(data).then(response => {
-      console.log(response)
-    })
-  }
+  //const putIndexedDB = async (data) => {
+  //  await update(data).then(response => {
+  //    console.log(response)
+  //  })
+  //}
   /** 저장 **/
   const handleSaveFrameData = async () => {
     const newData = Object.assign(defaultSetting, {date: new Date().toLocaleDateString(), row: publicSetting})
     window.localStorage.setItem('frameData', JSON.stringify(newData))
     if(isIframeKey !== null) {
-      await putIndexedDB(newData)
+      //await putIndexedDB(newData)
     } else {
-      await createIndexedDB(newData)
+      //await createIndexedDB(newData)
     }
     setIsLoading(false)
     if(selectedBanner.length !== 0) {
@@ -551,20 +549,20 @@ export function BannerCreative() {
   /** 배너선택 **/
   const handleSelectedBanner = (select) => {
     setIsIframeKey(select)
-    readIndexedDBValue(select)
+    //readIndexedDBValue(select)
   }
   const handleLoadFrameBanner = async () => {
-    const list = await getAll().then(response => {
-      return response
-    })
-    setModalOpen({
-      isShow: true,
-      modalComponent: () => {
-        return (
-          <BannerList list={list} frameKey={isIframeKey} setFrameKey={handleSelectedBanner} />
-        )
-      }
-    })
+    // const list = await getAll().then(response => {
+    //   return response
+    // })
+    //setModalOpen({
+    //  isShow: true,
+    //  modalComponent: () => {
+    //    return (
+    //      <BannerList list={list} frameKey={isIframeKey} setFrameKey={handleSelectedBanner} />
+    //    )
+    //  }
+    //})
   }
   /** 재설정(신규) **/
   const handleResetFrameBanner = () => {

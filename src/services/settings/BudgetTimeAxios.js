@@ -1,6 +1,6 @@
 import {AdminAxios} from "../../common/Axios";
 
-const isInit = true;
+const isInit = false;
 
 const ACTION_URL ='/adver/setting'
 const BUDGET_TIME_LIST ='/time'
@@ -30,8 +30,8 @@ export async function selBudgetTimeAdverList(keyword) {
   }
   await AdminAxios('POST', ACTION_URL + ADVER_LIST , keyword)
     .then((response) => {
-      const {data, responseCode} =response
-      if(responseCode.statusCode ===200){
+      const {data, statusCode} = response;
+      if(statusCode ===200){
         returnVal = data
       }else{
         returnVal = null
@@ -65,8 +65,8 @@ export async function selBudgetTimeList(userId) {
   }
   await AdminAxios('GET', ACTION_URL + BUDGET_TIME_LIST +'/'+userId)
     .then((response) => {
-      const {data, responseCode} =response
-      if(responseCode.statusCode ===200){
+      const {data, statusCode} = response;
+      if(statusCode === 200){
         returnVal = data
       }else{
         returnVal = null
@@ -89,8 +89,8 @@ export async function selBudgetTimeDetailInfo(userId,groupId) {
   }
   await AdminAxios('GET', ACTION_URL + BUDGET_TIME_LIST +'/'+userId +'/'+groupId)
     .then((response) => {
-      const {data, responseCode} =response
-      if(responseCode.statusCode ===200){
+      const {data, statusCode} = response;
+      if(statusCode ===200){
         returnVal = data
       }else{
         returnVal = null
@@ -103,8 +103,8 @@ export async function resistBudgetTimes(budgetTimesInfo) {
   let returnVal = null;
   await AdminAxios('POST', ACTION_URL + BUDGET_TIME_LIST ,budgetTimesInfo)
     .then((response) => {
-      const {responseCode} =response
-      if(responseCode.statusCode ===201){
+      const {statusCode} = response
+      if(statusCode === 200){
         returnVal = true
       }else{
         returnVal = false
@@ -117,8 +117,8 @@ export async function updateBudgetTimes(budgetTimesInfo) {
   let returnVal = null;
   await AdminAxios('PUT', ACTION_URL + BUDGET_TIME_LIST ,budgetTimesInfo)
     .then((response) => {
-      const {responseCode} =response
-      if(responseCode.statusCode ===200){
+      const {statusCode} = response;
+      if(statusCode === 200){
         returnVal = true
       }else{
         returnVal = false

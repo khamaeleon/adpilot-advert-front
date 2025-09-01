@@ -10,8 +10,9 @@ export async function retrieveUserPointRequest( userId ) {
   let returnVal = null;
   await AdverAxios('GET', ACTION_URL + userId , null)
     .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = response.data
+      const { data, statusCode } = response;
+      if (statusCode === 200) {
+        returnVal = data
       } else {
         returnVal = null
       }

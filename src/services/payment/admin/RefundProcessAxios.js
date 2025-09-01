@@ -11,11 +11,11 @@ export async function refundProcess( param ) {
   let returnVal = null;
   await AdminAxios('POST', REFUND, param)
     .then((response) => {
-      const {responseCode, data} = response
-      if (responseCode.statusCode === 200) {
-        returnVal = data
-      } else {
-        returnVal = null
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
+      }else{
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -29,11 +29,11 @@ export async function refundAllProcess( param ) {
   let returnVal = null;
   await AdminAxios('POST', REFUNDALL, param)
     .then((response) => {
-      const {responseCode, data} = response
-      if (responseCode.statusCode === 200) {
-        returnVal = data
-      } else {
-        returnVal = null
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
+      }else{
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;

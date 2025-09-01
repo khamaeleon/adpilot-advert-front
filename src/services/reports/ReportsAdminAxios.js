@@ -1,6 +1,6 @@
 import {AdminAxios} from "../../common/Axios";
 
-const isInit = true;
+const isInit = false;
 const ACTION_URL = '/adver/statistics';
 const CREATE_STATISTICS = ACTION_URL+'/custom-report'
 /**
@@ -14,7 +14,12 @@ export async function createCustomReportsAdminAxios(params) {
   }
   await AdminAxios('POST', CREATE_STATISTICS, params)
     .then((response) => {
-      returnVal = response.responseCode.statusCode === 200 ? response.data : null;
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      } else {
+        returnVal = null;
+      }
     }).catch((e) => returnVal = false)
   return returnVal;
 }
@@ -28,7 +33,12 @@ export async function deleteCustomReportsAdminAxios(deleteInfo) {
   let returnVal = null;
   await AdminAxios('DELETE', CREATE_STATISTICS, deleteInfo)
     .then((response) => {
-      returnVal = response.responseCode.statusCode === 200 ? response.data : null;
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
+      }else{
+        returnVal = null;
+      }
     }).catch((e) => returnVal = false)
   return returnVal;
 }
@@ -51,7 +61,12 @@ export async function retrieveCustomReportsAdminList(userId){
   }
   await AdminAxios('GET', `/adver/statistics/${userId}/custom-report`,null)
     .then((response) => {
-      returnVal = response.responseCode.statusCode === 200 ? response.data : null
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      } else {
+        returnVal = null;
+      }
     }).catch((e) => returnVal = false)
   return returnVal;
 }
@@ -63,7 +78,12 @@ export async function retrieveCustomReportsAdminDetail(userId, reportUserSetting
   let returnVal = null;
   await AdminAxios('POST', `/adver/statistics/${userId}/custom-report/${reportUserSettingId}`,params)
     .then((response) => {
-      returnVal = response.responseCode.statusCode === 200 ? response.data : null
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      } else {
+        returnVal = null;
+      }
     }).catch((e) => returnVal = false)
   return returnVal;
 }

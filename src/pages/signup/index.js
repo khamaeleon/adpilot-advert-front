@@ -6,7 +6,17 @@ import Basic from "./Basic";
 import Done from "./Done";
 import {useAtomValue} from "jotai";
 import {nextStepAtom} from "./entity/Common";
-import {Arrow, ButtonGroup, Logo, SignUpContents, SignUpHeader, Step, StepContainer, Steps} from "./styles";
+import {
+  Arrow,
+  BodyContainer,
+  ButtonGroup,
+  Logo,
+  SignUpContents,
+  SignUpHeader,
+  Step,
+  StepContainer,
+  Steps
+} from "./styles";
 
 function SignUp() {
   const agreeValidation = useAtomValue(nextStepAtom)
@@ -55,10 +65,11 @@ function SignUp() {
           </Link>
         </article>
       </SignUpHeader>
+      <BodyContainer>
       <StepContainer>
         <article>
           <div><h1>회원 가입</h1></div>
-          <div><p>회원가입 하시면 엠코퍼레이션에 다양한 서비스를 이용하실 수 있습니다.</p></div>
+          <div><p>회원가입 하시면 애드파일럿에 다양한 서비스를 이용하실 수 있습니다.</p></div>
           <Steps>
             <Step style={{backgroundColor: '#535353', color: '#fff'}}>
               <div style={{backgroundImage: `url("/assets/images/join/icon_membership_step01_on.png")`}}></div>
@@ -88,33 +99,34 @@ function SignUp() {
           </Steps>
         </article>
       </StepContainer>
-      <SignUpContents>
-        {!steps.step1 && !steps.step2 && !steps.step3 &&
-          <>
-            <Terms/>
-            <article style={{borderTop: '1px solid #dcdcdc'}}>
+        <SignUpContents>
+          {!steps.step1 && !steps.step2 && !steps.step3 &&
+            <>
+              <Terms/>
+              <article style={{borderTop: '1px solid #dcdcdc'}}>
+                <ButtonGroup>
+                  <button type={'button'} onClick={() => window.history.back()}>취소</button>
+                  <button type={'button'} onClick={handleNextStep}>다음</button>
+                </ButtonGroup>
+              </article>
+            </>
+          }
+          {steps.step1 && !steps.step2 && !steps.step3 &&
+            <Basic nextStep={handleNextStep}/>
+          }
+          {steps.step1 && steps.step2 && !steps.step3 &&
+            <div className={'done'}>
+              <Done/>
               <ButtonGroup>
-                <button type={'button'} onClick={() => window.history.back()}>취소</button>
-                <button type={'button'} onClick={handleNextStep}>다음</button>
+                {/* eslint-disable-next-line no-restricted-globals */}
+                <button onClick={() => location.replace('/')}>로그인하기</button>
               </ButtonGroup>
-            </article>
-          </>
-        }
-        {steps.step1 && !steps.step2 && !steps.step3 &&
-          <Basic nextStep={handleNextStep}/>
-        }
-        {steps.step1 && steps.step2 && !steps.step3 &&
-          <div className={'done'}>
-            <Done/>
-            <ButtonGroup>
-              {/* eslint-disable-next-line no-restricted-globals */}
-              <button onClick={() => location.replace('/')}>로그인하기</button>
-            </ButtonGroup>
-          </div>
-        }
-      </SignUpContents>
+            </div>
+          }
+        </SignUpContents>
+      </BodyContainer>
     </div>
   )
 }
 
-export default SignUp
+export default SignUp;

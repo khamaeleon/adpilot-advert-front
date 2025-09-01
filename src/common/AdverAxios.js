@@ -78,8 +78,8 @@ adverAxios.interceptors.response.use(
             // eslint-disable-next-line no-restricted-globals
             location.replace('/')
           }
-          const {data,responseCode} =response
-          if (responseCode.statusCode === 200) {
+          const { data, statusCode } = response;
+          if (statusCode === 200) {
               store.set(tokenResultAtom, {
                 id: data.id,
                 username: data.username,

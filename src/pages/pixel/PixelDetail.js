@@ -85,7 +85,6 @@ function PixelDetail() {
       subCategoryCode:''
     })
     retrieveSubLevelCategoryKeyValue(selectTopCategory.value).then(response => {
-      console.log(response)
       setRowLevelCategoryList(response)
     })
   }

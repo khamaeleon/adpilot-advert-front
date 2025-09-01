@@ -1,6 +1,6 @@
 import {AdverAxios} from "../../common/Axios";
 
-const isInit = true;
+const isInit = false;
 const ACTION_URL = '/statistics';
 const CREATE_STATISTICS = ACTION_URL+'/custom-report'
 /**
@@ -11,7 +11,12 @@ export async function createCustomReportsAxios(params) {
   let returnVal = null;
   await AdverAxios('POST', CREATE_STATISTICS, params)
     .then((response) => {
-      returnVal = response.responseCode.statusCode === 200 ? response.data : null;
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      } else {
+        returnVal = null;
+      }
     }).catch(() => returnVal = false)
   return returnVal;
 }
@@ -25,7 +30,12 @@ export async function deleteCustomReportsAxios(deleteInfo) {
   let returnVal = null;
   await AdverAxios('DELETE', CREATE_STATISTICS, deleteInfo)
     .then((response) => {
-      returnVal = response.responseCode.statusCode === 200 ? response.data : null;
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      } else {
+        returnVal = null;
+      }
     }).catch(() => returnVal = false)
   return returnVal;
 }
@@ -49,7 +59,12 @@ export async function retrieveCustomReportsList(userId){
   }
   await AdverAxios('GET', `/statistics/${userId}/custom-report`,null)
     .then((response) => {
-      returnVal = response.responseCode.statusCode === 200 ? response.data : null
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      } else {
+        returnVal = null;
+      }
     }).catch(() => returnVal = false)
   return returnVal;
 }
@@ -61,7 +76,12 @@ export async function retrieveCustomReportsDetail(userId, reportUserSettingId, p
   let returnVal = null;
   await AdverAxios('POST', `/statistics/${userId}/custom-report/${reportUserSettingId}`,params)
     .then((response) => {
-      returnVal = response.responseCode.statusCode === 200 ? response.data : null
+      const { data, statusCode } = response;
+      if(statusCode === 200){
+        returnVal = data;
+      } else {
+        returnVal = null;
+      }
     }).catch(() => returnVal = false)
   return returnVal;
 }

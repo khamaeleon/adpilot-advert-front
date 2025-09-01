@@ -152,10 +152,16 @@ function FindId(props) {
   const handleFindId = () => {
     if (success) {
       selFindUserId(findIdInfo).then(response => {
-        console.log(response)
-        if (response.length !== 0) {
-          setFindIdResult(response)
-          props.openModal()
+
+        const { data, statusCode } = response;
+        console.log("selFindUserId:"+data)
+        if(statusCode === 200){
+          if (data.length !== 0) {
+            setFindIdResult(response);
+            props.openModal();
+          } else {
+            toast.info('등록된 아이디나 이메일이 없습니다.')
+          }
         } else {
           toast.info('등록된 아이디나 이메일이 없습니다.')
         }
@@ -505,7 +511,8 @@ const LoginContainer = styled.div`
     align-items: center;
     width: 60%;
     height: 100vh;
-    background-image: url('/assets/images/login/login_background.png');
+    //background-image: url('/assets/images/login/login_background.png');
+    background-image: linear-gradient(to left, rgb(255,255,255), rgb(185,28,28));
     background-size: cover;
     text-align: center;
 

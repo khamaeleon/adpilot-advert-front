@@ -1,43 +1,5 @@
-import {
-  Board,
-  BoardHeader,
-  BoardSearchResult,
-  CancelButton,
-  ColSpan1,
-  ColSpan100,
-  ColSpan2,
-  ColSpan4,
-  Input,
-  RowSpan,
-  selectStyle,
-  Span3,
-  Span4,
-  SubmitButton,
-  SubmitContainer,
-  ValidationScript
-} from "../../../assets/GlobalStyles";
-import {
-  AdverInfo,
-  ArrowButton,
-  CampaignButton,
-  CategoryItem,
-  CreateImage,
-  DeleteIcon,
-  FolderButton,
-  ImageUploadCard,
-  PrevButton,
-  PrevFrame,
-  PrevImage250,
-  PrevImage728,
-  PrevTitle250,
-  PrevTitle728,
-  ResistBanner,
-  Row,
-  RowBody,
-  RowHeader,
-  SelectCategory,
-  Validation,
-  ValidationGroup
+import {  Board,  BoardHeader,  BoardSearchResult,  CancelButton,  ColSpan1,  ColSpan100,  ColSpan2,  ColSpan4,  Input,  RowSpan,  selectStyle,  Span3,  Span4,  SubmitButton,  SubmitContainer,  ValidationScript} from "../../../assets/GlobalStyles";
+import {AdverInfo, ArrowButton, CampaignButton, CategoryItem, CreateImage, DeleteIcon, FolderButton, ImageUploadCard, PrevButton, PrevFrame, PrevImage250, PrevImage728, PrevTitle250, PrevTitle728, ResistBanner, Row, RowBody, RowHeader, SelectCategory, Validation, ValidationGroup
 } from "../styles/common";
 import {HorizontalRule} from "../../../components/common/Common";
 import Select from "react-select";
@@ -50,12 +12,15 @@ import {selEnumInfo} from "../../../services/campaign/InfoAxios";
 import {bannerSizeAtom, campaignCreativeAtom, clickInducementTypeAtom, creativeTypeAtom} from "../entity/Creative";
 import ImageUploading from "react-images-uploading";
 import {
+  selCreativeAudioInfo,
   selCreativeBannerInfo,
   selCreativeNativeInfo,
   selCreativePopUnderInfo,
+  updateCampaignAudio,
   updateCampaignBanner,
   updateCampaignNative,
   updateCampaignPopUnder,
+  uploadAudioFile,
   uploadBannerImages,
   uploadLogoImages,
   uploadNativeImages
@@ -66,6 +31,8 @@ import {dateFormat, multiAxiosCall, toDay} from "../../../common/StringUtils";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import queryString from "query-string";
+import {AudioEditor} from "../Frame/AudioEditor";
+import {atomWithReset} from "jotai/utils";
 
 export function reactConfirmClose() {
   const target = document.getElementById('react-confirm-alert');
@@ -151,7 +118,7 @@ const RegistryBannerItem = (props) => {
               <ColSpan100 padding={'0'} key={key}>
                 <ImageUploadCard>
                   <DeleteIcon onClick={() => handleDeleteImage(item.imagePath)}/>
-                  <div className={'img'} style={{backgroundImage: `url(${item.thumbnailPath})`}}></div>
+                  <div className={'img'} style={{backgroundImage: `url(${item.imagePath})`}}></div>
                 </ImageUploadCard>
               </ColSpan100>
             )
@@ -371,7 +338,7 @@ function CampaignFourBanner(props) {
               <span>클릭 유도 문안</span>
               <Select options={clickInducementType}
                       placeholder={'유도 문안 선택'}
-                      value={campaignCreativeInfo.clickInducementType !== undefined ?
+                      value={campaignCreativeInfo?.clickInducementType !== undefined ?
                         clickInducementType?.find(value => value.value === campaignCreativeInfo.clickInducementType) : ''}
                       onChange={handleClickInducementType}
                       width={145}
@@ -694,7 +661,7 @@ function CampaignFourNative(props) {
             <span>클릭 유도 문안<small>(선택)</small></span>
             <Select options={clickInducementType}
                     placeholder={'유도 문안 선택'}
-                    value={campaignCreativeInfo.clickInducementType !== undefined ?
+                    value={campaignCreativeInfo?.clickInducementType !== undefined ?
                       clickInducementType.find(value => value.value === campaignCreativeInfo.clickInducementType) : ''}
                     onChange={handleClickInducementType}
                     width={145}
@@ -789,6 +756,7 @@ export function CampaignFour() {
   const {control, register, handleSubmit, reset, setError, setValue, formState: {errors}} = useFormContext()
   const state = location.search !== '' ? queryString.parse(location.search) : location.state
   const [resistBool] =useState(state === null);
+  const [file, setFile] = useState(null);
 
   useEffect(() => {
     if(!resistBool){
@@ -806,10 +774,9 @@ export function CampaignFour() {
           reset(response)
         })
       }else if(state.creativeType ==='AUDIO'){
-        selCreativeNativeInfo(state.campaignId).then(response =>{
+        selCreativeAudioInfo(state.campaignId).then(response =>{
           setCampaignCreative({
-            ...response,
-            materials:[]
+            ...response
           })
           setCampaignBasicInfo({
             ...campaignBasicInfo,
@@ -858,23 +825,23 @@ export function CampaignFour() {
       setValue('name', creativeType+name+time)
     }
     selEnumInfo('BANNER_SIZE').then(response => {
-      setBannerSize(response.data)
+      setBannerSize(response.values)
     })
     selEnumInfo('CLICK_INDUCEMENT_TYPE').then(response => {
-      setClickInducementType(response.data)
+      setClickInducementType(response.values)
     })
 
     if ((resistBool && campaignBasicInfo.productType ==='BANNER')|| (state !==null && state.productType==='BANNER')) {
       selEnumInfo('CREATIVE_TYPE_BANNER').then(response => {
-        setCreativeType(response.data)
+        setCreativeType(response.values)
       })
     } else if(state !==null && state.productType==='POP_UNDER'){
       selEnumInfo('CREATIVE_TYPE_POP_UNDER').then(response => {
-        setCreativeType(response.data)
+        setCreativeType(response.values)
       })
     } else {
       selEnumInfo('CREATIVE_TYPE_AUDIO').then(response => {
-        setCreativeType(response.data)
+        setCreativeType(response.values)
       })
     }
     return () => {
@@ -928,8 +895,25 @@ export function CampaignFour() {
       }
     } else state !== null ? toast.error('수정이 실패하였습니다.') : toast.error('등록이 실패하였습니다.')
   }
+  const pickVideo = async () => {
+    let returnVal = null;
+    if (file.length !== 0) {
+      await uploadAudioFile(file).then(response => {
+        const { uploadedFile, path } = response;
+        if (uploadedFile) {
+          toast.success('업로드에 성공 했습니다.');
+          returnVal = path;
+        } else {
+          toast.warning('업로드에 실패 했습니다.');
+        }
+      })
+    } else {
+      returnVal = false;
+    }
+    return returnVal;
+  }
   const onSubmit = () => {
-    const materialsImages = campaignCreativeInfo.materials.find(obj => obj.images.length === 0) ? true : false;
+    const materialsImages = campaignCreativeInfo.materials?.find(obj => obj.images.length === 0) ? true : false;
 
     if(campaignCreativeInfo.creativeType === 'BANNER' && ((campaignCreativeInfo.materials.length !== 0 && materialsImages) || campaignCreativeInfo.materials.length === 0)) {// 고정 배너 체크
 
@@ -937,6 +921,8 @@ export function CampaignFour() {
 
     } else if (campaignCreativeInfo.creativeType === 'NATIVE' && campaignCreativeInfo.nativeMaterials.length === 0) { // 네이티브 배너 체크
       setError('nativeMaterials', { type: 'required', message: '광고 소재를 등록해 주세요.' })
+    } else if (campaignCreativeInfo.creativeType === 'AUDIO' && campaignCreativeInfo.filePath === '' && file?.size <= 0) { // 네이티브 배너 체크
+      setError('file', { type: 'required', message: '광고 소재(오디오)를 등록해 주세요.' })
     } else {
       let param = {
         ...campaignCreativeInfo,
@@ -944,10 +930,25 @@ export function CampaignFour() {
         name: campaignCreativeInfo.name
       };
       let updateFunc;
+      console.log(file)
       switch(campaignCreativeInfo.creativeType){
         case "BANNER": updateFunc = updateCampaignBanner(param); break;
         case "NATIVE": updateFunc = updateCampaignNative(param); break;
         case "POP_UNDER": updateFunc = updateCampaignPopUnder(param); break;
+        case "AUDIO":
+          updateFunc = (file !== null) ?
+              pickVideo().then(response => {
+                let param = {
+                  ...campaignCreativeInfo,
+                  campaignId: campaignBasicInfo.campaignId,
+                  name: campaignCreativeInfo.name,
+                  filePath: response
+                };
+                if(response){
+                  return updateCampaignAudio(param)
+                }
+              }) : updateCampaignAudio(param);
+        break;
         default : updateFunc = updateCampaignBanner(param);break;
       }
       multiAxiosCall([updateFunc], onSubmitToast)
@@ -969,16 +970,16 @@ export function CampaignFour() {
                   <ColSpan1 padding={'0'}>
                     <CampaignButton type={'button'}
                                     onClick={() => selCreativeGroup('BANNER')}
-                                    className={campaignCreativeInfo.creativeType === 'BANNER' ? 'on' : null}
+                                    className={campaignCreativeInfo?.creativeType === 'BANNER' ? 'on' : null}
                     >
-                      {creativeType.find(value => value.value === 'BANNER')?.label}
+                      {creativeType?.find(value => value.value === 'BANNER')?.label}
                     </CampaignButton>
-                    <CampaignButton type={'button'}
-                                    onClick={() => selCreativeGroup('NATIVE')}
-                                    className={campaignCreativeInfo.creativeType === 'NATIVE' ? 'on' : null}
-                    >
-                      {creativeType.find(value => value.value === 'NATIVE')?.label}
-                    </CampaignButton>
+                    {/*<CampaignButton type={'button'}*/}
+                    {/*                onClick={() => selCreativeGroup('NATIVE')}*/}
+                    {/*                className={campaignCreativeInfo.creativeType === 'NATIVE' ? 'on' : null}*/}
+                    {/*>*/}
+                    {/*  {creativeType?.find(value => value.value === 'NATIVE')?.label}*/}
+                    {/*</CampaignButton>*/}
                   </ColSpan1>
                 }
                 {creativeType !== null && campaignBasicInfo.productType ==='POP_UNDER' &&
@@ -986,7 +987,7 @@ export function CampaignFour() {
                       <CampaignButton type={'button'}
                                       className={'on'}
                       >
-                        {creativeType.find(value => value.value === 'POP_UNDER')?.label}
+                        {creativeType?.find(value => value.value === 'POP_UNDER')?.label}
                       </CampaignButton>
                     </ColSpan1>
                 }
@@ -995,12 +996,16 @@ export function CampaignFour() {
                       <CampaignButton type={'button'}
                                       className={'on'}
                       >
-                        {creativeType.find(value => value.value === 'AUDIO')?.label}
+                        {creativeType?.find(value => value.value === 'AUDIO')?.label}
                       </CampaignButton>
                     </ColSpan1>
                 }
               </RowSpan>
-              {/*
+              {creativeType !== null && campaignBasicInfo.productType ==='AUDIO' &&
+                <RowSpan>
+                    <AudioEditor file={file} setFile={setFile} filePath={campaignCreativeInfo.filePath}/>
+                </RowSpan>
+              }
               <RowSpan column={true}>
                 <Span4>랜딩 url</Span4>
                 <RowSpan box={true} column={false}>
@@ -1077,7 +1082,7 @@ export function CampaignFour() {
                 <Validation>{errors.pcReferralCode && errors.pcReferralCode.message}</Validation>
                 <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
               </ValidationGroup>
-              */}
+
               {campaignCreativeInfo.creativeType === 'BANNER' && ((resistBool && campaignBasicInfo.productType==='BANNER') || (state !== null && state.productType==='BANNER')) &&
                 <CampaignFourBanner control={control} errors={errors} setError={setError} register={register} onImageError={onImageError}
                                     folding={campaignCreativeInfo.title1 === ''

@@ -11,11 +11,11 @@ export async function paymentRequest( param ) {
     console.log(param)
     await AdverAxios('POST', ACTION_URL, param)
         .then((response) => {
-          console.log(response)
-            if (response.responseCode.statusCode === 200) {
-                returnVal = response.data
-            } else {
-                returnVal = null
+            const { data, statusCode, message } = response;
+            if(statusCode === 200) {
+                returnVal = data;
+            }else{
+                returnVal = null;
             }
         }).catch(() => returnVal = null)
     return returnVal;

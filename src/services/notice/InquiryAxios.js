@@ -9,11 +9,11 @@ export async function selInquiryList(userId, searchCondition) {
 
   await AdverAxios('POST', INQUIRY_LIST.replace('{userId}', userId), searchCondition)
   .then((response) => {
-    const {data, responseCode} = response
-    if(responseCode.statusCode ===200){
-      returnVal = data
+    const { data, statusCode, message } = response;
+    if(statusCode ===200) {
+      returnVal = data;
     }else{
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = null)
 
@@ -25,11 +25,11 @@ export async function selInquiryById(inquiryId, searchCondition) {
 
   await AdverAxios('GET', INQUIRY_DETAIL.replace('{inquiryId}', inquiryId), searchCondition)
   .then((response) => {
-    const {data, responseCode} = response
-    if(responseCode.statusCode ===200){
-      returnVal = data
+    const { data, statusCode, message } = response;
+    if(statusCode === 200) {
+      returnVal = data;
     }else{
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = null)
 
@@ -41,11 +41,11 @@ export async function createInquiry(inquiryParam) {
 
   await AdverAxios('POST', ACTION_URL, inquiryParam)
   .then((response) => {
-    const {data, responseCode} = response
-    if(responseCode.statusCode === 200){
-      returnVal = data
+    const { data, statusCode, message } = response;
+    if(statusCode === 200) {
+      returnVal = data;
     }else{
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = null)
 

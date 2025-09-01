@@ -224,16 +224,16 @@ export function DashBoardCondition(props) {
                       isSearchable={false}
               />
             </ColSpan0>
-            <ColSpan0 style={{marginRight: 10}}>
-              <ColTitle style={{paddingLeft: 0}}>타겟팅</ColTitle>
-              <Select options={targetingType}
-                      value={targetingType.find(value => value.value === searchState?.targetingType)}
-                      onChange={handleTargetingType}
-                      width={160}
-                      styles={selectStyle}
-                      isSearchable={false}
-              />
-            </ColSpan0>
+            {/*<ColSpan0 style={{marginRight: 10}}>*/}
+            {/*  <ColTitle style={{paddingLeft: 0}}>타겟팅</ColTitle>*/}
+            {/*  <Select options={targetingType}*/}
+            {/*          value={targetingType.find(value => value.value === searchState?.targetingType)}*/}
+            {/*          onChange={handleTargetingType}*/}
+            {/*          width={160}*/}
+            {/*          styles={selectStyle}*/}
+            {/*          isSearchable={false}*/}
+            {/*  />*/}
+            {/*</ColSpan0>*/}
             <ColSpan0>
               <ColTitle style={{paddingLeft: 0}}>디바이스</ColTitle>
               <RelativeDiv style={{marginRight: 0}}>

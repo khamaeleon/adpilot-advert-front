@@ -1,6 +1,6 @@
 import {NonUserAxios} from "../../common/Axios";
 
-const isInit = true
+const isInit = false
 const ACTION_URL = '/sign';
 
 const LOGIN_USER = ACTION_URL + '/in/adver';
@@ -21,7 +21,7 @@ export async function login(loginInfo) {
   if(isInit){
     return {
       email: loginInfo.email,
-      role: 'ADMIN',
+      role: 'NORMAL',
       name: '김용태',
       token: {
         accessToken: '3298dsfh8ds9hfsdfs',
@@ -31,14 +31,16 @@ export async function login(loginInfo) {
   }
   await NonUserAxios('POST', LOGIN_USER, loginInfo)
     .then((response) => {
-      const {data,responseCode} =response.data
-      returnVal = data
-      if (responseCode.statusCode === 200) {
+      const { data, statusCode } = response.data
+      if (statusCode === 200) {
+        returnVal = data
         localStorage.removeItem("refreshToken")
         localStorage.setItem("refreshToken", data.token.refreshToken);
+      } else {
+        returnVal = false;
       }
     }).catch((e) =>{
-      if(e.response.data.responseCode.code === 'C007') {
+      if(e.response.data.status.code === 'C007') {
         returnVal = "disabled";
       } else {
         returnVal = false;
@@ -60,10 +62,10 @@ export async function logOutUser(userInfo) {
   await NonUserAxios('POST', LOGOUT_USER, userInfo)
     .then((response) => {
       returnVal = response.data
-      if (returnVal.responseCode.statusCode === 200) {
-        returnVal = true
+      if (returnVal.status === 200) {
+        returnVal = true;
       } else {
-        returnVal = false
+        returnVal = false;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -89,16 +91,16 @@ export async function loginAdmin(loginInfo) {
   }
   await NonUserAxios('POST', LOGIN_ADMIN, loginInfo)
     .then((response) => {
-      const {data,responseCode} =response.data
-      returnVal = data
-      console.log(responseCode)
-      if (responseCode.statusCode === 200) {
+      const {data,status} = response
+      returnVal = data.data
+      console.log(returnVal.token?.refreshToken)
+      if (status === 200) {
         localStorage.removeItem("refreshToken")
-        localStorage.setItem("refreshToken", data.token.refreshToken);
+        localStorage.setItem("refreshToken", returnVal.token.refreshToken);
       } else {
         returnVal = false
       }
-    }).catch((e) => returnVal = false)
+    }).catch((e) => console.log(e))
   return returnVal
 }
 
@@ -115,7 +117,7 @@ export async function logOutAdmin(userInfo) {
   await NonUserAxios('POST', LOGOUT_ADMIN, userInfo)
     .then((response) => {
       returnVal = response.data
-      if (returnVal.responseCode.statusCode === 200) {
+      if (returnVal.status === 200) {
         returnVal = true
       } else {
         returnVal = false
@@ -139,12 +141,12 @@ export async function refreshAdmin() {
   }
   let returnVal = null;
   await NonUserAxios('POST', ADMIN_REFRESH_URL, param).then((response) => {
-    const {data,responseCode} =response.data
+    const {data,status} =response.data
     returnVal = response.data
-    if (responseCode.statusCode === 200) {
+    if (status === 200) {
       localStorage.removeItem("refreshToken")
       localStorage.setItem("refreshToken", data.token.refreshToken);
-    }else if(responseCode.statusCode === 401 || responseCode.statusCode === 403){
+    }else if(status === 401 || status === 403){
       // eslint-disable-next-line no-restricted-globals
       location.replace('/')
     }
@@ -163,12 +165,12 @@ export async function refresh() {
   }
   let returnVal = null;
   await NonUserAxios('POST', USER_REFRESH_URL, param).then((responseUser) => {
-    const {data,responseCode} =responseUser.data
+    const {data,status} =responseUser.data
     returnVal = responseUser.data
-    if (responseCode.statusCode === 200) {
+    if (status === 200) {
       localStorage.removeItem("refreshToken")
       localStorage.setItem("refreshToken", data.token.refreshToken);
-    }else if(responseCode.statusCode === 401 || responseCode.statusCode === 403){
+    }else if(status === 401 || status === 403){
       // eslint-disable-next-line no-restricted-globals
       location.replace('/')
     }

@@ -421,7 +421,7 @@ export function FrameEditor(props){
 const FrameContainer = styled.div`
   padding: 0 10px 10px;
   background-color: #fff;
-  border: ${({active}) => active ? '1px solid #f5811f' : '1px solid #ddd'};
+  border: ${({active}) => active ? '1px solid #ff0000' : '1px solid #ddd'};
   border-radius: 3px;
 `
 const FrameHeader = styled.div`

@@ -10,11 +10,11 @@ export async function selNoticeListAdmin(searchCondition) {
 
   await AdminAxios('POST', NOTICE_LIST, searchCondition)
   .then((response) => {
-    const {data, responseCode} = response
-    if(responseCode.statusCode ===200){
-      returnVal = data
+    const { data, statusCode, message } = response;
+    if(statusCode ===200) {
+      returnVal = data;
     }else{
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = null)
 
@@ -26,11 +26,11 @@ export async function selNoticeAdmin(noticeId, searchCondition) {
 
   await AdminAxios('GET', NOTICE_DETAIL.replace('{noticeId}', noticeId), searchCondition)
   .then((response) => {
-    const {data, responseCode} = response
-    if(responseCode.statusCode ===200){
-      returnVal = data
+    const { data, statusCode, message } = response;
+    if(statusCode === 200) {
+      returnVal = data;
     }else{
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = null)
 
@@ -44,11 +44,11 @@ export async function updateNoticePublishAdmin(noticeId, publishYn) {
 
   await AdminAxios('PUT', NOTICE_UPDATE.replace('{noticeId}', noticeId), params)
   .then((response) => {
-    const {data, responseCode} = response
-    if(responseCode.statusCode ===200){
-      returnVal = data
+    const { data, statusCode, message } = response;
+    if(statusCode === 200) {
+      returnVal = data;
     }else{
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = null)
 
@@ -60,11 +60,11 @@ export async function createNoticeAdmin(noticeParam) {
 
   await AdminAxios('POST', ACTION_URL, noticeParam)
   .then((response) => {
-    const {data, responseCode} = response
-    if(responseCode.statusCode === 200){
-      returnVal = data
+    const { data, statusCode, message } = response;
+    if(statusCode === 200) {
+      returnVal = data;
     }else{
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = null)
 

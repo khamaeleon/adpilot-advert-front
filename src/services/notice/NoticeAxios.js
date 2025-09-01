@@ -9,11 +9,11 @@ export async function selNoticeList(searchCondition) {
 
   await AdverAxios('POST', NOTICE_LIST, searchCondition)
   .then((response) => {
-    const {data, responseCode} = response
-    if(responseCode.statusCode ===200){
-      returnVal = data
+    const { data, statusCode, message } = response;
+    if(statusCode === 200) {
+      returnVal = data;
     }else{
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = null)
 
@@ -25,11 +25,11 @@ export async function selNotice(noticeId, searchCondition) {
 
   await AdverAxios('GET', NOTICE_DETAIL.replace('{noticeId}', noticeId), searchCondition)
   .then((response) => {
-    const {data, responseCode} = response
-    if(responseCode.statusCode ===200){
-      returnVal = data
+    const { data, statusCode, message } = response;
+    if(statusCode === 200) {
+      returnVal = data;
     }else{
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = null)
 

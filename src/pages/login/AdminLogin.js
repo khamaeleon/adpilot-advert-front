@@ -78,7 +78,6 @@ function AdminLogin() {
    */
   const onSubmit = () => {
     loginAdmin(loginParamsValue).then((response) => {
-      console.log(response)
       if (response) {
         setTokenResult({
           id:response.email,
@@ -180,7 +179,7 @@ function AdminLogin() {
   )
 }
 
-export default AdminLogin
+export default AdminLogin;
 
 const LoginContainer = styled.div`
   display: flex;
@@ -191,7 +190,8 @@ const LoginContainer = styled.div`
     align-items: center;
     width: 60%;
     height: 100vh;
-    background-image: url('/assets/images/login/login_background.png');
+    //background-image: url('/assets/images/login/login_background.png');
+    background-image: linear-gradient(to left, rgb(255,255,255), rgb(185,28,28));
     background-size: cover;
     text-align: center;
 
@@ -212,7 +212,6 @@ const LoginContainer = styled.div`
     justify-content: center;
     align-items: center;
     width: 40%;
-    width: 40%;
     height: 100vh;
   }
 `
@@ -230,7 +229,7 @@ const LoginLogo = styled.div`
   width: 300px;
   height: 150px;
   background-image: url('/assets/images/logos/adpilot/logo_inline_w.png');
-  background-image: -webkit-image-set(url("/assets/images/logos/adpilot/logo_inline_w.png") 1x, url("/assets/images/logos/logo_inline_w@2x.png") 2x, url("/assets/images/logos/logo_inline_w@3x.png") 3x);
+  background-image: -webkit-image-set(url("/assets/images/logos/adpilot/logo_inline_w.png") 1x, url("/assets/images/logos/adpilot/logo_inline_w@2x.png") 2x, url("/assets/images/logos/adpilot/logo_inline_w@3x.png") 3x);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -240,7 +239,7 @@ const BlockLogo = styled.div`
   width: 120px;
   height: 80px;
   background-image: url('/assets/images/logos/adpilot/logo.png');
-  background-image: -webkit-image-set(url("/assets/images/logos/adpilot/logo.png") 1x, url("/assets/images/logos/logo@2x.png") 2x, url("/assets/images/logos/logo@3x.png") 3x);
+  background-image: -webkit-image-set(url("/assets/images/logos/adpilot/logo.png") 1x, url("/assets/images/logos/adpilot/logo@2x.png") 2x, url("/assets/images/logos/adpilot/logo@3x.png") 3x);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;

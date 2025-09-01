@@ -1,6 +1,6 @@
 import {AdminAxios} from "../../common/Axios";
 
-const isInit = true;
+const isInit = false;
 
 const ACTION_URL = '/adver/campaign'
 const ENUM_LIST = 'list'
@@ -110,10 +110,11 @@ export async function selEnumInfo(enumInfo) {
 
   await AdminAxios('GET', ACTION_URL + '/' + enumInfo + '/' + ENUM_LIST)
   .then((response) => {
-    if (response.responseCode.statusCode === 200) {
-      returnVal = response.data
+    const { data, statusCode } = response;
+    if (statusCode === 200) {
+      returnVal = data;
     } else {
-      returnVal = null
+      returnVal = null;
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -134,11 +135,11 @@ export async function resistCampaignBasic(campaignInfo) {
   }
   await AdminAxios('POST', ACTION_URL, campaignInfo)
   .then((response) => {
-    const {responseCode, data} = response
-    if (responseCode.statusCode === 201) {
-      returnVal = data
+    const { data, statusCode } = response;
+    if (statusCode === 200) {
+      returnVal = data;
     } else {
-      returnVal = false
+      returnVal = null;
     }
   }).catch((e) => returnVal = false)
   return returnVal;
@@ -163,8 +164,9 @@ export async function selTemporaryList(userId) {
   }
   await AdminAxios('GET', ACTION_URL + TEMPORARY_LIST + '?userId=' + userId)
   .then((response) => {
-    if (response.responseCode.statusCode === 200) {
-      returnVal = response.data
+    const { data, statusCode } = response;
+    if (statusCode === 200) {
+      returnVal = data
     } else {
       returnVal = null
     }
@@ -190,8 +192,9 @@ export async function selBasicInfo(userId) {
   }
   await AdminAxios('GET', ACTION_URL + '/' + userId)
   .then((response) => {
-    if (response.responseCode.statusCode === 200) {
-      returnVal = response.data
+    const { data, statusCode } = response;
+    if (statusCode === 200) {
+      returnVal = data
     } else {
       returnVal = null
     }
@@ -208,7 +211,12 @@ export async function deleteTemporary(campaignId) {
   let returnVal = null;
   await AdminAxios('DELETE', ACTION_URL + '/' + campaignId + '/temporary', null)
   .then((response) => {
-    returnVal = response.responseCode.statusCode === 200 ? true : false;
+    const { data, statusCode } = response;
+    if (statusCode === 200) {
+      returnVal = true;
+    } else {
+      returnVal = false;
+    }
   }).catch((e) => returnVal = false)
   return returnVal;
 }

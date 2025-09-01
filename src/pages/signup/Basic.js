@@ -321,11 +321,16 @@ export default function Basic(props) {
       const imagesLastIndex = pictureFiles.length - 1;
       data.append('file', pictureFiles[imagesLastIndex].file, pictureFiles[imagesLastIndex].file.name)
       accountFileUpload(data, 'LICENCE').then(response => {
-        if (response) {
+        const { uploadedFile, path } = response;
+        if (uploadedFile) {
+          toast.success('업로드에 성공 했습니다.')
           setAccountInfo({
             ...accountInfo,
-            businessLicenseWebPath: response,
+            businessLicenseWebPath: path,
           })
+        } else {
+          toast.warning('업로드에 실패 했습니다.')
+
         }
       })
     }
@@ -337,7 +342,7 @@ export default function Basic(props) {
   const onSubmit = () => {
     if(isIdCheck){
       signUp({...accountInfo, hostType:accountInfo.hostType.value}).then(response => {
-        if (response.responseCode.statusCode === 200) {
+        if (response.statusCode === 200) {
           setAgreeValidation({
             terms: true,
             validation: true

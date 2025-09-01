@@ -145,6 +145,6 @@ export const TotalCount = styled.div`
   }
   & > span:last-child {
     margin-left: 3px;
-    color: #f5811f;
+    color: #ff0000;
   }
 `

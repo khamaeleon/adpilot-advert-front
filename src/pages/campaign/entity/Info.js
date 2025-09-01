@@ -38,5 +38,5 @@ export const goalViewType = [
 
 export const biddingTypeAll = [
   {key:0, value:'CPC', label:'CPC'},
-  {key:1, value:'CPM', label:'CPM'}
+  {key:1, value:'CPM', label:'CPM'},
 ]

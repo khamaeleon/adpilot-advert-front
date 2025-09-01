@@ -6,6 +6,7 @@ export const campaignCreativeAtom = atomWithReset(
     campaignId: '',
     creativeType: 'AUDIO',
     materials: [],
+    filePath: '',
     pcLandingUrl: '',
     mobLandingUrl: '',
     mobReferralCode: '',

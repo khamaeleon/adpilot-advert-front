@@ -333,7 +333,7 @@ export default function CustomReports() {
             return null
           })
           setCampaignColumn(newObject)
-          setCampaignData(response?.pagingCommonResponse.rows)
+          setCampaignData(response?.pagingCommonResponse.content)
           setReportSettingInfo(response?.adminSetting)
         }
       })
@@ -346,7 +346,7 @@ export default function CustomReports() {
             return null
           })
           setCampaignColumn(newObject)
-          setCampaignData(response.pagingCommonResponse.rows)
+          setCampaignData(response.pagingCommonResponse.content)
           setReportSettingInfo(response.userSetting)
         }
       })
@@ -470,14 +470,16 @@ export default function CustomReports() {
    * 검색
    */
   const handleSearchReports = () => {
+    console.log(tokenResult)
+    console.log(reportsInfo)
     console.log(searchCondition)
     if(tokenResult.role !== "NORMAL") {
       retrieveCustomReportsAdminDetail(tokenResult.id, reportsInfo.id, searchCondition).then(response => {
-        setCampaignData(response.pagingCommonResponse.rows)
+        setCampaignData(response.pagingCommonResponse.content)
       })
     }else {
       retrieveCustomReportsDetail(tokenResult.id, reportsInfo.id, searchCondition).then(response => {
-        setCampaignData(response.pagingCommonResponse.rows)
+        setCampaignData(response.pagingCommonResponse.content)
       })
     }
   }
@@ -616,7 +618,7 @@ export default function CustomReports() {
       </RowSpan>
       <BoardSearchResult>
         <Table
-          style={{fontSize: 13, minHeight: campaignData.length !== 0 ? 550 : 300}}
+          style={{fontSize: 13, minHeight: campaignData?.length !== 0 ? 550 : 300}}
           headerHeight={40}
           columns={campaignColumn}
           data={campaignData}

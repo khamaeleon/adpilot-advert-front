@@ -13,25 +13,23 @@ import AdminLogin from "./pages/login/AdminLogin";
 import {NotFound} from "./pages/404";
 import "react-datepicker/dist/react-datepicker.css";
 import "../src/assets/DatePicker.css"
-import {initDB} from "react-indexed-db";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {ServerError} from "./pages/500";
-export const DBConfig = {
-  name: 'FrameDB',
-  version: 1,
-  objectStoresMeta: [
-    {
-      store: 'frameTable',
-      storeConfig: { keyPath: 'key', autoIncrement: true },
-      storeSchema: [
-        { name: 'row', keyPath: 'name', options: { unique: false } },
-      ]
-    }
-  ]
-};
+// export const DBConfig = {
+//   name: 'FrameDB',
+//   version: 1,
+//   objectStoresMeta: [
+//     {
+//       store: 'frameTable',
+//       storeConfig: { keyPath: 'key', autoIncrement: true },
+//       storeSchema: [
+//         { name: 'row', keyPath: 'name', options: { unique: false } },
+//       ]
+//     }
+//   ]
+// };
 
-initDB(DBConfig)
 
 const AtomsDevtools = ({ children }) => {
   useAtomsDevtools('demo')

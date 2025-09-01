@@ -1,6 +1,6 @@
 import {AdminAxios, AdverAxios} from "../../common/Axios";
 
-const isInit = true;
+const isInit = false;
 
 const ACTION_URL = '/adver/category';
 const CATEGORY_ALL = ACTION_URL+'/level/1/all'
@@ -26,8 +26,8 @@ export async function retrieveTopLevelAllCategory() {
   }
   await AdminAxios('GET', CATEGORY_ALL, null)
     .then((response) => {
-      const {responseCode, data} = response;
-      if (responseCode.statusCode === 200) {
+      const { data, statusCode } = response;
+      if (statusCode === 200) {
         returnVal = data
       } else {
         returnVal = null
@@ -52,8 +52,8 @@ export async function retrieveTopLevelCategory(searchKeyword) {
   let params = {keyword: searchKeyword != null ? searchKeyword : ''}
   await AdminAxios('POST', CATEGORY_BY_KEYWORD, params)
     .then((response) => {
-      const {responseCode, data} = response;
-      if (responseCode.statusCode === 200) {
+      const { data, statusCode } = response;
+      if (statusCode === 200) {
         returnVal = data
       } else {
         returnVal = null
@@ -72,8 +72,8 @@ export async function retrieveCategoryByParentCode(parentCode, searchKeyword) {
   let params = {keyword: searchKeyword != null ? searchKeyword : ''}
   await AdminAxios('POST', CATEGORY_BY_PARENT.replace('{parentCode}',parentCode), params)
     .then((response) => {
-      const {responseCode, data} = response;
-      if (responseCode.statusCode === 200) {
+      const { statusCode, data} = response;
+      if (statusCode === 200) {
         returnVal = data
       } else {
         returnVal = null
@@ -91,8 +91,8 @@ export async function createNewCategory (params) {
   let returnVal = null;
   await AdminAxios('POST', ACTION_URL, params)
     .then((response) => {
-      const {responseCode, data} = response;
-      if (responseCode.statusCode === 200) {
+      const { data, statusCode } = response;
+      if (statusCode === 200) {
         returnVal = data
       } else {
         returnVal = null
@@ -160,11 +160,11 @@ export async function retrieveUserTopLevelCategory(searchKeyword) {
   let params = {keyword: searchKeyword != null ? searchKeyword : ''}
   await AdverAxios('GET', USER_CATEGORY_ALL, params)
     .then((response) => {
-      const {responseCode, data} = response;
-      if (responseCode.statusCode === 200) {
-        returnVal = data
-      } else {
-        returnVal = null
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
+      }else{
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -185,11 +185,11 @@ export async function retrieveUserCategoryByParentCode(parentCode, searchKeyword
   let params = {keyword: searchKeyword != null ? searchKeyword : ''}
   await AdverAxios('GET', USER_CATEGORY_BY_PARENT.replace('{parentCode}',parentCode), params)
     .then((response) => {
-      const {responseCode, data} = response;
-      if (responseCode.statusCode === 200) {
-        returnVal = data
-      } else {
-        returnVal = null
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
+      }else{
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;

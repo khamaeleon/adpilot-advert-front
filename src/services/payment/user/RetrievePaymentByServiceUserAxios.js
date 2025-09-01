@@ -15,10 +15,11 @@ export async function paymentListRequest( userId, param ) {
   let returnVal = null;
   await AdverAxios('POST', ACTION_URL_PAYMENTS + "/" + userId + LIST_PAYMENTS , param)
     .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = response.data
-      } else {
-        returnVal = null
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
+      }else{
+        returnVal = null;
       }
     }).catch((e) => returnVal = null)
   return returnVal;
@@ -31,10 +32,11 @@ export async function pointListRequest( userId, param ) {
   let returnVal = null;
   await AdverAxios('POST', ACTION_URL_POINT + "/" + userId + LIST_POINT , param)
     .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = response.data
-      } else {
-        returnVal = null
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
+      }else{
+        returnVal = null;
       }
     }).catch((e) => returnVal = null)
   return returnVal;

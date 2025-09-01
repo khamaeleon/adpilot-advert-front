@@ -2,316 +2,24 @@ import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import ImageUploading from "react-images-uploading";
 import {toast} from "react-toastify";
+import {
+  uploadAudioFile,
+  uploadBannerImages
+} from "../../../services/campaign/CreativeAxios";
+import {accountFileUpload} from "../../../services/Platform/ManageUserAxios";
+import {useForm} from "react-hook-form";
+import VideoUploader from "../../../components/common/VideoUploader";
 export function AudioEditor(props){
-  const {size, guide, set, publicSetting, setPublicSetting} = props
-  const boundaryRef = useRef()
-  const [sized, setSized] = useState([0,0])
-  const [addElement, setAddElement] = useState(false)
-  const [isEditable, setIsEditable] = useState([false, false]);
-  const [elementPosition, setElementPosition] = useState({
-    size: size,
-    image: [],
-    text: [],
-    mainImage: {
-      left: 0,
-      top: 0,
-      width: 0,
-      height: 0,
-    },
-    image0: {
-      left: 0,
-      top: 0,
-      width: 0,
-      height: 0,
-    },
-    image1: {
-      left: 0,
-      top: 0,
-      width: 0,
-      height: 0,
-    },
-    title: {
-      left: 0,
-      top: 0,
-    },
-    text0: {
-      left: 0,
-      top: 0,
-    },
-    text1: {
-      left: 0,
-      top: 0,
-    },
-    button: {
-      left: 0,
-      top: 0,
-      width: 0,
-      height: 0,
-    }
-  });
-  const defaultBody = {
-    backgroundColor: set.background.backgroundColor,
-    backgroundImage: `url(${set.background.backgroundImage})`
-  }
-  const gridBody = {
-    backgroundColor: set.background.backgroundColor,
-    backgroundImage:`linear-gradient(90deg, #aaaaaa30 1px, transparent 1px), linear-gradient(0deg, #aaaaaa30 1px, transparent 1px),linear-gradient(90deg, #aaaaaa30 1px, transparent 1px), linear-gradient(0deg, #aaaaaa30 1px, transparent 1px), url(${set.background.backgroundImage})`,
-    backgroundSize: '10px 10px, 10px 10px, 50px 50px, 50px 50px,cover',
-    backgroundPosition: '-1px -1px, -1px -1px, -1px -1px, -1px -1px, center'
-  }
-  useEffect(() => {
-    setSized([300, 50])
-    if(publicSetting !== undefined){
-      setElementPosition(publicSetting)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [set]);
-
-  useEffect(() => {
-    setPublicSetting(elementPosition)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [elementPosition]);
-
-  const handleDoubleClick = (e, index) => {
-    e.stopPropagation()
-    isEditable[index] = true
-    setIsEditable([...isEditable]);
-  };
-
-  const handleChange = (e, index) => {
-    e.stopPropagation()
-    elementPosition.text[index] = e.target.value
-    setElementPosition({
-      ...elementPosition,
-      text: [...elementPosition.text]
-    })
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      setIsEditable([false, false]);
-    }
-  };
-  const handleOpenAddElement = (e) => {
-    e.stopPropagation()
-    setAddElement(true)
-  }
-
-  const inRange = (v, max) => {
-    if (v < 0) return 0;
-    if (v > max) return max;
-    console.log()
-    return guide ? Math.floor(v/10)*10 : v;
-  };
-
-
-  const handleImageResize = (clickEvent, target) => {
-    clickEvent.stopPropagation()
-    const mouseMoveHandler = (moveEvent) => {
-      const deltaX = moveEvent.screenX - clickEvent.screenX;
-      const deltaY = moveEvent.screenY - clickEvent.screenY;
-      const boundary = boundaryRef.current.getBoundingClientRect();
-
-      setElementPosition({
-        ...elementPosition,
-        [target]: {
-          ...elementPosition[target],
-          width: inRange((!isNaN(elementPosition[target].width) ? elementPosition[target].width : 0)  + deltaX, Math.floor(boundary.width)),
-          height: inRange((!isNaN(elementPosition[target].height) ? elementPosition[target].height : 0) + deltaY, Math.floor(boundary.height - 2))
-        }
-      })
-    }
-    const mouseUpHandler = () => {
-      document.removeEventListener('mousemove', mouseMoveHandler);
-    };
-    document.addEventListener('mousemove', mouseMoveHandler);
-    document.addEventListener('mouseup', mouseUpHandler, { once: true });
-  }
-
-  const handleButtonResize = (clickEvent, target) => {
-    clickEvent.stopPropagation()
-    const mouseMoveHandler = (moveEvent) => {
-      const deltaX = moveEvent.screenX - clickEvent.screenX;
-      const deltaY = moveEvent.screenY - clickEvent.screenY;
-      const boundary = boundaryRef.current.getBoundingClientRect();
-
-      setElementPosition({
-        ...elementPosition,
-        [target]: {
-          ...elementPosition[target],
-          width: inRange((!isNaN(elementPosition[target].width) ? elementPosition[target].width : 0)  + deltaX, Math.floor(boundary.width)),
-          height: inRange((!isNaN(elementPosition[target].height) ? elementPosition[target].height : 0) + deltaY, Math.floor(boundary.height - 2))
-        }
-      })
-    }
-    const mouseUpHandler = () => {
-      document.removeEventListener('mousemove', mouseMoveHandler);
-    };
-    document.addEventListener('mousemove', mouseMoveHandler);
-    document.addEventListener('mouseup', mouseUpHandler, { once: true });
-  }
-
-  const handleMouseMoveDrag = (clickEvent, target) => {
-    const mouseMoveHandler = (moveEvent) => {
-      const deltaX = moveEvent.screenX - clickEvent.screenX;
-      const deltaY = moveEvent.screenY - clickEvent.screenY;
-      const boundary = boundaryRef.current.getBoundingClientRect();
-      setElementPosition({
-        ...elementPosition,
-        [target]: {
-          ...elementPosition[target],
-          left: inRange(
-            elementPosition[target].left + deltaX,
-            Math.floor(boundary.width - clickEvent.target.clientWidth -2),
-          ),
-          top: inRange(
-            elementPosition[target].top + deltaY,
-            Math.floor(boundary.height - clickEvent.target.clientHeight -2),
-          ),
-        }
-      })
-    };
-    const mouseUpHandler = () => {
-      document.removeEventListener('mousemove', mouseMoveHandler);
-    };
-    document.addEventListener('mousemove', mouseMoveHandler);
-    document.addEventListener('mouseup', mouseUpHandler, { once: true });
-  }
-
-  const onImageError = (errors) => {
-    if (errors.maxFileSize) {
-      toast.warning('저장 가능한 이미지 사이즈는 1MB 입니다.')
-    } else if (errors.maxNumber) {
-      toast.warning('이미지는 5개 까지만 등록 가능합니다.')
-    } else if (errors.acceptType) {
-      toast.warning('"jpg", "gif", "png"의 형식만 등록 가능합니다.')
-    }
-  }
-
-  const onDrop = (pictureFiles, e) => {
-    if (pictureFiles.length !== 0) {
-      if(elementPosition.image.length < 2){
-        const reader = new FileReader();
-        reader.readAsDataURL(pictureFiles[0].file);
-        return new Promise((resolve) => {
-          reader.onload = () => {
-            const image = new Audio()
-            image.src = pictureFiles[0].dataURL
-            image.onload = function () {
-              const obj = {
-                url: pictureFiles[0].dataURL,
-              }
-              setElementPosition({
-                ...elementPosition,
-                image: elementPosition.image.concat(obj)
-              });
-            }
-            setAddElement(false)
-            resolve();
-          };
-        })
-      } else {
-        toast.warning('이미지는 최대 3개까지만 추가가 가능합니다.')
-        setAddElement(false)
-      }
-    }
-  }
-
-  const handleAddText = (e) => {
-    e.stopPropagation()
-    console.log('add text')
-    if(elementPosition.text.length < 2){
-      setElementPosition({
-        ...elementPosition,
-        text: elementPosition.text.concat('text')
-      });
-    }
-    setAddElement(false)
-  }
-
-  const handleClickEnd = (e) => {
-    e.stopPropagation()
-    setIsEditable([false, false]);
-    setAddElement(false)
-  }
-
-  const handleDeleteText = (index) => {
-    elementPosition.text.splice(index, 1)
-    setElementPosition({
-      ...elementPosition
-    })
-  }
-
-  const handleDeleteElementImage = (index) => {
-    elementPosition.image.splice(index, 1)
-    setElementPosition({
-      ...elementPosition
-    })
-  }
+  const {file, setFile, filePath} = props
 
   const handleResetFrame = () => {
-    setElementPosition({
-      image: [],
-      text: [],
-      mainImage: {
-        left: 0,
-        top: 0,
-        width: 0,
-        height: 0,
-      },
-      image0: {
-        left: 0,
-        top: 0,
-        width: 0,
-        height: 0,
-      },
-      image1: {
-        left: 0,
-        top: 0,
-        width: 0,
-        height: 0,
-      },
-      title: {
-        left: 0,
-        top: 0
-      },
-      text0: {
-        left: 0,
-        top: 0
-      },
-      text1: {
-        left: 0,
-        top: 0
-      },
-      button: {
-        left: 0,
-        top: 0
-      }
-    })
+    setFile(null);
   }
 
   return(
     <FrameContainer>
       <FrameHeader>
-        <AddButton type={"button"} onClick={handleOpenAddElement}>
-          {addIcon}
-          {addElement &&
-            <AddElement>
-              <div onClick={handleAddText}>텍스트 추가</div>
-              <ImageUploading
-                multiple
-                acceptType={["mp4"]}
-                onChange={onDrop}
-                maxFileSize={1048576}
-                maxNumber={5}
-                onError={(e) => onImageError(e)}
-                value={''}>
-                {({onImageUpload}) => (
-                  <div onClick={onImageUpload}>파일 업로드</div>
-                )}
-              </ImageUploading>
-            </AddElement>
-          }
+        <AddButton type={""}>
         </AddButton>
         <span>오디오 파일</span>
         <ReloadButton onClick={handleResetFrame}>
@@ -319,97 +27,7 @@ export function AudioEditor(props){
           {/** 리셋에 대한 정의 필요 **/}
         </ReloadButton>
       </FrameHeader>
-      <FrameBody
-        ref={boundaryRef}
-        width={sized[0]}
-        height={sized[1]}
-        style={!guide ? defaultBody : gridBody} onClick={handleClickEnd}>
-        {set.mainImage &&
-          <MainImage
-            source={set.mainImage.url}
-            ratio={set.mainImage.width / set.mainImage.height}
-            style={{ width: elementPosition[`mainImage`].width, height: elementPosition[`mainImage`].height, left: elementPosition[`mainImage`].left, top: elementPosition[`mainImage`].top}}
-            onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,`mainImage`)}}
-          >
-            <Resizer onMouseDown={(clickEvent) => {handleImageResize(clickEvent, `mainImage`)}}/>
-          </MainImage>
-        }
-        {elementPosition.image.length !== 0 && elementPosition.image.map((image, key) => {
-          const index = key
-          return (
-            <MainImage
-              key={key}
-              source={image.url}
-              ratio={image.width / image.height}
-              style={{ width: elementPosition[`image${index}`].width, height: elementPosition[`image${index}`].height, left:`${elementPosition[`image${index}`].left}px`, top:`${elementPosition[`image${index}`].top}px`}}
-              onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,`image${index}`)}}
-            >
-              <CloseButton onClick={() => handleDeleteElementImage(index)}/>
-              <Resizer onMouseDown={(clickEvent) => {handleImageResize(clickEvent, `image${index}`)}}/>
-            </MainImage>
-          )
-          })
-        }
-        {set.title !== '' &&
-          <Text
-            style={{
-              color: set.title.color,
-              fontSize: set.title.fontSize+'px',
-              fontWeight:set.title.fontWeight,
-              fontStyle: set.title.fontStyle,
-              textDecoration: set.title.textDecoration,
-              left:`${elementPosition.title.left}px`,
-              top:`${elementPosition.title.top}px`,
-              fontFamily: set.title.fontFamily
-            }}
-            onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent, 'title')}}
-          >{set.title.text}</Text>
-        }
-        {elementPosition.text.length > 0 && elementPosition.text.map((text, key) => {
-          const index = key
-          return (
-            <Text
-              key={key}
-              style={{
-                left: `${elementPosition[`text${index}`].left}px`,
-                top: `${elementPosition[`text${index}`].top}px`,
-                fontFamily: set.title.fontFamily,
-                color: set.title.color,
-              }}
-              onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent, `text${index}`)}}
-            >
-              {isEditable[index] ? (
-                <input
-                  type="text"
-                  value={elementPosition.text[index] || ''}
-                  onChange={(e) => handleChange(e, index)}
-                  onClick={(e) => e.stopPropagation()}
-                  onKeyDown={handleKeyDown}
-                />
-              ) : (
-                <div onDoubleClick={(e) => handleDoubleClick(e, index)}>{text}<CloseButton type={"button"} onClick={() => handleDeleteText(index)}/></div>
-              )}
-            </Text>
-          )
-          })
-        }
-        {set.button.text !== '' &&
-          <Button
-            type={"button"}
-            style={{
-              backgroundColor: set.button.backgroundColor,
-              color: set.button.color,
-              left:`${elementPosition.button.left}px`,
-              top:`${elementPosition.button.top}px`,
-              width: `${elementPosition.button.width}px`,
-              height: `${elementPosition.button.height}px`,
-              border: `${set.button.backgroundColor === set.background.backgroundColor ? `1px solid #aaa` : 'none'}`
-          }}
-            onMouseDown={(clickEvent) => {handleMouseMoveDrag(clickEvent,'button')}}>{set.button.text}
-            <Resizer onMouseDown={(clickEvent) => {handleButtonResize(clickEvent, `button`)}}/>
-          </Button>
-        }
-      </FrameBody>
+      <VideoUploader file={file} onSelect={setFile} filePath={filePath}/>
     </FrameContainer>
   )
 }
@@ -417,7 +35,7 @@ export function AudioEditor(props){
 const FrameContainer = styled.div`
   padding: 0 10px 10px;
   background-color: #fff;
-  border: ${({active}) => active ? '1px solid #f5811f' : '1px solid #ddd'};
+  border: ${({active}) => active ? '1px solid #ff0000' : '1px solid #ddd'};
   border-radius: 3px;
 `
 const FrameHeader = styled.div`
@@ -454,9 +72,6 @@ const AddButton = styled.div`
   align-items: center;
   width: 38px;
   height: 38px;
-  &:hover {
-    background-color: #eee;
-  }
 `
 const ReloadButton = styled.div`
   display: flex;
@@ -533,8 +148,8 @@ const Button = styled.button`
 
 const AddElement = styled.div`
   position: absolute;
-  left: 35px;
-  bottom: -75px;
+  left: 23px;
+  bottom: -19px;
   z-index: 9;
   border: 1px solid #ddd;
   border-radius: 5px;

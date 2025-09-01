@@ -74,10 +74,11 @@ export function CampaignTwo() {
       })
 
       if(state == null && ['INIT'].includes(campaignBasicInfo.step)){
+        console.log(budgetEventList)
         setCampaignBudgetInfo({
           ...campaignBudgetInfo,
           budgetTimeId: budgetTimeList[0]?.value,
-          targetingBudgetId: budgetEventList[0]?.value,
+          targetingBudgetId: parseInt(budgetEventList[0]?.value),
           targetingPrice: priceEventList[0]?.value
         })
       }
@@ -126,9 +127,9 @@ export function CampaignTwo() {
   const handleChangePriceEvent = (selectedPriceEvent) => {
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
-      targetingPrice: selectedPriceEvent,
+      biddingPrice: parseInt(selectedPriceEvent),
     })
-    clearErrors('targetingPrice')
+    clearErrors('biddingPrice')
   }
   /**
    * 이벤트 예산 셀렉트
@@ -239,7 +240,8 @@ export function CampaignTwo() {
       let campaignId = state !== null ? state.campaignId : campaignBasicInfo.campaignId
       updateCampaignBudget({
         ...campaignBudgetInfo,
-        campaignId: campaignId
+        campaignId: campaignId,
+        targetingPriceId: 1
       }).then(response => {
         if (response) {
           if (state !== null) {
@@ -298,7 +300,6 @@ export function CampaignTwo() {
                            maxLength={13}
                            readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
                            placeholder={campaignBudgetInfo.infiniteBudgetYn !== 'Y' ? '일일 평균 예산을 설정해주세요.' : ''}
-                           style={{color:'#f5811f'}}
                            {...register("dailyAvgBudget", {
                              required: campaignBudgetInfo.infiniteBudgetYn !== 'Y' && "일일 평균 예산을 설정해주세요.",
                              pattern:{
@@ -331,7 +332,6 @@ export function CampaignTwo() {
                   <InputLabel label={'원'}>
                     <Input type={'text'}
                            readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
-                           style={{color:'#f5811f'}}
                            step={10}
                            {...register("pcBudget", {
                              pattern:{
@@ -351,7 +351,7 @@ export function CampaignTwo() {
                     value={campaignBudgetInfo.budgetRate !== undefined ? campaignBudgetInfo.budgetRate : 50}
                     onChange={handleChangeInputRange}
                     style={{
-                      background: `linear-gradient(to right, #f5811f 0%, #f5811f ${campaignBudgetInfo.budgetRate !== undefined ? campaignBudgetInfo.budgetRate: 50}%, #ddd ${campaignBudgetInfo.budgetRate !== undefined ? campaignBudgetInfo.budgetRate: 50}%, #ddd 100%)`
+                      background: `linear-gradient(to right, #ff0000 0%, #ff0000 ${campaignBudgetInfo.budgetRate !== undefined ? campaignBudgetInfo.budgetRate: 50}%, #ddd ${campaignBudgetInfo.budgetRate !== undefined ? campaignBudgetInfo.budgetRate: 50}%, #ddd 100%)`
                     }}
                   />
                   {/*<Span1>*/}
@@ -363,7 +363,6 @@ export function CampaignTwo() {
                   <InputLabel label={'원'}>
                     <Input type={'text'}
                            readOnly={campaignBudgetInfo.infiniteBudgetYn !== 'N' && true}
-                           style={{color:'#f5811f'}}
                            step={10}
                            {...register("mobBudget", {
                              pattern:{
@@ -504,33 +503,25 @@ export function CampaignTwo() {
               <Span4>단가 설정</Span4>
               <RelativeDiv>
                 <ColSpan1>
-                  {priceEventListState !== null &&
-                    <Controller
-                      name="targetingPrice"
-                      control={control}
-                      rules={{
-                        required: {
-                          value: campaignBudgetInfo?.targetingPrice === '',
-                          message: "타겟팅 단가를 선택해주세요"
-                        }
-                      }}
-                      render={({field}) => (
-                        <Input type={'text'}
-                              step={100}
-                              maxLength={13}
-                              {...field}
-                              placeholder={'단가를 설정해주세요'}
-                              style={{color:'#f5811f'}}
-                      value={campaignBudgetInfo?.targetingPrice !== undefined ? priceEventListState.find(value => value.value === campaignBudgetInfo?.targetingPrice) : 0}
-                      onChange={(e)=>handleChangePriceEvent(e.target.value)}
-                            />
-                      )}
+                  <InputLabel label={'원'}>
+                    <Input type={'text'}
+                           step={100}
+                           maxLength={13}
+                           placeholder={campaignBudgetInfo.biddingPrice !== 0 ? '단가를 입력해주세요.' : ''}
+                           {...register("biddingPrice", {
+                             required: campaignBudgetInfo.biddingPrice !== 0 && "단가를 입력해주세요.",
+                             pattern:{
+                               value: /^[0-9,]+$/,
+                               message: "숫자만 입력 가능합니다."
+                             },
+                             onChange:(e) => handleChangePriceEvent(e.target.value)
+                           })}
+                           value={campaignBudgetInfo.biddingPrice !== 0 ? decimalFormat(campaignBudgetInfo.biddingPrice) : 0}
                     />
-                  }
+                  </InputLabel>
                 </ColSpan1>
-                {console.log(errors)}
-                {errors.targetingPrice &&
-                  <ColSpan1><ValidationScript>{errors.targetingPrice.message}</ValidationScript></ColSpan1>}
+                {errors.biddingPrice &&
+                  <ColSpan1><ValidationScript>{errors.biddingPrice.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>
           </RowSpan>

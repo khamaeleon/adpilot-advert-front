@@ -11,10 +11,11 @@ export async function retrieveUserRefundInfoRequestAxios(userId ) {
   let returnVal = null;
   await AdverAxios('GET', ACTION_URL + userId + URL)
     .then((response) => {
-      if (response.responseCode.statusCode === 200) {
-        returnVal = response.data
-      } else {
-        returnVal = null
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
+      }else{
+        returnVal = null;
       }
     }).catch((e) => returnVal = null)
   return returnVal;

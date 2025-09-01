@@ -11,11 +11,11 @@ export async function pointAllListRequest( param ) {
   let returnVal = null;
   await AdminAxios('POST', POINTALL, param)
     .then((response) => {
-      const {responseCode, data} = response
-      if (responseCode.statusCode === 200) {
-        returnVal = data
-      } else {
-        returnVal = null
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
+      }else{
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -29,11 +29,11 @@ export async function adverPointeRquest( userId ) {
   let returnVal = null;
   await AdminAxios('GET', ADVERPOINTALL+userId, null)
     .then((response) => {
-      const {responseCode, data} = response
-      if (responseCode.statusCode === 200) {
-        returnVal = data
-      } else {
-        returnVal = null
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
+      }else{
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
@@ -47,11 +47,11 @@ export async function addHistory( param ) {
   let returnVal = null;
   await AdminAxios('POST', ADDHISTORY, param)
     .then((response) => {
-      const {responseCode, data} = response
-      if (responseCode.statusCode === 200) {
-        returnVal = data
-      } else {
-        returnVal = null
+      const { data, statusCode, message } = response;
+      if(statusCode === 200) {
+        returnVal = data;
+      }else{
+        returnVal = null;
       }
     }).catch((e) => returnVal = false)
   return returnVal;
