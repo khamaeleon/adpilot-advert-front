@@ -110,8 +110,8 @@ function PwChangeModal(props) {
                   {...register("password", {
                     required: "비밀번호를 입력해주세요",
                     pattern: {
-                      value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
-                      message: "숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
+                      value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{8,20}$/,
+                      message: "대문자, 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
                     },
                     onChange: (e)=> handlePassword(e)
                   })}
@@ -141,7 +141,7 @@ function PwChangeModal(props) {
               <RelativeDiv>
                 <Input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder={'숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
+                  placeholder={'대문자, 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)'}
                   maxLength={16}
                   value={accountInfoState.confirmPassword !== undefined ? accountInfoState.confirmPassword : ''}
                   {...register("confirmPassword", {
@@ -359,7 +359,7 @@ function PlatformUserDetail() {
             ...accountInfoState,
             userCompanyProfile: {
               ...accountInfoState.userCompanyProfile,
-              businessLicenseWebPath: response
+              businessLicenseWebPath: pictureFiles[imagesLastIndex].file.name
             }
           })
           setValue('businessLicenseWebPath', pictureFiles[imagesLastIndex].file.name)
@@ -729,7 +729,7 @@ function PlatformUserDetail() {
                             value={accountInfoState?.userCompanyProfile.businessLicenseWebPath}
                             readOnly={true}
                           />
-                          <DownLoadButton type={'button'} onClick={()=> imageDownload(accountInfoState?.userCompanyProfile.businessLicenseWebPath)} />
+                          {/*<DownLoadButton type={'button'} onClick={()=> imageDownload(accountInfoState?.userCompanyProfile.businessLicenseWebPath)} />*/}
                         </div>
                         {errors.businessLicenseWebPath && <ValidationScript>{errors.businessLicenseWebPath?.message}</ValidationScript>}
                       </InputValidationCon>

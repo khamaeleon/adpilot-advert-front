@@ -9,6 +9,7 @@ const URL = '/refund-info'
  */
 export async function retrieveUserRefundInfoRequestAxios(userId ) {
   let returnVal = null;
+
   await AdverAxios('GET', ACTION_URL + userId + URL)
     .then((response) => {
       const { data, statusCode, message } = response;

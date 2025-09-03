@@ -19,7 +19,7 @@ import PaymentManageUser from "../platform_manage/PaymentManageUser"
 import DashBoard from "../dash_board";
 import {
   bgColor,
-  BoardContainer, mainColor, reverseTextColor,
+  BoardContainer, mainColor, reverseTextColor, subColor,
   textColor,
   TitleContainer, topicColor
 } from "../../assets/GlobalStyles";
@@ -174,13 +174,14 @@ function Layout() {
                 <AdvertisingBalance>
                   <div/>
                   <small>광고비 잔액 : </small>
-                  <small className={'won'}>{decimalFormat(userPoint + (requestAmount != undefined ? requestAmount : 0))}</small>
+                  <MyPage onClick={payment} active={['paymentManageUser'].includes(params.id)}>
+                    <small className={'won'}>{decimalFormat(userPoint + (requestAmount != undefined ? requestAmount : 0))}</small>
+                  </MyPage>
                 </AdvertisingBalance>
               </UserName>
               {/*[d] 20230411 사용자 화면에서 픽셀 관리 노출 보류*/}
               {/*<MyPage onClick={pixel}>픽셀 관리</MyPage>*/}
               {/*<MyPage onClick={pixel} active={['pixel', 'pixelDetail'].includes(params.id)}>픽셀 관리</MyPage>*/}
-              {/*<MyPage onClick={payment} active={['paymentManageUser'].includes(params.id)}>결제</MyPage>*/}
             </>
             :
             <>
@@ -209,8 +210,6 @@ function Layout() {
         {/* 대시보드 크리에이티브 설정*/}
         {params.id === 'campaignFour' && <main><BoardContainer><FormProvider {...methods}><CampaignFour/></FormProvider></BoardContainer></main>}
 
-        {/* 픽셀 관리*/}
-        {['pixel', 'pixelDetail'].includes(params.id) && <Pixel/>}
         {/* 광고 관리 */}
         {['campaign', 'manageCreative', 'manageCreativeDetail', 'bannerCreative', 'audioCreative'].includes(params.id) && <Campaign/>}
         {/* 보고서 */}
@@ -259,7 +258,7 @@ const UserName = styled.div`
   justify-content: flex-start;
   align-items: center;
   //border-left: 1px solid #eee;
-  padding-right: 28px;
+  //padding-right: 28px;
   font-weight: bold;
 `
 
@@ -283,7 +282,7 @@ const MyPage = styled.div`
   //border-left: 1px solid #eee;
   padding-left: 28px;
   margin-right: 28px;
-  color: ${(props) => props.active ? '#ff0000' : null};
+  color: ${(props) => props.active ? topicColor : null};
 
   & span {
   font-size: 13px;
@@ -326,7 +325,7 @@ const AdvertisingBalance = styled.div`
   margin-left: 20px;
   color: ${topicColor};
   font-size: 14pt;
-  >div{
+  > div:first-child{
     width: 25px;
     height: 25px;
     background-size: cover;

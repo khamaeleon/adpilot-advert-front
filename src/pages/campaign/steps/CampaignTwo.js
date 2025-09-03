@@ -27,8 +27,6 @@ import {Controller, useFormContext} from "react-hook-form";
 import TimeTable from "../../../components/modal/TimeTable";
 import {biddingTypeAll, campaignBasicInfoAtom} from "../entity/Info";
 import {selBudgetTimeDetailInfo, selBudgetTimeList} from "../../../services/settings/BudgetTimeAxios";
-import {selBudgetEventList} from "../../../services/settings/BudgetEventAxios";
-import {selPriceEventList} from "../../../services/settings/EventPriceAxios";
 import {timeBudgetDetailDataAtom} from "../../settings/entity/BudgetTime";
 import {selBudgetInfo, updateCampaignBudget} from "../../../services/campaign/BudgetAxios";
 import {campaignBudgetInfoAtom} from "../entity/Budget";
@@ -47,8 +45,6 @@ export function CampaignTwo() {
   const [campaignBudgetInfo, setCampaignBudgetInfo] = useAtom(campaignBudgetInfoAtom)
   const [budgetRateChk, setBudgetRateChk] = useState(false)
   const [budgetTimeListState, setBudgetTimeListState] = useState(null)
-  const [budgetEventListState, setBudgetEventListState] = useState(null)
-  const [priceEventListState, setPriceEventListState] = useState(null)
   const [biddingType] = useState(biddingTypeAll)
   const [timeBudgetDetailDataState, setTimeBudgetDetailDataState] = useAtom(timeBudgetDetailDataAtom)
   const location = useLocation()
@@ -62,28 +58,23 @@ export function CampaignTwo() {
 
     const callbackFunc = (response) => {
       const budgetTimeList = response[0]?.timeGroups.map(data => {return {value: data.id, label: data.groupName}});
-      const budgetEventList = response[1]?.targetingBudgetDtos.map(data => {return {value: data.targetingBudgetId, label: data.groupName}});
-      const priceEventList = response[2]?.targetingPriceDtos.map(data => {return {value: data.targetingPrice, label: data.groupName}});
 
       setBudgetTimeListState(budgetTimeList);
-      setBudgetEventListState(budgetEventList);
-      setPriceEventListState(priceEventList);
 
-      selBudgetTimeDetailInfo(userId, budgetTimeList[0].value).then(response => {
-        setTimeBudgetDetailDataState(response)
-      })
+      if(budgetTimeList.size > 0){
+        selBudgetTimeDetailInfo(userId, budgetTimeList[0].value).then(response => {
+          setTimeBudgetDetailDataState(response)
+        })
+      }
 
       if(state == null && ['INIT'].includes(campaignBasicInfo.step)){
-        console.log(budgetEventList)
         setCampaignBudgetInfo({
           ...campaignBudgetInfo,
           budgetTimeId: budgetTimeList[0]?.value,
-          targetingBudgetId: parseInt(budgetEventList[0]?.value),
-          targetingPrice: priceEventList[0]?.value
         })
       }
     }
-    multiAxiosCall([selBudgetTimeList(userId), selBudgetEventList(userId), selPriceEventList(userId)], callbackFunc);
+    multiAxiosCall([selBudgetTimeList(userId)], callbackFunc);
     // eslint-disable-next-line react-hooks/exhaustive-deps
 
     if (state !== null || ['STEP2_BUDGET','STEP3_INVENTORY','STEP4_CREATIVE','COMPLETED'].includes(campaignBasicInfo.step)) {
@@ -125,9 +116,11 @@ export function CampaignTwo() {
    * @param selectedPriceEvent
    */
   const handleChangePriceEvent = (selectedPriceEvent) => {
+    let num = removeStr(selectedPriceEvent)
+    let price = num !== '' ? parseInt(num) : 0
     setCampaignBudgetInfo({
       ...campaignBudgetInfo,
-      biddingPrice: parseInt(selectedPriceEvent),
+      biddingPrice: parseInt(price),
     })
     clearErrors('biddingPrice')
   }
@@ -387,7 +380,7 @@ export function CampaignTwo() {
                       control={control}
                       rules={{
                         required: {
-                          value: campaignBudgetInfo?.budgetTimeId === '',
+                          value: campaignBudgetInfo?.budgetTimeId === undefined,
                           message: "시간대 예산을 선택해주세요"
                         }
                       }}
@@ -414,38 +407,6 @@ export function CampaignTwo() {
                   <ColSpan1><ValidationScript>{errors.budgetTimeId.message}</ValidationScript></ColSpan1>}
               </RelativeDiv>
             </ColSpan4>
-            {/*}
-            <ColSpan4>
-              <Span4>타겟팅 예산 그룹</Span4>
-              <RelativeDiv>
-                <ColSpan1>
-                  {budgetEventListState !== null &&
-                    <Controller
-                      name="targetingBudgetId"
-                      control={control}
-                      rules={{
-                        required: {
-                          value: campaignBudgetInfo?.targetingBudgetId === '',
-                          message: "타겟팅 예산을 선택해주세요"
-                        }
-                      }}
-                      render={({field}) => (
-                        <Select options={budgetEventListState}
-                                placeholder={'타겟팅 예산 선택'}
-                                {...field}
-                                value={campaignBudgetInfo?.targetingBudgetId !== undefined ? budgetEventListState.find(value => value.value === campaignBudgetInfo?.targetingBudgetId) : budgetEventListState[0]}
-                                onChange={handleChangeBudgetEvents}
-                                styles={selectStyle}
-                        />
-                      )}
-                    />
-                  }
-                </ColSpan1>
-                {errors.targetingBudgetId &&
-                  <ColSpan1><ValidationScript>{errors.targetingBudgetId.message}</ValidationScript></ColSpan1>}
-              </RelativeDiv>
-            </ColSpan4>
-            */}
           </RowSpan>
           <RowSpan>
             <Span4>과금 설정</Span4>

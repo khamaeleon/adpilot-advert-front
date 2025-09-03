@@ -281,36 +281,36 @@ export const adverStatusDetailColumn = [
       return  <Link to={{pathname:'/board/campaignTwo', search: `campaignId=${data?.campaignId}&userId=${data?.userId}&adverInfo=${data?.adverInfo}`}}>{valueFormat}</Link>
     }
   },
-  {
-    name: 'advertiseGroupName',
-    header: '광고 그룹',
-    textAlign: 'center',
-    minWidth: 150,
-    showColumnMenuTool: false,
-    cellProps: {
-      style: {
-        textDecoration: 'underline'
-      }
-    },
-    render: ({value, data}) => {
-      return <Link to={{pathname:'/board/campaignThree', search: `campaignId=${data?.campaignId}&adverInfo=${data?.adverInfo}`}} state={{campaignId: data?.campaignId, adverInfo: data?.adverInfo}} className={'line-clamp_2'}>{value}</Link>
-    }
-  },
-  {
-    name: 'creativeName',
-    header: '크리에이티브',
-    textAlign: 'center',
-    minWidth: 150,
-    showColumnMenuTool: false,
-    cellProps: {
-      style: {
-        textDecoration: 'underline'
-      }
-    },
-    render: ({value, data}) => {
-      return <Link to={{pathname:'/board/campaignFour', search: `campaignId=${data?.campaignId}&creativeType=${data?.creativeType}&productType=${data.productType}&adverInfo=${data?.adverInfo}`}} state={{campaignId: data?.campaignId, creativeType: data?.creativeType, productType: data.productType, adverInfo: data?.adverInfo}} className={'line-clamp_2'}>{value}</Link>
-    }
-  },
+  //{
+  //  name: 'advertiseGroupName',
+  //  header: '광고 그룹',
+  //  textAlign: 'center',
+  //  minWidth: 150,
+  //  showColumnMenuTool: false,
+  //  cellProps: {
+  //    style: {
+  //      textDecoration: 'underline'
+  //    }
+  //  },
+  //  render: ({value, data}) => {
+  //    return <Link to={{pathname:'/board/campaignThree', search: `campaignId=${data?.campaignId}&adverInfo=${data?.adverInfo}`}} state={{campaignId: data?.campaignId, adverInfo: data?.adverInfo}} className={'line-clamp_2'}>{value}</Link>
+  //  }
+  //},
+  //{
+  //  name: 'creativeName',
+  //  header: '크리에이티브',
+  //  textAlign: 'center',
+  //  minWidth: 150,
+  //  showColumnMenuTool: false,
+  //  cellProps: {
+  //    style: {
+  //      textDecoration: 'underline'
+  //    }
+  //  },
+  //  render: ({value, data}) => {
+  //    return <Link to={{pathname:'/board/campaignFour', search: `campaignId=${data?.campaignId}&creativeType=${data?.creativeType}&productType=${data.productType}&adverInfo=${data?.adverInfo}`}} state={{campaignId: data?.campaignId, creativeType: data?.creativeType, productType: data.productType, adverInfo: data?.adverInfo}} className={'line-clamp_2'}>{value}</Link>
+  //  }
+  //},
   {
     name: 'exposureCount',
     header: '노출수',
@@ -487,16 +487,16 @@ export const adverStatusDetailColumn = [
  * 특정 광고주 캠페인 현황 리스트 컬럼
  */
 export const userCampaignListColumn = [
-  {
-    name: 'publishYn',
-    header: '게재 여부',
-    textAlign: 'center',
-    minWidth: 100,
-    maxWidth: 100,
-    showColumnMenuTool: false,
-    sortable: false,
-    render: ({value}) => <p>{value !== 'N' ? 'ON' : 'OFF'}</p>
-  },
+  // {
+  //   name: 'publishYn',
+  //   header: '게재 여부',
+  //   textAlign: 'center',
+  //   minWidth: 100,
+  //   maxWidth: 100,
+  //   showColumnMenuTool: false,
+  //   sortable: false,
+  //   render: ({value}) => <p>{value !== 'N' ? 'ON' : 'OFF'}</p>
+  // },
   {
     name: 'campaignName',
     header: '캠페인명',
@@ -523,20 +523,20 @@ export const userCampaignListColumn = [
       return valueFormat
     }
   },
-  {
-    name: 'advertiseGroupName',
-    header: '광고 그룹',
-    textAlign: 'center',
-    minWidth: 150,
-    showColumnMenuTool: false,
-  },
-  {
-    name: 'creativeName',
-    header: '크리에이티브',
-    textAlign: 'center',
-    minWidth: 150,
-    showColumnMenuTool: false,
-  },
+  //{
+  //  name: 'advertiseGroupName',
+  //  header: '광고 그룹',
+  //  textAlign: 'center',
+  //  minWidth: 150,
+  //  showColumnMenuTool: false,
+  //},
+  //{
+  //  name: 'creativeName',
+  //  header: '크리에이티브',
+  //  textAlign: 'center',
+  //  minWidth: 150,
+  //  showColumnMenuTool: false,
+  //},
   {
     name: 'exposureCount',
     header: '노출수',

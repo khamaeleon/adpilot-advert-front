@@ -112,10 +112,10 @@ export const menuList = [
         header: "사용자 관리",
         detail: "platformDetail"
       },
-      {
-        name: "categoryManage",
-        header: "광고주 카테고리 관리"
-      },
+      //{
+      //  name: "categoryManage",
+      //  header: "광고주 카테고리 관리"
+      //},
      // {
      //   name: "productManage",
      //   header: "상품 수집 관리"

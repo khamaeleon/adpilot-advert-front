@@ -1,5 +1,7 @@
 import {AdverAxios} from "../../../common/Axios";
 
+const isInit = true;
+
 const ACTION_URL_PAYMENTS = '/payments/ADVERTISE';
 const LIST_PAYMENTS = '/list'
 
@@ -13,6 +15,10 @@ const LIST_POINT = '/histories'
  */
 export async function paymentListRequest( userId, param ) {
   let returnVal = null;
+  if(isInit){
+    return null;
+  }
+
   await AdverAxios('POST', ACTION_URL_PAYMENTS + "/" + userId + LIST_PAYMENTS , param)
     .then((response) => {
       const { data, statusCode, message } = response;
@@ -30,6 +36,9 @@ export async function paymentListRequest( userId, param ) {
  */
 export async function pointListRequest( userId, param ) {
   let returnVal = null;
+  if(isInit){
+    return null;
+  }
   await AdverAxios('POST', ACTION_URL_POINT + "/" + userId + LIST_POINT , param)
     .then((response) => {
       const { data, statusCode, message } = response;

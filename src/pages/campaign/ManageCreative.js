@@ -96,7 +96,7 @@ export function ManageCreative() {
     return(
       <CustomDetailTable>
         <CustomDetailHeader>
-          <CreativeGroup>크리에이티브 그룹명</CreativeGroup>
+          <CreativeGroup>크리에이티브</CreativeGroup>
           <CreativeType>광고 상품</CreativeType>
           <CreativeType>크리에이티브 유형</CreativeType>
           <CreativeInfo>소재 정보</CreativeInfo>
@@ -107,6 +107,7 @@ export function ManageCreative() {
               <CreativeGroup>
                 <Link
                   to={{pathname: '/board/manageCreativeDetail', search:`campaignId=${item?.campaignId}&creativeType=${item?.creativeType}&productType=${item.productType}&adverInfo=${adverName}&backLink='manageCreative'`}}
+                  style={{color: "#0088ff"}}
                   state={{campaignId: item?.campaignId, creativeType: item?.creativeType, productType: item.productType, adverInfo: adverName, backLink: 'manageCreative'}}>
                   {item.creativeName}
                 </Link>

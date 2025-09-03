@@ -203,7 +203,7 @@ function PaymentManageUser() {
         console.error("Failed to fetch data:", error);
       }
     };
-    fetchData();
+    //fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dateRange, tokenUserInfo]);
   //[d] 차트 데이터에서 역으로 변동값 감지해서 다시 던저주기 paging 처리 관련...

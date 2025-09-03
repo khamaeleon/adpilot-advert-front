@@ -3,6 +3,7 @@ import {hostList} from "../../signup/entity/Common";
 import {Link} from "react-router-dom";
 import moment from "moment";
 import React from "react";
+import {topicColor} from "../../../assets/GlobalStyles";
 
 export const accountInfoAtom = atom(null)
 export const userInfoAtom = atom(null)
@@ -64,6 +65,21 @@ export const searchAccountInfo = {
  */
 export const columnUserData = [
   {
+    name: 'username',
+    header: '아이디',
+    label: '아이디',
+    cellProps: {
+      style: {
+        textDecoration: 'underline',
+      }
+    },
+    render: (props) => {
+      return (
+          <Link to={'/board/platformDetail'} state={{id: props.data.id}} style={{color: '#0088ff'}}>{props.data?.username}</Link>
+      )
+    }
+  },
+  {
     name: 'adverName',
     header: '광고주명',
     label: '광고주명'
@@ -85,21 +101,6 @@ export const columnUserData = [
     render: ({value}) => {
       return (
         <>{hostList.find(obj => obj.value === value).label}</>
-      )
-    }
-  },
-  {
-    name: 'username',
-    header: '아이디',
-    label: '아이디',
-    cellProps: {
-      style: {
-        textDecoration: 'underline'
-      }
-    },
-    render: (props) => {
-      return (
-        <Link to={'/board/platformDetail'} state={{id: props.data.id}}>{props.data?.username}</Link>
       )
     }
   },

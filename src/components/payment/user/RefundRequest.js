@@ -176,10 +176,10 @@ function RefundRequestModal (props) {
                 </ColSpan2>
               </RelativeDiv>
             </RowSpan>
-            <RowSpan>
-                <ColSpan100>문의</ColSpan100>
-                <ColSpan4>010-4070-3122</ColSpan4>
-            </RowSpan>
+            {/*<RowSpan>*/}
+            {/*    <ColSpan100>문의</ColSpan100>*/}
+            {/*    <ColSpan4>010-4070-3122</ColSpan4>*/}
+            {/*</RowSpan>*/}
           </ModalBody>
           <ModalFooter>
               <SubmitButton type={"submit"}>환불 신청</SubmitButton>

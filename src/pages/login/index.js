@@ -152,19 +152,12 @@ function FindId(props) {
   const handleFindId = () => {
     if (success) {
       selFindUserId(findIdInfo).then(response => {
-
-        const { data, statusCode } = response;
-        console.log("selFindUserId:"+data)
-        if(statusCode === 200){
-          if (data.length !== 0) {
+          if (response.length !== 0) {
             setFindIdResult(response);
             props.openModal();
           } else {
             toast.info('등록된 아이디나 이메일이 없습니다.')
           }
-        } else {
-          toast.info('등록된 아이디나 이메일이 없습니다.')
-        }
       })
     } else {
       toast.info('등록된 아이디나 이메일이 없습니다.')
@@ -399,7 +392,7 @@ function LoginComponent() {
               {...register("password", {
                 required: "비밀번호를 입력해주세요",
                 pattern: {
-                  value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i,
+                  value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{8,20}$/,
                   message: "비밀번호를 확인해주세요. 숫자, 영문, 특수 기호를 포함 (10자 ~ 16자)"
                 },
                 onChange: handleChangePassword

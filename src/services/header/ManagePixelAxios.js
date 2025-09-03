@@ -43,39 +43,6 @@ export async function selAdminPixelList(keyword) {
     }).catch((e) => returnVal = false)
   return returnVal;
 }
-export async function resistAdverPixelInfo(pixelInfo) {
-  let returnVal = null;
-  if(isInit){
-    return [
-      {
-         pixelId         :"",// 픽셀 id
-         interlockYn      :"",//연동 상태.
-         pixelName        :"",//픽셀 명.
-         username         :"",//광고주 로그인 id.
-          adverName       :"",// 광고주 명.
-         linkUrl          :"",//연동 url.
-         managerName      :"",//담당자 명.
-         mainCategoryCode :"",//대 카테고리 코드.
-          subCategoryCode :"",// 하위 카테고리 코드.
-          hostType        :"",// 호스팅 타입.
-         status           :"",//수집 상태
-         lastModifiedAt   :"",//최근 수정 일자.
-          events          :""// 픽셀 events.
-      }
-    ]
-  }
-  await AdminAxios('POST', ACTION_URL,pixelInfo)
-    .then((response) => {
-      const { data, statusCode, message } = response;
-      if(statusCode ===201) {
-        returnVal = true;
-      }else{
-        returnVal = false;
-      }
-    }).catch((e) => returnVal = false)
-  return returnVal;
-}
-
 export async function updatePixelInterlock(pixelId,interlockYn) {
   let returnVal = null;
   let params = {interlockYn : interlockYn ? 'Y': 'N'}

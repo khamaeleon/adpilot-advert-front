@@ -231,16 +231,16 @@ export function CampaignLookOver() {
                   }
                   </ValueText>
                 </ColSpan2>
-                <HorizontalRule/>
-                <ColSpan2>
-                  <Span4>송출 제한 지면</Span4>
-                  <ValueText>{
-                    campaignData.inventoryDetail?.disExposureInventoryType !== 'MANUAL' ?
-                        (campaignData.inventoryDetail?.disExposureInventoryType !== 'NONE' ? '카테고리 설정' : '송출 제한 지면 없음')
-                          : `${campaignData.inventoryDetail?.disAllowInventoryIds.length} 개 지면 송출 제한 설정`
-                  }
-                  </ValueText>
-                </ColSpan2>
+                {/*<HorizontalRule/>*/}
+                {/*<ColSpan2>*/}
+                {/*  <Span4>송출 제한 지면</Span4>*/}
+                {/*  <ValueText>{*/}
+                {/*    campaignData.inventoryDetail?.disExposureInventoryType !== 'MANUAL' ?*/}
+                {/*        (campaignData.inventoryDetail?.disExposureInventoryType !== 'NONE' ? '카테고리 설정' : '송출 제한 지면 없음')*/}
+                {/*          : `${campaignData.inventoryDetail?.disAllowInventoryIds.length} 개 지면 송출 제한 설정`*/}
+                {/*  }*/}
+                {/*  </ValueText>*/}
+                {/*</ColSpan2>*/}
               </Row>
               <Row>
                 <ColSpan2>
@@ -283,10 +283,10 @@ export function CampaignLookOver() {
                   <ValueText>{campaignData.creativeType}</ValueText>
                 </ColSpan2>
                 <HorizontalRule/>
-                <ColSpan2>
-                  <Span4>크리에이티브명</Span4>
-                  <ValueText>{campaignData?.creativeName}</ValueText>
-                </ColSpan2>
+                {/*<ColSpan2>*/}
+                {/*  <Span4>크리에이티브명</Span4>*/}
+                {/*  <ValueText>{campaignData?.creativeName}</ValueText>*/}
+                {/*</ColSpan2>*/}
               </Row>
               {/*
               <Row>

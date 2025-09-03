@@ -344,29 +344,29 @@ export function CampaignThree() {
       <Board>
         <BoardHeader>광고 그룹 설정</BoardHeader>
         <BoardSearchResult>
-          <RowSpan>
-            <ColSpan4>
-              <Span4>노출 영역</Span4>
-              <RelativeDiv>
-                <AgentType>
-                  {agentTypeState != null && agentTypeState.map((data, key)=>{
-                      return <Controller name={'exposureAgentType'}
-                                         control={control}
-                                         key={key}
-                                         rules={{required: {value: campaignGroupInfo.exposureAgentType?.length === 0, message:'노출 영역은 최소한 하나는 입력해주세요'}}}
-                                         render={({field}) =>
-                                           <Checkbox label={data.label} type={'c'} id={'event'+key+data.value} value={data.value} isChecked={campaignGroupInfo.exposureAgentType?.some(event => event === data.value)}
-                                                     onChange={handleAgentType} inputRef={field.ref}/>
-                                         }
-                              />
-                    })
-                  }
-                  {errors.exposureAgentType &&
-                    <ValidationScript>{errors.exposureAgentType.message}</ValidationScript>}
-                </AgentType>
-              </RelativeDiv>
-            </ColSpan4>
-          </RowSpan>
+          {/*<RowSpan>*/}
+          {/*  <ColSpan4>*/}
+          {/*    <Span4>노출 영역</Span4>*/}
+          {/*    <RelativeDiv>*/}
+          {/*      <AgentType>*/}
+          {/*        {agentTypeState != null && agentTypeState.map((data, key)=>{*/}
+          {/*            return <Controller name={'exposureAgentType'}*/}
+          {/*                               control={control}*/}
+          {/*                               key={key}*/}
+          {/*                               rules={{required: {value: campaignGroupInfo.exposureAgentType?.length === 0, message:'노출 영역은 최소한 하나는 입력해주세요'}}}*/}
+          {/*                               render={({field}) =>*/}
+          {/*                                 <Checkbox label={data.label} type={'c'} id={'event'+key+data.value} value={data.value} isChecked={campaignGroupInfo.exposureAgentType?.some(event => event === data.value)}*/}
+          {/*                                           onChange={handleAgentType} inputRef={field.ref}/>*/}
+          {/*                               }*/}
+          {/*                    />*/}
+          {/*          })*/}
+          {/*        }*/}
+          {/*        {errors.exposureAgentType &&*/}
+          {/*          <ValidationScript>{errors.exposureAgentType.message}</ValidationScript>}*/}
+          {/*      </AgentType>*/}
+          {/*    </RelativeDiv>*/}
+          {/*  </ColSpan4>*/}
+          {/*</RowSpan>*/}
           <RowSpan>
             <ColSpan4>
               <Span4>광고 게재 설정</Span4>
@@ -376,33 +376,6 @@ export function CampaignThree() {
             <ColSpan4>
               <Span4>게재 지면</Span4>
               <RelativeDiv>
-                {/*<label>
-                  <input
-                    type={'radio'}
-                    name={'inventory'}
-                    id={'inventoryAUTO'}
-                    onChange={() => setExposureInventoryType('AUTO')}
-                    checked={campaignGroupInfo.exposureInventoryType === 'AUTO'}
-                  />
-                  <span>자동 최적화</span>
-                </label>
-                <label>
-                  <Controller name={'inventoryCATEGORY'}
-                              control={control}
-                              rules={{required: {value: campaignGroupInfo.exposureInventoryType === "CATEGORY" && campaignGroupInfo.allowInventoryCategories?.length === 0, message:'카테고리를 최소한 하나는 입력해주세요'}}}
-                              render={({field}) =>
-                                <input
-                                  type={'radio'}
-                                  name={'inventory'}
-                                  id={'inventoryCATEGORY'}
-                                  onChange={() => setExposureInventoryType('CATEGORY')}
-                                  checked={campaignGroupInfo.exposureInventoryType === 'CATEGORY'}
-                                />
-                              }
-                  />
-                  <span>카테고리 설정</span>
-                </label>
-                */}
                 <ColSpan2>
                   <label>
                     <Controller name={'inventoryMANUAL'}
@@ -899,24 +872,24 @@ export function CampaignThree() {
             }
           </RowSpan>
 */}
-          <RowSpan>
-            <ColSpan4>
-              <Span4>광고 그룹명</Span4>
-              <RelativeDiv style={{paddingRight: 0}}>
-                <Input
-                  type={'text'}
-                  placeholder={'광고 그룹명'}
-                  value={campaignGroupInfo.name}
-                  style={{marginRight: 0}}
-                  {...register('name', {
-                    required: '광고 그룹명을 입력해주세요',
-                    onChange: (e)=>onChangeGroupName(e)
-                  })}
-                />
-                {errors.name && <ValidationScript>{errors.name.message}</ValidationScript>}
-              </RelativeDiv>
-            </ColSpan4>
-          </RowSpan>
+          {/*<RowSpan>*/}
+          {/*  <ColSpan4>*/}
+          {/*    <Span4>광고 그룹명</Span4>*/}
+          {/*    <RelativeDiv style={{paddingRight: 0}}>*/}
+          {/*      <Input*/}
+          {/*        type={'text'}*/}
+          {/*        placeholder={'광고 그룹명'}*/}
+          {/*        value={campaignGroupInfo.name}*/}
+          {/*        style={{marginRight: 0}}*/}
+          {/*        {...register('name', {*/}
+          {/*          required: '광고 그룹명을 입력해주세요',*/}
+          {/*          onChange: (e)=>onChangeGroupName(e)*/}
+          {/*        })}*/}
+          {/*      />*/}
+          {/*      {errors.name && <ValidationScript>{errors.name.message}</ValidationScript>}*/}
+          {/*    </RelativeDiv>*/}
+          {/*  </ColSpan4>*/}
+          {/*</RowSpan>*/}
         </BoardSearchResult>
       </Board>
       <SubmitContainer>

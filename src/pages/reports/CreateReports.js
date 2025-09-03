@@ -15,7 +15,7 @@ import {
 } from "../../assets/GlobalStyles";
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {VerticalRule} from "../../components/common/Common";
+import {HorizontalRule, VerticalRule} from "../../components/common/Common";
 import {Row} from "../campaign/styles/common";
 import {SearchAdvertiser} from "../../components/common/SearchAdvertiser";
 import {toast} from "react-toastify";
@@ -268,12 +268,13 @@ export default function CreateReports() {
                   <small>* 광고주 설정이 없을 경우 전체 보고서가 생성됩니다.</small>
                 </>
               }
-              {tokenResult.role === 'NORMAL' &&
-                <>
-                  <Span4>광고주</Span4>
-                  <ColSpan2>{tokenResult.name}</ColSpan2>
-                </>
-              }
+              {/*{tokenResult.role === 'NORMAL' &&*/}
+              {/*  <>*/}
+              {/*    <Span4>광고주</Span4>*/}
+              {/*    <HorizontalRule style={{margin: '0 10px'}} />*/}
+              {/*    <ColSpan2>{tokenResult.name}</ColSpan2>*/}
+              {/*  </>*/}
+              {/*}*/}
             </RelativeDiv>
           </RowSpan>
           <RowSpan>

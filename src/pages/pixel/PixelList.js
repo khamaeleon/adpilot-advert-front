@@ -22,7 +22,6 @@ import {modalController} from "../../store";
 import {ModalBody, ModalFooter, ModalHeader} from "../../components/modal/Modal";
 import {Controller, useForm} from "react-hook-form";
 import {
-  resistAdverPixelInfo,
   selAdminPixelDetailList,
   selAdminPixelList,
   selAdverPixelList

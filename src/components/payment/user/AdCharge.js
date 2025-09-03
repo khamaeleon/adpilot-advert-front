@@ -90,6 +90,7 @@ function AdChargeModal (props) {
   }, [newWindow]);
 
   const handleClickChargeButton = (plusValue) => {
+    //handleReset()
     if(inputValue === 1){
       setChargeAmount(0)
       setInputValue(0)
@@ -178,7 +179,7 @@ function AdChargeModal (props) {
                 <Input
                   type={'text'}
                   value={decimalFormat(chargeAmount)}
-                  onClick={()=>handleReset()}
+                  //onClick={()=>handleReset()}
                   maxLength="19"
                   {...register("chargeAmount", {
                     required: "충전 금액을 입력해 주세요.",
@@ -215,10 +216,10 @@ function AdChargeModal (props) {
             </ColSpan4>
           </RowSpan>
         </RowSpan>
-        <RowSpan>
-          <ColSpan1>문의</ColSpan1>
-          <ColSpan4>010-4070-3122</ColSpan4>
-        </RowSpan>
+        {/*<RowSpan>*/}
+        {/*  <ColSpan1>문의</ColSpan1>*/}
+        {/*  <ColSpan4>010-4070-3122</ColSpan4>*/}
+        {/*</RowSpan>*/}
       </ModalBody>
       <ModalFooter>
         <SubmitButton type={"submit"}>결제</SubmitButton>

@@ -257,7 +257,6 @@ export async function selUserByUserId(username) {
 export async function accountFileUpload(data,resourceType) {
   let returnVal = null;
   await AxiosFile('POST', UPLOAD_URL + resourceType, data).then(response => {
-      console.log(response)
       const { data, statusCode } = response;
       if(statusCode === 200){
         returnVal = data;

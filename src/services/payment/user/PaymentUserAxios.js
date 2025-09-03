@@ -1,5 +1,6 @@
 import {AdverAxios} from "../../../common/Axios";
 
+const isInit = true;
 const ACTION_URL = '/payments/ADVERTISE/payment-request';
 
 /**
@@ -9,6 +10,9 @@ const ACTION_URL = '/payments/ADVERTISE/payment-request';
 export async function paymentRequest( param ) {
     let returnVal = null;
     console.log(param)
+    if(isInit){
+        return {authPageUrl: "https://test.com"};
+    }
     await AdverAxios('POST', ACTION_URL, param)
         .then((response) => {
             const { data, statusCode, message } = response;

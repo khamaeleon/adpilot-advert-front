@@ -32,7 +32,8 @@ function TimeTableComponent (props) {
   )
 }
 export default function TimeTable(props){
-  const setModal = useSetAtom(modalController)
+  const setModal = useSetAtom(modalController);
+  const {exposureTimeType, readOnly } = props;
   useEffect(()=>{
     return ()=> {
       setModal({isShow: false})
@@ -43,15 +44,15 @@ export default function TimeTable(props){
     setModal({
       isShow: true,
       width: 1200,
-      modalComponent: () => <TimeTableComponent exposureTimeType={props.exposureTimeType} readOnly={props.readOnly} />
+      modalComponent: () => <TimeTableComponent exposureTimeType={exposureTimeType} readOnly={readOnly} />
     })
   }
-  return (
-    <ButtonDiv>
-      <div onClick={handleOpenTimeTable}>
-        <Script/>
-      </div>
-    </ButtonDiv>
+  return exposureTimeType != '' && (
+      <ButtonDiv>
+        <div onClick={handleOpenTimeTable}>
+          <Script/>
+        </div>
+      </ButtonDiv>
   )
 }
 

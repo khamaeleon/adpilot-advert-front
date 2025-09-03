@@ -6,8 +6,9 @@ export default function VideoUploader({ file, onSelect, filePath }) {
 
   const onChange = (e) => {
     const f = e.target.files?.[0] || null;
-    if (f && !f.type.startsWith('video/')) {
-      alert('비디오 파일만 업로드 가능합니다.');
+    console.log(f.type)
+    if (f && !f.type.startsWith('audio/')) {
+      alert('오디오 파일만 업로드 가능합니다.');
       // 잘못된 선택 시 input 비우기
       if (inputRef.current) inputRef.current.value = '';
       onSelect(null);
@@ -44,12 +45,12 @@ export default function VideoUploader({ file, onSelect, filePath }) {
         <input
             ref={inputRef}
             type="file"
-            accept="video/mp4,video/*"
+            accept="audio/mpeg,audio/*"
             onClick={onClickInput}
             onChange={onChange}
         />
         {previewUrl && (
-            <video
+            <audio
                 src={previewUrl}
                 controls
                 style={{ width: '100%', borderRadius: 8, background: '#000' }}

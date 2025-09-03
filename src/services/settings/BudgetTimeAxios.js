@@ -103,13 +103,13 @@ export async function resistBudgetTimes(budgetTimesInfo) {
   let returnVal = null;
   await AdminAxios('POST', ACTION_URL + BUDGET_TIME_LIST ,budgetTimesInfo)
     .then((response) => {
-      const {statusCode} = response
+      const {statusCode} = response;
       if(statusCode === 200){
-        returnVal = true
+        returnVal = true;
       }else{
-        returnVal = false
+        returnVal = false;
       }
-    }).catch((e) => returnVal = false)
+    }).catch((e) => returnVal = false);
   return returnVal;
 };
 

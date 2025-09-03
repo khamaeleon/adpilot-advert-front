@@ -24,7 +24,6 @@ import {useAtom, useSetAtom} from "jotai";
 import {stepCampaignAtom} from "../entity";
 import {Controller, useFormContext} from "react-hook-form";
 import {campaignBasicInfoAtom, campaignTemporaryListAtom} from "../entity/Info";
-import {PixelModal} from "../../pixel/PixelList";
 import {selAdminPixelDetailList} from "../../../services/header/ManagePixelAxios";
 import {resistCampaignBasic, selBasicInfo, selEnumInfo, selTemporaryList} from "../../../services/campaign/InfoAxios";
 import moment from "moment/moment";
@@ -76,17 +75,6 @@ export function CampaignOne() {
       adverName: data.adverName
     })
     clearErrors('username')
-    /**
-     * 픽셀 설정
-     */
-    selAdminPixelDetailList(data.id).then(response => {
-      let clonePixelList = []
-      response.map(data => {
-        clonePixelList = [...clonePixelList, {value: data.pixelId, label: data.pixelName}]
-        return null
-      })
-      setPixelList(clonePixelList)
-    })
     /**
      * 임시저장 선택
      */
@@ -302,7 +290,7 @@ export function CampaignOne() {
         </BoardSearchResult>
       </Board>
       <Board>
-        <BoardHeader>캠페인 목표 설정</BoardHeader>
+        <BoardHeader>캠페인 상품 설정</BoardHeader>
         <BoardSearchResult>
           {/*<RowSpan validation={true}>*/}
           {/*  <ColSpan4>*/}

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import {
   borderColor,
   buttonHeightSize,
-  lightGray
+  lightGray, topicColor
 } from "../../../assets/GlobalStyles";
 
 export const BorderSpan = styled.div`
@@ -25,19 +25,20 @@ export const CampaignTypeItem = styled.div`
   padding: 30px 80px 20px;
   background-color: ${(props) => props.readOnly ? "" : "#fff"};
   border-radius: 8px;
-  border: 2px solid ${(props) => props.active ? "#ff0000" : (props.readOnly ?"f9fafb":"#fff")};
+  border: 2px solid ${(props) => props.active ? topicColor : (props.readOnly ?"f9fafb":"#fff")};
   box-shadow: 0 2px 3px 0 rgba(10, 10, 10, 0.2);
   font-size: 12px;
   white-space: break-spaces;
   &:hover {
-    border: ${(props) => props.readOnly ? "" : "2px solid #ff0000" };
+    border-width: ${(props) => props.readOnly ? "" : "2px" };
+    border-color: ${(props) => props.readOnly ? "" : topicColor };
     cursor: ${(props) => props.readOnly ? "" : "pointer" };
   }
   & > p {
     font-size: 13px;
     font-weight: 500; 
     text-align: center;
-    color: ${(props) => props.active ? "#ff0000" : null};
+    color: ${(props) => props.active ? topicColor : null};
     margin-top: 10px;
   }
 `
@@ -360,7 +361,7 @@ export const ImageTitle = styled.div`
 `
 
 export const ValueText = styled.span`
-  padding:0 20px;
+  padding:0 8px;
   align-content: center;
   text-align : ${(props)=>props?.textAlign !== 'right' ? 'left' : 'right'};
   border: 1px solid ${lightGray};

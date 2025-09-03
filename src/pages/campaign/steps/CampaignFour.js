@@ -819,7 +819,7 @@ export function CampaignFour() {
       let name = campaignBasicInfo.productType !== 'BANNER' ? '_PU_' : '_BA_'
       setCampaignCreative({
         ...campaignCreativeAtom.init,
-        name: creativeType+name+time,
+        name: "AUDIO_"+time,
         creativeType: campaignBasicInfo.productType
       })
       setValue('name', creativeType+name+time)
@@ -901,10 +901,10 @@ export function CampaignFour() {
       await uploadAudioFile(file).then(response => {
         const { uploadedFile, path } = response;
         if (uploadedFile) {
-          toast.success('업로드에 성공 했습니다.');
+          //toast.success('업로드에 성공 했습니다.');
           returnVal = path;
         } else {
-          toast.warning('업로드에 실패 했습니다.');
+          //toast.warning('업로드에 실패 했습니다.');
         }
       })
     } else {
@@ -916,9 +916,7 @@ export function CampaignFour() {
     const materialsImages = campaignCreativeInfo.materials?.find(obj => obj.images.length === 0) ? true : false;
 
     if(campaignCreativeInfo.creativeType === 'BANNER' && ((campaignCreativeInfo.materials.length !== 0 && materialsImages) || campaignCreativeInfo.materials.length === 0)) {// 고정 배너 체크
-
       setError('materials', { type: 'required', message: campaignCreativeInfo.materials.length !== 0 ? '사이즈별 소재는 최소 1개 이상 등록해 주세요.' : '광고 소재를 등록해 주세요.'})
-
     } else if (campaignCreativeInfo.creativeType === 'NATIVE' && campaignCreativeInfo.nativeMaterials.length === 0) { // 네이티브 배너 체크
       setError('nativeMaterials', { type: 'required', message: '광고 소재를 등록해 주세요.' })
     } else if (campaignCreativeInfo.creativeType === 'AUDIO' && campaignCreativeInfo.filePath === '' && file?.size <= 0) { // 네이티브 배너 체크
@@ -930,25 +928,26 @@ export function CampaignFour() {
         name: campaignCreativeInfo.name
       };
       let updateFunc;
-      console.log(file)
       switch(campaignCreativeInfo.creativeType){
         case "BANNER": updateFunc = updateCampaignBanner(param); break;
         case "NATIVE": updateFunc = updateCampaignNative(param); break;
         case "POP_UNDER": updateFunc = updateCampaignPopUnder(param); break;
         case "AUDIO":
-          updateFunc = (file !== null) ?
+          updateFunc = (campaignCreativeInfo.filePath === '') ?
               pickVideo().then(response => {
                 let param = {
                   ...campaignCreativeInfo,
                   campaignId: campaignBasicInfo.campaignId,
                   name: campaignCreativeInfo.name,
-                  filePath: response
+                  filePath: response,
+                  pcLandingUrl: "http://dummy.com",
+                  mobLandingUrl: "http://dummy.com"
                 };
                 if(response){
                   return updateCampaignAudio(param)
                 }
               }) : updateCampaignAudio(param);
-        break;
+          break;
         default : updateFunc = updateCampaignBanner(param);break;
       }
       multiAxiosCall([updateFunc], onSubmitToast)
@@ -1006,7 +1005,8 @@ export function CampaignFour() {
                     <AudioEditor file={file} setFile={setFile} filePath={campaignCreativeInfo.filePath}/>
                 </RowSpan>
               }
-              <RowSpan column={true}>
+              {creativeType !== null && campaignBasicInfo.productType !=='AUDIO' &&
+                  <RowSpan column={true}>
                 <Span4>랜딩 url</Span4>
                 <RowSpan box={true} column={false}>
                   <ColSpan2>
@@ -1044,10 +1044,12 @@ export function CampaignFour() {
                   </ColSpan2>
                 </RowSpan>
               </RowSpan>
+              }
               <ValidationGroup>
                 <Validation>{errors.pcLandingUrl && errors.pcLandingUrl.message}</Validation>
                 <Validation>{errors.mobLandingUrl && errors.mobLandingUrl.message}</Validation>
               </ValidationGroup>
+              {creativeType !== null && campaignBasicInfo.productType !=='AUDIO' &&
               <RowSpan column={true}>
                 <Span4>인식 코드</Span4>
                 <RowSpan box={true} column={false}>
@@ -1078,6 +1080,7 @@ export function CampaignFour() {
                   </ColSpan2>
                 </RowSpan>
               </RowSpan>
+            }
               <ValidationGroup>
                 <Validation>{errors.pcReferralCode && errors.pcReferralCode.message}</Validation>
                 <Validation>{errors.mobReferralCode && errors.mobReferralCode.message}</Validation>
@@ -1097,23 +1100,23 @@ export function CampaignFour() {
               {campaignCreativeInfo.creativeType === 'NATIVE' && ((resistBool && campaignBasicInfo.productType==='BANNER') || (state !== null && state.productType==='BANNER')) &&
                 <CampaignFourNative control={control} errors={errors} setError={setError} register={register} onImageError={onImageError}/>
               }
-              <RowSpan column={true}>
-                <Row>
-                  <Span4>크리에이티브명</Span4>
-                  <input
-                      type={'text'}
-                      maxLength={25}
-                      name={'name'}
-                      value={campaignCreativeInfo?.name || ''}
-                      style={{width: '100%'}}
-                      {...register('name', {
-                        required: '크리에이티브명을 입력해주세요',
-                        onChange: (e)=>handleChangeInputs(e)
-                      })}
-                  />
-                </Row>
-                <Row><Span4></Span4>{errors?.name && <ValidationScript style={{position:'unset'}}>{errors.name.message}</ValidationScript>}</Row>
-              </RowSpan>
+              {/*<RowSpan column={true}>*/}
+              {/*  <Row>*/}
+              {/*    <Span4>크리에이티브명</Span4>*/}
+              {/*    <input*/}
+              {/*        type={'text'}*/}
+              {/*        maxLength={25}*/}
+              {/*        name={'name'}*/}
+              {/*        value={campaignCreativeInfo?.name || ''}*/}
+              {/*        style={{width: '100%'}}*/}
+              {/*        {...register('name', {*/}
+              {/*          required: '크리에이티브명을 입력해주세요',*/}
+              {/*          onChange: (e)=>handleChangeInputs(e)*/}
+              {/*        })}*/}
+              {/*    />*/}
+              {/*  </Row>*/}
+              {/*  <Row><Span4></Span4>{errors?.name && <ValidationScript style={{position:'unset'}}>{errors.name.message}</ValidationScript>}</Row>*/}
+              {/*</RowSpan>*/}
             </BoardSearchResult>
           </Board>
         </>

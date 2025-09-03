@@ -38,8 +38,6 @@ export const navigationName = {
   "/board/budgetTime": "홈/설정/시간별 예산 관리",
   "/board/budgetTimeList": "홈/설정/시간별 예산 리스트",
   "/board/budgetTimeDetail": "홈/설정/시간별 예산 상세 관리",
-  "/board/pixel": "홈/픽셀 관리",
-  "/board/pixelDetail": "홈/픽셀 관리 상세",
 }
 export const dataTotalInfo = {
   totalCount:1,
