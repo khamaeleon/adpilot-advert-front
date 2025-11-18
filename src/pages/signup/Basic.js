@@ -326,7 +326,7 @@ export default function Basic(props) {
           toast.success('업로드에 성공 했습니다.')
           setAccountInfo({
             ...accountInfo,
-            businessLicenseWebPath: path,
+            businessLicenseWebPath: pictureFiles[imagesLastIndex].file.name,
           })
         } else {
           toast.warning('업로드에 실패 했습니다.')

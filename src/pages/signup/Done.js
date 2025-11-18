@@ -6,7 +6,7 @@ export default function Done() {
     <article>
       <AfterSignUpGuild>
         <Round />
-        <div className={'tit'}>AdPilot의 회원이 되신 것을 환영합니다!</div>
+        <div className={'tit'}>Oaple의 회원이 되신 것을 환영합니다!</div>
         {/*<div className={'txt'}>최적화된 광고 지면 관리를 통해 최대 광고 수익률을 제공하겠습니다.</div>*/}
       </AfterSignUpGuild>
     </article>

@@ -156,8 +156,8 @@ const AsideContainer = styled.div`
 
 const Logo = styled.div`
   margin-left: ${menuPL};
-  height: 28px;
-  background-image: url("/assets/images/logos/adpilot/logo_inline_w@3x.png");
+  height: 56px;
+  background-image: url("/assets/images/logos/oaple/logo_inline_w@3x.png");
   background-size: contain;
   background-repeat: no-repeat;
   transition-duration: 0.3s;

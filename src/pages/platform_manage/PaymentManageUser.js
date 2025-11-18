@@ -15,7 +15,7 @@ import {
   DefaultButton,
   RowSpan,
   SaveExcelButton,
-  TitleContainer,
+  TitleContainer, topicColor,
 } from "../../assets/GlobalStyles";
 import styled from 'styled-components';
 import moment from 'moment';
@@ -394,7 +394,7 @@ const AdvertisingCostStatus = styled.div`
   >span {
     width: 100%;
     font-size: 25px;
-    color: #ff0000;
+    color: ${topicColor};
     text-align: right;
   }
   >small {

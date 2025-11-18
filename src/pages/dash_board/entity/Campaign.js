@@ -253,18 +253,18 @@ export const adverStatusDetailColumn = [
       return <Link to={{pathname:'/board/campaignLookOver', search: `campaignId=${data?.campaignId}&adverInfo=${data?.adverInfo}`}} state={{campaignId: data?.campaignId, adverInfo: data?.adverInfo}} className={'line-clamp_2'}>{value}</Link>
     }
   },
-  {
-    name: 'campaignId',
-    header: '캠페인 코드',
-    textAlign: 'center',
-    sortable: false,
-    minWidth: 90,
-    maxWidth: 90,
-    showColumnMenuTool: false,
-    render: ({value}) => {
-      return  <Icon icon={'copyCode'} value={value} />
-    }
-  },
+  // {
+  //   name: 'campaignId',
+  //   header: '캠페인 코드',
+  //   textAlign: 'center',
+  //   sortable: false,
+  //   minWidth: 90,
+  //   maxWidth: 90,
+  //   showColumnMenuTool: false,
+  //   render: ({value}) => {
+  //     return  <Icon icon={'copyCode'} value={value} />
+  //   }
+  // },
   {
     name: 'dailyAvgBudget',
     header: '예산설정',
@@ -281,36 +281,36 @@ export const adverStatusDetailColumn = [
       return  <Link to={{pathname:'/board/campaignTwo', search: `campaignId=${data?.campaignId}&userId=${data?.userId}&adverInfo=${data?.adverInfo}`}}>{valueFormat}</Link>
     }
   },
-  //{
-  //  name: 'advertiseGroupName',
-  //  header: '광고 그룹',
-  //  textAlign: 'center',
-  //  minWidth: 150,
-  //  showColumnMenuTool: false,
-  //  cellProps: {
-  //    style: {
-  //      textDecoration: 'underline'
-  //    }
-  //  },
-  //  render: ({value, data}) => {
-  //    return <Link to={{pathname:'/board/campaignThree', search: `campaignId=${data?.campaignId}&adverInfo=${data?.adverInfo}`}} state={{campaignId: data?.campaignId, adverInfo: data?.adverInfo}} className={'line-clamp_2'}>{value}</Link>
-  //  }
-  //},
-  //{
-  //  name: 'creativeName',
-  //  header: '크리에이티브',
-  //  textAlign: 'center',
-  //  minWidth: 150,
-  //  showColumnMenuTool: false,
-  //  cellProps: {
-  //    style: {
-  //      textDecoration: 'underline'
-  //    }
-  //  },
-  //  render: ({value, data}) => {
-  //    return <Link to={{pathname:'/board/campaignFour', search: `campaignId=${data?.campaignId}&creativeType=${data?.creativeType}&productType=${data.productType}&adverInfo=${data?.adverInfo}`}} state={{campaignId: data?.campaignId, creativeType: data?.creativeType, productType: data.productType, adverInfo: data?.adverInfo}} className={'line-clamp_2'}>{value}</Link>
-  //  }
-  //},
+  {
+   name: 'advertiseGroupName',
+   header: '광고 게재',
+   textAlign: 'center',
+   minWidth: 150,
+   showColumnMenuTool: false,
+   cellProps: {
+     style: {
+       textDecoration: 'underline'
+     }
+   },
+   render: ({value, data}) => {
+     return <Link to={{pathname:'/board/campaignThree', search: `campaignId=${data?.campaignId}&adverInfo=${data?.adverInfo}`}} state={{campaignId: data?.campaignId, adverInfo: data?.adverInfo}} className={'line-clamp_2'}>광고 게재 설정</Link>
+   }
+  },
+  {
+   name: 'creativeName',
+   header: '소재 설정',
+   textAlign: 'center',
+   minWidth: 150,
+   showColumnMenuTool: false,
+   cellProps: {
+     style: {
+       textDecoration: 'underline'
+     }
+   },
+   render: ({value, data}) => {
+     return <Link to={{pathname:'/board/campaignFour', search: `campaignId=${data?.campaignId}&creativeType=${data?.creativeType}&productType=${data.productType}&adverInfo=${data?.adverInfo}`}} state={{campaignId: data?.campaignId, creativeType: data?.creativeType, productType: data.productType, adverInfo: data?.adverInfo}} className={'line-clamp_2'}>소재 설정</Link>
+   }
+  },
   {
     name: 'exposureCount',
     header: '노출수',

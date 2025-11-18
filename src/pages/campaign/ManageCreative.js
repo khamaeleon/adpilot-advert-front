@@ -96,10 +96,8 @@ export function ManageCreative() {
     return(
       <CustomDetailTable>
         <CustomDetailHeader>
-          <CreativeGroup>크리에이티브</CreativeGroup>
+          <CreativeGroup>소재</CreativeGroup>
           <CreativeType>광고 상품</CreativeType>
-          <CreativeType>크리에이티브 유형</CreativeType>
-          <CreativeInfo>소재 정보</CreativeInfo>
         </CustomDetailHeader>
         {creativeDetailData.length !== 0 && creativeDetailData.map((item,key) => {
           return(
@@ -113,37 +111,6 @@ export function ManageCreative() {
                 </Link>
               </CreativeGroup>
               <CreativeType>{productType.find(type=> type.value === item.productType).label}</CreativeType>
-              <CreativeType>{creativeType.find(type=> type.value === item.creativeType).label}</CreativeType>
-              <CreativeInfo>
-                {item.images.length > 6 ?
-                <SliderComponent {...settings} style={{marginLeft: 35,width: 660}}>
-                  {item.images.map((info,idx) => {
-                    const onErrorImg = (e) => {
-                      e.target.src = defaultImage
-                    }
-                    return(
-                      <CreativeImage key={idx}  style={{ width: 100 }}>
-                        <img src={info.imagePath} alt={item.productType} onError={onErrorImg}/>
-                      </CreativeImage>
-                    )
-                  })}
-                </SliderComponent>
-                  :
-                  <div>
-                    {item.images.map((info,idx) => {
-                      const onErrorImg = (e) => {
-                        e.target.src = defaultImage
-                      }
-                      return(
-                        <CreativeImage key={idx}>
-                          <img src={info.imagePath} alt={item.productType} onError={onErrorImg}/>
-                        </CreativeImage>
-                      )
-                    })}
-                  </div>
-                }
-
-              </CreativeInfo>
             </CustomDetailRow>
           )
         })}
@@ -153,7 +120,7 @@ export function ManageCreative() {
 
   return(
     <Board>
-      <BoardHeader>크리에이티브 그룹 현황</BoardHeader>
+      <BoardHeader>소재 그룹 현황</BoardHeader>
       <BoardSearchDetail>
         <RowSpan>
           <ColSpan4>
@@ -174,7 +141,7 @@ export function ManageCreative() {
             <div>광고주명</div>
             <div>아이디</div>
             <div>담당자</div>
-            <div>크리에이티브 그룹</div>
+            <div>소재 그룹</div>
           </CustomTableHeader>
           {creativeData.length !== 0 && creativeData.map((item,key) => {
             return(
@@ -227,13 +194,16 @@ export const CustomDetailTable = styled.div`
 `
 export const CustomDetailRow = styled.div`
   position: relative;
+  margin-left: 50px;
+  justify-content: start;
   display: flex;
 `
 
 export const CustomDetailHeader = styled.div`
   position: relative;
   display: flex;
-  justify-content: space-between;
+  margin-left: 50px;
+  justify-content: start;
   background-color: ${mainColorOpacity5};
   border-bottom: 1px solid ${mainColorOpacity20};
   & > div {

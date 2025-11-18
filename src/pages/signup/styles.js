@@ -17,7 +17,7 @@ export const SignUpHeader = styled.div`
 export const Logo = styled.div`
   width: 212px;
   height: 45px;
-  background-image: url("/assets/images/logos/adpilot/logo_inline_w@2x.png");
+  background-image: url("/assets/images/logos/oaple/logo_inline_w@2x.png");
   background-repeat: no-repeat;
   background-size: contain;
 `

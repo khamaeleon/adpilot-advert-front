@@ -260,10 +260,16 @@ const UserName = styled.div`
   //border-left: 1px solid #eee;
   //padding-right: 28px;
   font-weight: bold;
+  background-color: ${bgColor};
+  border-radius: 18px 18px 0px 0px;
+  margin-top: 10px;
+  padding-right: 20px;
+  padding-left: 15px;
+  //border: 1px solid;
 `
 
 const UserIcon = styled.div`
-  margin: 0 20px 0 25px;
+  margin-right: 20px;
   background-color: #cccccc;
   padding: 3px;
   width: 30px;
@@ -281,7 +287,8 @@ const MyPage = styled.div`
   align-items: center;
   //border-left: 1px solid #eee;
   padding-left: 28px;
-  margin-right: 28px;
+  padding-right: 28px;
+  //background-color: ${bgColor};
   color: ${(props) => props.active ? topicColor : null};
 
   & span {
@@ -302,9 +309,11 @@ const Logout = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  //background-color: ${bgColor};
+  //border-radius: 0 10px 10px 0;
   //border-left: 1px solid #eee;
   //padding-left: 28px;
-  margin-right: 48px;
+  margin-right: 30px;
 
   & > button {
     font-size: 13px;

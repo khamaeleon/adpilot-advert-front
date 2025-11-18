@@ -1,4 +1,9 @@
-import {AdminAxios, AdverAxios, AxiosFile} from "../../common/Axios";
+import {
+  AdminAxios,
+  AdverAxios,
+  AxiosFile,
+  AxiosImage, AxiosImageAdver
+} from "../../common/Axios";
 import {responseFormatMessage} from "../../common/StringUtils";
 const isInit = false;
 
@@ -256,7 +261,7 @@ export async function selUserByUserId(username) {
  */
 export async function accountFileUpload(data,resourceType) {
   let returnVal = null;
-  await AxiosFile('POST', UPLOAD_URL + resourceType, data).then(response => {
+  await AxiosImageAdver('POST', UPLOAD_URL + resourceType, data).then(response => {
       const { data, statusCode } = response;
       if(statusCode === 200){
         returnVal = data;

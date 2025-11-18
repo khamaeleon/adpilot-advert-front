@@ -282,6 +282,7 @@ export async function updateCampaignPopUnder(creativeInfo) {
 };
 export async function updateCampaignAudio(creativeInfo) {
   let returnVal = null;
+  console.log(creativeInfo)
   await AdminAxios('PUT', ACTION_URL+'/'+ creativeInfo.campaignId +CREATE_AUDIO ,creativeInfo)
     .then((response) => {
       const { statusCode } = response;

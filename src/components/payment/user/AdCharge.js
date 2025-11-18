@@ -75,7 +75,8 @@ function AdChargeModal (props) {
         // newWindow가 닫혔을 때 수행할 작업을 여기에 추가
         console.log('newWindow is closed');
         setModal({ isShow: false });
-        window.location.reload();
+        console.log(chargeAmount)
+        //window.location.reload();
       } else {
         // newWindow가 아직 열려있는 경우 추가적으로 수행할 작업이 있다면 여기에 추가
       }
@@ -124,15 +125,16 @@ function AdChargeModal (props) {
         .then(response => {
           // 성공적인 응답 처리
           console.log("결제 성공!!", response);
-          const newWindow = window.open(response.authPageUrl, '_blank', 'width=800,height=800');
+          const newWindow = window.open("",'_blank', 'width=800,height=800');
           const iframe = document.createElement('iframe');
           setNewWindow(newWindow);
           newWindow.document.body.appendChild(iframe);
           props.onPaymentDetailsReceived();
           // iframe.src = 'https://testapi.co.kr?authenticationId=01023012301';
-          // iframe.src = response.authPageUrl;
-          // iframe.width = '100%';
-          // iframe.height = '100%';
+           //iframe.src = response.authPageUrl;
+           iframe.width = '100%';
+           iframe.height = '100%';
+           iframe.contentDocument.body.innerText = "결제 테스트 페이지 입니다.";
           // setRequestAmountValue(requestAmountValue => requestAmountValue + calcAmount());
           // setModal({ isShow: false })
         })

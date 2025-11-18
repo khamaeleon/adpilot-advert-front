@@ -52,8 +52,13 @@
   "scripts": {
     "local": "env-cmd -f .env.local react-scripts start",
     "alpha": "env-cmd -f .env.alpha react-scripts start",
+    "oaple": "env-cmd -f .env.oaple react-scripts start",
     "prod": "env-cmd -f .env.prod react-scripts start",
     "build": "react-scripts build",
+    "build:local": "env-cmd -f .env.local react-scripts build",
+    "build:alpha": "env-cmd -f .env.alpha react-scripts build",
+    "build:oaple": "env-cmd -f .env.oaple react-scripts build",
+    "build:prod": "env-cmd -f .env.prod react-scripts build",
     "test": "react-scripts test"
   },
   "eslintConfig": {

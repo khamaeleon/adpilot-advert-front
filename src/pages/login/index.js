@@ -449,7 +449,7 @@ function Login(props) {
       </>
     } else {
       return <>
-        <div>로그인 하시면 AdPilot의</div>
+        <div>로그인 하시면 Oaple의</div>
         <div>다양한 서비스를 이용하실 수 있습니다.</div>
       </>
     }
@@ -560,8 +560,8 @@ const Title = styled.div`
 const LoginLogo = styled.div`
   width: 300px;
   height: 150px;
-  background-image: url('/assets/images/logos/adpilot/logo_inline_w.png');
-  background-image: -webkit-image-set(url("/assets/images/logos/adpilot/logo_inline_w.png") 1x, url("/assets/images/logos/adpilot/logo_inline_w@2x.png") 2x, url("/assets/images/logos/adpilot/logo_inline_w@3x.png") 3x);
+  background-image: url('/assets/images/logos/oaple/logo_inline_w.png');
+  background-image: -webkit-image-set(url("/assets/images/logos/oaple/logo_inline_w.png") 1x, url("/assets/images/logos/oaple/logo_inline_w@2x.png") 2x, url("/assets/images/logos/oaple/logo_inline_w@3x.png") 3x);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -570,8 +570,8 @@ const LoginLogo = styled.div`
 const BlockLogo = styled.div`
   width: 120px;
   height: 80px;
-  background-image: url('/assets/images/logos/adpilot/logo.png');
-  background-image: -webkit-image-set(url("/assets/images/logos/adpilot/logo.png") 1x, url("/assets/images/logos/adpilot/logo@2x.png") 2x, url("/assets/images/logos/adpilot/logo@3x.png") 3x);
+  background-image: url('/assets/images/logos/oaple/logo.png');
+  background-image: -webkit-image-set(url("/assets/images/logos/oaple/logo.png") 1x, url("/assets/images/logos/oaple/logo@2x.png") 2x, url("/assets/images/logos/oaple/logo@3x.png") 3x);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;

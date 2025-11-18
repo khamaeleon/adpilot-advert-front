@@ -2,13 +2,14 @@ import {atom} from "jotai";
 import {atomWithReset} from "jotai/utils";
 
 export const campaignBasicInfoAtom = atomWithReset({
-  productType:'BANNER',
+  productType:'AUDIO',
   goalType:'CAMPAIGN_VIEW_GOAL',
   pixelId:'1',
   goal:'VIEW_COUNT',
   goalValue: '',
   campaignId:'',
-  step:''
+  step:'',
+  name:''
 })
 
 export const campaignTemporaryListAtom = atom(null)

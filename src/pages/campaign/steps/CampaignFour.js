@@ -910,6 +910,7 @@ export function CampaignFour() {
     } else {
       returnVal = false;
     }
+    console.log(returnVal)
     return returnVal;
   }
   const onSubmit = () => {
@@ -933,7 +934,8 @@ export function CampaignFour() {
         case "NATIVE": updateFunc = updateCampaignNative(param); break;
         case "POP_UNDER": updateFunc = updateCampaignPopUnder(param); break;
         case "AUDIO":
-          updateFunc = (campaignCreativeInfo.filePath === '') ?
+          console.log(file)
+          updateFunc = (campaignCreativeInfo.filePath === '' || file != null) ?
               pickVideo().then(response => {
                 let param = {
                   ...campaignCreativeInfo,
@@ -943,6 +945,7 @@ export function CampaignFour() {
                   pcLandingUrl: "http://dummy.com",
                   mobLandingUrl: "http://dummy.com"
                 };
+                console.log(response)
                 if(response){
                   return updateCampaignAudio(param)
                 }
@@ -961,9 +964,9 @@ export function CampaignFour() {
         <>
           {(params.id !== "manageCreativeDetail" && state !== null) && <AdverInfo><span>광고주 정보</span><p></p><span>{state?.adverInfo}</span></AdverInfo>}
           <Board>
-            <BoardHeader>크리에이티브 그룹 설정</BoardHeader>
+            <BoardHeader>소재 그룹 설정</BoardHeader>
             <BoardSearchResult>
-              <Span4>크리에이티브 그룹 선택</Span4>
+              <Span4>소재 그룹 선택</Span4>
               <RowSpan box={true} column={false}>
                 {creativeType !== null && ((resistBool && campaignBasicInfo.productType==='BANNER')|| (state !==null && state.productType==='BANNER')) &&
                   <ColSpan1 padding={'0'}>

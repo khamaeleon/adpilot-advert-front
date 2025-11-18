@@ -28,7 +28,7 @@ export const menuList = [
       },
       {
         name: "manageCreative",
-        header: "크리에이티브 관리",
+        header: "소재 관리",
         detail: "manageCreativeDetail"
       },
       //{
@@ -124,11 +124,11 @@ export const menuList = [
     //    name: "conversionManage",
     //    header: "전환 관리"
     //  },
-     // {
-     //   name: "historyCampaignManage",
-     //   header: "캠페인 이력 관리",
-     //   detail: 'historyCampaignDetail'
-     // },
+    //  {
+    //    name: "historyCampaignManage",
+    //    header: "캠페인 이력 관리",
+    //    detail: 'historyCampaignDetail'
+    //  },
      // {
      //   name: "historyPriceManage",
      //   header: "이벤트 단가 이력 관리",
@@ -144,14 +144,14 @@ export const menuList = [
      //   header: "시간별 예산 이력 관리",
      //   detail: 'historyTimeDetail'
      // },
-    //  {
-    //    name: "paymentManage",
-    //    header: "결제 관리"
-    //  },
-    //  {
-    //    name: "advertisingPayments", //Advertising cost payment management
-    //    header: "광고비 지급 관리"
-    //  }
+     {
+       name: "paymentManage",
+       header: "결제 관리"
+     },
+     {
+       name: "advertisingPayments", //Advertising cost payment management
+       header: "광고비 지급 관리"
+     }
     ]
   },
 ]
@@ -163,7 +163,7 @@ export const narrowStyle = {
     borderRadius: 15
   },
   icon: {
-    backgroundImage: "-webkit-image-set(url('/assets/images/logos/adpilot/logo_inline_w.png') 1x, url('/assets/images/logos/adpilot/logo_inline_w@2x.png') 2x,url('/assets/images/logos/adpilot/logo_inline_w@3x.png') 3x)",
+    backgroundImage: "-webkit-image-set(url('/assets/images/logos/oaple/logo_inline_w.png') 1x, url('/assets/images/logos/oaple/logo_inline_w@2x.png') 2x,url('/assets/images/logos/oaple/logo_inline_w@3x.png') 3x)",
     width: 45,
     backgroundPosition: 'center'
   },
@@ -178,7 +178,7 @@ export const widenStyle = {
     marginRight: 0,
   },
   icon: {
-    backgroundImage: "url(/assets/images/logos/adpilot/logo_inline_w@3x.png)",
+    backgroundImage: "url(/assets/images/logos/oaple/logo_inline_w@3x.png)",
     width: 148,
   },
 }

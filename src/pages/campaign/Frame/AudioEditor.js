@@ -6,7 +6,6 @@ import {
   uploadAudioFile,
   uploadBannerImages
 } from "../../../services/campaign/CreativeAxios";
-import {accountFileUpload} from "../../../services/Platform/ManageUserAxios";
 import {useForm} from "react-hook-form";
 import VideoUploader from "../../../components/common/VideoUploader";
 export function AudioEditor(props){

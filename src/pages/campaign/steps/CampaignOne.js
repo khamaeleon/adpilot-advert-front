@@ -31,6 +31,7 @@ import {TemporaryListModal} from "../../../components/campaign/TemporaryListModa
 import {useResetAtom} from "jotai/utils";
 import {decimalFormat, removeStr} from "../../../common/StringUtils";
 import {campaignBudgetInfoAtom} from "../entity/Budget";
+import {HorizontalRule} from "../../../components/common/Common";
 
 export function CampaignOne() {
   const [,setStepCampaign] = useAtom(stepCampaignAtom)
@@ -137,6 +138,13 @@ export function CampaignOne() {
     })
     clearErrors('pixelId')
   }
+  const handleChangeName = (text) => {
+    setCampaignBasicInfo({
+      ...campaignBasicInfo,
+      name: text,
+    })
+    clearErrors('name')
+  }
   /**
    * 캠페인 선택
    * @param goalInfo
@@ -242,7 +250,7 @@ export function CampaignOne() {
         goal: "VISIT_CLICK_COUNT",
         pixelId: "10f0a15a-c8c0-48ed-809c-ee643b05ad05",
         // name: `${campaignBasicInfo.productType !== 'BANNER' ? 'PU' : 'BA'}_${goalType(campaignBasicInfo.goalType)}_${goal(campaignBasicInfo.goal)}_${moment().format('YYYY-MM-DD HH:mm:ss').replace(' ' ,'_')}`
-        name: `${campaignBasicInfo.productType === 'AUDIO' ? 'AU' : 'BA'}_${moment().format('YYYY-MM-DD HH:mm:ss').replace(' ' ,'_')}`
+        //name: `${campaignBasicInfo.productType === 'AUDIO' ? 'AU' : 'BA'}_${moment().format('YYYY-MM-DD HH:mm:ss').replace(' ' ,'_')}`
       }).then(response =>{
         if(response){
           setCampaignBasicInfo({
@@ -263,7 +271,9 @@ export function CampaignOne() {
         <BoardSearchResult>
           <RowSpan>
             <ColSpan4>
+              <ColSpan0>
               <Span4>광고주 설정</Span4>
+              </ColSpan0>
               <ColSpan2>
                 <div className={'relative'}>
                   <Input
@@ -284,6 +294,38 @@ export function CampaignOne() {
                 {temporaryBool &&
                   <TemporaryListModal onClose={()=>setTemporaryBool(false)} onSubmit={handleSelectedTemporaryList} userId={campaignBasicInfo.userId} />
                 }
+              </ColSpan2>
+            </ColSpan4>
+          </RowSpan>
+          <RowSpan>
+          </RowSpan>
+          <RowSpan>
+            <ColSpan4>
+              <ColSpan0>
+                <Span4>캠페인 명</Span4>
+              </ColSpan0>
+              <ColSpan2>
+                <div className={'relative'}>
+                  <Controller
+                      name="name"
+                      control={control}
+                      rules={{
+                        required: {
+                          value: campaignBasicInfo?.name === '',
+                          message: "캠페인명을 입력해주세요"
+                        }
+                      }}
+                      render={({field}) => (
+                          <Input type={'text'}
+                                 {...field}
+                                 value={campaignBasicInfo?.name}
+                                 placeholder={'캠페인명을 입력해주세요'}
+                                 onChange={(e) => handleChangeName(e.target.value)}
+                          />
+                      )}
+                  />
+                  {errors.name && <ValidationScript>{errors.name?.message}</ValidationScript>}
+                </div>
               </ColSpan2>
             </ColSpan4>
           </RowSpan>
@@ -327,6 +369,9 @@ export function CampaignOne() {
           {/*    </BorderSpan>*/}
           {/*  </ColSpan4>*/}
           {/*</RowSpan>*/}
+
+          <RowSpan>
+          </RowSpan>
           <RowSpan>
             <ColSpan1>
               <Span4>캠페인 상품 선택</Span4>

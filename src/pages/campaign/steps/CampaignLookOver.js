@@ -317,6 +317,7 @@ export function CampaignLookOver() {
         }
       </Board>
       <SubmitContainer>
+        {console.log(state)}
         <CancelButton type={'button'}
                       onClick={()=> onCancel()}>{(tokenUserInfo.role !== 'NORMAL' && state !== null) ? '목록' : '확인'}</CancelButton>
         {tokenUserInfo.role !== 'NORMAL' && state !== null &&

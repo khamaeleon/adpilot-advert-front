@@ -237,9 +237,9 @@ function AdvertisingPayments() {
       .then(response => {
         // 성공적인 응답 처리
         if (response !== null) {
-          const { totalCount, rows: data } = response;
-          setTotalInfo(totalCount);
-          return Promise.resolve({ data, count: parseInt(totalCount) });
+          const { statusCode, data } = response;
+          setTotalInfo(data.totalElements);
+          return Promise.resolve({ data: data.content, count: parseInt(data.totalElements) });
         } else {
           return Promise.resolve({ data: [], count: 0 });
         }
