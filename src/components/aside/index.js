@@ -13,6 +13,7 @@ import {tokenResultAtom} from "../../pages/login/entity/Common";
 import {retrieveCustomReportsList} from "../../services/reports/ReportsAxios";
 import {retrieveCustomReportsAdminList} from "../../services/reports/ReportsAdminAxios";
 import {mainColor, textColor} from "../../assets/GlobalStyles";
+import {logo_inline_w} from "../../constants/GlobalConst";
 
 function AsideList (props) {
   const {id, mode} = props
@@ -157,7 +158,7 @@ const AsideContainer = styled.div`
 const Logo = styled.div`
   margin-left: ${menuPL};
   height: 56px;
-  background-image: url("/assets/images/logos/oaple/logo_inline_w@3x.png");
+  background-image:url(${logo_inline_w});
   background-size: contain;
   background-repeat: no-repeat;
   transition-duration: 0.3s;
@@ -221,7 +222,7 @@ const Narrow = styled.div`
   display: flex;
   justify-content: flex-end;
   padding: 14px;
-  border-top: 1px solid #7e7e7e;
+  //border-top: 1px solid #7e7e7e;
   & button {
     background-color: rgba(0, 0, 0, 0);
   }

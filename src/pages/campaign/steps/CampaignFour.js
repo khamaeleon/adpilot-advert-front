@@ -899,10 +899,10 @@ export function CampaignFour() {
     let returnVal = null;
     if (file.length !== 0) {
       await uploadAudioFile(file).then(response => {
-        const { uploadedFile, path } = response;
+        const { uploadedFile, path, duration } = response;
         if (uploadedFile) {
           //toast.success('업로드에 성공 했습니다.');
-          returnVal = path;
+          returnVal = {path: path, duration: duration};
         } else {
           //toast.warning('업로드에 실패 했습니다.');
         }
@@ -941,7 +941,8 @@ export function CampaignFour() {
                   ...campaignCreativeInfo,
                   campaignId: campaignBasicInfo.campaignId,
                   name: campaignCreativeInfo.name,
-                  filePath: response,
+                  filePath: response.path,
+                  duration: response.duration,
                   pcLandingUrl: "http://dummy.com",
                   mobLandingUrl: "http://dummy.com"
                 };

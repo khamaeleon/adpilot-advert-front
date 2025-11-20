@@ -87,6 +87,7 @@ adverAxios.interceptors.response.use(
                 name: data.name,
                 accessToken: data.token.accessToken
               })
+            localStorage.setItem('role', data.role);
               onTokenRefreshed(data.token.accessToken);
           } else {
             refreshSubscribers = [];

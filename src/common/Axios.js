@@ -66,6 +66,7 @@ export async function AxiosImage(type, uri, formData) {
               name: data.name,
               accessToken: data.token.accessToken
             })
+            localStorage.setItem('role', data.role);
             onTokenRefreshed();
           } else {
             refreshSubscribers = [];
@@ -128,6 +129,7 @@ export async function AxiosImageAdver(type, uri, formData) {
               name: data.name,
               accessToken: data.token.accessToken
             })
+            localStorage.setItem('role', data.role);
             onTokenRefreshed();
           } else {
             refreshSubscribers = [];
@@ -186,6 +188,7 @@ export async function AxiosFile(type, uri, formData) {
               name: data.name,
               accessToken: data.token.accessToken
             })
+            localStorage.setItem('role', data.role);
             onTokenRefreshed();
           } else {
             refreshSubscribers = [];

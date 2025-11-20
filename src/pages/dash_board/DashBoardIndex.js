@@ -466,7 +466,7 @@ function DashBoardIndex() {
                 lockedRows={lockedRows}
                 summaryReducer={summaryReducer}
                 onReady={setGridRef}
-                style={{minHeight: 1012}}
+                style={{minHeight: 700}}
                 headerHeight={50}
                 rowExpandHeight={rowExpandHeight}
                 rowHeight={60}

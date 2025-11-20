@@ -46,26 +46,26 @@ export const adverListColumn = [
     render: ({value}) => <p>{decimalFormat(value)}</p>,
     showColumnMenuTool: false
   },
-  {
-    name: 'validClickCount',
-    header: '클릭 수',
-    minWidth: 100,
-    textAlign: 'end',
-    render: ({value}) => <p>{decimalFormat(value)}</p>,
-    showColumnMenuTool: false
-  },
-  {
-    name: 'clickRate',
-    header: '클릭률',
-    minWidth: 100,
-    textAlign: 'end',
-    cellDOMProps: (cellProps) => ({ style: {color: '#1E8E3E'} }),
-    render: ({data}) => {
-      let value = data.exposureCount !== 0 ? (data.validClickCount / data.exposureCount) * 100 : 0;
-      return <p className={'pct'}>{numberToFixedFormat(value)}</p>
-    },
-    showColumnMenuTool: false
-  },
+  //{
+  //  name: 'validClickCount',
+  //  header: '클릭 수',
+  //  minWidth: 100,
+  //  textAlign: 'end',
+  //  render: ({value}) => <p>{decimalFormat(value)}</p>,
+  //  showColumnMenuTool: false
+  //},
+  //{
+  //  name: 'clickRate',
+  //  header: '클릭률',
+  //  minWidth: 100,
+  //  textAlign: 'end',
+  //  cellDOMProps: (cellProps) => ({ style: {color: '#1E8E3E'} }),
+  //  render: ({data}) => {
+  //    let value = data.exposureCount !== 0 ? (data.validClickCount / data.exposureCount) * 100 : 0;
+  //    return <p className={'pct'}>{numberToFixedFormat(value)}</p>
+  //  },
+  //  showColumnMenuTool: false
+  //},
   {
     name: 'costAmount',
     header: '비용',
@@ -319,26 +319,26 @@ export const adverStatusDetailColumn = [
     textAlign: 'end',
     render: ({value}) => <p>{decimalFormat(value)}</p>,
   },
-  {
-    name: 'validClickCount',
-    header: '클릭수',
-    minWidth: 150,
-    showColumnMenuTool: false,
-    textAlign: 'end',
-    render: ({value}) => <p>{decimalFormat(value)}</p>,
-  },
-  {
-    name: 'clickRate',
-    header: '클릭률',
-    minWidth: 150,
-    textAlign: 'end',
-    cellDOMProps: (cellProps) => ({ style: {color: '#1E8E3E'} }),
-    render: ({data}) => {
-      let value = data.exposureCount !== 0 ? (data.validClickCount / data.exposureCount) * 100 : 0;
-      return <p className={'pct'}>{numberToFixedFormat(value)}</p>
-    },
-    showColumnMenuTool: false
-  },
+  //{
+  //  name: 'validClickCount',
+  //  header: '클릭수',
+  //  minWidth: 150,
+  //  showColumnMenuTool: false,
+  //  textAlign: 'end',
+  //  render: ({value}) => <p>{decimalFormat(value)}</p>,
+  //},
+  //{
+  //  name: 'clickRate',
+  //  header: '클릭률',
+  //  minWidth: 150,
+  //  textAlign: 'end',
+  //  cellDOMProps: (cellProps) => ({ style: {color: '#1E8E3E'} }),
+  //  render: ({data}) => {
+  //    let value = data.exposureCount !== 0 ? (data.validClickCount / data.exposureCount) * 100 : 0;
+  //    return <p className={'pct'}>{numberToFixedFormat(value)}</p>
+  //  },
+  //  showColumnMenuTool: false
+  //},
   {
     name: 'costAmount',
     header: '비용',
@@ -545,25 +545,25 @@ export const userCampaignListColumn = [
     cellDOMProps: (cellProps) => ({ style: {textAlign: 'right'} }),
     render: ({value}) => <p>{decimalFormat(value)}</p>,
   },
-  {
-    name: 'validClickCount',
-    header: '클릭수',
-    minWidth: 150,
-    showColumnMenuTool: false,
-    cellDOMProps: (cellProps) => ({ style: {textAlign: 'right'} }),
-    render: ({value}) => <p>{decimalFormat(value)}</p>,
-  },
-  {
-    name: 'clickRate',
-    header: '클릭률',
-    minWidth: 150,
-    cellDOMProps: (cellProps) => ({ style: {color: '#1E8E3E', textAlign: 'right'} }),
-    render: ({data}) => {
-      let value = data.exposureCount !== 0 ? (data.validClickCount / data.exposureCount) * 100 : 0;
-      return <p className={'pct'}>{numberToFixedFormat(value)}</p>
-    },
-    showColumnMenuTool: false
-  },
+  //{
+  //  name: 'validClickCount',
+  //  header: '클릭수',
+  //  minWidth: 150,
+  //  showColumnMenuTool: false,
+  //  cellDOMProps: (cellProps) => ({ style: {textAlign: 'right'} }),
+  //  render: ({value}) => <p>{decimalFormat(value)}</p>,
+  //},
+  //{
+  //  name: 'clickRate',
+  //  header: '클릭률',
+  //  minWidth: 150,
+  //  cellDOMProps: (cellProps) => ({ style: {color: '#1E8E3E', textAlign: 'right'} }),
+  //  render: ({data}) => {
+  //    let value = data.exposureCount !== 0 ? (data.validClickCount / data.exposureCount) * 100 : 0;
+  //    return <p className={'pct'}>{numberToFixedFormat(value)}</p>
+  //  },
+  //  showColumnMenuTool: false
+  //},
   {
     name: 'costAmount',
     header: '비용',

@@ -96,8 +96,9 @@ export function ManageCreative() {
     return(
       <CustomDetailTable>
         <CustomDetailHeader>
-          <CreativeGroup>소재</CreativeGroup>
-          <CreativeType>광고 상품</CreativeType>
+          <CreativeGroup>소재명</CreativeGroup>
+          {/*<CreativeType>상품 타입</CreativeType>*/}
+          <CreativeType>상품 링크</CreativeType>
         </CustomDetailHeader>
         {creativeDetailData.length !== 0 && creativeDetailData.map((item,key) => {
           return(
@@ -110,7 +111,8 @@ export function ManageCreative() {
                   {item.creativeName}
                 </Link>
               </CreativeGroup>
-              <CreativeType>{productType.find(type=> type.value === item.productType).label}</CreativeType>
+              {/*<CreativeType>{productType.find(type=> type.value === item.productType).label}</CreativeType>*/}
+              <CreativeInfo>{item.images[0].imagePath}</CreativeInfo>
             </CustomDetailRow>
           )
         })}
@@ -230,13 +232,14 @@ export const CreativeType = styled.div`
   flex-basis: 10%;
   border-bottom: 1px solid ${mainColorOpacity20};
 `
+
 export const CreativeInfo = styled.div`
-  padding: 9px 0;
-  flex-basis: 60%;
+  padding: 9px 10px 9px 0;
+  flex-basis: 90%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 60%;
+  //justify-content: center;
+  width: 80%;
   border-bottom: 1px solid ${mainColorOpacity20};
 `
 

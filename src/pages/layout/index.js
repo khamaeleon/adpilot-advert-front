@@ -34,7 +34,7 @@ import {retrieveUserPoint, requestAmountPoint} from "./entity/UserPoint";
 import {searchConditionAtom} from "../dash_board/entity/Common";
 import {retrieveUserPointRequest} from "../../services/payment/user/RetrieveUserPointAxios";
 import Customer from "../customer";
-
+import store from "../../store";
 function Layout() {
   const params = useParams();
   const navigate = useNavigate();
@@ -49,9 +49,9 @@ function Layout() {
       if (tokenUserInfo.role === '') {
         refreshAdmin().then(response => {
           if(response){
-            const {data, status} = response
-            if (status === 200) {
-              const entity = data.data;
+            const {data, statusCode} = response
+            if (statusCode === 200) {
+              const entity = data;
               setTokenUserInfo({
                 id: entity.email,
                 role: entity.role,

@@ -21,9 +21,7 @@ export function AudioEditor(props){
         <AddButton type={""}>
         </AddButton>
         <span>오디오 파일</span>
-        <ReloadButton onClick={handleResetFrame}>
-          {resetIcon}
-          {/** 리셋에 대한 정의 필요 **/}
+        <ReloadButton>
         </ReloadButton>
       </FrameHeader>
       <VideoUploader file={file} onSelect={setFile} filePath={filePath}/>
@@ -35,13 +33,15 @@ const FrameContainer = styled.div`
   padding: 0 10px 10px;
   background-color: #fff;
   border: ${({active}) => active ? '1px solid #ff0000' : '1px solid #ddd'};
-  border-radius: 3px;
+  border-radius: 8px;
+  width: 300px;
+  height: 250px;
 `
 const FrameHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
   -ms-user-select: none;
   -moz-user-select: -moz-none;
   -khtml-user-select: none;

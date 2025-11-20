@@ -1,4 +1,5 @@
 import {atom} from "jotai/index";
+import {logo, logo_inline_w} from "../../constants/GlobalConst";
 
 export const selectedIcon = {
   dashboard: "/assets/images/aside/gmd_menu_01_on@3x.png",
@@ -163,7 +164,7 @@ export const narrowStyle = {
     borderRadius: 15
   },
   icon: {
-    backgroundImage: "-webkit-image-set(url('/assets/images/logos/oaple/logo_inline_w.png') 1x, url('/assets/images/logos/oaple/logo_inline_w@2x.png') 2x,url('/assets/images/logos/oaple/logo_inline_w@3x.png') 3x)",
+    backgroundImage: `-webkit-image-set(url(${logo_inline_w}) 1x, url(${logo_inline_w}) 2x,url(${logo_inline_w}) 3x)`,
     width: 45,
     backgroundPosition: 'center'
   },
@@ -178,7 +179,7 @@ export const widenStyle = {
     marginRight: 0,
   },
   icon: {
-    backgroundImage: "url(/assets/images/logos/oaple/logo_inline_w@3x.png)",
+    backgroundImage: `url(${logo_inline_w})`,
     width: 148,
   },
 }

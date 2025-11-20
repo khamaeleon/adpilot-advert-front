@@ -5,6 +5,7 @@ import {
   mainColor,
   whiteColor
 } from "../../assets/GlobalStyles";
+import {logo_inline_w} from "../../constants/GlobalConst";
 
 export const SignUpHeader = styled.div`
   display: flex;
@@ -17,7 +18,7 @@ export const SignUpHeader = styled.div`
 export const Logo = styled.div`
   width: 212px;
   height: 45px;
-  background-image: url("/assets/images/logos/oaple/logo_inline_w@2x.png");
+  background-image: url(${logo_inline_w});
   background-repeat: no-repeat;
   background-size: contain;
 `

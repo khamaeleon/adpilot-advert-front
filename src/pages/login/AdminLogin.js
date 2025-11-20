@@ -1,6 +1,6 @@
 import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {loginAdminParams, tokenResultAtom} from "./entity/Common";
+import {tokenResultAtom} from "./entity/Common";
 import {loginAdmin} from "../../services/auth/AuthAxios";
 import {useForm} from "react-hook-form";
 import {RowSpan, TextMainColor, ValidationScript} from "../../assets/GlobalStyles";
@@ -10,6 +10,11 @@ import {useCookies} from "react-cookie";
 import Checkbox from "../../components/common/Checkbox";
 import {useAtom} from "jotai";
 import {HorizontalRule} from "../../components/common/Common";
+import {
+  loginAdminParams,
+  logo,
+  logo_inline_w
+} from "../../constants/GlobalConst";
 
 const mainColor = css`${props => props.theme.color.mainColor}`
 function AdminLogin() {
@@ -24,6 +29,8 @@ function AdminLogin() {
    * 쿠키에 아이디 저장 삭제
    */
   useEffect(() => {
+    console.log(loginAdminParams)
+    console.log(logo)
     if(cookies.rememberAdminId !== undefined) {
       setLoginParams({
         ...loginParamsValue,
@@ -228,8 +235,8 @@ const Title = styled.div`
 const LoginLogo = styled.div`
   width: 300px;
   height: 150px;
-  background-image: url('/assets/images/logos/oaple/logo_inline_w.png');
-  background-image: -webkit-image-set(url("/assets/images/logos/oaple/logo_inline_w.png") 1x, url("/assets/images/logos/oaple/logo_inline_w@2x.png") 2x, url("/assets/images/logos/oaple/logo_inline_w@3x.png") 3x);
+  background-image: url(${logo_inline_w});
+  background-image: -webkit-image-set(url(${logo_inline_w}) 1x, url(${logo_inline_w}) 2x, url(${logo_inline_w}) 3x);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -238,8 +245,8 @@ const LoginLogo = styled.div`
 const BlockLogo = styled.div`
   width: 120px;
   height: 80px;
-  background-image: url('/assets/images/logos/oaple/logo.png');
-  background-image: -webkit-image-set(url("/assets/images/logos/oaple/logo.png") 1x, url("/assets/images/logos/oaple/logo@2x.png") 2x, url("/assets/images/logos/oaple/logo@3x.png") 3x);
+  background-image: url(${logo});
+  background-image: -webkit-image-set(url(${logo}) 1x, url(${logo}) 2x, url(${logo}) 3x);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
